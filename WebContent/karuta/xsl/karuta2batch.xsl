@@ -553,6 +553,53 @@
 		</import-node>
 	</xsl:template>
 	
+	<xsl:template match="*[metadata/@semantictag='move-node']">
+		<xsl:variable name="destination">
+			<xsl:call-template name='get-select'>
+				<xsl:with-param name='parent'>subsection-target</xsl:with-param>
+			</xsl:call-template>
+		</xsl:variable>
+		<xsl:variable name="source">
+			<xsl:call-template name='get-select'>
+				<xsl:with-param name='parent'>subsection-source</xsl:with-param>
+			</xsl:call-template>
+		</xsl:variable>
+		<!-- old -->
+			<xsl:variable name="old-source">#<xsl:call-template name="txtval"><xsl:with-param name="semtag">import-source</xsl:with-param></xsl:call-template></xsl:variable>
+			<xsl:variable name="dest"><xsl:value-of select=".//asmContext[metadata/@semantictag='destination-select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of></xsl:variable>
+			<xsl:variable name="srce"><xsl:value-of select=".//asmContext[metadata/@semantictag='source-select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of></xsl:variable>
+		<!-- end old -->
+		<move-node select="{$destination}{$dest}" source="{$srce}{$old-source}">
+			<source>
+				<xsl:value-of select='$source'/>
+			</source>
+		</move-node>
+	</xsl:template>
+	
+	<xsl:template match="*[metadata/@semantictag='update-node-comments']">
+		<xsl:variable name="select">
+			<xsl:call-template name='get-select'>
+				<xsl:with-param name='parent'>subsection-target</xsl:with-param>
+			</xsl:call-template>
+		</xsl:variable>
+		<xsl:variable name="source">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='source-select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="test">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='test']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<update-resource type='nodeContext' select="{$select}" test="{$test}">
+			<xsl:if test="$source!=''">
+				<source select="{$source}"/>
+			</xsl:if>
+			<attribute name='text' language-dependent='Y' replace-variable='Y'>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">text</xsl:with-param>
+				</xsl:call-template>
+			</attribute>
+		</update-resource>
+	</xsl:template>
+	
 	
 	<!-- ====================================================================================== -->
 	<!-- ====================================================================================== -->
@@ -802,9 +849,32 @@
 					<xsl:with-param name="semtag">libelle</xsl:with-param>
 				</xsl:call-template>
 			</attribute>
-			<attribute name='code' language-dependent='N' replace-variable='Y'>
+			<attribute name='value' language-dependent='N' replace-variable='Y'>
 				<xsl:call-template name="txtval">
 					<xsl:with-param name="semtag">value</xsl:with-param>
+				</xsl:call-template>
+			</attribute>
+		</update-resource>
+	</xsl:template>
+	
+	<xsl:template match="*[metadata/@semantictag='update-get-resource']">
+		<xsl:variable name="select">
+			<xsl:call-template name='get-select'>
+				<xsl:with-param name='parent'>subsection-target</xsl:with-param>
+			</xsl:call-template>
+		</xsl:variable>
+		<xsl:variable name="test">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='test']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<update-resource type='Get_Resource' select="{$select}" test="{$test}">
+			<attribute name='code' language-dependent='N' replace-variable='Y'>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">code</xsl:with-param>
+				</xsl:call-template>
+			</attribute>
+			<attribute name='label' language-dependent='Y' replace-variable='Y'>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">libelle</xsl:with-param>
 				</xsl:call-template>
 			</attribute>
 		</update-resource>

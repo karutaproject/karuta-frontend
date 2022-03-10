@@ -80,7 +80,7 @@ UIFactory["Variable"].prototype.displayView = function(dest,type,langcode)
 UIFactory["Variable"].update = function(itself,langcode)
 //==================================
 {
-	$(itself.lastmodified_node).text(new Date().toLocaleString());
+	$(itself.lastmodified_node).text(new Date().getTime());
 	itself.save();
 };
 

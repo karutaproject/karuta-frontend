@@ -1,4 +1,6 @@
 
+
+
 /// Check namespace existence
 if( UIFactory === undefined )
 {
@@ -157,7 +159,8 @@ UIFactory["Audio"].prototype.displayView = function(dest,type,langcode)
 	var html ="";
 	if (type=='html5') {
 		html += "<audio controls>";
-		var srce = serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&type=.mp3";
+//		var srce = serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&type=.mp3";
+		var srce = serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode];
 		html += "<source src='"+srce+"' type='audio/mpeg'/>";
 		html += "</audio>";		
 	}
@@ -174,7 +177,7 @@ UIFactory["Audio"].update = function(data,uuid,langcode,filename)
 	if (langcode==null)
 		langcode = LANGCODE;
 	//---------------------
-	$(itself.lastmodified_node).text(new Date().toLocaleString());
+	$(itself.lastmodified_node).text(new Date().getTime());
 	var size = data.files[0].size;
 	var type = data.files[0].type;
 	$("#fileAudio_"+uuid+"_"+langcode).html(filename);
@@ -240,16 +243,35 @@ UIFactory["Audio"].prototype.displayEditor = function(destid,type,langcode)
 		langcode = LANGCODE;
 	//---------------------
 	var html ="";
-	html += "<div class='audio-video-format'>Format: mp3</div>"
 	var url = serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode];
-	html +=" <div id='div_f_"+this.id+"_"+langcode+"'>";
+	//-------------------------------
+	let record_only = ($(UICom.structure.ui[this.id].metadata).attr('audio-record-only')==undefined)?'N':$(UICom.structure.ui[this.id].metadata).attr('audio-record-only');
+	if (record_only!="Y") {
+		html +="<ul id='audio-nav-tabs' class='nav nav-tabs' role='tablist'>";
+		html +=" <li class='nav-item'><a class='nav-link active' href='#edit-window-upload' aria-controls='edit-window-upload' role='tab' data-toggle='tab'>Téléverser un fichier audio</a></li>";
+		html +=" <li class='nav-item'><a class='nav-link' href='#edit-window-record' aria-controls='edit-window-record' role='tab' data-toggle='tab'>Enregistrer un fichier audio</a></li>";
+		html +="</ul>";
+		html +="<div class='tab-content'>";
+		html +=" <div role='tabpanel' class='tab-pane active' id='edit-window-upload' style='margin-top:10px'>";
+		html +=" </div>";
+		html +=" <div role='tabpanel' class='tab-pane' id='edit-window-record' style='margin-top:10px'>";
+		html +=" </div>";
+		html += "</div>";
+	} else {
+		html +=" <div role='tabpanel' class='tab-pane' id='edit-window-record' style='margin-top:10px'>";
+	}
+
+	$("#"+destid).append($(html));
+
+	//-----------------uploader-------------------------
+	html =" <div id='div_f_"+this.id+"_"+langcode+"'>";
 	html +=" <input id='f_"+this.id+"_"+langcode+"' type='file' name='uploadfile' data-url='"+url+"'>";
 	html += "</div>";
 	html +=" <div id='progress_f_"+this.id+"_"+langcode+"'><div class='bar' style='width: 0%;'></div></div>";
 	html += "<span id='fileAudio_"+this.id+"_"+langcode+"'>"+$(this.filename_node[langcode]).text()+"</span>";
 	html += "<span id='loaded_"+this.id+langcode+"'></span>"
-	html +=  " <button type='button' class='btn ' onclick=\"UIFactory.Audio.remove('"+this.id+"',"+langcode+")\">"+karutaStr[LANG]['button-delete']+"</button>";
-	$("#"+destid).append($(html));
+	html += " <button type='button' class='btn ' onclick=\"UIFactory.Audio.remove('"+this.id+"',"+langcode+")\">"+karutaStr[LANG]['button-delete']+"</button>";
+	$("#edit-window-upload").append($(html));
 	var loadedid = 'loaded_'+this.id+langcode;
 	$("#f_"+this.id+"_"+langcode).fileupload({
 		add: function(e, data) {
@@ -276,7 +298,111 @@ UIFactory["Audio"].prototype.displayEditor = function(destid,type,langcode)
 			var uuid = data.url.substring(data.url.lastIndexOf('/')+1,data.url.indexOf('?'));
 			UIFactory["Audio"].update(data.result,uuid,langcode,filename);
 		}
-    });
+	});
+	//---------------- recorder -----------------------------
+	// Web-dictaphone - CC0 1.0 Universal
+	//https://github.com/mdn/web-dictaphone
+
+	if (navigator.mediaDevices.getUserMedia) {
+		html = "";
+		html += "<div class='recorder-body'>";
+		html += " <section class='main-controls'>";
+		html += "  <canvas class='visualizer' height='60px'></canvas>";
+		html += "  <div id='buttons'><button class='btn record'>Record</button> <button class='btn stop'>Stop</button></div>";
+		html += " </section>";
+		html += " <section class='sound-clips'></section>";
+		html += "</div>";
+		$("#edit-window-record").append($(html));
+
+		const constraints = { audio: true };
+		let onSuccess = function(stream,audioCtx) {
+			const record = document.querySelector('.record');
+			const stop = document.querySelector('.stop');
+			const soundClips = document.querySelector('.sound-clips');
+			const canvas = document.querySelector('.visualizer');
+			const mainSection = document.querySelector('.main-controls');
+			var audioCtx;
+			const canvasCtx = canvas.getContext("2d");
+
+			let chunks = [];
+			const mediaRecorder = new MediaRecorder(stream);
+
+			visualize(stream,audioCtx,canvas,canvasCtx);
+
+			record.onclick = function() {
+				mediaRecorder.start();
+				record.style.background = "red";
+				stop.disabled = false;
+				record.disabled = true;
+			}
+
+			stop.onclick = function() {
+				mediaRecorder.stop();
+				record.style.background = "";
+				record.style.color = "";
+				stop.disabled = true;
+				record.disabled = false;
+			}
+
+			mediaRecorder.onstop = function(e) {
+				const clipContainer = document.createElement('div');
+				const audio = document.createElement('audio');
+				const savebutton = document.createElement('button');
+
+				clipContainer.classList.add('clip');
+				audio.setAttribute('controls', '');
+				savebutton.classList.add("btn");
+				savebutton.classList.add("audiosavebutton");
+				savebutton.textContent = 'Save';
+				savebutton.style.background = "green";
+				savebutton.style.color = "white";
+
+				clipContainer.appendChild(audio);
+				clipContainer.appendChild(savebutton);
+				soundClips.appendChild(clipContainer);
+
+				audio.controls = true;
+				const blob = new Blob(chunks, { 'type' : 'audio/ogg' });
+				chunks = [];
+				const audioURL = window.URL.createObjectURL(blob);
+				audio.src = audioURL;
+				savebutton.onclick = function(e) {
+					//----------------
+					var fd = new FormData();
+					fd.append('uploadfile', blob);
+					$.ajax({
+						async : false,
+						type: 'POST',
+						url: url,
+						data: fd,
+						processData: false,
+						contentType: false,
+						success : function(data) {
+							var uuid = data.files[0].url.substring(data.files[0].url.lastIndexOf('/')+1);
+							UIFactory["Audio"].update(data,uuid,langcode,'record');
+							$('#edit-window').modal('hide');
+						}
+					});
+					//----------------
+				}
+
+			}
+
+			mediaRecorder.ondataavailable = function(e) {
+				chunks.push(e.data);
+			}
+		} // end of on success
+
+		let onError = function(err) {
+			console.log('The following error occured: ' + err);
+		}
+
+		navigator.mediaDevices.getUserMedia(constraints).then(onSuccess, onError);
+
+	} else {
+		console.log('getUserMedia not supported on your browser!');
+	};
+	
 };
 
 //==================================
@@ -301,3 +427,49 @@ UIFactory["Audio"].prototype.refresh = function()
 	};
 
 };
+
+//==================================
+function visualize(stream,audioCtx,canvas,canvasCtx)
+//==================================
+//Web-dictaphone - CC0 1.0 Universal
+//https://github.com/mdn/web-dictaphone
+
+{
+	if(!audioCtx) {
+		audioCtx = new AudioContext();
+	}
+	const source = audioCtx.createMediaStreamSource(stream);
+	const analyser = audioCtx.createAnalyser();
+	analyser.fftSize = 2048;
+	const bufferLength = analyser.frequencyBinCount;
+	const dataArray = new Uint8Array(bufferLength);
+	source.connect(analyser);
+	
+	draw();
+	
+	function draw() {
+		const WIDTH = canvas.width
+		const HEIGHT = canvas.height;
+		requestAnimationFrame(draw);
+		analyser.getByteTimeDomainData(dataArray);
+		canvasCtx.fillStyle = 'rgb(200, 200, 200)';
+		canvasCtx.fillRect(0, 0, WIDTH, HEIGHT);
+		canvasCtx.lineWidth = 2;
+		canvasCtx.strokeStyle = 'rgb(0, 0, 0)';
+		canvasCtx.beginPath();
+		let sliceWidth = WIDTH * 1.0 / bufferLength;
+		let x = 0;
+		for(let i = 0; i < bufferLength; i++) {
+			let v = dataArray[i] / 128.0;
+			let y = v * HEIGHT/2;
+			if(i === 0) {
+				canvasCtx.moveTo(x, y);
+			} else {
+				canvasCtx.lineTo(x, y);
+			}
+			x += sliceWidth;
+		}
+		canvasCtx.lineTo(canvas.width, canvas.height/2);
+		canvasCtx.stroke();
+	}
+}

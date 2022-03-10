@@ -104,6 +104,9 @@ karutaStr["en"]["button-decrease"] = "Decrease Character Size";
 karutaStr["en"]["copy"] = "Copy";
 karutaStr["en"]["copied"] = "Copied";
 karutaStr["en"]["waitreport"] = "Wait, the report is executed on the server. Come back in a few minutes to view the report.";
+karutaStr["en"]["instruction-export-menu"] = "Copy the menu and paste it where you want to import it.";
+karutaStr["en"]["back"] = "Click to go back";
+
 //=========================================
 //========== ERRORS =======================
 //=========================================
@@ -136,12 +139,14 @@ karutaStr['en']['resnopencil']="Resource Without Pencil ";
 karutaStr['en']['editresroles']="Edit Resource";
 karutaStr['en']['delnoderoles']="Delete";
 karutaStr['en']['commentnoderoles']="Comment";
+karutaStr['en']['seecommentnoderoles']="See Comments";
 karutaStr['en']['annotnoderoles']="Annotate";
 karutaStr['en']['submitroles']="Submit";
 karutaStr['en']['unsubmitroles']="Unsubmit";
 karutaStr['en']['txtsubmitroles']="Submit Texts";
 karutaStr['en']['submitall']="Submit For All Roles";
-karutaStr['en']['nodenopencil']="Node Without Pencil";
+karutaStr['en']['nodenopencil']="Node Without Pencil for All";
+karutaStr['en']['nodenopencilroles']="Node Without Pencil";
 karutaStr['en']['editnoderoles']="Edit Label";
 karutaStr['en']['editcoderoles']="Edit Code";
 karutaStr['en']['duplicateroles']="Duplicate";
@@ -265,6 +270,25 @@ karutaStr['en']['node-comment']="Node Comments";
 karutaStr['en']['autoload']="Autoload";
 karutaStr['en']['defaultrole']="Default Role";
 karutaStr['en']['langnotvisible']="Not visible in";
+karutaStr['en']['menulabel']="Menu Label";
+karutaStr['en']['itemlabel']="Menu Item Label";
+karutaStr['en']['folder']="Folder";
+karutaStr['en']['foliocode']="Portfolio code";
+karutaStr['en']['semtag']="Semantic Tag";
+karutaStr['en']['parent-semtag']="Parent Semantic Tag";
+karutaStr['en']['itemtype']="Item Type";
+karutaStr['en']['roles']="Roles";
+karutaStr['en']['position']="Search Position";
+karutaStr['en']['parentsemtag']="Parent Semantic Tag";
+karutaStr['en']['condition']="Condition";
+karutaStr['en']['boxlabel']="Edit Box Label";
+karutaStr['en']['updatedtag']="Semantic Tag to Update";
+karutaStr['en']['target']="Semantic Tag of import place";
+karutaStr['en']['object']="Search Element";
+karutaStr['en']['start-semtag']="Start Semantic Tag";
+karutaStr['en']['destination-semtag']="Destination Semantic Tag";
+karutaStr['en']['audio-record-only']="Record only";
+karutaStr['en']['unique']="No duplicates";
 
 //=========================================
 //========== ADMIN ========================
@@ -366,6 +390,7 @@ karutaStr['en']['create_folder']="Create a Folder";
 karutaStr['en']['create_subfolder']="Create a Subfolder";
 karutaStr['en']['parent_code']="Parent Code";
 karutaStr['en']['folder_code']="Folder Code";
+karutaStr['en']['setrights']="Distinguish model  <i class='far fa-file-alt'></i> and instance  <i class='fas fa-file-alt'></i>";
 
 //=========================================
 //========== USERS ========================
@@ -519,7 +544,6 @@ karutaStr['en']['inexistent-user']="Sorry. Your login has not been found.";
 //========== TECHNICAL SUPPORT ============
 //=========================================
 
-karutaStr['en']['technical_support']="Technical Support";
 karutaStr['en']['technical-support']="Technical Support";
 karutaStr['en']['application-server']="Application";
 karutaStr['en']['user-name']="Your Name";
@@ -569,6 +593,7 @@ karutaStr['en']['Get_Get_Resource']="GetGetResource";
 karutaStr['en']['Get_Double_Resource']="GetDoubleResource";
 karutaStr['en']['Proxy']="Proxy";
 karutaStr['en']['Get_Proxy']="GetProxy";
+karutaStr['en']['Get_Portfolio']="GetPortfolio";
 
 karutaStr['en']['Variable']="Variable";
 karutaStr['en']['var-name']="Variable Name";

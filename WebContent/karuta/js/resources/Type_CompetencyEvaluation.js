@@ -93,7 +93,7 @@ UIFactory["CompetencyEvaluation"].prototype.displayView = function(dest,type,lan
 UIFactory["CompetencyEvaluation"].update = function(obj,itself,lang,type,name)
 //==================================
 {
-	$(itself.lastmodified_node).text(new Date().toLocaleString());
+	$(itself.lastmodified_node).text(new Date().getTime());
 	var selected = "";
 	var value = "";
 	var code = "";

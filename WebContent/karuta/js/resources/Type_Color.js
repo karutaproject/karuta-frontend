@@ -153,7 +153,7 @@ UIFactory["Color"].prototype.displayView = function(dest,type,langcode)
 UIFactory["Color"].update = function(itself,langcode)
 //==================================
 {
-	$(itself.lastmodified_node).text(new Date().toLocaleString());
+	$(itself.lastmodified_node).text(new Date().getTime());
 	if (!itself.multilingual) {
 		var text = $(itself.text_node[langcode]).text();
 		for (var langcode=0; langcode<languages.length; langcode++) {

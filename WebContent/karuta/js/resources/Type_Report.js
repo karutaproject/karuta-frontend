@@ -182,7 +182,7 @@ UIFactory["Report"].prototype.displayView = function(dest,langcode)
 UIFactory["Report"].update = function(itself,langcode)
 //==================================
 {
-	$(itself.lastmodified_node).text(new Date().toLocaleString());
+	$(itself.lastmodified_node).text(new Date().getTime());
 	itself.save();
 };
 
@@ -191,7 +191,7 @@ UIFactory["Report"].updateAttribute = function(uuid,attName,val,langcode)
 //==================================
 {
 	var itself = UICom.structure["ui"][uuid];  // context node
-	$(itself.lastmodified_node).text(new Date().toLocaleString());
+	$(itself.lastmodified_node).text(new Date().getTime());
 	$($(attName,$(itself.resource.node))).text(val);
 	itself.save();
 };
@@ -370,9 +370,7 @@ function register_report(uuid)
 	var comments = node_resource.comments_node[LANGCODE].text();
 	var data={code:uuid,portfolioid:g_portfolioid,startday:startday,time:time,freq:freq,comments:comments};
 	var url = serverBCK+"/report";
-	var ok = true;
 	$.ajax({
-		async: false,
 		type : "POST",
 		url : url,
 		data : data,
@@ -380,10 +378,8 @@ function register_report(uuid)
 		success : function(data) {
 		},
 		error : function(jqxhr, textStatus, err) {
-			ok = false;
-			console.log("Error - rapport not executed:"+textStatus+"/"+jqxhr.status+"/"+jqxhr.statusText);
+			alertHTML("Erreur - rapport non exécuté:"+textStatus+"/"+jqxhr.status+"/"+jqxhr.statusText);
 		}
 	});
-	return ok;
 }
 

@@ -29,27 +29,6 @@ var UICom =
 	query: function( type, url, callback, dataType, data )
 	//=======================================================================
 	{
-		/*
-		var set =
-		{
-			dataType: dataType,
-			type: type,
-			url: url,
-			contentType: "application/xml",
-			processData: false,
-			data: data,
-			success: function(data, textStatus)
-			{
-				if( callback != null )
-					callback(data);
-			},
-			error : function(jqxhr,textStatus) {
-				alertDisconnected();
-				alertHTML(karutaStr[LANG]['disconnected']);
-			}
-		};
-		jQuery.ajax(set);
-		*/
 		$.ajax({
 			async:false,
 			dataType: dataType,
@@ -303,20 +282,34 @@ var UICom =
 			try {
 				//----------------------------
 				var roles = null;
-				var attribute_value = r_replaceVariable($("metadata-wad",node).attr(attribute) != undefined ? $("metadata-wad",node).attr(attribute):"");
+				var attribute_value = replaceVariable($("metadata-wad",node).attr(attribute) != undefined ? $("metadata-wad",node).attr(attribute):"");
 				if (attribute == 'menuroles' && attribute_value.length>10) {
-					var items = attribute_value.split(";");
-					for (var i=0; i<items.length; i++){
-						var subitems = items[i].split(",");
-						if (subitems[0]!="#line") {
-							roles = subitems[3].split(" ");
+					if (attribute_value.charAt(0)!="<") {
+						var items = attribute_value.split(";");
+						for (var i=0; i<items.length; i++){
+							var subitems = items[i].split(",");
+							if (subitems[0]!="#line") {
+								roles = subitems[3].split(" ");
+								//----------------------------
+								for (var j=0;j<roles.length;j++){
+									if (roles[j]!='' && roles[j]!='user')
+										UICom.roles[roles[j]] = true;
+								}
+							}
+							//----------------------------
+						}
+					} else {
+						var parser = new DOMParser();
+						var xmlDoc = parser.parseFromString(attribute_value,"text/xml");
+						var roleselts = $("roles",xmlDoc);
+						for (var i=0; i<roleselts.length; i++){
+							var roles = $(roleselts[i]).text().split(" ");
 							//----------------------------
 							for (var j=0;j<roles.length;j++){
 								if (roles[j]!='' && roles[j]!='user')
 									UICom.roles[roles[j]] = true;
 							}
 						}
-						//----------------------------
 					}
 				}
 				else {
@@ -537,11 +530,12 @@ var UICom =
 	
 	
 	//=======================================================================
-	  DeleteNode: function( uuid, callback,param1,param2 )
+	  DeleteNode: function( uuid, callback,param1,param2,param3,param4)
 	//=======================================================================
 	{
-			$("#saved-window-body").html("<img src='../../karuta/img/red.png'/> recording...");
-			$.ajax({
+		$("#saved-window-body").html("<img src='../../karuta/img/red.png'/> recording...");
+		$.ajax({
+			async:false,
 			type : "DELETE",
 			dataType : "text",
 			url : serverBCK_API+"/nodes/node/" + uuid,
@@ -549,17 +543,15 @@ var UICom =
 				$("#saved-window-body").html("<img src='../../karuta/img/green.png'/> deleted : "+new Date().toLocaleString());
 				if (callback!=null && callback!='undefined')
 					if (jQuery.isFunction(callback))
-						callback(param1,param2);
+						callback(param1,param2,param3,param4);
 					else
-						eval(callback+"('"+param1+"','"+param2+"')");
+						eval(callback+"('"+param1+"','"+param2+"','"+param3+"','"+param4+"')");
 			},
 			error : function(jqxhr,textStatus) {
 				alertDisconnected();
 				alertHTML("Error in DeleteNode : "+jqxhr.responseText);
 				alertHTML(karutaStr[LANG]['disconnected']);
-//				window.location = "login.htm";
 			}
-
 		});
 	}
 	

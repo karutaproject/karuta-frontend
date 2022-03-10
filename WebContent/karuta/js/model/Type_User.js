@@ -730,8 +730,10 @@ UIFactory["User"].displaySearched = function (value,search_type,type)
 		success : function(data) {
 			UIFactory.User.parse_search(data);
 			if (type=='sharing-user'){
+				$("#"+type+"-rightside-users-content1").html("");
 				for (var i=0; i<searched_active_users_list.length;i++){
 					$("#"+type+"-rightside-users-content1").append(searched_active_users_list[i].getSelector(null,null,'select_users'));
+					$("#"+type+"-rightside-users-content1").append("<br>");
 				}				
 			} else {
 				$("#"+type+"-rightside-content1").show();
@@ -1324,8 +1326,11 @@ UIFactory["User"].deleteTemporaryUsers = function()
 	var last = UsersActive_list.length;
 	for (var i=first; i<last;i++){
 		var user = UsersActive_list[i];
+		try {
 		if (user.username.split('-').length>4 || user.username.indexOf('#')>10)
 			UIFactory.User.remove(user.id); 
+		} 
+		catch {}
 	}
 	$("#user-rightside-users-content3").html("");
 }
@@ -1334,7 +1339,7 @@ UIFactory["User"].deleteTemporaryUsers = function()
 UIFactory["User"].removeUsers = function() 
 //==================================
 {
-	$("#wait-window").show();
+	$("#wait-window").modal('show');
 	//----------------
 	$.ajaxSetup({async: false});
 	for (var i=0;i<UsersActive_list.length;i++){
@@ -1349,7 +1354,7 @@ UIFactory["User"].removeUsers = function()
 			}
 		});
 	}
-	$("#wait-window").hide();
+	$("#wait-window").modal('hide');
 	$.ajaxSetup({async: true});
 	fill_list_users();
 	$("#user-refresh").click();
@@ -1395,7 +1400,7 @@ function confirmDelEmptyUsers()
 UIFactory["User"].deleteEmptyUsers = function() 
 //==================================
 {
-	$("#wait-window").show();
+	$("#wait-window").modal('show');
 	//----------------
 	var selectedlist = $("input[name=empty-user]").filter(':checked');
 	$.ajaxSetup({async: false});
@@ -1404,7 +1409,7 @@ UIFactory["User"].deleteEmptyUsers = function()
 		UIFactory.User.remove(userid,'users');
 		$("#user-rightside-users-content4_"+userid).hide();
 	}
-	$("#wait-window").hide();
+	$("#wait-window").modal('hide');
 	$.ajaxSetup({async: true});
 	//----------------
 }

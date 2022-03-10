@@ -129,7 +129,7 @@ UIFactory["Get_Proxy"].prototype.displayView = function(dest,type,langcode)
 UIFactory["Get_Proxy"].update = function(selected_item,itself,lang,type)
 //==================================
 {
-	$(itself.lastmodified_node).text(new Date().toLocaleString());
+	$(itself.lastmodified_node).text(new Date().getTime());
 	if (lang==null)
 		lang = LANG;
 	var code = $(selected_item).attr('code');
@@ -160,7 +160,7 @@ UIFactory["Get_Proxy"].update = function(selected_item,itself,lang,type)
 UIFactory["Get_Proxy"].update2 = function(data,itself,lang,type,code)
 //==================================
 {
-	$(itself.lastmodified_node).text(new Date().toLocaleString());
+	$(itself.lastmodified_node).text(new Date().getTime());
 	var nodes = $("node",data);
 	var resource = null;
 	if ($("asmResource",nodes[0]).length==3)
@@ -190,7 +190,7 @@ UIFactory["Get_Proxy"].prototype.displayEditor = function(destid,type,langcode)
 	var queryattr_value = $("metadata-wad",this.node).attr('query');
 	if (queryattr_value!=undefined && queryattr_value!='') {
 		//------------------
-		queryattr_value = cleanCode(r_replaceVariable(queryattr_value));
+		queryattr_value = cleanCode(replaceVariable(queryattr_value));
 		var parts = queryattr_value.split("|");
 		var queryattr_value = parts[0];
 		var proxy_semtag = parts[1]

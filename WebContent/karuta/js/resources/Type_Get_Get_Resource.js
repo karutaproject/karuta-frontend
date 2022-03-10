@@ -190,7 +190,7 @@ var html = this.getView(dest,type,langcode);
 UIFactory["Get_Get_Resource"].update = function(selected_item,itself,langcode,type)
 //==================================
 {
-	$(itself.lastmodified_node).text(new Date().toLocaleString());
+	$(itself.lastmodified_node).text(new Date().getTime());
 	var value = $(selected_item).attr('value');
 	var code = $(selected_item).attr('code');
 	var style = $(selected_item).attr('style');
@@ -331,9 +331,6 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 				}
 			}
 			//----------------------
-//			if ($("*:has(metadata[semantictag*='"+semtag_parent+"'][encrypted='Y'])",parent).length>0)
-//				code_parent = decrypt(code_parent.substring(3),g_rc4key);
-			//----------------------
 			if (removestar>-1) {
 				var elts = code_parent.split("*");
 				code_parent = elts[removestar];
@@ -348,8 +345,9 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 			if (portfoliocode.indexOf('value?')>-1) {
 				code_parent = replaceVariable(code_parent);
 				value_parent = replaceVariable(value_parent);
-				portfoliocode_parent = value_parent;
-				portfoliocode = portfoliocode_parent;
+				portfoliocode = portfoliocode_parent = value_parent;
+				$(this.portfoliocode_node).text(portfoliocode_parent);
+				$(this.value_node).text(portfoliocode_parent);
 				url = serverBCK_API+"/nodes?portfoliocode="+portfoliocode_parent+"&semtag="+semtag.replace("!","")+"&semtag_parent="+semtag_parent+ "&code_parent="+code_parent;			
 			} else if (portfoliocode.indexOf('parent?')>-1){
 				if (portfoliocode_parent.indexOf("@")>-1) {
@@ -383,11 +381,11 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 					portfoliocode:portfoliocode,
 					semtag2:semtag2,
 					success : function(data) {
-						UIFactory["Get_Get_Resource"].parse(destid,type,langcode,data,self,disabled,srce,this.portfoliocode,semtag,semtag2,cachable);
+						self.parse(destid,type,langcode,data,disabled,srce,this.portfoliocode,semtag,semtag2,cachable);
 					},
 					error : function(jqxhr,textStatus) {
 						$("#"+destid).html("No result");
-						UIFactory["Get_Get_Resource"].parse(destid,type,langcode,null,self,disabled,srce,this.portfoliocode,semtag,semtag2,cachable);
+						self.parse(destid,type,langcode,null,disabled,srce,this.portfoliocode,semtag,semtag2,cachable);
 					}
 				});
 			} else {
@@ -424,11 +422,228 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 						portfoliocode:portfoliocode,
 						semtag2:semtag2,
 						success : function(data) {
-							UIFactory["Get_Get_Resource"].parse(destid,type,langcode,data,self,disabled,srce,this.portfoliocode,semtag,semtag2,cachable);
+							self.parse(destid,type,langcode,data,disabled,srce,this.portfoliocode,semtag,semtag2,cachable);
 						},
 						error : function(jqxhr,textStatus) {
 							$("#"+destid).html("No result");
-							UIFactory["Get_Get_Resource"].parse(destid,type,langcode,null,self,disabled,srce,this.portfoliocode,semtag,semtag2,cachable);
+							self.parse(destid,type,langcode,null,disabled,srce,this.portfoliocode,semtag,semtag2,cachable);
+						}
+					});
+				}
+			}
+			//----------------------
+		} catch(e) { alertHTML(e);
+			// do nothing - error in the search attribute
+		}
+	}
+	//----------------------------- NEW MENUS ----------------------------------
+	if (this.get_type=="import_comp"){
+		try {
+			type = "multiple";
+			srce = this.query_object;
+			//------------------------------
+			var semtag = this.query_semtag;
+			var semtag2 = "";
+			if (semtag.indexOf('+')>-1) {
+				semtag2 = semtag.substring(semtag.indexOf('+')+1);
+				semtag = semtag.substring(0,semtag.indexOf('+'));
+			}
+			var semtag_parent = this.parent_semtag;
+			if (semtag_parent.indexOf('#')==0)
+				semtag_parent = semtag_parent.substring(1);
+			var portfoliocode = this.query_portfolio;
+			var query_parent_semtag = this.query_parent_semtag;
+			srce = this.query_object;
+			//------------
+			var selfcode = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",UICom.root.node)).text();
+//			if (portfoliocode.indexOf('.')<0 && selfcode.indexOf('.')>0 && portfoliocode!='self')  // There is no project, we add the project of the current portfolio
+//				portfoliocode = selfcode.substring(0,selfcode.indexOf('.')) + "." + portfoliocode;
+			if (portfoliocode=='self')
+				portfoliocode = selfcode;
+			//------------
+//			portfoliocode = cleanCode(portfoliocode); // portfoliocode may be from a get_ressource with spécial characters
+			//------------
+			var query = this.parent_position+"."+this.parent_semtag;
+			var parent = null;
+			var ref = null;
+			var code_parent = "";
+			var value_parent = "";
+			var pcode_parent = "";
+			//-------------------------------
+			var removestar = -1;
+			if (semtag_parent.indexOf('*')>-1 ) {
+				var elts = semtag_parent.split("*");
+				for (var i=0;i<elts.length;i++) {
+					if (elts[i]!="")
+						removestar = i;
+				}
+				semtag_parent = elts[removestar];
+			}
+			// ------- search for parent ----
+			if (query.indexOf('code')>-1){
+				if (query.indexOf('itselfcode')>-1) {
+					code_parent = $($("code",$(this.node)[0])[0]).text();
+					value_parent = $($("value",$(this.node)[0])[0]).text();
+					pcode_parent = $($("portfoliocode",$(this.node)[0])[0]).text();
+				} else if (query.indexOf('parent.parent.parent.parent.parentcode')>-1) {
+					code_parent = $($("code",$(this.node).parent().parent().parent().parent().parent()[0])[0]).text();
+					value_parent = $($("value",$(this.node).parent().parent().parent().parent().parent()[0])[0]).text();
+					pcode_parent = $($("portfoliocode",$(this.node).parent().parent().parent().parent().parent()[0])[0]).text();
+				} else if (query.indexOf('parent.parent.parent.parentcode')>-1) {
+					code_parent = $($("code",$(this.node).parent().parent().parent().parent()[0])[0]).text();
+					value_parent = $($("value",$(this.node).parent().parent().parent().parent()[0])[0]).text();
+					pcode_parent = $($("portfoliocode",$(this.node).parent().parent().parent().parent()[0])[0]).text();
+				} else if (query.indexOf('parent.parent.parentcode')>-1) {
+					code_parent = $($("code",$(this.node).parent().parent().parent()[0])[0]).text();
+					value_parent = $($("value",$(this.node).parent().parent().parent()[0])[0]).text();
+					pcode_parent = $($("portfoliocode",$(this.node).parent().parent().parent()[0])[0]).text();
+				} else if (query.indexOf('parent.parentcode')>-1) {
+					code_parent = $($("code",$(this.node).parent().parent()[0])[0]).text();
+					value_parent = $($("value",$(this.node).parent().parent()[0])[0]).text();
+					pcode_parent = $($("portfoliocode",$(this.node).parent().parent()[0])[0]).text();
+				} else if (query.indexOf('parentcode')>-1) {
+					code_parent = $($("code",$(this.node).parent()[0])[0]).text();
+					value_parent = $($("value",$(this.node).parent()[0])[0]).text();
+					pcode_parent = $($("portfoliocode",$(this.node).parent()[0])[0]).text();
+				}
+			} else {
+				if (this.parent_position=='') {
+					parent = UICom.root.node;
+				} else if (query.indexOf('child')>-1) {
+					parent = this.node;
+				} else if (query.indexOf('sibling')>-1) {
+					parent = $(this.node).parent();
+				} else if (query.indexOf('parent.parent.parent.parent.parent')>-1) {
+					parent = $(this.node).parent().parent().parent().parent().parent().parent();
+				} else if (query.indexOf('parent.parent.parent.parent')>-1) {
+					parent = $(this.node).parent().parent().parent().parent().parent();
+				} else if (query.indexOf('parent.parent.parent')>-1) {
+					parent = $(this.node).parent().parent().parent().parent();
+				} else	if (query.indexOf('parent.parent')>-1) {
+					parent = $(this.node).parent().parent().parent();
+				} else if (query.indexOf('parent')>-1) {
+					parent = $(this.node).parent().parent();
+				}
+				//-----------
+				var child = $("metadata[semantictag*='"+semtag_parent+"']",parent).parent();
+				var itself = $(parent).has("metadata[semantictag*='"+semtag_parent+"']");
+				if (child.length==0 && itself.length>0){
+					code_parent = $($("code",itself)[0]).text();
+					value_parent = $($("value",itself)[0]).text();
+					pcode_parent = $($("portfoliocode",itself)[0]).text();
+				} else {
+					var nodetype = $(child).prop("nodeName"); // name of the xml tag
+					if (nodetype=='asmContext') {
+						code_parent = $($("code",child)[1]).text();
+						value_parent = $($("value",child)[1]).text();
+						pcode_parent = $($("portfoliocode",child)[0]).text();
+					 } else {
+						code_parent = $($("code",child)[0]).text();
+						value_parent = $($("value",child)[0]).text();
+						pcode_parent = $($("portfoliocode",child)[0]).text();
+					}
+				}
+			}
+			//----------------------
+			if (removestar>-1) {
+				var elts = code_parent.split("*");
+				code_parent = elts[removestar];
+			}
+			//----------------------
+			var portfoliocode_parent = $("portfoliocode",$("*:has(metadata[semantictag*='"+semtag_parent+"'])",parent)).text();
+			if (portfoliocode_parent.indexOf('.')<0 && selfcode.indexOf('.')>0 && portfoliocode_parent!='self')  // There is no project, we add the project of the current portfolio
+				portfoliocode_parent = selfcode.substring(0,selfcode.indexOf('.')) + "." + portfoliocode_parent;
+//			alertHTML('portfoliocode:'+portfoliocode+'--semtag:'+semtag+'--semtag_parent:'+semtag_parent+'--code_parent:'+code_parent+'--portfoliocode_parent:'+portfoliocode_parent);
+			//----------------------
+			var url ="";
+			code_parent = replaceVariable(code_parent);
+			if (portfoliocode=="##parentcode##") {
+				portfoliocode = cleanCode(code_parent);
+				url = serverBCK_API+"/nodes?portfoliocode="+portfoliocode+"&semtag="+semtag.replace("!","");
+			} else if (portfoliocode.indexOf("##parentcode##")>-1) {
+				let js2 = $("#js2").attr("onclick");
+				js2 = js2.replaceAll("##parentcode##",cleanCode(code_parent));
+				$("#js2").attr("onclick",js2);
+				portfoliocode = portfoliocode.replaceAll("##parentcode##",cleanCode(code_parent));
+				url = serverBCK_API+"/nodes?portfoliocode="+portfoliocode+"&semtag="+semtag.replace("!","");
+			} else if (portfoliocode.indexOf("##parentvalue##")>-1){
+				portfoliocode = value_parent;
+				let js2 = $("#js2").attr("onclick");
+				js2 = js2.replaceAll("##parentvalue##",value_parent);
+				$("#js2").attr("onclick",js2);
+				url = serverBCK_API+"/nodes?portfoliocode="+portfoliocode+"&semtag="+semtag.replace("!","")+"&semtag_parent="+this.query_parent_semtag+ "&code_parent="+code_parent;
+			} else if (portfoliocode.indexOf("##parentportfoliocode##")>-1){
+				portfoliocode = pcode_parent;
+				let js2 = $("#js2").attr("onclick");
+				js2 = js2.replaceAll("##parentportfoliocode##",pcode_parent);
+				$("#js2").attr("onclick",js2);
+				url = serverBCK_API+"/nodes?portfoliocode="+portfoliocode+"&semtag="+semtag.replace("!","")+"&semtag_parent="+this.query_parent_semtag+ "&code_parent="+code_parent;
+			} else {
+				let js2 = $("#js2").attr("onclick");
+				$("#js2").attr("onclick",js2);
+				url = serverBCK_API+"/nodes?portfoliocode="+portfoliocode+"&semtag="+semtag.replace("!","")+"&semtag_parent="+this.query_parent_semtag+ "&code_parent="+code_parent;
+			}
+			$(this.portfoliocode_node).text(portfoliocode);
+			//----------------------
+			var self = this;
+			portfoliocode = replaceVariable(portfoliocode);
+			url = replaceVariable(url);
+			if (code_parent!="") {
+				$.ajax({
+					async:false,
+					type : "GET",
+					dataType : "xml",
+					url : url,
+					portfoliocode:portfoliocode,
+					semtag2:semtag2,
+					success : function(data) {
+						self.parse(destid,type,langcode,data,disabled,srce,this.portfoliocode,semtag,semtag2,cachable);
+					},
+					error : function(jqxhr,textStatus) {
+						$("#"+destid).html("No result");
+						self.parse(destid,type,langcode,null,disabled,srce,this.portfoliocode,semtag,semtag2,cachable);
+					}
+				});
+			} else {
+				//----------- ERROR Parent not selected ---------------------------------------------
+				var data = this.node;
+				if ($("metadata-wad",data)[0]!=undefined && $($("metadata-wad",data)[0]).attr('error')!=undefined && $($("metadata-wad",data)[0]).attr('error')!=""){
+					var error_text = "";
+					var errorlang = 0;
+					var display_error = false;
+					var attr_error = $($("metadata-wad",data)[0]).attr('error');
+					var errors = attr_error.split("/"); // lang1/lang2/...
+					for (var j=0; j<errors.length; j++){
+						if (errors[j].indexOf("@"+languages[langcode])>-1)
+							errorlang =j;
+					}
+					error_text = errors[errorlang].substring(0,errors[errorlang].indexOf("@"));
+					if (errors[errorlang].indexOf(",")>-1) {
+						var roles = errors[errorlang].substring(errors[errorlang].indexOf(","));
+						if (roles.indexOf(this.userrole)>-1 || (roles.containsArrayElt(g_userroles) && g_userroles[0]!='designer') || USER.admin || g_userroles[0]=='designer')
+						display_error = true;
+					} else {
+						display_error = true;
+					}
+					if (display_error){
+						alertHTML(error_text);
+					}
+				} else { // we execute anyway
+					var self = this;
+					$.ajax({
+						async:false,
+						type : "GET",
+						dataType : "xml",
+						url : url,
+						portfoliocode:portfoliocode,
+						semtag:semtag,
+						semtag2:semtag2,
+						success : function(data) {
+							self.parse(destid,type,langcode,data,disabled,srce,this.portfoliocode,this.semtag,this.semtag2,cachable);
+						},
+						error : function(jqxhr,textStatus) {
+							$("#"+destid).html("No result");
+							self.parse(destid,type,langcode,null,disabled,srce,this.portfoliocode,this.semtag,this.semtag2,cachable);
 						}
 					});
 				}
@@ -442,20 +657,15 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 
 
 //==================================
-UIFactory["Get_Get_Resource"].parse = function(destid,type,langcode,data,self,disabled,srce,portfoliocode,semtag,semtag2,cachable) {
+UIFactory["Get_Get_Resource"].prototype.parse = function(destid,type,langcode,data,disabled,srce,portfoliocode,semtag,semtag2,cachable) {
 //==================================
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
 	//---------------------
+	let self = this;
 	var self_code = $(self.code_node).text();
-	if (self.encrypted)
-		self_code = decrypt(self_code.substring(3),g_rc4key);
-	//---------------------
-	//---------------------
 	var self_value = $(self.value_node).text();
-	if (self.encrypted)
-		self_value = decrypt(self_value.substring(3),g_rc4key);
 	//---------------------
 	if (type==undefined || type==null)
 		type = 'select';
@@ -725,77 +935,111 @@ UIFactory["Get_Get_Resource"].parse = function(destid,type,langcode,data,self,di
 	//------------------------------------------------------------
 		var inputs = "<div id='get_get_multiple' class='multiple'></div>";
 		var inputs_obj = $(inputs);
-		//-----------------------
-		var nodes = $("node",data);
-		for ( var i = 0; i < newTableau1.length; ++i) {
-			var uuid = $(newTableau1[i][1]).attr('id');
+		//-----search for already added------------------
+		if (this.unique!="") {
+			if (this.targetid==undefined || this.targetid=="")
+				this.targetid = this.parentid;
+			var targetid = this.targetid;
+			var searchsemtag = (this.query_semtag!=undefined)?this.query_semtag:semtag;
+			searchsemtag = (this.unique=='true')?searchsemtag:this.unique;
+			var data = UICom.structure.ui[targetid].node;
+			var allreadyadded = $("*:has(>metadata[semantictag*="+searchsemtag+"])",data);
+			var tabadded = [];
+			for ( var i = 0; i < allreadyadded.length; i++) {
+				let resource = null;
+				if ($("asmResource",allreadyadded[i]).length==3)
+					resource = $(">asmResource[xsi_type!='nodeRes'][xsi_type!='context']",allreadyadded[i]); 
+				else
+					resource = $(">asmResource[xsi_type='nodeRes']",allreadyadded[i]);
+				let code = $('code',resource).text();
+				tabadded[i] = code;
+			}
+		}
+		//----------remove allready added----------------
+		var newTableau2 = [];
+		if (this.unique!="") {
+			for ( var i = 0; i < newTableau1.length; ++i) {
+				const indx = tabadded.indexOf(newTableau1[i][0]);
+				if (indx==-1)
+					newTableau2.push(newTableau1[i]);
+			}
+		} else {
+			newTableau2 = newTableau1;
+		}
+		//------------------------------------------------
+		var previouscode = "";
+		for ( var i = 0; i < newTableau2.length; ++i) {
+			var uuid = $(newTableau2[i][1]).attr('id');
 			var input = "";
 			var style = "";
 			var resource = null;
 			//------------------------------
-			if ($("asmResource",newTableau1[i][1]).length==3) {
-				style = UIFactory.Node.getDataContentStyle(newTableau1[i][1].querySelector("metadata-epm"));
-				resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i][1]); 
+			if ($("asmResource",newTableau2[i][1]).length==3) {
+				style = UIFactory.Node.getDataContentStyle(newTableau2[i][1].querySelector("metadata-epm"));
+				resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau2[i][1]); 
 			} else {
-				style = UIFactory.Node.getDataLabelStyle(newTableau1[i][1].querySelector("metadata-epm"));
-				resource = $("asmResource[xsi_type='nodeRes']",newTableau1[i][1]);
+				style = UIFactory.Node.getDataLabelStyle(newTableau2[i][1].querySelector("metadata-epm"));
+				resource = $("asmResource[xsi_type='nodeRes']",newTableau2[i][1]);
 			}
 			//------------------------------
 			var code = $('code',resource).text();
-			var selectable = true;
-			var disabled = false;
-			var display_code = false;
-			var display_label = true;
-			//------------------------
-			if (code.indexOf("$")>-1){ 
-				display_label = false;
-			}
-			if (code.indexOf("@")<0) {
-				display_code = true;
-			}
-			if (code.indexOf("?")>-1) {
-				disabled = true;
-			}
-			if (code.indexOf("!")>-1 || semtag.indexOf("!")>-1) {
-				selectable = false;
-			}
-			code = cleanCode(code);
-			//------------------------------
-			input += "<div id='"+code+"' style=\""+style+"\">";
-			if (selectable) {
-				input += "	<input type='checkbox' name='multiple_"+self.id+"' value='"+$('value',resource).text()+"' code='"+$('code',resource).text()+"' portfoliocode='"+portfoliocode+"' class='multiple-item";
-				input += "' ";
-				if (srce=="resource") {
-					for (var j=0; j<languages.length;j++){
+			if (code!=previouscode){
+				previouscode = code
+				var selectable = true;
+				var disabled = false;
+				var display_code = false;
+				var display_label = true;
+				//------------------------
+				if (code.indexOf("$")>-1){ 
+					display_label = false;
+				}
+				if (code.indexOf("@")<0) {
+					display_code = true;
+				}
+				if (code.indexOf("?")>-1) {
+					disabled = true;
+				}
+				if (code.indexOf("!")>-1 || semtag.indexOf("!")>-1) {
+					selectable = false;
+				}
+				code = cleanCode(code);
+				//------------------------------
+				input += "<div id='"+code+"' style=\""+style+"\">";
+				if (selectable) {
+					input += "	<input type='checkbox' name='multiple_"+self.id+"' value='"+$('value',resource).text()+"' code='"+$('code',resource).text()+"' portfoliocode='"+portfoliocode+"' class='multiple-item";
+					input += "' ";
+					if (srce=="resource") {
+						for (var j=0; j<languages.length;j++){
+							var elts = $("label[lang='"+languages[langcode]+"']",resource).text().split("|");
+							input += "label_"+languages[j]+"=\""+elts[2].substring(6)+"\" ";
+						}
+					}
+					else {
+						for (var j=0; j<languages.length;j++){
+							input += "label_"+languages[j]+"=\""+$(srce+"[lang='"+languages[j]+"']",resource).text()+"\" ";
+						}
+					}
+					if (disabled)
+						input += "disabled";
+					input += "> ";
+				}
+				if (display_code)
+					input += code + " ";
+					if (srce=="resource") {
 						var elts = $("label[lang='"+languages[langcode]+"']",resource).text().split("|");
-						input += "label_"+languages[j]+"=\""+elts[2].substring(6)+"\" ";
+						input +="<span  class='"+code+"'>" + elts[2].substring(6) + "</span></div>";
 					}
+				else	
+					input +="<span  class='"+code+"'>"+$(srce+"[lang='"+languages[langcode]+"']",resource).text()+"</span></div>";
+				var input_obj = $(input);
+				$(inputs_obj).append(input_obj);
+				// ---------------------- children ---------
+				if (semtag2!="") {
+					var semtag_parent = semtag.replace("!","");
+					UIFactory.Get_Get_Resource.getChildren(inputs_obj,langcode,self,srce,portfoliocode,semtag2,semtag_parent,code,cachable);
 				}
-				else {
-					for (var j=0; j<languages.length;j++){
-						input += "label_"+languages[j]+"=\""+$(srce+"[lang='"+languages[j]+"']",resource).text()+"\" ";
-					}
-				}
-				if (disabled)
-					input += "disabled";
-				input += "> ";
+				//------------------------------------------
 			}
-			if (display_code)
-				input += code + " ";
-				if (srce=="resource") {
-					var elts = $("label[lang='"+languages[langcode]+"']",resource).text().split("|");
-					input +="<span  class='"+code+"'>" + elts[2].substring(6) + "</span></div>";
-				}
-			else	
-				input +="<span  class='"+code+"'>"+$(srce+"[lang='"+languages[langcode]+"']",resource).text()+"</span></div>";
-			var input_obj = $(input);
-			$(inputs_obj).append(input_obj);
-			// ---------------------- children ---------
-			if (semtag2!="") {
-				var semtag_parent = semtag.replace("!","");
-				UIFactory.Get_Get_Resource.getChildren(inputs_obj,langcode,self,srce,portfoliocode,semtag2,semtag_parent,code,cachable);
-			}
-			//------------------------------------------
 		}
 		//------------------------------
 		$("#"+destid).append(inputs_obj);
@@ -1243,21 +1487,20 @@ UIFactory["Get_Get_Resource"].prototype.refresh = function()
 };
 
 //==================================
-UIFactory["Get_Get_Resource"].addMultiple = function(parentid,targetid,multiple_tags,get_get_resource_semtag)
+UIFactory["Get_Get_Resource"].addMultiple = function(parentid,targetid,multiple_tags,get_get_resource_semtag,fctjs)
 //==================================
 {
-	$.ajaxSetup({async: false});
+	if (fctjs==null)
+		fctjs = "";
+	else
+		fctjs = decode(fctjs);
 	var elts = multiple_tags.split(",");
 	var part_code = elts[0];
 	var srce = part_code.substring(0,part_code.lastIndexOf('.'));
 	var part_semtag = part_code.substring(part_code.lastIndexOf('.')+1);
-	var get_resource_semtag = elts[1];
+	if (get_get_resource_semtag==undefined || get_get_resource_semtag==null)
+		get_get_resource_semtag = elts[1];
 	var fct = elts[2];
-
-//	var part_code = multiple_tags.substring(0,multiple_tags.indexOf(','));
-//	var srce = part_code.substring(0,part_code.lastIndexOf('.'));
-//	var part_semtag = part_code.substring(part_code.lastIndexOf('.')+1);
-//	var get_resource_semtag = multiple_tags.substring(multiple_tags.indexOf(',')+1);
 
 	var inputs = $("input[name='multiple_"+parentid+"']").filter(':checked');
 	//------------------------------
@@ -1269,7 +1512,7 @@ UIFactory["Get_Get_Resource"].addMultiple = function(parentid,targetid,multiple_
 	// for each one create a part
 	var databack = true;
 	var callback = UIFactory.Get_Get_Resource.updateaddedpart;
-	var param2 = get_resource_semtag;
+	var param2 = get_get_resource_semtag;
 	var param4 = false;
 	var param5 = parentid;
 	var param6 = fct;
@@ -1278,6 +1521,8 @@ UIFactory["Get_Get_Resource"].addMultiple = function(parentid,targetid,multiple_
 		if (j==inputs.length-1)
 			param4 = true;
 		importBranch(parentid,srce,part_semtag,databack,callback,param2,param3,param4,param5,param6);
+		if(fctjs!="")
+			eval(fctjs);
 	}
 };
 
@@ -1303,6 +1548,7 @@ UIFactory["Get_Get_Resource"].updateaddedpart = function(data,get_resource_semta
 	}
 	xml += "</asmResource>";
 	$.ajax({
+		async : false,
 		type : "GET",
 		dataType : "xml",
 		url : serverBCK_API+"/nodes/node/"+partid,
@@ -1316,6 +1562,7 @@ UIFactory["Get_Get_Resource"].updateaddedpart = function(data,get_resource_semta
 				url_resource = serverBCK_API+"/nodes/node/" + nodeid + "/noderesource";
 			}
 			$.ajax({
+				async : false,
 				type : "PUT",
 				contentType: "application/xml",
 				dataType : "text",
@@ -1334,10 +1581,13 @@ UIFactory["Get_Get_Resource"].updateaddedpart = function(data,get_resource_semta
 }
 
 //==================================
-UIFactory["Get_Get_Resource"].importMultiple = function(parentid,targetid,srce,fct)
+UIFactory["Get_Get_Resource"].importMultiple = function(parentid,targetid,srce,fct,fctjs)
 //==================================
 {
-	$.ajaxSetup({async: false});
+	if (fctjs==null)
+		fctjs = "";
+	else
+		fctjs = decode(fctjs);
 	var inputs = $("input[name='multiple_"+parentid+"']").filter(':checked');
 	//------------------------------
 	if (UICom.structure.ui[targetid]==undefined)
@@ -1368,14 +1618,17 @@ UIFactory["Get_Get_Resource"].importMultiple = function(parentid,targetid,srce,f
 	}
 	for (var j=0; j<inputs.length;j++){
 		var code = $(inputs[j]).attr('code');
-		if (srce=='?')
+		if (srce=='?' || srce=='parent-code' || srce=='##parentcode##')
 			srce = $(inputs[j]).attr('portfoliocode');
 		importBranch(parentid,srce,code,databack,callback,param2,param3);
+		if(fctjs!="")
+			eval(fctjs);
 	}
-	if (fct!=null) {
+	if (fct!=null && fct!="") {
 		fct(parentid);
 		UIFactory.Node.reloadUnit();
 	}
+	$('#edit-window').modal('hide');
 }
 
 //--------------------------------------------------------------------------------------------------------
@@ -1451,7 +1704,7 @@ function functions_ggmultiple(parentid,targetid,title,query,functions)
 				js2 += ",'"+items[3]+"'";
 			else
 				js2 += ",'"+targetid+"'";
-			js2 += ",'"+items[1]+","+items[2]+"');";
+			js2 += ",'"+items[1]+"','"+items[2]+"');";
 		}
 	}
 	var footer = "<button class='btn' onclick=\""+js2+";\">"+karutaStr[LANG]['Add']+"</button> <button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
@@ -1468,3 +1721,88 @@ function functions_ggmultiple(parentid,targetid,title,query,functions)
 	getgetResource.displayEditor("get-get-resource-node");
 	$('#edit-window').modal('show');
 }
+
+//==================================
+function import_get_get_multiple(parentid,targetid,title,parent_position,parent_semtag,query_portfolio,query_parent_semtag,query_semtag,query_object,actns,unique)
+//==================================
+{
+	const acts = actns.split(';');
+	if (unique==null)
+		unique = '';
+	let actions = [];
+	for (let i=0;i<acts.length-1;i++) {
+		//actions.push(JSON.parse(acts[i].replaceAll("|","\"").replaceAll("<<","(").replaceAll(">>",")")));
+		actions.push(JSON.parse(acts[i].replaceAll("|","\"")));
+	}
+	let js1 = "javascript:$('#edit-window').modal('hide')";
+	let js2 = "";
+	for (let i=0;i<actions.length;i++) {
+		//-----------------
+		let fctjs = "";
+		let fcts = actions[i].fcts.split(',');
+		for (let j=0;j<fcts.length;j++) {
+			fctjs += fcts[j]+";";
+		}		
+		fctjs = encode(fctjs);
+		//------------------
+		if (actions[i].type=="import-component") {
+			let targets = actions[i].trgts.split(',');
+			for (let j=0;j<targets.length;j++) {
+				if (targetid=="")
+					targetid = targets[j];
+				js2 += "UIFactory.Get_Get_Resource.addMultiple('"+actions[i].parentid+"','"+targets[j]+"','"+replaceVariable(actions[i].foliocode+"."+actions[i].semtag)+"','"+actions[i].updatedtag+"','"+fctjs+"');";
+			}
+		} else if (actions[i].type=="import-elts-from") {
+			let targets = actions[i].trgts.split(',');
+			for (let j=0;j<targets.length;j++) {
+				if (targetid=="")
+					targetid = targets[j];
+				js2 += "UIFactory.Get_Get_Resource.importMultiple('"+actions[i].parentid+"','"+targets[j]+"','"+replaceVariable(actions[i].foliocode)+"',null,'"+fctjs+"');";
+			}
+		} else if (actions[i].type=="import-component-w-today-date") {
+			let targets = actions[i].trgts.split(',');
+			for (let j=0;j<targets.length;j++){
+				if (targetid=="")
+					targetid = targets[j];
+					js2 += "importAndSetDateToday('"+actions[i].parentid+"','"+targets[j]+"','','"+replaceVariable(actions[i].foliocode+"','"+actions[i].semtag)+"','"+actions[i].updatedtag+"','"+fctjs+"');";
+			}
+		} else if (actions[i].type=="import") {
+			let targets = actions[i].trgts.split(',');
+			for (let j=0;j<targets.length;j++){
+				if (targetid=="")
+					targetid = targets[j];
+					js2 += "importComponent('"+actions[i].parentid+"','"+targets[j]+"','"+replaceVariable(actions[i].foliocode+"','"+actions[i].semtag)+"','"+fctjs+"');";
+			}
+		} else if (actions[i].type=="import-today-date") {
+			let targets = actions[i].trgts.split(',');
+			for (let j=0;j<targets.length;j++){
+				if (targetid=="")
+					targetid = targets[j];
+					js2 += "importAndSetDateToday('"+actions[i].parentid+"','"+targets[j]+"','','karuta.karuta-resources','Calendar','Calendar','"+fctjs+"');";
+			}
+		}
+	}
+	var footer = "<button id='js2' class='btn' onclick=\""+js2+";\">"+karutaStr[LANG]['Add']+"</button> <button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
+	$("#edit-window-footer").html(footer);
+	$("#edit-window-title").html(title);
+	var html = "<div id='get-get-resource-node'></div>";
+	$("#edit-window-body").html(html);
+	$("#edit-window-body-node").html("");
+	$("#edit-window-type").html("");
+	$("#edit-window-body-metadata").html("");
+	$("#edit-window-body-metadata-epm").html("");
+	var getgetResource = new UIFactory["Get_Get_Resource"](UICom.structure["ui"][parentid].node,"xsi_type='nodeRes'");
+	getgetResource.get_type = "import_comp";
+	getgetResource.parent_position = parent_position;
+	getgetResource.parent_semtag = parent_semtag;
+	getgetResource.query_portfolio = query_portfolio;
+	getgetResource.query_parent_semtag = query_parent_semtag;	
+	getgetResource.query_semtag = query_semtag;
+	getgetResource.query_object = query_object;
+	getgetResource.targetid = targetid;
+	getgetResource.unique = unique;
+	getgetResource.displayEditor("get-get-resource-node");
+	$('#edit-window').modal('show');
+}
+
+

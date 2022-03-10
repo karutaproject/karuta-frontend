@@ -120,7 +120,7 @@ UIFactory["Field"].prototype.displayView = function(dest,type,langcode)
 UIFactory["Field"].prototype.update = function(langcode)
 //==================================
 {
-	$(this.lastmodified_node).text(new Date().toLocaleString());
+	$(this.lastmodified_node).text(new Date().getTime());
 	//---------------------
 	if (!this.multilingual) {
 		var value = $(this.text_node[langcode]).text();
@@ -171,6 +171,8 @@ UIFactory["Field"].prototype.displayEditor = function(dest,type,langcode,disable
 UIFactory["Field"].prototype.save = function()
 //==================================
 {
+	if (UICom.structure.ui[this.id].semantictag.indexOf("g-select-variable")>-1)
+		updateVariable(this.resource);
 	//------------------------------
 	var log = (UICom.structure.ui[this.id]!=undefined && UICom.structure.ui[this.id].logcode!=undefined && UICom.structure.ui[this.id].logcode!="");
 	if (log)

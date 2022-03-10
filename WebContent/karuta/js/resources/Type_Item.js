@@ -222,7 +222,7 @@ UIFactory["Item"].prototype.displayView = function(dest,type,langcode)
 UIFactory["Item"].update = function(itself,langcode)
 //==================================
 {
-	$(itself.lastmodified_node).text(new Date().toLocaleString());
+	$(itself.lastmodified_node).text(new Date().getTime());
 	//---------------------
 	if (!itself.multilingual) {
 		var value = $(itself.label_node[langcode]).text();

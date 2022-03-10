@@ -40,19 +40,19 @@ UIFactory["Node"].prototype.setMetadata = function(dest,depth,langcode,edit,inli
 	this.submitnode = ($(node.node).attr('submit')=='Y')? true:false;
 	//------------------------
 	this.semantictag =  ($("metadata",data)[0]==undefined || $($("metadata",data)[0]).attr('semantictag')==undefined)?'': $($("metadata",data)[0]).attr('semantictag');
-	this.collapsed = 'N';
-	if (!g_designerrole)
+	this.collapsed = ($(node.metadata).attr('collapsed')==undefined)?'N':$(node.metadata).attr('collapsed');
+	if (!g_designerrole && sessionStorage.getItem('collapsed'+uuid)!=undefined)
 		this.collapsed = (sessionStorage.getItem('collapsed'+uuid)==undefined)?'N':sessionStorage.getItem('collapsed'+uuid);
-	else
-		this.collapsed = ($(node.metadata).attr('collapsed')==undefined)?'N':$(node.metadata).attr('collapsed');
 	this.displayed = ($(node.metadatawad).attr('display')==undefined)?'Y':$(node.metadatawad).attr('display');
 	this.collapsible = ($(node.metadatawad).attr('collapsible')==undefined)?'N':$(node.metadatawad).attr('collapsible');
 	this.resnopencil = ($(node.metadatawad).attr('resnopencil')==undefined)?'N':$(node.metadatawad).attr('resnopencil');
 	this.nodenopencil = ($(node.metadatawad).attr('nodenopencil')==undefined)?'N':$(node.metadatawad).attr('nodenopencil');
+	this.nodenopencilroles = ($(node.metadatawad).attr('nodenopencilroles')==undefined)?'':$(node.metadatawad).attr('nodenopencilroles');
 	this.editcoderoles = ($(node.metadatawad).attr('editcoderoles')==undefined)?'':$(node.metadatawad).attr('editcoderoles');
 	this.editnoderoles = ($(node.metadatawad).attr('editnoderoles')==undefined)?'':$(node.metadatawad).attr('editnoderoles');
 	this.delnoderoles = ($(node.metadatawad).attr('delnoderoles')==undefined)?'':$(node.metadatawad).attr('delnoderoles');
 	this.commentnoderoles = ($(node.metadatawad).attr('commentnoderoles')==undefined)?'':$(node.metadatawad).attr('commentnoderoles');
+	this.seecommentnoderoles = ($(node.metadatawad).attr('seecommentnoderoles')==undefined)?'':$(node.metadatawad).attr('seecommentnoderoles');
 	this.showroles = ($(node.metadatawad).attr('showroles')==undefined)?'':$(node.metadatawad).attr('showroles');
 	this.showtoroles = ($(node.metadatawad).attr('showtoroles')==undefined)?'':$(node.metadatawad).attr('showtoroles');
 	this.editresroles = ($(node.metadatawad).attr('editresroles')==undefined)?'':$(node.metadatawad).attr('editresroles');
@@ -93,7 +93,7 @@ UIFactory["Node"].prototype.setMetadata = function(dest,depth,langcode,edit,inli
 	this.duplicateroles = ($(node.metadatawad).attr('duplicateroles')==undefined)?'none':$(node.metadatawad).attr('duplicateroles');
 	this.incrementroles = ($(node.metadatawad).attr('incrementroles')==undefined)?'none':$(node.metadatawad).attr('incrementroles');
 	this.menuroles = ($(node.metadatawad).attr('menuroles')==undefined)?'none':$(node.metadatawad).attr('menuroles');
-	this.menulabels = r_replaceVariable(($(node.metadatawad).attr('menulabels')==undefined)?'none':$(node.metadatawad).attr('menulabels'));
+	this.menulabels = replaceVariable(($(node.metadatawad).attr('menulabels')==undefined)?'none':$(node.metadatawad).attr('menulabels'));
 	this.js = ($(node.metadatawad).attr('js')==undefined)?"":$(node.metadatawad).attr('js');
 	this.langnotvisible = ($(node.metadatawad).attr('langnotvisible')==undefined)?"":$(node.metadatawad).attr('langnotvisible');
 	if (this.resource!=undefined || this.resource!=null)
@@ -358,8 +358,8 @@ UIFactory["Node"].prototype.getRights = function()
 //==================================
 {
 	var rights = null;
-	$.ajaxSetup({async: false});
 	$.ajax({
+		async:false,
 		type : "GET",
 		dataType : "xml",
 		url : serverBCK_API+"/nodes/node/"+this.id+"/rights",
@@ -367,7 +367,6 @@ UIFactory["Node"].prototype.getRights = function()
 			rights = data;
 		}
 	});
-	$.ajaxSetup({async: true});
 	return rights;
 }
 
@@ -468,12 +467,11 @@ UIFactory["Node"].prototype.displayMetadataAttributesEditor = function(destid)
 				this.displayMetadataAttributeEditor('metadata-part1','multilingual-resource',true,true);
 		}
 	}
-//	if (name=='asmContext') {
-//		if (this.resource.type=='Field' || this.resource.type=='TextField' || this.resource.type=='Get_Resource' || this.resource.type=='Get_Get_Resource' || this.resource.type=='Get_Double_Resource')
-//			this.displayMetadataAttributeEditor('metadata-part1','encrypted',true);
-//	}
-	if (!model)
-		this.displayRights('metadata-rights');
+	if (name=='asmContext' && this.resource.type=='Audio') {
+		this.displayMetadataAttributeEditor('metadata-part1','audio-record-only',true);
+	}
+//	if (!model)
+	this.displayRights('metadata-rights');
 	if (model)
 		this.displayMetadataWadAttributeEditor('metadata-part2','seenoderoles');
 	else
@@ -494,6 +492,7 @@ UIFactory["Node"].prototype.displayMetadataAttributesEditor = function(destid)
 		this.displayMetadataWadAttributeEditor('metadata-part2','resnopencil',true);
 	}
 	this.displayMetadataWadAttributeEditor('metadata-part2','commentnoderoles');
+	this.displayMetadataWadAttributeEditor('metadata-part2','seecommentnoderoles');
 	if (model)
 		this.displayMetadataWadAttributeEditor('metadata-part2','submitroles');
 	else
@@ -515,6 +514,7 @@ UIFactory["Node"].prototype.displayMetadataAttributesEditor = function(destid)
 	//-----------------------------------------
 //	if (model) {
 		this.displayMetadataWadAttributeEditor('metadata-part2','nodenopencil',true);
+		this.displayMetadataWadAttributeEditor('metadata-part2','nodenopencilroles');
 //	else
 //		this.displayMetadataWadAttributeEditor('metadata-part2','nodenopencil',false,true);
 	//-----------------------------------------
@@ -595,7 +595,7 @@ UIFactory["Node"].prototype.displayMetadataAttributesEditor = function(destid)
 		$("#metadata_texts").append($(html));
 		this.displayMetadatawWadTextAttributeEditor('metadata_texts','editboxtitle');
 	//----------------------Search----------------------------
-	if (resource_type=='Get_Resource' || resource_type=='Get_Double_Resource' || resource_type=='Get_Get_Resource' || resource_type=='Proxy' || resource_type=='Get_Proxy' || resource_type=='Action' || resource_type=='URL2Unit' || resource_type=='URL2Portfolio' || name=='asmUnitStructure' || name=='asmUnit' || name=='asmStructure') {
+	if (resource_type=='Get_Resource' || resource_type=='Get_Double_Resource' || resource_type=='Get_Get_Resource' || resource_type=='Proxy' || resource_type=='Get_Proxy' || resource_type=='Get_Portfolio' || resource_type=='Action' || resource_type=='URL2Unit' || resource_type=='URL2Portfolio' || name=='asmUnitStructure' || name=='asmUnit' || name=='asmStructure') {
 		html  = "<label>"+karutaStr[languages[langcode]]['query'+resource_type]+"</label>";
 		$("#metadata_texts").append($(html));
 		this.displayMetadatawWadTextAttributeEditor('metadata_texts','query');
@@ -619,7 +619,7 @@ UIFactory["Node"].prototype.displayMetadataAttributesEditor = function(destid)
 		this.displayMetadatawWadTextAttributeEditor('metadata_texts','shareroles');
 	}
 	//----------------------Menu----------------------------
-	if (name=='asmRoot' || name=='asmStructure' || name=='asmUnit' || name=='asmUnitStructure') {
+/*	if (name=='asmRoot' || name=='asmStructure' || name=='asmUnit' || name=='asmUnitStructure') {
 		//-----------------------
 		html  = "<label>"+karutaStr[languages[langcode]]['menuroles'];
 		if (languages.length>1){
@@ -653,7 +653,7 @@ UIFactory["Node"].prototype.displayMetadataAttributesEditor = function(destid)
 		$("#metadata_texts").append($(html));
 		this.displayMetadatawWadTextAttributeEditor('metadata_texts','menulabels');
 		//-----------------------
-	}
+	}*/
 	//------------------------Help-------------------------
 	html = "<br><label>"+karutaStr[languages[langcode]]['help'];
 	if (languages.length>1){
@@ -813,7 +813,10 @@ UIFactory["Node"].getMetadataInfo = function(data,attribute)
 {
 	var html = "";
 	if (data.getAttribute(attribute)!=undefined && data.getAttribute(attribute)!="")
-		html += "<span>"+attribute+":"+data.getAttribute(attribute)+"|</span>";
+		if (data.getAttribute(attribute).indexOf("<menus>")>-1)
+			html += "<span>"+attribute+":XML Menu|</span>";
+		else
+			html += "<span>"+attribute+":"+data.getAttribute(attribute)+"|</span>";
 	return html;
 };
 

@@ -29,7 +29,7 @@
 		<!-- =============================================================== -->
 		<script src="../../karuta/js/displayHTML.js"></script>
 		<script src="../../karuta/js/pages/karuta-page.js"></script>
-		<script src="../../karuta/js/pages/public.js"></script>
+		<script src="../../karuta/js/pages/list.js"></script>
 		<script src="../../karuta/js/pages/main.js"></script>
 		<script src="../../karuta/js/pages/users.js"></script>
 		<!-- =============================================================== -->
@@ -50,6 +50,7 @@
 		<script src="../../karuta/js/resources/Type_Image.js"></script>
 		<script src="../../karuta/js/resources/Type_ImageBlock.js"></script>
 		<script src="../../karuta/js/resources/Type_Get_Resource.js"></script>
+		<script src="../../karuta/js/resources/Type_Get_Portfolio.js"></script>
 		<script src="../../karuta/js/resources/Type_Get_Double_Resource.js"></script>
 		<script src="../../karuta/js/resources/Type_Get_Get_Resource.js"></script>
 		<script src="../../karuta/js/resources/Type_URL.js"></script>
@@ -80,7 +81,6 @@
 		<script src="../../karuta/js/model/Type_User.js"></script>
 		<script src="../../karuta/js/model/Type_UsersGroup.js"></script>
 		<!-- =============================================================== -->
-		<script src="../../application/js/version.js"></script>
 		<script src="../../karuta/js/version.js"></script>
 		<!-- =============================================================== -->
 		<script src="../../karuta/js/SVGToIMG.js"></script>
@@ -144,12 +144,14 @@
 					alert(appliname + "-config/_init.js not found");
 				}
 			});
+			initKarutaPage();
 			window.addEventListener("load", function() {
-				displayKarutaPublic();
+				displayKarutaPage();
 			});
 			$('[data-toggle="tooltip"]').tooltip({
-				trigger : 'hover'
+			    trigger : 'hover'
 			})  // to avoid tooltip when button is clicked
 		</script>
 	</body>
+
 </html>

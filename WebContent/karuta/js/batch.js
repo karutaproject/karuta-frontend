@@ -56,6 +56,51 @@ function initBatchVars()
 }
 
 //-----------------------------------------------------------------------
+//==================================
+function replaceBatchVariable(text,node,withquote)
+//==================================
+{
+	if (withquote==null)
+		withquote = true;
+	if (text!=undefined && text.indexOf('lastimported')>-1) {
+		text = text.replaceAll('###lastimported-1###',"g_importednodestack[g_importednodestack.length-2]");
+		text = text.replaceAll('###lastimported-2###',"g_importednodestack[g_importednodestack.length-3]");
+		text = text.replaceAll('###lastimported###',"g_importednodestack[g_importednodestack.length-1]");
+	}
+	if (node!=null && node!=undefined && withquote && text.indexOf('###parentnode###')>-1)
+		text = text.replaceAll('###parentnode###',"'"+$(node).parent().attr('id')+"'");
+	if (node!=null && node!=undefined && withquote && text.indexOf('###currentnode###')>-1)
+		text = text.replaceAll('###currentnode###',"'"+node.id+"'");
+	if (node!=null && node!=undefined && withquote && text.indexOf('###currentcode###')>-1)
+		text = text.replaceAll('###currentcode###',node.getCode());
+	if (node!=null && node!=undefined && !withquote && text.indexOf('###currentnode###')>-1)
+		text = text.replaceAll('###currentnode###',node.id);
+	if (node!=null && node!=undefined && !withquote && text.indexOf('###currentcode###')>-1)
+		text = text.replaceAll('###currentcode###',node.getCode());
+	var n=0;
+	while (text!=undefined && text.indexOf("{###")>-1 && n<100) {
+		var test_string = text.substring(text.indexOf("{###")+4); // test_string = abcd{###variable###}efgh.....
+		var variable_name = test_string.substring(0,test_string.indexOf("###}"));
+		if (g_variables[variable_name]!=undefined)
+			text = text.replace("{###"+variable_name+"###}", g_variables[variable_name]);
+		n++; // to avoid infinite loop
+	}
+	while (text!=undefined && text.indexOf("###")>-1 && n<100) {
+		var test_string = text.substring(text.indexOf("###")+3); // test_string = abcd###variable###efgh.....
+		var variable_name = test_string.substring(0,test_string.indexOf("###"));
+		if (g_variables[variable_name]!=undefined)
+			text = text.replace("###"+variable_name+"###", g_variables[variable_name]);
+		if (text.indexOf("[")>-1) {
+			var variable_value = variable_name.substring(0,variable_name.indexOf("["))
+			var i = text.substring(text.indexOf("[")+1,text.indexOf("]"));
+			i = replaceVariable(i);
+			if (g_variables[variable_value]!=undefined && g_variables[variable_value].length>=i)
+				text = g_variables[variable_value][i];
+			}
+		n++; // to avoid infinite loop
+	}
+	return text;
+}
 //-----------------------------------------------------------------------
 
 //==================================
@@ -63,8 +108,8 @@ function getTxtvals(node)
 //==================================
 {
 	var str = getTxtvalsWithoutReplacement(node);
-	return str.trim();
-//	return replaceVariable(str.trim());
+//	return str.trim();
+	return replaceBatchVariable(str.trim());
 }
 
 //==================================
@@ -76,7 +121,7 @@ function b_replaceVariable(text)
 	return text;
 }
 
-///==================================
+//==================================
 function getTxtvalsWithoutReplacement(node)
 //==================================
 {
@@ -150,10 +195,10 @@ function getvarvals(node)
 					text = eval(text);
 				}
 			}
-			str += text.trim();
+			str += text;
 		}
 	}
-	return replaceVariable(str);
+	return replaceVariable(str.trim());
 }
 
 //==================================
@@ -180,7 +225,7 @@ function getTargetUrl(node)
 	else
 		url = serverBCK_API+"/nodes?portfoliocode=" + g_trees[treeref][1] + "&semtag="+semtag;
 	return url;
-//	return r_replaceVariable(url);
+//	return replaceVariable(url);
 }
 
 //==================================
@@ -218,7 +263,7 @@ function getSourceUrl(node)
 	else
 		url = serverBCK_API+"/nodes?portfoliocode=" + g_trees[treeref][1] + "&semtag="+semtag;
 	return url;
-//	return r_replaceVariable(url);
+//	return replaceVariable(url);
 }
 
 //-----------------------------------------------------------------------
@@ -883,6 +928,38 @@ g_actions['leave-usergroup'] = function LeaveUserGroup(node)
 	return ok;
 }
 
+//=================================================
+g_actions['delete-usergroup'] = function DeleteUserGroup(node)
+//=================================================
+{
+}
+
+//=================================================
+g_actions['create-usergroup-by-id'] = function DeleteUserGroupById(node)
+//=================================================
+{
+	var ok = false;
+	var usergroup = getTxtvals($("usergroup",node));
+	var url = serverBCK_API+"/usersgroups?group="+usergroup;
+	$.ajax({
+		async : false,
+		type : "DELETE",
+		contentType: "application/xml; charset=UTF-8",
+		dataType : "text",
+		url : url,
+		success : function(data) {
+			ok = true;
+			var usergroupid = data;
+			get_list_usergroups();
+			$("#batch-log").append("<br>- usergroup delete - id:"+usergroup);
+		},
+		error : function(data) {
+			$("#batch-log").append("<br>- *** not exist - id:"+usergroup);
+		}
+	});
+	return ok;
+}
+
 //-----------------------------------------------------------------------
 //-----------------------------------------------------------------------
 //------------------------ Delete Tree ----------------------------------
@@ -994,7 +1071,6 @@ g_actions['create-tree'] = function createTree(node)
 	var code = getvarvals($("code",node));
 	if (code=="")
 		code = getTxtvals($("code",node));
-	code = replaceVariable(code);
 	var treeref = $(node).attr('id');
 	if (code!="") {
 		var url = serverBCK_API+"/portfolios/portfolio/code/" + code;
@@ -1545,7 +1621,7 @@ g_actions['update-resource'] = function updateResource(node)
 						url : serverBCK_API+"/resources/resource/" + nodeid,
 						success : function(data) {
 							ok++;
-							$("#batch-log").append("<br>- resource updated "+type+" - "+semtag+":"+attribute_value);
+							$("#batch-log").append("<br>- resource updated "+type+" - "+semtag+" - "+attribute_value);
 						},
 						error : function(data) {
 							$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in update resource "+type+" - "+semtag+":"+attribute_value);
@@ -1603,10 +1679,18 @@ g_actions['update-node-resource'] = function updateResource(node)
 					//-------------------
 					var nodeid = $(nodes[i]).attr('id');
 					var resource = $("asmResource[xsi_type='nodeRes']",nodes[i]);
+					var oldcode = $("code",resource).text();
+					var oldlabel =$("label[lang='"+LANG+"']",resource).text();
 					var code = getTxtvals($("newcode",node));
+					if (code.indexOf("##oldcode##")>-1)
+						code = code.replaceAll("##oldcode##",oldcode);
 					var label = getTxtvals($("label",node));
-					$("code",resource).text(code);
-					$("label[lang='"+LANG+"']",resource).text(label);
+					if (label.indexOf("##oldlabel##")>-1)
+						label = label.replaceAll("##oldlabel##",oldlabel);
+					if (code!="")
+						$("code",resource).text(code);
+					if (label!="")
+						$("label[lang='"+LANG+"']",resource).text(label);
 					var data = "<asmResource xsi_type='nodeRes'>" + $(resource).html() + "</asmResource>";
 					var strippeddata = data.replace(/xmlns=\"http:\/\/www.w3.org\/1999\/xhtml\"/g,"");  // remove xmlns attribute
 					//-------------------
@@ -1638,6 +1722,7 @@ g_actions['update-node-resource'] = function updateResource(node)
 	return (ok!=0 && ok == nodes.length);
 }
 
+
 //-----------------------------------------------------------------------
 //-----------------------------------------------------------------------
 //------------- Update Node - Metadata ----------------------------------
@@ -1666,7 +1751,7 @@ g_actions['update-node'] = function updateNode(node)
 				var results = $('*',data);
 				var nodes = new Array();
 				nodes[0] = results[0];
-				var text = getTxtvalsWithoutReplacement($("text",node));
+				var text = getTxtvals($("text",node));
 				if ($("source",node).length>0){
 					var source_select = $("source",node).attr("select");
 					var source_idx = source_select.indexOf(".");
@@ -1741,7 +1826,7 @@ g_actions['update-node'] = function updateNode(node)
 			success : function(data) {
 				var nodes = $("node",data);
 				nodes = eval("$(nodes)"+test);
-				var text = getTxtvalsWithoutReplacement($("text",node));
+				var text = getTxtvals($("text",node));
 				$("#batch-log").append("<br>- " + nodes.length + " nodes");
 				if (nodes.length>0) {
 					if ($("source",node).length>0){
@@ -1846,11 +1931,15 @@ function updateMetada(nodes,node,type,semtag,text,attribute)
 function updateMetadawad(nodes,node,type,semtag,text,attribute)
 //=================================================
 {
+	if (attribute=="menuroles")
+		text = text.replaceAll("<br/>","").replaceAll("<br>","").replaceAll("&amp;","&");
 	for (var inode=0;inode<nodes.length;inode++) {
 		var nodeid = $(nodes[inode]).attr('id');
 		var metadatawad = $("metadata-wad",nodes[inode]);
 		$(metadatawad).attr(attribute,text);
 		var xml = xml2string(metadatawad[0]);
+		if (attribute=="menuroles")
+			xml = xml.replaceAll("&amp;","&");
 		$.ajax({
 			async : false,
 			type : "PUT",
@@ -2703,7 +2792,107 @@ g_actions['import-node'] = function importNode(node)
 	return ok;
 }
 
+//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
+//------------------------- Move Node ----------------------------------
+//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
 
+//=================================================
+g_actions['move-node'] = function moveNode(node)
+//=================================================
+{
+	var ok = false
+	//------------------------------------
+	var source = $("source",node).text();
+	var srce_idx = source.lastIndexOf(".");
+	var srce_treeref = source.substring(0,srce_idx);
+	var srce_semtag = source.substring(srce_idx+1);
+	//------------------------------------
+	var select = $(node).attr("select");
+	var dest_idx = select.lastIndexOf(".");
+	var dest_treeref = select.substring(0,dest_idx);
+	var dest_semtag = select.substring(dest_idx+1);
+	//------------- source -----------------------
+	var nodeid = "";
+	if (source.indexOf('#current_node')+source.indexOf('#uuid')>-2){
+		if (source.indexOf('#current_node')>-1)
+			nodeid = g_current_node_uuid;
+		else
+			nodeid = replaceVariable(b_replaceVariable(treeref)); // select = porfolio_uuid.#uuid
+	} else {
+		//------------  --------------------
+		var url = "";
+		if (srce_treeref.indexOf("#")>-1)
+			url = serverBCK_API+"/nodes?portfoliocode=" + srce_treeref.substring(1) + "&semtag="+srce_semtag;	
+		else
+			url = serverBCK_API+"/nodes?portfoliocode=" + g_trees[srce_treeref][1] + "&semtag="+srce_semtag;
+		//--------------------------------
+		$.ajax({
+			async: false,
+			type : "GET",
+			dataType : "xml",
+			url : url,
+			success : function(data) {
+				var nodes = $("node",data);
+				if (nodes.length>0){
+					nodeid = $(nodes[0]).attr('id');
+				} else {
+					$("#batch-log").append("<br>- <span class='danger'>ERROR </span> in move NOT FOUND - source="+source);
+				}
+			},
+			error : function(data) {
+				$("#batch-log").append("<br>- <span class='danger'>ERROR</span> in move - source="+source);
+			}
+		});
+	}
+	//------------ Target --------------------
+	if (select.indexOf('#current_node')+select.indexOf('#uuid')>-2){
+		if (select.indexOf('#current_node')>-1)
+			destid = g_current_node_uuid;
+		else
+			destid = replaceVariable(b_replaceVariable(treeref)); // select = porfolio_uuid.#uuid
+	} else {
+		var url = "";
+		if (dest_treeref.indexOf("#")>-1)
+			url = serverBCK_API+"/nodes?portfoliocode=" + dest_treeref.substring(1) + "&semtag="+dest_semtag;	
+		else
+			url = serverBCK_API+"/nodes?portfoliocode=" + g_trees[dest_treeref][1] + "&semtag="+dest_semtag;
+		//--------------------------------
+		$.ajax({
+			async: false,
+			type : "GET",
+			dataType : "xml",
+			url : url,
+			success : function(data) {
+				var nodes = $("node",data);
+				if (nodes.length>0){
+					destid = $(nodes[0]).attr('id');
+				} else {
+					$("#batch-log").append("<br>- <span class='danger'>ERROR</span> NOT FOUND - dest="+select);
+				}
+			},
+			error : function(data) {
+				$("#batch-log").append("<br>- <span class='danger'>ERROR</span> in move NOT FOUND - dest="+select);
+			}
+		});
+		//----------------- move node ------------------------
+		$.ajax({
+			async:false,
+			type : "POST",
+			dataType : "text",
+			url : serverBCK_API+"/nodes/node/" + nodeid + "/parentof/"+destid,
+			success : function(data) {
+				$("#batch-log").append("<br>- node moved from -"+source+ " to "+select);
+			},
+			error : function(jqxhr,textStatus) {
+				$("#batch-log").append("<br>- <span class='danger'>ERROR</span> in move from -"+source+ " to "+select);
+			}
+		});
+
+	}
+	return ok;
+}
 
 //-----------------------------------------------------------------------
 //-----------------------------------------------------------------------
@@ -3226,7 +3415,6 @@ function getInputsLine(node)
 	}
 	return json_line;
 };
-
 
 //==================================
 function display_execBatch()

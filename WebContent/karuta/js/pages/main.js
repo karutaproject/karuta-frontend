@@ -21,10 +21,12 @@ function fill_main_page(portfolioid)
 //==============================
 {
 	setLanguageMenu("fill_main_page()");
+	g_importednodestack = [];
 	$("#wait-window").modal('show');
 	g_dashboard_models = {};
 	g_report_models = {};
 	g_Get_Resource_caches = {};
+	g_Get_Portfolio_caches = {};
 	var html = "";
 	$("#portfolio-container").html(html);
 	g_welcome_add = false;
@@ -40,6 +42,7 @@ function fill_main_page(portfolioid)
 	//-------------------------------------------
 	var url = serverBCK_API+"/portfolios/portfolio/" + g_portfolioid + "?resources=true";
 	$.ajax({
+		async:false,
 		type : "GET",
 		dataType : "xml",
 		url : url,
@@ -67,8 +70,9 @@ function fill_main_page(portfolioid)
 				g_designerrole = true;
 				g_visible = localStorage.getItem('metadata');
 				toggleMetadata(g_visible);
-			} 
+			}
 			$.ajax({
+				async:false,
 				type : "GET",
 				dataType : "xml",
 				url : serverBCK_API+"/rolerightsgroups/all/users?portfolio=" + g_portfolioid,
@@ -149,6 +153,12 @@ function fill_main_page(portfolioid)
 			//-------------------------------------------------
 			UIFactory.Portfolio.displayPortfolio('portfolio-container',g_display_type,LANGCODE,g_edit);
 			// --------------------------
+			try {
+				specificEnterDisplayPortfolio();
+			} catch(e) {
+				// do nothing
+			}
+			// --------------------------
 			if (g_bar_type.indexOf('horizontal')>-1) {
 				$("#toggleSideBar").hide();
 			}
@@ -200,10 +210,9 @@ function fill_main_page(portfolioid)
 			else {
 				alertHTML("<h4>Error in fill_main_page</h4><h5>responseText</h5><p>"+jqxhr.responseText+"</p><h5>textStatus</h5><p>"+textStatus+"<h5>status</h5><p>"+jqxhr.status);
 				}
-		$("#wait-window").modal('hide');
+			$("#wait-window").modal('hide');
 		}
 	});
-	$.ajaxSetup({async: false});
 	//=====================================================
 	$('[data-toggle=tooltip]').tooltip({html: true, trigger: 'hover'}); 
 	$(document).click(function(e) {

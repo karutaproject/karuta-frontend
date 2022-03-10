@@ -129,6 +129,7 @@ UIFactory["Dashboard"].prototype.getView = function(dest,langcode)
 UIFactory["Dashboard"].prototype.displayView = function(dest,langcode)
 //==================================
 {
+	//---------------------
 	var uuid = this.id;
 	//---------------------
 	if (langcode==null)
@@ -140,14 +141,14 @@ UIFactory["Dashboard"].prototype.displayView = function(dest,langcode)
 	var html = $(this.text_node[langcode]).text();
 	$("#"+dest).html(html);
 //	report_not_in_a_portfolio = false;
+	if (g_userroles[0]!='designer')
+		$("#sub_node_"+uuid).hide();
 	//-----------------------------------------------------
 	$("#extra_"+uuid).append($("<div id='extra_button_"+uuid+"' class='dashboard-buttons btn-group'></div>"));
 	$("#extra_"+uuid).append($("<div id='dashboard_"+uuid+"' class='createreport'></div>"));
 	var root_node = g_portfolio_current;
 	var parent_node = UICom.structure.ui[$(this.parent).attr("id")];
 	genDashboardContent("dashboard_"+uuid,uuid,parent_node,root_node);
-	if (g_userroles[0]!='designer')
-		$("#sub_node_"+uuid).hide();
 	//---------- display csv or pdf -------
 	var csv_roles = $(UICom.structure["ui"][uuid].resource.csv_node).text();
 	if (csv_roles.indexOf('all')>-1 || csv_roles.containsArrayElt(g_userroles) || (csv_roles!='' && (g_userroles[0]=='designer' || USER.admin))) {
@@ -172,7 +173,7 @@ UIFactory["Dashboard"].prototype.displayView = function(dest,langcode)
 UIFactory["Dashboard"].update = function(itself,langcode)
 //==================================
 {
-	$(itself.lastmodified_node).text(new Date().toLocaleString());
+	$(itself.lastmodified_node).text(new Date().getTime());
 	//---------------------
 	if (!itself.multilingual) {
 		var value = $(itself.text_node[langcode]).text();

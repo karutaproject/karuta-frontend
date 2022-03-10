@@ -30,7 +30,7 @@ function displayKarutaPublic()
 	html += "<div id='portfolio-container'>";
 	html += "<div class='main-row row'>";
 	html += "	<div class='col-sm-3'>";
-	html += "		<div id='welcome'></div>";
+//	html += "		<div id='welcome'></div>";
 	html += "		<div id='sidebar'><div id='sidebar-content'><div  class='panel-group' id='sidebar-parent' role='tablist'></div></div></div>";
 	html += "	</div>";
 	html += "	<div class='col-sm-9' id='contenu'></div>";
@@ -45,27 +45,26 @@ function displayKarutaPublic()
 	$('body').append(alertBox());
 	$('body').append(messageBox());
 	$('body').append(imageBox());
-	$('body').append(previewBox());
 
 	//---------------------------
 	$("#welcome").html(welcome[LANG]);
 	//----------------
-	$.ajaxSetup({async: false});
-	loadLanguages(function(data) {
-		getLanguage();
+	getLanguage();
+	loadLanguages(function() {
+//				getLanguage();
 	});
 	$.ajax({
+		async:false,
 		type : "GET",
-		dataType : "text",
 		url : serverBCK+"/direct?i=" + iid,
 		success : function(data) {
 			g_uuid = data;
 			//----------------
 			$.ajax({
+				async:false,
 				type : "GET",
 				dataType : "xml",
 				url : serverBCK_API+"/credential",
-				data: "",
 				success : function(data) {
 					USER = new UIFactory["User"]($("user",data));
 				},
@@ -75,31 +74,12 @@ function displayKarutaPublic()
 					}						
 				}
 			});
-			//----------------
-			$.ajax({	// get id of the portfolio that contains the node
-				async : false,
-				type : "GET",
-				dataType : "text",
-				url : serverBCK_API+"/nodes/node/" + g_uuid  +"/portfolioid",
-				success : function(data) {
-					g_portfolioid = data;
-				}
-			});
-			//----------------
-			$.ajax({	// get id of the portfolio that contains the node
-				type : "GET",
-				dataType : "text",
-				url : serverBCK_API+"/portfolios/portfolio/" + g_portfolioid + "?resources=true",
-				success : function(data) {
-					var config_unit = $("asmUnit:has(metadata[semantictag*='configuration-unit'])",data);
-//					setConfigurationPortfolioVariable(config_unit,true);
-					setCSSportfolio(config_unit);
-					setVariables(data);
-				}
-			});
-
+			setConfigurationTechVariables(LANGCODE);
+			setConfigurationUIVariables(LANGCODE);
+			applyKarutaConfiguration();
 			//----------------
 			$.ajax({
+				async:false,
 				type : "GET",
 				dataType : "xml",
 				url : serverBCK_API+"/nodes/node/" + g_uuid,
@@ -146,6 +126,9 @@ function displayKarutaPublic()
 						var rootid = $(root[0]).attr('id');
 						$("#sidebar_"+rootid).click();
 					}
+				},		
+				error : function( jqXHR, textStatus, errorThrown ) {
+					alert("Fermer votre browser et rouvrir le lien pour accéder au portfolio.");
 				}
 			});
 		},
@@ -158,7 +141,6 @@ function displayKarutaPublic()
 			$('.tooltip').hide();
 		}
 	});
-	$.ajaxSetup({async: true});
 }
 
 

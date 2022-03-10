@@ -174,7 +174,7 @@ UIFactory["Oembed"].prototype.displayView = function(dest,type,langcode)
 UIFactory["Oembed"].update = function(obj,itself,type,langcode)
 //==================================
 {
-	$(itself.lastmodified_node).text(new Date().toLocaleString());
+	$(itself.lastmodified_node).text(new Date().getTime());
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;

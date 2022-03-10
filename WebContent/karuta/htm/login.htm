@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Karuta Welcome</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+		<link rel="icon" type="image/png" href="../img/faviconK.png" />
+		<link rel="icon" type="image/png" href="../../karuta/img/faviconK.png"></link>
+		<!-- =============================================================== -->
+		<link rel="stylesheet" type="text/css" href="../../other/bootstrap-4.4.0-dist/css/bootstrap.min.css"></link>
+		<link rel="stylesheet" type="text/css" href="../../other/css/jquery-ui.css"></link>
+		<link rel="stylesheet" type="text/css" href="../../other/font-awesome/css/all.css"></link>
+		<!-- =============================================================== -->
+		<link rel='stylesheet' type='text/css' href='../../karuta/css/color.css'></link>
+		<link rel='stylesheet' type='text/css' href='../../karuta/css/karuta.css'></link>
+		<link rel='stylesheet' type='text/css' href='../../karuta/css/welcome.css'></link>
+		<!-- =============================================================== -->
+		<script src="../../other/js/jquery-3.3.1.min.js"></script>
+		<script src="../../other/js/popper.min.js"></script>
+		<script src="../../other/bootstrap-4.4.0-dist/js/bootstrap.min.js"></script>
+		<!-- =============================================================== -->
+		<script src="../../karuta/js/karuta.js"></script>
+		<script src="../../karuta/js/UICom.js"></script>
+		<!-- =============================================================== -->
+		<script src="../../karuta/js/pages/karuta-page.js"></script>
+		<script src="../../karuta/js/pages/login.js"></script>
+		<script src="../../karuta/js/pages/users.js"></script>
+		<!-- =========================== For configuration ================= -->
+		<script src="../../karuta/js/model/Type_Node.js"></script>
+		<script src="../../karuta/js/resources/Type_Field.js"></script>
+		<script src="../../karuta/js/resources/Type_Image.js"></script>
+		<script src="../../karuta/js/model/Type_Node_metadata.js"></script>
+		<script src="../../karuta/js/resources/Type_Color.js"></script>
+		<script src="../../karuta/js/resources/Type_Get_Resource.js"></script>
+		<!-- =============================================================== -->
+		<script>
+			var pathname = window.location.pathname;
+			var appliname = pathname.substring(0,pathname.substring(1).indexOf('/')+1);
+			var url = "../../.." + appliname + "-config/_init.js"
+			$.ajax({
+				async:false,
+				url: url,
+				dataType: "script",
+				error : function(jqxhr,textStatus) {
+					alert(appliname + "-config/_init.js not found");
+				}
+			});
+			window.addEventListener("load", function() {
+				displayKarutaLogin();
+			});
+			$('[data-toggle="tooltip"]').tooltip({
+				trigger : 'hover'
+			})  // to avoid tooltip when button is clicked
+		</script>
+	</head>
+	<body class="welcome">
+		<script>document.write(alertBox());</script>
+	</body>
+</html>

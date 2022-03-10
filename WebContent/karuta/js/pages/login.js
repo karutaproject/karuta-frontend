@@ -18,7 +18,7 @@ function callCAS()
 //==================================
 {
 	var url = window.location.href;
-	var serverURL = url.substring(0,url.lastIndexOf(appliname+"/")-1);
+	var serverURL = url.substring(0,url.indexOf(appliname+"/")-1);
 	var locationURL = cas_url+"/login?service="+serverURL+"/"+serverBCK_API.substring(9)+"/credential/login/cas?redir="+serverURL+"/"+appliname+"/application/htm/karuta.htm";
 	window.location = locationURL;
 }
@@ -99,14 +99,15 @@ function getLogin(encrypt_url,lang)
 {
 	var html = "";
 	html += "<div id='connection-cas'>";
-	html += "<h5>"+karutaStr[LANG]['connection-cas1']+"</h5>";
-	html += "<button class='button-login' onclick='javascript:callCAS()'>"+karutaStr[LANG]['login']+"</button>";
-	html += "<h5>"+karutaStr[LANG]['connection-cas2']+"</h5>";
-	html += "</div>";
-
-	html += "<input id='useridentifier' class='form-control' placeholder=\""+karutaStr[LANG]['username']+"\" type='text'>";
-	html += "<input id='password' class='form-control' placeholder=\""+karutaStr[LANG]['password']+"\" type='password'>";
-	html += "<button class='button-login' onclick=\"javascript:callSubmit('"+encrypt_url+"','"+lang+"')\">"+karutaStr[LANG]['login']+"</button>";
+	html += "	<h5 id='connection-cas1'>"+karutaStr[LANG]['connection-cas1']+"</h5>";
+	html += "	<button class='button-login' onclick='javascript:callCAS()'>"+karutaStr[LANG]['login']+"</button>";
+	html += "</div>"
+	html += "<div id='login-karuta'>"
+	html += "	<h5 id='connection-cas2'>"+karutaStr[LANG]['connection-cas2']+"</h5>";
+	html += "	<input id='useridentifier' class='form-control' placeholder=\""+karutaStr[LANG]['username']+"\" type='text'>";
+	html += "	<input id='password' class='form-control' placeholder=\""+karutaStr[LANG]['password']+"\" type='password'>";
+	html += "	<button class='button-login' onclick=\"javascript:callSubmit('"+encrypt_url+"','"+lang+"')\">"+karutaStr[LANG]['login']+"</button>";
+	html += "</div>"
 	return html;
 }
 
@@ -141,6 +142,8 @@ function displayKarutaLogin()
 	loginPublic();
 	setLoginTechnicalVariables();
 	setLoginConfigurationVariables();
+	applyKarutaConfiguration()
+	//-------------------------
 	var html = "";
 	html += "<div id='main-welcome'>";
 	html += "<div id='navigation-bar'></div>";
@@ -180,6 +183,10 @@ function displayKarutaLogin()
 			karuta_fileserver_date = $("date",$("#fileserver",data)).text();
 		}
 	});
+	try {
+		specificLoginFunction();
+	} catch(e) {
+	}
 	$('#password').keypress(function(e) {
 		var code= (e.keyCode ? e.keyCode : e.which);
 		if (code == 13)
@@ -312,7 +319,6 @@ function setLoginTechnicalVariables()
 			//---------Languages--------------
 			g_configVar['default-language'] = getText('default-language','Get_Resource','code',data,0);
 			var language_nodes = $("metadata[semantictag='portfolio-language']",data);
-			languages = [];
 			for (i=0;i<language_nodes.length;i++){
 				languages[i] = $("code",$("asmResource[xsi_type='Get_Resource']",$(language_nodes[i]).parent())).text();
 			}
@@ -339,6 +345,43 @@ function setLoginTechnicalVariables()
 			g_configVar['maintenance-display'] = getText('config-maintenance-display','Get_Resource','value',data);
 			g_configVar['maintenance-text'] = getText('config-maintenance-text','TextField','text',data,LANGCODE);
 			g_configVar['maintenance-text-style'] = getContentStyle('config-maintenance-text',data);
+			//----- Load Plugins + Javascript Files
+			var jsfile_nodes = [];
+			jsfile_nodes = $("asmContext:has(metadata[semantictag='config-file-js'])",data);
+			for (var i=0; i<jsfile_nodes.length; i++){
+				var fileid = $(jsfile_nodes[i]).attr("id");
+				var url = "../../../"+serverBCK+"/resources/resource/file/"+fileid;
+				$.ajax({
+					url: url,
+					dataType: "script",
+				});
+				console.log("JS file loaded")
+			}
+			// --------CSS Text------------------
+			var csstext = $("text[lang='"+LANG+"']",$("asmResource[xsi_type='TextField']",$("asmContext:has(metadata[semantictag='config-css'])",data))).text();
+			csstext = csstext.replace(/(<([^>]+)>)/ig, "").replace(/&nbsp;/g,"");
+			if (csstext!=undefined && csstext!=''){
+				console.log("Configuration CSS added")
+				$("<style id='configcsstext'>"+csstext+"</style>").appendTo('head');
+			}
+			//----- Load CSS Files
+			var jsfile_nodes = [];
+			jsfile_nodes = $("asmContext:has(metadata[semantictag='config-file-css'])",data);
+			for (var i=0; i<jsfile_nodes.length; i++){
+				var fileid = $(jsfile_nodes[i]).attr("id");
+				var filename = $("filename[lang='"+languages[LANGCODE]+"']",$("asmResource[xsi_type='Document']",jsfile_nodes[i])).text();
+				var url = "../../../"+serverBCK+"/resources/resource/file/"+fileid;
+				$.ajax({
+					url: url,
+					filename:filename,
+					dataType: "text",
+					success:function(data){
+						console.log("CSS file loaded : "+this.filename)
+						$("head").append("<style>" + data + "</style>");
+					}
+				});
+			}
+
 		},
 		error : function() {
 			loadLanguages(function() {

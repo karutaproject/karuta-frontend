@@ -13,6 +13,10 @@
 	permissions and limitations under the License.
    ======================================================= */
 
+/* ======================================================= */
+/* ======================================================= */
+
+
 //--------- for languages
 //var karutaStr = new Array();
 
@@ -43,6 +47,7 @@ var g_execbatch = false;
 var g_dashboard_models = {}; // cache for dashboard_models
 var g_report_models = {}; // cache for report_models
 var g_Get_Resource_caches = {};
+var g_Get_Portfolio_caches = {};
 //------------------
 var g_wysihtml5_autosave = 60000; // 60 seconds
 var g_portfolio_current = ""; // XML jQuery Object - must be set after loading xml
@@ -53,6 +58,9 @@ var g_nb_trees = 0;
 var g_sum_trees = 0;
 var g_roles = []; // list of portfolio roles for designer
 var g_variables = {}; // variables for substitution in Get_resource and menus
+var g_importednodestack = [];
+var g_backstack = [];
+
 //-------------- used for designer-----
 var redisplays = {};
 // -------------backward compatibility------------------------
@@ -140,7 +148,6 @@ function getNavBar(type,portfolioid,edit)
 		html += "	<div class='dropdown-menu versions' aria-labelledby='navbar-brand-logo'>";
 		html += "		<a class='dropdown-item'><b>Versions</b></a>";
 		html += "		<div class='dropdown-divider'></div>";
-		html += "		<a class='dropdown-item'>Application : "+application_version+" (" +application_date+")</a>";
 		html += "		<a class='dropdown-item'>Karuta-frontend : "+karuta_version+" (" +karuta_date+")</a>";
 		html += "		<a class='dropdown-item'>Karuta-backend : "+karuta_backend_version+" (" +karuta_backend_date+")</a>";
 		html += "		<a class='dropdown-item'>Karuta-fileserver : "+karuta_fileserver_version+" (" +karuta_fileserver_date+")</a>";
@@ -151,7 +158,7 @@ function getNavBar(type,portfolioid,edit)
 	html += "			<span class='navbar-toggler-icon'></span>";
 	html += "		</button>";
 	html += "		<div class='navbar-collapse collapse' id='collapse-1'>";
-	html += "			<ul class='mr-auto navbar-nav'>";
+	html += "			<ul id='navbar-icons' class='mr-auto navbar-nav'>";
 	//---------------------HOME - TECHNICAL SUPPORT-----------------------
 	if (type=='login' || type=="create_account") {
 		html += "			<li id='navbar-mailto' class='nav-item icon'><a class='nav-link' href='mailto:"+g_configVar['technical-support']+"?subject="+karutaStr[LANG]['technical_support']+" ("+appliname+")' data-title='"+karutaStr[LANG]["button-technical-support"]+"' data-toggle='tooltip' data-placement='bottom'><i class='fas fa-envelope' data-title='"+karutaStr[LANG]["technical_support"]+"' data-toggle='tooltip' data-placement='bottom'></i></a></li>";
@@ -229,16 +236,22 @@ function getNavBar(type,portfolioid,edit)
 		html += "	</li>";
 		if (USER.username.indexOf("karuser")<0) {
 			//-----------------USERNAME-----------------------------------------
-			html += "	<li class='nav-item dropdown'>";
-			html += "		<a class='nav-link dropdown-toggle' href='#' id='userDropdown' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'  data-title='"+karutaStr[LANG]["button-change-password"]+"' data-toggle='tooltip' data-placement='bottom'>";
-			html += "			<i class='fas fa-user'></i>&nbsp;&nbsp;"+USER.firstname+" "+USER.lastname;
-			html += " 		</a>";
-			html += "		<div class='dropdown-menu dropdown-menu-right' aria-labelledby='userDropdown'>";
-			html += "				<a class='dropdown-item' href=\"javascript:UIFactory['User'].callChangePassword()\">"+karutaStr[LANG]['change_password']+"</a>";
-			if ((USER.creator && !USER.limited)  && !USER.admin)
-				html += "			<a class='dropdown-item' href=\"javascript:UIFactory['User'].callCreateTestUser()\">"+karutaStr[LANG]['create-test-user']+"</a>";
-			html += "		</div>";
-			html += "	</li>";
+			if (cas_url=="") {
+				html += "	<li class='nav-item dropdown'>";
+				html += "		<a class='nav-link dropdown-toggle' href='#' id='userDropdown' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'  data-title='"+karutaStr[LANG]["button-change-password"]+"' data-toggle='tooltip' data-placement='bottom'>";
+				html += "			<i class='fas fa-user'></i>&nbsp;&nbsp;"+USER.firstname+" "+USER.lastname;
+				html += " 		</a>";
+				html += "		<div class='dropdown-menu dropdown-menu-right' aria-labelledby='userDropdown'>";
+				html += "				<a class='dropdown-item' href=\"javascript:UIFactory['User'].callChangePassword()\">"+karutaStr[LANG]['change_password']+"</a>";
+				if ((USER.creator && !USER.limited)  && !USER.admin)
+					html += "			<a class='dropdown-item' href=\"javascript:UIFactory['User'].callCreateTestUser()\">"+karutaStr[LANG]['create-test-user']+"</a>";
+				html += "		</div>";
+				html += "	</li>";
+			} else {
+				html += "	<li class='nav-item dropdown'>";
+				html += "		<i class='fas fa-user'></i>&nbsp;&nbsp;"+USER.firstname+" "+USER.lastname;
+				html += "	</li>";
+			}
 			//-----------------LOGOUT-----------------------------------------
 			html += "	<li class='nav-item icon'>";
 			html += "				<a class='nav-link' onclick='logout()' data-title='"+karutaStr[LANG]["button-disconnect"]+"' data-toggle='tooltip' data-placement='bottom'><i class='fas fa-sign-out-alt'></i></a>";
@@ -288,6 +301,7 @@ function fillEditBoxBody()
 		html += "\n					<li class='nav-item'><a class='nav-link active' href='#edit-window-body-main' aria-controls='edit-window-body-main' role='tab' data-toggle='tab'>"+karutaStr[LANG]['resource']+"</a></li>";
 		html += "\n					<li class='nav-item'><a class='nav-link' href='#edit-window-body-metadata' aria-controls='edit-window-body-metadata' role='tab' data-toggle='tab'>"+karutaStr[LANG]['metadata']+"</a></li>";
 		html += "\n					<li class='nav-item'><a class='nav-link' href='#edit-window-body-metadata-epm' aria-controls='edit-window-body-metadata-epm' role='tab' data-toggle='tab'>"+karutaStr[LANG]['css-styles']+"</a></li>";
+		html += "\n					<li id='edit-window-body-menu-item' style='display:none' class='nav-item'><a class='nav-link' href='#edit-window-body-menu' aria-controls='edit-window-body-metadata-epm' role='tab' data-toggle='tab'>"+karutaStr[LANG]['menu']+"</a></li>";
 		html += "\n				</ul>";
 		html += "\n				<div class='tab-content'>";
 		html += "\n					<div role='tabpanel' class='tab-pane active' id='edit-window-body-main' style='margin-top:10px'>";
@@ -297,6 +311,7 @@ function fillEditBoxBody()
 		html += "\n					</div>";
 		html += "\n					<div role='tabpanel' class='tab-pane' id='edit-window-body-metadata'></div>";
 		html += "\n					<div role='tabpanel' class='tab-pane' id='edit-window-body-metadata-epm'></div>";
+		html += "\n					<div role='tabpanel' class='tab-pane' id='edit-window-body-menu'></div>";
 		html += "\n				</div>";
 //		html += "\n			</div>";
 	}
@@ -306,6 +321,7 @@ function fillEditBoxBody()
 		html += "\n					<div id='edit-window-body-context'></div>";
 		html += "\n					<div id='edit-window-body-metadata'></div>";
 		html += "\n					<div id='edit-window-body-metadata-epm'></div>";
+		html += "\n					<div id='edit-window-body-menu'></div>";
 	}
 	$('#edit-window-body').html(html);
 }
@@ -348,11 +364,18 @@ function getEditBox(uuid,js2) {
 	$("#edit-window").attr("role",g_userroles[0]);
 	fillEditBoxBody();
 	var js1 = "javascript:$('#edit-window').modal('hide')";
-	if (js2!=null)
+	if (js2!=null) {
+		j2 = replaceVariable(js2);
+		if (j2.indexOf("(")<0)
+			js2 = js2+"('"+uuid+"')";
 		js1 += ";"+js2;
-	var footer = "<button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
+	}
+	var footer = "<span id='footer-before-close'></span><button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
 	$("#edit-window-footer").html($(footer));
 	var html = "";
+	//--------------------------
+	if (UICom.structure["ui"][uuid].editresroles==undefined)
+		UICom.structure["ui"][uuid].setMetadata();
 	//--------------------------
 	if (UICom.structure['tree'][uuid]==null || UICom.structure['tree'][uuid]==undefined) {  // if resource is in report and not loaded (report on server)
 		$.ajax({
@@ -372,7 +395,7 @@ function getEditBox(uuid,js2) {
 			}
 		});		
 	}
-	if(UICom.structure["ui"][uuid].resource!=null) {
+	if(UICom.structure["ui"][uuid].resource!=null && (UICom.structure["ui"][uuid].editresroles.containsArrayElt(g_userroles) || g_userroles[0]=='designer')) {
 		try {
 			html = UICom.structure["ui"][uuid].resource.getEditor();
 			$("#edit-window-body-resource").html($(html));
@@ -415,12 +438,15 @@ function getEditBox(uuid,js2) {
 	// ------------admin and designer----------
 	if (USER.admin || g_userroles[0]=='designer') {
 		UICom.structure.ui[uuid].displayMetadataAttributesEditor("edit-window-body-metadata");
+		$("#edit-window-body-menu-item").show();
+		UICom.structure.ui[uuid].displayMenuEditor("edit-window-body-menu");
 	}
+	$('#edit-window').modal('toggle');
 	// ------------------------------
-//	$(".modal-dialog").css('width','70%');
+	$('#edit-window').animate({ scrollTop: 0 }, 'slow');
+	// ------------------------------
+//	$('#edit-window').show();
 	$(".pickcolor").colorpicker();
-	// ------------------------------
-	$('#edit-window-body').animate({ scrollTop: 0 }, 'slow');
 }
 
 
@@ -434,13 +460,13 @@ function getEditBoxOnCallback(data,param2,param3,param4) {
 
 
 //==============================
-function deleteButton(uuid,type,parentid,destid,callback,param1,param2)
+function deleteButton(uuid,type,parentid,destid,callback,param1,param2,param3,param4)
 //==============================
 {
 	var menus_style = UICom.structure.ui[uuid].getMenuStyle();
 	var html = "";
 	html += "\n<!-- ==================== Delete Button ==================== -->";
-	html += "<i id='del-"+uuid+"' style='"+menus_style+"' class='button fas fa-trash-alt' onclick=\"confirmDel('"+uuid+"','"+type+"','"+parentid+"','"+destid+"','"+callback+"','"+param1+"','"+param2+"')\" data-title='"+karutaStr[LANG]["button-delete"]+"' data-toggle='tooltip' data-placement='bottom'></i>";
+	html += "<i id='del-"+uuid+"' style='"+menus_style+"' class='button fas fa-trash-alt' onclick=\"confirmDel('"+uuid+"','"+type+"','"+parentid+"','"+destid+"','"+callback+"','"+param1+"','"+param2+"','"+param3+"','"+param4+"')\" data-title='"+karutaStr[LANG]["button-delete"]+"' data-toggle='tooltip' data-placement='bottom'></i>";
 	return html;
 }
 
@@ -527,17 +553,19 @@ function messageBox()
 }
 
 //==============================
-function previewBox()
+function previewBox(id)
 //==============================
 {
 	var html = "";
-	html += "\n<!-- ==================== Message box ==================== -->";
-	html += "\n<div id='preview-window' class='modal fade'>";
-	html += "\n		<div class='modal-dialog'>";
+	html += "\n<!-- ==================== Preview box ==================== -->";
+	html += "\n<div id='preview-window-"+id+"'>";
+	html += "\n		<div class=''>";
 	html += "\n			<div class='modal-content'>";
-	html += "\n				<div id='preview-window-body' class='modal-body'>";
+	html += "\n				<div id='preview-window-header-"+id+"' class='modal-footer' >";
 	html += "\n				</div>";
-	html += "\n				<div id='preview-window-footer' class='modal-footer' >";
+	html += "\n				<div id='preview-window-body-"+id+"' class=''>";
+	html += "\n				</div>";
+	html += "\n				<div id='preview-window-footer-"+id+"' class='modal-footer' >";
 	html += "\n				</div>";
 	html += "\n			</div>";
 	html += "\n		</div>";
@@ -564,13 +592,13 @@ function imageBox()
 }
 
 //=======================================================================
-function deleteandhidewindow(uuid,type,parentid,destid,callback,param1,param2) 
+function deleteandhidewindow(uuid,type,parentid,destid,callback,param1,param2,param3,param4) 
 // =======================================================================
 {
 	$('#delete-window').modal('hide');
 	$('#wait-window').modal('show');
 	if (type!=null && (type=='asmStructure' || type=='asmUnit' || type=='asmUnitStructure' || type=='asmContext')) {
-		UIFactory['Node'].remove(uuid,callback,param1,param2); //asm node
+		UIFactory['Node'].remove(uuid,callback,param1,param2,param3,param4); //asm node
 		if (parentid!=null) {
 			parent = $("#"+parentid);
 			$("#"+uuid,parent).remove();
@@ -585,9 +613,15 @@ function deleteandhidewindow(uuid,type,parentid,destid,callback,param1,param2)
 }
 
 //=======================================================================
-function confirmSubmit(uuid,submitall) 
+function confirmSubmit(uuid,submitall,js) 
 // =======================================================================
 {
+	if (js==null || js==undefined)
+		js = "";
+	if (js!="" && js.indexOf('(')<0)
+		js = js + "('" + uuid + "')";
+	else 
+		js = replaceVariable(js);
 	var href = "";
 	var type = "";
 	try {
@@ -603,19 +637,19 @@ function confirmSubmit(uuid,submitall)
 	{
 		document.getElementById('delete-window-body').innerHTML = karutaStr[LANG]["confirm-submit"];
 		var buttons = "<button class='btn' onclick=\"javascript:$('#delete-window').modal('hide');\">" + karutaStr[LANG]["Cancel"] + "</button>";
-		buttons += "<button class='btn btn-danger' onclick=\"$('#delete-window').modal('hide');submit('"+uuid+"',"+submitall+")\">" + karutaStr[LANG]["button-submit"] + "</button>";
+		buttons += "<button class='btn btn-danger' onclick=\"$('#delete-window').modal('hide');submit('"+uuid+"',"+submitall+");"+js+"\">" + karutaStr[LANG]["button-submit"] + "</button>";
 		document.getElementById('delete-window-footer').innerHTML = buttons;
 		$('#delete-window').modal('show');
     }
 }
 
 //=======================================================================
-function confirmDel(uuid,type,parentid,destid,callback,param1,param2) 
+function confirmDel(uuid,type,parentid,destid,callback,param1,param2,param3,param4) 
 // =======================================================================
 {
 	document.getElementById('delete-window-body').innerHTML = karutaStr[LANG]["confirm-delete"];
 	var buttons = "<button class='btn' onclick=\"javascript:$('#delete-window').modal('hide');\">" + karutaStr[LANG]["Cancel"] + "</button>";
-	buttons += "<button class='btn btn-danger' onclick=\"javascript:deleteandhidewindow('"+uuid+"','"+type+"','"+parentid+"','"+destid+"',"+callback+",'"+param1+"','"+param2+"')\">" + karutaStr[LANG]["button-delete"] + "</button>";
+	buttons += "<button class='btn btn-danger' onclick=\"javascript:deleteandhidewindow('"+uuid+"','"+type+"','"+parentid+"','"+destid+"',"+callback+",'"+param1+"','"+param2+"','"+param3+"','"+param4+"')\">" + karutaStr[LANG]["button-delete"] + "</button>";
 	document.getElementById('delete-window-footer').innerHTML = buttons;
 	$('#delete-window').modal('show');
 }
@@ -627,6 +661,17 @@ function confirmDelObject(id,type)
 	document.getElementById('delete-window-body').innerHTML = karutaStr[LANG]["confirm-delete"];
 	var buttons = "<button class='btn' onclick=\"$('#delete-window').modal('hide');\">" + karutaStr[LANG]["Cancel"] + "</button>";
 	buttons += "<button class='btn btn-danger' onclick=\"$('#delete-window').modal('hide');UIFactory."+type+".del('"+uuid+"')\">" + karutaStr[LANG]["button-delete"] + "</button>";
+	document.getElementById('delete-window-footer').innerHTML = buttons;
+	$('#delete-window').modal('show');
+}
+
+//=======================================================================
+function confirmDelete(js) 
+// =======================================================================
+{
+	document.getElementById('delete-window-body').innerHTML = karutaStr[LANG]["confirm-delete"];
+	var buttons = "<button class='btn' onclick=\"$('#delete-window').modal('hide');\">" + karutaStr[LANG]["Cancel"] + "</button>";
+	buttons += "<button class='btn btn-danger' onclick=\""+js+";$('#delete-window').modal('hide')\">" + karutaStr[LANG]["button-delete"] + "</button>";
 	document.getElementById('delete-window-footer').innerHTML = buttons;
 	$('#delete-window').modal('show');
 }
@@ -647,7 +692,15 @@ function getURLParameter(sParam) {
 //==================================
 function displayPage(uuid,depth,type,langcode) {
 //==================================
+	if (g_backstack[g_backstack.length]!=uuid)
+		g_backstack.push(uuid);
 	//---------------------
+	if (uuid==null)
+		uuid = localStorage.getItem('currentDisplayedPage');
+	localStorage.setItem('currentDisplayedPage',uuid);
+	//---------------------
+	if (type==null)
+		type = "standard";
 	if (langcode==null)
 		langcode = LANGCODE;
 	//---------------------
@@ -659,7 +712,7 @@ function displayPage(uuid,depth,type,langcode) {
 		scrollLeft = 0;
 		g_current_page = uuid;
 	}
-	localStorage.setItem('currentDisplayedPage',uuid);
+	
 	//---------------------
 	$("#contenu").html("<div id='page' uuid='"+uuid+"'></div>");
 	$('.selected').removeClass('selected');
@@ -686,18 +739,14 @@ function displayPage(uuid,depth,type,langcode) {
 	var name = $(UICom.structure['ui'][uuid].node).prop("nodeName");
 	if (depth==null)
 		depth=100;
-	if (name=='asmRoot' || name=='asmStructure')
+	if ( (name=='asmRoot' || name=='asmStructure'))
 		depth = 1;
 	if (UICom.structure['tree'][uuid]!=null) {
 		if (type=='standard') {
 			var node = UICom.structure['ui'][uuid].node;
 			var display = ($(node.metadatawad).attr('display')==undefined)?'Y':$(node.metadatawad).attr('display');
 			$("#welcome-edit").html("");
-			if (UICom.structure["ui"][uuid].semantictag.indexOf('welcome-unit')>-1 && !g_welcome_edit && display=='Y')
-				UIFactory['Node'].displayWelcomePage(UICom.structure.tree[uuid],'contenu',depth,langcode,g_edit);
-			else {
-				UICom.structure["ui"][uuid].displayNode('standard',UICom.structure['tree'][uuid],'contenu',depth,langcode,g_edit);
-			}
+			UICom.structure["ui"][uuid].displayNode('standard',UICom.structure['tree'][uuid],'contenu',depth,langcode,g_edit);
 		}
 		if (type=='translate')
 			UICom.structure["ui"][uuid].displayTranslateNode(type,UICom.structure['tree'][uuid],'contenu',depth,langcode,g_edit);
@@ -724,7 +773,6 @@ function displayPage(uuid,depth,type,langcode) {
 		html += "			</div>";
 		$("#welcome-add").html(html);
 	}
-	$('[data-toggle="tooltip"]').tooltip({html: true, trigger: 'hover'});
 	$("#wait-window").modal('hide');
 	if ($("#standard-search-text-input").val()!=undefined && $("#standard-search-text-input").val()!="") {
 		var searched_text = $("#standard-search-text-input").val();
@@ -734,6 +782,7 @@ function displayPage(uuid,depth,type,langcode) {
 		document.getElementById("contenu").innerHTML = newhtml;
 	}
 	window.scrollTo(scrollLeft, scrollTop);
+	$('[data-toggle="tooltip"]').tooltip({html: true, trigger: 'hover'});
 }
 
 //==================================
@@ -744,15 +793,25 @@ function previewPage(uuid,depth,type,langcode)
 	if (langcode==null)
 		langcode = LANGCODE;
 	//---------------------
-	$("#preview-window-footer").html("");
-	var footer = "<button class='btn' onclick=\"$('#preview-window').modal('hide');\">"+karutaStr[LANG]['Close']+"</button>";
-	$("#preview-window-footer").append($(footer));
-	$("#preview-window-body").html("");
+	var previewbackdrop = document.createElement("DIV");
+	previewbackdrop.setAttribute("class", "preview-backdrop");
+	previewbackdrop.setAttribute("id", "previewbackdrop-"+uuid);
+	$('body').append(previewbackdrop);
+
+	var previewwindow = document.createElement("DIV");
+	previewwindow.setAttribute("class", "preview-window");
+	previewwindow.innerHTML =  previewBox(uuid);
+	$('body').append(previewwindow);
+	var header = "<button class='btn add-button' style='float:right' onclick=\"$('#preview-window-"+uuid+"').remove();$('#previewbackdrop-"+uuid+"').remove();\">"+karutaStr[LANG]['Close']+"</button>";
+	$("#preview-window-header-"+uuid).html(header);
+	$("#preview-window-body-"+uuid).html("");
 	if (UICom.structure['tree'][uuid]!=null) {
 		g_report_edit = false;
-		UICom.structure["ui"][uuid].displayNode('standard',UICom.structure['tree'][uuid],"preview-window-body",depth,langcode,false);
+		UICom.structure["ui"][uuid].displayNode('standard',UICom.structure['tree'][uuid],"preview-window-body-"+uuid,depth,langcode,false);
 		g_report_edit = g_edit;
-		$("#preview-window").modal('show');
+		$("#previewbackdrop-"+uuid).show();
+		$("#preview-window-"+uuid).show();
+		window.scrollTo(0,0);
 	} else {
 		$.ajax({
 			type : "GET",
@@ -761,17 +820,19 @@ function previewPage(uuid,depth,type,langcode)
 			success : function(data) {
 				UICom.parseStructure(data);
 				g_report_edit = false;
-				UICom.structure["ui"][uuid].displayNode('standard',UICom.structure['tree'][uuid],"preview-window-body",depth,langcode,false);
+				UICom.structure["ui"][uuid].displayNode('standard',UICom.structure['tree'][uuid],"preview-window-body-"+uuid,depth,langcode,false);
 				g_report_edit = g_edit;
-				$("#preview-window").modal('show');
-
+				$("#preview-window-"+uuid).show();
+				$("#previewbackdrop-"+uuid).show();
+				window.scrollTo(0,0);
 			},
 			error : function() {
 				var html = "";
 				html += "<div>" + karutaStr[languages[langcode]]['error-notfound'] + "</div>";
-				$("#preview-window-body").html(html);
-				$("#preview-window").modal('show');
-
+				$("#preview-window-body-"+uuid).html(html);
+				$("#previewbackdrop-"+uuid).show();
+				$("#preview-window-"+uuid).show();
+				window.scrollTo(0,0);
 			}
 		});
 	}
@@ -816,12 +877,42 @@ function writeSaved(uuid,data)
 	$("#saved-window-body").html("<img src='../../karuta/img/green.png'/> saved : "+new Date().toLocaleString());
 }
 
+//==================================
+function importComponent(parentid,targetid,srce,part_semtag,fctjs)
+//==================================
+{
+	if (fctjs==null)
+		fctjs = "";
+	else
+		fctjs = decode(fctjs);
+	$.ajaxSetup({async: false});
+	var databack = false;
+	var callback = UIFactory.Node.reloadUnit;
+	//------------------------------
+	if (targetid!='##lastimported##')
+		if (UICom.structure.ui[targetid]==undefined && targetid!="")
+			targetid = getNodeIdBySemtag(targetid);
+	if (targetid!="" && targetid!=parentid)
+		parentid = targetid;
+	//------------------------------
+	var semtags = part_semtag.split("+");
+	for (var i=0;i<semtags.length;i++){
+		if (semtags[i].length>0)
+			importBranch(parentid,replaceVariable(srce),semtags[i],databack,callback);
+			if (fctjs!="")
+				eval(fctjs);
+	}
+};
+
 //=======================================================================
 function importBranch(destid,srcecode,srcetag,databack,callback,param2,param3,param4,param5,param6,param7,param8) 
 //=======================================================================
 // if srcetag does not exist as semantictag search as code
 {
-	$("#wait-window").modal('show');
+	var result = "";
+	//------------
+	if (destid=='##lastimported##')
+		destid = g_importednodestack.pop();
 	//------------
 	srcecode = cleanCode(replaceVariable(srcecode));
 	var selfcode = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",UICom.root.node)).text();
@@ -846,19 +937,21 @@ function importBranch(destid,srcecode,srcetag,databack,callback,param2,param3,pa
 		success : function(data) {
 			if (data=='Inexistent selection'){
 				alertHTML(karutaStr[languages[LANGCODE]]['inexistent-selection']);
+			} else {
+				g_importednodestack.push(data);
 			}
+			result = data;
 			if (callback!=null)
 				if (databack)
 					callback(data,param2,param3,param4,param5,param6,param7,param8);
 				else
 					callback(param2,param3,param4,param5,param6,param7,param8);
-			$("#wait-window").modal('hide');			
 		},
 		error : function(jqxhr,textStatus) {
 			alertHTML(karutaStr[languages[LANGCODE]]['inexistent-selection']);
-			$("#wait-window").modal('hide');			
 		}
 	});
+	return result;
 }
 
 //=======================================================================
@@ -906,6 +999,7 @@ function submit(uuid,submitall)
 	if (submitall!=null && submitall)
 		urlS += 'all';
 	$.ajax({
+		async:false,
 		type : "POST",
 		dataType : "text",
 		contentType: "application/xml",
@@ -918,11 +1012,12 @@ function submit(uuid,submitall)
 					parent = $(parent).parent();
 				if ($(parent).hasClass("submit-tohide"))
 					$(parent).hide();
-				register_report($("#submit-"+uuid).parent().attr('dashboardid'));
+				if (UICom.structure.ui[$("#submit-"+uuid).parent().attr('dashboardid')].startday_node!=null)
+					register_report($("#submit-"+uuid).parent().attr('dashboardid'));
 			} else
 				UIFactory.Node.reloadUnit();
 		}
-	});
+	}); 
 }
 
 //=======================================================================
@@ -970,6 +1065,25 @@ function show(uuid)
 }
 
 //=======================================================================
+function showinreport(uuid)
+//=======================================================================
+{
+	var urlS = serverBCK_API+'/nodes/node/'+uuid+'/action/show';
+	$.ajax({
+		type : "POST",
+		dataType : "text",
+		contentType: "application/xml",
+		url : urlS,
+		uuid:uuid,
+		success : function (data){
+			$("#report"+this.uuid).removeClass('private');
+			$(".fa-eye-slash",$("#report"+this.uuid)).removeClass('fa-eye-slash').addClass('fa-eye').attr('onclick',"hideinreport('"+this.uuid+"')").attr('title',karutaStr[LANG]["button-hide"]).tooltip();
+		}
+	});
+}
+
+
+//=======================================================================
 function hide(uuid)
 //=======================================================================
 {
@@ -985,6 +1099,23 @@ function hide(uuid)
 	});
 }
 
+//=======================================================================
+function hideinreport(uuid)
+//=======================================================================
+{
+	var urlS = serverBCK_API+'/nodes/node/'+uuid+'/action/hide';
+	$.ajax({
+		type : "POST",
+		dataType : "text",
+		contentType: "application/xml",
+		url : urlS,
+		uuid:uuid,
+		success : function (data){
+			$("#report"+this.uuid).addClass('private');
+			$(".fa-eye",$("#report"+this.uuid)).removeClass('fa-eye').addClass('fa-eye-slash').attr('onclick',"showinreport('"+this.uuid+"')").attr('title',karutaStr[LANG]["button-show"]).tooltip();
+		}
+	});
+}
 
 //=======================================================================
 function Set()
@@ -1343,25 +1474,26 @@ function sendEmailPublicURL(encodeddata,email,langcode) {
 	var serverURL = url.substring(0,url.indexOf("/application/htm"));
 	if (url.indexOf("/application/htm")<0)
 		serverURL = url.substring(0,url.indexOf("/karuta/htm"));
-	url = serverURL+"/application/htm/public.htm?i="+encodeddata+"&amp;lang="+languages[langcode];
+	url = serverURL+"/karuta/htm/public.htm?i="+encodeddata+"&amp;lang="+languages[langcode];
 	//------------------------------
 	var message = "";
-	message = g_sendEmailPublicURL_message.replace("##firstname##",USER.firstname);
-	message = message.replace("##lastname##",USER.lastname);
-	message = message.replace("#want-sharing#",karutaStr[LANG]['want-sharing']);
-	message = message.replace("#see#",karutaStr[LANG]['see']);
-	message = message.replace("#do not edit this#",url);
+//	message = g_sendEmailPublicURL_message.replace("##firstname##",USER.firstname);
+//	message = message.replace("##lastname##",USER.lastname);
+//	message = message.replace("#want-sharing#",karutaStr[LANG]['want-sharing']);
+//	message = message.replace("#see#",karutaStr[LANG]['see']);
+//	message = message.replace("#do not edit this#",url);
 	//------------------------------
-/*
-	message = g_configVar['send-email-logo'] + g_configVar['send-email-message'];
+
+	message = g_configVar['send-email-logo'] + "<br>" + g_configVar['send-email-message'];
 	message = message.replace("##firstname##",USER.firstname);
 	message = message.replace("##lastname##",USER.lastname);
-	message = message.replace("##click-here##","<a href='"+url+"'>"+g_configVar['send-email-image']+"</a>");
+	const urlhtml = g_configVar['send-email-url']==""?g_configVar['send-email-image']:g_configVar['send-email-url']
+	message = message.replace("##click-here##","<a href='"+url+"' style='"+g_configVar['send-email-url-style']+"'>"+urlhtml+"</a>");
 	var elt = document.createElement("p");
 	elt.textContent = message;
 	message = elt.innerHTML;
 	message = message.replace(/..\/..\/..\/..\/..\/../g, window.location.protocol+"//"+window.location.host);
-*/	
+
 	//------------------------------
 	var xml ="<node>";
 	xml +="<sender>"+$(USER.email_node).text()+"</sender>";
@@ -1747,6 +1879,7 @@ function logout()
 //==============================
 {
 	$.ajax({
+		async:false,
 		type: "GET",
 		dataType: "text",
 		url: serverBCK_API+"/credential/logout",
@@ -1788,8 +1921,8 @@ function cleanCode(code,variable)
 	code = removeStr(code,"@");
 	if (!variable)
 		code = removeStr(code,"#");
-	code = removeStr(code,"*");
 	code = removeStr(code,"%");
+	code = removeStr(code,"*");
 	code = removeStr(code,"$");
 	code = removeStr(code,"&");
 	code = removeStr(code,"!");
@@ -2049,25 +2182,36 @@ function getText(semtag,objtype,elttype,data,langcode)
 //------------------------------------------------------
 
 //==============================
-function printSection(eltid)
+function printSection(eltid,notinreport)
 //==============================
 {
+	if (notinreport==null)
+		notinreport = true;
 	var node_type = UICom.structure.ui[eltid.substring(6)].asmtype;
-	if (node_type=='asmUnit' || node_type=='asmStructure' || node_type=='asmRoot')
+	if ( (node_type=='asmUnit' || node_type=='asmStructure' || node_type=='asmRoot') && notinreport) // g_report_edit==false when inside preview
 		window.print();
 	else {
-		$("#wait-window").show();
+		$("#wait-window").modal('show');
 		$("#print-window").html("");
 		var divcontent = $(eltid).clone();
 		var ids = $("*[id]", divcontent);
 		$(ids).removeAttr("id");
-		var content = $(divcontent).html();
+		var content = $(divcontent)[0].outerHTML;
 		$("#print-window").html(content);
 		$("#main-body").addClass("section2hide");
 		$("#print-window").addClass("section2print");
-		$("#wait-window").hide();
-		
+		$("#wait-window").modal('hide');
+		if (!notinreport) {
+			$(".preview-window").hide();
+			$(".preview-backdrop").hide();
+		}
+		//------------------
 		window.print();
+		//------------------
+		if (!notinreport) {
+			$(".preview-window").show();
+			$(".preview-backdrop").show();
+		}
 		$("#print-window").removeClass("section2print");
 		$("#main-body").removeClass("section2hide");
 		$("#print-window").css("display", "none");
@@ -2079,7 +2223,7 @@ function autocomplete(input,arrayOfValues,onupdate,self,langcode) {
 //==================================
 	if (input!=null) {
 		var currentFocus;
-		/*execute a function when someone writes in the text field:*/
+		//execute a function when someone writes in the text field:
 		input.addEventListener("input", function(e) {
 			var a, b, i, val = this.value;
 			closeAllLists();
@@ -2112,47 +2256,47 @@ function autocomplete(input,arrayOfValues,onupdate,self,langcode) {
 				}
 			}
 		});
-		/*execute a function presses a key on the keyboard:*/
+		//execute a function presses a key on the keyboard:
 		input.addEventListener("keydown", function(e) {
 			var x = document.getElementById(this.id + "autocomplete-list");
 			if (x) x = x.getElementsByTagName("div");
 			if (e.keyCode == 40) {
-			/*If the arrow DOWN key is pressed, increase the currentFocus variable:*/
+			//If the arrow DOWN key is pressed, increase the currentFocus variable:
 				currentFocus++;
-				/*and and make the current item more visible:*/
+				//and and make the current item more visible:
 			addActive(x);
 			} else if (e.keyCode == 38) { //up
-				/*If the arrow UP key is pressed, decrease the currentFocus variable:*/
+				//If the arrow UP key is pressed, decrease the currentFocus variable:
 				currentFocus--;
-				/*and and make the current item more visible:*/
+				//and and make the current item more visible:
 				addActive(x);
 			} else if (e.keyCode == 13) {
-				/*If the ENTER key is pressed, prevent the form from being submitted,*/
+				//If the ENTER key is pressed, prevent the form from being submitted,
 				e.preventDefault();
 				if (currentFocus > -1) {
-					/*and simulate a click on the "active" item:*/
+					//and simulate a click on the "active" item:
 					if (x) x[currentFocus].click();
 				}
 			}
 		});
 		function addActive(x) {
-			/*a function to classify an item as "active":*/
+			//a function to classify an item as "active":
 			if (!x) return false;
-			/*start by removing the "active" class on all items:*/
+			//start by removing the "active" class on all items:
 			removeActive(x);
 			if (currentFocus >= x.length) currentFocus = 0;
 			if (currentFocus < 0) currentFocus = (x.length - 1);
-			/*add class "autocomplete-active":*/
+			//add class "autocomplete-active":
 			x[currentFocus].classList.add("autocomplete-active");
 		}
 		function removeActive(x) {
-			/*a function to remove the "active" class from all autocomplete items:*/
+			//a function to remove the "active" class from all autocomplete items:
 			for (var i = 0; i < x.length; i++) {
 				x[i].classList.remove("autocomplete-active");
 			}
 		}
 		function closeAllLists(elmnt) {
-			/*close all autocomplete lists in the document, except the one passed as an argument:*/
+			//close all autocomplete lists in the document, except the one passed as an argument:
 			var x = document.getElementsByClassName("autocomplete-items");
 			for (var i = 0; i < x.length; i++) {
 				if (elmnt != x[i] && elmnt != input) {
@@ -2160,14 +2304,15 @@ function autocomplete(input,arrayOfValues,onupdate,self,langcode) {
 				}
 			}
 		}
-		/*execute a function when someone clicks in the document:*/
+		//execute a function when someone clicks in the document:
 		document.addEventListener("click", function (e) {
 			closeAllLists(e.target);
 		});
 	}
 }
+
 //==================================
-function addautocomplete(input,arrayOfValues)
+function addautocomplete(input,arrayOfValues,onupdate,self,langcode)
 //==================================
 {	
 	if (input!=null) {
@@ -2175,7 +2320,11 @@ function addautocomplete(input,arrayOfValues)
 		input.addEventListener("input", function(e) {
 			var a, b, i, val = this.value.substring(this.value.lastIndexOf(" ")+1);
 			closeAllLists();
-			if (!val) { return false;}
+			if (!val) {
+				if (this.value=="" && onupdate!=null)
+					eval(onupdate)
+				return false;
+			}
 		 	currentFocus = -1;
 			a = document.createElement("DIV");
 			a.setAttribute("id", this.id + "autocomplete-list");
@@ -2194,7 +2343,10 @@ function addautocomplete(input,arrayOfValues)
 							input.value = input.value.substring(0,input.value.lastIndexOf(" ")+1) + $("input",this).attr('label');
 						else
 							input.value = $("input",this).attr('label');
-						$(input).change();
+						if (onupdate!=null)
+							eval(onupdate);
+						else
+							$(input).change();
 						closeAllLists();
 					});
 					a.appendChild(b);
@@ -2245,9 +2397,26 @@ function addautocomplete(input,arrayOfValues)
 
 
 //==================================
-function replaceVariable(text)
+function replaceVariable(text,node,withquote)
 //==================================
 {
+	if (withquote==null)
+		withquote = true;
+	if (text!=undefined && text.indexOf('lastimported')>-1) {
+		text = text.replaceAll('##lastimported-1##',"g_importednodestack[g_importednodestack.length-2]");
+		text = text.replaceAll('##lastimported-2##',"g_importednodestack[g_importednodestack.length-3]");
+		text = text.replaceAll('##lastimported##',"g_importednodestack[g_importednodestack.length-1]");
+	}
+	if (node!=null && node!=undefined && withquote && text.indexOf('##parentnode##')>-1)
+		text = text.replaceAll('##parentnode##',"'"+$(node).parent().attr('id')+"'");
+	if (node!=null && node!=undefined && withquote && text.indexOf('##currentnode##')>-1)
+		text = text.replaceAll('##currentnode##',"'"+node.id+"'");
+	if (node!=null && node!=undefined && withquote && text.indexOf('##currentcode##')>-1)
+		text = text.replaceAll('##currentcode##',node.getCode());
+	if (node!=null && node!=undefined && !withquote && text.indexOf('##currentnode##')>-1)
+		text = text.replaceAll('##currentnode##',node.id);
+	if (node!=null && node!=undefined && !withquote && text.indexOf('##currentcode##')>-1)
+		text = text.replaceAll('##currentcode##',node.getCode());
 	var n=0;
 	while (text!=undefined && text.indexOf("{##")>-1 && n<100) {
 		var test_string = text.substring(text.indexOf("{##")+3); // test_string = abcd{##variable##}efgh.....
@@ -2272,6 +2441,7 @@ function replaceVariable(text)
 	}
 	return text;
 }
+
 
 //==================================
 function addParentCode (parentid) {
@@ -2313,6 +2483,7 @@ function addParentCode (parentid) {
 			//-------------------
 		}
 	}
+	UIFactory.Node.reloadUnit();
 }
 
 //==================================
@@ -2347,7 +2518,7 @@ function updateParentCode (node) {
 			//-------------------
 		}
 	}
-	UIFactory.Node.reloadUnit();
+	UIFactory.Node.reloadUnit;
 }
 
 //==================================
@@ -2703,33 +2874,409 @@ function sortTable (tableid)
 }
 
 //==================================
-function getTarget (knode,menuitem)
+function getTarget (knode,position_semtag)
 //==================================
 {
 	var node = knode.node;
 	var target = "";
-	if (menuitem.indexOf("child.")>-1) {
-		var semtag = menuitem.substring("child.".length);
-		target = $("*:has(>metadata[semantictag='"+semtag+"'])",node);
-	} else if (menuitem.indexOf("parent.parent.parent.parent.parent.")>-1) {
-		var semtag = menuitem.substring("parent.parent.parent.parent.parent.".length);
-		target = $("*:has(>metadata[semantictag='"+semtag+"'])",$(node).parent().parent().parent().parent().parent()).addBack("*:has(>metadata[semantictag='"+semtag+"'])");
-	} else if (menuitem.indexOf("parent.parent.parent.parent")>-1) {
-		var semtag = menuitem.substring("parent.parent.parent.parent.".length);
-		target = $("*:has(>metadata[semantictag='"+semtag+"'])",$(node).parent().parent().parent().parent()).addBack("*:has(>metadata[semantictag='"+semtag+"'])");
-	} else if (menuitem.indexOf("parent.parent.parent")>-1) {
-		var semtag = menuitem.substring("parent.parent.parent.".length);
-		target = $("*:has(>metadata[semantictag='"+semtag+"'])",$(node).parent().parent().parent()).addBack("*:has(>metadata[semantictag='"+semtag+"'])");
-	} else if (menuitem.indexOf("parent.parent")>-1) {
-		var semtag = menuitem.substring("parent.parent.".length);
-		target = $("*:has(>metadata[semantictag='"+semtag+"'])",$(node).parent().parent()).addBack("*:has(>metadata[semantictag='"+semtag+"'])");
-	} else if (menuitem.indexOf("parent.")>-1) {
-		var semtag = menuitem.substring("parent.".length);
-		target = $("*:has(>metadata[semantictag='"+semtag+"'])",$(node).parent()).addBack("*:has(>metadata[semantictag='"+semtag+"'])").addBack("*:has(>metadata[semantictag='"+semtag+"'])");
+	if (position_semtag.indexOf("child.")>-1) {
+		var semtag = position_semtag.substring("child.".length);
+		target = $("*:has(>metadata[semantictag*='"+semtag+"'])",node);
+	} else	if (position_semtag.indexOf("sibling.")>-1) {
+		var semtag = position_semtag.substring("sibling.".length);
+		target = $("*:has(>metadata[semantictag*='"+semtag+"'])",$(node).parent());
+	} else if (position_semtag.indexOf("parent.parent.parent.parent.parent.")>-1) {
+		var semtag = position_semtag.substring("parent.parent.parent.parent.parent.".length);
+		target = $("*:has(>metadata[semantictag*='"+semtag+"'])",$(node).parent().parent().parent().parent().parent()).addBack("*:has(>metadata[semantictag*='"+semtag+"'])");
+	} else if (position_semtag.indexOf("parent.parent.parent.parent")>-1) {
+		var semtag = position_semtag.substring("parent.parent.parent.parent.".length);
+		target = $("*:has(>metadata[semantictag*='"+semtag+"'])",$(node).parent().parent().parent().parent()).addBack("*:has(>metadata[semantictag*='"+semtag+"'])");
+	} else if (position_semtag.indexOf("parent.parent.parent")>-1) {
+		var semtag = position_semtag.substring("parent.parent.parent.".length);
+		target = $("*:has(>metadata[semantictag*='"+semtag+"'])",$(node).parent().parent().parent()).addBack("*:has(>metadata[semantictag*='"+semtag+"'])");
+	} else if (position_semtag.indexOf("parent.parent")>-1) {
+		var semtag = position_semtag.substring("parent.parent.".length);
+		target = $("*:has(>metadata[semantictag*='"+semtag+"'])",$(node).parent().parent()).addBack("*:has(>metadata[semantictag*='"+semtag+"'])");
+	} else if (position_semtag.indexOf("parent.")>-1) {
+		var semtag = position_semtag.substring("parent.".length);
+		target = $("*:has(>metadata[semantictag*='"+semtag+"'])",$(node).parent()).addBack("*:has(>metadata[semantictag*='"+semtag+"'])");
+	} else if (position_semtag.indexOf(".")==0) {  // position is empty
+		var semtag = position_semtag.substring(".".length);
+		target = $("*:has(>metadata[semantictag*='"+semtag+"'])",g_portfolio_current);
 	} else {
-		target = $("*:has(>metadata[semantictag='"+menuitem+"'])",g_portfolio_current);
+		target = $("*:has(>metadata[semantictag*='"+position_semtag+"'])",g_portfolio_current);
+		if (target.length==0) {
+			position_semtag = position_semtag.replace(".","|")
+			position_semtag = replaceVariable(position_semtag,knode,false);
+			const code = position_semtag.substring(0,position_semtag.indexOf("|"));
+			const semtag = position_semtag.substring(position_semtag.indexOf("|")+1);
+			target = $("*:has(>metadata[semantictag*='"+semtag+"']):has(code:contains('"+code+"'))",g_portfolio_current);
+		}
 	}
 	return target;
 }
 
+//==================================
+function toggleDraft (nodeid)
+//==================================
+{
+	const node = UICom.structure.ui[nodeid];
+	let semtag = node.metadata.getAttribute('semantictag');
+	if (semtag.indexOf("@draft@")>-1) {
+		semtag = semtag.replace("@draft@","").replace("draft-node","");
+		$($("metadata",node.node)[0]).attr('semantictag',semtag);
+		UICom.UpdateMetadata(node.id);
+		node.semantictag = semtag;
+		node.refresh();
+		if (g_userroles[0]=='designer' || USER.admin) {  
+			node.displayMetainfo("metainfo_"+node.id);
+		}
+	} else {
+		semtag = semtag.substring(0,1)+"@draft@"+semtag.substring(1)+" draft-node";
+		$($("metadata",node.node)[0]).attr('semantictag',semtag);
+		UICom.UpdateMetadata(node.id);
+		node.semantictag = semtag;
+		node.refresh();
+		if (g_userroles[0]=='designer' || USER.admin) {  
+			node.displayMetainfo("metainfo_"+node.id);
+		}
+	}
+}
+
+//==================================
+function notExistChild (nodeid,semtag)
+//==================================
+{
+	const node = UICom.structure.ui[nodeid].node;
+	if ( $("*:has(>metadata[semantictag*='"+semtag+"'])",node).length==0 )
+		return true;
+	else
+		return false;
+}
+
+//==================================
+function displayRoot (destid)
+//==================================
+{
+	
+}
+
+//=========================================================
+//==================API Vector Functions===================
+//=========================================================
+
+//==================================
+function saveVector(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10)
+//==================================
+{
+	var xml = "<vector><a1>"+((a1==undefined)?"":a1)+"</a1><a2>"+((a2==undefined)?"":a2)+"</a2><a3>"+((a3==undefined)?"":a3)+"</a3><a4>"+((a4==undefined)?"":a4)+"</a4><a5>"+((a5==undefined)?"":a5)+"</a5><a6>"+((a6==undefined)?"":a6)+"</a6><a7>"+((a7==undefined)?"":a7)+"</a7><a8>"+((a8==undefined)?"":a8)+"</a8><a9>"+((a9==undefined)?"":a9)+"</a9><a10>"+((a10==undefined)?"":a10)+"</a10></vector>";
+	$.ajax({
+		type : "POST",
+		contentType: "application/xml",
+		dataType : "xml",
+		url : serverBCK+"/vector",
+		data : xml,
+		success : function(data) {
+			return true;
+		},
+		error : function(jqxhr,textStatus) {
+			return false;
+		}
+	});
+}
+
+//==================================
+function deleteVector(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10)
+//==================================
+{
+	let url = ""
+	if (a1!=null)
+		url += "a1="+a1;
+	if (a2!=null)
+		if (url=="")
+			url += "a2="+a2;
+		else
+			url += "&a2="+a2;
+	if (a3!=null)
+		if (url=="")
+			url += "a3="+a3;
+		else
+			url += "&a3="+a3;
+	if (a4!=null)
+		if (url=="")
+			url += "a4="+a4;
+		else
+			url += "&a4="+a4;
+	if (a5!=null)
+		if (url=="")
+			url += "a5="+a5;
+		else
+			url += "&a5="+a5;
+	if (a6!=null)
+		if (url=="")
+			url += "a6="+a6;
+		else
+			url += "&a6="+a6;
+	if (a7!=null)
+		if (url=="")
+			url += "a7="+a7;
+		else
+			url += "&a7="+a7;
+	if (a8!=null)
+		if (url=="")
+			url += "a8="+a8;
+		else
+			url += "&a8="+a8;
+	if (a9!=null)
+		if (url=="")
+			url += "a9="+a9;
+		else
+			url += "&a9="+a9;
+	if (a10!=null)
+		if (url=="")
+			url += "a10="+a10;
+		else
+			url += "&a10="+a10;
+	url = serverBCK+"/vector?" + url;
+	$.ajax({
+		type : "DELETE",
+		contentType: "application/xml",
+		dataType : "xml",
+		url : url,
+		success : function(data) {
+			return true;
+		},
+		error : function(jqxhr,textStatus) {
+			return false;
+		}
+	});
+}
+
+//==================================
+function searchVector(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10)
+//==================================
+{
+	let result = [];
+	let query = "";
+	if (a1!=null)
+		query += "a1="+a1;
+	if (a2!=null)
+		if (query=="")
+			query += "a2="+a2;
+		else
+			query += "&a2="+a2;
+	if (a3!=null)
+		if (query=="")
+			query += "a3="+a3;
+		else
+			query += "&a3="+a3;
+	if (a4!=null)
+		if (query=="")
+			query += "a4="+a4;
+		else
+			query += "&a4="+a4;
+	if (a5!=null)
+		if (query=="")
+			query += "a5="+a5;
+		else
+			query += "&a5="+a5;
+	if (a6!=null)
+		if (query=="")
+			query += "a6="+a6;
+		else
+			query += "&a6="+a6;
+	if (a7!=null)
+		if (query=="")
+			query += "a7="+a7;
+		else
+			query += "&a7="+a7;
+	if (a8!=null)
+		if (query=="")
+			query += "a8="+a8;
+		else
+			query += "&a8="+a8;
+	if (a9!=null)
+		if (query=="")
+			query += "a9="+a9;
+		else
+			query += "&a9="+a9;
+	if (a10!=null)
+		if (query=="")
+			query += "a10="+a10;
+		else
+			query += "&a10="+a10;
+	$.ajax({
+		async:false,
+		type : "GET",
+		contentType: "application/xml",
+		url : serverBCK+"/vector?"+query,
+		success : function(data) {
+			result = data;
+		},
+		error : function(jqxhr,textStatus) {
+			return false;
+		}
+	});
+	return result;
+}
+
+function deleteAllVectors(nodeid){
+	const date = UICom.structure.ui[nodeid].resource.getView();
+	let url = serverBCK+"/vector?";
+	if (date!=null)
+		url += "date="+date;
+	$.ajax({
+		type : "DELETE",
+		contentType: "application/xml",
+		dataType : "xml",
+		url : url,
+		success : function(data) {
+			return true;
+		},
+		error : function(jqxhr,textStatus) {
+			return false;
+		}
+	});
+
+}
+
+function confirmDeleteAllVectors(nodeid){
+	let js = "deleteAllVectors('"+nodeid+"')";
+	confirmDelete(js);
+}
+
+//=========================================================
+//=========================================================
+
+function setNodeCode(nodeid, code, visible){
+	if (visible==null)
+		visible = false;
+	if (!visible)
+		code +="@";
+	if(UICom.structure.ui[nodeid].node_code==undefined) // in case of access before node ndisplay
+		UICom.structure.ui[nodeid].setMetadata();
+	$(UICom.structure.ui[nodeid].code_node).text(code);
+	UICom.structure.ui[nodeid].save();
+}
+
+//=========================================================
+function setNodeCodeLabel(nodeid,targetid){
+	if (nodeid!=targetid) {
+		if(UICom.structure.ui[nodeid].node_code==undefined) // in case of access before node ndisplay
+			UICom.structure.ui[nodeid].setMetadata();
+		if(UICom.structure.ui[targetid].node_code==undefined) // in case of access before node ndisplay
+			UICom.structure.ui[nodeid].setMetadata();
+		//-----------------------
+		$(UICom.structure.ui[targetid].code_node).text($(UICom.structure.ui[nodeid].code_node).text());
+		$(UICom.structure.ui[targetid].label_node[LANGCODE]).text($(UICom.structure.ui[nodeid].label_node[LANGCODE]).text());
+		UICom.structure.ui[targetid].save();
+	}
+}
+//=========================================================
+//=========================================================
+
+
+function encode(s) {
+	var result = ('' + s)
+		.replace(/,/g, '%2C')
+		.replace(/'/g, '%27')
+		.replace(/"/g, '%22')
+		.replace(/</g, '%3C')
+		.replace(/>/g, '%3E');
+	return result
+}
+
+function decode(s) {
+	var result = ('' + s)
+		.replace(/%3E/g, '>')
+		.replace(/%3C/g, '<')
+		.replace(/%22/g, '"')
+		.replace(/%27/g, "'")
+		.replace(/%2C/g, ",")
+	return result
+}
+
+//=========================================================
+// Functions for Resources
+//=========================================================
+
+function testNumber(text) {
+	return (!isNaN(text))
+}
+
+function testNotNumber(text) {
+	return (isNaN(text))
+}
+
+//=========================================================
+// Test Functions for Menus
+//=========================================================
+
+function testSubmitted(uuid) {
+	if (UICom.structure.ui[uuid].submitted==undefined)
+		UICom.structure.ui[uuid].setMetadata();
+	return UICom.structure.ui[uuid].submitted=="Y";
+}
+
+function testNotSubmitted(uuid) {
+	if (UICom.structure.ui[uuid].submitted==undefined)
+		UICom.structure.ui[uuid].setMetadata();
+	return UICom.structure.ui[uuid].submitted!="Y";
+}
+
+function testExist(semtag,uuid) {
+	if (uuid == null)
+		uuid = $("#page").attr('uuid');
+	const nodes = $("*:has(>metadata[semantictag*="+semtag+"])",UICom.structure.ui[uuid].node);
+	return (nodes.length>0);
+}
+
+function testNotExist(semtag,uuid) {
+	if (uuid == null)
+		uuid = $("#page").attr('uuid');
+	const nodes = $("*:has(>metadata[semantictag*="+semtag+"])",UICom.structure.ui[uuid].node);
+	return (nodes.length==0);
+}
+
+function testCodeNotEmpty(semtag,uuid) {
+	if (uuid == null)
+		uuid = $("#page").attr('uuid');
+	const nodes = $("*:has(>metadata[semantictag*="+semtag+"])",UICom.structure.ui[uuid].node);
+	if ($("asmResource",nodes[0]).length==3) {
+		resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",nodes[0]); 
+	} else {
+		resource = $("asmResource[xsi_type='nodeRes']",nodes[0]);
+	}
+	return($("code",resource).text()!="");
+}
+
+function testCodeEmpty(semtag,uuid) {
+	if (uuid == null)
+		uuid = $("#page").attr('uuid');
+	const nodes = $("*:has(>metadata[semantictag*="+semtag+"])",UICom.structure.ui[uuid].node);
+	if ($("asmResource",nodes[0]).length==3) {
+		resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",nodes[0]); 
+	} else {
+		resource = $("asmResource[xsi_type='nodeRes']",nodes[0]);
+	}
+	return($("code",resource).text()=="");
+}
+
+function deleteSameCode(uuid,targetsemtag,srcesemtag){
+	const code = UICom.structure.ui[uuid].getCode();
+	const target = getTarget (UICom.structure.ui[uuid].node,targetsemtag);
+	if (target.length>0) {
+		targetid = $(target[0]).attr("id");
+		const compnode = $("*:has(>metadata[semantictag*="+srcesemtag+"])",UICom.structure.ui[targetid].node);
+		for (let i=0;i<compnode.length;i++){
+			const nodeid = $(compnode[i]).attr("id");
+			const nodecode = UICom.structure.ui[nodeid].getCode();
+			if (nodecode==code)
+				UIFactory.Node.remove(nodeid);
+		}
+		UIFactory.Node.reloadStruct();
+	}
+}
+
+//================================================
 

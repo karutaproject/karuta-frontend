@@ -76,8 +76,8 @@ UIFactory["URL"] = function( node )
 	if (!this.multilingual && this.version_node.text()!="3.0") {  // for backward compatibility - if multilingual we set all languages
 		this.version_node.text("3.0");
 		for (var langcode=0; langcode<languages.length; langcode++) {
-			$(this.label_node[langcode]).text($(this.label_node[0]).text());
-			$(this.url_node[langcode]).text($(this.url_node[0]).text());
+			$(this.label_node[langcode]).text(replaceVariable($(this.label_node[0]).text()));
+			$(this.url_node[langcode]).text(replaceVariable($(this.url_node[0]).text()));
 		}
 		this.save();
 	}
@@ -175,7 +175,7 @@ UIFactory["URL"].prototype.displayView = function(dest,type,langcode)
 UIFactory["URL"].update = function(obj,itself,type,langcode,parent)
 //==================================
 {
-	$(itself.lastmodified_node).text(new Date().toLocaleString());
+	$(itself.lastmodified_node).text(new Date().getTime());
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;

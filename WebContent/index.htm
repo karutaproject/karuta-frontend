@@ -3,6 +3,11 @@
 <head>
 </head>
 <body class="welcome">
-	<script language='javascript'>window.location="application/htm/login.htm"</script>
+	<script>
+		var pathname = window.location.pathname;
+		var appliname = pathname.substring(0,pathname.substring(1).indexOf('/')+1);
+		var login_url = "../../.." + appliname + "-config/login.htm"
+		window.location = login_url;
+	</script>
 </body>
 </html>

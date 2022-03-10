@@ -1,7 +1,4 @@
 //----------------------------------
-var application_version = "3.0";
-var application_date = "2021-02-22";
-//----------------------------------
 var appliname = 'karuta';
 var bckname = '';
 var serverBCK = "../../../karuta-backend"+bckname; // fileserver backend

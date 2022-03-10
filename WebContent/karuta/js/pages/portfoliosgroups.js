@@ -18,7 +18,7 @@ function fill_list_portfoliosgroups()
 //==============================
 {
 //	setLanguageMenu("fill_list_portfoliosgroups()");
-	$("#wait-window").show();
+	$("#wait-window").modal('show');
 	//--------------------------
 	var html = "";
 	//-----------------------------------------------------------

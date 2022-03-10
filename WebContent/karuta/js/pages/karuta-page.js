@@ -33,7 +33,7 @@ function initKarutaPage()
 	$('body').append(messageBox());
 	$('body').append(imageBox());
 	$('body').append(LangueBox());
-	$('body').append(previewBox());
+	
 	//--------------------------
 	var spinner1 = new Spinner().spin(document.getElementById('wait-spin'));
 	var spinner2 = new Spinner().spin(document.getElementById('export-spin'));
@@ -43,8 +43,8 @@ function initKarutaPage()
 function displayKarutaPage()
 //==============================
 {
-	$.ajaxSetup({async: false});
 	$.ajax({
+		async: false,
 		type : "GET",
 		dataType : "xml",
 		url : serverBCK_API+"/credential",
@@ -110,7 +110,6 @@ function displayKarutaPage()
 			});
 		}
 	});
-	$.ajaxSetup({async: true});
 	$('[data-tooltip="true"]').tooltip({html: true, trigger: 'hover'});
 }
 
@@ -338,6 +337,8 @@ function setConfigurationTechVariables(langcode)
 			//----------------------
 			g_configVar['send-email-logo'] = getImg('config-send-email-logo',data,langcode);
 			g_configVar['send-email-image'] = getImg('config-send-email-image',data,langcode);
+			g_configVar['send-email-url'] = getText('config-send-email-url','Field','text',data,langcode);
+			g_configVar['send-email-url-style'] = getContentStyle('config-send-email-url',data);
 			g_configVar['send-email-message'] = getText('config-send-email-message','TextField','text',data,langcode);
 			// --------CSS Text------------------
 			var csstext = $("text[lang='"+LANG+"']",$("asmResource[xsi_type='TextField']",$("asmContext:has(metadata[semantictag='config-css'])",data))).text();
@@ -367,12 +368,14 @@ function setConfigurationTechVariables(langcode)
 			jsfile_nodes = $("asmContext:has(metadata[semantictag='config-file-css'])",data);
 			for (var i=0; i<jsfile_nodes.length; i++){
 				var fileid = $(jsfile_nodes[i]).attr("id");
+				var filename = $("filename[lang='"+languages[langcode]+"']",$("asmResource[xsi_type='Document']",jsfile_nodes[i])).text();
 				var url = "../../../"+serverBCK+"/resources/resource/file/"+fileid;
 				$.ajax({
 					url: url,
+					filename:filename,
 					dataType: "text",
 					success:function(data){
-						console.log("CSS file loaded")
+						console.log("CSS file loaded : "+this.filename)
 						$("head").append("<style>" + data + "</style>");
 					}
 				});

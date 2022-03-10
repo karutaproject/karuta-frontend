@@ -148,7 +148,7 @@ function dropPortfolioFolder(ev)
 			folders_byid[portfolioid].renameFolderCode(newportfolio_code);
 		}
 		if (type=="portfolio") {
-			var newportfolio_code = folder_code.substring(0,folder_code.lastIndexOf('/')) + portfolio_code.substring(portfolio_code.indexOf('.'));
+			var newportfolio_code = folder_code.substring(0,folder_code.lastIndexOf('/')) + ((portfolio_code.indexOf(".")<0)? ".":"") + portfolio_code.substring(portfolio_code.indexOf('.'));
 			portfolios_byid[portfolioid].renamePortfolioCode(newportfolio_code);
 			if (parentid!="") {
 				folders_byid[parentid].loaded = false;
@@ -182,17 +182,18 @@ UIFactory["PortfolioFolder"].loadAndDisplayAll = function (type)
 			UIFactory["PortfolioFolder"].displayAll(type);
 			//--------------------------------------
 			if (nb_folders==0 && !USER.admin && !USER.creator) {
-				$("#folders-label").hide();
+//				$("#folders-label").hide();
+				$("#portfolio-leftside").hide();
 			} else {
 				$("#nb_folders_active").html( (nb_folders==0)?0:nb_folders);
 			}
 			//--------------------------------------
 			$('[data-toggle=tooltip]').tooltip({html: true, trigger: 'hover'}); 
-			$("#wait-window").hide();
+			$("#wait-window").modal('hide');
 		},
 		error : function(jqxhr,textStatus) {
 			alertHTML("Server Error GET UIFactory.PortfolioFolder.loadAndDisplayAll: "+textStatus);
-			$("#wait-window").hide();
+			$("#wait-window").modal('hide');
 		}
 	});
 }
@@ -490,7 +491,31 @@ UIFactory["PortfolioFolder"].prototype.displayContent = function(type,parentid,v
 		}
 	}
 	$(window).scrollTop(0);
-	$("#wait-window").hide();
+	$("#wait-window").modal('hide');
+}
+
+//==================================
+UIFactory["PortfolioFolder"].prototype.setRights = function()
+//==================================
+{
+	for (uuid in this.children){
+		var portfolio = portfolios_byid[uuid];
+		portfolio.rights = portfolio.root.getRights();
+	}
+}
+
+//==================================
+UIFactory["PortfolioFolder"].setRights = function(folderid)
+//==================================
+{
+	$("#wait-window").modal('show');
+	var previewbackdrop = document.createElement("DIV");
+	previewbackdrop.setAttribute("class", "preview-backdrop");
+	previewbackdrop.setAttribute("id", "previewbackdrop-"+folderid);
+	$('body').append(previewbackdrop);
+	folders_byid[folderid].setRights();
+	$("#wait-window").modal('hide');
+	$("#previewbackdrop-"+folderid).remove();
 }
 
 //==================================
@@ -548,6 +573,7 @@ UIFactory["PortfolioFolder"].prototype.displayFolderDetail = function(type,paren
 		if (USER.admin || (this.owner=='Y' && !USER.xlimited)) {
 			html += "			<button  data-toggle='dropdown' class='btn dropdown-toggle'></button>";
 			html += "			<div class='dropdown-menu  dropdown-menu-right'>";
+			html += "				<a class='dropdown-item' onclick=\"UIFactory.PortfolioFolder.setRights('"+this.id+"');folders_byid['"+this.id+"'].displayContent('portfolio')\" ><i class='far fa-file'></i> "+karutaStr[LANG]["setrights"]+"</a>";
 			html += "				<a class='dropdown-item' onclick=\"UIFactory.PortfolioFolder.callRename('"+this.id+"',null,true)\" ><i class='fa fa-edit'></i> "+karutaStr[LANG]["rename"]+"</a>";
 			html += "				<a class='dropdown-item' onclick=\"UIFactory.PortfolioFolder.createFolder('"+folder_code+"/')\" ><i class='fas fa-folder'></i> "+karutaStr[LANG]["create_subfolder"]+"</a>";
 			html += "				<a class='dropdown-item' onclick=\"UIFactory.PortfolioFolder.confirmDelFolderContent('"+this.id+"')\" ><i class='fa fa-trash'></i> "+karutaStr[LANG]["button-delete-content"]+"</a>";
@@ -964,14 +990,13 @@ UIFactory["PortfolioFolder"].checkPortfolios = function()
 			if (nb_portfolios==0)
 				$("#portfolios-label").hide();
 			else {
-				$("#portfolios-nb").html(nb_portfolios);
 				if (nb_folders==0 || !USER.admin)
 					UIFactory.PortfolioFolder.loadAndDisplayPortfolios('portfolio-content2-rightside','list');
 			}
 		},
 		error : function(jqxhr,textStatus) {
 			alertHTML("Server Error GET active=1&project=false: "+textStatus);
-			$("#wait-window").hide();
+			$("#wait-window").modal('hide');
 		}
 	});
 }
@@ -991,31 +1016,38 @@ UIFactory["PortfolioFolder"].loadAndDisplayPortfolios = function(dest,type)
 			var nb_visibleportfolios = 0;
 			var visibleid = "";
 			var autoload = "";
-			for (var i=0;i<portfolios_list.length;i++){
-				if (portfolios_list[i].visible || portfolios_list[i].ownerid==USER.id) {
-					nb_visibleportfolios++;
-					visibleid = portfolios_list[i].id;
+			try {
+				specificDisplayPortfolios();
+			} catch(e) {
+				for (var i=0;i<portfolios_list.length;i++){
+					//--------------------------
+					if (portfolios_list[i].visible || portfolios_list[i].ownerid==USER.id) {
+						nb_visibleportfolios++;
+						visibleid = portfolios_list[i].id;
+					}
+					if (portfolios_list[i].autoload) {
+						autoload = portfolios_list[i].id;
+					}
 				}
-				if (portfolios_list[i].autoload) {
-					autoload = portfolios_list[i].id;
-				}
-			}
-			if (nb_visibleportfolios>0 || autoload!="" )
-				if (nb_visibleportfolios>9 && portfoliosnotinfolders.length>9)
-					UIFactory.PortfolioFolder.displayPortfolios('project-portfolios','false','list',portfoliosnotinfolders);
-				else if (nb_visibleportfolios>1 && autoload=="")
+				$("#portfolios-nb").html(nb_visibleportfolios);
+				//---------------------------------------------------------------------------------------------
+				if (nb_visibleportfolios>0 || autoload!="" )
+					if (nb_visibleportfolios>9 && portfoliosnotinfolders.length>9)
+						UIFactory.PortfolioFolder.displayPortfolios('project-portfolios','false','list',portfoliosnotinfolders);
+					else if (nb_visibleportfolios>1 && autoload=="")
+						UIFactory.PortfolioFolder.displayPortfolios('card-deck-portfolios','false','card',portfoliosnotinfolders);
+					else if (autoload!="") {
+						display_main_page(autoload);
+						UIFactory.PortfolioFolder.displayPortfolios('card-deck-portfolios','false','card',portfoliosnotinfolders);
+					}
+					else {  // nb_visibleportfolios == 1
+						display_main_page(visibleid);
+						UIFactory.PortfolioFolder.displayPortfolios('card-deck-portfolios','false','card',portfoliosnotinfolders);
+					}
+				else if (portfolios_list.length==1) {
+					display_main_page(portfolios_list[0].id);
 					UIFactory.PortfolioFolder.displayPortfolios('card-deck-portfolios','false','card',portfoliosnotinfolders);
-				else if (autoload!="") {
-					display_main_page(autoload);
-					UIFactory.PortfolioFolder.displayPortfolios('card-deck-portfolios','false','card',portfoliosnotinfolders);
-				}
-				else {  // nb_visibleportfolios == 1
-					display_main_page(visibleid);
-					UIFactory.PortfolioFolder.displayPortfolios('card-deck-portfolios','false','card',portfoliosnotinfolders);
-				}
-			else if (portfolios_list.length==1) {
-				display_main_page(portfolios_list[0].id);
-				UIFactory.PortfolioFolder.displayPortfolios('card-deck-portfolios','false','card',portfoliosnotinfolders);
+				}				
 			}
 		},
 		error : function(jqxhr,textStatus) {
@@ -1023,6 +1055,8 @@ UIFactory["PortfolioFolder"].loadAndDisplayPortfolios = function(dest,type)
 		}
 	});
 }
+
+
 
 //==================================
 UIFactory["PortfolioFolder"].displayPortfolios = function(dest,parentcode,type,items)
@@ -1073,7 +1107,7 @@ UIFactory["PortfolioFolder"].displayPortfolios = function(dest,parentcode,type,i
 			}
 	}
 	$(window).scrollTop(0);
-	$("#wait-window").hide();
+	$("#wait-window").modal('hide');
 }
 
 //--------------------------------------------------------------
@@ -1126,7 +1160,7 @@ UIFactory["PortfolioFolder"].displaySearchedPortfolios = function(code,type)
 	$("#"+type+"-rightside-header").html("");
 	$("#"+type+"-rightside-content1").html("");
 	$("#"+type+"-rightside-content2").html("");
-	$("#wait-window").show();
+	$("#wait-window").modal('show');
 	cleanList();
 	//----------------
 	$.ajax({
@@ -1159,7 +1193,7 @@ UIFactory["PortfolioFolder"].displaySearchedPortfolios = function(code,type)
 			$("#archive-button").removeAttr("disabled");
 			$("#archive-button").attr("href",archive_href);
 			$("#remove-button").prop("disabled",false);
-			$("#wait-window").hide();
+			$("#wait-window").modal('hide');
 		},
 		error : function(jqxhr,textStatus) {
 			alertHTML("Server Error GET active: "+textStatus);

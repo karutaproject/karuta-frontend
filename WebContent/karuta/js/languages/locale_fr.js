@@ -104,7 +104,8 @@ karutaStr["fr"]["button-decrease"] = "Diminuer la taille des caractères";
 karutaStr["fr"]["copy"] = "Copier";
 karutaStr["fr"]["copied"] = "Copié";
 karutaStr["fr"]["waitreport"] = "Patience, le rapport est exécuté sur le serveur. Revenez dans quelques minutes pour visualiser le rapport.";
-
+karutaStr["fr"]["instruction-export-menu"] = "Copier le menu Ajouter et le coller dans l'élément où vous voulez l'importer.";
+karutaStr["fr"]["back"] = "Cliquer pour revenir en arrière";
 //=========================================
 //========== ERRORS =======================
 //=========================================
@@ -137,12 +138,14 @@ karutaStr['fr']['resnopencil']="Ressource sans crayon ";
 karutaStr['fr']['editresroles']="Éditer ressource";
 karutaStr['fr']['delnoderoles']="Supprimer";
 karutaStr['fr']['commentnoderoles']="Commenter";
+karutaStr['fr']['seecommentnoderoles']="Voir les commentaires";
 karutaStr['fr']['annotnoderoles']="Annoter";
 karutaStr['fr']['submitroles']="Soumettre";
 karutaStr['fr']['txtsubmitroles']="Textes Soumettre";
 karutaStr['fr']['unsubmitroles']="Réinitialiser Soumettre";
 karutaStr['fr']['submitall']="Soumettre pour tous les rôles";
-karutaStr['fr']['nodenopencil']="Noeud sans crayon";
+karutaStr['fr']['nodenopencil']="Noeud sans crayon pour tous";
+karutaStr['fr']['nodenopencilroles']="Noeud sans crayon";
 karutaStr['fr']['editnoderoles']="Éditer libellé";
 karutaStr['fr']['editcoderoles']="Éditer code";
 karutaStr['fr']['duplicateroles']="Dupliquer";
@@ -266,6 +269,25 @@ karutaStr['fr']['node-comment']="Commentaires du noeud";
 karutaStr['fr']['autoload']="Autoload";
 karutaStr['fr']['defaultrole']="Rôle par défaut";
 karutaStr['fr']['langnotvisible']="Non visible en";
+karutaStr['fr']['menulabel']="Libellé du menu";
+karutaStr['fr']['itemlabel']="Libellé de l'item de menu";
+karutaStr['fr']['folder']="Dossier";
+karutaStr['fr']['foliocode']="Code du portfolio";
+karutaStr['fr']['semtag']="Tag sémantique";
+karutaStr['fr']['parent-semtag']="Tag sémantique du parent";
+karutaStr['fr']['itemtype']="Type d'item";
+karutaStr['fr']['roles']="Rôles";
+karutaStr['fr']['position']="Position de recherche";
+karutaStr['fr']['parentsemtag']="Tag sémantique du parent";
+karutaStr['fr']['condition']="Condition";
+karutaStr['fr']['boxlabel']="Libellé de la boîte d'édition";
+karutaStr['fr']['updatedtag']="Tag sémantique à mettre à jour";
+karutaStr['fr']['target']="Tag sémantique où importer";
+karutaStr['fr']['object']="Élément à rechercher";
+karutaStr['fr']['start-semtag']="Tag sémantique de départ";
+karutaStr['fr']['destination-semtag']="Tag sémantique d'arrivée";
+karutaStr['fr']['audio-record-only']="Enregistrement seulement";
+karutaStr['fr']['unique']="Sans doublons";
 
 //=========================================
 //========== ADMIN ========================
@@ -367,6 +389,7 @@ karutaStr['fr']['create_folder']="Créer un dossier";
 karutaStr['fr']['create_subfolder']="Créer un sous-dossier";
 karutaStr['fr']['parent_code']="Code du parent";
 karutaStr['fr']['folder_code']="Code du dossier";
+karutaStr['fr']['setrights']="Distinguer modèle <i class='far fa-file-alt'></i> et instance  <i class='fas fa-file-alt'></i>";
 
 //=========================================
 //========== USERS ========================
@@ -520,8 +543,7 @@ karutaStr['fr']['inexistent-user']="Désolé. Votre login n'a pas été trouvé.
 //========== TECHNICAL SUPPORT ============
 //=========================================
 
-karutaStr['fr']['technical_support']="Soutien technique";
-karutaStr['fr']['technical-support']="Soutien technique";
+karutaStr['fr']['technical_support']="Support technique";
 karutaStr['fr']['application-server']="Application";
 karutaStr['fr']['user-name']="Votre nom";
 karutaStr['fr']['user-email']="Votre courriel";
@@ -570,6 +592,7 @@ karutaStr['fr']['Get_Get_Resource']="GetGetResource";
 karutaStr['fr']['Get_Double_Resource']="GetDoubleResource";
 karutaStr['fr']['Proxy']="Proxy";
 karutaStr['fr']['Get_Proxy']="GetProxy";
+karutaStr['fr']['Get_Portfolio']="GetPortfolio";
 
 karutaStr['fr']['Variable']="Variable";
 karutaStr['fr']['var-name']="Nom de la variable";
