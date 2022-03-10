@@ -56,6 +56,51 @@ function initBatchVars()
 }
 
 //-----------------------------------------------------------------------
+//==================================
+function replaceBatchVariable(text,node,withquote)
+//==================================
+{
+	if (withquote==null)
+		withquote = true;
+	if (text!=undefined && text.indexOf('lastimported')>-1) {
+		text = text.replaceAll('###lastimported-1###',"g_importednodestack[g_importednodestack.length-2]");
+		text = text.replaceAll('###lastimported-2###',"g_importednodestack[g_importednodestack.length-3]");
+		text = text.replaceAll('###lastimported###',"g_importednodestack[g_importednodestack.length-1]");
+	}
+	if (node!=null && node!=undefined && withquote && text.indexOf('###parentnode###')>-1)
+		text = text.replaceAll('###parentnode###',"'"+$(node).parent().attr('id')+"'");
+	if (node!=null && node!=undefined && withquote && text.indexOf('###currentnode###')>-1)
+		text = text.replaceAll('###currentnode###',"'"+node.id+"'");
+	if (node!=null && node!=undefined && withquote && text.indexOf('###currentcode###')>-1)
+		text = text.replaceAll('###currentcode###',node.getCode());
+	if (node!=null && node!=undefined && !withquote && text.indexOf('###currentnode###')>-1)
+		text = text.replaceAll('###currentnode###',node.id);
+	if (node!=null && node!=undefined && !withquote && text.indexOf('###currentcode###')>-1)
+		text = text.replaceAll('###currentcode###',node.getCode());
+	var n=0;
+	while (text!=undefined && text.indexOf("{###")>-1 && n<100) {
+		var test_string = text.substring(text.indexOf("{###")+4); // test_string = abcd{###variable###}efgh.....
+		var variable_name = test_string.substring(0,test_string.indexOf("###}"));
+		if (g_variables[variable_name]!=undefined)
+			text = text.replace("{###"+variable_name+"###}", g_variables[variable_name]);
+		n++; // to avoid infinite loop
+	}
+	while (text!=undefined && text.indexOf("###")>-1 && n<100) {
+		var test_string = text.substring(text.indexOf("###")+3); // test_string = abcd###variable###efgh.....
+		var variable_name = test_string.substring(0,test_string.indexOf("###"));
+		if (g_variables[variable_name]!=undefined)
+			text = text.replace("###"+variable_name+"###", g_variables[variable_name]);
+		if (text.indexOf("[")>-1) {
+			var variable_value = variable_name.substring(0,variable_name.indexOf("["))
+			var i = text.substring(text.indexOf("[")+1,text.indexOf("]"));
+			i = replaceVariable(i);
+			if (g_variables[variable_value]!=undefined && g_variables[variable_value].length>=i)
+				text = g_variables[variable_value][i];
+			}
+		n++; // to avoid infinite loop
+	}
+	return text;
+}
 //-----------------------------------------------------------------------
 
 //==================================
@@ -63,8 +108,8 @@ function getTxtvals(node)
 //==================================
 {
 	var str = getTxtvalsWithoutReplacement(node);
-	return str.trim();
-//	return replaceVariable(str.trim());
+//	return str.trim();
+	return replaceBatchVariable(str.trim());
 }
 
 //==================================
@@ -1706,7 +1751,7 @@ g_actions['update-node'] = function updateNode(node)
 				var results = $('*',data);
 				var nodes = new Array();
 				nodes[0] = results[0];
-				var text = getTxtvalsWithoutReplacement($("text",node));
+				var text = getTxtvals($("text",node));
 				if ($("source",node).length>0){
 					var source_select = $("source",node).attr("select");
 					var source_idx = source_select.indexOf(".");
@@ -1781,7 +1826,7 @@ g_actions['update-node'] = function updateNode(node)
 			success : function(data) {
 				var nodes = $("node",data);
 				nodes = eval("$(nodes)"+test);
-				var text = getTxtvalsWithoutReplacement($("text",node));
+				var text = getTxtvals($("text",node));
 				$("#batch-log").append("<br>- " + nodes.length + " nodes");
 				if (nodes.length>0) {
 					if ($("source",node).length>0){
@@ -1886,11 +1931,15 @@ function updateMetada(nodes,node,type,semtag,text,attribute)
 function updateMetadawad(nodes,node,type,semtag,text,attribute)
 //=================================================
 {
+	if (attribute=="menuroles")
+		text = text.replaceAll("<br/>","").replaceAll("<br>","").replaceAll("&amp;","&");
 	for (var inode=0;inode<nodes.length;inode++) {
 		var nodeid = $(nodes[inode]).attr('id');
 		var metadatawad = $("metadata-wad",nodes[inode]);
 		$(metadatawad).attr(attribute,text);
 		var xml = xml2string(metadatawad[0]);
+		if (attribute=="menuroles")
+			xml = xml.replaceAll("&amp;","&");
 		$.ajax({
 			async : false,
 			type : "PUT",
