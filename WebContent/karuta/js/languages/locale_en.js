@@ -592,6 +592,6 @@ karutaStr['en']['coverage']="Coverage";
 //========== LOGIN ====================
 //=========================================
 
-karutaStr['fr']['connection-cas1']="Connection with University Account";
-karutaStr['fr']['connection-cas2']="Connection without University Account";
+karutaStr['en']['connection-cas1']="Connection with University Account";
+karutaStr['en']['connection-cas2']="Connection without University Account";
 

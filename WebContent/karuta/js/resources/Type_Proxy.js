@@ -145,12 +145,18 @@ UIFactory["Proxy"].prototype.displayEditor = function(destid,type,langcode)
 	}
 	if (queryattr_value!=undefined && queryattr_value!='') {
 		//------------
-		queryattr_value = cleanCode(replaceVariable(queryattr_value));
+		queryattr_value = replaceVariable(queryattr_value);
 		//------------
 		var srce_indx = queryattr_value.lastIndexOf('.');
 		var srce = queryattr_value.substring(srce_indx+1);
 		var semtag_indx = queryattr_value.substring(0,srce_indx).lastIndexOf('.');
 		var semtag = queryattr_value.substring(semtag_indx+1,srce_indx);
+		var semtag2 = "";
+		if (semtag.indexOf('+')>-1) {
+			semtag2 = semtag.substring(semtag.indexOf('+')+1);
+			semtag = semtag.substring(0,semtag.indexOf('+'));
+		}
+		var target = queryattr_value.substring(srce_indx+1); // label or text
 		//------------
 		var portfoliocode = queryattr_value.substring(0,semtag_indx);
 		var selfcode = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",UICom.root.node)).text();
@@ -164,61 +170,47 @@ UIFactory["Proxy"].prototype.displayEditor = function(destid,type,langcode)
 			$.ajax({
 				type : "GET",
 				dataType : "xml",
-				url : serverBCK_API+"/nodes?portfoliocode=" + portfoliocode + "&semtag="+semtag,
+				url : serverBCK_API+"/nodes?portfoliocode=" + portfoliocode + "&semtag="+semtag.replace("!",""),
 				success : function(data) {
-					UIFactory["Proxy"].parse(destid,type,langcode,data,self,portfoliocode,srce);
+					UIFactory["Proxy"].parse(destid,type,langcode,data,self,portfoliocode,srce,target,semtag,semtag2);
 				}
 			});
 		} else {  // code==all
 			// retrieve active portfolios
 			$("#wait-window").modal('show');
-//			$.ajaxSetup({async: false});
-//			$.ajax({
-//				type : "GET",
-//				dataType : "xml",
-//				url : serverBCK_API+"/portfolios?active=1",
-//				success : function(data) {
-//					UIFactory["Portfolio"].parse(data);
-					for ( var i = 0; i < portfolios_list.length; i++) {
-						code = portfolios_list[i].code_node.text();
-						label = portfolios_list[i].label_node[langcode].text();
-						$.ajax({
-							type : "GET",
-							dataType : "xml",
-							url : serverBCK_API+"/nodes?portfoliocode=" + code + "&semtag="+semtag,
-							success : function(data) {
-								var nodes = $("node",data);
-								var display = false;
-								for ( var i = 0; i < $(nodes).length; ++i) {
-									var semtag = $("metadata",nodes[i]).attr('semantictag');
-									if (semtag.indexOf("proxy-")<0)
-										display = true;
-								}
-								if (nodes.length>0 && display) {
-									var html = "";
-									html += "<div class='portfolio-proxy' style='margin-top:20px'>"+label+"</div>";
-									var placeid = code.replace(/\./g, '_'); 
-									html += "<div id='"+placeid+"'></div>";
-									$("#"+destid).append($(html));
-									UIFactory["Proxy"].parse(placeid,type,langcode,data,self,label,srce);
-								}
-							}
-						});
+			for ( var i = 0; i < portfolios_list.length; i++) {
+				code = portfolios_list[i].code_node.text();
+				label = portfolios_list[i].label_node[langcode].text();
+				$.ajax({
+					type : "GET",
+					dataType : "xml",
+					url : serverBCK_API+"/nodes?portfoliocode=" + code + + "&semtag="+semtag.replace("!",""),
+					success : function(data) {
+						var nodes = $("node",data);
+						var display = false;
+						for ( var i = 0; i < $(nodes).length; ++i) {
+							var semtag = $("metadata",nodes[i]).attr('semantictag');
+							if (semtag.indexOf("proxy-")<0)
+								display = true;
+						}
+						if (nodes.length>0 && display) {
+							var html = "";
+							html += "<div class='portfolio-proxy' style='margin-top:20px'>"+label+"</div>";
+							var placeid = code.replace(/\./g, '_'); 
+							html += "<div id='"+placeid+"'></div>";
+							$("#"+destid).append($(html));
+							UIFactory["Proxy"].parse(placeid,type,langcode,data,self,label,srce,target,semtag,semtag2);
+						}
 					}
-//				},
-//				error : function(jqxhr,textStatus) {
-//					alertHTML("Server Error UIFactory.Proxy.prototype.displayEditor: "+textStatus);
-//					$("#wait-window").modal('hide');
-//				}
-//			});
-//			$.ajaxSetup({async: true});
+				});
+			}
 			$("#wait-window").modal('hide');
 		}
 	}
 };
 
 //==================================
-UIFactory["Proxy"].parse = function(destid,type,langcode,data,self,portfolio_label,srce) 
+UIFactory["Proxy"].parse = function(destid,type,langcode,data,self,portfolio_label,srce,target,semtag,semtag2) 
 //==================================
 {
 	//---------------------
@@ -318,11 +310,7 @@ UIFactory["Proxy"].parse = function(destid,type,langcode,data,self,portfolio_lab
 			var disabled = false;
 			var selectable = true;
 			var input = "";
-			var resource = null;
-//			if ($("asmResource",newTableau1[i][1]).length==3)
-//				resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i][1]); 
-//			else
-				resource = $("asmResource[xsi_type='nodeRes']",newTableau1[i][1]);
+			var resource = resource = $("asmResource[xsi_type='nodeRes']",newTableau1[i][1]);
 			//------------------------------
 			var code = $('code',resource).text();
 			var value = $(newTableau1[i][1]).attr('id');
@@ -336,9 +324,10 @@ UIFactory["Proxy"].parse = function(destid,type,langcode,data,self,portfolio_lab
 			if (code.indexOf("?")>-1) {
 				disabled = true;
 			}
-			if (code.indexOf("!")>-1) {
+			if (code.indexOf("!")>-1 || semtag.indexOf("!")>-1) {
 				selectable = false;
 			}
+			var original_code = code
 			code = cleanCode(code);
 			//------------------------------
 			input += "<div>";
@@ -357,11 +346,110 @@ UIFactory["Proxy"].parse = function(destid,type,langcode,data,self,portfolio_lab
 			input +="<span  class='"+code+"'>"+$(srce+"[lang='"+languages[langcode]+"']",resource).text()+"</span></div>";
 			var input_obj = $(input);
 			$(inputs_obj).append(input_obj);
+			// ---------------------- children ---------
+			if (semtag2!="") {
+				var semtag_parent = semtag.replace("!","");
+				UIFactory.Proxy.getChildren(inputs_obj,self,langcode,srce,target,portfolio_label,semtag2,semtag_parent,original_code);
+			}
 		}
 		$("#"+destid).append(inputs_obj);
 	}
 };
 
+//==================================
+UIFactory["Proxy"].getChildren = function(dest,self,langcode,srce,target,portfoliocode,semtag,semtag_parent,code)
+//==================================
+{
+	var semtag2 = "";
+	if (semtag.indexOf('+')>-1) {
+		semtag2 = semtag.substring(semtag.indexOf('+')+1);
+		semtag = semtag.substring(0,semtag.indexOf('+'));
+	}
+	//------------
+	$.ajax({
+		async:false,
+		type : "GET",
+		dataType : "xml",
+		url : serverBCK_API+"/nodes?portfoliocode="+portfoliocode+"&semtag="+semtag.replace("!","")+"&semtag_parent="+semtag_parent+ "&code_parent="+code,
+		success : function(data) {
+			let target= "label"
+			UIFactory.Proxy.parseChildren(dest,self,data,langcode,srce,target,portfoliocode,semtag,semtag_parent,code,semtag2);
+		}
+	});
+	//------------
+}
+//==================================
+UIFactory["Proxy"].parseChildren = function(dest,self,data,langcode,srce,target,portfoliocode,semtag,semtag_parent,code,semtag2)
+//==================================
+{
+	//-----Node ordering-------------------------------------------------------
+	var nodes = $("node",data);
+	var tableau1 = new Array();
+	for ( var i = 0; i < $(nodes).length; i++) {
+		var resource = null;
+//		if ($("asmResource",nodes[i]).length==3)
+//			resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",nodes[i]); 
+//		else
+			resource = $("asmResource[xsi_type='nodeRes']",nodes[i]);
+		var code = $('code',resource).text();
+		tableau1[i] = [code,nodes[i]];
+	}
+	var newTableau1 = tableau1.sort(sortOn1);
+	//--------------------------------------------------------------------
+	for ( var i = 0; i < newTableau1.length; ++i) {
+		var uuid = $(newTableau1[i][1]).attr('id');
+		//------------------------------
+		var input = "";
+		//------------------------------
+		var resource = null;
+//		if ($("asmResource",newTableau1[i][1]).length==3)
+//			resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i][1]); 
+//		else
+			resource = $("asmResource[xsi_type='nodeRes']",newTableau1[i][1]);
+		//------------------------------
+		var code = $('code',resource).text();
+		var value = $(newTableau1[i][1]).attr('id');
+		var selectable = true;
+		var disabled = false;
+		var display_code = false;
+		var display_label = true;
+		//------------------------
+		if (code.indexOf("$")>-1){ 
+			display_label = false;
+		}
+		if (code.indexOf("@")<0) {
+			display_code = true;
+		}
+		if (code.indexOf("?")>-1) {
+			disabled = true;
+		}
+		if (code.indexOf("!")>-1 || semtag.indexOf("!")>-1 ) {
+			selectable = false;
+		}
+		code = cleanCode(code);
+		//------------------------------
+		input += "<div id='"+code+"' class='subget_ressource'>";
+		if (selectable) {
+			input += "	<input type='checkbox' name='multiple_"+self.id+"' value='"+value+"' code='"+$('code',resource).text()+"' class='multiple-item";
+			input += "' ";
+			for (var j=0; j<languages.length;j++){
+				input += "label_"+languages[j]+"=\""+$(srce+"[lang='"+languages[j]+"']",resource).text()+"\" ";
+			}
+			if (disabled)
+				input += "disabled";
+			input += "> ";
+		}
+		if (display_code)
+			input += code + " ";
+		input +="<span  class='"+code+"'>"+$(srce+"[lang='"+languages[langcode]+"']",resource).text()+"</span></div>";
+		var input_obj = $(input);
+		$(dest).append(input_obj);
+		if (semtag2!="") {
+			var semtag_parent = semtag.replace("!","");
+			UIFactory.Proxy.getChildren(dest,self,langcode,srce,target,portfoliocode,semtag2,semtag_parent,code,cachable);
+		}
+	}
+}
 //==================================
 UIFactory["Proxy"].prototype.save = function()
 //==================================

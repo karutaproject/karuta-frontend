@@ -785,6 +785,15 @@ g_report_actions['for-each-node'] = function (destid,action,no,data)
 	var select = $(action).attr("select");
 	var test = $(action).attr("test");
 	var countvar = $(action).attr("countvar");
+	//----------------------------------
+	var ref_init = $(action).attr("ref-init");
+	if (ref_init!=undefined) {
+		ref_init = r_replaceVariable(ref_init);
+		var ref_inits = ref_init.split("/"); // ref1/ref2/...
+		for (var k=0;k<ref_inits.length;k++)
+			g_variables[ref_inits[k]] = new Array();
+	}
+	//----------------------------------
 	if (test!=undefined) 
 		test = r_replaceVariable(test);
 	if (select!=undefined) {
@@ -812,14 +821,6 @@ g_report_actions['for-each-node'] = function (destid,action,no,data)
 				//----------------------------------
 				if (countvar!=undefined) {
 					g_variables[countvar] = j;
-				}
-				//----------------------------------
-				var ref_init = $(action).attr("ref-init");
-				if (ref_init!=undefined) {
-					ref_init = r_replaceVariable(ref_init);
-					var ref_inits = ref_init.split("/"); // ref1/ref2/...
-					for (var k=0;k<ref_inits.length;k++)
-						g_variables[ref_inits[k]] = new Array();
 				}
 				//----------------------------------
 				for (var i=0; i<actions.length;i++){
@@ -1260,7 +1261,7 @@ g_report_actions['for-each-portfolio'] = function (destid,action,no,data)
 			var tableau = new Array();
 			var sortvalue = "";
 			if (sortag!=undefined && sortag!="") {
-				for ( var j = 0; j < items.length; j++) {
+				for ( var i = 0; i < items.length; i++) {
 					portfolioid = $(items[i]).attr('id');
 					var code = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",items[i])).text();
 					//------------------------------------
@@ -2226,7 +2227,7 @@ g_report_actions['url2portfolio'] = function (destid,action,no,data)
 		dataType : "xml",
 		url : url,
 		success : function(data) {
-			uuid = $("asmRoot",data).attr("id");
+			uuid = $("portfolio",data).attr("id");
 			label = $("label[lang='"+languages[LANGCODE]+"']",$("asmRoot>asmResource[xsi_type='nodeRes']",data)[0]).text();
 		}
 	});

@@ -76,7 +76,7 @@ function b_replaceVariable(text)
 	return text;
 }
 
-//==================================
+///==================================
 function getTxtvalsWithoutReplacement(node)
 //==================================
 {
@@ -96,8 +96,10 @@ function getTxtvalsWithoutReplacement(node)
 					text = new Date().toLocaleString();
 				else
 					text = eval("g_json."+select.substring(2));
-			} else if (select.indexOf("/")>-1)
+			} else if (select.indexOf("/")>-1) {
 				text = eval("g_users['"+select.substring(1)+"']");
+			} else if (select.indexOf("##")>-1)
+				text = replaceVariable(select);
 			else
 				text = eval("g_json.lines["+g_noline+"]."+select);
 			if (fct!=null)
@@ -111,9 +113,9 @@ function getTxtvalsWithoutReplacement(node)
 				text = eval(text);
 			}
 		}
-		str += text.trim();
+		str += text;
 	}
-	return str;
+	return str.trim();
 }
 
 //==================================
@@ -992,6 +994,7 @@ g_actions['create-tree'] = function createTree(node)
 	var code = getvarvals($("code",node));
 	if (code=="")
 		code = getTxtvals($("code",node));
+	code = replaceVariable(code);
 	var treeref = $(node).attr('id');
 	if (code!="") {
 		var url = serverBCK_API+"/portfolios/portfolio/code/" + code;
@@ -3126,7 +3129,7 @@ function get_portfoliogroupid(groupname)
 	var groupid = null;
 	get_list_portfoliosgroups();
 	for (var i=0;i<portfoliogroups_list.length;i++){
-		if (portfoliogroups_list[i].label==groupname){
+		if (portfoliogroups_list[i].code==groupname){
 			groupid = portfoliogroups_list[i].id;
 			break;
 		}
@@ -3198,15 +3201,32 @@ function execBatchForm()
 function getInputsLine(node)
 //==================================================
 {
-	line_inputs = $("asmContext:has(metadata[semantictag*='BatchFormInput'])",node);
-	var g_json_line = {};
+	let json_line = {};
+	let line_inputs = $("asmContext:has(metadata[semantictag='BatchFormInput'])",node);
+	for ( var j = 0; j < line_inputs.length; j++) {
+		let inputid = $(line_inputs[j]).attr('id');
+		let variable = UICom.structure["ui"][inputid].getCode().trim();
+		json_line[variable] = replaceVariable(UICom.structure["ui"][inputid].resource.getView(null,'batchform').trim());
+	}
+	line_inputs = $("asmContext:has(metadata[semantictag='BatchFormInputCode'])",node);
+	for ( var j = 0; j < line_inputs.length; j++) {
+		let inputid = $(line_inputs[j]).attr('id');
+		let variable = UICom.structure["ui"][inputid].getCode();
+		if (UICom.structure["ui"][inputid].resource.type=="Get_Resource")
+			json_line[variable] = replaceVariable(UICom.structure["ui"][inputid].resource.getCode(null));
+	}
+	line_inputs = $("asmContext:has(metadata[semantictag='BatchFormInputLabelCode'])",node);
 	for ( var j = 0; j < line_inputs.length; j++) {
 		var inputid = $(line_inputs[j]).attr('id');
-		code = UICom.structure["ui"][inputid].getCode().trim();
-		g_json_line[code] = replaceVariable(UICom.structure["ui"][inputid].resource.getView(null,'batchform').trim());
+		let variable = UICom.structure["ui"][inputid].getCode();
+		if (UICom.structure["ui"][inputid].resource.type=="Get_Resource") {
+			json_line[variable+"_code"] = replaceVariable(UICom.structure["ui"][inputid].resource.getCode(null));
+			json_line[variable+"_label"] = replaceVariable(UICom.structure["ui"][inputid].resource.getView(null,'batchform').trim());
+		}
 	}
-	return g_json_line;
+	return json_line;
 };
+
 
 //==================================
 function display_execBatch()

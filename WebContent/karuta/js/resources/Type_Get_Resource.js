@@ -234,8 +234,10 @@ UIFactory["Get_Resource"].prototype.getView = function(dest,type,langcode,indash
 				html += "'>";
 				if ((code.indexOf("#")>-1 && code.indexOf("##")<0) || (this.queryattr_value != undefined && this.queryattr_value.indexOf("CNAM")>-1))
 					html += "<span name='code'>" + cleanCode(code) + "</span> ";
+				if (code.indexOf("*")>-1)
+					html += "<span name='code'>" + cleanCode(code) + "</span> ";
 				if (code.indexOf("%")<0) {
-						html += "<span name='label'>" + elts[1].substring(6) + "</span> ";
+						html += "<span name='label'>" + elts[2].substring(6) + "</span> ";
 				}
 				if (code.indexOf("&")>-1)
 					html += " ["+$(this.value_node).text()+ "] ";
@@ -292,6 +294,8 @@ UIFactory["Get_Resource"].prototype.getView = function(dest,type,langcode,indash
 		html += "'>";
 		if ((code.indexOf("#")>-1 && code.indexOf("##")<0) || (this.queryattr_value != undefined && this.queryattr_value.indexOf("CNAM")>-1))
 			html += "<span name='code'>" + cleanCode(code) + "</span> ";
+		if (code.indexOf("*")>-1)
+			html += "<span name='code'>" + cleanCode(code) + "</span> ";
 		if (code.indexOf("%")<0 && elts[2]!=undefined) {
 				html += "<span name='label'>" + label + "</span> ";
 		} else {
@@ -307,33 +311,53 @@ UIFactory["Get_Resource"].prototype.getView = function(dest,type,langcode,indash
 			html += "</div>";
 	//--------------------------------------------------
 	} else {
-		if (indashboard)
-			html += "<span class='"+cleanCode(code)+"' style='";
-		else
-			html += "<div class='"+cleanCode(code)+" view-div' style='";
-		html += style;
-//		if (indashboard)
-//			html += "background-position:center;";
-		html += "'>";
-		if (code.indexOf("#")>-1 && code.indexOf("##")<0) 
-			html += "<span name='code'>" + cleanCode(code) + "</span> ";
-		if (code.indexOf("%")<0) {
-			if (label.indexOf("fileid-")>-1)
-				html += UICom.structure["ui"][label.substring(7)].resource.getView();
+		if (type!="batchform") {
+			if (indashboard)
+				html += "<span class='"+cleanCode(code)+"' style='";
 			else
-				html += "<span name='label'>" + label + "</span> ";
-			}
-		if (code.indexOf("&")>-1)
-			html += " ["+$(this.value_node).text()+ "] ";
-		if (this.preview)
-			html+= "&nbsp;<span class='button preview-button fas fa-binoculars' onclick=\"previewPage('"+this.uuid_node.text()+"',100,'standard') \" data-title='"+karutaStr[LANG]["preview"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
-		if (indashboard)
-			html += "</span>";
-		else
-			html += "</div>";
+				html += "<div class='"+cleanCode(code)+" view-div' style='";
+			html += style;
+	//		if (indashboard)
+	//			html += "background-position:center;";
+			html += "'>";
+			if (code.indexOf("#")>-1 && code.indexOf("##")<0) 
+				html += "<span name='code'>" + cleanCode(code) + "</span> ";
+			if (code.indexOf("*")>-1)
+				html += "<span name='code'>" + cleanCode(code) + "</span> ";
+			if (code.indexOf("%")<0) {
+				if (label.indexOf("fileid-")>-1)
+					html += UICom.structure["ui"][label.substring(7)].resource.getView();
+				else
+					html += "<span name='label'>" + label + "</span> ";
+				}
+			if (code.indexOf("&")>-1)
+				html += " ["+$(this.value_node).text()+ "] ";
+			if (this.preview)
+				html+= "&nbsp;<span class='button preview-button fas fa-binoculars' onclick=\"previewPage('"+this.uuid_node.text()+"',100,'standard') \" data-title='"+karutaStr[LANG]["preview"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
+			if (indashboard)
+				html += "</span>";
+			else
+				html += "</div>";
+		} else {	// type=='batchform'
+			html = label;
+		}
 
 	}
-	//--------------------------------------------------
+	//-------- if function js -------------
+	if (UICom.structure["ui"][this.id].js!="") {
+		
+		var fcts = UICom.structure["ui"][this.id].js.split("|");
+		for (let i=0;i<fcts.length;i++) {
+			let elts = fcts[i].split("/");
+			if (elts[0]=="display-resource") {
+				fctjs = elts[1].split(";");
+				for (let j=0;j<fctjs.length;j++) {
+					eval(fctjs[j]+"(this.node,g_portfolioid)");
+				}
+			}
+		}
+	}
+	//---------------------
 	return html;
 };
 
@@ -341,7 +365,7 @@ UIFactory["Get_Resource"].prototype.getView = function(dest,type,langcode,indash
 UIFactory["Get_Resource"].prototype.displayView = function(dest,type,langcode)
 //==================================
 {
-var html = this.getView(dest,type,langcode);
+	var html = this.getView(dest,type,langcode);
 	$("#"+dest).html(html);
 };
 
@@ -375,9 +399,16 @@ UIFactory["Get_Resource"].update = function(selected_item,itself,langcode,type)
 	}
 	//-------- if function js -------------
 	if (UICom.structure["ui"][itself.id].js!="") {
-		var elts = UICom.structure["ui"][itself.id].js.split("/");
-		if (elts[0]=="update-resource")
-			eval(elts[1]+"(itself.node,g_portfolioid)");
+		var fcts = UICom.structure["ui"][itself.id].js.split("|");
+		for (let i=0;i<fcts.length;i++) {
+			let elts = fcts[i].split("/");
+			if (elts[0]=="update-resource") {
+				fctjs = elts[1].split(";");
+				for (let j=0;j<fctjs.length;j++) {
+					eval(fctjs[j]+"(itself.node,g_portfolioid)");
+				}
+			}
+		}
 	}
 	//---------------------
 	itself.save();
@@ -432,6 +463,7 @@ UIFactory["Get_Resource"].prototype.displayEditor = function(destid,type,langcod
 			UIFactory["Get_Resource"].parse(destid,type,langcode,g_Get_Resource_caches[portfoliocode+semtag],self,disabled,srce,resettable,target,semtag,multiple_tags,portfoliocode,semtag2,cachable);
 		else {
 			$.ajax({
+				async:false,
 				type : "GET",
 				dataType : "xml",
 				url : serverBCK_API+"/nodes?portfoliocode=" + portfoliocode + "&semtag="+semtag.replace("!",""),
@@ -442,7 +474,20 @@ UIFactory["Get_Resource"].prototype.displayEditor = function(destid,type,langcod
 				}
 			});
 		}
-		//------------
+		//-------- if function js -------------
+		if (UICom.structure["ui"][this.id].js!="") {
+			var fcts = UICom.structure["ui"][this.id].js.split("|");
+			for (let i=0;i<fcts.length;i++) {
+				let elts = fcts[i].split("/");
+				if (elts[0]=="edit-resource") {
+					fctjs = elts[1].split(";");
+					for (let j=0;j<fctjs.length;j++) {
+						eval(fctjs[j]+"(this.node,g_portfolioid)");
+					}
+				}
+			}
+		}
+		//---------------------
 	}
 };
 
@@ -971,76 +1016,101 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 		//-----------------------
 		for ( var i = 0; i < newTableau1.length; ++i) {
 			var uuid = $(newTableau1[i][1]).attr('id');
-			var input = "";
-			var style = "";
-			var resource = null;
-			//------------------------------
-			if ($("asmResource",newTableau1[i][1]).length==3) {
-				style = UIFactory.Node.getDataContentStyle(newTableau1[i][1].querySelector("metadata-epm"));
-				resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i][1]); 
-			} else {
-				style = UIFactory.Node.getDataLabelStyle(newTableau1[i][1].querySelector("metadata-epm"));
-				resource = $("asmResource[xsi_type='nodeRes']",newTableau1[i][1]);
-			}
-			//------------------------------
-			var code = $('code',resource).text();
-			var selectable = true;
-			var disabled = false;
-			var display_code = false;
-			var display_label = true;
-			//------------------------
-			if (code.indexOf("$")>-1){ 
-				display_label = false;
-			}
-			if (code.indexOf("@")<0) {
-				display_code = true;
-			}
-			if (code.indexOf("?")>-1) {
-				disabled = true;
-			}
-			if (code.indexOf("!")>-1 || semtag.indexOf("!")>-1) {
-				selectable = false;
-			}
-			var original_code = code
-			code = cleanCode(code);
-			//------------------------------
-			input += "<div id='"+code+"' style=\""+style+"\">";
-			if (selectable) {
-				input += "	<input type='checkbox' name='multiple_"+self.id+"' value='"+$('value',resource).text()+"' code='"+$('code',resource).text()+"' class='multiple-item";
-				input += "' ";
-				for (var j=0; j<languages.length;j++){
-					if (target=='fileid' || target=='resource') {
-						if (target=='fileid')
-							input += "label_"+languages[j] + "=\"" + target + "-" + uuid + "\" ";
-						else
-							input += "label_"+languages[j] + "=\"" + target + ":" + uuid + "|semtag:"+semtag+"|label:"+$("label[lang='"+languages[j]+"']",resource).text()+"\" ";
-					} else if (target=='nodelabel')
-						input += "label_"+languages[j]+"=\"nodelabel:"+uuid + "|semtag:"+semtag+"|label:"+UICom.structure["ui"][uuid].getLabel(null,'none')+"\" ";
-					else 
-						input += "label_"+languages[j]+"=\""+$(srce+"[lang='"+languages[j]+"']",resource).text()+"\" ";
+			//-------------------------------------
+			let display_item = true;
+			let rights = "";
+			$.ajax({
+				async:false,
+				type : "GET",
+				dataType : "xml",
+				url : serverBCK_API+"/nodes/node/"+this.id+"/rights",
+				success : function(data) {
+					rights = data;
 				}
-				if (disabled)
-					input += "disabled";
-				input += "> ";
+			});
+			let roles = $("role",rights);
+			if (roles.length>0) {
+				for (var i=0;i<roles.length;i++){
+					var rolename = $(roles[i]).attr("name");
+					roles_by_role[rolename] = new RoleRights(roles[i],this.id);
+				}
+				for (role in roles_by_role) {
+					if (role.name==g_userroles[0] && role.rights['RD']=="N")
+						display_item = false;
+				}
 			}
-			if (display_code)
-				input += code + " ";
-			if (display_label) {
-				if (srce=='resource' || srce=='nodelabel')
-					input += $("label[lang='"+languages[langcode]+"']",resource).text()+"</div>";
-				else
-					input += $(srce+"[lang='"+languages[langcode]+"']",resource).text()+"</div>";
+			if (display_item) {
+				var input = "";
+				var style = "";
+				var resource = null;
+				//------------------------------
+				if ($("asmResource",newTableau1[i][1]).length==3) {
+					style = UIFactory.Node.getDataContentStyle(newTableau1[i][1].querySelector("metadata-epm"));
+					resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i][1]); 
+				} else {
+					style = UIFactory.Node.getDataLabelStyle(newTableau1[i][1].querySelector("metadata-epm"));
+					resource = $("asmResource[xsi_type='nodeRes']",newTableau1[i][1]);
+				}
+				//------------------------------
+				var code = $('code',resource).text();
+				var selectable = true;
+				var disabled = false;
+				var display_code = false;
+				var display_label = true;
+				//------------------------
+				if (code.indexOf("$")>-1){ 
+					display_label = false;
+				}
+				if (code.indexOf("@")<0) {
+					display_code = true;
+				}
+				if (code.indexOf("?")>-1) {
+					disabled = true;
+				}
+				if (code.indexOf("!")>-1 || semtag.indexOf("!")>-1) {
+					selectable = false;
+				}
+				var original_code = code
+				code = cleanCode(code);
+				//------------------------------
+				input += "<div id='"+code+"' style=\""+style+"\">";
+				if (selectable) {
+					input += "	<input type='checkbox' name='multiple_"+self.id+"' value='"+$('value',resource).text()+"' code='"+$('code',resource).text()+"' class='multiple-item";
+					input += "' ";
+					for (var j=0; j<languages.length;j++){
+						if (target=='fileid' || target=='resource') {
+							if (target=='fileid')
+								input += "label_"+languages[j] + "=\"" + target + "-" + uuid + "\" ";
+							else
+								input += "label_"+languages[j] + "=\"" + target + ":" + uuid + "|semtag:"+semtag+"|label:"+$("label[lang='"+languages[j]+"']",resource).text()+"\" ";
+						} else if (target=='nodelabel')
+							input += "label_"+languages[j]+"=\"nodelabel:"+uuid + "|semtag:"+semtag+"|label:"+UICom.structure["ui"][uuid].getLabel(null,'none')+"\" ";
+						else 
+							input += "label_"+languages[j]+"=\""+$(srce+"[lang='"+languages[j]+"']",resource).text()+"\" ";
+					}
+					if (disabled)
+						input += "disabled";
+					input += "> ";
+				}
+				if (display_code)
+					input += code + " ";
+				if (display_label) {
+					if (srce=='resource' || srce=='nodelabel')
+						input += $("label[lang='"+languages[langcode]+"']",resource).text()+"</div>";
+					else
+						input += $(srce+"[lang='"+languages[langcode]+"']",resource).text()+"</div>";
+				}
+	
+	//			input +="<span  class='"+code+"'>"+$(srce+"[lang='"+languages[langcode]+"']",resource).text()+"</span></div>";
+				var input_obj = $(input);
+				$(inputs_obj).append(input_obj);
+				// ---------------------- children ---------
+				if (semtag2!="") {
+					var semtag_parent = semtag.replace("!","");
+					UIFactory.Get_Resource.getChildren(inputs_obj,self,langcode,srce,target,portfoliocode,semtag2,semtag_parent,original_code,cachable);
+				}
+				//------------------------------------------
 			}
-
-//			input +="<span  class='"+code+"'>"+$(srce+"[lang='"+languages[langcode]+"']",resource).text()+"</span></div>";
-			var input_obj = $(input);
-			$(inputs_obj).append(input_obj);
-			// ---------------------- children ---------
-			if (semtag2!="") {
-				var semtag_parent = semtag.replace("!","");
-				UIFactory.Get_Resource.getChildren(inputs_obj,self,langcode,srce,target,portfoliocode,semtag2,semtag_parent,original_code,cachable);
-			}
-			//------------------------------------------
 		}
 		//------------------------------
 		$("#"+destid).append(inputs_obj);
