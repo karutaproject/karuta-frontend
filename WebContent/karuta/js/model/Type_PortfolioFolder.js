@@ -191,7 +191,7 @@ UIFactory["PortfolioFolder"].loadAndDisplayAll = function (type)
 			$('[data-toggle=tooltip]').tooltip({html: true, trigger: 'hover'}); 
 			$("#wait-window").modal('hide');
 		},
-		error : function(jqxhr,textStatus) {
+		error : function(jqxhr,textStatus) {			
 			alertHTML("Server Error GET UIFactory.PortfolioFolder.loadAndDisplayAll: "+textStatus);
 			$("#wait-window").modal('hide');
 		}
@@ -307,7 +307,7 @@ UIFactory["PortfolioFolder"].prototype.loadAndDisplayContent = function (type,pa
 			this.folder.displayContent(type,this.folder.id);
 		},
 		error : function(jqxhr,textStatus) {
-			alertHTML("Server Error GET active: "+textStatus);
+			alertHTML("Server Error loadAndDisplayContent: "+textStatus);
 		}
 	});
 }
@@ -343,7 +343,7 @@ UIFactory["PortfolioFolder"].prototype.loadContent = function ()
 			}
 		},
 		error : function(jqxhr,textStatus) {
-			alertHTML("Server Error GET active: "+textStatus);
+			alertHTML("Server Error loadContent: "+textStatus);
 		}
 	});
 }
@@ -930,7 +930,7 @@ UIFactory["PortfolioFolder"].prototype.rename = function(oldfolder_code,newfolde
 					}
 				},
 				error : function(jqxhr,textStatus) {
-					alertHTML("Server Error GET active: "+textStatus);
+					alertHTML("Server Error rename: "+textStatus);
 				}
 			});
 			//------------------------------------------
@@ -1051,7 +1051,7 @@ UIFactory["PortfolioFolder"].loadAndDisplayPortfolios = function(dest,type)
 			}
 		},
 		error : function(jqxhr,textStatus) {
-			alertHTML("Server Error GET active: "+textStatus);
+			alertHTML("Server Error loadAndDisplayPortfolios: "+textStatus);
 		}
 	});
 }
@@ -1196,7 +1196,20 @@ UIFactory["PortfolioFolder"].displaySearchedPortfolios = function(code,type)
 			$("#wait-window").modal('hide');
 		},
 		error : function(jqxhr,textStatus) {
-			alertHTML("Server Error GET active: "+textStatus);
+			if (textStatus.indexOf("parsererror")!=-1) {
+				let lastportfolio = jqxhr.responseText.substring(jqxhr.responseText.lastIndexOf("<portfolio"));
+				let code = lastportfolio.substring(lastportfolio.indexOf("<code"))
+				if (confirm("THIS PORTFOLIO SEEMS TO HAVE A PARSING PROBLEM, DO YOU WANT TO DELETE IT?   "+lastportfolio))
+					{
+					const idx1 = lastportfolio.indexOf("<portfolio id=") + 15;
+					const idx2 = lastportfolio.indexOf(" root_node") -1;
+					const lastportfolioid = lastportfolio.substring(idx1,idx2);
+					UIFactory.Portfolio.del(lastportfolioid);
+					}
+				$(".modal-backdrop").hide();
+				$("#wait-window").hide();
+			} else
+				alertHTML("Server Error GET active: "+textStatus);
 		}
 	});
 	//---------------------------------------------------
