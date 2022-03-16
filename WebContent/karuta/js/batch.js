@@ -2028,7 +2028,7 @@ g_actions['update-rights'] = function updateRights(node)
 					//-------------------
 					var nodeid = $(nodes[i]).attr('id');
 					var xml = "<node><role name='"+role+"'><right RD='"+rd+"' WR='"+wr+"' DL='"+dl+"' SB='"+sb+"'></right></role></node>"
-					nodes = nodes.slice(1,nodes.length);
+//					nodes = nodes.slice(1,nodes.length);
 					$.ajax({
 						async : false,
 						type : "POST",
