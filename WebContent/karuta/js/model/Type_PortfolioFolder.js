@@ -172,6 +172,7 @@ UIFactory["PortfolioFolder"].loadAndDisplayAll = function (type)
 //==================================
 {
 	$.ajax({
+		async:false,
 		type : "GET",
 		dataType : "xml",
 		url : serverBCK_API+"/portfolios?active=1&project=true",

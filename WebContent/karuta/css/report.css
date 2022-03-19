@@ -1,0 +1,259 @@
+/* ====================
+	REPORT
+   ====================*/
+.report .cssinfo {
+  display: block;
+}
+
+.report .chkbox-comments {
+  display: inline;
+  float: right;
+  margin-right: 20px;
+}
+
+.report .asmRoot > div[name=lbl-div] .chkbox-comments {
+  display: none;
+}
+
+.report .comments,
+.report .comments .form-control,
+.report .comments .btn,
+.report .comments .cssinfo {
+  font-style: italic;
+  font-weight: normal;
+  color: var(--report-comment-color);
+}
+
+.report .ref-init .resource {
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+}
+
+.portfoliocode {
+  margin-left: 10px;
+  font-style: italic;
+  font-size: 1rem;
+}
+
+.report-comment,
+.report-comment .collapsible,
+.report-comment .btn-default,
+.report-comment a,
+.report-comment .btn-group .button,
+.report-comment .form-control {
+  color: var(--report-comment-color);
+}
+
+.report .collapsible {
+  float: left;
+  margin-right: 3px;
+}
+
+.report .btn {
+  min-height: 34px;
+}
+
+.report .asmUnitStructure {
+  padding: 10px;
+}
+
+.report .select select,
+.report .select input {
+  margin-bottom: 0px;
+}
+
+.report .buttons,
+.report .menus {
+  float: right;
+}
+
+.report button.select-label {
+  padding-left: 5px;
+  min-width: 120px;
+}
+
+.report #layout,
+.report #metadata-epm-part1,
+.report #metadata-epm-node {
+  display: none;
+}
+
+/* ====================
+	Report Graphicer
+   ====================*/
+.report #edit-window[role=reporter] .padding-top,
+.report #edit-window[role=reporter] .node-font-weight,
+.report #edit-window[role=reporter] .node-font-style,
+.report #edit-window[role=reporter] .node-text-align,
+.report #edit-window[role=reporter] .node-font-size,
+.report #edit-window[role=reporter] .node-padding-top,
+.report #edit-window[role=reporter] .node-color {
+  display: flex;
+}
+.report #edit-window[role=reporter] .metadata-epm-label,
+.report #edit-window[role=reporter] #metadata-epm-label {
+  display: none;
+}
+
+/* ====================
+	Report Dashboard
+   ====================*/
+.createreport .button,
+.createreport .btn-group .button,
+.createreport .menus,
+.createreport .add-button {
+  color: var(--portfolio-buttons-color);
+}
+
+.createreport {
+  margin-top: 10px;
+}
+.createreport .URL2Portfolio-link {
+  cursor: pointer;
+  color: var(--portfolio-link-color);
+}
+
+.createreport table {
+  margin-bottom: 0px;
+}
+
+.createreport td {
+  padding: 5px;
+  border-left: 1px solid lightGrey;
+  border-right: 1px solid lightGrey;
+  border-bottom: 1px solid lightGrey;
+  border-top: 1px solid lightGrey;
+}
+
+.zebra-table .createreport td {
+  padding: 5px;
+  border-left: none;
+  border-right: none;
+  border-bottom: none;
+  border-top: none;
+}
+
+.createreport ul {
+  margin-bottom: 0px;
+}
+
+.report .draw-web-title,
+.report .draw-web-axis {
+  min-height: 100px;
+}
+
+.aggregatetype select,
+.nodetype select,
+.todisplay select {
+  width: 150px;
+}
+
+.report .asmNop .node-model {
+  display: none;
+}
+
+/*
+.report .asmNop .row {
+	margin-top:-20px;
+	margin-left: -30px;
+}
+*/
+.report-url2unit {
+  cursor: pointer;
+}
+
+.dashboard-buttons {
+  margin-top: 10px;
+}
+
+/* ============================= */
+/*     COMPONENTS COLORS         */
+/* ============================= */
+.report {
+  --report-loop-color: #46c7c7;
+  --report-instruction-color: orange;
+  --report-display-color: #8bffff;
+  --report-varop-color: #f08080;
+  --report-csv-color: #307D7E;
+  --report-alone-color: #386bc1;
+  --report-svg-color: #52D017;
+}
+.report .for-each-person,
+.report .for-each-line,
+.report .for-each-portfolio,
+.report .for-each-portfolio-js,
+.report .for-each-portfolios-nodes,
+.report .for-each-node,
+.report .loop {
+  margin-top: 7px;
+  border: 2px solid var(--report-loop-color);
+}
+.report .go-parent,
+.report .if-then-else,
+.report .then-part,
+.report .else-part {
+  margin-top: 7px;
+  border: 2px solid var(--report-instruction-color);
+}
+.report .model-table {
+  margin-top: 7px;
+  border: 2px solid Navy;
+}
+.report .model-row {
+  margin-top: 7px;
+  border: 2px solid SeaGreen;
+}
+.report .model-cell {
+  margin-top: 7px;
+  border: 2px solid Crimson;
+}
+.report .model-europass {
+  margin-top: 7px;
+  border: 2px solid var(--report-alone-color);
+}
+.report .username,
+.report .firstname,
+.report .lastname,
+.report .firstname-lastname,
+.report .text,
+.report .node_resource,
+.report .url2unit,
+.report .url2portfolio,
+.report .preview2unit,
+.report .model-qrcode {
+  margin-top: 7px;
+  border: 1px solid var(--report-display-color);
+}
+.report .report-variable,
+.report .aggregate,
+.report .operation {
+  margin-top: 7px;
+  border: 1px solid var(--report-varop-color);
+}
+.report .csv-line {
+  margin-top: 7px;
+  border: 2px solid var(--report-instruction-color);
+}
+.report .csv-value {
+  margin-top: 7px;
+  border: 1px solid var(--report-instruction-color);
+}
+.report .model-svg {
+  margin-top: 7px;
+  border: 2px solid var(--report-svg-color);
+}
+.report .draw-web-title,
+.report .draw-web-line,
+.report .draw-web-axis,
+.report .draw-data,
+.report .draw-xy-axis {
+  margin-top: 7px;
+  border: 1px solid var(--report-svg-color);
+}
+.report .show-sharing,
+.report .dislay-sharing {
+  margin-top: 7px;
+  border: 2px solid var(--report-alone-color);
+}
+
+/*# sourceMappingURL=report.css.map */

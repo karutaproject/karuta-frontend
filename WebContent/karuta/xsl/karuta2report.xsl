@@ -300,7 +300,7 @@
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='text-value']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</text>
 	</xsl:template>
-	<!-- ================ r_getSelector ============================ -->
+	<!-- ================ node_resource ============================ -->
 	<xsl:template match="*[metadata/@semantictag='node_resource']">
 		<xsl:variable name="editresroles">
 			<xsl:value-of select="metadata-wad/@editresroles"></xsl:value-of>
@@ -310,6 +310,9 @@
 		</xsl:variable>
 		<xsl:variable name="showroles">
 			<xsl:value-of select="metadata-wad/@showroles"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="submitroles">
+			<xsl:value-of select="metadata-wad/@submitroles"></xsl:value-of>
 		</xsl:variable>
 		<xsl:variable name="style">
 			<xsl:call-template name="style"/>
@@ -342,6 +345,9 @@
 			</xsl:if>
 			<xsl:if test="not(delnoderoles='')">
 				<xsl:attribute name="delnoderoles"><xsl:value-of select="$delnoderoles"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not(submitroles='')">
+				<xsl:attribute name="submitroles"><xsl:value-of select="$submitroles"/></xsl:attribute>
 			</xsl:if>
 			<xsl:if test="not($ref='')">
 				<xsl:attribute name="ref"><xsl:value-of select="$ref"/></xsl:attribute>
@@ -502,11 +508,17 @@
 		<xsl:variable name="semtag">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='semtag']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
+		<xsl:variable name="editable">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='editable']/asmResource[@xsi_type='Get_Resource']/value"></xsl:value-of>
+		</xsl:variable>
 		<xsl:variable name="select">asmUnit.<xsl:value-of select="$semtag"/></xsl:variable>
 		<xsl:variable name="class">
 			<xsl:call-template name="class"/>
 		</xsl:variable>
 		<preview2unit>
+			<xsl:if test="not($editable='')">
+				<xsl:attribute name="editable"><xsl:value-of select="$editable"/></xsl:attribute>
+			</xsl:if>
 			<xsl:if test="not($class='')">
 				<xsl:attribute name="class"><xsl:value-of select="$class"/></xsl:attribute>
 			</xsl:if>

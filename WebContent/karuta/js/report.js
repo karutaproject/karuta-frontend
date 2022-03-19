@@ -1785,6 +1785,7 @@ g_report_actions['node_resource'] = function (destid,action,no,data)
 		var editresroles = $(action).attr("editresroles");
 		var delnoderoles = $(action).attr("delnoderoles");
 		var showroles = ($(action).attr("showroles")==undefined)? "":$(action).attr("showroles");
+		var submitroles = ($(action).attr("submitroles")==undefined)? "":$(action).attr("submitroles");
 		style = replaceVariable($(action).attr("style"));
 		var selector = r_getSelector(select);
 		var node = $(selector.jquery,data);
@@ -1806,6 +1807,10 @@ g_report_actions['node_resource'] = function (destid,action,no,data)
 			var shownode = false;
 			if (g_designerrole || writenode) {
 				shownode = (showroles.containsArrayElt(g_userroles) || showroles.indexOf($(USER.username_node).text())>-1 )
+			}
+			var submitnode = false;
+			if (g_designerrole || writenode) {
+				submitnode = (submitroles.containsArrayElt(g_userroles) || submitroles.indexOf($(USER.username_node).text())>-1 )
 			}
 			var deletenode = ($(node.node).attr('delete')=='Y')? true:false;
 			if (delnoderoles.indexOf("user")>-1)
@@ -1889,7 +1894,35 @@ g_report_actions['node_resource'] = function (destid,action,no,data)
 					text = "<span id='report"+nodeid+"'>"+text+"<span class='button fas fa-eye' style='' onclick=\"hideinreport('"+nodeid+"')\" title='"+karutaStr[LANG]["button-hide"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
 				}
 			}
-
+			//------------- submit  -------------------
+			if (submitnode) {
+				//------------------
+				var labels = [];
+				labels[0] = karutaStr[languages[langcode]]['button-submit'];
+				labels[1] = karutaStr[languages[langcode]]['button-unsubmit'];
+				labels[2] = karutaStr[languages[langcode]]['submitted'];
+				labels[3] = karutaStr[languages[langcode]]['notsubmitted'];
+				if (node.textssubmit!="") {
+					var texts = node.textssubmit.split(";");
+					for (var j=0; j<texts.length; j++){
+						var textlang = texts[j].split("/");
+						for (var k=0; k<textlang.length; k++){
+							if (textlang[k].indexOf("@"+languages[langcode])>-1)
+								labels[j] = textlang[k].substring(0,textlang[k].indexOf("@"));
+						}
+					}
+				}
+				//------------------
+				if ( node.submitted!='Y') {
+					html += "<span id='submit-"+node.id+"' style='"+menus_style+"' class='submitbutton button add-button' onclick=\"javascript:confirmSubmit('"+node.id+"'";
+					if (node.submitall=='Y')
+						html += ",true";
+					html += ")\" ";
+					html += " >"+labels[0]+"</span>";
+				} else {
+						html += "<div class='alert submitted button add-button'>"+labels[2] + " " +node.submitteddate+"</div>";
+				}
+			}
 			//----------------------------
 			if (g_report_edit && inline & writenode) {
 				//-----------------------
@@ -1917,15 +1950,6 @@ g_report_actions['node_resource'] = function (destid,action,no,data)
 	if ($("#report_display_editor_"+nodeid).length>0) {
 		UICom.structure["ui"][nodeid].resource.displayEditor("report_display_editor_"+nodeid);
 	}
-
-/*
-	// -------- if resource changed refresh the report - editor not inline
-	if (report_refresh && $("#dashboard_node_resource"+nodeid).length>0 && editresroles.length>0) {
-		$("#dashboard_"+prefix_id+nodeid).on('DOMSubtreeModified',function (){
-			refresh_report(dashboard_current);
-		});
-	}
-*/
 
 	// -------- if resource changed refresh the report - editor not inline
 	if (report_refresh && $("#dashboard_node_resource"+nodeid).length>0 && editresroles.length>0) {
@@ -2342,6 +2366,8 @@ g_report_actions['preview2unit'] = function (destid,action,no,data)
 	var text = "";
 	var style = replaceVariable($(action).attr("style"));
 	var cssclass = replaceVariable($(action).attr("class"));
+	var editable = replaceVariable($(action).attr("editable"));
+	var edit = (editable=='1')? true:false;
 	var select = $(action).attr("select");
 	select = replaceVariable(select);
 	var selector = r_getSelector(select);
@@ -2356,7 +2382,7 @@ g_report_actions['preview2unit'] = function (destid,action,no,data)
 		label = UICom.structure["ui"][nodeid].getLabel(null,'none');
 	}
 	text = "<span id='"+nodeid+"' style='"+style+"' class='report-preview2unit "+cssclass+"'>"+label+"</span>&nbsp;";
-	text += "<span class='button fas fa-binoculars' onclick=\"previewPage('"+targetid+"',100,'standard') \" data-title='"+karutaStr[LANG]["preview"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
+	text += "<span class='button fas fa-binoculars' onclick=\"previewPage('"+targetid+"',100,'standard',null,"+edit+") \" data-title='"+karutaStr[LANG]["preview"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
 	$("#"+destid).append($(text));
 	$("#"+nodeid).attr("style",style);
 }

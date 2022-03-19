@@ -132,10 +132,12 @@ function getTxtvalsWithoutReplacement(node)
 		var text = "";
 		if (select!=undefined && select!="") {
 			var fct = null;
+			//---------- function ---
 			if (select.indexOf('function(')>-1) {
 				fct = select.substring(9,select.indexOf(','))
 				select = select.substring(select.indexOf(',')+1,select.indexOf(')'))
 			}
+			//---------- text ------
 			if (select.indexOf("//")>-1) {
 				if (select=="//today")
 					text = new Date().toLocaleString();
@@ -147,8 +149,10 @@ function getTxtvalsWithoutReplacement(node)
 				text = replaceVariable(select);
 			else
 				text = eval("g_json.lines["+g_noline+"]."+select);
+			//---------- function ---
 			if (fct!=null)
 				text = eval(fct+"('"+text+"')");
+			//-------------
 		} else {
 			text = $(txtvals[i]).text();
 			if (text=="//today")
@@ -175,10 +179,12 @@ function getvarvals(node)
 			var text = "";
 			if (items[i]!=undefined && items[i]!="") {
 				var fct = null;
+			//---------- function ---
 				if (items[i].indexOf('function(')>-1) {
 					fct = items[i].substring(9,items[i].indexOf(','));
 					items[i] = items[i].substring(items[i].indexOf(',')+1,items[i].indexOf(')'));
 				}
+			//---------- text ---
 				if (select.indexOf("//")>-1) {
 					if (select=="//today")
 						text = new Date().toLocaleString();
@@ -188,8 +194,10 @@ function getvarvals(node)
 					text = eval("g_json.lines["+g_noline+"]."+items[i].substring(1));
 				else 
 					text = items[i];
+			//---------- function ---
 				if (fct!=null)
 					text = eval(fct+"('"+text+"')");
+			//---------- numline ---
 				if (text!=undefined && text.indexOf('numline()')>-1) {
 					text = text.replace(/numline()/g,g_noline);
 					text = eval(text);
@@ -1684,9 +1692,15 @@ g_actions['update-node-resource'] = function updateResource(node)
 					var code = getTxtvals($("newcode",node));
 					if (code.indexOf("##oldcode##")>-1)
 						code = code.replaceAll("##oldcode##",oldcode);
+					if (code.indexOf('function(')>-1) {
+						var fct = code.substring(9,code.indexOf(','))
+						code = code.substring(code.indexOf(',')+1,code.indexOf(')'));
+						code = eval(fct+"('"+code+"')");
+					}
 					var label = getTxtvals($("label",node));
 					if (label.indexOf("##oldlabel##")>-1)
 						label = label.replaceAll("##oldlabel##",oldlabel);
+					//--------------------------------
 					if (code!="")
 						$("code",resource).text(code);
 					if (label!="")
