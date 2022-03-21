@@ -129,10 +129,10 @@ function get_usersxml_from_groups(usersgroups)
 //==============================
 {
 	var xml = "<users>";
-	$.ajaxSetup({async: false});
 	for (var i=0; i<usersgroups.length; i++){
 		var gid = $(usersgroups[i]).attr('value');
 		$.ajax({
+			async:false,
 			type : "GET",
 			dataType : "xml",
 			url : serverBCK_API+"/usersgroups?group="+gid,
@@ -144,7 +144,6 @@ function get_usersxml_from_groups(usersgroups)
 			}
 		});
 	}
-	$.ajaxSetup({async: true});
 	xml += "</users>";
 	return xml;
 }

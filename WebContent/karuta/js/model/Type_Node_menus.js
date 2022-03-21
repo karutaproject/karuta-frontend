@@ -1218,7 +1218,6 @@ UIFactory["Node"].getXmlItemMenu = function(node,parentid,item,title,databack,ca
 					let callback = null;
 					let param2 = null;
 					//----------------
-					$.ajaxSetup({async: false});
 					if (type=='import-component-w-today-date') {
 						databack = true;
 						callback = 'UIFactory.Calendar.updateaddedpart';
