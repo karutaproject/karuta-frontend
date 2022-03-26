@@ -1581,9 +1581,17 @@ g_actions['update-resource'] = function updateResource(node)
 		test=getTest(test);
 	}
 	var semtag = getSemtag(node);
+	var filter_semtag = $(node).attr("filter-semtag");
+	var filter_test = $(node).attr("filter-test");
+	if (filter_test!=undefined) {
+		filter_test = replaceVariable(filter_test);
+		filter_test=getTest(filter_test);
+	}
 	//------------ Target --------------------
 	var url = getTargetUrl(node);
 	//--------------------------------
+	var temp_nodes = new Array();
+	var temp1_nodes = new Array();
 	var nodes = new Array();
 	$.ajax({
 		async : false,
@@ -1593,11 +1601,36 @@ g_actions['update-resource'] = function updateResource(node)
 		success : function(data) {
 			if (this.url.indexOf('/node/')>-1) {  // get by uuid
 				var results = $('*',data);
-				nodes[0] = results[0];
+				temp_nodes[0] = results[0];
 			} else {							// get by code and semtag
-				nodes = $("node",data);
+				temp_nodes = $("node",data);
 			}
-			nodes = eval("$(nodes)"+test);
+			temp_nodes = eval("$(temp_nodes)"+test);
+			//-------------------
+			if (filter_semtag!=undefined && filter_semtag!="") {
+				for (let i=0;i<temp_nodes.length;i++){
+					var nodeid = $(temp_nodes[i]).attr('id');
+					$.ajax({
+						async : false,
+						type : "GET",
+						dataType : "xml",
+						url : serverBCK_API+"/nodes/node/"+nodeid,
+						success : function(data) {
+							var nds = $("*:has(>metadata[semantictag="+filter_semtag+"])",data);
+							if (filter_test!=undefined && filter_test!="")
+								nds = eval("$(nds)"+filter_test);
+							temp1_nodes = temp1_nodes.concat(nds);
+						},
+						error : function(data) {
+							$("#batch-log").append("<br>- ***NOT FOUND <span class='danger'>ERROR - update-resource "+type+"</span>");
+						}
+					});
+				}
+				nodes = temp1_nodes;
+			} else {
+				nodes = temp_nodes;
+			}
+			//-------------------
 			if (nodes.length>0){
 				for (var i=0; i<nodes.length; i++){
 					//-------------------
@@ -1746,6 +1779,7 @@ g_actions['update-node-resource'] = function updateResource(node)
 g_actions['update-node'] = function updateNode(node)
 //=================================================
 {
+	var ok = false;
 	var select = $(node).attr("select");
 	var type = $(node).attr("type");
 	var idx = select.indexOf(".");
@@ -1762,6 +1796,7 @@ g_actions['update-node'] = function updateNode(node)
 			dataType : "xml",
 			url : serverBCK_API+"/nodes/node/"+g_current_node_uuid,
 			success : function(data) {
+				ok = true;
 				var results = $('*',data);
 				var nodes = new Array();
 				nodes[0] = results[0];
@@ -1843,6 +1878,7 @@ g_actions['update-node'] = function updateNode(node)
 				var text = getTxtvals($("text",node));
 				$("#batch-log").append("<br>- " + nodes.length + " nodes");
 				if (nodes.length>0) {
+					ok = true;
 					if ($("source",node).length>0){
 						var source_select = $("source",node).attr("select");
 						var source_idx = source_select.indexOf(".");
@@ -1910,6 +1946,7 @@ g_actions['update-node'] = function updateNode(node)
 			}
 		});
 	}
+	return ok;
 }
 
 
