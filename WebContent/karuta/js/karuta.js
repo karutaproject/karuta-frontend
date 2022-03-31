@@ -1951,7 +1951,7 @@ function logout()
 		async:false,
 		type: "GET",
 		dataType: "text",
-		url: serverBCK_API+"/credential/logout",
+		url: serverBCK_API+"/credential/logout?redir=%2F"+appliname,
 		data: "",
 		success: function(data) {
 		window.location="login.htm?lang="+LANG;
