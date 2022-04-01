@@ -1076,7 +1076,7 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 	if (type.indexOf('multiple')>-1) {
 	//------------------------------------------------------------
 	//------------------------------------------------------------
-		var inputs = "<div id='get_multiple' class='multiple'></div>";
+		var inputs = "<div id='get_multiple' class='multiple "+semtag+"'></div>";
 		var inputs_obj = $(inputs);
 		//-----search for already added------------------
 		if (this.unique!=undefined && this.unique!="") {
@@ -1168,13 +1168,14 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 					input += "> ";
 				}
 				if (display_code)
-					input += code + " ";
+					input += "<span class='input-code'>" + code + "</span> ";
 				if (display_label) {
 					if (srce=='resource' || srce=='nodelabel')
-						input += $("label[lang='"+languages[langcode]+"']",resource).text()+"</div>";
+						input += "<span class='input-label'>" + $("label[lang='"+languages[langcode]+"']",resource).text()+"</span>";
 					else
-						input += $(srce+"[lang='"+languages[langcode]+"']",resource).text()+"</div>";
+						input += "<span class='input-label'>" + $(srce+"[lang='"+languages[langcode]+"']",resource).text()+"</span>";
 				}
+				input += "</div>";
 				var input_obj = $(input);
 				$(inputs_obj).append(input_obj);
 				// ---------------------- children ---------

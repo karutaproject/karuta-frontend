@@ -1244,7 +1244,7 @@ g_report_actions['for-each-person'] = function (destid,action,no,data)
 					if (comparator=="*=")
 						condition = $(UsersActive_list[j].attributes[attribute]).text().indexOf(value)>-1;
 					//------------------------------------
-					if (condition){
+					if (condition || comparator==""){
 						userid = UsersActive_list[j].id;
 						var actions = $(action).children();
 						for (var i=0; i<actions.length;i++){
@@ -1264,6 +1264,26 @@ g_report_actions['for-each-person'] = function (destid,action,no,data)
 //======================  username firstname lastname =========================
 //=============================firstname-lastname==============================
 //=============================================================================
+
+//==================================
+g_report_actions['userid'] = function (destid,action,no,data,is_out_csv)
+//==================================
+{
+	var text ="";
+	if (userid!=null)
+		text = Users_byid[userid].id;
+	else
+		text = USER.id;
+	//----------------
+	if (is_out_csv!=null && is_out_csv) {
+		if (typeof csvseparator == 'undefined') // for backward compatibility
+			csvseparator = ";";
+		csvline += text + csvseparator;		
+	} else {
+		text = "<span id='"+destid+'-'+no+"'>"+text+"</span>";
+		$("#"+destid).append($(text));		
+	}
+}
 
 //==================================
 g_report_actions['login'] = function (destid,action,no,data,is_out_csv)

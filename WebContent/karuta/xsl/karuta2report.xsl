@@ -207,6 +207,29 @@
 			</xsl:if>
 		</refresh-button>
 	</xsl:template>
+	<!-- ================ userid ============================ -->
+	<xsl:template match="*[metadata/@semantictag='userid']">
+		<xsl:variable name="style">
+			<xsl:call-template name="style"/>
+		</xsl:variable>
+		<xsl:variable name="help">
+			<xsl:value-of select="metadata-wad/@help"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="class">
+			<xsl:call-template name="class"/>
+		</xsl:variable>
+		<userid>
+			<xsl:if test="not($class='')">
+				<xsl:attribute name="class"><xsl:value-of select="$class"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not($style='')">
+				<xsl:attribute name="style"><xsl:value-of select="$style"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not($help='')">
+				<xsl:attribute name="help"><xsl:value-of select="$help"/></xsl:attribute>
+			</xsl:if>
+		</userid>
+	</xsl:template>
 	<!-- ================ login ============================ -->
 	<xsl:template match="*[metadata/@semantictag='login']">
 		<xsl:variable name="style">
