@@ -72,13 +72,14 @@ UIFactory["PortfolioFolder"] = function(node)
 	this.nbfolders = 0;
 	this.nbchildren = 0;
 	$.ajax({
-		async: false,
 		type : "GET",
 		dataType : "xml",
 		url : serverBCK_API+"/portfolios?active=1&count=true&project="+$(this.code_node).text()+".",
 		folder:this,
+		folderid:this.id,
 		success : function(data) {
 			this.folder.nbchildren = parseInt($('portfolios',data).attr('count'));
+			$("#nbchildren_"+this.folderid).html(this.folder.nbchildren);
 		}
 	});
 }
@@ -172,6 +173,7 @@ UIFactory["PortfolioFolder"].loadAndDisplayAll = function (type)
 //==================================
 {
 	$.ajax({
+		async:false,
 		type : "GET",
 		dataType : "xml",
 		url : serverBCK_API+"/portfolios?active=1&project=true",

@@ -2000,7 +2000,6 @@ UIFactory['Node'].loadNode = function(uuid)
 			}
 		}
 	});
-	$.ajaxSetup({async: true});
 };
 
 //==================================================
@@ -2034,7 +2033,6 @@ UIFactory['Node'].loadStructure = function(uuid)
 			UICom.structure.ui[this.uuid].loaded = true;
 		}
 	});
-	$.ajaxSetup({async: true});
 };
 
 //==================================================

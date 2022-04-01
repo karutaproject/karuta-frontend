@@ -1341,11 +1341,11 @@ UIFactory["User"].removeUsers = function()
 {
 	$("#wait-window").modal('show');
 	//----------------
-	$.ajaxSetup({async: false});
 	for (var i=0;i<UsersActive_list.length;i++){
 		var userid = $(UsersActive_list[i]).attr("id");
 		var url = serverBCK_API+"/users/user/" + userid;
 		$.ajax({
+			async:false,
 			type : "DELETE",
 			dataType : "text",
 			url : url,
@@ -1355,7 +1355,6 @@ UIFactory["User"].removeUsers = function()
 		});
 	}
 	$("#wait-window").modal('hide');
-	$.ajaxSetup({async: true});
 	fill_list_users();
 	$("#user-refresh").click();
 	//----------------

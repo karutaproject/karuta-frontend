@@ -576,7 +576,7 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 	//---------------------
 	if (type==undefined || type==null)
 		type = 'select';
-	//-----Node ordering-------------------------------------------------------
+//-----Node ordering-------------------------------------------------------
 	let nodes = $("node",data);
 	let tableau1 = new Array();
 	let tableau2 = new Array();
@@ -588,7 +588,10 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 			resource = $("asmResource[xsi_type='nodeRes']",nodes[i]);
 		let code = $('code',resource).text();
 		let libelle = $(srce+"[lang='"+languages[langcode]+"']",resource).text();
-		tableau1[i] = [code,nodes[i]];
+		if (code.indexOf("~")<0)   // si ~ on trie sur le libellé sinon sur le code
+			tableau1[i] = [code,nodes[i]];
+		else
+			tableau1[i] = [libelle,nodes[i]]
 		tableau2[i] = {'code':code,'libelle':libelle};
 	}
 	let newTableau1 = tableau1.sort(sortOn1);

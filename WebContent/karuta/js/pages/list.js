@@ -125,6 +125,7 @@ function fill_list_page()
 		$("#refresh").hide();
 		displayExecBatchButton();
 	}
+	$("#wait-window").modal('hide');
 }
 
 //==============================
