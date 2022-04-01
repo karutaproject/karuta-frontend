@@ -394,7 +394,11 @@ UIFactory["Node"].prototype.displayAsmContext = function (dest,type,langcode,edi
 		if (this.displayview=='xwide' || this.displayview.indexOf("/12")>-1)
 			$("div[name='res-lbl-div']","#node_"+uuid).hide();
 	//----------- Comments -----------
-	if (this.edit && this.inline && this.writenode)
+	if (this.edit && this.inline && this.writenode && (
+			g_userroles[0]=='designer'
+			|| this.commentnoderoles.indexOf(g_userroles[0])>-1 
+			|| this.commentnoderoles.indexOf($(USER.username_node).text())>-1
+			))
 		UIFactory.Node.displayCommentsEditor('comments_'+uuid,UICom.structure["ui"][uuid]);
 	else
 		UIFactory.Node.displayComments('comments_'+uuid,UICom.structure["ui"][uuid]);
@@ -1561,7 +1565,7 @@ UIFactory["Node"].displayCommentsEditor = function(destid,node,type,langcode)
 		&& (USER.admin 
 			|| g_userroles[0]=='designer'
 			|| commentnoderoles.indexOf(g_userroles[0])>-1 
-			|| commentnoderoles.indexOf($(USER.username_node).text()>-1)
+			|| commentnoderoles.indexOf($(USER.username_node).text())>-1
 			)
 		) {
 		//---------------------
