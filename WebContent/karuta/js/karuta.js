@@ -340,7 +340,7 @@ function EditBox()
 	var html = "";
 	html += "\n<!-- ==================== Edit box ==================== -->";
 	html += "\n<div id='edit-window' class='modal fade'>";
-	html += "\n		<div class='modal-dialog'>";
+	html += "\n		<div class='modal-dialog modal-dialog-scrollable'>";
 	html += "\n		<div class='modal-content'>";
 	html += "\n		<div id='edit-window-header' class='modal-header'>";
 	html += "\n			<div id='edit-window-type' style='float:right'></div>";
@@ -543,7 +543,7 @@ function DeleteBox()
 	var html = "";
 	html += "\n<!-- ==================== Delete box ==================== -->";
 	html += "\n<div id='delete-window' class='modal fade'>";
-	html += "\n		<div class='modal-dialog'>";
+	html += "\n		<div class='modal-dialog modal-dialog-scrollable'>";
 	html += "\n			<div class='modal-content'>";
 	html += "\n				<div class='modal-header'>";
 	html += "\n					<div id='edit-window-type' style='float:right'></div>";
@@ -582,7 +582,7 @@ function alertBox()
 	var html = "";
 	html += "\n<!-- ==================== Alert box ==================== -->";
 	html += "\n<div id='alert-window' class='modal fade'>";
-	html += "\n		<div class='modal-dialog'>";
+	html += "\n		<div class='modal-dialog modal-dialog-scrollable'>";
 	html += "\n			<div class='modal-content'>";
 	html += "\n				<div class='modal-header'>";
 	html += "\n					<h3 id='alert-window-header' >Attention</h3>";
@@ -605,7 +605,7 @@ function messageBox()
 	var html = "";
 	html += "\n<!-- ==================== Message box ==================== -->";
 	html += "\n<div id='message-window' class='modal fade'>";
-	html += "\n		<div class='modal-dialog'>";
+	html += "\n		<div class='modal-dialog modal-dialog-scrollable'>";
 	html += "\n			<div class='modal-content'>";
 	html += "\n				<div id='message-window-body' class='modal-body'>";
 	html += "\n				</div>";

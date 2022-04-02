@@ -505,7 +505,16 @@
 				<xsl:with-param name='parent'>subsection-target</xsl:with-param>
 			</xsl:call-template>
 		</xsl:variable>
-		<delete-node select="{$select}">
+		<xsl:variable name="test">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='test']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="filter-semtag">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='filter-semtag']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="filter-test">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='filter-test']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<delete-node select="{$select}" test="{$test}" filter-semtag="{$filter-semtag}" filter-test="{$filter-test}">
 		</delete-node>
 	</xsl:template>
 
