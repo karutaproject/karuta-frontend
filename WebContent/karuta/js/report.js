@@ -125,6 +125,18 @@ $.fn.test_hasChildSemtag = function (options) { return result = ($(this).hasChil
 //=====================================
 
 //=====================================
+$.fn.hasNotChildSemtag = function (options)
+//=====================================
+{
+	var result = $(this).hasChildSemtag(options);
+	if (result.length>0)
+		return [];
+	else
+		return $(this);
+};
+
+
+//=====================================
 $.fn.hasChildSemtagAndResourceCodeContains = function (options)   // hasChildSemtagAndResourceCodeContains({"semtag":"s","value":"v"})
 //=====================================
 {

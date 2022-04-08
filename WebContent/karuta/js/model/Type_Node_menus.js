@@ -8,6 +8,7 @@ menuElts ["import"]= "<import del='y'><srce><foliocode/><semtag/></srce><trgt><p
 menuElts ["import-today-date"]= "<import-today-date del='y'><nop/><trgt><position>##currentnode##</position><semtag/></trgt></import-today-date>";
 menuElts ["import-component-w-today-date"]= "<import-component-w-today-date del='y'><srce><foliocode/><semtag/><updatedtag/></srce><trgt><position>##currentnode##</position><semtag/></trgt></import-component-w-today-date>";
 menuElts ["moveTO"]= "<moveTO del='y'><start-semtag/><destination-semtag/></moveTO>";
+menuElts ["switchBTW"]= "<switchBTW del='y'><start-semtag/><destination-semtag/></switchBTW>";
 menuElts ["import-component"]= "<import-component del='y'><srce><foliocode/><semtag/><updatedtag/></srce><trgt><position>##currentnode##</position><semtag/></trgt></import-component>";
 menuElts ["import-proxy"]= "<import-proxy del='y'><srce><foliocode/><semtag/><updatedtag/></srce><trgt><position>##currentnode##</position><semtag/></trgt></import-proxy>";
 menuElts ["import-elts"]= "<import-elts del='y'><srce><foliocode disabled='y'>search code</foliocode></srce></import-elts>";
@@ -38,7 +39,7 @@ menuItems['import-today-date']= ["trgt","function"];
 menuItems['import-component-w-today-date']= ["trgt","function"];
 menuItems['get_single']= ["trgt"];
 menuItems['menu']= ["item"];
-menuItems['item']= ["import","function","moveTO","import_get_multiple","import_get_get_multiple","execReportforBatchCSV","import-today-date","import-component-w-today-date"];
+menuItems['item']= ["import","function","switchBTW","import_get_multiple","import_get_get_multiple","execReportforBatchCSV","import-today-date","import-component-w-today-date"];
 menuItems['g_actions']= ["import-component","import-elts-from","import-proxy"];
 menuItems['gg_search']= ["search-source","#or","search-in-parent","#or","search-w-parent"];
 menuItems['gg_actions']= ["import-component","import-elts-from","#line","import","import-component-w-today-date","import-today-date"];
@@ -1178,7 +1179,7 @@ UIFactory["Node"].getXmlItemMenu = function(node,parentid,item,title,databack,ca
 			onclick += "execReport_BatchCSV('"+parentid+"',null,null,'"+codeReport+"',true);";
 		}
 		//------------------------- moveTO --------------------
-		else if (type=='moveTO') {
+ 		else if (type=='moveTO' || type=='switchBTW') {
 			let actualparentid = $(node.node).parent().attr('id');
 			// --------- start/destination ------------
 			let start = replaceVariable( ($("start-semtag",itemelts[i]).length>0)?$("start-semtag",itemelts[i]).text():"" );

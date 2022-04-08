@@ -175,6 +175,18 @@ UIFactory["Get_Portfolio"].prototype.displayEditor = function(destid,type,langco
 					UIFactory["Get_Portfolio"].parse(destid,type,langcode,data,self,disabled,resettable,target);
 				}
 			});
+	} else {
+		$.ajax({
+			async : false,
+			type : "GET",
+			dataType : "xml",
+			url : serverBCK_API+"/portfolios?active=1",
+			success : function(data) {
+				if (cachable)
+					g_Get_Portfolio_caches[queryattr_value] = data;
+				UIFactory.Get_Portfolio.parse(destid,"completion",langcode,data,self,disabled,resettable,"label");
+			}
+		});
 	}
 	//---------------------------------------------------------
 	if (g_userroles[0]=='designer' || USER.admin || editnoderoles.containsArrayElt(g_userroles) || editnoderoles.indexOf(this.userrole)>-1 || editnoderoles.indexOf($(USER.username_node).text())>-1) {

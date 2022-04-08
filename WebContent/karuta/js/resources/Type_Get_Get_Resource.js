@@ -481,7 +481,10 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 			}
 			// ------- search for parent ----
 			if (query.indexOf('code')>-1){
-				if (query.indexOf('itselfcode')>-1) {
+				if (query.indexOf('itselfrescode')>-1) {
+					code_parent = $($("code",$("asmResource[xsi_type!='context'][xsi_type!='nodeRes']",this.node))).text();
+					value_parent = $($("value",$("asmResource[xsi_type!='context'][xsi_type!='nodeRes']",this.node))).text();
+				} else if (query.indexOf('itselfcode')>-1) {
 					code_parent = $($("code",$(this.node)[0])[0]).text();
 					value_parent = $($("value",$(this.node)[0])[0]).text();
 					pcode_parent = $($("portfoliocode",$(this.node)[0])[0]).text();

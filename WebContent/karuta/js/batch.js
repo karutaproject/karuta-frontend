@@ -2356,6 +2356,7 @@ g_actions['leave-portfoliogroup'] = function LeavePortfolioGroup(node)
 {
 	var ok = false;
 	var portfoliogroup = getTxtvals($("portfoliogroup",node));
+	var select = $(node).attr("select");
 	var treeref = select.replace(".","");
 	//---- get portfoliogroupid ----------
 	var groupid = "";

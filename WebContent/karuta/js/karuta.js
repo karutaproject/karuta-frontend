@@ -2472,48 +2472,51 @@ function replaceVariable(text,node,withquote)
 {
 	if (withquote==null)
 		withquote = true;
-	if (text!=undefined && text.indexOf('lastimported')>-1) {
-		text = text.replaceAll('##lastimported-1##',"g_importednodestack[g_importednodestack.length-2]");
-		text = text.replaceAll('##lastimported-2##',"g_importednodestack[g_importednodestack.length-3]");
-		text = text.replaceAll('##lastimported##',"g_importednodestack[g_importednodestack.length-1]");
-	}
-	if (text!=undefined && text.indexOf('##today##')>-1)
-		text = text.replaceAll('##today##',new Date().toLocaleString());
-	if (node!=null && node!=undefined && withquote && text.indexOf('##parentnode##')>-1)
-		text = text.replaceAll('##parentnode##',"'"+$(node.node).parent().attr('id')+"'");
-	if (node!=null && node!=undefined && withquote && text.indexOf('##currentnode##')>-1)
-		text = text.replaceAll('##currentnode##',"'"+node.id+"'");
-	if (node!=null && node!=undefined && withquote && text.indexOf('##currentcode##')>-1)
-		text = text.replaceAll('##currentcode##',node.getCode());
-	if (node!=null && node!=undefined && !withquote && text.indexOf('##currentnode##')>-1)
-		text = text.replaceAll('##currentnode##',node.id);
-	if (node!=null && node!=undefined && !withquote && text.indexOf('##currentcode##')>-1)
-		text = text.replaceAll('##currentcode##',node.getCode());
-	if (node!=null && node!=undefined && withquote && text.indexOf('##currentrestext##')>-1) {
-		const attributes = node.getAttributes()
-		text = text.replaceAll('##currentrestext##',"'"+attributes["text"]+"'");
-	}
-	var n=0;
-	while (text!=undefined && text.indexOf("{##")>-1 && n<100) {
-		var test_string = text.substring(text.indexOf("{##")+3); // test_string = abcd{##variable##}efgh.....
-		var variable_name = test_string.substring(0,test_string.indexOf("##}"));
-		if (g_variables[variable_name]!=undefined)
-			text = text.replace("{##"+variable_name+"##}", g_variables[variable_name]);
-		n++; // to avoid infinite loop
-	}
-	while (text!=undefined && text.indexOf("##")>-1 && n<100) {
-		var test_string = text.substring(text.indexOf("##")+2); // test_string = abcd##variable##efgh.....
-		var variable_name = test_string.substring(0,test_string.indexOf("##"));
-		if (g_variables[variable_name]!=undefined)
-			text = text.replace("##"+variable_name+"##", g_variables[variable_name]);
-		if (text.indexOf("[")>-1) {
-			var variable_value = variable_name.substring(0,variable_name.indexOf("["))
-			var i = text.substring(text.indexOf("[")+1,text.indexOf("]"));
-			i = replaceVariable(i);
-			if (g_variables[variable_value]!=undefined && g_variables[variable_value].length>=i)
-				text = g_variables[variable_value][i];
+	if (text!=undefined && text!="") {
+		if (text!=undefined && text.indexOf('lastimported')>-1) {
+			text = text.replaceAll('##lastimported-1##',"g_importednodestack[g_importednodestack.length-2]");
+			text = text.replaceAll('##lastimported-2##',"g_importednodestack[g_importednodestack.length-3]");
+			text = text.replaceAll('##lastimported##',"g_importednodestack[g_importednodestack.length-1]");
+		}
+		if (node!=null && node!=undefined && text!=undefined) {
+			if (withquote && text.indexOf('##current')>-1) {
+				text = text.replaceAll('##currentnode##',"'"+node.id+"'");
+				text = text.replaceAll('##currentcode##',"'"+node.getCode()+"'");
 			}
-		n++; // to avoid infinite loop
+			if (!withquote && text.indexOf('##current')>-1) {
+				text = text.replaceAll('##currentnode##',node.id);
+				text = text.replaceAll('##currentcode##',node.getCode());
+			}
+			if (withquote && text.indexOf('##parentnode##')>-1)
+				text = text.replaceAll('##parentnode##',"'"+$(node.node).parent().attr('id')+"'");
+			if (!withquote && text.indexOf('##parentnode##')>-1)
+				text = text.replaceAll('##parentnode##',$(node.node).parent().attr('id'));
+			if (withquote && text.indexOf('##itselfrescode##')>-1)
+				text = text.replaceAll('##itselfrescode##',"'"+$($("code",$("asmResource[xsi_type!='context'][xsi_type!='nodeRes']",node.node))).text()+"'");
+	
+		}
+		var n=0;
+		while (text!=undefined && text.indexOf("{##")>-1 && n<100) {
+			var test_string = text.substring(text.indexOf("{##")+3); // test_string = abcd{##variable##}efgh.....
+			var variable_name = test_string.substring(0,test_string.indexOf("##}"));
+			if (g_variables[variable_name]!=undefined)
+				text = text.replace("{##"+variable_name+"##}", g_variables[variable_name]);
+			n++; // to avoid infinite loop
+		}
+		while (text!=undefined && text.indexOf("##")>-1 && n<100) {
+			var test_string = text.substring(text.indexOf("##")+2); // test_string = abcd##variable##efgh.....
+			var variable_name = test_string.substring(0,test_string.indexOf("##"));
+			if (g_variables[variable_name]!=undefined)
+				text = text.replace("##"+variable_name+"##", g_variables[variable_name]);
+			if (text.indexOf("[")>-1) {
+				var variable_value = variable_name.substring(0,variable_name.indexOf("["))
+				var i = text.substring(text.indexOf("[")+1,text.indexOf("]"));
+				i = replaceVariable(i);
+				if (g_variables[variable_value]!=undefined && g_variables[variable_value].length>=i)
+					text = g_variables[variable_value][i];
+				}
+			n++; // to avoid infinite loop
+		}
 	}
 	return text;
 }

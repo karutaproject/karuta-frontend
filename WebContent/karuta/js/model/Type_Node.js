@@ -2087,3 +2087,41 @@ UIFactory["Node"].prototype.getBubbleView = function(dest,type,langcode)
 	return html;
 };
 
+/----------------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------------
+//--------------------------- exportNode -------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------------
+
+function exportNode(uuid,destcode) {
+	UICom.structure.ui[uuid].exportNode(destcode);
+}
+
+//==================================
+UIFactory["Node"].prototype.exportNode = function(destcode)
+//==================================
+{
+	var srceid = this.id;
+	$.ajax({
+		type : "GET",
+		dataType : "xml",
+		url : serverBCK_API+"/portfolios/portfolio/code/"+destcode,
+		success : function(data) {
+			var destid = $("asmRoot",data).attr("id");
+			var urlS = serverBCK_API+"/nodes/node/import/"+destid+"?uuid="+srceid;
+			$.ajax({
+				type : "POST",
+				dataType : "text",
+				url : urlS,
+				data : "",
+				success :{
+				},
+				error : function(jqxhr,textStatus) {
+					alert("Error in exportNode "+textStatus+" : "+jqxhr.responseText);
+				}
+			});
+		}					
+	});
+
+};
+
