@@ -721,7 +721,7 @@
 		.modal-dialog {
 			width:70%;
 			max-width: none;
-			min-height:100%;
+//			min-height:100%;
 			.modal-content {
 				min-height:500px;
 			}
@@ -1851,6 +1851,10 @@
 		display:in-line;
 	}
 
+	.Dashboard .fa-sync-alt {
+		padding-left:10px;
+		cursor:pointer;
+	}
 
 /* ============================ */
 /* ============================ */

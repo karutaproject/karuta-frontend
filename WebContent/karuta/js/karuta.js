@@ -2477,8 +2477,10 @@ function replaceVariable(text,node,withquote)
 		text = text.replaceAll('##lastimported-2##',"g_importednodestack[g_importednodestack.length-3]");
 		text = text.replaceAll('##lastimported##',"g_importednodestack[g_importednodestack.length-1]");
 	}
+	if (text!=undefined && text.indexOf('##today##')>-1)
+		text = text.replaceAll('##today##',new Date().toLocaleString());
 	if (node!=null && node!=undefined && withquote && text.indexOf('##parentnode##')>-1)
-		text = text.replaceAll('##parentnode##',"'"+$(node).parent().attr('id')+"'");
+		text = text.replaceAll('##parentnode##',"'"+$(node.node).parent().attr('id')+"'");
 	if (node!=null && node!=undefined && withquote && text.indexOf('##currentnode##')>-1)
 		text = text.replaceAll('##currentnode##',"'"+node.id+"'");
 	if (node!=null && node!=undefined && withquote && text.indexOf('##currentcode##')>-1)
@@ -2487,6 +2489,10 @@ function replaceVariable(text,node,withquote)
 		text = text.replaceAll('##currentnode##',node.id);
 	if (node!=null && node!=undefined && !withquote && text.indexOf('##currentcode##')>-1)
 		text = text.replaceAll('##currentcode##',node.getCode());
+	if (node!=null && node!=undefined && withquote && text.indexOf('##currentrestext##')>-1) {
+		const attributes = node.getAttributes()
+		text = text.replaceAll('##currentrestext##',"'"+attributes["text"]+"'");
+	}
 	var n=0;
 	while (text!=undefined && text.indexOf("{##")>-1 && n<100) {
 		var test_string = text.substring(text.indexOf("{##")+3); // test_string = abcd{##variable##}efgh.....
@@ -3271,11 +3277,10 @@ function decode(s) {
 //=========================================================
 
 function testNumber(text) {
-	return (!isNaN(text))
-}
-
-function testNotNumber(text) {
-	return (isNaN(text))
+	const result = !isNaN(text);
+	if (!result)
+		alertHTML(karutaStr[LANG]['not-number']);
+	return result;
 }
 
 //=========================================================
@@ -3349,4 +3354,35 @@ function deleteSameCode(uuid,targetsemtag,srcesemtag){
 }
 
 //================================================
+//================================================
+//============== Function JS =====================
+//================================================
+//================================================
+
+function execJS(node,tag){
+	var test = "";
+	if (UICom.structure["ui"][node.id].js==undefined)
+		UICom.structure["ui"][node.id].setMetadata();
+	if (UICom.structure["ui"][node.id].js!="" && UICom.structure["ui"][node.id].js.indexOf(tag)>-1) {
+		var fcts = UICom.structure["ui"][node.id].js.split("|");
+		for (let i=0;i<fcts.length;i++) {
+			let elts = fcts[i].split("/");
+			if (elts[0]==tag) {
+				fctjs = elts[1].split(";");
+				for (let j=0;j<fctjs.length;j++) {
+					if (fctjs[j].indexOf("##")>-1)
+						test = eval(replaceVariable(fctjs[j],node));
+					else if (fctjs[j].indexOf("(")>-1)
+						test = eval(fctjs[j])
+					else
+						test = eval(fctjs[j]+"(node.node,g_portfolioid)");
+				}
+			}
+		}
+	}
+	return test;
+}
+
+
+
 

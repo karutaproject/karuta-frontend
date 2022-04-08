@@ -120,6 +120,7 @@ UIFactory["Field"].prototype.displayView = function(dest,type,langcode)
 UIFactory["Field"].prototype.update = function(langcode)
 //==================================
 {
+	execJS(this,"update-resource-before");
 	$(this.lastmodified_node).text(new Date().getTime());
 	//---------------------
 	if (!this.multilingual) {
@@ -129,7 +130,9 @@ UIFactory["Field"].prototype.update = function(langcode)
 		}
 	}
 	//---------------------
-	this.save();
+	if (execJS(this,"update-resource-test"))
+		this.save();
+	execJS(this,"update-resource-after");
 };
 
 //==================================

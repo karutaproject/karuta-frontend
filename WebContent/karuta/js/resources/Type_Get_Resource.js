@@ -384,7 +384,7 @@ UIFactory["Get_Resource"].update = function(selected_item,itself,langcode,type)
 		//-------- if function js -------------
 		if (UICom.structure["ui"][itself.id].js==undefined)
 			UICom.structure["ui"][itself.id].setMetadata();
-		if (UICom.structure["ui"][itself.id].js!="") {
+		if (UICom.structure["ui"][itself.id].js!="" && UICom.structure["ui"][itself.id].js.indexOf("update-resource-before")>-1) {
 			var fcts = UICom.structure["ui"][itself.id].js.split("|");
 			for (let i=0;i<fcts.length;i++) {
 				let elts = fcts[i].split("/");

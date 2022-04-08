@@ -908,7 +908,7 @@ g_report_actions['for-each-node'] = function (destid,action,no,data)
 
 //=============================================================================
 //=============================================================================
-//======================= FOR-EACH-NODE-JS =======================================
+//======================= FOR-EACH-NODE-JS ====================================
 //=============================================================================
 //=============================================================================
 
@@ -2012,7 +2012,7 @@ g_report_actions['refresh-button'] = function (destid,action,no,data)
 {
 	var style = replaceVariable($(action).attr("style"));
 	var cssclass = replaceVariable($(action).attr("class"));
-	var html = "<span calss='fas fa-sync-alt' class='"+cssclass+"' style='"+style+"' onclick=\"refresh_report('"+dashboard_current+"')\"></span>";
+	var html = "<span class='fas fa-sync-alt "+cssclass+"' style='"+style+"' onclick=\"refresh_report('"+dashboard_current+"')\"></span>";
 	$("#"+destid).append($(html));
 }
 //=============================================================================

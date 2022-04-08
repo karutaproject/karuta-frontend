@@ -1415,7 +1415,6 @@ UIFactory["Node"].getFunctionArray = function(node,item)
 	if (fcts.length>0) {
 		for (let k=0;k<fcts.length;k++){
 			fctarray.push(replaceVariable(encode($(fcts[k]).text()),node));
-			//fctarray.push(replaceVariable($(fcts[k]).text().replaceAll("(","<<").replaceAll(")",">>"),node));
 		}
 	}
 	return fctarray;

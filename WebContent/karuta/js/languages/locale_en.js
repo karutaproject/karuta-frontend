@@ -539,6 +539,7 @@ karutaStr['en']['code-not-null']="Code cannot be null";
 karutaStr['en']['label-not-null']="Label cannot be null";
 karutaStr['en']['inexistent-selection']="Inexistent Selection";
 karutaStr['en']['inexistent-user']="Sorry. Your login has not been found.";
+karutaStr['en']['not-number']="This is not a number.";
 
 //=========================================
 //========== TECHNICAL SUPPORT ============

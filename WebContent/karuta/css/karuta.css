@@ -667,7 +667,6 @@ body,
 #edit-window .modal-dialog {
   width: 70%;
   max-width: none;
-  min-height: 100%;
 }
 #edit-window .modal-dialog .modal-content {
   min-height: 500px;
@@ -1719,6 +1718,11 @@ table[name=res-div] {
   text-align: center;
   padding-top: 7px;
   display: in-line;
+}
+
+.Dashboard .fa-sync-alt {
+  padding-left: 10px;
+  cursor: pointer;
 }
 
 /* ============================ */
