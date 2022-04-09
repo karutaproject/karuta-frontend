@@ -2790,6 +2790,12 @@ g_actions['import-node'] = function importNode(node)
 //=================================================
 {
 	var ok = false
+	//-----------------------------------
+	var test = $(node).attr("test");
+	if (test!=undefined) {
+		test = replaceVariable(test);
+		test = replaceBatchVariable(getTest(test),node);
+	}
 	//------------------------------------
 	var source = $("source",node).text();
 	if (source=='') // for backward compatibility
@@ -2823,7 +2829,7 @@ g_actions['import-node'] = function importNode(node)
 			destid:destid,
 			success : function(data) {
 				g_current_node_uuid = data;
-				$("#batch-log").append("<br>- node added at ("+this.destid+") - semtag="+semtag+ " source="+source);
+				$("#batch-log").append("<br>- node ("+g_current_node_uuid+") added at ("+this.destid+") - semtag="+semtag+ " source="+source);
 				ok = true;
 			},
 			error : function(data) {
@@ -2845,6 +2851,8 @@ g_actions['import-node'] = function importNode(node)
 			url : url,
 			success : function(data) {
 				var nodes = $("node",data);
+				if (test!=undefined)
+					nodes = eval("$(nodes)"+test);
 				if (nodes.length>0){
 					for (var i=0; i<nodes.length; i++){
 						destid = $(nodes[i]).attr('id');
@@ -2859,7 +2867,7 @@ g_actions['import-node'] = function importNode(node)
 							success : function(data) {
 								ok = true;
 								g_current_node_uuid = data;
-								$("#batch-log").append("<br>- node added at ("+this.destid+") - semtag="+semtag+ " source="+source);
+								$("#batch-log").append("<br>- node ("+g_current_node_uuid+") added at ("+this.destid+") - semtag="+semtag+ " source="+source);
 								ok = true;
 							},
 							error : function(data) {

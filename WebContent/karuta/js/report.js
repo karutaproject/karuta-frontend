@@ -1492,7 +1492,7 @@ g_report_actions['for-each-portfolio'] = function (destid,action,no,data)
 			//======================================================
 			var first = 0;
 			var last = items_list.length;
-			if (NBELT!="" && NOELT!="") {
+			if (NBELT!=undefined && NBELT!="" && NOELT!=undefined && NOELT!="") {
 				first = parseInt(NOELT);
 				last = (parseInt(NOELT)+parseInt(NBELT)<items_list.length)? parseInt(NOELT)+parseInt(NBELT):items_list.length;
 			}

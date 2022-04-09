@@ -3363,7 +3363,7 @@ function deleteSameCode(uuid,targetsemtag,srcesemtag){
 //================================================
 
 function execJS(node,tag){
-	var test = "";
+	var test = true;
 	if (UICom.structure["ui"][node.id].js==undefined)
 		UICom.structure["ui"][node.id].setMetadata();
 	if (UICom.structure["ui"][node.id].js!="" && UICom.structure["ui"][node.id].js.indexOf(tag)>-1) {
