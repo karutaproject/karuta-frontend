@@ -1194,6 +1194,13 @@ body,
   width: 30px;
 }
 
+/* ====================
+	Get_Portfolio 
+   ====================*/
+div.get-portfolio button.select {
+  min-width: 200px;
+}
+
 /* ====================== */
 /*     FIRST NODE         */
 /* ====================== */
@@ -2637,7 +2644,7 @@ table.tablesorter th.restore {
 }
 
 .EuropassL .select-label {
-  min-width: 50px;
+  min-width: 250px;
   padding: 1px;
 }
 .EuropassL .select {

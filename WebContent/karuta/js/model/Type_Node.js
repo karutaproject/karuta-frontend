@@ -2114,7 +2114,8 @@ UIFactory["Node"].prototype.exportNode = function(destcode)
 				dataType : "text",
 				url : urlS,
 				data : "",
-				success :{
+				success : function () {
+					alert("Exported");
 				},
 				error : function(jqxhr,textStatus) {
 					alert("Error in exportNode "+textStatus+" : "+jqxhr.responseText);

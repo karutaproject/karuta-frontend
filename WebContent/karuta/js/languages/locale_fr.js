@@ -165,6 +165,7 @@ karutaStr['fr']['queryProxy']="Recherche <br/><span style='font-size:smaller'> c
 karutaStr['fr']['queryAction']="Recherche <br/><span style='font-size:smaller'> code_portfolio.tag_sémantique.<i>label</i><br> Mots réservés pour code_portfolio : <i>all</i> et <i>self</i></span>";
 karutaStr['fr']['queryGet_Double_Resource']="Recherche <br/><span style='font-size:smaller'> code_portfolio1.tag_sémantique1.<i>label;</i>code_portfolio2.tag_sémantique2.<i>label</i><br> Mot réservé pour code_portfolio : <i>self</i></span>";
 karutaStr['fr']['queryGet_Proxy']="Recherche <br/><span style='font-size:smaller'> code_portfolio.tag_sémantique.<i>label</i>/tag_sémantique_cible";
+karutaStr['fr']['queryGet_Portfolio']="Recherche <br/><span style='font-size:smaller'> code_portfolio.<i>label</i> ou laisser vide pour tous les portfolios";
 karutaStr['fr']['shownoderoles']="Montrer";
 karutaStr['fr']['showroles']="Montrer à";
 karutaStr['fr']['notifyroles']="Notifier à";

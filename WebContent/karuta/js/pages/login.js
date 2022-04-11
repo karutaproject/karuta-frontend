@@ -112,6 +112,20 @@ function getLogin(encrypt_url,lang)
 }
 
 //==============================
+function unlog()
+//==============================
+{
+	$.ajax({
+		async:false,
+		type: "GET",
+		dataType: "text",
+		url: serverBCK_API+"/credential/logout",
+		success : function(data) {
+		}
+	});
+}
+
+//==============================
 function getNewPassword()
 //==============================
 {
@@ -139,60 +153,74 @@ function getNewAccount()
 function displayKarutaLogin()
 //==============================
 {
-	loginPublic();
-	setLoginTechnicalVariables();
-	setLoginConfigurationVariables();
-	applyKarutaConfiguration()
-	//-------------------------
-	var html = "";
-	html += "<div id='main-welcome'>";
-	html += "<div id='navigation-bar'></div>";
-	html += "<div id='main-container' class='container'>";
-	html += "	<div id='form-signin' class='form-signin'>";
-	html += "		<div id='welcome1'></div>";
-	html += "		<div id='welcome-version'></div>";
-	html += "		<div id='welcome2'></div>";
-	html += "		<div id='welcome3'></div>";
-	html += "		<div id='maintenance' style='display:none'></div>";
-	html += "		<div id='login'></div>";
-	html += "	</div>";
-	html += "	<div class='form-newpassword' id='newpassword'></div>";
-	html += "	<div class='form-newaccount' id='newaccount'></div>";
-	html += "</div>";
-	html += "</div>";
-	$('body').html(html);
-	$('body').append(alertBox());
-	$('body').append(EditBox());
-	$("#navigation-bar").html(getNavBar('login',null));
-	$("#login").html($(getLogin(encrypt_url,lang)));
-	$("#connection-cas").hide();
-	$("#useridentifier").focus();
-	if (typeof cas_url != 'undefined' && cas_url!="")
-		$("#connection-cas").show();
-	applyNavbarConfiguration();
-	applyLoginConfiguration();
+	var data = "<credential><login>public</login><password>public</password></credential>";
 	$.ajax({
-		type : "GET",
-		dataType : "xml",
-		url : serverBCK+"/version",
-		data: "",
-		success : function(data) {		
-			karuta_backend_version = $("number",$("#backend",data)).text();
-			karuta_backend_date = $("date",$("#backend",data)).text();
-			karuta_fileserver_version = $("number",$("#fileserver",data)).text();
-			karuta_fileserver_date = $("date",$("#fileserver",data)).text();
+		async:false,
+		contentType: "application/xml",
+		type : "POST",
+		dataType : "text",
+		url : serverBCK_API+"/credential/login",
+		data: data,
+		success : function(data) {
+			setLoginTechnicalVariables();
+			setLoginConfigurationVariables();
+			applyKarutaConfiguration()
+			//-------------------------
+			var html = "";
+			html += "<div id='main-welcome'>";
+			html += "<div id='navigation-bar'></div>";
+			html += "<div id='main-container' class='container'>";
+			html += "	<div id='form-signin' class='form-signin'>";
+			html += "		<div id='welcome1'></div>";
+			html += "		<div id='welcome-version'></div>";
+			html += "		<div id='welcome2'></div>";
+			html += "		<div id='welcome3'></div>";
+			html += "		<div id='maintenance' style='display:none'></div>";
+			html += "		<div id='login'></div>";
+			html += "	</div>";
+			html += "	<div class='form-newpassword' id='newpassword'></div>";
+			html += "	<div class='form-newaccount' id='newaccount'></div>";
+			html += "</div>";
+			html += "</div>";
+			$('body').html(html);
+			$('body').append(alertBox());
+			$('body').append(EditBox());
+			$("#navigation-bar").html(getNavBar('login',null));
+			$("#login").html($(getLogin(encrypt_url,lang)));
+			$("#connection-cas").hide();
+			$("#useridentifier").focus();
+			if (typeof cas_url != 'undefined' && cas_url!="")
+				$("#connection-cas").show();
+			applyNavbarConfiguration();
+			applyLoginConfiguration();
+			$.ajax({
+				type : "GET",
+				dataType : "xml",
+				url : serverBCK+"/version",
+				data: "",
+				success : function(data) {		
+					karuta_backend_version = $("number",$("#backend",data)).text();
+					karuta_backend_date = $("date",$("#backend",data)).text();
+					karuta_fileserver_version = $("number",$("#fileserver",data)).text();
+					karuta_fileserver_date = $("date",$("#fileserver",data)).text();
+				}
+			});
+			try {
+				specificLoginFunction();
+			} catch(e) {
+			}
+			$('#password').keypress(function(e) {
+				var code= (e.keyCode ? e.keyCode : e.which);
+				if (code == 13)
+					callSubmit();
+			});
+			//----------------------------------------------
+			const myTimeout = setTimeout(unlog, 2000);
+		},
+		error : function(jqxhr,textStatus) {
+			alertHTML("Identification : "+jqxhr.responseText);
 		}
 	});
-	try {
-		specificLoginFunction();
-	} catch(e) {
-	}
-	$('#password').keypress(function(e) {
-		var code= (e.keyCode ? e.keyCode : e.which);
-		if (code == 13)
-			callSubmit();
-	});
-	//----------------------------------------------
 }
 
 //------------------------------

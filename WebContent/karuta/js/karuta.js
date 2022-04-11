@@ -456,7 +456,7 @@ function getEditBox(uuid,js2) {
 			error : function() {
 				var html = "";
 				html += "<div>" + karutaStr[languages[LANGCODE]]['error-notfound'] + "</div>";
-				$("#preview-window-body").html(html);
+				$("#//-window-body").html(html);
 				$("#preview-window").modal('show');
 			}
 		});		
@@ -2481,11 +2481,11 @@ function replaceVariable(text,node,withquote)
 		if (node!=null && node!=undefined && text!=undefined) {
 			if (withquote && text.indexOf('##current')>-1) {
 				text = text.replaceAll('##currentnode##',"'"+node.id+"'");
-				text = text.replaceAll('##currentcode##',"'"+node.getCode()+"'");
+				text = text.replaceAll('##currentcode##',"'"+$($("code",$("asmResource[xsi_type!='context'][xsi_type!='nodeRes']",node.node))).text()+"'");
 			}
 			if (!withquote && text.indexOf('##current')>-1) {
 				text = text.replaceAll('##currentnode##',node.id);
-				text = text.replaceAll('##currentcode##',node.getCode());
+				text = text.replaceAll('##currentcode##',$($("code",$("asmResource[xsi_type!='context'][xsi_type!='nodeRes']",node.node))).text());
 			}
 			if (withquote && text.indexOf('##parentnode##')>-1)
 				text = text.replaceAll('##parentnode##',"'"+$(node.node).parent().attr('id')+"'");
