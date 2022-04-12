@@ -530,8 +530,9 @@ function report_processCode()
 function report_getModelAndPortfolio(model_code,node,destid,g_dashboard_models)
 //==================================
 {
+	$('#'+destid).html("<img id='wait_"+destid+"' style='width: 450px; height: 100px; object-fit:none' src='../img/loading2.gif'>");
 	$.ajax({
-		async:false,
+		async:true,
 		type : "GET",
 		dataType : "xml",
 		url : serverBCK_API+"/portfolios/portfolio/code/"+model_code,
@@ -541,7 +542,7 @@ function report_getModelAndPortfolio(model_code,node,destid,g_dashboard_models)
 			// ---- transform karuta portfolio to report model
 			var urlS = serverBCK_API+"/nodes/"+nodeid+"?xsl-file="+appliname+"/karuta/xsl/karuta2report.xsl&lang="+LANG;
 			$.ajax({
-				async:false,
+				async:true,
 				type : "GET",
 				dataType : "xml",
 				url : urlS,
@@ -553,8 +554,7 @@ function report_getModelAndPortfolio(model_code,node,destid,g_dashboard_models)
 					catch(err) {
 						alertHTML("Error in Dashboard : " + err.message);
 					}
-					$("#wait-window").modal('hide');
-					$("#wait-window").modal('hide');
+					$('#wait_'+destid).remove();
 				}
 			 });
 		}
@@ -566,9 +566,9 @@ function report_getModelAndProcess(model_code,json)
 //==================================
 /// csv +report
 {
-	$('#wait-window').show();
+	$('#'+destid).html("<img id='wait_"+destid+"' style='width: 450px; height: 100px; object-fit:none' src='../img/loading2.gif'>");
 	$.ajax({
-		async:false,
+		async:true,
 		type : "GET",
 		dataType : "xml",
 		url : serverBCK_API+"/portfolios?active=1&search="+model_code,
@@ -591,14 +591,14 @@ function report_getModelAndProcess(model_code,json)
 						url : urlS,
 						success : function(data) {
 							r_report_process(data,json);
-							$("#wait-window").modal('hide');
-							$("#wait-window").modal('hide');
+						$('#wait_'+destid).remove();
 						}
 					 });
 				}
 			});
 		},
 		error : function(jqxhr,textStatus) {
+			$('#wait_'+destid).remove();
 			alertHTML("Server Error GET active: "+textStatus);
 		}
 	});
@@ -769,9 +769,9 @@ function genDashboardContent(destid,uuid,parent,root_node)
 	if (model_code.indexOf('.')<0 && model_code!='self' && model_code!='')  // There is no project, we add the project of the current portfolio
 		model_code = selfcode.substring(0,selfcode.indexOf('.')) + "." + model_code;
 	try {
-		if (g_dashboard_models[model_code]!=null && g_dashboard_models[model_code]!=undefined)
-			r_processPortfolio(0,g_dashboard_models[model_code],destid,root_node,0,spinning);
-		else
+//		if (g_dashboard_models[model_code]!=null && g_dashboard_models[model_code]!=undefined)
+//			r_processPortfolio(0,g_dashboard_models[model_code],destid,root_node,0,spinning);
+//		else
 			report_getModelAndPortfolio(model_code,root_node,destid,g_dashboard_models,spinning);
 	}
 	catch(err) {

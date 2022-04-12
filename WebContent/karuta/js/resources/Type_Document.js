@@ -141,7 +141,11 @@ UIFactory["Document"].prototype.getView = function(dest,type,langcode)
 	//---------------------
 	if (type==null)
 		type = "standard";
-	//---------------------
+	//------------------------
+	var nodefileid = this.id;
+	if (nodefileid.indexOf("_")>-1) // proxy-audio
+		nodefileid = nodefileid.substring(0,nodefileid.indexOf("_"));
+	//------------------------
 	var html = "";
 	if ($(this.filename_node[langcode]).text()!="") {
 		var filename = $(this.filename_node[langcode]).text();
@@ -150,13 +154,13 @@ UIFactory["Document"].prototype.getView = function(dest,type,langcode)
 			extension = "none";
 		var iconfile = "../../karuta/img/files-png/" + extension + ".png";
 		if (type=='standard' || type=='none'){
-				html =  "<a id='file_"+this.id+"' href='../../../"+serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"'><img style='width:24px' src='"+iconfile+"'/> "+filename+"</a>";
+				html =  "<a id='file_"+this.id+"' href='../../../"+serverBCK+"/resources/resource/file/"+nodefileid+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"'><img style='width:24px' src='"+iconfile+"'/> "+filename+"</a>";
 		}
 		if (type=='icon-url-label'){
-				html =  "<a id='file_"+this.id+"' href='../../../"+serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"'>"+$(this.filename_node[langcode]).text()+" <img style='width:24px' src='"+iconfile+"'/></a>"; 
+				html =  "<a id='file_"+this.id+"' href='../../../"+serverBCK+"/resources/resource/file/"+nodefileid+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"'>"+$(this.filename_node[langcode]).text()+" <img style='width:24px' src='"+iconfile+"'/></a>"; 
 		}
 		if (type=='icon-url'){
-				html =  "<a id='file_"+this.id+"' href='../../../"+serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"'><img style='width:24px' src='"+iconfile+"'/></a>"; 
+				html =  "<a id='file_"+this.id+"' href='../../../"+serverBCK+"/resources/resource/file/"+nodefileid+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"'><img style='width:24px' src='"+iconfile+"'/></a>"; 
 		}
 		if (type=='icon'){
 				html =  documentIcon[extension]; 

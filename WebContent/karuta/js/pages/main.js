@@ -22,7 +22,7 @@ function fill_main_page(portfolioid)
 {
 	setLanguageMenu("fill_main_page()");
 	g_importednodestack = [];
-	$("#wait-window").modal('show');
+//	$("#wait-window").modal('show');
 	g_dashboard_models = {};
 	g_report_models = {};
 	g_Get_Resource_caches = {};
@@ -42,7 +42,7 @@ function fill_main_page(portfolioid)
 	//-------------------------------------------
 	var url = serverBCK_API+"/portfolios/portfolio/" + g_portfolioid + "?resources=true";
 	$.ajax({
-		async:false,
+		async:true,
 		type : "GET",
 		dataType : "xml",
 		url : url,
@@ -176,11 +176,6 @@ function fill_main_page(portfolioid)
 				$("#contenu").removeClass().addClass('col-md-12').addClass('col-sm-12');
 			}
 			//---------------------------
-			if (g_encrypted)
-				loadLanguages(function() {g_rc4key = window.prompt(karutaStr[LANG]['get_rc4key']);});
-			//---------------------------
-			$("#wait-window").modal('hide');
-			//---------------------------
 			var welcomes = $("asmUnit:has(metadata[semantictag*='WELCOME'])",data);
 			if (welcomes.length==0) // for backward compatibility
 				welcomes = $("asmUnit:has(metadata[semantictag*='welcome-unit'])",data);
@@ -202,6 +197,16 @@ function fill_main_page(portfolioid)
 			}
 			//---------------------------
 			fillEditBoxBody();
+			//=====================================================
+			$('[data-toggle=tooltip]').tooltip({html: true, trigger: 'hover'}); 
+			$(document).click(function(e) {
+				if (!$(e.target).is('.tooltip')) {
+					$('.tooltip').hide();
+				}
+			});
+			//=====================================================
+//			$("#wait-window").modal('hide');
+			//---------------------------
 		},
 		error : function(jqxhr,textStatus) {
 			if (jqxhr.status=="403")
@@ -213,14 +218,6 @@ function fill_main_page(portfolioid)
 			$("#wait-window").modal('hide');
 		}
 	});
-	//=====================================================
-	$('[data-toggle=tooltip]').tooltip({html: true, trigger: 'hover'}); 
-	$(document).click(function(e) {
-		if (!$(e.target).is('.tooltip')) {
-			$('.tooltip').hide();
-		}
-	});
-	//=====================================================
 }
 
 //==============================
@@ -230,6 +227,6 @@ function display_main_page(portfolioid)
 	$("#sub-bar").show();
 	$("#welcome-bar").hide();
 	fill_main_page(portfolioid);
-	show_main_page();		
+	show_main_page();
 }
 
