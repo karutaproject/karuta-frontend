@@ -14,72 +14,7 @@
    ======================================================= */
 
 /* ======================================================= */
-function ajouterCompetencesDansBilan (nodeid){
-	const node = UICom.structure.ui[nodeid].node;
-	const target =  $("*:has(>metadata[semantictag*=comps-auto-evals])",g_portfolio_current);
-	const targetid = $(target[0]).attr("id");
-	var allreadyadded = $("*:has(>metadata[semantictag*=auto-evaluation-globale])",target);
-	var tabadded = [];
-	for ( var i = 0; i < allreadyadded.length; i++) {
-		const resource = $(">asmResource[xsi_type='nodeRes']",allreadyadded[i]);
-		let code = $('code',resource).text();
-		tabadded[i] = code;
-	}
-	const comps = $("*:has(>metadata[semantictag*=page-competence])",node);
-	const databack = true;
-	const callback = updateautoevalpart;
-	let param2 = "";
-	let param3 = false;
-	const param4 = targetid;
-	for (let i=0;i<comps.length;i++) {
-		const compid = $(comps[i]).attr("id");
-		const code = UICom.structure.ui[compid].getCode();
-		const indx = tabadded.indexOf(code);
-		if (indx==-1) {
-			param2 = code;
-			if (i==comps.length-1)
-				param3 = true;
-			importBranch(targetid,replaceVariable('##coop-dossier-etudiants-modeles##.composants-etudiants'),'auto-evaluation-globale',databack,callback,param2,param3,param4);
-		}
-	}
-}
 
-function updateautoevalpart(data,code,last,targetid)
-{
-	var partid = data;
-	var xml = "<asmResource xsi_type='nodeRes'>";
-	xml += "<code>"+code+"</code>";
-	xml += "<value></value>";
-	xml += "<uuid></uuid>";
-	for (var i=0; i<languages.length;i++){
-		xml += "<label lang='"+languages[i]+"'></label>";
-	}
-	xml += "</asmResource>";
-	$.ajax({
-		type : "GET",
-		dataType : "xml",
-		url : serverBCK_API+"/nodes/node/"+partid,
-		last : last,
-		targetid :targetid,
-		partid :partid,
-		success : function(data) {
-			$.ajax({
-				type : "PUT",
-				contentType: "application/xml",
-				dataType : "text",
-				url : serverBCK_API+"/nodes/node/" + this.partid + "/noderesource",
-				data : xml,
-				last : this.last,
-				targetid :this.targetid,
-				success : function(data) {
-					if (this.last) {
-						UIFactory.Node.reloadUnit(this.targetid,false);
-					}
-				}
-			});
-		}
-	});
-}
 /* ======================================================= */
 
 

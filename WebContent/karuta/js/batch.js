@@ -1587,13 +1587,13 @@ g_actions['update-resource'] = function updateResource(node)
 	//----------Test --------
 	var test = $(node).attr("test");
 	if (test!=undefined) {
-		test = replaceVariable(test);
+		test = replaceBatchVariable(test);
 		test=getTest(test);
 	}
 	var filter_semtag = $(node).attr("filter-semtag");
 	var filter_test = $(node).attr("filter-test");
 	if (filter_test!=undefined) {
-		filter_test = replaceVariable(filter_test);
+		filter_test = replaceBatchVariable(filter_test);
 		filter_test=getTest(filter_test);
 	}
 	//------------ Target --------------------
@@ -1705,13 +1705,13 @@ g_actions['update-node-resource'] = function updateResource(node)
 	//----------Test --------
 	var test = $(node).attr("test");
 	if (test!=undefined) {
-		test = replaceVariable(test);
+		test = replaceBatchVariable(test);
 		test=getTest(test);
 	}
 	var filter_semtag = $(node).attr("filter-semtag");
 	var filter_test = $(node).attr("filter-test");
 	if (filter_test!=undefined) {
-		filter_test = replaceVariable(filter_test);
+		filter_test = replaceBatchVariable(filter_test);
 		filter_test=getTest(filter_test);
 	}
 	//------------ Target --------------------

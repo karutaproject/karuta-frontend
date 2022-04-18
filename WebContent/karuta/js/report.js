@@ -216,7 +216,7 @@ $.fn.nodeCodeEquals = function (options) // nodeCodeEquals({"value":"v"})
 	var defaults= { "value":"v"};
 	var parameters = $.extend(defaults, options);
 	var nodes = $(this).has("asmResource[xsi_type='nodeRes']>code:contains('"+parameters.value+"')");
-	for (var i=0; i<nodes.length;i++){
+	for (let i=0; i<nodes.length;i++){
 		var code = $("code",$("asmResource[xsi_type='nodeRes']",nodes[i])).text();
 		if (code == parameters.value)
 			result.push(nodes[i]);
@@ -257,7 +257,7 @@ $.fn.utcBetween = function (options)
 	var result = [];
 	var defaults= {"semtag":"s","min":"m","max":"M"};
 	var parameters = $.extend(defaults, options);
-	for (var i=0;i<this.length;i++){
+	for (let i=0;i<this.length;i++){
 		var node = $("asmContext:has('>metadata[semantictag*=" + parameters.semtag + "]')",this[i]);		
 		var utc = $("utc",node).text();
 		if (parameters.min < utc && utc < parameters.max)
@@ -275,7 +275,7 @@ $.fn.hasAncestorSemtagAndNodeCodeContains = function (options)   // hasChildSemt
 	var defaults= {"semtag":"s","value":"v"};
 	var parameters = $.extend(defaults, options);
 	var result = [];
-	for (var i=0;i<this.length;i++){
+	for (let i=0;i<this.length;i++){
 		var parent = $(this[i]).parent();
 		var tagname = $(parent).prop("tagName");
 		var search = [];
@@ -380,7 +380,6 @@ function r_getSelector(select,test)
 		selects[0] = "*";
 	var jquery = ""; //selects[0];
 	var filter1 = null;
-	var filter2 = null;
 	if (selects[1]!="") {
 		jquery +="*:has(>metadata[semantictag*='"+selects[1]+"'])";
 		filter1 = function(){return $(this).children("metadata[semantictag*='"+selects[1]+"']").length>0};
@@ -498,7 +497,7 @@ function r_report_process(xmlDoc,json)
 function processReportActions(destid,actions,data)
 //=================================================
 {
-	for (var i=0; i<actions.length;i++){
+	for (let i=0; i<actions.length;i++){
 		var tagname = $(actions[i])[0].tagName;
 		g_report_actions[tagname](destid,actions[i],i.toString(),data);
 	};
@@ -740,13 +739,13 @@ function genDashboardContent(destid,uuid,parent,root_node)
 	var model_code = "";
 	if (part_code.indexOf('|')>-1){
 		var parameters = part_code.substring(part_code.indexOf('|')+1).split('|');
-		for (var i=0; i<parameters.length;i++){
+		for (let i=0; i<parameters.length;i++){
 			g_variables[parameters[i].substring(0,parameters[i].indexOf(":"))] = replaceVariable(parameters[i].substring(parameters[i].indexOf(":")+1));
 		}
 		model_code = folder_code + replaceVariable(part_code.substring(0,part_code.indexOf("|")));
 	} else if (part_code.indexOf('/')>-1){
 		var parameters = part_code.substring(part_code.indexOf('/')+1).split('/');
-		for (var i=0; i<parameters.length;i++){
+		for (let i=0; i<parameters.length;i++){
 			g_variables[parameters[i].substring(0,parameters[i].indexOf(":"))] = replaceVariable(parameters[i].substring(parameters[i].indexOf(":")+1));
 		}
 		model_code = folder_code + replaceVariable(part_code.substring(0,part_code.indexOf("/")));
@@ -804,13 +803,13 @@ g_report_actions['if-then-else'] = function (destid,action,no,data)
 	var then_actions = $($('then-part',action)[0]).children();
 	var else_actions = $($('else-part',action)[0]).children();
 	if (eval(test)){
-		for (var i=0; i<then_actions.length;i++){
+		for (let i=0; i<then_actions.length;i++){
 			var tagname = $(then_actions[i])[0].tagName;
 			g_report_actions[tagname](destid,then_actions[i],no+'-'+i.toString(),data);
 		};
 	}
 	else {
-		for (var i=0; i<else_actions.length;i++){
+		for (let i=0; i<else_actions.length;i++){
 			var tagname = $(else_actions[i])[0].tagName;
 			g_report_actions[tagname](destid,else_actions[i],no+'-'+i.toString(),data);
 		};
@@ -833,7 +832,7 @@ g_report_actions['for-each-line'] = function (destid,action,no,data)
 	var actions = $(action).children();
 	$("#line-number").html('0');
 	$("#number_lines").html(json.lines.length);
-	for (var j=0; j<json.lines.length; j++){
+	for (let j=0; j<json.lines.length; j++){
 		if (countvar!=undefined) {
 			g_variables[countvar] = j;
 		}
@@ -844,7 +843,7 @@ g_report_actions['for-each-line'] = function (destid,action,no,data)
 			for (var k=0;k<ref_inits.length;k++)
 				g_variables[ref_inits[k]] = new Array();
 		}
-		for (var i=0; i<actions.length;i++){
+		for (let i=0; i<actions.length;i++){
 			var tagname = $(actions[i])[0].tagName;
 			g_report_actions[tagname](destid,actions[j],no+'-'+j.toString()+'-'+i.toString(),data);
 		}
@@ -869,7 +868,7 @@ g_report_actions['for-each-node'] = function (destid,action,no,data)
  	if (ref_init!=undefined) {
  		ref_init = replaceVariable(ref_init);
  		var ref_inits = ref_init.split("/"); // ref1/ref2/...
- 		for (var k=0;k<ref_inits.length;k++)
+ 		for (let k=0;k<ref_inits.length;k++)
  			g_variables[ref_inits[k]] = new Array();
  	}
  	//----------------------------------
@@ -896,13 +895,13 @@ g_report_actions['for-each-node'] = function (destid,action,no,data)
 		//---------------------------
 		var actions = $(action).children();
 		if (test.indexOf('notFound')<0) {
-			for (var j=0; j<nodes.length;j++){
+			for (let j=0; j<nodes.length;j++){
 				//----------------------------------
 				if (countvar!=undefined) {
 					g_variables[countvar] = j;
 				}
 				g_variables["currentnode"] = "UICom.structure.ui['"+$(nodes[j]).attr("id")+"']";
-				for (var i=0; i<actions.length;i++){
+				for (let i=0; i<actions.length;i++){
 					var tagname = $(actions[i])[0].tagName;
 					g_report_actions[tagname](destid,actions[i],no+'-'+j.toString()+'-'+i.toString(),nodes[j]);
 				}
@@ -910,7 +909,7 @@ g_report_actions['for-each-node'] = function (destid,action,no,data)
 			};
 		}
 		else if (nodes.length==0){
-			for (var i=0; i<actions.length;i++){
+			for (let i=0; i<actions.length;i++){
 				var tagname = $(actions[i])[0].tagName;
 				g_report_actions[tagname](destid,actions[i],no,data);
 			}
@@ -943,7 +942,7 @@ g_report_actions['for-each-node-js'] = function (destid,action,no,data)
 		last = (parseInt(NOELT)+parseInt(NBELT)<nodeids.length)? parseInt(NOELT)+parseInt(NBELT):nodeids.length;
 	}
 	//----------------------------------
-	for ( var j = first; j < last; j++) {
+	for ( let j = first; j < last; j++) {
 		if (countvar!=undefined) {
 			g_variables[countvar] = j;
 		}
@@ -951,7 +950,7 @@ g_report_actions['for-each-node-js'] = function (destid,action,no,data)
 		if (ref_init!=undefined) {
 			ref_init = replaceVariable(ref_init);
 			var ref_inits = ref_init.split("/"); // ref1/ref2/...
-			for (var i=0;i<ref_inits.length;i++)
+			for (let i=0;i<ref_inits.length;i++)
 				g_variables[ref_inits[i]] = new Array();
 		}
 		nodeid = nodeids[j];
@@ -967,7 +966,7 @@ g_report_actions['for-each-node-js'] = function (destid,action,no,data)
 			success : function(data) {
 				UICom.parseStructure(data,true, null, null,true);
 				var actions = $(action).children();
-				for (var i=0; i<actions.length;i++){
+				for (let i=0; i<actions.length;i++){
 					var tagname = $(actions[i])[0].tagName;
 					g_report_actions[tagname](destid,actions[i],no+'-'+j.toString()+i.toString(),data);
 				};
@@ -1021,7 +1020,7 @@ g_report_actions['loop'] = function (destid,action,no,data)
 		}
 		//---------------------------
 		var actions = $(action).children();
-		for (var i=0; i<actions.length;i++){
+		for (let i=0; i<actions.length;i++){
 			var tagname = $(actions[i])[0].tagName;
 			g_report_actions[tagname](destid,actions[i],no+'-'+j.toString()+'-'+i.toString(),data);
 		}
@@ -1041,7 +1040,7 @@ g_report_actions['goparent'] = function (destid,action,no,data)
 	var parent = $(data).parent();
 	//---------------------------
 	var actions = $(action).children();
-	for (var i=0; i<actions.length;i++){
+	for (let i=0; i<actions.length;i++){
 		var tagname = $(actions[i])[0].tagName;
 		g_report_actions[tagname](destid,actions[i],no+'-'+i.toString(),parent);
 	}
@@ -1115,7 +1114,7 @@ g_report_actions['table'] = function (destid,action,no,data)
 	$("#"+destid).append($(html));
 	//---------------------------
 	var actions = $(action).children();
-	for (var i=0; i<actions.length;i++){
+	for (let i=0; i<actions.length;i++){
 		var tagname = $(actions[i])[0].tagName;
 		g_report_actions[tagname](destid+'-'+no,actions[i],i.toString(),data);
 	};
@@ -1143,7 +1142,7 @@ g_report_actions['row'] = function (destid,action,no,data)
 	$("#"+destid).append($(html));
 	//---------------------------
 	var actions = $(action).children();
-	for (var i=0; i<actions.length;i++){
+	for (let i=0; i<actions.length;i++){
 		var tagname = $(actions[i])[0].tagName;
 		g_report_actions[tagname](destid+'-'+no,actions[i],i.toString(),data);
 	};
@@ -1170,7 +1169,7 @@ g_report_actions['cell'] = function (destid,action,no,data)
 		var help_text = "";
 		var helps = attr_help.split("//"); // lang1/lang2/...
 		if (attr_help.indexOf("@")>-1) { // lang@fr/lang@en/...
-			for (var j=0; j<helps.length; j++){
+			for (let j=0; j<helps.length; j++){
 				if (helps[j].indexOf("@"+languages[LANGCODE])>-1)
 					help_text = helps[j].substring(0,helps[j].indexOf("@"));
 			}
@@ -1190,7 +1189,7 @@ g_report_actions['cell'] = function (destid,action,no,data)
 	}
 	//---------------------------
 	var actions = $(action).children();
-	for (var i=0; i<actions.length;i++){
+	for (let i=0; i<actions.length;i++){
 		var tagname = $(actions[i])[0].tagName;
 		g_report_actions[tagname](destid+'-'+no,actions[i],i.toString(),data);
 	};
@@ -1211,7 +1210,7 @@ g_report_actions['for-each-person'] = function (destid,action,no,data)
 	if (select=="#logged_user") {
 		userid = USER.id;
 		var actions = $(action).children();
-		for (var i=0; i<actions.length;i++){
+		for (let i=0; i<actions.length;i++){
 			var tagname = $(actions[i])[0].tagName;
 			g_report_actions[tagname](destid,actions[i],no+'-'+i.toString(),userid);
 		};
@@ -1238,7 +1237,7 @@ g_report_actions['for-each-person'] = function (destid,action,no,data)
 					comparator = "*=";
 				}
 				var condition = false;
-				for ( var j = 0; j < UsersActive_list.length; j++) {
+				for ( let j = 0; j < UsersActive_list.length; j++) {
 					if (countvar!=undefined) {
 						g_variables[countvar] = j;
 					}
@@ -1247,7 +1246,7 @@ g_report_actions['for-each-person'] = function (destid,action,no,data)
 					if (ref_init!=undefined) {
 						ref_init = replaceVariable(ref_init);
 						var ref_inits = ref_init.split("/"); // ref1/ref2/...
-						for (var i=0;i<ref_inits.length;i++)
+						for (let i=0;i<ref_inits.length;i++)
 							g_variables[ref_inits[i]] = new Array();
 					}
 					//------------------------------------
@@ -1259,7 +1258,7 @@ g_report_actions['for-each-person'] = function (destid,action,no,data)
 					if (condition || comparator==""){
 						userid = UsersActive_list[j].id;
 						var actions = $(action).children();
-						for (var i=0; i<actions.length;i++){
+						for (let i=0; i<actions.length;i++){
 							var tagname = $(actions[i])[0].tagName;
 							g_report_actions[tagname](destid,actions[i],no+j.toString()+'-'+i.toString(),userid);
 						};
@@ -1427,7 +1426,7 @@ g_report_actions['for-each-portfolio'] = function (destid,action,no,data)
 			var tableau = new Array();
 			var sortvalue = "";
 			if (sortag!=undefined && sortag!="") {
-				for ( var i = 0; i < items.length; i++) {
+				for ( let i = 0; i < items.length; i++) {
 					portfolioid = $(items[i]).attr('id');
 					var code = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",items[i])).text();
 					//------------------------------------
@@ -1480,12 +1479,12 @@ g_report_actions['for-each-portfolio'] = function (destid,action,no,data)
 					//------------------------------------
 				}
 				var newTableau = tableau.sort(sortOn1);
-				for ( var i = 0; i < newTableau.length; i++) {
+				for ( let i = 0; i < newTableau.length; i++) {
 					items_list[i] = portfolios_byid[newTableau[i][1]]
 				}
 				items_list.length = newTableau.length;
 			} else {
-				for ( var i = 0; i < items.length; i++) {
+				for ( let i = 0; i < items.length; i++) {
 					items_list[i] = portfolios_byid[$(items[i]).attr('id')]
 				}
 			}
@@ -1497,7 +1496,7 @@ g_report_actions['for-each-portfolio'] = function (destid,action,no,data)
 				last = (parseInt(NOELT)+parseInt(NBELT)<items_list.length)? parseInt(NOELT)+parseInt(NBELT):items_list.length;
 			}
 			//----------------------------------
-			for ( var j = first; j < last; j++) {
+			for ( let j = first; j < last; j++) {
 				if (countvar!=undefined) {
 					g_variables[countvar] = j;
 				}
@@ -1505,7 +1504,7 @@ g_report_actions['for-each-portfolio'] = function (destid,action,no,data)
 				if (ref_init!=undefined) {
 					ref_init = replaceVariable(ref_init);
 					var ref_inits = ref_init.split("/"); // ref1/ref2/...
-					for (var i=0;i<ref_inits.length;i++)
+					for (let i=0;i<ref_inits.length;i++)
 						g_variables[ref_inits[i]] = new Array();
 				}
 				var code = items_list[j].code_node.text();
@@ -1552,7 +1551,7 @@ g_report_actions['for-each-portfolio'] = function (destid,action,no,data)
 							}
 							UICom.parseStructure(data,true, null, null,true);
 							var actions = $(action).children();
-							for (var i=0; i<actions.length;i++){
+							for (let i=0; i<actions.length;i++){
 								var tagname = $(actions[i])[0].tagName;
 								g_report_actions[tagname](destid,actions[i],no+'-'+j.toString()+i.toString(),data);
 							};
@@ -1590,7 +1589,7 @@ g_report_actions['for-each-portfolio-js'] = function (destid,action,no,data)
 		last = (parseInt(NOELT)+parseInt(NBELT)<portfolioids.length)? parseInt(NOELT)+parseInt(NBELT):portfolioids.length;
 	}
 	//----------------------------------
-	for ( var j = first; j < last; j++) {
+	for (let j = first; j < last+1; j++) {
 		if (countvar!=undefined) {
 			g_variables[countvar] = j;
 		}
@@ -1598,7 +1597,7 @@ g_report_actions['for-each-portfolio-js'] = function (destid,action,no,data)
 		if (ref_init!=undefined) {
 			ref_init = replaceVariable(ref_init);
 			var ref_inits = ref_init.split("/"); // ref1/ref2/...
-			for (var i=0;i<ref_inits.length;i++)
+			for (let i=0;i<ref_inits.length;i++)
 				g_variables[ref_inits[i]] = new Array();
 		}
 		portfolioid = portfolioids[j];
@@ -1607,7 +1606,7 @@ g_report_actions['for-each-portfolio-js'] = function (destid,action,no,data)
 		}
 		portfolioid_current = portfolioid;
 		$.ajax({
-			async:false,
+			async:true,
 			type : "GET",
 			dataType : "xml",
 			j : j,
@@ -1619,7 +1618,7 @@ g_report_actions['for-each-portfolio-js'] = function (destid,action,no,data)
 				}
 				UICom.parseStructure(data,true, null, null,true);
 				var actions = $(action).children();
-				for (var i=0; i<actions.length;i++){
+				for (let i=0; i<actions.length;i++){
 					var tagname = $(actions[i])[0].tagName;
 					g_report_actions[tagname](destid,actions[i],no+'-'+j.toString()+i.toString(),data);
 				};
@@ -1629,7 +1628,7 @@ g_report_actions['for-each-portfolio-js'] = function (destid,action,no,data)
 	if (NBELT!="" && NOELT!="" && parseInt(NOELT)+parseInt(NBELT)<portfolioids.length) {
 		g_variables["NOELT"] = parseInt(NOELT) + parseInt(NBELT);
 		let js = "$(\"#\"+dashboard_current).html(\"\");r_processPortfolio(0,dashboard_infos[dashboard_current].xmlReport,dashboard_current,dashboard_infos[dashboard_current].data,0);"
-		let next = "<br>"+first +" - "+ last + "/" +portfolioids.length+ " <button class='btn' onclick='"+js+"'>NEXT</button>"
+		let next = "<br>"+first +" - "+ last + "/" +portfolioids.length+ " <button class='btn' onclick='"+js+"'>"+karutaStr[LANG]['next']+"</button>"
 		$("#"+dashboard_current).append(next);
 	}
 }
@@ -1667,7 +1666,7 @@ g_report_actions['for-each-portfolios-nodes'] = function (destid,action,no,data)
 			var tableau = new Array();
 			var sortvalue = "";
 			if (sortag!=undefined && sortag!="") {
-				for ( var j = 0; j < items.length; j++) {
+				for ( let j = 0; j < items.length; j++) {
 					portfolioid = $(items[i]).attr('id');
 					var code = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",items[i])).text();
 					if (select.indexOf("code*=")>-1) {
@@ -1711,17 +1710,17 @@ g_report_actions['for-each-portfolios-nodes'] = function (destid,action,no,data)
 					//------------------------------------
 				}
 				var newTableau = tableau.sort(sortOn1);
-				for ( var i = 0; i < newTableau.length; i++) {
+				for ( let i = 0; i < newTableau.length; i++) {
 					items_list[i] = portfolios_byid[newTableau[i][1]]
 				}
 				items_list.length = newTableau.length;
 			} else {
-				for ( var i = 0; i < items.length; i++) {
+				for ( let i = 0; i < items.length; i++) {
 					items_list[i] = portfolios_byid[$(items[i]).attr('id')]
 				}
 			}
 			//----------------------------------
-			for ( var j = 0; j < items_list.length; j++) {
+			for ( let j = 0; j < items_list.length; j++) {
 				if (countvar!=undefined) {
 					g_variables[countvar] = j;
 				}
@@ -1778,7 +1777,7 @@ g_report_actions['for-each-portfolios-nodes'] = function (destid,action,no,data)
 										UICom.parseStructure(data,true, null, null,true);
 										//-----------------------------
 										var actions = $(action).children();
-										for (var i=0; i<actions.length;i++){
+										for (let i=0; i<actions.length;i++){
 											var tagname = $(actions[i])[0].tagName;
 											g_report_actions[tagname](destid,actions[i],no+'-'+j.toString()+i.toString(),data);
 										};
@@ -1936,7 +1935,7 @@ g_report_actions['node_resource'] = function (destid,action,no,data)
 				labels[3] = karutaStr[languages[langcode]]['notsubmitted'];
 				if (node.textssubmit!="") {
 					var texts = node.textssubmit.split(";");
-					for (var j=0; j<texts.length; j++){
+					for (let j=0; j<texts.length; j++){
 						var textlang = texts[j].split("/");
 						for (var k=0; k<textlang.length; k++){
 							if (textlang[k].indexOf("@"+languages[langcode])>-1)
@@ -2086,7 +2085,7 @@ g_report_actions['variable'] = function (destid,action,no,data)
 			select = replaceVariable(select);
 			if (aggregatetype=="sum" && g_variables[select]!=undefined){
 				var sum = 0;
-				for (var i=0;i<g_variables[select].length;i++){
+				for (let i=0;i<g_variables[select].length;i++){
 					if ($.isNumeric(g_variables[select][i]))
 						sum += parseFloat(g_variables[select][i]);
 				}
@@ -2094,7 +2093,7 @@ g_report_actions['variable'] = function (destid,action,no,data)
 			}
 			if (aggregatetype=="avg" && g_variables[select]!=undefined){
 				var sum = 0;
-				for (var i=0;i<g_variables[select].length;i++){
+				for (let i=0;i<g_variables[select].length;i++){
 					if ($.isNumeric(g_variables[select][i]))
 						sum += parseFloat(g_variables[select][i]);
 				}
@@ -2195,7 +2194,7 @@ g_report_actions['csv-line'] = function (destid,action,no,data)
 {
 	csvline = "";
 	var actions = $(action).children();
-	for (var i=0; i<actions.length;i++){
+	for (let i=0; i<actions.length;i++){
 		var tagname = $(actions[i])[0].tagName;
 		var is_out_csv = true;
 		g_report_actions[tagname](destid,actions[i],no+'-'+i.toString(),data,is_out_csv);
@@ -2524,7 +2523,7 @@ g_report_actions['aggregate'] = function (destid,action,no,data)
 	var text = "";
 	if (type=="sum" && g_variables[select]!=undefined){
 		var sum = 0;
-		for (var i=0;i<g_variables[select].length;i++){
+		for (let i=0;i<g_variables[select].length;i++){
 			if ($.isNumeric(g_variables[select][i]))
 				sum += parseFloat(g_variables[select][i]);
 		}
@@ -2532,7 +2531,7 @@ g_report_actions['aggregate'] = function (destid,action,no,data)
 	}
 	if (type=="avg" && g_variables[select]!=undefined){
 		var sum = 0;
-		for (var i=0;i<g_variables[select].length;i++){
+		for (let i=0;i<g_variables[select].length;i++){
 			if ($.isNumeric(g_variables[select][i]))
 				sum += parseFloat(g_variables[select][i]);
 		}
@@ -2706,7 +2705,7 @@ function getPoints(data,select) {
 	var nodes = $(selector.jquery,data).filter(selector.filter1);
 	nodes = eval("nodes"+selector.filter2);
 	var angle = 360 / nodes.length;
-	for (var i=0; i<nodes.length;i++){
+	for (let i=0; i<nodes.length;i++){
 		//---------------------------
 		var nodeid = $(nodes[i]).attr("id");
 		if (selector.type=='resource') {
@@ -2741,7 +2740,7 @@ function getResText(data,select) {
 	nodes = eval("nodes"+selector.filter2);
 	if (nodes.length==0)
 		nodes = $(data); //node itself
-	for (var i=0; i<nodes.length;i++){
+	for (let i=0; i<nodes.length;i++){
 		//---------------------------
 		var nodeid = $(nodes[i]).attr("id");
 		if (selector.type=='resource') {
@@ -2777,7 +2776,7 @@ g_report_actions['svg'] = function (destid,action,no,data)
 	$("#"+destid).append(svg);
 	//----------------------------------
 	var actions = $(action).children();
-	for (var i=0; i<actions.length;i++){
+	for (let i=0; i<actions.length;i++){
 		var tagname = $(actions[i])[0].tagName;
 		g_report_actions[tagname](destid+'-'+no,actions[i],i.toString(),data)
 	}
@@ -2807,7 +2806,7 @@ g_report_actions['draw-web-axis'] = function (destid,action,no,data)
 		select = replaceVariable(select);
 		var texts = getResText(data,select);
 		var angle = 360 / texts.length;
-		for (var i=0; i<texts.length;i++){
+		for (let i=0; i<texts.length;i++){
 			drawAxis(destid,texts[i],svgfontname,svgfontsize,angle*i,svgcenter,svgaxislength);
 		}
 	}
@@ -2828,13 +2827,13 @@ g_report_actions['draw-web-line'] = function (destid,action,no,data)
 		select = replaceVariable(select);
 		var points = getPoints(data,select);
 		var angle = 360 / points.length;
-		for (var i=0; i<points.length;i++){
+		for (let i=0; i<points.length;i++){
 			if (points[i].value!=null) {
 				points[i] = {'value': ((points[i].value - min)/(max-min))*svgaxislength, 'angle':angle*i};
 				drawValue(destid,points[i].value,points[i].angle,svgcenter,'svg-web-value'+pos);
 				}
 			if (pos==0){ // draw gaduations
-				for (var j=0;j<=Math.abs(max-min);j++) {
+				for (let j=0;j<=Math.abs(max-min);j++) {
 					if (j>0)
 						drawGraduationLine(destid,j,min,max,angle*i,svgcenter,'svg-web-line'+no);
 					if (i==0)
@@ -2899,7 +2898,7 @@ g_report_actions['draw-xy-axis'] = function (destid,action,no,data)
 	document.getElementById(destid).appendChild(yline);
 	// x axis graduation
 	if (xnbgraduation>0) {
-		for (var j=0;j<=xnbgraduation;j++) {
+		for (let j=0;j<=xnbgraduation;j++) {
 			var x = 100+xaxis + (1000-xaxis) / xnbgraduation * j ;
 			var line = makeSVG('line',{'x1':x,'y1':1100-yaxis-5,'x2':x,'y2':1100-yaxis+5,'stroke':'black','stroke-width': 1});
 			document.getElementById(destid).appendChild(line);
@@ -2922,7 +2921,7 @@ g_report_actions['draw-xy-axis'] = function (destid,action,no,data)
 	document.getElementById(destid).appendChild(xline);
 	// y axis graduation
 	if (ynbgraduation>0) {
-		for (var j=0;j<=ynbgraduation;j++) {
+		for (let j=0;j<=ynbgraduation;j++) {
 			var y = 1100-yaxis - (1000-yaxis) / ynbgraduation * j  ;
 			var line = makeSVG('line',{'x1':100+xaxis-5,'y1':y,'x2':100+xaxis+5,'y2':y,'stroke':'black','stroke-width': 1});
 			document.getElementById(destid).appendChild(line);
@@ -2969,12 +2968,12 @@ g_report_actions['draw-data'] = function (destid,action,no,data)
 			points = getPoints(data,pointselect);
 		}
 		if (pointvariable!="") {
-			for (var i=0; i<g_variables[pointvariable].length;i++){
+			for (let i=0; i<g_variables[pointvariable].length;i++){
 				points[points.length] = {'value': parseInt(g_variables[pointvariable][i]),'x':0,'y':0};
 			}
 		}
 		if (graphtype=='point' || graphtype=='line') {
-			for (var i=0; i<points.length;i++){
+			for (let i=0; i<points.length;i++){
 				if (points[i].value!=null){
 					points[i].x = 100+xaxis + (1000-xaxis) / xnbgraduation * (i+1) ;
 					points[i].y = 1100-yaxis - (1000-yaxis) / (ymax-ymin) * points[i].value ;
@@ -2988,7 +2987,7 @@ g_report_actions['draw-data'] = function (destid,action,no,data)
 			}
 		}
 		if (graphtype=='bar') {
-			for (var i=0; i<points.length;i++){
+			for (let i=0; i<points.length;i++){
 				if (points[i].value!=null){
 					points[i].x = 90+xaxis+ (20*nbdata) + (1000-xaxis) / xnbgraduation * (i+1) ;
 					points[i].y = 1100-yaxis - (1000-yaxis) / (ymax-ymin) * points[i].value ;
@@ -3005,11 +3004,11 @@ g_report_actions['draw-data'] = function (destid,action,no,data)
 				texts = getResText(data,legendselect);
 			}
 			if (legendvariable!="") {
-				for (var i=0; i<g_variables[legendvariable].length;i++){
+				for (let i=0; i<g_variables[legendvariable].length;i++){
 					texts[texts.length] = g_variables[legendvariable][i];
 				}
 			}
-			for (var i=0; i<texts.length;i++){
+			for (let i=0; i<texts.length;i++){
 				var line = makeSVG('line',{'x1':100,'y1':1140+20*nbdata,'x2':100,'y2':1140+20*nbdata,'class':'svg-web-value'+nbdata});
 				document.getElementById(destid).appendChild(line);
 				var svgtext = makeSVG('text',{'x':120,'y':1145+20*nbdata,'font-size':svgfontsize,'font-family':svgfontname},texts[i]);
@@ -3024,11 +3023,11 @@ g_report_actions['draw-data'] = function (destid,action,no,data)
 				texts = getResText(data,gradselect);
 			}
 			if (gradvariable!="") {
-				for (var i=0; i<g_variables[gradvariable].length;i++){
+				for (let i=0; i<g_variables[gradvariable].length;i++){
 					texts[texts.length] = g_variables[gradvariable][i];
 				}
 			}
-			for (var i=0; i<texts.length;i++){
+			for (let i=0; i<texts.length;i++){
 				var x = 100+xaxis + (20*nbdata) + (1000-xaxis) / xnbgraduation * (i+1) ;
 				var y = 1120 ;
 				var svgtext = makeSVG('text',{'x':x,'y':y,'transform':"rotate(45 "+x+" "+y+")",'font-size':svgfontsize,'font-family':svgfontname},texts[i]);

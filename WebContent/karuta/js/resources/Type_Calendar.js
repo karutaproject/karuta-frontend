@@ -97,6 +97,7 @@ UIFactory["Calendar"].prototype.getAttributes = function(type,langcode)
 		result['minViewMode'] = this.minViewMode_node.text();
 		result['text'] = this.text_node[langcode].text();
 		result['format'] = this.format_node[langcode].text();
+		result['utc'] = this.utc.text();
 	}
 	return result;
 }
@@ -169,19 +170,19 @@ UIFactory["Calendar"].prototype.displayEditor = function(dest,type,langcode,disa
 	if (disabled==null)
 		disabled = false;
 	//---------------------
-	var html = "<form class='form-horizontal' role='form'></form>";
+	var html = "<div class='form-horizontal' role='form'></div>";
 	var form = $(html);
 	//------
 	html = "<input type='text' name='datepicker' class='datepicker form-control' style='width:150px;' ";
 	if (disabled)
 		html += "disabled='disabled' ";
-	html += "value=\""+$(this.text_node[langcode]).text()+"\" >";
+	html += "value=\""+$(this.text_node[langcode]).text()+"\" >"
 	var input1 = $(html);
 	var self = this;
-//	$(input1).change(function (){
-//		$(self.text_node[langcode]).text($(this).val());
-//		UIFactory["Calendar"].update(self,langcode);
-//	});
+	$(input1).change(function (){
+		$(self.text_node[langcode]).text($(this).val());
+		UIFactory["Calendar"].update(self,langcode);
+	});
 	var format = $(this.format_node[langcode]).text();
 	if (format.length<2)
 		format = "yyyy/mm/dd";
@@ -192,7 +193,7 @@ UIFactory["Calendar"].prototype.displayEditor = function(dest,type,langcode,disa
 	$(input1).datepicker().on('changeDate', function (ev) {
 		$(self.utc).text(ev.date.getTime());
 		$(self.text_node[langcode]).text($(this).val());
-		UIFactory["Calendar"].update(self,langcode);
+		UIFactory.Calendar.update(self,langcode);
 	});
 	$(form).append(input1);
 	//------

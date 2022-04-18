@@ -450,6 +450,7 @@ karutaStr['en']['report']="Execute Report Script";
 karutaStr['en']['upload_csv_or_code']="Upload a CSV File or Type a Model Code";
 karutaStr['en']['model_code']="Model Code";
 karutaStr['en']['report-elt-disabled'] = "disabled"
+karutaStr['en']['next'] = "Next";
 
 //=========================================
 //========== RESOURCE =====================

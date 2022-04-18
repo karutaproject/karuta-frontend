@@ -393,8 +393,10 @@ UIFactory["Get_Resource"].update = function(selected_item,itself,langcode,type)
 					for (let j=0;j<fctjs.length;j++) {
 						if (fctjs[j].indexOf("##")>-1)
 							eval(replaceVariable(fctjs[j],itself.node));
+						else if (fctjs[j].indexOf("(")>-1)
+							eval(fctjs[j]);
 						else
-							eval(fctjs[j]+"(itself.node,g_portfolioid)");
+						eval(fctjs[j]+"(itself.node,g_portfolioid)");
 					}
 				}
 			}

@@ -576,7 +576,7 @@ UIFactory["Node"].prototype.displayMetadataAttributesEditor = function(destid)
 	this.displayMetadataWadAttributeEditor('metadata-part2','logcode');
 	this.displayMetadataWadAttributeEditor('metadata-part2','js');
 	//--------------------------------------
-	if (name=='asmContext' && (this.resource.type=='URL2Unit' || this.resource.type=='Get_Resource'))
+	if (name=='asmContext' && (this.resource.type=='URL2Unit' || this.resource.type=='Get_Resource' || this.resource.type=='Get_Get_Resource'))
 		this.displayMetadataAttributeEditor('metadata-part2','preview',true);
 	if (name!='asmRoot')
 		this.displayMetadataWadAttributeEditor('metadata-part2','display',true);
