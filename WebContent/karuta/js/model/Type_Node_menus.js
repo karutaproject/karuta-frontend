@@ -1011,7 +1011,7 @@ UIFactory["Node"].prototype.displayEltMenu = function(cntidx,destmenu)
 	html += "<div id='" + cntidx + "_" + eltidx + "' class='"+tag+"title' style='margin-top:14px;border-top:1px dashed #ced4da'>";
 	if (menuItems[tag]!=undefined && menuItems[tag].length>0){
 		html += "<div class='dropdown '>";
-		html += "<button class='btn dropdown-toggle add-button' style='background-color:transparent;float:right;' type='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>Ajouter</button>";
+		html += "<button class='btn dropdown-toggle add-button' style='background-color:transparent;float:right;' type='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>"+karutaStr[LANG]['Add']+"</button>";
 		html += "<div class='dropdown-menu'>";
 		for (let i=0;i<menuItems[tag].length;i++){
 			if (menuItems[tag][i]=="#line")
@@ -1305,6 +1305,20 @@ UIFactory["Node"].getXmlItemMenu = function(node,parentid,item,title,databack,ca
 					let fctarray = UIFactory.Node.getFunctionArray(node,imports[j]);
 					let trgtarray = UIFactory.Node.getTargetArray(node,parentid,imports[j]);
 					actions += "{|type|:|import_component|,|parentid|:|"+parentid+"|,|foliocode|:|"+foliocode+"|,|semtag|:|"+semtag+"|,|updatedtag|:|"+updatedtag+"|,|trgts|:|"+trgtarray.toString()+"|,|fcts|:|"+fctarray.toString()+"|};";
+				}
+				onclick += "import_get_multiple('"+parentid+"','','"+boxlabel+"','"+search_foliocode+"','"+search_semtag+"','"+search_object+"','"+actions+"','"+unique+"');";
+			}
+			// --------import-proxy ------
+			imports = $("import-proxy",itemelts[i]);
+			if (imports.length>0) {
+				for (let j=0;j<imports.length;j++){
+					let srce = $("srce",imports[j])[0];
+					let foliocode = replaceVariable( ($("foliocode",srce).length>0)?$("foliocode",srce).text():"" );
+					let semtag = replaceVariable( ($("semtag",srce).length>0)?$("semtag",srce).text():"" );
+					let updatedtag = replaceVariable( ($("updatedtag",srce).length>0)?$("updatedtag",srce).text():"" );
+					let fctarray = UIFactory.Node.getFunctionArray(node,imports[j]);
+					let trgtarray = UIFactory.Node.getTargetArray(node,parentid,imports[j]);
+					actions += "{|type|:|import_proxy|,|parentid|:|"+parentid+"|,|foliocode|:|"+foliocode+"|,|semtag|:|"+semtag+"|,|updatedtag|:|"+updatedtag+"|,|trgts|:|"+trgtarray.toString()+"|,|fcts|:|"+fctarray.toString()+"|};";
 				}
 				onclick += "import_get_multiple('"+parentid+"','','"+boxlabel+"','"+search_foliocode+"','"+search_semtag+"','"+search_object+"','"+actions+"','"+unique+"');";
 			}

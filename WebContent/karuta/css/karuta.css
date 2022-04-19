@@ -1137,7 +1137,8 @@ body,
   cursor: pointer;
 }
 
-.Get_Resource .preview-button {
+.Get_Resource .preview-button,
+.Get_Get_Resource .preview-button {
   color: var(--portfolio-link-color);
   cursor: pointer;
 }

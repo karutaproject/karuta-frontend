@@ -1917,6 +1917,13 @@ function import_get_multiple(parentid,targetid,title,query_portfolio,query_semta
 					targetid = targets[j];
 				js2 += "UIFactory.Get_Resource.addMultiple('"+actions[i].parentid+"','"+targets[j]+"','"+replaceVariable(actions[i].foliocode+"."+actions[i].semtag)+"','"+actions[i].updatedtag+"','"+fctjs+"');";
 			}
+		} else if (actions[i].type=="import_proxy") {
+			let targets = actions[i].trgts.split(',');
+			for (let j=0;j<targets.length;j++) {
+				if (targetid=="")
+					targetid = targets[j];
+				js2 += "UIFactory.Get_Proxy.addMultiple('"+actions[i].parentid+"','"+targets[j]+"','"+replaceVariable(actions[i].foliocode+"."+actions[i].semtag)+"','"+actions[i].updatedtag+"','"+fctjs+"');";
+			}
 		} else if (actions[i].type=="import_elts") {
 			let targets = actions[i].trgts.split(',');
 			for (let j=0;j<targets.length;j++) {

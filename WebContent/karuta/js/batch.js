@@ -1284,29 +1284,63 @@ g_actions['update-tree-root'] = function updateTreeRoot(node)
 			url : serverBCK_API+"/nodes?portfoliocode=" + g_trees[treeref][1] + "&semtag=root",
 			success : function(data) {
 				var nodeid = $("asmRoot",data).attr('id');
-				var xml = "<asmResource xsi_type='nodeRes'>";
-				xml += "<code>"+newcode+"</code>";
-				for (var lan=0; lan<languages.length;lan++)
-					if (lan==LANGCODE && label!="")
-						xml += "<label lang='"+languages[lan]+"'>"+label+"</label>";
-					else
-						xml += "<label lang='"+languages[lan]+"'>"+$("label[lang='"+languages[lan]+"']",$("asmResource[xsi_type='nodeRes']",data)).text()+"</label>";
-				xml += "</asmResource>";
-				$.ajax({
-					async : false,
-					type : "PUT",
-					contentType: "application/xml",
-					dataType : "text",
-					data : xml,
-					url : serverBCK_API+"/nodes/node/" + nodeid + "/noderesource",
-					success : function(data) {
-						ok = true;
-						$("#batch-log").append("<br>- tree root updated ("+g_trees[treeref][1]+") - newcode:"+newcode);
-					},
-					error : function(data) {
-						$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in  updateTreeRoot - code:"+g_trees[treeref][1]+" not found");
-					}
-				});
+				var oldcode = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",data)).text();
+				//--------------  if folder -------------
+				if (oldcode.indexOf(".")>=0) {
+					var xml = "<asmResource xsi_type='nodeRes'>";
+					xml += "<code>"+newcode+"</code>";
+					for (var lan=0; lan<languages.length;lan++)
+						if (lan==LANGCODE && label!="")
+							xml += "<label lang='"+languages[lan]+"'>"+label+"</label>";
+						else
+							xml += "<label lang='"+languages[lan]+"'>"+$("label[lang='"+languages[lan]+"']",$("asmResource[xsi_type='nodeRes']",data)).text()+"</label>";
+					xml += "</asmResource>";
+					$.ajax({
+						async : false,
+						type : "PUT",
+						contentType: "application/xml",
+						dataType : "text",
+						data : xml,
+						url : serverBCK_API+"/nodes/node/" + nodeid + "/noderesource",
+						success : function(data) {
+							ok = true;
+							$("#batch-log").append("<br>- tree root updated ("+g_trees[treeref][1]+") - newcode:"+newcode);
+								//------------------
+						},
+						error : function(data) {
+							$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in  updateTreeRoot - code:"+g_trees[treeref][1]+" not found");
+						}
+					});
+				} else {
+					$.ajax({
+						async: false,
+						folder : this,
+						type : "GET",
+						dataType : "xml",
+						url : serverBCK_API+"/portfolios?active=1&project="+oldcode,
+						success : function(data) {
+							var items = $("portfolio",data);
+							for ( var i = 0; i < items.length; i++) {
+								var portfolio_rootid = $("asmRoot",items[i]).attr("id");
+								var portfolio_code = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",items[i])).text();
+								var newportfolio_code = portfolio_code.replace(oldcode,newcode);
+								var xml = "";
+								xml +="<asmResource xsi_type='nodeRes'>";
+								xml +="<code>"+newportfolio_code+"</code>";
+								for (var j=0; j<languages.length;j++){
+									xml +="<label lang='"+languages[j]+"'>"+ $("label[lang='"+languages[j]+"']",$("asmRoot>asmResource[xsi_type='nodeRes']",items[i])[0]).text()+"</label>";	
+								}
+								xml +="</asmResource>";
+								strippeddata = xml.replace(/xmlns=\"http:\/\/www.w3.org\/1999\/xhtml\"/g,"");  // remove xmlns attribute
+								UICom.query("PUT",serverBCK_API+'/nodes/node/'+portfolio_rootid+'/noderesource',null,"text",strippeddata);
+								$("#batch-log").append("<br>- tree root updated - newcode:"+newportfolio_code);
+							}
+						},
+						error : function(jqxhr,textStatus) {
+							alertHTML("Server Error rename: "+textStatus);
+						}
+					});
+				}
 			},
 			error : function(data) {
 				$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in  updateTreeRoot - code:"+g_trees[treeref][1]);
