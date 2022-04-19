@@ -301,109 +301,116 @@ UIFactory["Node"].prototype.displayAsmContext = function (dest,type,langcode,edi
 		if (!this.writenode)
 			this.writenode = (g_userroles[0]=='designer')? true : false;
 	}
-	//---------------- DISPLAY HTML -------------------------------
-	var html = "";
-	var displayview = "";
-	var resourcetype = this.resource_type;
-	if (this.displayview!='' & type!='raw') {
-		var newtype = this.displayview;
-		html = displayHTML[type+"-resource-"+newtype];
-		displayview = type+"-resource-"+newtype;
-		if (html==undefined) {
-			html = displayHTML[type+"-resource-"+resourcetype+"-"+newtype];
-			displayview = type+"-resource-"+resourcetype+"-"+newtype;
+if (execJS(this,"display-if")) {
+		//---------------- DISPLAY HTML -------------------------------
+		var html = "";
+		var displayview = "";
+		var resourcetype = this.resource_type;
+		if (this.displayview!='' & type!='raw') {
+			var newtype = this.displayview;
+			html = displayHTML[type+"-resource-"+newtype];
+			displayview = type+"-resource-"+newtype;
+			if (html==undefined) {
+				html = displayHTML[type+"-resource-"+resourcetype+"-"+newtype];
+				displayview = type+"-resource-"+resourcetype+"-"+newtype;
+			}
+			if (html==undefined) {
+				alert("error: "+newtype+" does not exist");
+				html = displayHTML[type+"-resource-default"];
+				displayview = type+"-resource-default";
+			}
 		}
-		if (html==undefined) {
-			alert("error: "+newtype+" does not exist");
-			html = displayHTML[type+"-resource-default"];
-			displayview = type+"-resource-default";
-		}
-	}
-	else
-		if (type=='raw') {
-			html = displayHTML["raw-resource-default"];
-			displayview = "raw-resource-default";
+		else
+			if (type=='raw') {
+				html = displayHTML["raw-resource-default"];
+				displayview = "raw-resource-default";
+			} else {
+				html = displayHTML[type+"-resource-default"];
+				displayview = type+"-resource-default";
+			}
+		html = html.replace(/#displayview#/g,displayview).replace(/#displaytype#/g,type).replace(/#uuid#/g,uuid).replace(/#nodetype#/g,this.nodetype).replace(/#resourcetype#/g,this.resource_type).replace(/#semtag#/g,this.semantictag).replace(/#cssclass#/g,this.cssclass);
+		html = html.replace(/#node-orgclass#/g,this.displayitselforg)
+		//-------------------- display ----------------------
+		if (!refresh) {
+			$("#"+dest).append (html);
 		} else {
-			html = displayHTML[type+"-resource-default"];
-			displayview = type+"-resource-default";
+			$("#node_"+this.id).replaceWith(html);
 		}
-	html = html.replace(/#displayview#/g,displayview).replace(/#displaytype#/g,type).replace(/#uuid#/g,uuid).replace(/#nodetype#/g,this.nodetype).replace(/#resourcetype#/g,this.resource_type).replace(/#semtag#/g,this.semantictag).replace(/#cssclass#/g,this.cssclass);
-	html = html.replace(/#node-orgclass#/g,this.displayitselforg)
-	//-------------------- display ----------------------
-	if (!refresh) {
-		$("#"+dest).append (html);
-	} else {
-		$("#node_"+this.id).replaceWith(html);
-	}
-	//-------------------- STYLES ---------------------------------------
-	var style = "";
-	//-------------------- node style -------------------
-	style = replaceVariable(this.getNodeStyle(uuid));
-	$("#node_"+uuid).attr("style",style);
-	//-------------------- label style -------------------
-	style = replaceVariable(this.getLabelStyle(uuid));
-	$("*[name='res-lbl-div']","#node_"+uuid).attr("style",style);
-	//-------------------- resource style -------------------
-	style = replaceVariable(this.getContentStyle());
-	$("*[name='res-div']","#node_"+uuid).attr("style",style);
-	//---------------- display resource ---------------------------------
-	if (this.edit && this.inline && this.writenode && this.editable_in_line)
-		this.resource.displayEditor("resource_"+uuid,null,langcode,false,this.inline);
-	else if (this.structured_resource != null && type!='raw') {
-		this.structured_resource.displayView("resource_"+uuid,null,langcode);
-	}
-	else
-		this.resource.displayView("resource_"+uuid);
-	//---------------- display label ---------------------------------
-	$("#label_node_"+uuid).html(this.getView('label_node_'+uuid));
-	//----------- Buttons & Menus -----------
-	if(edit) {
-		var buttons = "";
-		if (this.xsi_type.indexOf("Block")>-1) {
-			buttons += this.structured_resource.getButtons();
+		//-------------------- STYLES ---------------------------------------
+		var style = "";
+		//-------------------- node style -------------------
+		style = replaceVariable(this.getNodeStyle(uuid));
+		$("#node_"+uuid).attr("style",style);
+		//-------------------- label style -------------------
+		style = replaceVariable(this.getLabelStyle(uuid));
+		$("*[name='res-lbl-div']","#node_"+uuid).attr("style",style);
+		//-------------------- resource style -------------------
+		style = replaceVariable(this.getContentStyle());
+		$("*[name='res-div']","#node_"+uuid).attr("style",style);
+		//---------------- display resource ---------------------------------
+		if (this.edit && this.inline && this.writenode && this.editable_in_line)
+			this.resource.displayEditor("resource_"+uuid,null,langcode,false,this.inline);
+		else if (this.structured_resource != null && type!='raw') {
+			this.structured_resource.displayView("resource_"+uuid,null,langcode);
 		}
-		buttons += this.getButtons();
-		//------------- print button -------------------
-		if ((this.printroles.containsArrayElt(g_userroles) || this.printroles.indexOf($(USER.username_node).text())>-1 || USER.admin || g_userroles[0]=='designer') && this.printroles!='none' && this.printroles!='') {
-				buttons += "<span class='button fas fa-print' style='"+menus_color+"' onclick=\"printSection('#node_"+this.id+"',"+g_report_edit+")\" data-title='"+karutaStr[LANG]["button-print"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
-		}
-		if (buttons!="")
-			buttons = "<div class='btn-group'>"+buttons+"</div><!-- class='btn-group' -->"
-		$("#buttons-"+uuid).html(buttons);
-
-		if (this.menu)
-			this.displayMenus("#menus-"+uuid,langcode);
-	} else {
-		//------------- print button -------------------
-		if ((this.printroles.containsArrayElt(g_userroles) || this.printroles.indexOf($(USER.username_node).text())>-1 || USER.admin || g_userroles[0]=='designer') && this.printroles!='none' && this.printroles!='') {
-			var buttons = "<span class='button fas fa-print' style='"+menus_color+"' onclick=\"printSection('#node_"+this.id+"',"+g_report_edit+")\" data-title='"+karutaStr[LANG]["button-print"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
+		else
+			this.resource.displayView("resource_"+uuid);
+		//---------------- display label ---------------------------------
+		$("#label_node_"+uuid).html(this.getView('label_node_'+uuid));
+		//----------- Buttons & Menus -----------
+		if(edit) {
+			var buttons = "";
+			if (this.xsi_type.indexOf("Block")>-1) {
+				buttons += this.structured_resource.getButtons();
+			}
+			buttons += this.getButtons();
+			//------------- print button -------------------
+			if ((this.printroles.containsArrayElt(g_userroles) || this.printroles.indexOf($(USER.username_node).text())>-1 || USER.admin || g_userroles[0]=='designer') && this.printroles!='none' && this.printroles!='') {
+					buttons += "<span class='button fas fa-print' style='"+menus_color+"' onclick=\"printSection('#node_"+this.id+"',"+g_report_edit+")\" data-title='"+karutaStr[LANG]["button-print"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
+			}
+			if (buttons!="")
+				buttons = "<div class='btn-group'>"+buttons+"</div><!-- class='btn-group' -->"
 			$("#buttons-"+uuid).html(buttons);
+	
+			if (this.menu)
+				this.displayMenus("#menus-"+uuid,langcode);
+		} else {
+			//------------- print button -------------------
+			if ((this.printroles.containsArrayElt(g_userroles) || this.printroles.indexOf($(USER.username_node).text())>-1 || USER.admin || g_userroles[0]=='designer') && this.printroles!='none' && this.printroles!='') {
+				var buttons = "<span class='button fas fa-print' style='"+menus_color+"' onclick=\"printSection('#node_"+this.id+"',"+g_report_edit+")\" data-title='"+karutaStr[LANG]["button-print"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
+				$("#buttons-"+uuid).html(buttons);
+			}
 		}
+		//----------------delete control on proxy parent ------------
+		if (edit && proxies_delete[uuid]!=undefined && proxies_delete[uuid].containsArrayElt(g_userroles)) {
+			var html = deleteButton(proxies_nodeid[uuid],"asmContext",undefined,undefined,"UIFactory.Node.reloadUnit",g_portfolioid,null);
+			$("#buttons-"+uuid).html(html);
+		}
+		//------------- print button -------------------
+		if ((this.printroles.containsArrayElt(g_userroles) || this.printroles.indexOf($(USER.username_node).text())>-1 || USER.admin || g_userroles[0]=='designer') && this.printroles!='none' && this.printroles!='') {
+				html += "<span class='button fas fa-print' style='"+menus_color+"' onclick=\"javascript:printSection('#node_"+this.id+"')\" data-title='"+karutaStr[LANG]["button-print"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
+		}
+		//----------------- hide lbl-div if empty ------------------------------------
+		if (this.getLabel(null,'none',langcode)=="" && this.getButtons(langcode)=="" && this.getMenus(langcode)=="")
+			if (this.displayview=='xwide' || this.displayview.indexOf("/12")>-1)
+				$("div[name='res-lbl-div']","#node_"+uuid).hide();
+		//----------- Comments -----------
+		if (this.edit && this.inline && this.writenode && (
+				g_userroles[0]=='designer'
+				|| this.commentnoderoles.indexOf(g_userroles[0])>-1 
+				|| this.commentnoderoles.indexOf($(USER.username_node).text())>-1
+				))
+			UIFactory.Node.displayCommentsEditor('comments_'+uuid,UICom.structure["ui"][uuid]);
+		else
+			UIFactory.Node.displayComments('comments_'+uuid,UICom.structure["ui"][uuid]);
+		//--------------------Metadata Info------------------------------------------
+		if (g_userroles[0]=='designer' || USER.admin) {  
+			this.displayMetainfo("metainfo_"+uuid);
+			this.displayMetaEpmInfo("cssinfo_"+uuid);
+		}
+		//-------------------------------------------------
 	}
-	//----------------delete control on proxy parent ------------
-	if (edit && proxies_delete[uuid]!=undefined && proxies_delete[uuid].containsArrayElt(g_userroles)) {
-		var html = deleteButton(proxies_nodeid[uuid],"asmContext",undefined,undefined,"UIFactory.Node.reloadUnit",g_portfolioid,null);
-		$("#buttons-"+uuid).html(html);
-	}
-	//------------- print button -------------------
-	if ((this.printroles.containsArrayElt(g_userroles) || this.printroles.indexOf($(USER.username_node).text())>-1 || USER.admin || g_userroles[0]=='designer') && this.printroles!='none' && this.printroles!='') {
-			html += "<span class='button fas fa-print' style='"+menus_color+"' onclick=\"javascript:printSection('#node_"+this.id+"')\" data-title='"+karutaStr[LANG]["button-print"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
-	}
-	//----------------- hide lbl-div if empty ------------------------------------
-	if (this.getLabel(null,'none',langcode)=="" && this.getButtons(langcode)=="" && this.getMenus(langcode)=="")
-		if (this.displayview=='xwide' || this.displayview.indexOf("/12")>-1)
-			$("div[name='res-lbl-div']","#node_"+uuid).hide();
-	//----------- Comments -----------
-	if (this.edit && this.inline && this.writenode)
-		UIFactory.Node.displayCommentsEditor('comments_'+uuid,UICom.structure["ui"][uuid]);
-	else
-		UIFactory.Node.displayComments('comments_'+uuid,UICom.structure["ui"][uuid]);
-	//--------------------Metadata Info------------------------------------------
-	if (g_userroles[0]=='designer' || USER.admin) {  
-		this.displayMetainfo("metainfo_"+uuid);
-		this.displayMetaEpmInfo("cssinfo_"+uuid);
-	}
-	//-------------------------------------------------
+
 }
 
 //==================================================
@@ -1065,16 +1072,14 @@ UIFactory["Node"].remove = function(uuid,callback,param1,param2,param3,param4)
 					eval(replaceVariable(elts[1],UICom.structure.ui[uuid]));
 			}
 			if (elts[0]=="delete-if") {
-				if (elts[1].indexOf("(")<0) {
-					if (!eval(elts[1]+"(uuid)"))
-						remove = false;
-				} else {
-					if (!eval(replaceVariable(elts[1],UICom.structure.ui[uuid])))
-						remove = false;
-				}
+				if (elts[1].indexOf("(")<0) 
+					remove = eval(elts[1]+"(uuid)");
+				else
+					remove = eval(replaceVariable(elts[1],UICom.structure.ui[uuid]));
 			}
 		}
 	}
+	//------------------------------------
 	if (remove) {
 		$("#"+uuid,g_portfolio_current).remove();
 		UICom.DeleteNode(uuid,callback,param1,param2,param3,param4);
@@ -1561,7 +1566,7 @@ UIFactory["Node"].displayCommentsEditor = function(destid,node,type,langcode)
 		&& (USER.admin 
 			|| g_userroles[0]=='designer'
 			|| commentnoderoles.indexOf(g_userroles[0])>-1 
-			|| commentnoderoles.indexOf($(USER.username_node).text()>-1)
+			|| commentnoderoles.indexOf($(USER.username_node).text())>-1
 			)
 		) {
 		//---------------------
@@ -2081,5 +2086,44 @@ UIFactory["Node"].prototype.getBubbleView = function(dest,type,langcode)
 	html += "<div id='map-info_"+this.id+"'></div>";
 	html += "<div id='bubble_display_"+this.id+"' class='bubble_display'></div>";
 	return html;
+};
+
+//----------------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------------
+//--------------------------- exportNode -------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------------
+
+function exportNode(uuid,destcode) {
+	UICom.structure.ui[uuid].exportNode(destcode);
+}
+
+//==================================
+UIFactory["Node"].prototype.exportNode = function(destcode)
+//==================================
+{
+	var srceid = this.id;
+	$.ajax({
+		type : "GET",
+		dataType : "xml",
+		url : serverBCK_API+"/portfolios/portfolio/code/"+destcode,
+		success : function(data) {
+			var destid = $("asmRoot",data).attr("id");
+			var urlS = serverBCK_API+"/nodes/node/import/"+destid+"?uuid="+srceid;
+			$.ajax({
+				type : "POST",
+				dataType : "text",
+				url : urlS,
+				data : "",
+				success : function () {
+					alert("Exported");
+				},
+				error : function(jqxhr,textStatus) {
+					alert("Error in exportNode "+textStatus+" : "+jqxhr.responseText);
+				}
+			});
+		}					
+	});
+
 };
 

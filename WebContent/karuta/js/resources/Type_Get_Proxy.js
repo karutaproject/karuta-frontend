@@ -432,7 +432,7 @@ UIFactory["Get_Proxy"].parse = function(destid,type,langcode,data,self,srce,rese
 			//------------------------------
 			input += "<div>";
 			if (selectable) {
-				input += "	<input type='checkbox' name='multiple_"+self.id+"' value='"+value+"' code='"+$('code',resource).text()+"' class='multiple-item";
+				input += "	<input type='checkbox' name='multiple_"+self.id+"' uuid='"+uuid+"' value='"+value+"' code='"+$('code',resource).text()+"' class='multiple-item";
 				input += "' ";
 				for (var j=0; j<languages.length;j++){
 					input += "label_"+languages[j]+"=\""+$(srce+"[lang='"+languages[j]+"']",resource).text()+"\" ";
@@ -499,38 +499,57 @@ function Get_Proxy_multiple(parentid,title,query,partcode,get_resource_semtag)
 }
 
 //==================================
-UIFactory["Get_Proxy"].addMultiple = function(parentid,multiple_tags)
+UIFactory["Get_Proxy"].addMultiple = function(parentid,targetid,multiple_tags,updated_semtag,fctjs)
 //==================================
 {
+	if (fctjs==null)
+		fctjs = "";
+	else
+		fctjs = decode(fctjs);
+	//------------------------------
+	if (UICom.structure.ui[targetid]==undefined && targetid!="")
+		targetid = getNodeIdBySemtag(targetid);
+	else if (targetid=="")
+		targetid = parentid;
+	//------------------------------
 	$.ajaxSetup({async: false});
-	multiple_tags = replaceVariable(multiple_tags);
-	var part_code = multiple_tags.substring(0,multiple_tags.indexOf(','));
+	var elts = multiple_tags.split(",");
+	var part_code = elts[0];
 	var srce = part_code.substring(0,part_code.lastIndexOf('.'));
 	var part_semtag = part_code.substring(part_code.lastIndexOf('.')+1);
-	var get_resource_semtag = multiple_tags.substring(multiple_tags.indexOf(',')+1);
+	var get_resource_semtag = elts[1];
+	var fct = elts[2];
 	var inputs = $("input[name='multiple_"+parentid+"']").filter(':checked');
 	// for each one create a part
 	var databack = true;
 	var callback = UIFactory.Get_Proxy.updateaddedpart;
 	var param2 = get_resource_semtag;
 	var param4 = false;
-	for (var j=0; j<inputs.length;j++){
-		var param3 = inputs[j];
+	var param5 = parentid;
+	var param6 = fct;
+	for (let j=0; j<inputs.length;j++){
+		let param3 = inputs[j];
 		if (j==inputs.length-1)
 			param4 = true;
-		importBranch(parentid,srce,part_semtag,databack,callback,param2,param3,param4);
+		importBranch(parentid,srce,part_semtag,databack,callback,param2,param3,param4,param5,param6);
+		if (fctjs!="")
+			eval(fctjs);
 	}
 };
 
 //==================================
-UIFactory["Get_Proxy"].updateaddedpart = function(data,get_resource_semtag,selected_item,last)
+UIFactory["Get_Proxy"].updateaddedpart = function(data,get_resource_semtag,selected_item,last,parentid,fct)
 //==================================
 {
 	var partid = data;
 	var value = $(selected_item).attr('value');
 	var code = $(selected_item).attr('code');
+	var uuid = $(selected_item).attr('uuid');
+	if (fct=="addParentCode") {
+		code = UICom.structure.ui[parentid].getCode() + "*" + code;
+	}
 	var xml = "<asmResource xsi_type='Get_Proxy'>";
-	xml += "<code>"+value+"</code>";
+	xml += "<code>"+uuid+"</code>";
 	xml += "<value>"+value+"</value>";
 	for (var i=0; i<languages.length;i++){
 		var label = $(selected_item).attr('label_'+languages[i]);

@@ -667,7 +667,6 @@ body,
 #edit-window .modal-dialog {
   width: 70%;
   max-width: none;
-  min-height: 100%;
 }
 #edit-window .modal-dialog .modal-content {
   min-height: 500px;
@@ -1138,7 +1137,8 @@ body,
   cursor: pointer;
 }
 
-.Get_Resource .preview-button {
+.Get_Resource .preview-button,
+.Get_Get_Resource .preview-button {
   color: var(--portfolio-link-color);
   cursor: pointer;
 }
@@ -1193,6 +1193,13 @@ body,
 }
 #get-resource-node .btn-group.select-label button.dropdown-toggle {
   width: 30px;
+}
+
+/* ====================
+	Get_Portfolio 
+   ====================*/
+div.get-portfolio button.select {
+  min-width: 200px;
 }
 
 /* ====================== */
@@ -1719,6 +1726,11 @@ table[name=res-div] {
   text-align: center;
   padding-top: 7px;
   display: in-line;
+}
+
+.Dashboard .fa-sync-alt {
+  padding-left: 10px;
+  cursor: pointer;
 }
 
 /* ============================ */
@@ -2633,7 +2645,7 @@ table.tablesorter th.restore {
 }
 
 .EuropassL .select-label {
-  min-width: 50px;
+  min-width: 250px;
   padding: 1px;
 }
 .EuropassL .select {

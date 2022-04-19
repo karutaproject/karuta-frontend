@@ -14,72 +14,7 @@
    ======================================================= */
 
 /* ======================================================= */
-function ajouterCompetencesDansBilan (nodeid){
-	const node = UICom.structure.ui[nodeid].node;
-	const target =  $("*:has(>metadata[semantictag*=comps-auto-evals])",g_portfolio_current);
-	const targetid = $(target[0]).attr("id");
-	var allreadyadded = $("*:has(>metadata[semantictag*=auto-evaluation-globale])",target);
-	var tabadded = [];
-	for ( var i = 0; i < allreadyadded.length; i++) {
-		const resource = $(">asmResource[xsi_type='nodeRes']",allreadyadded[i]);
-		let code = $('code',resource).text();
-		tabadded[i] = code;
-	}
-	const comps = $("*:has(>metadata[semantictag*=page-competence])",node);
-	const databack = true;
-	const callback = updateautoevalpart;
-	let param2 = "";
-	let param3 = false;
-	const param4 = targetid;
-	for (let i=0;i<comps.length;i++) {
-		const compid = $(comps[i]).attr("id");
-		const code = UICom.structure.ui[compid].getCode();
-		const indx = tabadded.indexOf(code);
-		if (indx==-1) {
-			param2 = code;
-			if (i==comps.length-1)
-				param3 = true;
-			importBranch(targetid,replaceVariable('##coop-dossier-etudiants-modeles##.composants-etudiants'),'auto-evaluation-globale',databack,callback,param2,param3,param4);
-		}
-	}
-}
 
-function updateautoevalpart(data,code,last,targetid)
-{
-	var partid = data;
-	var xml = "<asmResource xsi_type='nodeRes'>";
-	xml += "<code>"+code+"</code>";
-	xml += "<value></value>";
-	xml += "<uuid></uuid>";
-	for (var i=0; i<languages.length;i++){
-		xml += "<label lang='"+languages[i]+"'></label>";
-	}
-	xml += "</asmResource>";
-	$.ajax({
-		type : "GET",
-		dataType : "xml",
-		url : serverBCK_API+"/nodes/node/"+partid,
-		last : last,
-		targetid :targetid,
-		partid :partid,
-		success : function(data) {
-			$.ajax({
-				type : "PUT",
-				contentType: "application/xml",
-				dataType : "text",
-				url : serverBCK_API+"/nodes/node/" + this.partid + "/noderesource",
-				data : xml,
-				last : this.last,
-				targetid :this.targetid,
-				success : function(data) {
-					if (this.last) {
-						UIFactory.Node.reloadUnit(this.targetid,false);
-					}
-				}
-			});
-		}
-	});
-}
 /* ======================================================= */
 
 
@@ -340,7 +275,7 @@ function EditBox()
 	var html = "";
 	html += "\n<!-- ==================== Edit box ==================== -->";
 	html += "\n<div id='edit-window' class='modal fade'>";
-	html += "\n		<div class='modal-dialog'>";
+	html += "\n		<div class='modal-dialog modal-dialog-scrollable'>";
 	html += "\n		<div class='modal-content'>";
 	html += "\n		<div id='edit-window-header' class='modal-header'>";
 	html += "\n			<div id='edit-window-type' style='float:right'></div>";
@@ -456,7 +391,7 @@ function getEditBox(uuid,js2) {
 			error : function() {
 				var html = "";
 				html += "<div>" + karutaStr[languages[LANGCODE]]['error-notfound'] + "</div>";
-				$("#preview-window-body").html(html);
+				$("#//-window-body").html(html);
 				$("#preview-window").modal('show');
 			}
 		});		
@@ -543,7 +478,7 @@ function DeleteBox()
 	var html = "";
 	html += "\n<!-- ==================== Delete box ==================== -->";
 	html += "\n<div id='delete-window' class='modal fade'>";
-	html += "\n		<div class='modal-dialog'>";
+	html += "\n		<div class='modal-dialog modal-dialog-scrollable'>";
 	html += "\n			<div class='modal-content'>";
 	html += "\n				<div class='modal-header'>";
 	html += "\n					<div id='edit-window-type' style='float:right'></div>";
@@ -582,7 +517,7 @@ function alertBox()
 	var html = "";
 	html += "\n<!-- ==================== Alert box ==================== -->";
 	html += "\n<div id='alert-window' class='modal fade'>";
-	html += "\n		<div class='modal-dialog'>";
+	html += "\n		<div class='modal-dialog modal-dialog-scrollable'>";
 	html += "\n			<div class='modal-content'>";
 	html += "\n				<div class='modal-header'>";
 	html += "\n					<h3 id='alert-window-header' >Attention</h3>";
@@ -605,7 +540,7 @@ function messageBox()
 	var html = "";
 	html += "\n<!-- ==================== Message box ==================== -->";
 	html += "\n<div id='message-window' class='modal fade'>";
-	html += "\n		<div class='modal-dialog'>";
+	html += "\n		<div class='modal-dialog modal-dialog-scrollable'>";
 	html += "\n			<div class='modal-content'>";
 	html += "\n				<div id='message-window-body' class='modal-body'>";
 	html += "\n				</div>";
@@ -1951,7 +1886,7 @@ function logout()
 		async:false,
 		type: "GET",
 		dataType: "text",
-		url: serverBCK_API+"/credential/logout",
+		url: serverBCK_API+"/credential/logout?redir=%2F"+appliname,
 		data: "",
 		success: function(data) {
 		window.location="login.htm?lang="+LANG;
@@ -2472,42 +2407,51 @@ function replaceVariable(text,node,withquote)
 {
 	if (withquote==null)
 		withquote = true;
-	if (text!=undefined && text.indexOf('lastimported')>-1) {
-		text = text.replaceAll('##lastimported-1##',"g_importednodestack[g_importednodestack.length-2]");
-		text = text.replaceAll('##lastimported-2##',"g_importednodestack[g_importednodestack.length-3]");
-		text = text.replaceAll('##lastimported##',"g_importednodestack[g_importednodestack.length-1]");
-	}
-	if (node!=null && node!=undefined && withquote && text.indexOf('##parentnode##')>-1)
-		text = text.replaceAll('##parentnode##',"'"+$(node).parent().attr('id')+"'");
-	if (node!=null && node!=undefined && withquote && text.indexOf('##currentnode##')>-1)
-		text = text.replaceAll('##currentnode##',"'"+node.id+"'");
-	if (node!=null && node!=undefined && withquote && text.indexOf('##currentcode##')>-1)
-		text = text.replaceAll('##currentcode##',node.getCode());
-	if (node!=null && node!=undefined && !withquote && text.indexOf('##currentnode##')>-1)
-		text = text.replaceAll('##currentnode##',node.id);
-	if (node!=null && node!=undefined && !withquote && text.indexOf('##currentcode##')>-1)
-		text = text.replaceAll('##currentcode##',node.getCode());
-	var n=0;
-	while (text!=undefined && text.indexOf("{##")>-1 && n<100) {
-		var test_string = text.substring(text.indexOf("{##")+3); // test_string = abcd{##variable##}efgh.....
-		var variable_name = test_string.substring(0,test_string.indexOf("##}"));
-		if (g_variables[variable_name]!=undefined)
-			text = text.replace("{##"+variable_name+"##}", g_variables[variable_name]);
-		n++; // to avoid infinite loop
-	}
-	while (text!=undefined && text.indexOf("##")>-1 && n<100) {
-		var test_string = text.substring(text.indexOf("##")+2); // test_string = abcd##variable##efgh.....
-		var variable_name = test_string.substring(0,test_string.indexOf("##"));
-		if (g_variables[variable_name]!=undefined)
-			text = text.replace("##"+variable_name+"##", g_variables[variable_name]);
-		if (text.indexOf("[")>-1) {
-			var variable_value = variable_name.substring(0,variable_name.indexOf("["))
-			var i = text.substring(text.indexOf("[")+1,text.indexOf("]"));
-			i = replaceVariable(i);
-			if (g_variables[variable_value]!=undefined && g_variables[variable_value].length>=i)
-				text = g_variables[variable_value][i];
+	if (text!=undefined && text!="") {
+		if (text!=undefined && text.indexOf('lastimported')>-1) {
+			text = text.replaceAll('##lastimported-1##',"g_importednodestack[g_importednodestack.length-2]");
+			text = text.replaceAll('##lastimported-2##',"g_importednodestack[g_importednodestack.length-3]");
+			text = text.replaceAll('##lastimported##',"g_importednodestack[g_importednodestack.length-1]");
+		}
+		if (node!=null && node!=undefined && text!=undefined) {
+			if (withquote && text.indexOf('##current')>-1) {
+				text = text.replaceAll('##currentnode##',"'"+node.id+"'");
+				text = text.replaceAll('##currentcode##',"'"+$($("code",$("asmResource[xsi_type!='context'][xsi_type!='nodeRes']",node.node))).text()+"'");
 			}
-		n++; // to avoid infinite loop
+			if (!withquote && text.indexOf('##current')>-1) {
+				text = text.replaceAll('##currentnode##',node.id);
+				text = text.replaceAll('##currentcode##',$($("code",$("asmResource[xsi_type!='context'][xsi_type!='nodeRes']",node.node))).text());
+			}
+			if (withquote && text.indexOf('##parentnode##')>-1)
+				text = text.replaceAll('##parentnode##',"'"+$(node.node).parent().attr('id')+"'");
+			if (!withquote && text.indexOf('##parentnode##')>-1)
+				text = text.replaceAll('##parentnode##',$(node.node).parent().attr('id'));
+			if (withquote && text.indexOf('##itselfrescode##')>-1)
+				text = text.replaceAll('##itselfrescode##',"'"+$($("code",$("asmResource[xsi_type!='context'][xsi_type!='nodeRes']",node.node))).text()+"'");
+	
+		}
+		var n=0;
+		while (text!=undefined && text.indexOf("{##")>-1 && n<100) {
+			var test_string = text.substring(text.indexOf("{##")+3); // test_string = abcd{##variable##}efgh.....
+			var variable_name = test_string.substring(0,test_string.indexOf("##}"));
+			if (g_variables[variable_name]!=undefined)
+				text = text.replace("{##"+variable_name+"##}", g_variables[variable_name]);
+			n++; // to avoid infinite loop
+		}
+		while (text!=undefined && text.indexOf("##")>-1 && n<100) {
+			var test_string = text.substring(text.indexOf("##")+2); // test_string = abcd##variable##efgh.....
+			var variable_name = test_string.substring(0,test_string.indexOf("##"));
+			if (g_variables[variable_name]!=undefined)
+				text = text.replace("##"+variable_name+"##", g_variables[variable_name]);
+			if (text.indexOf("[")>-1) {
+				var variable_value = variable_name.substring(0,variable_name.indexOf("["))
+				var i = text.substring(text.indexOf("[")+1,text.indexOf("]"));
+				i = replaceVariable(i);
+				if (g_variables[variable_value]!=undefined && g_variables[variable_value].length>=i)
+					text = g_variables[variable_value][i];
+				}
+			n++; // to avoid infinite loop
+		}
 	}
 	return text;
 }
@@ -3271,11 +3215,10 @@ function decode(s) {
 //=========================================================
 
 function testNumber(text) {
-	return (!isNaN(text))
-}
-
-function testNotNumber(text) {
-	return (isNaN(text))
+	const result = !isNaN(text);
+	if (!result)
+		alertHTML(karutaStr[LANG]['not-number']);
+	return result;
 }
 
 //=========================================================
@@ -3349,4 +3292,35 @@ function deleteSameCode(uuid,targetsemtag,srcesemtag){
 }
 
 //================================================
+//================================================
+//============== Function JS =====================
+//================================================
+//================================================
+
+function execJS(node,tag){
+	var test = true;
+	if (UICom.structure["ui"][node.id].js==undefined)
+		UICom.structure["ui"][node.id].setMetadata();
+	if (UICom.structure["ui"][node.id].js!="" && UICom.structure["ui"][node.id].js.indexOf(tag)>-1) {
+		var fcts = UICom.structure["ui"][node.id].js.split("|");
+		for (let i=0;i<fcts.length;i++) {
+			let elts = fcts[i].split("/");
+			if (elts[0]==tag) {
+				fctjs = elts[1].split(";");
+				for (let j=0;j<fctjs.length;j++) {
+					if (fctjs[j].indexOf("##")>-1)
+						test = eval(replaceVariable(fctjs[j],node));
+					else if (fctjs[j].indexOf("(")>-1)
+						test = eval(fctjs[j])
+					else
+						test = eval(fctjs[j]+"(node.node,g_portfolioid)");
+				}
+			}
+		}
+	}
+	return test;
+}
+
+
+
 

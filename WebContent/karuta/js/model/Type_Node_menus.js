@@ -8,6 +8,7 @@ menuElts ["import"]= "<import del='y'><srce><foliocode/><semtag/></srce><trgt><p
 menuElts ["import-today-date"]= "<import-today-date del='y'><nop/><trgt><position>##currentnode##</position><semtag/></trgt></import-today-date>";
 menuElts ["import-component-w-today-date"]= "<import-component-w-today-date del='y'><srce><foliocode/><semtag/><updatedtag/></srce><trgt><position>##currentnode##</position><semtag/></trgt></import-component-w-today-date>";
 menuElts ["moveTO"]= "<moveTO del='y'><start-semtag/><destination-semtag/></moveTO>";
+menuElts ["switchBTW"]= "<switchBTW del='y'><start-semtag/><destination-semtag/></switchBTW>";
 menuElts ["import-component"]= "<import-component del='y'><srce><foliocode/><semtag/><updatedtag/></srce><trgt><position>##currentnode##</position><semtag/></trgt></import-component>";
 menuElts ["import-proxy"]= "<import-proxy del='y'><srce><foliocode/><semtag/><updatedtag/></srce><trgt><position>##currentnode##</position><semtag/></trgt></import-proxy>";
 menuElts ["import-elts"]= "<import-elts del='y'><srce><foliocode disabled='y'>search code</foliocode></srce></import-elts>";
@@ -38,7 +39,7 @@ menuItems['import-today-date']= ["trgt","function"];
 menuItems['import-component-w-today-date']= ["trgt","function"];
 menuItems['get_single']= ["trgt"];
 menuItems['menu']= ["item"];
-menuItems['item']= ["import","function","moveTO","import_get_multiple","import_get_get_multiple","execReportforBatchCSV","import-today-date","import-component-w-today-date"];
+menuItems['item']= ["import","function","switchBTW","import_get_multiple","import_get_get_multiple","execReportforBatchCSV","import-today-date","import-component-w-today-date"];
 menuItems['g_actions']= ["import-component","import-elts-from","import-proxy"];
 menuItems['gg_search']= ["search-source","#or","search-in-parent","#or","search-w-parent"];
 menuItems['gg_actions']= ["import-component","import-elts-from","#line","import","import-component-w-today-date","import-today-date"];
@@ -845,6 +846,20 @@ UIFactory["Node"].addMenuElt = function(tag,noitem,nodeid,destmenu)
 }
 
 //==================================
+UIFactory["Node"].duplicateMenuElt = function(tag,no,noitem,nodeid,destmenu)
+//==================================
+{	
+	const elt = menueltslist[noitem];
+	$(menueltslist[noitem])[0].append(elt.getElementsByTagName(tag)[0].cloneNode(true));
+	var value= xml2string(xmlDoc);
+	var node = UICom.structure["ui"][nodeid].node;
+	$($("metadata-wad",node)[0]).attr('menuroles',value);
+	UICom.UpdateMetaWad(nodeid);
+	UICom.structure.ui[nodeid].setMetadata();
+	UICom.structure.ui[nodeid].displayMenuEditor("edit-window-body-menu");
+}
+
+//==================================
 UIFactory["Node"].removeMenuElt = function(noitem,nodeid,destmenu)
 //==================================
 {	
@@ -993,10 +1008,10 @@ UIFactory["Node"].prototype.displayEltMenu = function(cntidx,destmenu)
 	let tag = $(elt).prop("tagName");
 	let del = $(elt).attr("del");
 
-	html += "<div class='"+tag+"title' style='margin-top:14px;border-top:1px dashed #ced4da'>";
+	html += "<div id='" + cntidx + "_" + eltidx + "' class='"+tag+"title' style='margin-top:14px;border-top:1px dashed #ced4da'>";
 	if (menuItems[tag]!=undefined && menuItems[tag].length>0){
 		html += "<div class='dropdown '>";
-		html += "<button class='btn dropdown-toggle add-button' style='background-color:transparent;float:right;' type='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>Ajouter</button>";
+		html += "<button class='btn dropdown-toggle add-button' style='background-color:transparent;float:right;' type='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>"+karutaStr[LANG]['Add']+"</button>";
 		html += "<div class='dropdown-menu'>";
 		for (let i=0;i<menuItems[tag].length;i++){
 			if (menuItems[tag][i]=="#line")
@@ -1009,8 +1024,10 @@ UIFactory["Node"].prototype.displayEltMenu = function(cntidx,destmenu)
 		html += "</div></div>";
 	}
 	html += "<span>"+tag+"</span>";
-	if (del!=undefined && del=='y')
+	if (del!=undefined && del=='y') {
 		html +="<i style='' class='button fas fa-trash-alt' onclick=\"UIFactory.Node.removeMenuElt('"+eltidx+"','"+this.id+"','"+destmenu+"')\" data-title='Supprimer' data-toggle='tooltip' data-placement='bottom' data-original-title='' title=''></i>";
+		html +="<i style='' class='button fas fa-clone' onclick=\"UIFactory.Node.duplicateMenuElt('"+tag+"','"+eltidx+"','"+cntidx+"','"+this.id+"','"+destmenu+"')\" data-title='Supprimer' data-toggle='tooltip' data-placement='bottom' data-original-title='' title=''></i>";
+	}
 	html += "</div>";
 	html += "<div id='content"+eltidx+"' class='menucontent'></div>"
 	$("#content"+cntidx).append(html);
@@ -1178,7 +1195,7 @@ UIFactory["Node"].getXmlItemMenu = function(node,parentid,item,title,databack,ca
 			onclick += "execReport_BatchCSV('"+parentid+"',null,null,'"+codeReport+"',true);";
 		}
 		//------------------------- moveTO --------------------
-		else if (type=='moveTO') {
+ 		else if (type=='moveTO' || type=='switchBTW') {
 			let actualparentid = $(node.node).parent().attr('id');
 			// --------- start/destination ------------
 			let start = replaceVariable( ($("start-semtag",itemelts[i]).length>0)?$("start-semtag",itemelts[i]).text():"" );
@@ -1288,6 +1305,20 @@ UIFactory["Node"].getXmlItemMenu = function(node,parentid,item,title,databack,ca
 					let fctarray = UIFactory.Node.getFunctionArray(node,imports[j]);
 					let trgtarray = UIFactory.Node.getTargetArray(node,parentid,imports[j]);
 					actions += "{|type|:|import_component|,|parentid|:|"+parentid+"|,|foliocode|:|"+foliocode+"|,|semtag|:|"+semtag+"|,|updatedtag|:|"+updatedtag+"|,|trgts|:|"+trgtarray.toString()+"|,|fcts|:|"+fctarray.toString()+"|};";
+				}
+				onclick += "import_get_multiple('"+parentid+"','','"+boxlabel+"','"+search_foliocode+"','"+search_semtag+"','"+search_object+"','"+actions+"','"+unique+"');";
+			}
+			// --------import-proxy ------
+			imports = $("import-proxy",itemelts[i]);
+			if (imports.length>0) {
+				for (let j=0;j<imports.length;j++){
+					let srce = $("srce",imports[j])[0];
+					let foliocode = replaceVariable( ($("foliocode",srce).length>0)?$("foliocode",srce).text():"" );
+					let semtag = replaceVariable( ($("semtag",srce).length>0)?$("semtag",srce).text():"" );
+					let updatedtag = replaceVariable( ($("updatedtag",srce).length>0)?$("updatedtag",srce).text():"" );
+					let fctarray = UIFactory.Node.getFunctionArray(node,imports[j]);
+					let trgtarray = UIFactory.Node.getTargetArray(node,parentid,imports[j]);
+					actions += "{|type|:|import_proxy|,|parentid|:|"+parentid+"|,|foliocode|:|"+foliocode+"|,|semtag|:|"+semtag+"|,|updatedtag|:|"+updatedtag+"|,|trgts|:|"+trgtarray.toString()+"|,|fcts|:|"+fctarray.toString()+"|};";
 				}
 				onclick += "import_get_multiple('"+parentid+"','','"+boxlabel+"','"+search_foliocode+"','"+search_semtag+"','"+search_object+"','"+actions+"','"+unique+"');";
 			}
@@ -1415,7 +1446,6 @@ UIFactory["Node"].getFunctionArray = function(node,item)
 	if (fcts.length>0) {
 		for (let k=0;k<fcts.length;k++){
 			fctarray.push(replaceVariable(encode($(fcts[k]).text()),node));
-			//fctarray.push(replaceVariable($(fcts[k]).text().replaceAll("(","<<").replaceAll(")",">>"),node));
 		}
 	}
 	return fctarray;

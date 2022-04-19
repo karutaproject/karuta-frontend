@@ -97,6 +97,7 @@ UIFactory["Calendar"].prototype.getAttributes = function(type,langcode)
 		result['minViewMode'] = this.minViewMode_node.text();
 		result['text'] = this.text_node[langcode].text();
 		result['format'] = this.format_node[langcode].text();
+		result['utc'] = this.utc.text();
 	}
 	return result;
 }
@@ -135,6 +136,7 @@ UIFactory["Calendar"].prototype.displayView = function(dest,langcode)
 UIFactory["Calendar"].update = function(itself,langcode)
 //==================================
 {
+	execJS(itself,"update-resource-before");
 	$(itself.lastmodified_node).text(new Date().getTime());
 	if ($(itself.text_node[langcode]).text()=="")
 		$(itself.utc).text("null");
@@ -147,8 +149,14 @@ UIFactory["Calendar"].update = function(itself,langcode)
 			$(itself.format_node[langcode]).text(format);
 		}
 	}
-	//---------------------
 	itself.save();
+	//---------------------
+	if (UICom.structure.ui[itself.id].semantictag.indexOf("g-select-variable")>-1) {
+		var variable_name = $(UICom.structure.ui[itself.id].code_node).text();
+		g_variables[variable_name] = $(itself.utc).text();
+	}
+	//---------------------
+	execJS(itself,"update-resource-after");
 };
 
 //==================================
@@ -162,13 +170,13 @@ UIFactory["Calendar"].prototype.displayEditor = function(dest,type,langcode,disa
 	if (disabled==null)
 		disabled = false;
 	//---------------------
-	var html = "<form class='form-horizontal' role='form'></form>";
+	var html = "<div class='form-horizontal' role='form'></div>";
 	var form = $(html);
 	//------
 	html = "<input type='text' name='datepicker' class='datepicker form-control' style='width:150px;' ";
 	if (disabled)
 		html += "disabled='disabled' ";
-	html += "value=\""+$(this.text_node[langcode]).text()+"\" >";
+	html += "value=\""+$(this.text_node[langcode]).text()+"\" >"
 	var input1 = $(html);
 	var self = this;
 	$(input1).change(function (){
@@ -184,6 +192,8 @@ UIFactory["Calendar"].prototype.displayEditor = function(dest,type,langcode,disa
 	$(input1).datepicker({minViewMode:minViewMode,format:format,language:LANG});
 	$(input1).datepicker().on('changeDate', function (ev) {
 		$(self.utc).text(ev.date.getTime());
+		$(self.text_node[langcode]).text($(this).val());
+		UIFactory.Calendar.update(self,langcode);
 	});
 	$(form).append(input1);
 	//------

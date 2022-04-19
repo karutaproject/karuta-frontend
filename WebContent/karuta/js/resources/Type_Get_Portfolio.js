@@ -175,6 +175,18 @@ UIFactory["Get_Portfolio"].prototype.displayEditor = function(destid,type,langco
 					UIFactory["Get_Portfolio"].parse(destid,type,langcode,data,self,disabled,resettable,target);
 				}
 			});
+	} else {
+		$.ajax({
+			async : false,
+			type : "GET",
+			dataType : "xml",
+			url : serverBCK_API+"/portfolios?active=1",
+			success : function(data) {
+				if (cachable)
+					g_Get_Portfolio_caches[queryattr_value] = data;
+				UIFactory.Get_Portfolio.parse(destid,"completion",langcode,data,self,disabled,resettable,"label");
+			}
+		});
 	}
 	//---------------------------------------------------------
 	if (g_userroles[0]=='designer' || USER.admin || editnoderoles.containsArrayElt(g_userroles) || editnoderoles.indexOf(this.userrole)>-1 || editnoderoles.indexOf($(USER.username_node).text())>-1) {
@@ -215,7 +227,7 @@ UIFactory["Get_Portfolio"].parse = function(destid,type,langcode,data,self,disab
 
 	//------------------------------------------------------------
 	if (type=='select') {
-		var html = "<div class='btn-group'>";
+		var html = "<div class='btn-group get-portfolio'>";
 		html += "	<button type='button' class='btn select selected-label' id='button_"+self.id+"'>&nbsp;</button>";
 		html += "	<button type='button' class='btn dropdown-toggle dropdown-toggle-split ' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'></button>";
 		html += "</div>";
@@ -271,8 +283,78 @@ UIFactory["Get_Portfolio"].parse = function(destid,type,langcode,data,self,disab
 			}
 		}
 		//---------------------
+		$(btn_group).append($(select));	
+	}
+	//------------------------------------------------------------
+	else if (type=='completion') {
+		var html ="";
+		html += "<form autocomplete='off'>";
+		html += "</form>";
+		var form = $(html);
+		html = "";
+		html += "<div class='auto-complete btn-group'>";
+		html += "<input id='button_"+langcode+self.id+"' type='text' class='btn btn-default select' code= '' value=''/>";
+		html += "<button type='button' class='btn btn-default dropdown-toggle select' data-toggle='dropdown' aria-expanded='false'><span class='caret'></span><span class='sr-only'>&nbsp;</span></button>";
+		html += "</div>";
+		var btn_group = $(html);
+		$(form).append($(btn_group));
+		$("#"+destid).append(form);
+		//---------------------------------------------------
+		html = "<div class='dropdown-menu dropdown-menu-right'></div>";
+		var select  = $(html);
+		if (resettable) { //----------------- null value to erase
+			html = "<a class='dropdown-item' value='' code='' ";
+			for (var j=0; j<languages.length;j++) {
+				html += "label_"+languages[j]+"='&nbsp;' ";
+			}
+			html += ">";
+			html += "&nbsp;</a>";
+		}
+		var select_item_a = $(html);
+		$(select_item_a).click(function (ev){
+			$("#button_"+self.id).html($(this).attr("label_"+languages[langcode]));
+			$("#button_"+self.id).attr('class', 'btn btn-default select select-label');
+			UIFactory["Get_Portfolio"].update(this,self,langcode);
+		});
+		$(select).append($(select_item_a));
+		//---------------------
+		let tableau2 = new Array();
+		if (target=='label') {
+			var items = $("portfolio",data);
+			for ( var i = 0; i < items.length; i++) {
+				var uuid = $(items[i]).attr('id');
+				var code = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",items[i])).text();
+				var label = {};
+				for (var j=0; j<languages.length;j++){
+					label[j] = $("label[lang="+languages[j]+"]",$("asmRoot>asmResource[xsi_type='nodeRes']",items[i])).text();
+				}
+				tableau2[i] = {'code':code,'libelle':label[langcode]};
+				html = "<a class='dropdown-item' value='"+uuid+"' code='"+code+"' ";
+				for (var j=0; j<languages.length;j++){
+					html += "label_"+languages[j]+"=\""+label[j]+"\" ";
+				}
+				html += ">";
+				html += "<div class='li-code'>"+code+"</div> <span class='li-label'>"+label[langcode]+"</span></a>";
+				var select_item_a = $(html);
+				$(select_item_a).click(function (ev){
+					$("#button_"+self.id).html($(this).attr("label_"+languages[langcode]));
+					UIFactory["Get_Portfolio"].update(this,self,langcode);
+				});
+				$(select).append($(select_item_a));
+				//-------------- update button -----
+				if (code!="" && self_code==$('code',resource).text()) {
+					if (($('code',resource).text()).indexOf("#")>-1)
+						$("#button_"+self.id).html(code+" "+label[langcode]);
+					else
+						$("#button_"+self.id).html(label[langcode]);
+					$("#button_"+self.id).attr('class', 'btn btn-default select select-label').addClass("sel"+code);
+				}
+			}
+		}
+		//---------------------
 		$(btn_group).append($(select));
-		
+		var onupdate = "UIFactory.Get_Portfolio.update(input,self)";
+		autocomplete(document.getElementById("button_"+langcode+self.id), tableau2,onupdate,self,langcode);
 	}
 };
 

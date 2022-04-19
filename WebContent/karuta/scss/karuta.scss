@@ -721,7 +721,7 @@
 		.modal-dialog {
 			width:70%;
 			max-width: none;
-			min-height:100%;
+//			min-height:100%;
 			.modal-content {
 				min-height:500px;
 			}
@@ -1243,7 +1243,8 @@
 			cursor:pointer;
 		}
 	}
-	.Get_Resource .preview-button {
+	.Get_Resource .preview-button,
+	.Get_Get_Resource .preview-button {
 		color: var(--portfolio-link-color);
 		cursor:pointer;
 	}
@@ -1305,6 +1306,14 @@
 				width:30px;
 			}
 		}
+	}
+
+/* ====================
+	Get_Portfolio 
+   ====================*/
+
+	div.get-portfolio button.select {
+		min-width:200px;	
 	}
 
 /* ====================== */
@@ -1851,6 +1860,10 @@
 		display:in-line;
 	}
 
+	.Dashboard .fa-sync-alt {
+		padding-left:10px;
+		cursor:pointer;
+	}
 
 /* ============================ */
 /* ============================ */
@@ -2777,7 +2790,7 @@ table.tablesorter th.restore {
 	
 	.EuropassL {
 		.select-label {
-			min-width:50px;
+			min-width:250px;
 			padding: 1px;
 		}
 		.select {

@@ -165,6 +165,7 @@ karutaStr['en']['queryProxy']="Query <br/><span style='font-size:smaller'> portf
 karutaStr['en']['queryAction']="Query <br/><span style='font-size:smaller'> portfolio_code.semantic_tag.<i>label</i><br> Reserved words for portfolio_code are <i>all</i> and <i>self</i></span>";
 karutaStr['en']['queryGet_Double_Resource']="Query <br/><span style='font-size:smaller'> portfolio_code1.semantic_tag1.<i>label;</i>portfolio_code2.semantic_tag2.<i>label</i><br> Reserved word for portfolio_code is <i>self</i></span>";
 karutaStr['en']['queryGet_Proxy']="Query <br/><span style='font-size:smaller'> portfolio_code.semantic_tag.<i>label</i>/target_semantic_tag";
+karutaStr['en']['queryGet_Portfolio']="Quey <br/><span style='font-size:smaller'> portfolio_code.<i>label</i> or left empty for all portfolios";
 karutaStr['en']['shownoderoles']="Show";
 karutaStr['en']['showroles']="Show To";
 karutaStr['en']['notifyroles']="Notify To";
@@ -449,6 +450,7 @@ karutaStr['en']['report']="Execute Report Script";
 karutaStr['en']['upload_csv_or_code']="Upload a CSV File or Type a Model Code";
 karutaStr['en']['model_code']="Model Code";
 karutaStr['en']['report-elt-disabled'] = "disabled"
+karutaStr['en']['next'] = "Next";
 
 //=========================================
 //========== RESOURCE =====================
@@ -539,6 +541,7 @@ karutaStr['en']['code-not-null']="Code cannot be null";
 karutaStr['en']['label-not-null']="Label cannot be null";
 karutaStr['en']['inexistent-selection']="Inexistent Selection";
 karutaStr['en']['inexistent-user']="Sorry. Your login has not been found.";
+karutaStr['en']['not-number']="This is not a number.";
 
 //=========================================
 //========== TECHNICAL SUPPORT ============

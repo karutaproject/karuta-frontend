@@ -73,6 +73,14 @@ UIFactory["Get_Get_Resource"] = function( node,condition)
 	this.displayValue = {};
 	this.displayCode = {};
 	this.multiple = "";
+	//--------------------
+	if ($("asmResource[xsi_type='"+this.type+"']",node).length>0 && $("uuid",$("asmResource[xsi_type='"+this.type+"']",node)).length==0){  // for backward compatibility
+		var newelement = createXmlElement("uuid");
+		$("asmResource[xsi_type='"+this.type+"']",node)[0].appendChild(newelement);
+	}
+	this.uuid_node = $("uuid",$("asmResource[xsi_type='"+this.type+"']",node));
+	//--------------------
+	this.preview = ($("metadata",node).attr('preview')=='Y') ? true : false;
 };
 
 //==================================
@@ -171,6 +179,8 @@ UIFactory["Get_Get_Resource"].prototype.getView = function(dest,type,langcode)
 		if (($(this.code_node).text()).indexOf("&")>-1)
 			html += " ["+$(this.value_node).text()+ "] ";
 	}
+	if (this.preview)
+		html+= "&nbsp;<span class='button preview-button fas fa-binoculars' onclick=\"previewPage('"+this.uuid_node.text()+"',100,'standard') \" data-title='"+karutaStr[LANG]["preview"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
 
 	return html;
 };
@@ -193,6 +203,7 @@ UIFactory["Get_Get_Resource"].update = function(selected_item,itself,langcode,ty
 	$(itself.lastmodified_node).text(new Date().getTime());
 	var value = $(selected_item).attr('value');
 	var code = $(selected_item).attr('code');
+	var uuid = $(selected_item).attr('uuid');
 	var style = $(selected_item).attr('style');
 	//---------------------
 	if (itself.encrypted)
@@ -202,13 +213,10 @@ UIFactory["Get_Get_Resource"].update = function(selected_item,itself,langcode,ty
 	//---------------------
 	$(itself.value_node[0]).text(value);
 	$(itself.code_node[0]).text(code);
+	$(itself.uuid_node[0]).text(uuid);
 	$(itself.style_node[0]).text(style);
 	for (var i=0; i<languages.length;i++){
 		var label = $(selected_item).attr('label_'+languages[i]);
-		//---------------------
-		if (itself.encrypted)
-			label = "rc4"+encrypt(label,g_rc4key);
-		//---------------------
 		$(itself.label_node[i][0]).text(label);
 	}
 	itself.save();
@@ -481,7 +489,10 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 			}
 			// ------- search for parent ----
 			if (query.indexOf('code')>-1){
-				if (query.indexOf('itselfcode')>-1) {
+				if (query.indexOf('itselfrescode')>-1) {
+					code_parent = $($("code",$("asmResource[xsi_type!='context'][xsi_type!='nodeRes']",this.node))).text();
+					value_parent = $($("value",$("asmResource[xsi_type!='context'][xsi_type!='nodeRes']",this.node))).text();
+				} else if (query.indexOf('itselfcode')>-1) {
 					code_parent = $($("code",$(this.node)[0])[0]).text();
 					value_parent = $($("value",$(this.node)[0])[0]).text();
 					pcode_parent = $($("portfoliocode",$(this.node)[0])[0]).text();
@@ -697,7 +708,7 @@ UIFactory["Get_Get_Resource"].prototype.parse = function(destid,type,langcode,da
 //		html = "<div id='dropdown-"+self.id+"' class='dropdown-menu dropdown-menu-right'></div>";
 		var select  = $(html);
 		//----------------- null value to erase
-		html = "<a class='dropdown-item' value='' code='' ";
+		html = "<a class='dropdown-item' uuid='' value='' code='' ";
 		for (var j=0; j<languages.length;j++) {
 			html += "label_"+languages[j]+"='&nbsp;' ";
 		}
@@ -739,7 +750,7 @@ UIFactory["Get_Get_Resource"].prototype.parse = function(destid,type,langcode,da
 				html = "<div class='dropdown-divider'></div>";
 				select_item = $(html);
 			} else {
-				html = "<a class='dropdown-item sel"+code+"' value='"+$('value',resource).text()+"' code='"+$('code',resource).text()+"' ";
+				html = "<a class='dropdown-item sel"+code+"' uuid='"+uuid+"' value='"+$('value',resource).text()+"' code='"+$('code',resource).text()+"' ";
 				for (var j=0; j<languages.length;j++){
 					html += "label_"+languages[j]+"=\""+$(srce+"[lang='"+languages[j]+"']",resource).text()+"\" ";
 				}
@@ -794,7 +805,7 @@ UIFactory["Get_Get_Resource"].prototype.parse = function(destid,type,langcode,da
 		//----------------- null value to erase
 		var radio_obj = $("<div class='get-radio'></div>");
 		var input = "";
-		input += "<input type='radio' name='radio_"+self.id+"' value='' code='' ";
+		input += "<input type='radio' name='radio_"+self.id+"' value='' uuid='' code='' ";
 		if (disabled)
 			input +="disabled='disabled' ";
 		for (var j=0; j<languages.length;j++){
@@ -836,7 +847,7 @@ UIFactory["Get_Get_Resource"].prototype.parse = function(destid,type,langcode,da
 			}
 			code = cleanCode(code);
 			//------------------------------
-			input += "<div class='radio-div' value='"+$('value',resource).text()+"' code='"+$('code',resource).text()+"' ";
+			input += "<div class='radio-div' value='"+$('value',resource).text()+"' uuid='"+uuid+"' code='"+$('code',resource).text()+"' ";
 			for (var j=0; j<languages.length;j++){
 				input += "label_"+languages[j]+"=\""+$(srce+"[lang='"+languages[j]+"']",resource).text()+"\" ";
 			}

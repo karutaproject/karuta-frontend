@@ -106,6 +106,7 @@ karutaStr["fr"]["copied"] = "Copié";
 karutaStr["fr"]["waitreport"] = "Patience, le rapport est exécuté sur le serveur. Revenez dans quelques minutes pour visualiser le rapport.";
 karutaStr["fr"]["instruction-export-menu"] = "Copier le menu Ajouter et le coller dans l'élément où vous voulez l'importer.";
 karutaStr["fr"]["back"] = "Cliquer pour revenir en arrière";
+
 //=========================================
 //========== ERRORS =======================
 //=========================================
@@ -164,6 +165,7 @@ karutaStr['fr']['queryProxy']="Recherche <br/><span style='font-size:smaller'> c
 karutaStr['fr']['queryAction']="Recherche <br/><span style='font-size:smaller'> code_portfolio.tag_sémantique.<i>label</i><br> Mots réservés pour code_portfolio : <i>all</i> et <i>self</i></span>";
 karutaStr['fr']['queryGet_Double_Resource']="Recherche <br/><span style='font-size:smaller'> code_portfolio1.tag_sémantique1.<i>label;</i>code_portfolio2.tag_sémantique2.<i>label</i><br> Mot réservé pour code_portfolio : <i>self</i></span>";
 karutaStr['fr']['queryGet_Proxy']="Recherche <br/><span style='font-size:smaller'> code_portfolio.tag_sémantique.<i>label</i>/tag_sémantique_cible";
+karutaStr['fr']['queryGet_Portfolio']="Recherche <br/><span style='font-size:smaller'> code_portfolio.<i>label</i> ou laisser vide pour tous les portfolios";
 karutaStr['fr']['shownoderoles']="Montrer";
 karutaStr['fr']['showroles']="Montrer à";
 karutaStr['fr']['notifyroles']="Notifier à";
@@ -448,6 +450,7 @@ karutaStr['fr']['report']="Exécuter un script de rapport";
 karutaStr['fr']['upload_csv_or_code']="Téléverser un fichier CSV ou Saisir un code de modèle";
 karutaStr['fr']['model_code']="Code du modèle";
 karutaStr['fr']['report-elt-disabled'] = "désactivé";
+karutaStr['fr']['next'] = "Suivant";
 
 //=========================================
 //========== RESOURCE =====================
@@ -538,6 +541,7 @@ karutaStr['fr']['code-not-null']="Le code ne peut pas être vide";
 karutaStr['fr']['label-not-null']="Le libellé ne peut pas être vide";
 karutaStr['fr']['inexistent-selection']="Sélection inexistante";
 karutaStr['fr']['inexistent-user']="Désolé. Votre login n'a pas été trouvé.";
+karutaStr['fr']['not-number']="Ce n'est pas un nombre.";
 
 //=========================================
 //========== TECHNICAL SUPPORT ============

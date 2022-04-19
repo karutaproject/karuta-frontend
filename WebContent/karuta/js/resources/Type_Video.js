@@ -145,11 +145,15 @@ UIFactory["Video"].prototype.getView = function(dest,type,langcode)
 	//---------------------
 	if (type==null)
 		type = "html5";
-	//---------------------
+	//------------------------
+	var nodefileid = this.id;
+	if (nodefileid.indexOf("_")>-1) // proxy-audio
+		nodefileid = nodefileid.substring(0,nodefileid.indexOf("_"));
+	//------------------------
 	var html ="";
 	if (type=='html5' || type=='none') {
 		html += "<video width='100%' controls>";
-		var srce = serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&type=.mp4";
+		var srce = serverBCK+"/resources/resource/file/"+nodefileid+"?lang="+languages[langcode]+"&type=.mp4";
 		html += "<source src='"+srce+"' type=\"video/mp4\"></source>";
 		html += "</video>";
 	}
@@ -170,11 +174,15 @@ UIFactory["Video"].prototype.displayView = function(dest,type,langcode)
 	//---------------------
 	if (type==null)
 		type = "html5";
-	//---------------------
+	//------------------------
+	var nodefileid = this.id;
+	if (nodefileid.indexOf("_")>-1) // proxy-audio
+		nodefileid = nodefileid.substring(0,nodefileid.indexOf("_"));
+	//------------------------
 	var html ="";
 	if (type=='html5') {
 		html += "<video width='100%' controls>";
-		var srce = serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&type=.mp4";
+		var srce = serverBCK+"/resources/resource/file/"+nodefileid+"?lang="+languages[langcode]+"&type=.mp4";
 		html += "<source src='"+srce+"' type=\"video/mp4\"></source>";
 		html += "</video>";
 	}
