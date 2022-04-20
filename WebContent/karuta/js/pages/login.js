@@ -94,21 +94,21 @@ function callSend()
 }
 
 //==============================
-function getLogin(encrypt_url,lang)
+function getLogin(encrypt_url,lang,withKarutaLogin)
 //==============================
 {
 	var html = "";
 	html += "<div id='connection-cas'>";
 	html += "	<h5 id='connection-cas1'>"+karutaStr[LANG]['connection-cas1']+"</h5>";
 	html += "	<button class='button-login' onclick='javascript:callCAS()'>"+karutaStr[LANG]['login']+"</button>";
-	html += "</div>";
-	if (typeof localLogin == 'undefined' || localLogin) {
-		html += "<div id='login-karuta'>";
+	html += "</div>"
+	if (withKarutaLogin) {
+		html += "<div id='login-karuta'>"
 		html += "	<h5 id='connection-cas2'>"+karutaStr[LANG]['connection-cas2']+"</h5>";
 		html += "	<input id='useridentifier' class='form-control' placeholder=\""+karutaStr[LANG]['username']+"\" type='text'>";
 		html += "	<input id='password' class='form-control' placeholder=\""+karutaStr[LANG]['password']+"\" type='password'>";
 		html += "	<button class='button-login' onclick=\"javascript:callSubmit('"+encrypt_url+"','"+lang+"')\">"+karutaStr[LANG]['login']+"</button>";
-		html += "</div>";
+		html += "</div>"
 	}
 	return html;
 }
@@ -164,68 +164,78 @@ function displayKarutaLogin()
 		url : serverBCK_API+"/credential/login",
 		data: data,
 		success : function(data) {
-			setLoginTechnicalVariables();
-			setLoginConfigurationVariables();
-			applyKarutaConfiguration()
-			//-------------------------
-			var html = "";
-			html += "<div id='main-welcome'>";
-			html += "<div id='navigation-bar'></div>";
-			html += "<div id='main-container' class='container'>";
-			html += "	<div id='form-signin' class='form-signin'>";
-			html += "		<div id='welcome1'></div>";
-			html += "		<div id='welcome-version'></div>";
-			html += "		<div id='welcome2'></div>";
-			html += "		<div id='welcome3'></div>";
-			html += "		<div id='maintenance' style='display:none'></div>";
-			html += "		<div id='login'></div>";
-			html += "	</div>";
-			if (typeof localLogin == 'undefined' || localLogin) {
-				html += "	<div class='form-newpassword' id='newpassword'></div>";
-			}
-			html += "	<div class='form-newaccount' id='newaccount'></div>";
-			html += "</div>";
-			html += "</div>";
-			$('body').html(html);
-			$('body').append(alertBox());
-			$('body').append(EditBox());
-			$("#navigation-bar").html(getNavBar('login',null));
-			$("#login").html($(getLogin(encrypt_url,lang)));
-			$("#connection-cas").hide();
-			$("#useridentifier").focus();
-			if (typeof cas_url != 'undefined' && cas_url!="")
-				$("#connection-cas").show();
-			applyNavbarConfiguration();
-			applyLoginConfiguration();
-			$.ajax({
-				type : "GET",
-				dataType : "xml",
-				url : serverBCK+"/version",
-				data: "",
-				success : function(data) {		
-					karuta_backend_version = $("number",$("#backend",data)).text();
-					karuta_backend_date = $("date",$("#backend",data)).text();
-					karuta_fileserver_version = $("number",$("#fileserver",data)).text();
-					karuta_fileserver_date = $("date",$("#fileserver",data)).text();
-				}
-			});
-			try {
-				specificLoginFunction();
-			} catch(e) {
-			}
-			$('#password').keypress(function(e) {
-				var code= (e.keyCode ? e.keyCode : e.which);
-				if (code == 13)
-					callSubmit();
-			});
-			//----------------------------------------------
-			const myTimeout = setTimeout(unlog, 2000);
+			constructKarutaLogin(true);
 		},
 		error : function(jqxhr,textStatus) {
-			alertHTML("Identification : "+jqxhr.responseText);
+			if (jqxhr.status == '404') {
+				constructKarutaLogin(false);
+			} else {
+				alertHTML("Identification : "+jqxhr.responseText);
+			}
 		}
 	});
 }
+
+//==============================
+function constructKarutaLogin(withKarutaLogin)
+//==============================
+{
+	setLoginTechnicalVariables();
+	setLoginConfigurationVariables();
+	applyKarutaConfiguration()
+	//-------------------------
+	var html = "";
+	html += "<div id='main-welcome'>";
+	html += "<div id='navigation-bar'></div>";
+	html += "<div id='main-container' class='container'>";
+	html += "	<div id='form-signin' class='form-signin'>";
+	html += "		<div id='welcome1'></div>";
+	html += "		<div id='welcome-version'></div>";
+	html += "		<div id='welcome2'></div>";
+	html += "		<div id='welcome3'></div>";
+	html += "		<div id='maintenance' style='display:none'></div>";
+	html += "		<div id='login'></div>";
+	html += "	</div>";
+	html += "	<div class='form-newpassword' id='newpassword'></div>";
+	html += "	<div class='form-newaccount' id='newaccount'></div>";
+	html += "</div>";
+	html += "</div>";
+	$('body').html(html);
+	$('body').append(alertBox());
+	$('body').append(EditBox());
+	$("#navigation-bar").html(getNavBar('login',null));
+	$("#login").html($(getLogin(encrypt_url,lang,withKarutaLogin)));
+	$("#connection-cas").hide();
+	$("#useridentifier").focus();
+	if (typeof cas_url != 'undefined' && cas_url!="")
+		$("#connection-cas").show();
+	applyNavbarConfiguration();
+	applyLoginConfiguration();
+	$.ajax({
+		type : "GET",
+		dataType : "xml",
+		url : serverBCK+"/version",
+		data: "",
+		success : function(data) {
+			karuta_backend_version = $("number",$("#backend",data)).text();
+			karuta_backend_date = $("date",$("#backend",data)).text();
+			karuta_fileserver_version = $("number",$("#fileserver",data)).text();
+			karuta_fileserver_date = $("date",$("#fileserver",data)).text();
+		}
+	});
+	try {
+		specificLoginFunction();
+	} catch(e) {
+	}
+	$('#password').keypress(function(e) {
+		var code= (e.keyCode ? e.keyCode : e.which);
+		if (code == 13)
+			callSubmit();
+	});
+	//----------------------------------------------
+	const myTimeout = setTimeout(unlog, 2000);
+}
+
 
 //------------------------------
 //------------------------------
@@ -253,13 +263,13 @@ function applyLoginConfiguration()
 	if (g_configVar['login-subtitle']!=undefined && g_configVar['login-subtitle']!="") {
 		$('#welcome2').html(g_configVar['login-subtitle']);
 		$("#welcome2").attr("style",g_configVar['login-subtitle-style']);
-	} else 
+	} else
 		$('#welcome2').html(welcome2[LANG]);
 	//---------------------
 	if (g_configVar['login-subtext']!=undefined && g_configVar['login-subtext']!="") {
 		$('#welcome3').html(g_configVar['login-subtext']);
 		$("#welcome3").attr("style",g_configVar['login-subtext-style']);
-	} else 
+	} else
 		$('#welcome3').html(welcome3[LANG]);
 	//---------------------
 	setConfigLoginColor(root,'list-menu-background-color');
@@ -425,11 +435,10 @@ function setLoginTechnicalVariables()
 
 
 //=======================================================================
-function setConfigLoginColor(root,configname) 
+function setConfigLoginColor(root,configname)
 // =======================================================================
 {
 	var color = g_configVar[configname];
 	if (color!=undefined)
 		root.style.setProperty("--"+configname,color);
 }
-
