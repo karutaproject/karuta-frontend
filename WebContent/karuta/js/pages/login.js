@@ -442,4 +442,3 @@ function setConfigLoginColor(root,configname)
 	if (color!=undefined)
 		root.style.setProperty("--"+configname,color);
 }
-
