@@ -351,6 +351,9 @@
 		<xsl:variable name="editresroles">
 			<xsl:value-of select="metadata-wad/@editresroles"></xsl:value-of>
 		</xsl:variable>
+		<xsl:variable name="editnoderoles">
+			<xsl:value-of select="metadata-wad/@editnoderoles"></xsl:value-of>
+		</xsl:variable>
 		<xsl:variable name="delnoderoles">
 			<xsl:value-of select="metadata-wad/@delnoderoles"></xsl:value-of>
 		</xsl:variable>
@@ -359,6 +362,12 @@
 		</xsl:variable>
 		<xsl:variable name="submitroles">
 			<xsl:value-of select="metadata-wad/@submitroles"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="nodenopencil">
+			<xsl:value-of select="metadata-wad/@nodenopencil"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="nodenopencilroles">
+			<xsl:value-of select="metadata-wad/@nodenopencilroles"></xsl:value-of>
 		</xsl:variable>
 		<xsl:variable name="style">
 			<xsl:call-template name="style"/>
@@ -386,6 +395,9 @@
 			<xsl:if test="not(editresroles='')">
 				<xsl:attribute name="editresroles"><xsl:value-of select="$editresroles"/></xsl:attribute>
 			</xsl:if>
+			<xsl:if test="not(editnoderoles='')">
+				<xsl:attribute name="editnoderoles"><xsl:value-of select="$editnoderoles"/></xsl:attribute>
+			</xsl:if>
 			<xsl:if test="not(showroles='')">
 				<xsl:attribute name="showroles"><xsl:value-of select="$showroles"/></xsl:attribute>
 			</xsl:if>
@@ -394,6 +406,12 @@
 			</xsl:if>
 			<xsl:if test="not(submitroles='')">
 				<xsl:attribute name="submitroles"><xsl:value-of select="$submitroles"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not(nodenopencil='')">
+				<xsl:attribute name="nodenopencil"><xsl:value-of select="$nodenopencil"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not(nodenopencilroles='')">
+				<xsl:attribute name="nodenopencilroles"><xsl:value-of select="$nodenopencilroles"/></xsl:attribute>
 			</xsl:if>
 			<xsl:if test="not($ref='')">
 				<xsl:attribute name="ref"><xsl:value-of select="$ref"/></xsl:attribute>

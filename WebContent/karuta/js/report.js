@@ -565,7 +565,6 @@ function report_getModelAndProcess(model_code,json)
 //==================================
 /// csv +report
 {
-	$('#'+destid).html("<img id='wait_"+destid+"' style='width: 450px; height: 100px; object-fit:none' src='../img/loading2.gif'>");
 	$.ajax({
 		async:true,
 		type : "GET",
@@ -590,7 +589,6 @@ function report_getModelAndProcess(model_code,json)
 						url : urlS,
 						success : function(data) {
 							r_report_process(data,json);
-						$('#wait_'+destid).remove();
 						}
 					 });
 				}
@@ -1589,7 +1587,7 @@ g_report_actions['for-each-portfolio-js'] = function (destid,action,no,data)
 		last = (parseInt(NOELT)+parseInt(NBELT)<portfolioids.length)? parseInt(NOELT)+parseInt(NBELT):portfolioids.length;
 	}
 	//----------------------------------
-	for (let j = first; j < last+1; j++) {
+	for (let j = first; j < last; j++) {
 		if (countvar!=undefined) {
 			g_variables[countvar] = j;
 		}
@@ -1606,7 +1604,7 @@ g_report_actions['for-each-portfolio-js'] = function (destid,action,no,data)
 		}
 		portfolioid_current = portfolioid;
 		$.ajax({
-			async:true,
+			async:false,
 			type : "GET",
 			dataType : "xml",
 			j : j,
@@ -1813,10 +1811,13 @@ g_report_actions['node_resource'] = function (destid,action,no,data)
 		select = replaceVariable(select);
 		var ref = $(action).attr("ref");
 		ref = replaceVariable(ref);
+		var editnoderoles = $(action).attr("editnoderoles");
 		var editresroles = $(action).attr("editresroles");
 		var delnoderoles = $(action).attr("delnoderoles");
 		var showroles = ($(action).attr("showroles")==undefined)? "":$(action).attr("showroles");
 		var submitroles = ($(action).attr("submitroles")==undefined)? "":$(action).attr("submitroles");
+		var nodenopencil = ($(action).attr("nodenopencil")==undefined)? "":$(action).attr("nodenopencil");
+		var nodenopencilroles = ($(action).attr("nodenopencilroles")==undefined)? "":$(action).attr("nodenopencilroles");
 		style = replaceVariable($(action).attr("style"));
 		var selector = r_getSelector(select);
 		var node = $(selector.jquery,data);
@@ -1832,8 +1833,10 @@ g_report_actions['node_resource'] = function (destid,action,no,data)
 			var writenode = ($(node.node).attr('write')=='Y')? true:false;
 			if (editresroles.indexOf("user")>-1)
 				editresroles = ($(node.metadatawad).attr('editresroles')==undefined)?'':$(node.metadatawad).attr('editresroles');
+			if (editnoderoles.indexOf("user")>-1)
+				editnoderoles = ($(node.metadatawad).attr('editnoderoles')==undefined)?'':$(node.metadatawad).attr('editnoderoles');
 			if (g_designerrole || writenode) {
-				writenode = (editresroles.containsArrayElt(g_userroles) || editresroles.indexOf($(USER.username_node).text())>-1 )
+				writenode = (editresroles.containsArrayElt(g_userroles) || editresroles.indexOf($(USER.username_node).text())>-1  || editnoderoles.containsArrayElt(g_userroles) || editnoderoles.indexOf($(USER.username_node).text())>-1 ) ;
 			}
 			var shownode = false;
 			if (g_designerrole || writenode) {
@@ -1909,7 +1912,7 @@ g_report_actions['node_resource'] = function (destid,action,no,data)
 				g_variables[ref][g_variables[ref].length] = text;
 			}
 			text = "<span id='dashboard_node_resource"+nodeid+"' style='"+style+"'>"+text+"</span>";
-			if (g_report_edit && writenode) {
+			if (g_report_edit && writenode && nodenopencil!='Y' && !nodenopencilroles.containsArrayElt(g_userroles)) {
 				text += "<span class='button fas fa-pencil-alt' data-toggle='modal' data-target='#edit-window' onclick=\"javascript:getEditBox('"+nodeid+"')\" data-title='"+karutaStr[LANG]["button-edit"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
 			}
 			if (g_report_edit && deletenode) {
@@ -1955,7 +1958,7 @@ g_report_actions['node_resource'] = function (destid,action,no,data)
 				}
 			}
 			//----------------------------
-			if (g_report_edit && inline & writenode) {
+			if (g_report_edit && inline & writenode && nodenopencil!='Y' && !nodenopencilroles.containsArrayElt(g_userroles)) {
 				//-----------------------
 				if(UICom.structure["ui"][nodeid].resource!=null) {
 					try {
