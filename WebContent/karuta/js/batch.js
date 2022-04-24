@@ -1648,7 +1648,8 @@ g_actions['update-resource'] = function updateResource(node)
 			} else {							// get by code and semtag
 				temp_nodes = $("node",data);
 			}
-			temp_nodes = eval("$(temp_nodes)"+test);
+			if (test!=undefined)
+				temp_nodes = eval("$(temp_nodes)"+test);
 			//-------------------
 			if (filter_semtag!=undefined && filter_semtag!="") {
 				for (let i=0;i<temp_nodes.length;i++){
@@ -3064,7 +3065,8 @@ g_actions['delete-node'] = function deleteNode(node)
 			} else {							// get by code and semtag
 				temp_nodes = $("node",data);
 			}
-			temp_nodes = eval("$(temp_nodes)"+test);
+			if (test!=undefined)
+				temp_nodes = eval("$(temp_nodes)"+test);
 			//-------------------
 			if (filter_semtag!=undefined && filter_semtag!="") {
 				for (let i=0;i<temp_nodes.length;i++){
@@ -3157,7 +3159,8 @@ g_actions['moveup-node'] = function moveupNode(node)
 			} else {							// get by code and semtag
 				temp_nodes = $("node",data);
 			}
-			temp_nodes = eval("$(temp_nodes)"+test);
+			if (test!=undefined)
+				temp_nodes = eval("$(temp_nodes)"+test);
 			//-------------------
 			if (filter_semtag!=undefined && filter_semtag!="") {
 				for (let i=0;i<temp_nodes.length;i++){

@@ -2423,9 +2423,15 @@ function replaceVariable(text,node,withquote)
 				text = text.replaceAll('##currentcode##',$($("code",$("asmResource[xsi_type!='context'][xsi_type!='nodeRes']",node.node))).text());
 			}
 			if (withquote && text.indexOf('##parentnode##')>-1)
-				text = text.replaceAll('##parentnode##',"'"+$(node.node).parent().attr('id')+"'");
+				if (node.node!=undefined)
+					text = text.replaceAll('##parentnode##',"'"+$(node.node).parent().attr('id')+"'");
+				else
+					text = text.replaceAll('##parentnode##',"'"+$(node).parent().attr('id')+"'");
 			if (!withquote && text.indexOf('##parentnode##')>-1)
-				text = text.replaceAll('##parentnode##',$(node.node).parent().attr('id'));
+				if (node.node!=undefined)
+					text = text.replaceAll('##parentnode##',$(node.node).parent().attr('id'));
+				else
+					text = text.replaceAll('##parentnode##',$(node).parent().attr('id'));
 			if (withquote && text.indexOf('##itselfrescode##')>-1)
 				text = text.replaceAll('##itselfrescode##',"'"+$($("code",$("asmResource[xsi_type!='context'][xsi_type!='nodeRes']",node.node))).text()+"'");
 	
