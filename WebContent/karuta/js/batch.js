@@ -2900,10 +2900,13 @@ g_actions['import-node'] = function importNode(node)
 							data : "",
 							destid:destid,
 							success : function(data) {
-								ok = true;
-								g_current_node_uuid = data;
-								$("#batch-log").append("<br>- node ("+g_current_node_uuid+") added at ("+this.destid+") - semtag="+semtag+ " source="+source);
-								ok = true;
+								if (data.indexOf("llegal operation")<0) {
+									ok = true;
+									g_current_node_uuid = data;
+									$("#batch-log").append("<br>- node ("+g_current_node_uuid+") added at ("+this.destid+") - semtag="+semtag+ " source="+source);
+								} else{
+									$("#batch-log").append("<br>- <span class='danger'>ERROR</span> SOURCE NOT FOUND - semtag="+semtag+ " source="+source);
+								}
 							},
 							error : function(data) {
 								$("#batch-log").append("<br>- <span class='danger'>ERROR</span> in import node("+this.destid+") - semtag="+semtag+ " source="+source);
@@ -3177,7 +3180,7 @@ g_actions['moveup-node'] = function moveupNode(node)
 							temp1_nodes = temp1_nodes.concat(nds);
 						},
 						error : function(data) {
-							$("#batch-log").append("<br>- ***NOT FOUND <span class='danger'>ERROR - update-resource "+type+"</span>");
+							$("#batch-log").append("<br>- ***NOT FOUND <span class='danger'>ERROR -  "+nodeid+"("+this.semtag+")</span>");
 						}
 					});
 				}
@@ -3199,13 +3202,86 @@ g_actions['moveup-node'] = function moveupNode(node)
 						$("#batch-log").append("<br>- node moved up - nodeid("+this.semtag+")");
 					},
 					error : function(jqxhr,textStatus) {
-						$("#batch-log").append("<br>- <span class='danger'>ERROR</span> in moveup node - nodeid("+this.semtag+")");
+						$("#batch-log").append("<br>- <span class='danger'>ERROR</span> in moveup node - "+nodeid+"("+this.semtag+")");
 					}
 				});
 			}
 		},
 		error : function(data) {
 			$("#batch-log").append("<br>- ***NOT FOUND <span class='danger'>ERROR</span> in update-moveup "+this.semtag);
+		}
+	});
+	return (ok!=0 && ok == nodes.length);
+}
+
+//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
+//------------------------- Submitall -----------------------------------
+//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
+
+//=================================================
+g_actions['submitall'] = function submitall(node)
+//=================================================
+{
+	var ok = 0;
+	var type = $(node).attr("type");
+	//----------Test --------
+	var test = $(node).attr("test");
+	if (test!=undefined) {
+		test = replaceBatchVariable(test);
+		test=getTest(test);
+	}
+	var filter_semtag = $(node).attr("filter-semtag");
+	var filter_test = $(node).attr("filter-test");
+	if (filter_test!=undefined) {
+		filter_test = replaceBatchVariable(filter_test);
+		filter_test=getTest(filter_test);
+	}
+	//------------ Target --------------------
+	var url = getTargetUrl(node);
+	//--------------------------------
+	var nodes = new Array();
+	$.ajax({
+		async : false,
+		type : "GET",
+		dataType : "xml",
+		url : url,
+		success : function(data) {
+			if (this.url.indexOf('/node/')>-1) {  // get by uuid
+				var results = $('*',data);
+				nodes[0] = results[0];
+			} else {							// get by code and semtag
+				nodes = $("node",data);
+			}
+			nodes = eval("$(nodes)"+test);
+			if (nodes.length>0){
+				for (var i=0; i<nodes.length; i++){
+					//-------------------
+					var nodeid = $(nodes[i]).attr('id');
+				//-------------------
+					$.ajax({
+						async : false,
+						type : "POST",
+						contentType: "application/xml",
+						dataType : "text",
+						url : serverBCK_API+"/nodes/node/" + nodeid + "/action/submitall",
+						success : function(data) {
+							ok++;
+							$("#batch-log").append("<br>- node submitted ("+nodeid+")");
+						},
+						error : function(data) {
+							$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in submitall("+nodeid+")");
+						}
+					});
+					//-------------------
+				}
+			} else {
+				$("#batch-log").append("<br>- ***NOT FOUND <span class='danger'>ERROR - submitall</span>");
+			}
+		},
+		error : function(data) {
+				$("#batch-log").append("<br>- ***NOT FOUND <span class='danger'>ERROR - submitall</span>");
 		}
 	});
 	return (ok!=0 && ok == nodes.length);

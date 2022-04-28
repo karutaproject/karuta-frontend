@@ -70,6 +70,7 @@
 .batch span.chkbox-comments.xupdate-node-resource,
 .batch span.chkbox-comments.ximport-node,
 .batch span.chkbox-comments.xdelete-node,
+.batch span.chkbox-comments.xsubmitall-node,
 .batch span.chkbox-comments.xmoveup-node,
 .batch span.chkbox-comments.xupdate-metadata,
 .batch span.chkbox-comments.xupdate-metadata-wad,
@@ -238,6 +239,10 @@
   border: 1px solid var(--batch-node-color);
 }
 .batch .moveup-node {
+  margin-top: 7px;
+  border: 1px solid var(--batch-node-color);
+}
+.batch .submitall {
   margin-top: 7px;
   border: 1px solid var(--batch-node-color);
 }
