@@ -3,6 +3,7 @@
 karutaStr['es'] = new Array();
 //----------------------------------------------------
 karutaStr['es']['language']="Español";
+karutaStr['es']['langshort']="ES";
 karutaStr['es']['flag-name']="Spain";
 //----------------------------------------------------
 karutaStr['es']['new']="Nuevo Elemento";

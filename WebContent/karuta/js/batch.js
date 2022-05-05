@@ -2258,7 +2258,7 @@ g_actions['delete-node-byid'] = function deleteNodeById(node)
 		async : false,
 		type : "DELETE",
 		dataType : "text",
-		url : serverBCK_API+"/nodes/node/=" + nodeid,
+		url : serverBCK_API+"/nodes/node/" + nodeid,
 		data : "",
 		success : function(data) {
 			ok = true;
@@ -2266,6 +2266,29 @@ g_actions['delete-node-byid'] = function deleteNodeById(node)
 		},
 		error : function(data) {
 			$("#batch-log").append("<br>- *** <span class='danger'>ERROR</span> in deleting node : "+nodeid);
+		}
+	});
+	return ok;
+}
+
+//=================================================
+g_actions['delete-tree-byid'] = function (node)
+//=================================================
+{
+	var ok = false;
+	var portfolioid = getTxtvals($("uuid",node));
+	$.ajax({
+		async : false,
+		type : "DELETE",
+		dataType : "text",
+		url : serverBCK_API+"/portfolios/portfolio/" + portfolioid,
+		data : "",
+		success : function(data) {
+			ok = true;
+			$("#batch-log").append("<br>- tree deleted ("+portfolioid+")");
+		},
+		error : function(data) {
+			$("#batch-log").append("<br>- *** <span class='danger'>ERROR</span> in deleting tree : "+portfolioid);
 		}
 	});
 	return ok;
@@ -3652,14 +3675,17 @@ function get_usergroupid(groupname)
 //==================================================
 
 //==================================================
-function execBatchForm()
+function execBatchForm(nodeid)
 //==================================================
 {
 	$("#wait-window").modal('show');
 	g_execbatch = false;
-	var line0 = $("asmUnitStructure:has(metadata[semantictag*='BatchFormLine0'])",g_portfolio_current);
-	var lines = $("asmUnitStructure:has(metadata[semantictag*='BatchFormLines'])",g_portfolio_current);
-	var model_code_node = $("asmContext:has(metadata[semantictag='model_code'])",g_portfolio_current);
+	let batchformnode = g_portfolio_current;
+	if (nodeid!=null)
+		batchformnode = $(UICom.structure.ui[nodeid].node);
+	var line0 = $("asmUnitStructure:has(metadata[semantictag*='BatchFormLine0'])",batchformnode);
+	var lines = $("asmUnitStructure:has(metadata[semantictag*='BatchFormLines'])",batchformnode);
+	var model_code_node = $("asmContext:has(metadata[semantictag='model_code'])",batchformnode);
 	var model_code_nodeid = $(model_code_node).attr("id");
 	var model_code = UICom.structure["ui"][model_code_nodeid].resource.getView();
 	initBatchVars();

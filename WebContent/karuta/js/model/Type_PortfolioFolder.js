@@ -1179,7 +1179,7 @@ UIFactory["PortfolioFolder"].displaySearchedPortfolios = function(code,type)
 			for (var i=0;i<searched_portfolios_list.length;i++){
 				var portfolio = searched_portfolios_list[i];
 				if (portfolio.visible || (USER.creator && !USER.limited) ) {
-					if (portfolio.semantictag.indexOf('karuta-project')>-1)
+					if (portfolio.semantictag!=undefined && portfolio.semantictag.indexOf('karuta-project')>-1)
 						$("#"+type+"-searched-folders-content").append($("<div class='row portfolio-row'   id='portfolio_"+portfolio.id+"' draggable='true' ondragstart='dragPortfolioFolder(event)'></div>"));
 					else
 						$("#"+type+"-searched-portfolios-content").append($("<div class='row portfolio-row'   id='portfolio_"+portfolio.id+"' draggable='true' ondragstart='dragPortfolio(event)'></div>"));

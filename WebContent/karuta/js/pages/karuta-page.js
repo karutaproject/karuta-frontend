@@ -170,8 +170,6 @@ function setConfigurationUIVariables(langcode)
 			//---------Navigation Bar--------------
 			g_configVar['navbar-text-color'] = getText('config-navbar-text-color','Color','text',data,langcode);
 			g_configVar['navbar-background-color'] = getText('config-navbar-background-color','Color','text',data,langcode);
-			g_configVar['navbar-display-mailto'] = getText('navbar-display-mailto','Get_Resource','value',data);
-			g_configVar['navbar-display-language'] = getText('navbar-display-language','Get_Resource','value',data);
 			//----------------------
 			g_configVar['font-standard'] = getText('config-font-standard','Field','text',data,langcode);
 			g_configVar['font-google'] = getText('config-font-google','Field','text',data,langcode);
@@ -334,6 +332,8 @@ function setConfigurationTechVariables(langcode)
 			}
 			//----------------------
 			g_configVar['technical-support'] = getText('config-technical-support','Field','text',data,langcode);
+			g_configVar['navbar-display-mailto'] = getText('navbar-display-mailto','Get_Resource','value',data);
+			g_configVar['navbar-display-language'] = getText('navbar-display-language','Get_Resource','value',data);
 			//----------------------
 			g_configVar['send-email-logo'] = getImg('config-send-email-logo',data,langcode);
 			g_configVar['send-email-image'] = getImg('config-send-email-image',data,langcode);
