@@ -1036,8 +1036,7 @@ UIFactory["Node"].prototype.displayMetadataAttributeEditor = function(destid,att
 		if (value=='Y')
 			html+= " checked ";
 		html+= "></div>";
-	}
-	else {
+	} else {
 		html += "<div class='input-group "+attribute+"'>";
 		html += "	<div class='input-group-prepend'>";
 		html += "		<span class='input-group-text' id='"+attribute+this.id+"'>"+karutaStr[languages[langcode]][attribute]+"</span>";
@@ -1233,7 +1232,7 @@ UIFactory["Node"].prototype.displaySelectRole= function(destid,attribute,yes_no,
 	html += "	</div>";
 	html += "	<input id='"+attribute+nodeid+"' type='text' class='form-control'  onchange=\"javascript:UIFactory['Node'].updateMetadataWadAttribute('"+nodeid+"','"+attribute+"',this.value)\" value=\""+value+"\"";
 	if(disabled!=null && disabled)
-		html+= " disabled='disabled' ";			
+		html+= " disabled='disabled' ";
 	html += ">";
 	if(disabled==null || !disabled) {
 		html += "<div class='input-group-append'>";
@@ -1242,9 +1241,15 @@ UIFactory["Node"].prototype.displaySelectRole= function(destid,attribute,yes_no,
 //		html += "		<div class='dropdown-menu'>";
 		html += "			<a class='dropdown-item' value='' onclick=\"$('#"+attribute+nodeid+"').val('');$('#"+attribute+nodeid+"').change();\")>&nbsp;</a>";
 		//---------------------
-		for (role in UICom.roles) {
+		if (attribute=='unsubmitroles') {
+			const role = 'resetter';
 			html += "		<a  class='dropdown-item' value='"+role+"' onclick=\"var v=$('#"+attribute+nodeid+"').val();$('#"+attribute+nodeid+"').val(v+' "+role+"');$('#"+attribute+nodeid+"').change();\")>"+role+"</a>";
 			rolesarray[rolesarray.length] = {'libelle':role};
+		} else {
+			for (role in UICom.roles) {
+				html += "		<a  class='dropdown-item' value='"+role+"' onclick=\"var v=$('#"+attribute+nodeid+"').val();$('#"+attribute+nodeid+"').val(v+' "+role+"');$('#"+attribute+nodeid+"').change();\")>"+role+"</a>";
+				rolesarray[rolesarray.length] = {'libelle':role};
+			}
 		}
 //		html += "		</div>";
 		html += "	</div>";
