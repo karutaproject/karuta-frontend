@@ -48,6 +48,7 @@ function fill_main_page(portfolioid)
 		url : url,
 		success : function(data) {
 			UICom.roles = {};
+			g_userroles = [];
 			g_portfolio_current = data;
 			g_portfolio_rootid = $("asmRoot",data).attr("id");
 			//-------------------------

@@ -93,40 +93,73 @@ function callSubmit()
 function displayKarutaCreateAccount()
 //==============================
 {
-//	loginPublic();
-	setLoginTechnicalVariables();
-	setLoginConfigurationVariables();
-	var html = "";
-	html += "<div id='main-welcome'>";
-	html += "<div id='navigation-bar'></div>";
-	html += "<div id='main-container' class='container'>";
-	html += "	<div id='form-signin' class='form-signin'>";
-	html += "		<div id='welcome1'></div>";
-	html += "		<div id='welcome-version'></div>";
-	html += "		<div id='welcome2'></div>";
-	html += "		<div id='welcome3'></div>";
-	html += "		<div id='login'></div>";
-	html += "	</div>";
-	html += "</div>";
-	html += "</div>";
-	$('body').html(html);
-	$('body').append(alertBox());
-
+	var data = "<credential><login>public</login><password>public</password></credential>";
 	$.ajax({
-		async: false,
-		type : "GET",
-		dataType : "xml",
-		url : serverBCK+"/version",
-		data: "",
-		success : function(data) {		
-			karuta_backend_version = $("number",$("#backend",data)).text();
-			karuta_backend_date = $("date",$("#backend",data)).text();
-			karuta_fileserver_version = $("number",$("#fileserver",data)).text();
-			karuta_fileserver_date = $("date",$("#fileserver",data)).text();
-			$("#navigation-bar").html(getNavBar('create_account',null));
-			$("#login").html(getInputs());$("#welcome4").html(karutaStr[LANG]['create_account']);
-			applyNavbarConfiguration();
-			applyLoginConfiguration();
+		async:false,
+		contentType: "application/xml",
+		type : "POST",
+		dataType : "text",
+		url : serverBCK_API+"/credential/login",
+		data: data,
+		success : function(data) {
+			setLoginTechnicalVariables();
+			setLoginConfigurationVariables();
+			var html = "";
+			html += "<div id='main-welcome'>";
+			html += "<div id='navigation-bar'></div>";
+			html += "<div id='main-container' class='container'>";
+			html += "	<div id='form-signin' class='form-signin'>";
+			html += "		<div id='welcome1'></div>";
+			html += "		<div id='welcome-version'></div>";
+			html += "		<div id='welcome2'></div>";
+			html += "		<div id='welcome3'></div>";
+			html += "		<div id='login'></div>";
+			html += "	</div>";
+			html += "</div>";
+			html += "</div>";
+			$('body').html(html);
+			$('body').append(alertBox());
+		
+			$.ajax({
+				async: false,
+				type : "GET",
+				dataType : "xml",
+				url : serverBCK+"/version",
+				data: "",
+				success : function(data) {		
+					karuta_backend_version = $("number",$("#backend",data)).text();
+					karuta_backend_date = $("date",$("#backend",data)).text();
+					karuta_fileserver_version = $("number",$("#fileserver",data)).text();
+					karuta_fileserver_date = $("date",$("#fileserver",data)).text();
+					$("#navigation-bar").html(getNavBar('create_account',null));
+					$("#login").html(getInputs());$("#welcome4").html(karutaStr[LANG]['create_account']);
+					applyNavbarConfiguration();
+					applyLoginConfiguration();
+				}
+			});
+			const myTimeout = setTimeout(unlog, 2000);
+		},
+		error : function(jqxhr,textStatus) {
+			if (jqxhr.status == '404') {
+				constructKarutaLogin(false);
+			} else {
+				alertHTML("Identification : "+jqxhr.responseText);
+			}
+		}
+	});
+
+}
+
+//==============================
+function unlog()
+//==============================
+{
+	$.ajax({
+		async:false,
+		type: "GET",
+		dataType: "text",
+		url: serverBCK_API+"/credential/logout",
+		success : function(data) {
 		}
 	});
 }

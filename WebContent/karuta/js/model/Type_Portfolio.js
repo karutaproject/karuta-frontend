@@ -2622,12 +2622,12 @@ UIFactory["Portfolio"].removeSearchedPortfolios = function()
 {
 	$("#wait-window").modal('show');
 	//----------------
-	$.ajaxSetup({async: false});
 	for (var i=0;i<searched_portfolios_list.length;i++){
 		var uuid = searched_portfolios_list[i].id;
-		var url = serverBCK_API+"/portfolios/portfolio/" + uuid + "?active=false";
+		var url = serverBCK_API+"/portfolios/portfolio/" + uuid;
 		$.ajax({
-			type : "PUT",
+			async:false,
+			type : "DELETE",
 			contentType: "application/xml",
 			dataType : "text",
 			url : url,
@@ -2639,9 +2639,12 @@ UIFactory["Portfolio"].removeSearchedPortfolios = function()
 			}
 		});
 	}
-	searchPortfolio();
 	$("#wait-window").modal('hide');
-	$.ajaxSetup({async: true});
+	portfolios_byid = {};
+	portfolios_list = [];
+	folders_byid = {};
+	folders_list = [];
+	fill_list_page()
 	//----------------
 }
 
