@@ -1285,8 +1285,8 @@ g_actions['update-tree-root'] = function updateTreeRoot(node)
 			success : function(data) {
 				var nodeid = $("asmRoot",data).attr('id');
 				var oldcode = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",data)).text();
-				//--------------  if folder -------------
 				if (oldcode.indexOf(".")>=0) {
+					//--------------  if not folder -------------
 					var xml = "<asmResource xsi_type='nodeRes'>";
 					xml += "<code>"+newcode+"</code>";
 					for (var lan=0; lan<languages.length;lan++)
@@ -1312,6 +1312,7 @@ g_actions['update-tree-root'] = function updateTreeRoot(node)
 						}
 					});
 				} else {
+					//--------------  if folder -------------
 					$.ajax({
 						async: false,
 						folder : this,
@@ -1328,7 +1329,10 @@ g_actions['update-tree-root'] = function updateTreeRoot(node)
 								xml +="<asmResource xsi_type='nodeRes'>";
 								xml +="<code>"+newportfolio_code+"</code>";
 								for (var j=0; j<languages.length;j++){
-									xml +="<label lang='"+languages[j]+"'>"+ $("label[lang='"+languages[j]+"']",$("asmRoot>asmResource[xsi_type='nodeRes']",items[i])[0]).text()+"</label>";	
+								if (newportfolio_code==newcode && j==LANGCODE && label!="")
+									xml += "<label lang='"+languages[j]+"'>"+label+"</label>";
+								else
+									xml +=" <label lang='"+languages[j]+"'>"+ $("label[lang='"+languages[j]+"']",$("asmRoot>asmResource[xsi_type='nodeRes']",items[i])[0]).text()+"</label>";	
 								}
 								xml +="</asmResource>";
 								strippeddata = xml.replace(/xmlns=\"http:\/\/www.w3.org\/1999\/xhtml\"/g,"");  // remove xmlns attribute
