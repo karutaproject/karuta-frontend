@@ -721,13 +721,13 @@ function displayPage(uuid,depth,type,langcode) {
 		$("#sidebar_"+uuid).addClass('selected');
 		if (g_breadcrumb=="@1") {
 			var nodeid = uuid;
-			var breadcrumb = "/" + UICom.structure.ui[nodeid].getLabel(null,'none');
+			var breadcrumb = " &gt; <span onclick=\"displayPage('"+nodeid+"')\">" + UICom.structure.ui[nodeid].getLabel(null,'none') + "</span>";
 			while($(UICom.structure.ui[nodeid].node)!=undefined && $(UICom.structure.ui[nodeid].node).parent().parent().parent().length!=0) {
 				nodeid = $(UICom.structure.ui[nodeid].node).parent().attr("id");
-				breadcrumb = "/" + UICom.structure.ui[nodeid].getLabel(null,'none') + breadcrumb;
+				breadcrumb = " &gt; <span onclick=\"displayPage('"+nodeid+"')\">" + UICom.structure.ui[nodeid].getLabel(null,'none') + "</span>" + breadcrumb;
 			}
-			breadcrumb = breadcrumb.substring(breadcrumb.indexOf("/")+1);
-			$("#breadcrumb").html(breadcrumb.substring(breadcrumb.indexOf("/")+1));
+			breadcrumb = breadcrumb.substring(breadcrumb.indexOf(" &gt; ")+3);
+			$("#breadcrumb").html(breadcrumb.substring(breadcrumb.indexOf(" > ")+3));
 		}
 	} else {
 		$("#sidebar_"+uuid).parent().addClass('selected');

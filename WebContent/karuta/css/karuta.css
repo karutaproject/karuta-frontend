@@ -1100,10 +1100,10 @@ body,
 /* ====================== */
 #breadcrumb {
   border-top: 1px solid #F0F0F0;
-  padding-left: 20px;
-  padding-right: 15px;
+  padding-left: 10px;
+  padding-right: 10px;
   font-size: calc(var(--font-size-coeff) * 0.875rem);
-  background-color: #FBFBFB;
+  cursor: pointer;
 }
 
 /* ====================== */
