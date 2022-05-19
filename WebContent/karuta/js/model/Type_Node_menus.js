@@ -1259,7 +1259,7 @@ UIFactory["Node"].getXmlItemMenu = function(node,parentid,item,title,databack,ca
 									targetid = position;
 							}
 						}
-						onclick += "importBranch('"+targetid+"','"+foliocode+"','"+semtags[k]+"',"+databack+","+callback+",'"+param2+"');"
+						onclick += "importBranch('"+targetid+"','"+foliocode+"','"+semtags[k]+"',"+databack+","+callback+",'"+param2+"',null,'"+targetid+"');"
 					}
 					// --------- fcts ------------
 					let jss = $("js",trgts[j]);

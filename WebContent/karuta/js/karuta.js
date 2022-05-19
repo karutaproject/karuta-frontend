@@ -787,6 +787,32 @@ function displayPage(uuid,depth,type,langcode) {
 }
 
 //==================================
+function reloadPreviewBox(node) 
+//==================================
+{
+	const uuid = $(node).attr("preview-uuid");
+	const edit = $(node).attr("preview-edit");
+	if (uuid!=null) {
+		$("#preview-window-body-"+uuid).html("");
+		$.ajax({
+			type : "GET",
+			dataType : "xml",
+			url : serverBCK_API+"/nodes/node/" + uuid + "?resources=true",
+			success : function(data) {
+				UICom.parseStructure(data);
+				if (edit==null)
+					g_report_edit = false;
+				else
+					g_report_edit = edit;
+				UICom.structure["ui"][uuid].displayNode('standard',UICom.structure['tree'][uuid],"preview-window-body-"+uuid,100,LANGCODE,g_report_edit);
+				g_report_edit = g_edit;
+				$("#preview-window-"+uuid).show();
+				$("#previewbackdrop-"+uuid).show();
+			}
+		});
+	}
+}
+//==================================
 function previewPage(uuid,depth,type,langcode,edit) 
 //==================================
 {
@@ -801,6 +827,8 @@ function previewPage(uuid,depth,type,langcode,edit)
 
 	var previewwindow = document.createElement("DIV");
 	previewwindow.setAttribute("class", "preview-window");
+	previewwindow.setAttribute("preview-uuid", uuid);
+	previewwindow.setAttribute("preview-edit", edit);
 	previewwindow.innerHTML =  previewBox(uuid);
 	$('body').append(previewwindow);
 	var header = "<button class='btn add-button' style='float:right' onclick=\"$('#preview-window-"+uuid+"').remove();$('#previewbackdrop-"+uuid+"').remove();\">"+karutaStr[LANG]['Close']+"</button>";
@@ -823,8 +851,11 @@ function previewPage(uuid,depth,type,langcode,edit)
 			url : serverBCK_API+"/nodes/node/" + uuid + "?resources=true",
 			success : function(data) {
 				UICom.parseStructure(data);
-				g_report_edit = false;
-				UICom.structure["ui"][uuid].displayNode('standard',UICom.structure['tree'][uuid],"preview-window-body-"+uuid,depth,langcode,false);
+				if (edit==null)
+					g_report_edit = false;
+				else
+					g_report_edit = edit;
+				UICom.structure["ui"][uuid].displayNode('standard',UICom.structure['tree'][uuid],"preview-window-body-"+uuid,depth,langcode,g_report_edit);
 				g_report_edit = g_edit;
 				$("#preview-window-"+uuid).show();
 				$("#previewbackdrop-"+uuid).show();
@@ -1063,7 +1094,7 @@ function show(uuid)
 		contentType: "application/xml",
 		url : urlS,
 		success : function (data){
-			UIFactory.Node.reloadUnit();
+			UIFactory.Node.reloadUnit(null,null,uuid);
 		}
 	});
 }
@@ -1098,7 +1129,7 @@ function hide(uuid)
 		contentType: "application/xml",
 		url : urlS,
 		success : function (data){
-			UIFactory.Node.reloadUnit();
+			UIFactory.Node.reloadUnit(null,null,uuid);
 		}
 	});
 }

@@ -329,7 +329,9 @@ if (execJS(this,"display-if")) {
 				displayview = type+"-resource-default";
 			}
 		html = html.replace(/#displayview#/g,displayview).replace(/#displaytype#/g,type).replace(/#uuid#/g,uuid).replace(/#nodetype#/g,this.nodetype).replace(/#resourcetype#/g,this.resource_type).replace(/#semtag#/g,this.semantictag).replace(/#cssclass#/g,this.cssclass);
-		html = html.replace(/#node-orgclass#/g,this.displayitselforg)
+		html = html.replace(/#node-orgclass#/g,this.displayitselforg);
+		if (this.privatevalue)
+		 html = html.replace(/#priv#/g,'private');
 		//-------------------- display ----------------------
 		if (!refresh) {
 			$("#"+dest).append (html);
@@ -383,7 +385,7 @@ if (execJS(this,"display-if")) {
 		}
 		//----------------delete control on proxy parent ------------
 		if (edit && proxies_delete[uuid]!=undefined && proxies_delete[uuid].containsArrayElt(g_userroles)) {
-			var html = deleteButton(proxies_nodeid[uuid],"asmContext",undefined,undefined,"UIFactory.Node.reloadUnit",g_portfolioid,null);
+			var html = deleteButton(proxies_nodeid[uuid],"asmContext",undefined,undefined,"UIFactory.Node.reloadUnit","null","null","this");
 			$("#buttons-"+uuid).html(html);
 		}
 		//------------- print button -------------------
@@ -558,7 +560,7 @@ UIFactory["Node"].prototype.displayAsmNode = function(dest,type,langcode,edit,re
 	}
 	//----------------delete control on proxy parent ------------
 	if (edit && proxies_delete[uuid]!=undefined && proxies_delete[uuid].containsArrayElt(g_userroles)) {
-		var html = deleteButton(proxies_nodeid[uuid],"asmContext",undefined,undefined,"UIFactory.Node.reloadUnit",g_portfolioid,null);
+		var html = deleteButton(proxies_nodeid[uuid],"asmContext",undefined,undefined,"UIFactory.Node.reloadUnit","null","null","this");
 		$("#buttons-"+uuid).html(html);
 	}
 	//----------- Comments -----------
@@ -1830,7 +1832,7 @@ UIFactory["Node"].prototype.getButtons = function(dest,type,langcode,inline,dept
 					}
 				}
 			} else {
-				html += deleteButton(this.id,this.asmtype,undefined,undefined,"UIFactory.Node.reloadUnit",g_portfolioid,null,null);
+				html += deleteButton(this.id,this.asmtype,undefined,undefined,"UIFactory.Node.reloadUnit","null","null",this.id);
 			}
 		}
 		//------------- move node buttons ---------------
@@ -1926,48 +1928,61 @@ UIFactory['Node'].reloadStruct = function(uuid,redisplay,redisplay_uuid)
 };
 
 //==================================================
-UIFactory['Node'].reloadUnit = function(uuid,redisplay)
+UIFactory['Node'].reloadUnit = function(uuid,redisplay,nodeid)
 //==================================================
 {
-	if (redisplay == null)
-		redisplay = true;
-	if (uuid=="" || uuid==null || redisplay)
-		uuid = $("#page").attr('uuid');
-	var parentid = "";
-	if (uuid==g_portfolio_rootid)
-		parentid = g_portfolio_rootid;
-	else
-		parentid = $($(UICom.structure["ui"][uuid].node).parent()).attr('id');
-	if (uuid.indexOf("_")>-1)
-		uuid = uuid.substring(0,uuid.indexOf("_"));
-	$.ajax({
-		async: false,
-		type : "GET",
-		dataType : "xml",
-		url : serverBCK_API+"/nodes/node/" + uuid,
-		parentid : parentid,
-		success : function(data) {
-			UICom.parseStructure(data,false,this.parentid);
-			setVariables(data);
-			$("#"+uuid,g_portfolio_current).replaceWith($(":root",data));
-			if (g_bar_type.indexOf('horizontal')>-1) {
-				$("#menu_bar").html("");
-				$("#menu_bar").show();
-				UIFactory.Portfolio.displayHorizontalMenu(UICom.root,'menu_bar',g_display_type,null,g_edit,UICom.rootid);
-			} else {
-				$("#sidebar").html("");
-				$("#menu_bar").hide();
-				UIFactory.Portfolio.displaySidebar(UICom.root,'sidebar',g_display_type,null,g_edit,UICom.rootid);
-			}
-			if (redisplay) {
-				if (g_display_type=='model')
-					displayPage(UICom.rootid,1,g_display_type,LANGCODE,g_edit);
-				else
-					displayPage(uuid,99,g_display_type,LANGCODE,g_edit);
-			}
-			$('#wait-window').modal('hide');
+	let previewuuid =null;
+	let node = null
+	if (nodeid!=null) {
+		node = document.getElementById("node_"+nodeid);
+		while (node.parentNode!=null && node.getAttribute("preview-uuid")==null)
+			node = node.parentNode;
+		previewuuid = $(node).attr("preview-uuid");
 		}
-	});
+	if (previewuuid!=null && node!=null) {
+		reloadPreviewBox(node)
+		$('#wait-window').modal('hide');
+	} else {
+		if (redisplay == null)
+			redisplay = true;
+		if (uuid=="" || uuid==null || redisplay)
+			uuid = $("#page").attr('uuid');
+		var parentid = "";
+		if (uuid==g_portfolio_rootid)
+			parentid = g_portfolio_rootid;
+		else
+			parentid = $($(UICom.structure["ui"][uuid].node).parent()).attr('id');
+		if (uuid.indexOf("_")>-1)
+			uuid = uuid.substring(0,uuid.indexOf("_"));
+		$.ajax({
+			async: false,
+			type : "GET",
+			dataType : "xml",
+			url : serverBCK_API+"/nodes/node/" + uuid,
+			parentid : parentid,
+			success : function(data) {
+				UICom.parseStructure(data,false,this.parentid);
+				setVariables(data);
+				$("#"+uuid,g_portfolio_current).replaceWith($(":root",data));
+				if (g_bar_type.indexOf('horizontal')>-1) {
+					$("#menu_bar").html("");
+					$("#menu_bar").show();
+					UIFactory.Portfolio.displayHorizontalMenu(UICom.root,'menu_bar',g_display_type,null,g_edit,UICom.rootid);
+				} else {
+					$("#sidebar").html("");
+					$("#menu_bar").hide();
+					UIFactory.Portfolio.displaySidebar(UICom.root,'sidebar',g_display_type,null,g_edit,UICom.rootid);
+				}
+				if (redisplay) {
+					if (g_display_type=='model')
+						displayPage(UICom.rootid,1,g_display_type,LANGCODE,g_edit);
+					else
+						displayPage(uuid,99,g_display_type,LANGCODE,g_edit);
+				}
+				$('#wait-window').modal('hide');
+			}
+		});
+	}
 };
 
 
