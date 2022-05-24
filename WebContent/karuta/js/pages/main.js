@@ -56,7 +56,8 @@ function fill_main_page(portfolioid)
 			if (typeof(rewriteURL) == 'function')
 				rewriteURL(portfoliocode);
 			//-------------------------
-			UICom.structure['ui'][g_portfolio_rootid].loaded = true;
+			if (UICom.structure['ui'][g_portfolio_rootid]!=undefined)
+				UICom.structure['ui'][g_portfolio_rootid].loaded = true;
 			var root_semantictag = $("metadata",$("asmRoot",data)).attr('semantictag');
 			var default_role = "";
 			if ($("metadata-wad",$("asmRoot",data)).attr('defaultrole')!= undefined)

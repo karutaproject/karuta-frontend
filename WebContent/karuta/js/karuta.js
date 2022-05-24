@@ -2444,6 +2444,9 @@ function replaceVariable(text,node,withquote)
 			text = text.replaceAll('##lastimported-2##',"g_importednodestack[g_importednodestack.length-3]");
 			text = text.replaceAll('##lastimported##',"g_importednodestack[g_importednodestack.length-1]");
 		}
+		else if (text!=undefined && text.indexOf('##currentportfolio##')>-1) {
+			text = text.replaceAll('##currentportfolio##',portfolios_byid[portfolioid_current].code_node.text());
+		}
 		if (node!=null && node!=undefined && text!=undefined) {
 			if (withquote && text.indexOf('##current')>-1) {
 				text = text.replaceAll('##currentnode##',"'"+node.id+"'");

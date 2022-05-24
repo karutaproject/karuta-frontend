@@ -234,7 +234,7 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 		queryattr_value = this.multiple.substring(0,this.multiple.indexOf('/'));
 		type = 'multiple';
 	}
-	if (queryattr_value!=undefined && queryattr_value!='') {
+	if (this.get_type!="import_comp" && queryattr_value!=undefined && queryattr_value!='') {
 		queryattr_value = replaceVariable(queryattr_value);
 //		if (type=='multiple')
 //			queryattr_value = cleanCode(queryattr_value);  // portfoliocode may be from a get_ressource with spécial characters
