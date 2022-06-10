@@ -713,6 +713,28 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 				}
 				$(select).append($(select_item));
 			}
+			if (newTableau1.length==0) { // if no choice but already setted
+				//-------------- update button -----
+				if (self_code!="" && self_label!="") {
+					//------------------------------
+					var display_code = false;
+					var display_label = true;
+					if (self_code.indexOf("$")>-1) 
+						display_label = false;
+					if (self_code.indexOf("@")<0) 
+						display_code = true;
+					self_code = cleanCode(self_code);
+					//------------------------------
+					var html = "";
+					if (display_code)
+						html += self_code+" ";
+					if (display_label)
+						html += self_label;
+					$("#button_"+langcode+self.id).attr("style",style);
+					$("#button_"+langcode+self.id).html(html);
+					$("#button_"+langcode+self.id).attr('class', 'btn select selected-label').addClass("sel"+self_code).addClass(code);
+				}
+			}
 		}
 		//---------------------
 		if (target=='text') {
@@ -1900,7 +1922,7 @@ function import_get_multiple(parentid,targetid,title,query_portfolio,query_semta
 		actions.push(JSON.parse(acts[i].replaceAll("|","\"")));
 	}
 	let js1 = "$('#edit-window').modal('hide')";
-	let js2 = "";
+	let js2 = "this.setAttribute('disabled',true);";
 	for (let i=0;i<actions.length;i++) {
 		//-----------------
 		let fctjs = "";

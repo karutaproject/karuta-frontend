@@ -157,7 +157,7 @@ UIFactory["Node"].prototype.displayMenus = function(dest,langcode)
 //==================================================
 {
 	var html = this.getMenus(langcode);
-	$(dest).html(html);
+	$(dest).append(html);
 	//------------ Public URL -----------------
 	if ($("#2world-"+this.id).length){
 		var shares = [];

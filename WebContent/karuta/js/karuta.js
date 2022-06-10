@@ -332,7 +332,7 @@ function setMessageBox(html)
 //==============================
 {
 	html = "<span>" + html + "</span>";
-	$("#message-body").html($(html));
+	$("#message-window-body").html($(html));
 }
 
 //==============================
@@ -340,7 +340,7 @@ function addMessageBox(html)
 //==============================
 {
 	html = "<span>" + html + "</span>";
-	$("#message-body").add($(html));
+	$("#message-window-body").add($(html));
 }
 
 //==============================
@@ -539,7 +539,7 @@ function messageBox()
 {
 	var html = "";
 	html += "\n<!-- ==================== Message box ==================== -->";
-	html += "\n<div id='message-window' class='modal fade'>";
+	html += "\n<div id='message-window' class='modal'>";
 	html += "\n		<div class='modal-dialog modal-dialog-scrollable'>";
 	html += "\n			<div class='modal-content'>";
 	html += "\n				<div id='message-window-body' class='modal-body'>";
@@ -2254,6 +2254,27 @@ function printSection(eltid,notinreport)
 	}
 }
 
+//==============================
+function printNode(uuid)
+//==============================
+{
+	let printwindow = window.open("../htm/printwindow.htm","printwindow","width=200,height=100");
+/*		$("#wait-window").modal('show');
+		$("#print-window").html("");
+		UICom.structure["ui"][uuid].displayNode('standard',UICom.structure['tree'][uuid],'print-window',99,LANGCODE,g_edit);
+		$("#main-body").addClass("section2hide");
+		$("#print-window").addClass("section2print");
+		$("#wait-window").modal('hide');
+		//------------------
+		window.print();
+		//------------------
+		$("#print-window").removeClass("section2print");
+		$("#main-body").removeClass("section2hide");
+		$("#print-window").css("display", "none");
+	*/
+}
+
+
 //==================================
 function autocomplete(input,arrayOfValues,onupdate,self,langcode) {
 //==================================
@@ -3362,5 +3383,10 @@ function execJS(node,tag){
 }
 
 
+function soumettreEvaluationActionK(nodeid) {
+	var page = $(UICom.structure.ui[nodeid].node).parent().parent().parent().parent().parent().parent().parent()[0];
+	var pageid = $(page).attr("id");
+	buildSaveVectorKAPC(nodeid,pageid,'action-evaluation-done');
+}
 
 

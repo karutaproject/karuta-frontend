@@ -1540,6 +1540,22 @@ UIFactory["Portfolio"].getActions = function(portfolioid)
 	return html;
 };
 
+
+//==================================
+UIFactory["Portfolio"].exportPortfolio = function(portfolioid) 
+//==================================
+{
+	if (portfolioid==null)
+		portfolioid = g_portfolioid;
+	let html = "<a class='dropdown-item' href='../../../"+serverBCK_API+"/portfolios/portfolio/"+portfolioid+"?resources=true&amp;files=true'>"+karutaStr[LANG]['export-with-files']+"</a>";
+	let js1 = "hideMessageBox()";
+	let footer = "<button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
+	$("#message-window-footer").html($(footer));
+	setMessageBox(html);
+	showMessageBox();
+}
+
+
 //==================================
 UIFactory["Portfolio"].callRenameMove = function(portfolioid,langcode,project)
 //==================================

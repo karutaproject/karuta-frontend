@@ -368,7 +368,7 @@ if (execJS(this,"display-if")) {
 			buttons += this.getButtons();
 			//------------- print button -------------------
 			if ((this.printroles.containsArrayElt(g_userroles) || this.printroles.indexOf($(USER.username_node).text())>-1 || USER.admin || g_userroles[0]=='designer') && this.printroles!='none' && this.printroles!='') {
-					buttons += "<span class='button fas fa-print' style='"+menus_color+"' onclick=\"printSection('#node_"+this.id+"',"+g_report_edit+")\" data-title='"+karutaStr[LANG]["button-print"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
+					buttons += "<span class='button fas fa-print' onclick=\"printSection('#node_"+this.id+"',"+g_report_edit+")\" data-title='"+karutaStr[LANG]["button-print"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
 			}
 			if (buttons!="")
 				buttons = "<div class='btn-group'>"+buttons+"</div><!-- class='btn-group' -->"
@@ -379,7 +379,7 @@ if (execJS(this,"display-if")) {
 		} else {
 			//------------- print button -------------------
 			if ((this.printroles.containsArrayElt(g_userroles) || this.printroles.indexOf($(USER.username_node).text())>-1 || USER.admin || g_userroles[0]=='designer') && this.printroles!='none' && this.printroles!='') {
-				var buttons = "<span class='button fas fa-print' style='"+menus_color+"' onclick=\"printSection('#node_"+this.id+"',"+g_report_edit+")\" data-title='"+karutaStr[LANG]["button-print"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
+				var buttons = "<span class='button fas fa-print'  onclick=\"printSection('#node_"+this.id+"',"+g_report_edit+")\" data-title='"+karutaStr[LANG]["button-print"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
 				$("#buttons-"+uuid).html(buttons);
 			}
 		}
@@ -390,7 +390,7 @@ if (execJS(this,"display-if")) {
 		}
 		//------------- print button -------------------
 		if ((this.printroles.containsArrayElt(g_userroles) || this.printroles.indexOf($(USER.username_node).text())>-1 || USER.admin || g_userroles[0]=='designer') && this.printroles!='none' && this.printroles!='') {
-				html += "<span class='button fas fa-print' style='"+menus_color+"' onclick=\"javascript:printSection('#node_"+this.id+"')\" data-title='"+karutaStr[LANG]["button-print"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
+				html += "<span class='button fas fa-print'  onclick=\"javascript:printSection('#node_"+this.id+"')\" data-title='"+karutaStr[LANG]["button-print"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
 		}
 		//----------------- hide lbl-div if empty ------------------------------------
 		if (this.getLabel(null,'none',langcode)=="" && this.getButtons(langcode)=="" && this.getMenus(langcode)=="")
