@@ -200,26 +200,31 @@ var html = this.getView(dest,type,langcode);
 UIFactory["Get_Get_Resource"].update = function(selected_item,itself,langcode,type)
 //==================================
 {
-	$(itself.lastmodified_node).text(new Date().getTime());
-	var value = $(selected_item).attr('value');
-	var code = $(selected_item).attr('code');
-	var uuid = $(selected_item).attr('uuid');
-	var style = $(selected_item).attr('style');
-	//---------------------
-	if (itself.encrypted)
-		value = "rc4"+encrypt(value,g_rc4key);
-	if (itself.encrypted)
-		code = "rc4"+encrypt(code,g_rc4key);
-	//---------------------
-	$(itself.value_node[0]).text(value);
-	$(itself.code_node[0]).text(code);
-	$(itself.uuid_node[0]).text(uuid);
-	$(itself.style_node[0]).text(style);
-	for (var i=0; i<languages.length;i++){
-		var label = $(selected_item).attr('label_'+languages[i]);
-		$(itself.label_node[i][0]).text(label);
+	try {
+		exec_node_function_js(itself,'update-resource-before');
+		//-----------------------
+		var value = $(selected_item).attr('value');
+		var code = $(selected_item).attr('code');
+		var uuid = $(selected_item).attr('uuid');
+		var style = $(selected_item).attr('style');
+		$(itself.value_node[0]).text(value);
+		$(itself.code_node[0]).text(code);
+		$(itself.uuid_node[0]).text(uuid);
+		$(itself.style_node[0]).text(style);
+		for (var i=0; i<languages.length;i++){
+			var label = $(selected_item).attr('label_'+languages[i]);
+			$(itself.label_node[i][0]).text(label);
+		}
+		$(itself.lastmodified_node).text(new Date().getTime());
+		//-----------------------
+		exec_node_function_js(itself,'update-resource');
+		//-----------------------
+		itself.save();
 	}
-	itself.save();
+	catch(e) {
+		console.log(e);
+		// do nothing
+	}
 };
 
 //==================================

@@ -3382,11 +3382,25 @@ function execJS(node,tag){
 	return test;
 }
 
-
-function soumettreEvaluationActionK(nodeid) {
-	var page = $(UICom.structure.ui[nodeid].node).parent().parent().parent().parent().parent().parent().parent()[0];
-	var pageid = $(page).attr("id");
-	buildSaveVectorKAPC(nodeid,pageid,'action-evaluation-done');
+function exec_node_function_js(itself,tag) {
+		if (UICom.structure.ui[itself.id].js==undefined)
+			UICom.structure.ui[itself.id].setMetadata();
+		if (UICom.structure.ui[itself.id].js!="" && UICom.structure.ui[itself.id].js.indexOf(tag)>-1) {
+			var fcts = UICom.structure.ui[itself.id].js.split("|");
+			for (let i=0;i<fcts.length;i++) {
+				let elts = fcts[i].split("/");
+				if (elts[0]==tag) {
+					fctjs = elts[1].split(";");
+					for (let j=0;j<fctjs.length;j++) {
+						if (fctjs[j].indexOf("##")>-1)
+							eval(replaceVariable(fctjs[j],itself.node));
+						else if (fctjs[j].indexOf("(")>-1)
+							eval(fctjs[j]);
+						else
+						eval(fctjs[j]+"(itself.node,g_portfolioid)");
+					}
+				}
+			}
+		}
 }
-
 
