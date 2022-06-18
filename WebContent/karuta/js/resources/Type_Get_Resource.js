@@ -382,25 +382,8 @@ UIFactory["Get_Resource"].update = function(selected_item,itself,langcode,type)
 {
 	try {
 		//-------- if function js -------------
-		if (UICom.structure["ui"][itself.id].js==undefined)
-			UICom.structure["ui"][itself.id].setMetadata();
-		if (UICom.structure["ui"][itself.id].js!="" && UICom.structure["ui"][itself.id].js.indexOf("update-resource-before")>-1) {
-			var fcts = UICom.structure["ui"][itself.id].js.split("|");
-			for (let i=0;i<fcts.length;i++) {
-				let elts = fcts[i].split("/");
-				if (elts[0]=="update-resource-before") {
-					fctjs = elts[1].split(";");
-					for (let j=0;j<fctjs.length;j++) {
-						if (fctjs[j].indexOf("##")>-1)
-							eval(replaceVariable(fctjs[j],itself.node));
-						else if (fctjs[j].indexOf("(")>-1)
-							eval(fctjs[j]);
-						else
-						eval(fctjs[j]+"(itself.node,g_portfolioid)");
-					}
-				}
-			}
-		}
+		execJS(this,"update-resource-before");
+		//---------------------
 		var value = $(selected_item).attr('value');
 		var code = $(selected_item).attr('code');
 		var uuid = $(selected_item).attr('uuid');
@@ -424,21 +407,7 @@ UIFactory["Get_Resource"].update = function(selected_item,itself,langcode,type)
 			$(itself.label_node[i][0]).text(label);
 		}
 		//-------- if function js -------------
-		if (UICom.structure["ui"][itself.id].js!="") {
-			var fcts = UICom.structure["ui"][itself.id].js.split("|");
-			for (let i=0;i<fcts.length;i++) {
-				let elts = fcts[i].split("/");
-				if (elts[0]=="update-resource") {
-					fctjs = elts[1].split(";");
-					for (let j=0;j<fctjs.length;j++) {
-						if (fctjs[j].indexOf("##")>-1)
-							eval(replaceVariable(fctjs[j],itself.node));
-						else
-							eval(fctjs[j]+"(itself.node,g_portfolioid)");
-					}
-				}
-			}
-		}
+		execJS(itself,'update-resource');
 		//---------------------
 		itself.save();
 	}

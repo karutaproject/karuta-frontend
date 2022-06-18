@@ -201,7 +201,7 @@ UIFactory["Get_Get_Resource"].update = function(selected_item,itself,langcode,ty
 //==================================
 {
 	try {
-		exec_node_function_js(itself,'update-resource-before');
+		execJS(itself,'update-resource-before');
 		//-----------------------
 		var value = $(selected_item).attr('value');
 		var code = $(selected_item).attr('code');
@@ -217,7 +217,7 @@ UIFactory["Get_Get_Resource"].update = function(selected_item,itself,langcode,ty
 		}
 		$(itself.lastmodified_node).text(new Date().getTime());
 		//-----------------------
-		exec_node_function_js(itself,'update-resource');
+		execJS(itself,'update-resource');
 		//-----------------------
 		itself.save();
 	}
