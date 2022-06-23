@@ -938,6 +938,9 @@ body,
 #main-portfolio #portfolio-container .menus a {
   color: var(--portfolio-buttons-color);
 }
+#main-portfolio #portfolio-container .button {
+  color: var(--portfolio-buttons-color);
+}
 #main-portfolio #portfolio-container #contenu,
 #main-portfolio #portfolio-container .popover-header {
   color: var(--portfolio-text-color);

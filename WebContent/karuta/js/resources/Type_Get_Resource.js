@@ -382,7 +382,7 @@ UIFactory["Get_Resource"].update = function(selected_item,itself,langcode,type)
 {
 	try {
 		//-------- if function js -------------
-		execJS(this,"update-resource-before");
+		execJS(itself,"update-resource-before");
 		//---------------------
 		var value = $(selected_item).attr('value');
 		var code = $(selected_item).attr('code');

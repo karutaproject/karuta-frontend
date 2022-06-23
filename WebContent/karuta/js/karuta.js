@@ -747,7 +747,10 @@ function displayPage(uuid,depth,type,langcode) {
 			var node = UICom.structure['ui'][uuid].node;
 			var display = ($(node.metadatawad).attr('display')==undefined)?'Y':$(node.metadatawad).attr('display');
 			$("#welcome-edit").html("");
-			UICom.structure["ui"][uuid].displayNode('standard',UICom.structure['tree'][uuid],'contenu',depth,langcode,g_edit);
+			if (UICom.structure["ui"][uuid].semantictag.indexOf('welcome-unit')>-1 && !g_welcome_edit && display=='Y')
+				UIFactory['Node'].displayWelcomePage(UICom.structure['tree'][uuid],'contenu',depth,langcode,g_edit);
+			else
+				UICom.structure["ui"][uuid].displayNode('standard',UICom.structure['tree'][uuid],'contenu',depth,langcode,g_edit);
 		}
 		if (type=='translate')
 			UICom.structure["ui"][uuid].displayTranslateNode(type,UICom.structure['tree'][uuid],'contenu',depth,langcode,g_edit);
@@ -2216,24 +2219,36 @@ function getText(semtag,objtype,elttype,data,langcode)
 //------------------------------------------------------
 //------------------------------------------------------
 //------------------------------------------------------
-
 //==============================
-function printSection(eltid,notinreport)
+function displayRoot(dest)
 //==============================
 {
+	UICom.structure.ui[g_portfolio_rootid].displayNode('standard',UICom.structure['tree'][g_portfolio_rootid],dest,100,LANGCODE,false);
+}
+
+//==============================
+function printSection(eltid,notinreport,notall)
+//==============================
+{
+	if (notall==null)
+		notall = true;
 	if (notinreport==null)
 		notinreport = true;
 	var node_type = UICom.structure.ui[eltid.substring(6)].asmtype;
-	if ( (node_type=='asmUnit' || node_type=='asmStructure' || node_type=='asmRoot') && notinreport) // g_report_edit==false when inside preview
+	if ( (node_type=='asmUnit' || node_type=='asmStructure' || node_type=='asmRoot') && notinreport && notall) // g_report_edit==false when inside preview
 		window.print();
 	else {
 		$("#wait-window").modal('show');
 		$("#print-window").html("");
-		var divcontent = $(eltid).clone();
-		var ids = $("*[id]", divcontent);
-		$(ids).removeAttr("id");
-		var content = $(divcontent)[0].outerHTML;
-		$("#print-window").html(content);
+		if (notall) {
+			var divcontent = $(eltid).clone();
+			var ids = $("*[id]", divcontent);
+			$(ids).removeAttr("id");
+			var content = $(divcontent)[0].outerHTML;
+			$("#print-window").html(content);
+		} else {
+			displayRoot("print-window");
+		}
 		$("#main-body").addClass("section2hide");
 		$("#print-window").addClass("section2print");
 		$("#wait-window").modal('hide');
@@ -2252,26 +2267,6 @@ function printSection(eltid,notinreport)
 		$("#main-body").removeClass("section2hide");
 		$("#print-window").css("display", "none");
 	}
-}
-
-//==============================
-function printNode(uuid)
-//==============================
-{
-	let printwindow = window.open("../htm/printwindow.htm","printwindow","width=200,height=100");
-/*		$("#wait-window").modal('show');
-		$("#print-window").html("");
-		UICom.structure["ui"][uuid].displayNode('standard',UICom.structure['tree'][uuid],'print-window',99,LANGCODE,g_edit);
-		$("#main-body").addClass("section2hide");
-		$("#print-window").addClass("section2print");
-		$("#wait-window").modal('hide');
-		//------------------
-		window.print();
-		//------------------
-		$("#print-window").removeClass("section2print");
-		$("#main-body").removeClass("section2hide");
-		$("#print-window").css("display", "none");
-	*/
 }
 
 
@@ -3029,22 +3024,20 @@ function notExistChild (nodeid,semtag)
 		return false;
 }
 
-//==================================
-function displayRoot (destid)
-//==================================
-{
-	
-}
+
 
 //=========================================================
 //==================API Vector Functions===================
 //=========================================================
 
 //==================================
-function saveVector(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10)
+function saveVector(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,w,d,r)
 //==================================
 {
-	var xml = "<vector><a1>"+((a1==undefined)?"":a1)+"</a1><a2>"+((a2==undefined)?"":a2)+"</a2><a3>"+((a3==undefined)?"":a3)+"</a3><a4>"+((a4==undefined)?"":a4)+"</a4><a5>"+((a5==undefined)?"":a5)+"</a5><a6>"+((a6==undefined)?"":a6)+"</a6><a7>"+((a7==undefined)?"":a7)+"</a7><a8>"+((a8==undefined)?"":a8)+"</a8><a9>"+((a9==undefined)?"":a9)+"</a9><a10>"+((a10==undefined)?"":a10)+"</a10></vector>";
+	var xml = "<vector>";
+//	xml += "<rights w='"+w+"' d='"+w+"' r='"+r+"'/>";
+	xml += "<a1>"+((a1==undefined)?"":a1)+"</a1><a2>"+((a2==undefined)?"":a2)+"</a2><a3>"+((a3==undefined)?"":a3)+"</a3><a4>"+((a4==undefined)?"":a4)+"</a4><a5>"+((a5==undefined)?"":a5)+"</a5><a6>"+((a6==undefined)?"":a6)+"</a6><a7>"+((a7==undefined)?"":a7)+"</a7><a8>"+((a8==undefined)?"":a8)+"</a8><a9>"+((a9==undefined)?"":a9)+"</a9><a10>"+((a10==undefined)?"":a10)+"</a10>";
+	xml += "</vector>"
 	$.ajax({
 		type : "POST",
 		contentType: "application/xml",
@@ -3381,5 +3374,4 @@ function execJS(node,tag){
 	}
 	return test;
 }
-
 

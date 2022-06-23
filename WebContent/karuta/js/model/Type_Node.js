@@ -2142,3 +2142,128 @@ UIFactory["Node"].prototype.exportNode = function(destcode)
 
 };
 
+//=======================================================================================================================================
+//=======================================================================================================================================
+//======================================= for backward compatibility 2.4 ================================================================
+//=======================================================================================================================================
+//=======================================================================================================================================
+
+
+//==================================================
+UIFactory["Node"].displayWelcomePage = function(root,dest,depth,langcode,edit,inline,backgroundParent)
+//==================================================
+{
+	//---------------------
+	if (langcode==null)
+		langcode = LANGCODE;
+	//---------------------
+	var style = null;
+	var metadataepm = null;
+	var node = null;
+	var data = root.node;
+	var uuid = $(data).attr("id");
+	var images = $("asmContext:has(metadata[semantictag='welcome-main-image'])",data);
+	var imageid = $(images[0]).attr("id");
+	var titles = $("asmContext:has(metadata[semantictag='welcome-title'])",data);
+	var titleid = $(titles[0]).attr("id");
+	var html = "";
+	html += "<div class='page-welcome'>";
+	html += "<div id='welcome-image' style=\"background: url('../../../"+serverBCK+"/resources/resource/file/"+imageid+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"') no-repeat\">";
+	if (titles.length>0) {
+		html += "<div class='welcome-box'>";
+		html += "<div class='welcome-subbox'>";
+		html += "<div class='welcome-title' id='welcome-title'>";
+		html += UICom.structure["ui"][titleid].resource.getView('welcome-title','span')
+		html += "</div>";
+		html += "<div class='welcome-line'/>";
+		var texts = $("asmContext:has(metadata[semantictag='welcome-baseline'])",data);
+		var textid = $(texts[0]).attr("id");
+		html += "<div class='welcome-baseline' id='welcome-baseline' style='"+UIFactory["Node"].getContentStyle(textid)+"'>";
+		html += UICom.structure["ui"][textid].resource.getView('welcome-baseline');
+		html += "</div><!-- id='welcome-baseline' -->";
+		html += "</div><!--  class='welcome-subbox' -->";
+		html += "</div><!--  class='welcome-box' -->";
+	}
+	html += "</div><!-- id='welcome-image' -->";
+	html += "<div id='welcome-blocks'>";
+	html += "</div><!-- id='welcome-blocks' -->";
+	html += "</div><!-- id='welcome-page' -->";
+	$("#"+dest).append(html);
+	//----------------- WELCOME BLOCKS ------------------------
+	var welcome_blocks = $(data).find("asmUnitStructure:has(metadata[semantictag='welcome-page'])").children("asmUnitStructure:has(metadata[semantictag='welcome-block']),asmUnitStructure:has(metadata[semantictag*='asm-block'])");
+	for (var i=0; i<welcome_blocks.length; i++) {
+		var semtag = $($("metadata",welcome_blocks[i])[0]).attr('semantictag');
+		if (semtag=='welcome-block')
+			UIFactory["Node"].displayWelcomeBlock(welcome_blocks[i],'welcome-blocks',depth,langcode,edit,inline,backgroundParent,1);
+		else {
+			var child = UICom.structure["tree"][$(welcome_blocks[i]).attr("id")];
+			edit = false;
+			var menu = false;
+			UIFactory["Node"].displayNode(type,child,'welcome-blocks',depth,langcode,edit,inline,backgroundParent,1,menu);
+		}
+	}
+	//---------------------------------------
+	var semtag =  ($("metadata",data)[0]==undefined)?'': $($("metadata",data)[0]).attr('semantictag');
+	if ( (g_userroles[0]=='designer' && semtag.indexOf('welcome-unit')>-1) || (semtag.indexOf('welcome-unit')>-1 && semtag.indexOf('-editable')>-1 && semtag.containsArrayElt(g_userroles)) ) {
+		html = "<a  class='fas fa-edit' onclick=\"if(!g_welcome_edit){g_welcome_edit=true;} else {g_welcome_edit=false;};$('#contenu').html('');displayPage('"+uuid+"',100,'standard','"+langcode+"',true)\" data-title='"+karutaStr[LANG]["button-welcome-edit"]+"' data-toggle='tooltip' data-placement='bottom'></a>";
+		$("#welcome-edit").html(html);
+	}
+	$('[data-toggle="tooltip"]').tooltip({html: true, trigger: 'hover'});
+}
+
+
+//==================================================
+UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu,block)
+//==================================================
+{
+};
+
+
+
+//==================================================
+UIFactory["Node"].displayWelcomeBlock = function(root,dest,depth,langcode,edit,inline,backgroundParent)
+//==================================================
+{
+	var html = "";
+	var style = "";
+	//---------------------------
+	var welcome_blockid = $(root).attr("id");
+	style = UIFactory["Node"].getLabelStyle(welcome_blockid);
+	html += "<div id='welcome_"+welcome_blockid+"' class='row welcome-block'>";
+	html += "  <div id='welcome-title_"+welcome_blockid+"' class='col-md-12' style='"+style+"'>";
+	html += UICom.structure["ui"][welcome_blockid].getView('welcome-title_'+welcome_blockid,'span');
+	html += "  </div>";	
+	html += "</div><!-- class='row' -->";
+	//----------------- WELCOME RESOURCES ------------------------
+	style = UIFactory["Node"].getContentStyle(welcome_blockid);
+	html += "<div class='row welcome-resources' style='"+style+"'>";
+	var resources = $(root).children("asmContext:has(metadata[semantictag*='welcome'])");
+	for (var i=0; i<resources.length; i++) {
+		var nodeid = $(resources[i]).attr("id");
+		style = UIFactory["Node"].getContentStyle(nodeid);
+		html += "<div id='welcome_resource_"+nodeid+"' class='col-md-12' style='"+style+"'>";
+		UICom.structure["ui"][nodeid].setMetadata();
+		html += UICom.structure["ui"][nodeid].resource.getView('welcome_resource_'+nodeid);
+		html += "</div><!-- class='col-md-12' -->";
+	}
+	html += "</div><!-- class='welcome-resources' -->";
+	//----------------- WELCOME BLOCKS ------------------------
+	style = UIFactory["Node"].getContentStyle(welcome_blockid);
+	html += "<div class='row welcome-block' style='"+style+"'>";
+	var welcome_blocks = $(root).children("asmUnitStructure:has(metadata[semantictag='welcome-block'])");
+	var lgcolumn = Math.floor(12/welcome_blocks.length);
+	for (var i=0; i<welcome_blocks.length; i++) {
+		var welcome_blockid = $(welcome_blocks[i]).attr("id");
+		html += "<div id='welcome_sub"+welcome_blockid+"' class='col-md-"+lgcolumn+"' style='"+style+"'>";
+		html += "</div><!-- class='col-md' -->";
+	}
+	html += "</div><!-- class='row' -->";
+	//---------------------------------------
+	$("#"+dest).append(html);
+	for (var i=0; i<welcome_blocks.length; i++) {
+		var welcome_blockid = $(welcome_blocks[i]).attr("id");
+		UIFactory["Node"].displayWelcomeBlock(welcome_blocks[i],'welcome_sub'+welcome_blockid,depth,langcode,edit,inline,backgroundParent);
+	}
+	//-------------------------------------------------------
+}
+
