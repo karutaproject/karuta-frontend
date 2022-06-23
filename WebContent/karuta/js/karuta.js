@@ -691,10 +691,85 @@ function getURLParameter(sParam) {
 }
 
 //==================================
+function displayBack() {
+//==================================
+	g_backstack.pop();
+	let uuid = g_backstack[g_backstack.length-1].uuid
+	let portfolioid = g_backstack[g_backstack.length-1].portfolioid;
+	if (portfolioid!=g_portfolioid) {
+			var url = serverBCK_API+"/portfolios/portfolio/" + portfolioid + "?resources=true";
+			$.ajax({
+				async:true,
+				type : "GET",
+				dataType : "xml",
+				url : url,
+				success : function(data) {
+					UICom.roles = {};
+					g_userroles = [];
+					g_portfolio_current = data;
+					g_portfolio_rootid = $("asmRoot",data).attr("id");
+					//-------------------------
+					var portfoliocode = portfolios_byid[g_portfolioid].code_node.text();
+					if (typeof(rewriteURL) == 'function')
+						rewriteURL(portfoliocode);
+					//-------------------------
+					if (UICom.structure['ui'][g_portfolio_rootid]!=undefined)
+						UICom.structure['ui'][g_portfolio_rootid].loaded = true;
+					var root_semantictag = $("metadata",$("asmRoot",data)).attr('semantictag');
+					var default_role = "";
+					if ($("metadata-wad",$("asmRoot",data)).attr('defaultrole')!= undefined)
+						default_role = $("metadata-wad",$("asmRoot",data)).attr('defaultrole').trim();
+					$("body").addClass(root_semantictag);
+					// -----------ROLE---------------
+					var role = $("asmRoot",data).attr("role");
+					if (role!="") {
+						g_userroles[0] = g_userroles[1] = role;
+					} else {
+						g_userroles[0] = g_userroles[1] ='designer';
+						g_designerrole = true;
+						g_visible = localStorage.getItem('metadata');
+						toggleMetadata(g_visible);
+					}
+					$.ajax({
+						async:false,
+						type : "GET",
+						dataType : "xml",
+						url : serverBCK_API+"/rolerightsgroups/all/users?portfolio=" + g_portfolioid,
+						success : function(data) {
+							const rrgs = $("rrg",data);
+							for (let i=0;i<rrgs.length;i++) {
+								const label = $("label",rrgs[i]).text();
+								const users = $("user",rrgs[i]);
+								for (let j=0;j<users.length;j++) {
+									if ($(users[j]).attr("id")==USER.id)
+										g_userroles.push(label);
+								}
+							}
+						}
+					});
+					// --------------------------
+					UICom.parseStructure(data,true);
+					if (g_bar_type.indexOf('horizontal')>-1) {
+						UIFactory["Portfolio"].displayHorizontalMenu(UICom.root,'menu_bar','standard',LANGCODE,g_edit,UICom.rootid);
+					} else {
+						UIFactory["Portfolio"].displaySidebar(UICom.root,'sidebar','standard',LANGCODE,g_edit,UICom.rootid);
+					}
+					displayPage(uuid);
+			}
+		});
+	} else {
+		displayPage(uuid);
+	}
+}
+//==================================
 function displayPage(uuid,depth,type,langcode) {
 //==================================
-	if (g_backstack[g_backstack.length]!=uuid)
-		g_backstack.push(uuid);
+	if (g_backstack.length>0 && g_backstack[g_backstack.length-1].uuid!=uuid)
+		g_backstack.push({'uuid':uuid,'portfolioid': g_portfolioid});
+	else if (g_backstack.length==0)
+		g_backstack.push({'uuid':uuid,'portfolioid': g_portfolioid});
+//	if (g_backstack[g_backstack.length]!=uuid)
+//		g_backstack.push(uuid);
 	//---------------------
 	if (uuid==null)
 		uuid = localStorage.getItem('currentDisplayedPage');

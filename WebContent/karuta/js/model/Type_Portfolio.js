@@ -494,7 +494,7 @@ UIFactory["Portfolio"].getNavBar = function (type,langcode,edit,portfolioid)
 	var rootid = $(UICom.root.node).attr('id');
 	html += "<nav id='navbar1' class='navbar navbar-expand-md navbar-dark'>";
 	html += "	<a  id='toggleSideBar' onclick='toggleSideBar()' class='nav-item button icon'><i class='fa fa-bars'></i></a>";
-	html += "	<a  id='backbutton' onclick='g_backstack.pop();displayPage(g_backstack.pop())' class='nav-item button icon' style='font-size:150%' data-title='"+karutaStr[LANG]["back"]+"' data-toggle='tooltip' data-placement='bottom'><i class='fas fa-arrow-circle-left'></i></a>";
+	html += "	<a  id='backbutton' onclick='displayBack()' class='nav-item button icon' style='font-size:150%' data-title='"+karutaStr[LANG]["back"]+"' data-toggle='tooltip' data-placement='bottom'><i class='fas fa-arrow-circle-left'></i></a>";
 	html += "	<a class='navbar-brand' id='sidebar_"+rootid+"' onclick=\"displayPage('"+rootid+"',1,'"+type+"','"+langcode+"',"+g_edit+")\">";
 	html += 		UICom.structure["ui"][rootid].getLabel('sidebar_'+rootid);
 	html += "	</a>";
