@@ -223,22 +223,11 @@
   margin-top: 7px;
   border: 1px solid var(--batch-usergroup-color);
 }
-.batch .update-node-resource {
-  margin-top: 7px;
-  border: 1px solid var(--batch-node-color);
-}
-.batch .import-node {
-  margin-top: 7px;
-  border: 1px solid var(--batch-node-color);
-}
-.batch .delete-node {
-  margin-top: 7px;
-  border: 1px solid var(--batch-node-color);
-}
-.batch .moveup-node {
-  margin-top: 7px;
-  border: 1px solid var(--batch-node-color);
-}
+.batch .delete-node,
+.batch .import-node,
+.batch .update-node-resource,
+.batch .moveup-node,
+.batch .move-node,
 .batch .submitall {
   margin-top: 7px;
   border: 1px solid var(--batch-node-color);

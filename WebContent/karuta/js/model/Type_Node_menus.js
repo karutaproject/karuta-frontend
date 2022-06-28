@@ -157,7 +157,7 @@ UIFactory["Node"].prototype.displayMenus = function(dest,langcode)
 //==================================================
 {
 	var html = this.getMenus(langcode);
-	$(dest).html(html);
+	$(dest).append(html);
 	//------------ Public URL -----------------
 	if ($("#2world-"+this.id).length){
 		var shares = [];
@@ -1259,7 +1259,7 @@ UIFactory["Node"].getXmlItemMenu = function(node,parentid,item,title,databack,ca
 									targetid = position;
 							}
 						}
-						onclick += "importBranch('"+targetid+"','"+foliocode+"','"+semtags[k]+"',"+databack+","+callback+",'"+param2+"');"
+						onclick += "importBranch('"+targetid+"','"+foliocode+"','"+semtags[k]+"',"+databack+","+callback+",'"+param2+"',null,'"+targetid+"');"
 					}
 					// --------- fcts ------------
 					let jss = $("js",trgts[j]);

@@ -647,6 +647,10 @@ body,
 .preview-window button {
   background-color: var(--edit-window-button-background-color);
 }
+.preview-window .row {
+  margin-left: 0px;
+  margin-right: 0px;
+}
 
 .preview-backdrop {
   position: fixed;
@@ -832,7 +836,6 @@ body,
   position: relative;
 }
 #menu_bar .dropdown-submenu > .dropdown-menu {
-  top: 2.4rem;
   left: 0px;
   width: 200px;
   margin-top: -6px;
@@ -937,6 +940,9 @@ body,
   color: var(--portfolio-link-color);
 }
 #main-portfolio #portfolio-container .menus a {
+  color: var(--portfolio-buttons-color);
+}
+#main-portfolio #portfolio-container .button {
   color: var(--portfolio-buttons-color);
 }
 #main-portfolio #portfolio-container #contenu,
@@ -1100,10 +1106,10 @@ body,
 /* ====================== */
 #breadcrumb {
   border-top: 1px solid #F0F0F0;
-  padding-left: 20px;
-  padding-right: 15px;
+  padding-left: 10px;
+  padding-right: 10px;
   font-size: calc(var(--font-size-coeff) * 0.875rem);
-  background-color: #FBFBFB;
+  cursor: pointer;
 }
 
 /* ====================== */

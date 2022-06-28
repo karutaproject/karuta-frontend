@@ -332,7 +332,7 @@ function setMessageBox(html)
 //==============================
 {
 	html = "<span>" + html + "</span>";
-	$("#message-body").html($(html));
+	$("#message-window-body").html($(html));
 }
 
 //==============================
@@ -340,7 +340,7 @@ function addMessageBox(html)
 //==============================
 {
 	html = "<span>" + html + "</span>";
-	$("#message-body").add($(html));
+	$("#message-window-body").add($(html));
 }
 
 //==============================
@@ -539,7 +539,7 @@ function messageBox()
 {
 	var html = "";
 	html += "\n<!-- ==================== Message box ==================== -->";
-	html += "\n<div id='message-window' class='modal fade'>";
+	html += "\n<div id='message-window' class='modal'>";
 	html += "\n		<div class='modal-dialog modal-dialog-scrollable'>";
 	html += "\n			<div class='modal-content'>";
 	html += "\n				<div id='message-window-body' class='modal-body'>";
@@ -691,10 +691,85 @@ function getURLParameter(sParam) {
 }
 
 //==================================
+function displayBack() {
+//==================================
+	g_backstack.pop();
+	let uuid = g_backstack[g_backstack.length-1].uuid
+	let portfolioid = g_backstack[g_backstack.length-1].portfolioid;
+	if (portfolioid!=g_portfolioid) {
+			var url = serverBCK_API+"/portfolios/portfolio/" + portfolioid + "?resources=true";
+			$.ajax({
+				async:true,
+				type : "GET",
+				dataType : "xml",
+				url : url,
+				success : function(data) {
+					UICom.roles = {};
+					g_userroles = [];
+					g_portfolio_current = data;
+					g_portfolio_rootid = $("asmRoot",data).attr("id");
+					//-------------------------
+					var portfoliocode = portfolios_byid[g_portfolioid].code_node.text();
+					if (typeof(rewriteURL) == 'function')
+						rewriteURL(portfoliocode);
+					//-------------------------
+					if (UICom.structure['ui'][g_portfolio_rootid]!=undefined)
+						UICom.structure['ui'][g_portfolio_rootid].loaded = true;
+					var root_semantictag = $("metadata",$("asmRoot",data)).attr('semantictag');
+					var default_role = "";
+					if ($("metadata-wad",$("asmRoot",data)).attr('defaultrole')!= undefined)
+						default_role = $("metadata-wad",$("asmRoot",data)).attr('defaultrole').trim();
+					$("body").addClass(root_semantictag);
+					// -----------ROLE---------------
+					var role = $("asmRoot",data).attr("role");
+					if (role!="") {
+						g_userroles[0] = g_userroles[1] = role;
+					} else {
+						g_userroles[0] = g_userroles[1] ='designer';
+						g_designerrole = true;
+						g_visible = localStorage.getItem('metadata');
+						toggleMetadata(g_visible);
+					}
+					$.ajax({
+						async:false,
+						type : "GET",
+						dataType : "xml",
+						url : serverBCK_API+"/rolerightsgroups/all/users?portfolio=" + g_portfolioid,
+						success : function(data) {
+							const rrgs = $("rrg",data);
+							for (let i=0;i<rrgs.length;i++) {
+								const label = $("label",rrgs[i]).text();
+								const users = $("user",rrgs[i]);
+								for (let j=0;j<users.length;j++) {
+									if ($(users[j]).attr("id")==USER.id)
+										g_userroles.push(label);
+								}
+							}
+						}
+					});
+					// --------------------------
+					UICom.parseStructure(data,true);
+					if (g_bar_type.indexOf('horizontal')>-1) {
+						UIFactory["Portfolio"].displayHorizontalMenu(UICom.root,'menu_bar','standard',LANGCODE,g_edit,UICom.rootid);
+					} else {
+						UIFactory["Portfolio"].displaySidebar(UICom.root,'sidebar','standard',LANGCODE,g_edit,UICom.rootid);
+					}
+					displayPage(uuid);
+			}
+		});
+	} else {
+		displayPage(uuid);
+	}
+}
+//==================================
 function displayPage(uuid,depth,type,langcode) {
 //==================================
-	if (g_backstack[g_backstack.length]!=uuid)
-		g_backstack.push(uuid);
+	if (g_backstack.length>0 && g_backstack[g_backstack.length-1].uuid!=uuid)
+		g_backstack.push({'uuid':uuid,'portfolioid': g_portfolioid});
+	else if (g_backstack.length==0)
+		g_backstack.push({'uuid':uuid,'portfolioid': g_portfolioid});
+//	if (g_backstack[g_backstack.length]!=uuid)
+//		g_backstack.push(uuid);
 	//---------------------
 	if (uuid==null)
 		uuid = localStorage.getItem('currentDisplayedPage');
@@ -721,13 +796,13 @@ function displayPage(uuid,depth,type,langcode) {
 		$("#sidebar_"+uuid).addClass('selected');
 		if (g_breadcrumb=="@1") {
 			var nodeid = uuid;
-			var breadcrumb = "/" + UICom.structure.ui[nodeid].getLabel(null,'none');
+			var breadcrumb = " &gt; <span onclick=\"displayPage('"+nodeid+"')\">" + UICom.structure.ui[nodeid].getLabel(null,'none') + "</span>";
 			while($(UICom.structure.ui[nodeid].node)!=undefined && $(UICom.structure.ui[nodeid].node).parent().parent().parent().length!=0) {
 				nodeid = $(UICom.structure.ui[nodeid].node).parent().attr("id");
-				breadcrumb = "/" + UICom.structure.ui[nodeid].getLabel(null,'none') + breadcrumb;
+				breadcrumb = " &gt; <span onclick=\"displayPage('"+nodeid+"')\">" + UICom.structure.ui[nodeid].getLabel(null,'none') + "</span>" + breadcrumb;
 			}
-			breadcrumb = breadcrumb.substring(breadcrumb.indexOf("/")+1);
-			$("#breadcrumb").html(breadcrumb.substring(breadcrumb.indexOf("/")+1));
+			breadcrumb = breadcrumb.substring(breadcrumb.indexOf(" &gt; ")+3);
+			$("#breadcrumb").html(breadcrumb.substring(breadcrumb.indexOf(" > ")+3));
 		}
 	} else {
 		$("#sidebar_"+uuid).parent().addClass('selected');
@@ -747,7 +822,10 @@ function displayPage(uuid,depth,type,langcode) {
 			var node = UICom.structure['ui'][uuid].node;
 			var display = ($(node.metadatawad).attr('display')==undefined)?'Y':$(node.metadatawad).attr('display');
 			$("#welcome-edit").html("");
-			UICom.structure["ui"][uuid].displayNode('standard',UICom.structure['tree'][uuid],'contenu',depth,langcode,g_edit);
+			if (UICom.structure["ui"][uuid].semantictag.indexOf('welcome-unit')>-1 && !g_welcome_edit && display=='Y')
+				UIFactory['Node'].displayWelcomePage(UICom.structure['tree'][uuid],'contenu',depth,langcode,g_edit);
+			else
+				UICom.structure["ui"][uuid].displayNode('standard',UICom.structure['tree'][uuid],'contenu',depth,langcode,g_edit);
 		}
 		if (type=='translate')
 			UICom.structure["ui"][uuid].displayTranslateNode(type,UICom.structure['tree'][uuid],'contenu',depth,langcode,g_edit);
@@ -787,6 +865,32 @@ function displayPage(uuid,depth,type,langcode) {
 }
 
 //==================================
+function reloadPreviewBox(node) 
+//==================================
+{
+	const uuid = $(node).attr("preview-uuid");
+	const edit = $(node).attr("preview-edit");
+	if (uuid!=null) {
+		$("#preview-window-body-"+uuid).html("");
+		$.ajax({
+			type : "GET",
+			dataType : "xml",
+			url : serverBCK_API+"/nodes/node/" + uuid + "?resources=true",
+			success : function(data) {
+				UICom.parseStructure(data);
+				if (edit==null)
+					g_report_edit = false;
+				else
+					g_report_edit = edit;
+				UICom.structure["ui"][uuid].displayNode('standard',UICom.structure['tree'][uuid],"preview-window-body-"+uuid,100,LANGCODE,g_report_edit);
+				g_report_edit = g_edit;
+				$("#preview-window-"+uuid).show();
+				$("#previewbackdrop-"+uuid).show();
+			}
+		});
+	}
+}
+//==================================
 function previewPage(uuid,depth,type,langcode,edit) 
 //==================================
 {
@@ -801,6 +905,8 @@ function previewPage(uuid,depth,type,langcode,edit)
 
 	var previewwindow = document.createElement("DIV");
 	previewwindow.setAttribute("class", "preview-window");
+	previewwindow.setAttribute("preview-uuid", uuid);
+	previewwindow.setAttribute("preview-edit", edit);
 	previewwindow.innerHTML =  previewBox(uuid);
 	$('body').append(previewwindow);
 	var header = "<button class='btn add-button' style='float:right' onclick=\"$('#preview-window-"+uuid+"').remove();$('#previewbackdrop-"+uuid+"').remove();\">"+karutaStr[LANG]['Close']+"</button>";
@@ -823,8 +929,11 @@ function previewPage(uuid,depth,type,langcode,edit)
 			url : serverBCK_API+"/nodes/node/" + uuid + "?resources=true",
 			success : function(data) {
 				UICom.parseStructure(data);
-				g_report_edit = false;
-				UICom.structure["ui"][uuid].displayNode('standard',UICom.structure['tree'][uuid],"preview-window-body-"+uuid,depth,langcode,false);
+				if (edit==null)
+					g_report_edit = false;
+				else
+					g_report_edit = edit;
+				UICom.structure["ui"][uuid].displayNode('standard',UICom.structure['tree'][uuid],"preview-window-body-"+uuid,depth,langcode,g_report_edit);
 				g_report_edit = g_edit;
 				$("#preview-window-"+uuid).show();
 				$("#previewbackdrop-"+uuid).show();
@@ -1063,7 +1172,7 @@ function show(uuid)
 		contentType: "application/xml",
 		url : urlS,
 		success : function (data){
-			UIFactory.Node.reloadUnit();
+			UIFactory.Node.reloadUnit(null,null,uuid);
 		}
 	});
 }
@@ -1098,7 +1207,7 @@ function hide(uuid)
 		contentType: "application/xml",
 		url : urlS,
 		success : function (data){
-			UIFactory.Node.reloadUnit();
+			UIFactory.Node.reloadUnit(null,null,uuid);
 		}
 	});
 }
@@ -1280,8 +1389,8 @@ function getSendSharingURL(nodeid,uuid,sharewithrole,sharetoemail,sharetoroles,l
 	$("#edit-window-footer").append(obj);
 	var footer = " <button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
 	$("#edit-window-footer").append($(footer));
-
-	var html = "<div class='form-horizontal'>";
+	var html = "<div style='display:none'>" + g_configVar['send-email-logo'] +"</div>";
+	html += "<div class='form-horizontal'>";
 	html += "<div class='form-group'>";
 	if (sharetoemail=='?') {
 		html += "		<label for='email' class='col-sm-3 control-label'>"+karutaStr[LANG]['email']+"</label>";
@@ -1488,7 +1597,10 @@ function sendEmailPublicURL(encodeddata,email,langcode) {
 //	message = message.replace("#do not edit this#",url);
 	//------------------------------
 
-	message = g_configVar['send-email-logo'] + "<br>" + g_configVar['send-email-message'];
+	var img = document.querySelector('#config-send-email-logo');
+	var imgB64 = getDataUrl(img)//	$("#image-window-body").html("");
+	var logo = "<img width='"+img.style.width+"' height='"+img.style.height+"' src=\""+imgB64+"\">";
+	message = logo + "<br>" + g_configVar['send-email-message'];
 	message = message.replace("##firstname##",USER.firstname);
 	message = message.replace("##lastname##",USER.lastname);
 	const urlhtml = g_configVar['send-email-url']==""?g_configVar['send-email-image']:g_configVar['send-email-url']
@@ -2134,7 +2246,7 @@ function getImg(semtag,data,langcode,fluid)
 		var width = getText(semtag,'Image','width',data,langcode);
 		var height =  getText(semtag,'Image','height',data,langcode);
 		var result = "";
-		result += "<img ";
+		result += "<img id='"+semtag+"' ";
 		if (fluid)
 			result += "class='img-fluid' ";
 		result += "style='display:inline"+(width!=""?';width:'+width:"")+""+(height!=""?';height:'+height:"")+"' src='../../../"+serverBCK+"/resources/resource/file/"+getNodeid(semtag,data)+"?lang="+languages[langcode]+"'/>";
@@ -2185,24 +2297,36 @@ function getText(semtag,objtype,elttype,data,langcode)
 //------------------------------------------------------
 //------------------------------------------------------
 //------------------------------------------------------
-
 //==============================
-function printSection(eltid,notinreport)
+function displayRoot(dest)
 //==============================
 {
+	UICom.structure.ui[g_portfolio_rootid].displayNode('standard',UICom.structure['tree'][g_portfolio_rootid],dest,100,LANGCODE,false);
+}
+
+//==============================
+function printSection(eltid,notinreport,notall)
+//==============================
+{
+	if (notall==null)
+		notall = true;
 	if (notinreport==null)
 		notinreport = true;
 	var node_type = UICom.structure.ui[eltid.substring(6)].asmtype;
-	if ( (node_type=='asmUnit' || node_type=='asmStructure' || node_type=='asmRoot') && notinreport) // g_report_edit==false when inside preview
+	if ( (node_type=='asmUnit' || node_type=='asmStructure' || node_type=='asmRoot') && notinreport && notall) // g_report_edit==false when inside preview
 		window.print();
 	else {
 		$("#wait-window").modal('show');
 		$("#print-window").html("");
-		var divcontent = $(eltid).clone();
-		var ids = $("*[id]", divcontent);
-		$(ids).removeAttr("id");
-		var content = $(divcontent)[0].outerHTML;
-		$("#print-window").html(content);
+		if (notall) {
+			var divcontent = $(eltid).clone();
+			var ids = $("*[id]", divcontent);
+			$(ids).removeAttr("id");
+			var content = $(divcontent)[0].outerHTML;
+			$("#print-window").html(content);
+		} else {
+			displayRoot("print-window");
+		}
 		$("#main-body").addClass("section2hide");
 		$("#print-window").addClass("section2print");
 		$("#wait-window").modal('hide');
@@ -2222,6 +2346,7 @@ function printSection(eltid,notinreport)
 		$("#print-window").css("display", "none");
 	}
 }
+
 
 //==================================
 function autocomplete(input,arrayOfValues,onupdate,self,langcode) {
@@ -2412,6 +2537,9 @@ function replaceVariable(text,node,withquote)
 			text = text.replaceAll('##lastimported-1##',"g_importednodestack[g_importednodestack.length-2]");
 			text = text.replaceAll('##lastimported-2##',"g_importednodestack[g_importednodestack.length-3]");
 			text = text.replaceAll('##lastimported##',"g_importednodestack[g_importednodestack.length-1]");
+		}
+		else if (text!=undefined && text.indexOf('##currentportfolio##')>-1) {
+			text = text.replaceAll('##currentportfolio##',portfolios_byid[portfolioid_current].code_node.text());
 		}
 		if (node!=null && node!=undefined && text!=undefined) {
 			if (withquote && text.indexOf('##current')>-1) {
@@ -2974,22 +3102,20 @@ function notExistChild (nodeid,semtag)
 		return false;
 }
 
-//==================================
-function displayRoot (destid)
-//==================================
-{
-	
-}
+
 
 //=========================================================
 //==================API Vector Functions===================
 //=========================================================
 
 //==================================
-function saveVector(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10)
+function saveVector(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,w,d,r)
 //==================================
 {
-	var xml = "<vector><a1>"+((a1==undefined)?"":a1)+"</a1><a2>"+((a2==undefined)?"":a2)+"</a2><a3>"+((a3==undefined)?"":a3)+"</a3><a4>"+((a4==undefined)?"":a4)+"</a4><a5>"+((a5==undefined)?"":a5)+"</a5><a6>"+((a6==undefined)?"":a6)+"</a6><a7>"+((a7==undefined)?"":a7)+"</a7><a8>"+((a8==undefined)?"":a8)+"</a8><a9>"+((a9==undefined)?"":a9)+"</a9><a10>"+((a10==undefined)?"":a10)+"</a10></vector>";
+	var xml = "<vector>";
+//	xml += "<rights w='"+w+"' d='"+w+"' r='"+r+"'/>";
+	xml += "<a1>"+((a1==undefined)?"":a1)+"</a1><a2>"+((a2==undefined)?"":a2)+"</a2><a3>"+((a3==undefined)?"":a3)+"</a3><a4>"+((a4==undefined)?"":a4)+"</a4><a5>"+((a5==undefined)?"":a5)+"</a5><a6>"+((a6==undefined)?"":a6)+"</a6><a7>"+((a7==undefined)?"":a7)+"</a7><a8>"+((a8==undefined)?"":a8)+"</a8><a9>"+((a9==undefined)?"":a9)+"</a9><a10>"+((a10==undefined)?"":a10)+"</a10>";
+	xml += "</vector>"
 	$.ajax({
 		type : "POST",
 		contentType: "application/xml",
@@ -3228,7 +3354,7 @@ function testNumber(text) {
 }
 
 //=========================================================
-// Test Functions for Menus
+// Functions for Menus
 //=========================================================
 
 function testSubmitted(uuid) {
@@ -3297,6 +3423,11 @@ function deleteSameCode(uuid,targetsemtag,srcesemtag){
 	}
 }
 
+function moveup(nodeid) {
+	UIFactory.Node.upNode(nodeid);
+}
+
+
 //================================================
 //================================================
 //============== Function JS =====================
@@ -3328,5 +3459,11 @@ function execJS(node,tag){
 }
 
 
-
-
+function getDataUrl(img) {
+	const canvas = document.createElement('canvas');
+	const ctx = canvas.getContext('2d');
+	canvas.width = img.width;
+	canvas.height = img.height;
+	ctx.drawImage(img, 0, 0);
+	return canvas.toDataURL('image/png');
+}

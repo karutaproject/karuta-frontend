@@ -494,7 +494,7 @@ UIFactory["Portfolio"].getNavBar = function (type,langcode,edit,portfolioid)
 	var rootid = $(UICom.root.node).attr('id');
 	html += "<nav id='navbar1' class='navbar navbar-expand-md navbar-dark'>";
 	html += "	<a  id='toggleSideBar' onclick='toggleSideBar()' class='nav-item button icon'><i class='fa fa-bars'></i></a>";
-	html += "	<a  id='backbutton' onclick='g_backstack.pop();displayPage(g_backstack.pop())' class='nav-item button icon' style='font-size:150%' data-title='"+karutaStr[LANG]["back"]+"' data-toggle='tooltip' data-placement='bottom'><i class='fas fa-arrow-circle-left'></i></a>";
+	html += "	<a  id='backbutton' onclick='displayBack()' class='nav-item button icon' style='font-size:150%' data-title='"+karutaStr[LANG]["back"]+"' data-toggle='tooltip' data-placement='bottom'><i class='fas fa-arrow-circle-left'></i></a>";
 	html += "	<a class='navbar-brand' id='sidebar_"+rootid+"' onclick=\"displayPage('"+rootid+"',1,'"+type+"','"+langcode+"',"+g_edit+")\">";
 	html += 		UICom.structure["ui"][rootid].getLabel('sidebar_'+rootid);
 	html += "	</a>";
@@ -1539,6 +1539,22 @@ UIFactory["Portfolio"].getActions = function(portfolioid)
 	}
 	return html;
 };
+
+
+//==================================
+UIFactory["Portfolio"].exportPortfolio = function(portfolioid) 
+//==================================
+{
+	if (portfolioid==null)
+		portfolioid = g_portfolioid;
+	let html = "<a class='dropdown-item' href='../../../"+serverBCK_API+"/portfolios/portfolio/"+portfolioid+"?resources=true&amp;files=true'>"+karutaStr[LANG]['export-with-files']+"</a>";
+	let js1 = "hideMessageBox()";
+	let footer = "<button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
+	$("#message-window-footer").html($(footer));
+	setMessageBox(html);
+	showMessageBox();
+}
+
 
 //==================================
 UIFactory["Portfolio"].callRenameMove = function(portfolioid,langcode,project)
@@ -2922,7 +2938,7 @@ function setCSSportfolioOLD(data)
 	//--------------------------------
 	if ($("asmContext:has(metadata[semantictag='portfolio-sidebar-separator'])",data).length>0) {
 		var portfolio_sidebar_separator_id = $("asmContext:has(metadata[semantictag='portfolio-sidebar-separator'])",data).attr("id");
-		var portfolio_sidebar_separator_color = UICom.structure["ui"][portfolio_sidebar_separator_id].resource.getValue();								
+		var color = UICom.structure["ui"][portfolio_sidebar_separator_id].resource.getValue();								
 		root.style.setProperty("--portfolio-sidebar-separator-color",color);
 	}
 	//-----------PORTFOLIO COLORS------------------------------------
@@ -2954,7 +2970,7 @@ function setCSSportfolioOLD(data)
 	//--------------------------------
 	if ($("asmContext:has(metadata[semantictag='portfolio-buttons-color'])",data).length>0) {
 		var portfolio_buttons_color_id = $("asmContext:has(metadata[semantictag='portfolio-buttons-color'])",data).attr("id");
-		var portfolio_buttons_color = UICom.structure["ui"][portfolio_buttons_color_id].resource.getValue();
+		var color = UICom.structure["ui"][portfolio_buttons_color_id].resource.getValue();
 		changeCss(".collapsible .glyphicon, .createreport .button,.btn-group .button", "color:"+color+";");
 	}
 	//--------------------------------

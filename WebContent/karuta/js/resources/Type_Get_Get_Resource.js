@@ -200,26 +200,31 @@ var html = this.getView(dest,type,langcode);
 UIFactory["Get_Get_Resource"].update = function(selected_item,itself,langcode,type)
 //==================================
 {
-	$(itself.lastmodified_node).text(new Date().getTime());
-	var value = $(selected_item).attr('value');
-	var code = $(selected_item).attr('code');
-	var uuid = $(selected_item).attr('uuid');
-	var style = $(selected_item).attr('style');
-	//---------------------
-	if (itself.encrypted)
-		value = "rc4"+encrypt(value,g_rc4key);
-	if (itself.encrypted)
-		code = "rc4"+encrypt(code,g_rc4key);
-	//---------------------
-	$(itself.value_node[0]).text(value);
-	$(itself.code_node[0]).text(code);
-	$(itself.uuid_node[0]).text(uuid);
-	$(itself.style_node[0]).text(style);
-	for (var i=0; i<languages.length;i++){
-		var label = $(selected_item).attr('label_'+languages[i]);
-		$(itself.label_node[i][0]).text(label);
+	try {
+		execJS(itself,'update-resource-before');
+		//-----------------------
+		var value = $(selected_item).attr('value');
+		var code = $(selected_item).attr('code');
+		var uuid = $(selected_item).attr('uuid');
+		var style = $(selected_item).attr('style');
+		$(itself.value_node[0]).text(value);
+		$(itself.code_node[0]).text(code);
+		$(itself.uuid_node[0]).text(uuid);
+		$(itself.style_node[0]).text(style);
+		for (var i=0; i<languages.length;i++){
+			var label = $(selected_item).attr('label_'+languages[i]);
+			$(itself.label_node[i][0]).text(label);
+		}
+		$(itself.lastmodified_node).text(new Date().getTime());
+		//-----------------------
+		execJS(itself,'update-resource');
+		//-----------------------
+		itself.save();
 	}
-	itself.save();
+	catch(e) {
+		console.log(e);
+		// do nothing
+	}
 };
 
 //==================================
@@ -234,7 +239,7 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 		queryattr_value = this.multiple.substring(0,this.multiple.indexOf('/'));
 		type = 'multiple';
 	}
-	if (queryattr_value!=undefined && queryattr_value!='') {
+	if (this.get_type!="import_comp" && queryattr_value!=undefined && queryattr_value!='') {
 		queryattr_value = replaceVariable(queryattr_value);
 //		if (type=='multiple')
 //			queryattr_value = cleanCode(queryattr_value);  // portfoliocode may be from a get_ressource with spécial characters
@@ -1746,7 +1751,7 @@ function import_get_get_multiple(parentid,targetid,title,parent_position,parent_
 		actions.push(JSON.parse(acts[i].replaceAll("|","\"")));
 	}
 	let js1 = "javascript:$('#edit-window').modal('hide')";
-	let js2 = "";
+	let js2 = "this.setAttribute('disabled',true);";
 	for (let i=0;i<actions.length;i++) {
 		//-----------------
 		let fctjs = "";
