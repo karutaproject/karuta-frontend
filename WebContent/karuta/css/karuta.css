@@ -647,6 +647,10 @@ body,
 .preview-window button {
   background-color: var(--edit-window-button-background-color);
 }
+.preview-window .row {
+  margin-left: 0px;
+  margin-right: 0px;
+}
 
 .preview-backdrop {
   position: fixed;

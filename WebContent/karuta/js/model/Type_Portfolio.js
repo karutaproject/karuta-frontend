@@ -2938,7 +2938,7 @@ function setCSSportfolioOLD(data)
 	//--------------------------------
 	if ($("asmContext:has(metadata[semantictag='portfolio-sidebar-separator'])",data).length>0) {
 		var portfolio_sidebar_separator_id = $("asmContext:has(metadata[semantictag='portfolio-sidebar-separator'])",data).attr("id");
-		var portfolio_sidebar_separator_color = UICom.structure["ui"][portfolio_sidebar_separator_id].resource.getValue();								
+		var color = UICom.structure["ui"][portfolio_sidebar_separator_id].resource.getValue();								
 		root.style.setProperty("--portfolio-sidebar-separator-color",color);
 	}
 	//-----------PORTFOLIO COLORS------------------------------------
@@ -2970,7 +2970,7 @@ function setCSSportfolioOLD(data)
 	//--------------------------------
 	if ($("asmContext:has(metadata[semantictag='portfolio-buttons-color'])",data).length>0) {
 		var portfolio_buttons_color_id = $("asmContext:has(metadata[semantictag='portfolio-buttons-color'])",data).attr("id");
-		var portfolio_buttons_color = UICom.structure["ui"][portfolio_buttons_color_id].resource.getValue();
+		var color = UICom.structure["ui"][portfolio_buttons_color_id].resource.getValue();
 		changeCss(".collapsible .glyphicon, .createreport .button,.btn-group .button", "color:"+color+";");
 	}
 	//--------------------------------

@@ -1389,8 +1389,8 @@ function getSendSharingURL(nodeid,uuid,sharewithrole,sharetoemail,sharetoroles,l
 	$("#edit-window-footer").append(obj);
 	var footer = " <button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
 	$("#edit-window-footer").append($(footer));
-
-	var html = "<div class='form-horizontal'>";
+	var html = "<div style='display:none'>" + g_configVar['send-email-logo'] +"</div>";
+	html += "<div class='form-horizontal'>";
 	html += "<div class='form-group'>";
 	if (sharetoemail=='?') {
 		html += "		<label for='email' class='col-sm-3 control-label'>"+karutaStr[LANG]['email']+"</label>";
@@ -1597,7 +1597,10 @@ function sendEmailPublicURL(encodeddata,email,langcode) {
 //	message = message.replace("#do not edit this#",url);
 	//------------------------------
 
-	message = g_configVar['send-email-logo'] + "<br>" + g_configVar['send-email-message'];
+	var img = document.querySelector('#config-send-email-logo');
+	var imgB64 = getDataUrl(img)//	$("#image-window-body").html("");
+	var logo = "<img width='"+img.style.width+"' height='"+img.style.height+"' src=\""+imgB64+"\">";
+	message = logo + "<br>" + g_configVar['send-email-message'];
 	message = message.replace("##firstname##",USER.firstname);
 	message = message.replace("##lastname##",USER.lastname);
 	const urlhtml = g_configVar['send-email-url']==""?g_configVar['send-email-image']:g_configVar['send-email-url']
@@ -2243,7 +2246,7 @@ function getImg(semtag,data,langcode,fluid)
 		var width = getText(semtag,'Image','width',data,langcode);
 		var height =  getText(semtag,'Image','height',data,langcode);
 		var result = "";
-		result += "<img ";
+		result += "<img id='"+semtag+"' ";
 		if (fluid)
 			result += "class='img-fluid' ";
 		result += "style='display:inline"+(width!=""?';width:'+width:"")+""+(height!=""?';height:'+height:"")+"' src='../../../"+serverBCK+"/resources/resource/file/"+getNodeid(semtag,data)+"?lang="+languages[langcode]+"'/>";
@@ -3351,7 +3354,7 @@ function testNumber(text) {
 }
 
 //=========================================================
-// Test Functions for Menus
+// Functions for Menus
 //=========================================================
 
 function testSubmitted(uuid) {
@@ -3420,6 +3423,11 @@ function deleteSameCode(uuid,targetsemtag,srcesemtag){
 	}
 }
 
+function moveup(nodeid) {
+	UIFactory.Node.upNode(nodeid);
+}
+
+
 //================================================
 //================================================
 //============== Function JS =====================
@@ -3450,3 +3458,12 @@ function execJS(node,tag){
 	return test;
 }
 
+
+function getDataUrl(img) {
+	const canvas = document.createElement('canvas');
+	const ctx = canvas.getContext('2d');
+	canvas.width = img.width;
+	canvas.height = img.height;
+	ctx.drawImage(img, 0, 0);
+	return canvas.toDataURL('image/png');
+}
