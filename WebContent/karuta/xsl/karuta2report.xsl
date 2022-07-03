@@ -725,6 +725,29 @@
 			<xsl:apply-templates select='asmUnitStructure'/>
 		</for-each-node-js>
 	</xsl:template>
+	<!-- ================ for-vector ============================ -->
+	<xsl:template match="*[metadata/@semantictag='for-each-vector']">
+		<xsl:variable name="ref-init">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='ref-init']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="countvar">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='countvar']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="select">
+			<xsl:value-of select="asmContext[metadata/@semantictag='select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"/>
+		</xsl:variable>
+		<xsl:variable name="display">
+			<xsl:value-of select="asmContext[metadata/@semantictag='display']/asmResource[@xsi_type='Field']/text[@lang=$lang]"/>
+		</xsl:variable>
+		<for-each-vector select='{$select}' display='{$display}'>
+			<xsl:if test="not($ref-init='')">
+				<xsl:attribute name="ref-init"><xsl:value-of select="$ref-init"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not($countvar='')">
+				<xsl:attribute name="countvar"><xsl:value-of select="$countvar"/></xsl:attribute>
+			</xsl:if>
+		</for-each-vector>
+	</xsl:template>
 	<!-- ================ for-each-portfolio-js ============================ -->
 	<xsl:template match="*[metadata/@semantictag='for-each-portfolio-js']">
 		<xsl:variable name="ref-init">

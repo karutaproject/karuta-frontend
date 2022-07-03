@@ -3113,7 +3113,6 @@ function saveVector(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,w,d,r)
 //==================================
 {
 	var xml = "<vector>";
-//	xml += "<rights w='"+w+"' d='"+w+"' r='"+r+"'/>";
 	xml += "<a1>"+((a1==undefined)?"":a1)+"</a1><a2>"+((a2==undefined)?"":a2)+"</a2><a3>"+((a3==undefined)?"":a3)+"</a3><a4>"+((a4==undefined)?"":a4)+"</a4><a5>"+((a5==undefined)?"":a5)+"</a5><a6>"+((a6==undefined)?"":a6)+"</a6><a7>"+((a7==undefined)?"":a7)+"</a7><a8>"+((a8==undefined)?"":a8)+"</a8><a9>"+((a9==undefined)?"":a9)+"</a9><a10>"+((a10==undefined)?"":a10)+"</a10>";
 	xml += "</vector>"
 	$.ajax({
@@ -3467,3 +3466,5 @@ function getDataUrl(img) {
 	ctx.drawImage(img, 0, 0);
 	return canvas.toDataURL('image/png');
 }
+
+

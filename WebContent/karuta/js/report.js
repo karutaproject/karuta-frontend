@@ -3044,4 +3044,53 @@ g_report_actions['draw-data'] = function (destid,action,no,data)
 }
 
 
+//=============================================================================
+//=============================================================================
+//================================= VECTOR ====================================
+//=============================================================================
+//=============================================================================
 
+//==================================
+g_report_actions['for-each-vector'] = function (destid,action,no,data)
+//==================================
+{
+	const NBELT = g_variables["NBELT"];
+	const NOELT = g_variables["NOELT"];
+	var countvar = $(action).attr("countvar");
+	var nodevar = $(action).attr("nodevar");
+	var select = $(action).attr("select");
+	var display = $(action).attr("display");
+	select = replaceVariable(select);
+	var vectors = $("vector",eval(select))
+	//----------------------------------
+	var first = 0;
+	var last = vectors.length;
+	if (NBELT!="" && NOELT!="") {
+		first = parseInt(NOELT);
+		last = (parseInt(NOELT)+parseInt(NBELT)<vectors.length)? parseInt(NOELT)+parseInt(NBELT):vectors.length;
+	}
+	//----------------------------------
+	for ( let j = first; j < last; j++) {
+		if (countvar!=undefined) {
+			g_variables[countvar] = j;
+		}
+		var ref_init = $(action).attr("ref-init");
+		if (ref_init!=undefined) {
+			ref_init = replaceVariable(ref_init);
+			var ref_inits = ref_init.split("/"); // ref1/ref2/...
+			for (let i=0;i<ref_inits.length;i++)
+				g_variables[ref_inits[i]] = new Array();
+		}
+		let a1 = $("a1",vectors[j]).text();
+		let a2 = $("a2",vectors[j]).text();
+		let a3 = $("a3",vectors[j]).text();
+		let a4 = $("a4",vectors[j]).text();
+		eval(display);
+	}
+	if (NBELT!="" && NOELT!="" && parseInt(NOELT)+parseInt(NBELT)<nodeids.length) {
+		g_variables["NOELT"] = parseInt(NOELT) + parseInt(NBELT);
+		let js = "$(\"#\"+dashboard_current).html(\"\");r_processPortfolio(0,dashboard_infos[dashboard_current].xmlReport,dashboard_current,dashboard_infos[dashboard_current].data,0);"
+		let next = "<br>"+first +" - "+ last + "/" +nodeids.length+ " <button class='btn' onclick='"+js+"'>NEXT</button>"
+		$("#"+dashboard_current).append(next);
+	}
+}
