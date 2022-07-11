@@ -1,3 +1,6 @@
+ATTENTION - La version officielle est dorénavant sur le [site ESup] (https://github.com/EsupPortail/karuta-frontend)
+
+
 Karuta
 ======
 
