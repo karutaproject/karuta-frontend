@@ -3061,7 +3061,7 @@ g_report_actions['for-each-vector'] = function (destid,action,no,data)
 	var select = $(action).attr("select");
 	var display = $(action).attr("display");
 	select = replaceVariable(select);
-	var vectors = $("vector",eval(select))
+	var vectors = eval(select);
 	//----------------------------------
 	var first = 0;
 	var last = vectors.length;
@@ -3081,16 +3081,23 @@ g_report_actions['for-each-vector'] = function (destid,action,no,data)
 			for (let i=0;i<ref_inits.length;i++)
 				g_variables[ref_inits[i]] = new Array();
 		}
+		let date = $(vectors[j]).attr('date');
 		let a1 = $("a1",vectors[j]).text();
 		let a2 = $("a2",vectors[j]).text();
 		let a3 = $("a3",vectors[j]).text();
 		let a4 = $("a4",vectors[j]).text();
+		let a5 = $("a5",vectors[j]).text();
+		let a6 = $("a6",vectors[j]).text();
+		let a7 = $("a7",vectors[j]).text();
+		let a8 = $("a8",vectors[j]).text();
+		let a9 = $("a9",vectors[j]).text();
+		let a10 = $("10",vectors[j]).text();
 		eval(display);
 	}
-	if (NBELT!="" && NOELT!="" && parseInt(NOELT)+parseInt(NBELT)<nodeids.length) {
+	if (NBELT!="" && NOELT!="" && parseInt(NOELT)+parseInt(NBELT)<vectors.length) {
 		g_variables["NOELT"] = parseInt(NOELT) + parseInt(NBELT);
 		let js = "$(\"#\"+dashboard_current).html(\"\");r_processPortfolio(0,dashboard_infos[dashboard_current].xmlReport,dashboard_current,dashboard_infos[dashboard_current].data,0);"
-		let next = "<br>"+first +" - "+ last + "/" +nodeids.length+ " <button class='btn' onclick='"+js+"'>NEXT</button>"
+		let next = "<br>"+first +" - "+ last + "/" +vectors.length+ " <button class='btn' onclick='"+js+"'>NEXT</button>"
 		$("#"+dashboard_current).append(next);
 	}
 }
