@@ -166,7 +166,7 @@ $.fn.resourceTextContains = function (options)
 {
 	var defaults= { "value":"v"};
 	var parameters = $.extend(defaults, options);
-	var result = $(this).has("asmResource[xsi_type!='context'][xsi_type!='nodeRes']>text[lang='"+languages[LANGCODE]+"']:contains('"+parameters.value+"')");
+	var result = $(this).has(">asmResource[xsi_type!='context'][xsi_type!='nodeRes']>text[lang='"+languages[LANGCODE]+"']:contains('"+parameters.value+"')");
 	return result;
 };
 $.fn.test_resourceTextContains = function (options) { return result = ($(this).resourceTextContains(options).length>0) ? true : false;};
@@ -178,7 +178,7 @@ $.fn.resourceValueContains = function (options)
 {
 	var defaults= { "value":"v"};
 	var parameters = $.extend(defaults, options);
-	var result = $(this).has("asmResource[xsi_type!='context'][xsi_type!='nodeRes']>value:contains('"+parameters.value+"')");
+	var result = $(this).has(">asmResource[xsi_type!='context'][xsi_type!='nodeRes']>value:contains('"+parameters.value+"')");
 	return result;
 };
 $.fn.test_resourceValueContains = function (options) { return result = ($(this).resourceValueContains(options).length>0) ? true : false;};
@@ -190,7 +190,7 @@ $.fn.resourceFilenameContains = function (options)
 {
 	var defaults= { "value":"v"};
 	var parameters = $.extend(defaults, options);
-	var result = $(this).has("asmResource[xsi_type!='context'][xsi_type!='nodeRes']>filename[lang='"+languages[LANGCODE]+"']:contains('"+parameters.value+"')");
+	var result = $(this).has(">asmResource[xsi_type!='context'][xsi_type!='nodeRes']>filename[lang='"+languages[LANGCODE]+"']:contains('"+parameters.value+"')");
 	return result;
 };
 $.fn.test_resourceFilenameContains = function (options) { return result = ($(this).resourceFilenameContains(options).length>0) ? true : false;};
@@ -202,22 +202,22 @@ $.fn.nodeCodeContains = function (options)
 {
 	var defaults= { "value":"v"};
 	var parameters = $.extend(defaults, options);
-	var result = $(this).has("asmResource[xsi_type='nodeRes']>code:contains('"+parameters.value+"')");
+	var result = $(this).has(">asmResource[xsi_type='nodeRes']>code:contains('"+parameters.value+"')");
 	return result;
 };
 $.fn.test_nodeCodeContains = function (options) { return result = ($(this).nodeCodeContains(options).length>0) ? true : false;};
 //=====================================
 
 //=====================================
-$.fn.nodeCodeEquals = function (options) // nodeCodeEquals({"value":"v"})
+$.fn.nodeCodeEquals = function (options) // nodeCodeEquals({"value":"12"})
 //=====================================
 {
 	var result = [];
 	var defaults= { "value":"v"};
 	var parameters = $.extend(defaults, options);
-	var nodes = $(this).has("asmResource[xsi_type='nodeRes']>code:contains('"+parameters.value+"')");
+	var nodes = $(this).has(">asmResource[xsi_type='nodeRes']>code:contains('"+parameters.value+"')");
 	for (let i=0; i<nodes.length;i++){
-		var code = $("code",$("asmResource[xsi_type='nodeRes']",nodes[i])).text();
+		var code = $("code",$(">asmResource[xsi_type='nodeRes']",nodes[i])).text();
 		if (code == parameters.value)
 			result.push(nodes[i]);
 	}
@@ -232,7 +232,7 @@ $.fn.nodeLabelContains = function (options)
 {
 	var defaults= { "value":"v"};
 	var parameters = $.extend(defaults, options);
-	var result = $(this).has("asmResource[xsi_type='nodeRes']>label[lang='"+languages[LANGCODE]+"']:contains('"+parameters.value+"')");
+	var result = $(this).has(">asmResource[xsi_type='nodeRes']>label[lang='"+languages[LANGCODE]+"']:contains('"+parameters.value+"')");
 	return result;
 };
 $.fn.test_nodeLabelContains = function (options) { return result = ($(this).nodeLabelContains(options).length>0) ? true : false;};
@@ -244,7 +244,7 @@ $.fn.nodeValueContains = function (options)
 {
 	var defaults= { "value":"v"};
 	var parameters = $.extend(defaults, options);
-	var result = $(this).has("asmResource[xsi_type='nodeRes']>value:contains('"+parameters.value+"')");
+	var result = $(this).has(">asmResource[xsi_type='nodeRes']>value:contains('"+parameters.value+"')");
 	return result;
 };
 $.fn.test_nodeValueContains = function (options) { return result = ($(this).nodeValueContains(options).length>0) ? true : false;};
@@ -417,8 +417,8 @@ g_unique_functions['uniqueNodeCode'] = function (index,node)
 //==================================
 {
 	if (index>0) {
-		var current = $("code",$("asmResource[xsi_type='nodeRes']",$(g_current_nodes[index]))).text();
-		var previous = $("code",$("asmResource[xsi_type='nodeRes']",$(g_current_nodes[index-1]))).text();
+		var current = $("code",$(">asmResource[xsi_type='nodeRes']",$(g_current_nodes[index]))).text();
+		var previous = $("code",$(">asmResource[xsi_type='nodeRes']",$(g_current_nodes[index-1]))).text();
 		return current!=previous;
 	} else 
 		return true;
@@ -429,8 +429,8 @@ g_unique_functions['uniqueNodeLabel'] = function (index,node)
 //==================================
 {
 	if (index>0) {
-		var current = $("label[lang='"+languages[LANGCODE]+"']",$("asmResource[xsi_type='nodeRes']",$(g_current_nodes[index]))).text();
-		var previous = $("label[lang='"+languages[LANGCODE]+"']",$("asmResource[xsi_type='nodeRes']",$(g_current_nodes[index-1]))).text();
+		var current = $("label[lang='"+languages[LANGCODE]+"']",$(">asmResource[xsi_type='nodeRes']",$(g_current_nodes[index]))).text();
+		var previous = $("label[lang='"+languages[LANGCODE]+"']",$(">asmResource[xsi_type='nodeRes']",$(g_current_nodes[index-1]))).text();
 		return current!=previous;
 	} else 
 		return true;
@@ -441,8 +441,8 @@ g_unique_functions['uniqueResourceValue'] = function (index,node)
 //==================================
 {
 	if (index>0) {
-		var current = $("value",$("asmResource[xsi_type!='context'][xsi_type!='nodeRes']",$(g_current_nodes[index]))).text();
-		var previous = $("value",$("asmResource[xsi_type!='context'][xsi_type!='nodeRes']",$(g_current_nodes[index-1]))).text();
+		var current = $("value",$(">asmResource[xsi_type!='context'][xsi_type!='nodeRes']",$(g_current_nodes[index]))).text();
+		var previous = $("value",$(">asmResource[xsi_type!='context'][xsi_type!='nodeRes']",$(g_current_nodes[index-1]))).text();
 		return current!=previous;
 	} else 
 		return true;
@@ -453,8 +453,8 @@ g_unique_functions['uniqueResourceCode'] = function (index,node)
 //==================================
 {
 	if (index>0) {
-		var current = $("code",$("asmResource[xsi_type!='context'][xsi_type!='nodeRes']",$(g_current_nodes[index]))).text();
-		var previous = $("code",$("asmResource[xsi_type!='context'][xsi_type!='nodeRes']",$(g_current_nodes[index-1]))).text();
+		var current = $("code",$(">asmResource[xsi_type!='context'][xsi_type!='nodeRes']",$(g_current_nodes[index]))).text();
+		var previous = $("code",$(">asmResource[xsi_type!='context'][xsi_type!='nodeRes']",$(g_current_nodes[index-1]))).text();
 		return current!=previous;
 	} else 
 		return true;
@@ -465,8 +465,8 @@ g_unique_functions['uniqueResourceText'] = function (index,node)
 //==================================
 {
 	if (index>0) {
-		var current = $("text[lang='"+languages[LANGCODE]+"']",$("asmResource[xsi_type!='context'][xsi_type!='nodeRes']",$(g_current_nodes[index]))).text();
-		var previous = $("text[lang='"+languages[LANGCODE]+"']",$("asmResource[xsi_type!='context'][xsi_type!='nodeRes']",$(g_current_nodes[index-1]))).text();
+		var current = $("text[lang='"+languages[LANGCODE]+"']",$(">asmResource[xsi_type!='context'][xsi_type!='nodeRes']",$(g_current_nodes[index]))).text();
+		var previous = $("text[lang='"+languages[LANGCODE]+"']",$(">asmResource[xsi_type!='context'][xsi_type!='nodeRes']",$(g_current_nodes[index-1]))).text();
 		return current!=previous;
 	} else 
 		return true;
@@ -1111,6 +1111,8 @@ g_report_actions['table'] = function (destid,action,no,data)
 	//---------------------------
 	var style = replaceVariable($(action).attr("style"));
 	var cssclass = replaceVariable($(action).attr("class"));
+	if (cssclass==undefined)
+		cssclass="";
 	var html = "<table id='"+destid+'-'+no+"' style='"+style+"' class='"+cssclass+"'></table>";
 	$("#"+destid).append($(html));
 	//---------------------------
@@ -1122,6 +1124,12 @@ g_report_actions['table'] = function (destid,action,no,data)
 	//-----------SORT----------------
 	if (cssclass!=undefined && cssclass.indexOf('sort-table')>-1)
 		sortTable(destid+'-'+no);
+	if (cssclass!=undefined && cssclass.indexOf('tablesorter')>-1)
+		$("#"+destid+'-'+no).tablesorter({
+			sortList: [[0,0]],
+			headers: {3:{sorter:false}}
+		});
+
 }
 
 //==================================
@@ -1139,6 +1147,8 @@ g_report_actions['row'] = function (destid,action,no,data)
 	//---------------------------
 	var style = replaceVariable($(action).attr("style"));
 	var cssclass = replaceVariable($(action).attr("class"));
+	if (cssclass==undefined)
+		cssclass="";
 	var html = "<tr id='"+destid+'-'+no+"' style='"+style+"' class='"+cssclass+"'></table>";
 	$("#"+destid).append($(html));
 	//---------------------------
@@ -1161,7 +1171,8 @@ g_report_actions['cell'] = function (destid,action,no,data)
 	var html = "<td id='"+destid+'-'+no+"' style='"+style+"' class='"+cssclass+"'";
 	if (colspan!=null && colspan!='0')
 		html += "colspan='"+colspan+"' "
-	html += "><span id='help_"+destid+'-'+no+"' class='ihelp'></span>";
+	html += ">";
+	html += "<span id='help_"+destid+'-'+no+"' class='ihelp'></span>";
 	if (cssclass!=undefined && cssclass.indexOf('sort-th')>-1)
 		html+= "<i class='fas fa-sort' aria-hidden='true'></i> ";
 	html += "</td>";
@@ -1195,6 +1206,56 @@ g_report_actions['cell'] = function (destid,action,no,data)
 		g_report_actions[tagname](destid+'-'+no,actions[i],i.toString(),data);
 	};
 }
+
+//-------------------------- used for sortable table -------------------
+//==================================
+function tableelt(type,destid,action,no,data)
+//==================================
+{
+	//---------------------------
+	var ref_init = $(action).attr("ref-init");
+	if (ref_init!=undefined) {
+		ref_init = replaceVariable(ref_init);
+		var ref_inits = ref_init.split("/"); // ref1/ref2/...
+		for (var k=0;k<ref_inits.length;k++)
+			g_variables[ref_inits[k]] = new Array();
+	}
+	//---------------------------
+	var style = replaceVariable($(action).attr("style"));
+	var cssclass = replaceVariable($(action).attr("class"));
+	if (cssclass==undefined)
+		cssclass="";
+	var html = "<"+type+" id='"+destid+'-'+no+"' style='"+style+"' class='"+cssclass+"'></"+type+">";
+	$("#"+destid).append($(html));
+	//---------------------------
+	var actions = $(action).children();
+	for (let i=0; i<actions.length;i++){
+		var tagname = $(actions[i])[0].tagName;
+		g_report_actions[tagname](destid+'-'+no,actions[i],i.toString(),data);
+	};
+}
+
+//==================================
+g_report_actions['thead'] = function (destid,action,no,data)
+//==================================
+{
+	tableelt('thead',destid,action,no,data);
+}
+
+//==================================
+g_report_actions['th'] = function (destid,action,no,data)
+//==================================
+{
+	tableelt('th',destid,action,no,data);
+}
+
+//==================================
+g_report_actions['tbody'] = function (destid,action,no,data)
+//==================================
+{
+	tableelt('tbody',destid,action,no,data);
+}
+
 
 //=============================================================================
 //=============================================================================
@@ -1982,7 +2043,7 @@ g_report_actions['node_resource'] = function (destid,action,no,data)
 	}
 	//------------------------------
 	text += "<span id='reshelp_"+nodeid+"'></span>"
-	$("#"+destid).append($(text));
+	$("#"+destid).append(text);
 	//--------------------set editor------------------------------------------
 	if ($("#report_display_editor_"+nodeid).length>0) {
 		UICom.structure["ui"][nodeid].resource.displayEditor("report_display_editor_"+nodeid);
@@ -2383,7 +2444,7 @@ g_report_actions['text'] = function (destid,action,no,data,is_out_csv)
 	}
 	//-----------------
 	text = "<span id='txt"+nodeid+"' style='"+style+"' class='"+cssclass+"'>"+text+"</span>";
-	$("#"+destid).append($(text));
+	$("#"+destid).append(text);
 }
 
 

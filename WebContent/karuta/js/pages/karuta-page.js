@@ -356,12 +356,16 @@ function setConfigurationTechVariables(langcode)
 			jsfile_nodes = $("asmContext:has(metadata[semantictag='config-file-js'])",data);
 			for (var i=0; i<jsfile_nodes.length; i++){
 				var fileid = $(jsfile_nodes[i]).attr("id");
+				var filename = $("filename[lang='"+languages[langcode]+"']",$("asmResource[xsi_type='Document']",jsfile_nodes[i])).text();
 				var url = "../../../"+serverBCK+"/resources/resource/file/"+fileid;
 				$.ajax({
 					url: url,
+					filename:filename,
 					dataType: "script",
+					success:function(data){
+						console.log("js file loaded : "+this.filename)
+					}
 				});
-				console.log("JS file loaded")
 			}
 			//----- Load CSS Files
 			var jsfile_nodes = [];

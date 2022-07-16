@@ -1598,7 +1598,7 @@ function sendEmailPublicURL(encodeddata,email,langcode) {
 	//------------------------------
 
 	var img = document.querySelector('#config-send-email-logo');
-	var imgB64 = getDataUrl(img)//	$("#image-window-body").html("");
+	var imgB64 = getDataUrl(img);
 	var logo = "<img width='"+img.style.width+"' height='"+img.style.height+"' src=\""+imgB64+"\">";
 	message = logo + "<br>" + g_configVar['send-email-message'];
 	message = message.replace("##firstname##",USER.firstname);
@@ -1630,7 +1630,6 @@ function sendEmailPublicURL(encodeddata,email,langcode) {
 		}
 	});
 }
-
 
 //==================================
 function getLanguage() {
@@ -2990,6 +2989,7 @@ function majcodenum (node) {
 function sortTable (tableid)
 //==================================
 {
+	
 	// adapted from Pierre Giraud - www.pierre-giraud.com
 	const compare = function(ids, asc){
 		return function(row1, row2){
