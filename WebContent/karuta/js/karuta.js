@@ -542,10 +542,9 @@ function messageBox()
 	html += "\n<div id='message-window' class='modal'>";
 	html += "\n		<div class='modal-dialog modal-dialog-scrollable'>";
 	html += "\n			<div class='modal-content'>";
-	html += "\n				<div id='message-window-body' class='modal-body'>";
-	html += "\n				</div>";
-	html += "\n				<div id='message-window-footer' class='modal-footer' >";
-	html += "\n				</div>";
+	html += "\n				<div id='message-window-header' class='modal-header'></div>";
+	html += "\n				<div id='message-window-body' class='modal-body'></div>";
+	html += "\n				<div id='message-window-footer' class='modal-footer'></div>";
 	html += "\n			</div>";
 	html += "\n		</div>";
 	html += "\n</div>";
@@ -904,12 +903,13 @@ function previewPage(uuid,depth,type,langcode,edit)
 	$('body').append(previewbackdrop);
 
 	var previewwindow = document.createElement("DIV");
+	previewwindow.setAttribute("id", "preview-"+uuid);
 	previewwindow.setAttribute("class", "preview-window");
 	previewwindow.setAttribute("preview-uuid", uuid);
 	previewwindow.setAttribute("preview-edit", edit);
 	previewwindow.innerHTML =  previewBox(uuid);
 	$('body').append(previewwindow);
-	var header = "<button class='btn add-button' style='float:right' onclick=\"$('#preview-window-"+uuid+"').remove();$('#previewbackdrop-"+uuid+"').remove();\">"+karutaStr[LANG]['Close']+"</button>";
+	var header = "<button class='btn add-button' style='float:right' onclick=\"$('#preview-"+uuid+"').remove();$('#previewbackdrop-"+uuid+"').remove();\">"+karutaStr[LANG]['Close']+"</button>";
 	$("#preview-window-header-"+uuid).html(header);
 	$("#preview-window-body-"+uuid).html("");
 	if (UICom.structure['tree'][uuid]!=null) {
@@ -2535,6 +2535,8 @@ function replaceVariable(text,node,withquote)
 		if (text!=undefined && text.indexOf('lastimported')>-1) {
 			text = text.replaceAll('##lastimported-1##',"g_importednodestack[g_importednodestack.length-2]");
 			text = text.replaceAll('##lastimported-2##',"g_importednodestack[g_importednodestack.length-3]");
+			text = text.replaceAll('##lastimported-3##',"g_importednodestack[g_importednodestack.length-4]");
+			text = text.replaceAll('##lastimported-4##',"g_importednodestack[g_importednodestack.length-5]");
 			text = text.replaceAll('##lastimported##',"g_importednodestack[g_importednodestack.length-1]");
 		}
 		else if (text!=undefined && text.indexOf('##currentportfolio##')>-1) {
@@ -3466,5 +3468,4 @@ function getDataUrl(img) {
 	ctx.drawImage(img, 0, 0);
 	return canvas.toDataURL('image/png');
 }
-
 

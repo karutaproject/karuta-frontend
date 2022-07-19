@@ -849,8 +849,8 @@ UIFactory["Node"].addMenuElt = function(tag,noitem,nodeid,destmenu)
 UIFactory["Node"].duplicateMenuElt = function(tag,no,noitem,nodeid,destmenu)
 //==================================
 {	
-	const elt = menueltslist[noitem];
-	$(menueltslist[noitem])[0].append(elt.getElementsByTagName(tag)[0].cloneNode(true));
+	const elt = menueltslist[no];
+	$(menueltslist[noitem])[0].append(elt.cloneNode(true));
 	var value= xml2string(xmlDoc);
 	var node = UICom.structure["ui"][nodeid].node;
 	$($("metadata-wad",node)[0]).attr('menuroles',value);
@@ -1025,8 +1025,8 @@ UIFactory["Node"].prototype.displayEltMenu = function(cntidx,destmenu)
 	}
 	html += "<span>"+tag+"</span>";
 	if (del!=undefined && del=='y') {
-		html +="<i style='' class='button fas fa-trash-alt' onclick=\"UIFactory.Node.removeMenuElt('"+eltidx+"','"+this.id+"','"+destmenu+"')\" data-title='Supprimer' data-toggle='tooltip' data-placement='bottom' data-original-title='' title=''></i>";
-		html +="<i style='' class='button fas fa-clone' onclick=\"UIFactory.Node.duplicateMenuElt('"+tag+"','"+eltidx+"','"+cntidx+"','"+this.id+"','"+destmenu+"')\" data-title='Supprimer' data-toggle='tooltip' data-placement='bottom' data-original-title='' title=''></i>";
+		html +="<i style='' class='button fas fa-trash-alt' onclick=\"UIFactory.Node.removeMenuElt('"+eltidx+"','"+this.id+"','"+destmenu+"')\" data-title='"+karutaStr[LANG]["button-delete"]+"' data-toggle='tooltip' data-placement='bottom' data-original-title='' title=''></i>";
+		html +="<i style='' class='button fas fa-clone' onclick=\"UIFactory.Node.duplicateMenuElt('"+tag+"','"+eltidx+"','"+cntidx+"','"+this.id+"','"+destmenu+"')\" data-title='"+karutaStr[LANG]['button-duplicate']+"' data-toggle='tooltip' data-placement='bottom' data-original-title='' title=''></i>";
 	}
 	html += "</div>";
 	html += "<div id='content"+eltidx+"' class='menucontent'></div>"

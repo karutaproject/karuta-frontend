@@ -328,6 +328,26 @@ $.fn.hasParentParentParentSemtagAndNodeCodeContains = function (options)   // ha
 };
 $.fn.test_hasParentParentParentSemtagAndNodeCodeContains = function (options) { return result = ($(this).hasParentParentParentSemtagAndNodeCodeContains(options).length>0) ? true : false;};
 
+//=====================================
+$.fn.sortOnChildSemtag = function (options)
+//=====================================
+{
+	var defaults= { "semtag":"s","sorton":"s"};
+	var parameters = $.extend(defaults, options);
+	var result = $(this).sort(function(a, b){ return $(parameters.sorton,$("asmResource[xsi_type!='context'][xsi_type!='nodeRes']",$("*>metadata[semantictag*=" + parameters.semtag + "]",$(a)))).text() > $(parameters.sorton,$("asmResource[xsi_type!='context'][xsi_type!='nodeRes']",$("*>metadata[semantictag*=" + parameters.semtag + "]",$(b)))).text() ? 1 : -1; });
+	return result;
+};
+
+//=====================================
+$.fn.invsortOnChildSemtag = function (options)
+//=====================================
+{
+	var defaults= { "semtag":"s","sorton":"s"};
+	var parameters = $.extend(defaults, options);
+	var result = $(this).sort(function(a, b){ return $(parameters.sorton,$("asmResource[xsi_type!='context'][xsi_type!='nodeRes']",$("*>metadata[semantictag*=" + parameters.semtag + "]",$(a)))).text() > $(parameters.sorton,$("asmResource[xsi_type!='context'][xsi_type!='nodeRes']",$("*>metadata[semantictag*=" + parameters.semtag + "]",$(b)))).text() ? -1 : 1; });
+	return result;
+};
+
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
@@ -534,7 +554,7 @@ function report_getModelAndPortfolio(model_code,node,destid,g_dashboard_models)
 {
 	$('#'+destid).html("<img id='wait_"+destid+"' style='width: 450px; height: 100px; object-fit:none' src='../img/loading2.gif'>");
 	$.ajax({
-		async:true,
+		async:false,
 		type : "GET",
 		dataType : "xml",
 		url : serverBCK_API+"/portfolios/portfolio/code/"+model_code,
@@ -544,7 +564,7 @@ function report_getModelAndPortfolio(model_code,node,destid,g_dashboard_models)
 			// ---- transform karuta portfolio to report model
 			var urlS = serverBCK_API+"/nodes/"+nodeid+"?xsl-file="+appliname+"/karuta/xsl/karuta2report.xsl&lang="+LANG;
 			$.ajax({
-				async:true,
+				async:false,
 				type : "GET",
 				dataType : "xml",
 				url : urlS,
@@ -3152,7 +3172,7 @@ g_report_actions['for-each-vector'] = function (destid,action,no,data)
 		let a7 = $("a7",vectors[j]).text();
 		let a8 = $("a8",vectors[j]).text();
 		let a9 = $("a9",vectors[j]).text();
-		let a10 = $("10",vectors[j]).text();
+		let a10 = $("a10",vectors[j]).text();
 		eval(display);
 	}
 	if (NBELT!="" && NOELT!="" && parseInt(NOELT)+parseInt(NBELT)<vectors.length) {

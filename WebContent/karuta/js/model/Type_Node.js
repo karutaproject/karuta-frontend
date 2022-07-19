@@ -581,7 +581,9 @@ UIFactory["Node"].prototype.displayAsmNode = function(dest,type,langcode,edit,re
 	}
 	//----------------- hide lbl-div if empty ------------------------------------
 	if (this.getLabel(null,'none',langcode)=="" && this.getButtons()=="" && this.getMenus(langcode)=="")
-		$("div[name='lbl-div']","#node_"+uuid).hide();
+		$("div[name='lbl-div']","#node_"+uuid).hide()
+	//------------------------------------------------------------------------------
+	execJS(this,"display-node-after");
 }
 
 //==============================================================================

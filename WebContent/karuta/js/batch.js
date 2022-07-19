@@ -3765,7 +3765,6 @@ function execReport_BatchCSV(parentid,targetid,title,codeReport,display)
 	}
 	codeReport = replaceVariable(codeReport);
 	report_getModelAndPortfolio(codeReport,root_node,null,g_dashboard_models);
-	$.ajaxSetup({async: true});
 	initBatchVars();
 	if (csvreport.length>1) {
 		var codesLine = csvreport[0].substring(0,csvreport[0].length-1).split(csvseparator);
@@ -3784,9 +3783,10 @@ function execReport_BatchCSV(parentid,targetid,title,codeReport,display)
 		//------------------------------
 		getModelAndProcess(g_json.model_code);		
 		UIFactory.Node.reloadUnit();
-		} else  {
+	} else  {
 		alertHTML("No report data for batch execution!");
 	}
+	$.ajaxSetup({async: true});
 };
 
 //==================================================
