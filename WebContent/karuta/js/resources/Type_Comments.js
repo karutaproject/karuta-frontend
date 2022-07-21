@@ -166,6 +166,7 @@ UIFactory["Comments"].prototype.displayView = function(dest,type,langcode)
 UIFactory["Comments"].prototype.update = function(langcode)
 //==================================
 {
+	execJS(this,"update-resource-before");
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
@@ -189,6 +190,7 @@ UIFactory["Comments"].prototype.update = function(langcode)
 	//---------------------
 
 	this.save();
+	execJS(this,"update-resource-after");
 };
 
 

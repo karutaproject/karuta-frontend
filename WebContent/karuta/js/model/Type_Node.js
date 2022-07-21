@@ -844,6 +844,7 @@ UIFactory["Node"].prototype.displayView = function(dest,type,langcode)
 UIFactory["Node"].prototype.updateLabel = function(langcode)
 //==================================
 {
+	execJS(this,"update-node-before");
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
@@ -860,12 +861,14 @@ UIFactory["Node"].prototype.updateLabel = function(langcode)
 	//---------------------
 	this.save();
 	writeSaved(this.id);
+	execJS(this,"update-node-after");
 };
 
 //==================================
 UIFactory["Node"].prototype.update = function(langcode)
 //==================================
 {
+	execJS(this,"update-node-before");
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
@@ -894,6 +897,7 @@ UIFactory["Node"].prototype.update = function(langcode)
 	}
 	//---------------------
 	this.save();
+	execJS(this,"update-node-after");
 	writeSaved(this.id);
 };
 
@@ -1066,7 +1070,7 @@ UIFactory["Node"].remove = function(uuid,callback,param1,param2,param3,param4)
 		UICom.structure.ui[uuid].js = ($(node.metadatawad).attr('js')==undefined)?"":$(node.metadatawad).attr('js');
 	}
 	if (UICom.structure.ui[uuid].js!=undefined && UICom.structure.ui[uuid].js!="") {
-		var fcts = UICom.structure.ui[uuid].js.split(";");
+		var fcts = UICom.structure.ui[uuid].js.split("|");
 		for (var i=0;i<fcts.length;i++) {
 			var elts = fcts[i].split("/");
 			if (elts[0]=="delete") {
@@ -1087,6 +1091,9 @@ UIFactory["Node"].remove = function(uuid,callback,param1,param2,param3,param4)
 	if (remove) {
 		$("#"+uuid,g_portfolio_current).remove();
 		UICom.DeleteNode(uuid,callback,param1,param2,param3,param4);
+	} else {
+		$('#delete-window').modal('hide');
+		$('#wait-window').modal('hide');
 	}
 };
 

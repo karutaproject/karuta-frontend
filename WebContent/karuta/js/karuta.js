@@ -909,10 +909,11 @@ function previewPage(uuid,depth,type,langcode,edit)
 	previewwindow.setAttribute("preview-edit", edit);
 	previewwindow.innerHTML =  previewBox(uuid);
 	$('body').append(previewwindow);
+	$("#preview-"+uuid).hide();
 	var header = "<button class='btn add-button' style='float:right' onclick=\"$('#preview-"+uuid+"').remove();$('#previewbackdrop-"+uuid+"').remove();\">"+karutaStr[LANG]['Close']+"</button>";
 	$("#preview-window-header-"+uuid).html(header);
 	$("#preview-window-body-"+uuid).html("");
-	if (UICom.structure['tree'][uuid]!=null) {
+/*	if (UICom.structure['tree'][uuid]!=null) {
 		if (edit==null)
 			g_report_edit = false;
 		else
@@ -922,7 +923,7 @@ function previewPage(uuid,depth,type,langcode,edit)
 		$("#previewbackdrop-"+uuid).show();
 		$("#preview-window-"+uuid).show();
 		window.scrollTo(0,0);
-	} else {
+	} else { */
 		$.ajax({
 			type : "GET",
 			dataType : "xml",
@@ -935,7 +936,7 @@ function previewPage(uuid,depth,type,langcode,edit)
 					g_report_edit = edit;
 				UICom.structure["ui"][uuid].displayNode('standard',UICom.structure['tree'][uuid],"preview-window-body-"+uuid,depth,langcode,g_report_edit);
 				g_report_edit = g_edit;
-				$("#preview-window-"+uuid).show();
+				$("#preview-"+uuid).show();
 				$("#previewbackdrop-"+uuid).show();
 				window.scrollTo(0,0);
 			},
@@ -948,7 +949,7 @@ function previewPage(uuid,depth,type,langcode,edit)
 				window.scrollTo(0,0);
 			}
 		});
-	}
+//	}
 }
 
 //==================================
@@ -1127,6 +1128,9 @@ function submit(uuid,submitall)
 					$(parent).hide();
 				if (UICom.structure.ui[$("#submit-"+uuid).parent().attr('dashboardid')].startday_node!=null)
 					register_report($("#submit-"+uuid).parent().attr('dashboardid'));
+			} else if ( $(".preview-window").length>0) {
+					$(".preview-window").remove();
+					$(".preview-backdrop").remove();
 			} else
 				UIFactory.Node.reloadUnit();
 		}
@@ -1145,6 +1149,10 @@ function reset(uuid)
 		url : urlS,
 		uuid : uuid,
 		success : function (data){
+			if ( $(".preview-window").length>0) {
+				$(".preview-window").remove();
+				$(".preview-backdrop").remove();
+			} else 
 			UIFactory.Node.reloadUnit();
 		}
 	});
@@ -3111,12 +3119,19 @@ function notExistChild (nodeid,semtag)
 //=========================================================
 
 //==================================
-function saveVector(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,w,d,r)
+function saveVector(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,d,w,r)
 //==================================
 {
-	var xml = "<vector>";
-	xml += "<a1>"+((a1==undefined)?"":a1)+"</a1><a2>"+((a2==undefined)?"":a2)+"</a2><a3>"+((a3==undefined)?"":a3)+"</a3><a4>"+((a4==undefined)?"":a4)+"</a4><a5>"+((a5==undefined)?"":a5)+"</a5><a6>"+((a6==undefined)?"":a6)+"</a6><a7>"+((a7==undefined)?"":a7)+"</a7><a8>"+((a8==undefined)?"":a8)+"</a8><a9>"+((a9==undefined)?"":a9)+"</a9><a10>"+((a10==undefined)?"":a10)+"</a10>";
-	xml += "</vector>"
+	if (d==undefined)
+		d = USER.username;
+	if (w==undefined)
+		w = "";
+	if (r==undefined)
+		r = "";
+	var xml = "<vectors>";
+	xml += "<rights w='"+w+"' d='"+d+" "+USER.username+"' r='"+r+"'/>";
+	xml += "<vector><a1>"+((a1==undefined)?"":a1)+"</a1><a2>"+((a2==undefined)?"":a2)+"</a2><a3>"+((a3==undefined)?"":a3)+"</a3><a4>"+((a4==undefined)?"":a4)+"</a4><a5>"+((a5==undefined)?"":a5)+"</a5><a6>"+((a6==undefined)?"":a6)+"</a6><a7>"+((a7==undefined)?"":a7)+"</a7><a8>"+((a8==undefined)?"":a8)+"</a8><a9>"+((a9==undefined)?"":a9)+"</a9><a10>"+((a10==undefined)?"":a10)+"</a10>";
+	xml += "</vector></vectors>"
 	$.ajax({
 		type : "POST",
 		contentType: "application/xml",
@@ -3267,7 +3282,19 @@ function searchVector(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10)
 	return result;
 }
 
-function deleteAllVectors(nodeid){
+//==================================
+function numberOfVector(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10)
+//==================================
+{
+	let search = $("vector",searchVector(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10));
+	const nb = search.length;
+	return nb;
+}
+
+//==================================
+function deleteAllVectors(nodeid)
+//==================================
+{
 	const date = UICom.structure.ui[nodeid].resource.getView();
 	let url = serverBCK+"/vector?";
 	if (date!=null)
@@ -3287,7 +3314,10 @@ function deleteAllVectors(nodeid){
 
 }
 
-function confirmDeleteAllVectors(nodeid){
+//==================================
+function confirmDeleteAllVectors(nodeid)
+//==================================
+{
 	let js = "deleteAllVectors('"+nodeid+"')";
 	confirmDelete(js);
 }

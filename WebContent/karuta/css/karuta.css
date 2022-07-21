@@ -2383,7 +2383,7 @@ table.tablesorter thead tr th, table.tablesorter tfoot tr th {
   min-width: 150px;
 }
 
-table.tablesorter th.restore {
+s table.tablesorter th.restore {
   min-width: 35px;
   width: 35px;
 }

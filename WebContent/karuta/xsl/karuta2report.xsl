@@ -132,7 +132,7 @@
 		</th>
 	</xsl:template>
 	<!-- ================ row ============================ -->
-	<xsl:template match="*[metadata/@semantictag='model-row']">
+	<xsl:template match="*[metadata/@semantictag='model-row']|*[metadata/@semantictag='model-rw-thead']">
 		<xsl:variable name="ref-init">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='ref-init']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
