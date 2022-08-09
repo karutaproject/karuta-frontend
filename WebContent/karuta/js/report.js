@@ -260,12 +260,48 @@ $.fn.utcBetween = function (options)
 	for (let i=0;i<this.length;i++){
 		var node = $("asmContext:has('>metadata[semantictag*=" + parameters.semtag + "]')",this[i]);		
 		var utc = $("utc",node).text();
-		if (parameters.min < utc && utc < parameters.max)
+		if (replaceVariable(parameters.min) < utc && utc < replaceVariable(parameters.max))
 			result.push(this[i])
 	}
 	return result;
 };
 $.fn.test_utcBetween = function (options) { return result = ($(this).utcBetween(options).length>0) ? true : false;};
+//=====================================
+
+//=====================================
+$.fn.utcGreater = function (options)  
+//=====================================
+{
+	var result = [];
+	var defaults= {"semtag":"s","min":"m"};
+	var parameters = $.extend(defaults, options);
+	for (let i=0;i<this.length;i++){
+		var node = $("asmContext:has('>metadata[semantictag*=" + parameters.semtag + "]')",this[i]);		
+		var utc = $("utc",node).text();
+		if (replaceVariable(parameters.min) < utc)
+			result.push(this[i])
+	}
+	return result;
+};
+$.fn.test_utcGreater = function (options) { return result = ($(this).utcGreater(options).length>0) ? true : false;};
+//=====================================
+
+//=====================================
+$.fn.utcLower = function (options)  
+//=====================================
+{
+	var result = [];
+	var defaults= {"semtag":"s","max":"M"};
+	var parameters = $.extend(defaults, options);
+	for (let i=0;i<this.length;i++){
+		var node = $("asmContext:has('>metadata[semantictag*=" + parameters.semtag + "]')",this[i]);		
+		var utc = $("utc",node).text();
+		if (utc < replaceVariable(parameters.max))
+			result.push(this[i])
+	}
+	return result;
+};
+$.fn.test_utcLower = function (options) { return result = ($(this).utcLower(options).length>0) ? true : false;};
 //=====================================
 
 //=====================================
@@ -2200,7 +2236,7 @@ g_report_actions['variable'] = function (destid,action,no,data)
 			if (!$.isNumeric(text))
 				text="";
 		} else if (fct!=undefined && fct!=""){
-			text = eval(fct);
+			text = eval(replaceVariable(fct));
 		} else {
 			var select = $(action).attr("select");
 			if (select!=undefined && select.length>0) {

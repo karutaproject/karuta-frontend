@@ -2590,6 +2590,14 @@ s table.tablesorter th.restore {
   display: none;
 }
 
+.hidesubmittedbutton .submitted {
+  display: none;
+}
+
+.hidenotsubmittedbutton .not-submitted {
+  display: none;
+}
+
 .alert {
   padding: 1px 5px;
   margin-bottom: 0px;

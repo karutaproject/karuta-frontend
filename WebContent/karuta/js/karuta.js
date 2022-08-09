@@ -613,7 +613,7 @@ function deleteandhidewindow(uuid,type,parentid,destid,callback,param1,param2,pa
 }
 
 //=======================================================================
-function confirmSubmit(uuid,submitall,js) 
+function confirmSubmit(uuid,submitall,js,text) 
 // =======================================================================
 {
 	if (js==null || js==undefined)
@@ -635,7 +635,7 @@ function confirmSubmit(uuid,submitall,js)
 		alertHTML(karutaStr[LANG]["document-required"]);
 	else
 	{
-		document.getElementById('delete-window-body').innerHTML = karutaStr[LANG]["confirm-submit"];
+		document.getElementById('delete-window-body').innerHTML = (text==null) ? karutaStr[LANG]["confirm-submit"] : text;
 		var buttons = "<button class='btn' onclick=\"javascript:$('#delete-window').modal('hide');\">" + karutaStr[LANG]["Cancel"] + "</button>";
 		buttons += "<button class='btn btn-danger' onclick=\"$('#delete-window').modal('hide');submit('"+uuid+"',"+submitall+");"+js+"\">" + karutaStr[LANG]["button-submit"] + "</button>";
 		document.getElementById('delete-window-footer').innerHTML = buttons;
@@ -1992,7 +1992,10 @@ function updateVariable(node)
 {
 	var value = UICom.structure.ui[$(node).attr("id")].resource.getAttributes().value;
 	var code = UICom.structure.ui[$(node).attr("id")].resource.getAttributes().code;
+	var text = UICom.structure.ui[$(node).attr("id")].resource.getAttributes().text;
 	var variable_value = (value=="") ? code : value;
+	if (variable_value==undefined)
+		variable_value = text;;
 	g_variables[UICom.structure.ui[$(node).attr("id")].getCode()] = cleanCode(variable_value,true);
 }
 
@@ -2540,6 +2543,10 @@ function replaceVariable(text,node,withquote)
 	if (withquote==null)
 		withquote = true;
 	if (text!=undefined && text!="") {
+		if (text.indexOf("##today-utc##"))
+			text = text.replaceAll('##today-utc##',new Date().getTime());
+		if (text.indexOf("##today##"))
+			text = text.replaceAll('##today##',new Date().toLocaleString());
 		if (text!=undefined && text.indexOf('lastimported')>-1) {
 			text = text.replaceAll('##lastimported-1##',"g_importednodestack[g_importednodestack.length-2]");
 			text = text.replaceAll('##lastimported-2##',"g_importednodestack[g_importednodestack.length-3]");
@@ -2551,6 +2558,7 @@ function replaceVariable(text,node,withquote)
 			text = text.replaceAll('##currentportfolio##',portfolios_byid[portfolioid_current].code_node.text());
 		}
 		if (node!=null && node!=undefined && text!=undefined) {
+			//--------- currentnode--------------
 			if (withquote && text.indexOf('##current')>-1) {
 				text = text.replaceAll('##currentnode##',"'"+node.id+"'");
 				text = text.replaceAll('##currentcode##',"'"+$($("code",$("asmResource[xsi_type!='context'][xsi_type!='nodeRes']",node.node))).text()+"'");
@@ -2559,6 +2567,7 @@ function replaceVariable(text,node,withquote)
 				text = text.replaceAll('##currentnode##',node.id);
 				text = text.replaceAll('##currentcode##',$($("code",$("asmResource[xsi_type!='context'][xsi_type!='nodeRes']",node.node))).text());
 			}
+			//--------- parentcode--------------
 			if (withquote && text.indexOf('##parentnode##')>-1)
 				if (node.node!=undefined)
 					text = text.replaceAll('##parentnode##',"'"+$(node.node).parent().attr('id')+"'");
@@ -2569,6 +2578,18 @@ function replaceVariable(text,node,withquote)
 					text = text.replaceAll('##parentnode##',$(node.node).parent().attr('id'));
 				else
 					text = text.replaceAll('##parentnode##',$(node).parent().attr('id'));
+			//--------- parentcode--------------
+			if (withquote && text.indexOf('##parentparentnode##')>-1)
+				if (node.node!=undefined)
+					text = text.replaceAll('##parentparentnode##',"'"+$(node.node).parent().parent().attr('id')+"'");
+				else
+					text = text.replaceAll('##parentparentnode##',"'"+$(node).parent().parent().attr('id')+"'");
+			if (!withquote && text.indexOf('##parentparentnode##')>-1)
+				if (node.node!=undefined)
+					text = text.replaceAll('##parentparentnode##',$(node.node).parent().parent().attr('id'));
+				else
+					text = text.replaceAll('##parentparentnode##',$(node).parent().parent().attr('id'));
+			//--------- itselfrescode--------------
 			if (withquote && text.indexOf('##itselfrescode##')>-1)
 				text = text.replaceAll('##itselfrescode##',"'"+$($("code",$("asmResource[xsi_type!='context'][xsi_type!='nodeRes']",node.node))).text()+"'");
 	
@@ -3129,10 +3150,11 @@ function saveVector(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,d,w,r)
 	if (r==undefined)
 		r = "";
 	var xml = "<vectors>";
-	xml += "<rights w='"+w+"' d='"+d+" "+USER.username+"' r='"+r+"'/>";
+	xml += "<rights w='"+w+"' d='"+d+"' r='"+r+"'/>";
 	xml += "<vector><a1>"+((a1==undefined)?"":a1)+"</a1><a2>"+((a2==undefined)?"":a2)+"</a2><a3>"+((a3==undefined)?"":a3)+"</a3><a4>"+((a4==undefined)?"":a4)+"</a4><a5>"+((a5==undefined)?"":a5)+"</a5><a6>"+((a6==undefined)?"":a6)+"</a6><a7>"+((a7==undefined)?"":a7)+"</a7><a8>"+((a8==undefined)?"":a8)+"</a8><a9>"+((a9==undefined)?"":a9)+"</a9><a10>"+((a10==undefined)?"":a10)+"</a10>";
 	xml += "</vector></vectors>"
 	$.ajax({
+		async:false,
 		type : "POST",
 		contentType: "application/xml",
 		dataType : "xml",
@@ -3201,6 +3223,7 @@ function deleteVector(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10)
 			url += "&a10="+a10;
 	url = serverBCK+"/vector?" + url;
 	$.ajax({
+		async:false,
 		type : "DELETE",
 		contentType: "application/xml",
 		dataType : "xml",

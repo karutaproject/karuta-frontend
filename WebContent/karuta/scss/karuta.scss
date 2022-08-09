@@ -2733,6 +2733,8 @@ table.tablesorter th.restore {
 .hidesubmitbutton .showsubmitbutton .submitbutton {background-color:red;display:block}
 
 .hideresetbutton .resetbutton {display:none}
+.hidesubmittedbutton .submitted {display:none}
+.hidenotsubmittedbutton .not-submitted {display:none}
 
 .alert {
 	padding: 1px 5px;

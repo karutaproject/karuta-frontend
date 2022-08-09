@@ -741,6 +741,7 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 		if (target=='fileid') {
 			for ( var i = 0; i < newTableau1.length; i++) {
 				var uuid = $(newTableau1[i][1]).attr('id');
+				var style = UIFactory.Node.getDataContentStyle(newTableau1[i][1].querySelector("metadata-epm"));
 				var resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i][1]);
 				//------------------------------
 				var code = $('code',resource).text();
@@ -763,6 +764,7 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 				for (var j=0; j<languages.length;j++){
 					html += "label_"+languages[j]+"=\"fileid-"+uuid+"\" ";
 				}
+				html += " style=\""+style+"\">";
 				html += ">";
 				
 				if (display_code)

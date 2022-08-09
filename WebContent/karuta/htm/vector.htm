@@ -18,7 +18,7 @@ function getVectorElt(vector)
 	for (var j=1;j<11;j++){
 		const elt = $("a"+j,vector);
 		if (elt.length>0){
-			html += "<td style='background-color:#F5F5F5'>"+$(elt).text();
+			html += "<td id='td-"+j+"'style='background-color:#F5F5F5'>"+$(elt).text();
 			if (!isNaN($(elt).text())){
 				try {
 					if (parseInt($(elt).text())>10000000) {
@@ -29,7 +29,7 @@ function getVectorElt(vector)
 				catch(e){};
 			}
 			html += "</td>";
-			param += "'"+$(elt).text()+"'";
+			param += "\""+$(elt).text()+"\"";
 			if (j<nbelts)
 				param += ",";
 		} else {
@@ -63,7 +63,7 @@ function displayVector(destid,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10)
 			param = "";
 			html += "<td style='font-size:80%;background-color:#D7D7D7'>userid:"+$(vectors[i]).attr('uid')+"<br>"+$(vectors[i]).attr('date')+"</td>"
 			html += getVectorElt(vectors[i]);
-			html += "<td><button class='danger' onclick=\"if (confirm('Delete?')){deleteVector("+param+")}\">Del</button>"
+			html += "<td><button class='danger' onclick=\'if (confirm(\"Delete?\")){deleteVectorNo("+i+")}\'>Del</button>"
 			html += " <button  onclick=\"copyPasteVector("+param+")\">Copy-Paste</button></td>"
 			html += "</tr>";
 		}
@@ -78,6 +78,16 @@ function displayvectors() {
 		tabas[i] = (val!="")? val : null;
 	}
 	displayVector('report',tabas[1],tabas[2],tabas[3],tabas[4],tabas[5],tabas[6],tabas[7],tabas[8],tabas[9],tabas[10]);
+}
+
+function deleteVectorNo(no) {
+	var tabas = [];
+	for (var i=1;i<11;i++){
+		const tr = document.getElementById("tr-"+no);
+		const val = $("#td-"+i, tr).text();
+		tabas[i] = (val!="")? val : null;
+	}
+	deleteVector(tabas[1],tabas[2],tabas[3],tabas[4],tabas[5],tabas[6],tabas[7],tabas[8],tabas[9],tabas[10]);
 }
 
 function deletevectors() {
