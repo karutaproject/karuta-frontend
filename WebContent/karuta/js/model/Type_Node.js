@@ -944,7 +944,7 @@ UIFactory["Node"].prototype.getEditor = function(type,langcode)
 			if (g_userroles[0]=='designer' || USER.admin || editcoderoles.containsArrayElt(g_userroles) || editcoderoles.indexOf(this.userrole)>-1 || editcoderoles.indexOf($(USER.username_node).text())>-1) {
 				//---------------------- code ----------------------------
 				var htmlCodeGroupObj = $("<div class='form-group ncode'></div>")
-				var htmlCodeLabelObj = $("<label for='code_"+this.id+"' class='col-sm-3 control-label'>Code</label>");
+				var htmlCodeLabelObj = $("<label for='code_"+this.id+"' class='col-sm-3 control-label'>"+karutaStr[LANG]['code']+"</label>");
 				var htmlCodeDivObj = $("<div class='node-code'></div>");
 				var htmlCodeInputObj = $("<input id='code_"+this.id+"' type='text' class='form-control' name='input_code' value=\""+this.code_node.text()+"\">");
 				$(htmlCodeInputObj).change(function (){
@@ -956,7 +956,7 @@ UIFactory["Node"].prototype.getEditor = function(type,langcode)
 				$(htmlFormObj).append($(htmlCodeGroupObj));
 				//---------------------- value ----------------------------
 				var htmlValueGroupObj = $("<div class='form-group nvalue'></div>")
-				var htmlValueLabelObj = $("<label for='value_"+this.id+"' class='col-sm-3 control-label'>Value</label>");
+				var htmlValueLabelObj = $("<label for='value_"+this.id+"' class='col-sm-3 control-label'>"+karutaStr[LANG]['value']+"</label>");
 				var htmlValueDivObj = $("<div class='node-value'></div>");
 				var htmlValueInputObj = $("<input id='value_"+this.id+"' type='text' class='form-control' name='input_value' value=\""+this.value_node.text()+"\">");
 				$(htmlValueInputObj).change(function (){
@@ -1944,10 +1944,10 @@ UIFactory['Node'].reloadUnit = function(uuid,redisplay,nodeid)
 	let node = null
 	if (nodeid!=null) {
 		node = document.getElementById("node_"+nodeid);
-		while (node.parentNode!=null && node.getAttribute("preview-uuid")==null)
+		while (node!=null && node.parentNode!=null && node.getAttribute("preview-uuid")==null)
 			node = node.parentNode;
 		previewuuid = $(node).attr("preview-uuid");
-		}
+	}
 	if (previewuuid!=null && node!=null) {
 		reloadPreviewBox(node)
 		$('#wait-window').modal('hide');

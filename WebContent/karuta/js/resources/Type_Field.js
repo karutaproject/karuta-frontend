@@ -96,6 +96,8 @@ UIFactory["Field"].prototype.getAttributes = function(type,langcode)
 UIFactory["Field"].prototype.getView = function(dest,type,langcode)
 //==================================
 {
+	if (UICom.structure.ui[this.id].semantictag.indexOf("g-select-variable")>-1)
+		updateVariable(this.node);
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;

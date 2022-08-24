@@ -698,6 +698,7 @@ UIFactory["Get_Get_Resource"].prototype.parse = function(destid,type,langcode,da
 		tableau1[i] = [code,nodes[i]];
 	}
 	var newTableau1 = tableau1.sort(sortOn1);
+	var tabadded = [];
 	//------------------------------------------------------------
 	if (type=='select') {
 		//--------------------------------
@@ -952,7 +953,7 @@ UIFactory["Get_Get_Resource"].prototype.parse = function(destid,type,langcode,da
 		var inputs = "<div id='get_get_multiple' class='multiple'></div>";
 		var inputs_obj = $(inputs);
 		//-----search for already added------------------
-		if (this.unique!="") {
+		if (this.unique!=undefined && this.unique!="" && this.unique!="false") {
 			if (this.targetid==undefined || this.targetid=="")
 				this.targetid = this.parentid;
 			var targetid = this.targetid;
@@ -973,7 +974,7 @@ UIFactory["Get_Get_Resource"].prototype.parse = function(destid,type,langcode,da
 		}
 		//----------remove allready added----------------
 		var newTableau2 = [];
-		if (this.unique!="") {
+		if (this.unique!=undefined && this.unique!="" && this.unique!="false") {
 			for ( var i = 0; i < newTableau1.length; ++i) {
 				const indx = tabadded.indexOf(newTableau1[i][0]);
 				if (indx==-1)
@@ -1018,6 +1019,7 @@ UIFactory["Get_Get_Resource"].prototype.parse = function(destid,type,langcode,da
 				if (code.indexOf("!")>-1 || semtag.indexOf("!")>-1) {
 					selectable = false;
 				}
+				let original_code = code
 				code = cleanCode(code);
 				//------------------------------
 				input += "<div id='"+code+"' style=\""+style+"\">";
@@ -1052,7 +1054,7 @@ UIFactory["Get_Get_Resource"].prototype.parse = function(destid,type,langcode,da
 				// ---------------------- children ---------
 				if (semtag2!="") {
 					var semtag_parent = semtag.replace("!","");
-					UIFactory.Get_Get_Resource.getChildren(inputs_obj,langcode,self,srce,portfoliocode,semtag2,semtag_parent,code,cachable);
+					UIFactory.Get_Get_Resource.getChildren(inputs_obj,langcode,self,srce,portfoliocode,semtag2,semtag_parent,original_code,cachable,tabadded);
 				}
 				//------------------------------------------
 			}
@@ -1064,7 +1066,7 @@ UIFactory["Get_Get_Resource"].prototype.parse = function(destid,type,langcode,da
 };
 
 //==================================
-UIFactory["Get_Get_Resource"].getChildren = function(dest,langcode,self,srce,portfoliocode,semtag,semtag_parent,code,cachable)
+UIFactory["Get_Get_Resource"].getChildren = function(dest,langcode,self,srce,portfoliocode,semtag,semtag_parent,code,cachable,tabadded)
 //==================================
 {
 	var semtag2 = "";
@@ -1074,7 +1076,7 @@ UIFactory["Get_Get_Resource"].getChildren = function(dest,langcode,self,srce,por
 	}
 	//------------
 	if (cachable && g_Get_Resource_caches[portfoliocode+semtag+semtag_parent+code]!=undefined && g_Get_Resource_caches[portfoliocode+semtag+semtag_parent+code]!="")
-		UIFactory.Get_Get_Resource.parseChildren(dest,g_Get_Resource_caches[portfoliocode+semtag+semtag_parent+code],langcode,srce,portfoliocode,semtag,semtag_parent,code,semtag2,cachable)
+		UIFactory.Get_Get_Resource.parseChildren(dest,g_Get_Resource_caches[portfoliocode+semtag+semtag_parent+code],langcode,srce,portfoliocode,semtag,semtag_parent,code,semtag2,cachable,tabadded)
 	else {
 		$.ajax({
 			async:false,
@@ -1084,14 +1086,14 @@ UIFactory["Get_Get_Resource"].getChildren = function(dest,langcode,self,srce,por
 			success : function(data) {
 				if (cachable)
 					g_Get_Resource_caches[portfoliocode+semtag+semtag_parent+code] = data;
-				UIFactory.Get_Get_Resource.parseChildren(dest,data,langcode,self,srce,portfoliocode,semtag,semtag_parent,code,semtag2,cachable)
+				UIFactory.Get_Get_Resource.parseChildren(dest,data,langcode,self,srce,portfoliocode,semtag,semtag_parent,code,semtag2,cachable,tabadded)
 			}
 		});
 	}
 	//------------
 }
 //==================================
-UIFactory["Get_Get_Resource"].parseChildren = function(dest,data,langcode,self,srce,portfoliocode,semtag,semtag_parent,code,semtag2,cachable)
+UIFactory["Get_Get_Resource"].parseChildren = function(dest,data,langcode,self,srce,portfoliocode,semtag,semtag_parent,code,semtag2,cachable,tabadded)
 //==================================
 {
 	//-----Node ordering-------------------------------------------------------
@@ -1107,20 +1109,31 @@ UIFactory["Get_Get_Resource"].parseChildren = function(dest,data,langcode,self,s
 		tableau1[i] = [code,nodes[i]];
 	}
 	var newTableau1 = tableau1.sort(sortOn1);
+	//----------remove allready added----------------------------------------------------------
+	var newTableau2 = [];
+	if (tabadded.length>0) {
+		for ( var i = 0; i < newTableau1.length; ++i) {
+			const indx = tabadded.indexOf(newTableau1[i][0]);
+			if (indx==-1)
+				newTableau2.push(newTableau1[i]);
+		}
+	} else {
+		newTableau2 = newTableau1;
+	}
 	//--------------------------------------------------------------------
-	for ( var i = 0; i < newTableau1.length; ++i) {
-		var uuid = $(newTableau1[i][1]).attr('id');
+	for ( var i = 0; i < newTableau2.length; ++i) {
+		var uuid = $(newTableau2[i][1]).attr('id');
 		//------------------------------
 		var input = "";
 		var style = "";
 		var resource = null;
 		//------------------------------
-		if ($("asmResource",newTableau1[i][1]).length==3) {
-			style = UIFactory.Node.getDataContentStyle(newTableau1[i][1].querySelector("metadata-epm"));
-			resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i][1]); 
+		if ($("asmResource",newTableau2[i][1]).length==3) {
+			style = UIFactory.Node.getDataContentStyle(newTableau2[i][1].querySelector("metadata-epm"));
+			resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau2[i][1]); 
 		} else {
-			style = UIFactory.Node.getDataLabelStyle(newTableau1[i][1].querySelector("metadata-epm"));
-			resource = $("asmResource[xsi_type='nodeRes']",newTableau1[i][1]);
+			style = UIFactory.Node.getDataLabelStyle(newTableau2[i][1].querySelector("metadata-epm"));
+			resource = $("asmResource[xsi_type='nodeRes']",newTableau2[i][1]);
 		}
 		//------------------------------
 		var code = $('code',resource).text();

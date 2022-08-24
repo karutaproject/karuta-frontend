@@ -637,7 +637,7 @@ function confirmSubmit(uuid,submitall,js,text)
 	{
 		document.getElementById('delete-window-body').innerHTML = (text==null) ? karutaStr[LANG]["confirm-submit"] : text;
 		var buttons = "<button class='btn' onclick=\"javascript:$('#delete-window').modal('hide');\">" + karutaStr[LANG]["Cancel"] + "</button>";
-		buttons += "<button class='btn btn-danger' onclick=\"$('#delete-window').modal('hide');submit('"+uuid+"',"+submitall+");"+js+"\">" + karutaStr[LANG]["button-submit"] + "</button>";
+		buttons += "<button class='btn btn-danger' onclick=\"$('#delete-window').modal('hide');"+js+";submit('"+uuid+"',"+submitall+");\">" + karutaStr[LANG]["button-submit"] + "</button>";
 		document.getElementById('delete-window-footer').innerHTML = buttons;
 		$('#delete-window').modal('show');
     }
@@ -1978,6 +1978,7 @@ function setVariables(data)
 	try {
 		var select_variable_nodes = $("asmContext:has(metadata[semantictag*='g-select-variable'])",data);
 		for (var i=0;i<select_variable_nodes.length;i++) {
+			let attributes = UICom.structure.ui[$(select_variable_nodes[i]).attr("id")].resource.getAttributes();
 			var value = UICom.structure.ui[$(select_variable_nodes[i]).attr("id")].resource.getAttributes().value;
 			var code = UICom.structure.ui[$(select_variable_nodes[i]).attr("id")].resource.getAttributes().code;
 			var variable_value = (value=="") ? code : value;
@@ -3417,10 +3418,38 @@ function testSubmitted(uuid) {
 	return UICom.structure.ui[uuid].submitted=="Y";
 }
 
+function testSubmitted(uuid,semtag) {
+	if (uuid == null)
+		uuid = $("#page").attr('uuid');
+	const nodes = $("*:has(>metadata[semantictag*="+semtag+"])",UICom.structure.ui[uuid].node);
+	if (nodes.length>0) {
+		const nodeid = $(nodes[0]).attr("id");
+		if (UICom.structure.ui[nodeid].submitted==undefined)
+			UICom.structure.ui[nodeid].setMetadata();
+		return UICom.structure.ui[nodeid].submitted=="Y";
+	} else {
+		return false;
+	}
+}
+
 function testNotSubmitted(uuid) {
 	if (UICom.structure.ui[uuid].submitted==undefined)
 		UICom.structure.ui[uuid].setMetadata();
 	return UICom.structure.ui[uuid].submitted!="Y";
+}
+
+function testNotSubmitted(uuid,semtag) {
+	if (uuid == null)
+		uuid = $("#page").attr('uuid');
+	const nodes = $("*:has(>metadata[semantictag*="+semtag+"])",UICom.structure.ui[uuid].node);
+	if (nodes.length>0) {
+		const nodeid = $(nodes[0]).attr("id");
+		if (UICom.structure.ui[nodeid].submitted==undefined)
+			UICom.structure.ui[nodeid].setMetadata();
+		return UICom.structure.ui[nodeid].submitted!="Y";
+	} else {
+		return true;
+	}
 }
 
 function testExist(semtag,uuid) {

@@ -112,12 +112,14 @@ function replaceBatchVariable(text,node,withquote)
 //-----------------------------------------------------------------------
 
 //==================================
-function getTxtvals(node)
+function getTxtvals(node,cleancode)
 //==================================
 {
 	var str = getTxtvalsWithoutReplacement(node);
-//	return str.trim();
-	return replaceBatchVariable(str.trim());
+	str = replaceBatchVariable(str.trim());
+	if (cleancode!=null && cleancode) // ne pas faire cleancode pour les usagers avec un @ et pour les textes avec un &
+		str = cleancode(str);
+	return str;
 }
 
 //==================================
@@ -1188,7 +1190,9 @@ g_actions['select-tree'] = function selectTree(node)
 //=================================================
 {
 	var ok = false;
-	var code = getTxtvals($("code",node));
+	var code = getvarvals($("code",node));
+	if (code=="")
+		code = getTxtvals($("code",node));
 	//----- get tree id -----
 	var portfolioid = UIFactory["Portfolio"].getid_bycode(code,false); 
 	if (portfolioid!=""){
@@ -3709,25 +3713,33 @@ function getInputsLine(node)
 //==================================================
 {
 	let json_line = {};
-	let line_inputs = $("asmContext:has(metadata[semantictag*='BatchFormInput'])",node);
+	let line_inputs = $("asmContext:has(>metadata[semantictag*='BatchFormInput'])",node);
 	for ( var j = 0; j < line_inputs.length; j++) {
 		let inputid = $(line_inputs[j]).attr('id');
 		let variable = UICom.structure["ui"][inputid].getCode().trim();
 		json_line[variable] = replaceVariable(UICom.structure["ui"][inputid].resource.getView(null,'batchform').trim());
 	}
-	line_inputs = $("asmContext:has(metadata[semantictag*='BatchFormInputCode'])",node);
+	line_inputs = $("asmContext:has(>metadata[semantictag*='BatchFormInputCode'])",node);
 	for ( var j = 0; j < line_inputs.length; j++) {
 		let inputid = $(line_inputs[j]).attr('id');
 		let variable = UICom.structure["ui"][inputid].getCode();
 		if (UICom.structure["ui"][inputid].resource.type=="Get_Resource")
 			json_line[variable] = replaceVariable(UICom.structure["ui"][inputid].resource.getCode(null));
 	}
-	line_inputs = $("asmContext:has(metadata[semantictag*='BatchFormInputLabelCode'])",node);
+	line_inputs = $("asmContext:has(>metadata[semantictag*='BatchFormInputLabelCode'])",node);
 	for ( var j = 0; j < line_inputs.length; j++) {
 		var inputid = $(line_inputs[j]).attr('id');
 		let variable = UICom.structure["ui"][inputid].getCode();
 		json_line[variable+"_code"] = replaceVariable(UICom.structure["ui"][inputid].resource.getCode(null));
 		json_line[variable+"_label"] = replaceVariable(UICom.structure["ui"][inputid].resource.getView(null,'batchform').trim());
+	}
+	line_inputs = $("asmContext:has(>metadata[semantictag*='BatchFormInputLabelCodeValue'])",node);
+	for ( var j = 0; j < line_inputs.length; j++) {
+		var inputid = $(line_inputs[j]).attr('id');
+		let variable = UICom.structure["ui"][inputid].getCode();
+		json_line[variable+"_code"] = replaceVariable(UICom.structure["ui"][inputid].resource.getCode(null));
+		json_line[variable+"_label"] = replaceVariable(UICom.structure["ui"][inputid].resource.getView(null,'batchform').trim());
+		json_line[variable+"_value"] = replaceVariable(UICom.structure["ui"][inputid].resource.getValue(null,'batchform').trim());
 	}
 	return json_line;
 };

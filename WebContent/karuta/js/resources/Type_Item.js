@@ -89,10 +89,6 @@ UIFactory["Item"].prototype.getAttributes = function(type,langcode)
 	if (this.multilingual!=undefined && !this.multilingual)
 		langcode = 0;
 	//---------------------
-	if (dest!=null) {
-		this.display[dest]=langcode;
-	}
-	//---------------------
 	if (type==null)
 		type = 'default';
 	//---------------------
@@ -100,6 +96,7 @@ UIFactory["Item"].prototype.getAttributes = function(type,langcode)
 		result['restype'] = this.type;
 		result['code'] = this.code_node.text();
 		result['label'] = this.label_node[langcode].text();
+		result['value'] = this.value_node.text();
 	}
 	return result;
 }
@@ -262,19 +259,6 @@ UIFactory["Item"].prototype.getEditor = function(type,langcode,disabled)
 		$(htmlCodeGroupObj).append($(htmlCodeDivObj));
 		$(htmlFormObj).append($(htmlCodeGroupObj));
 		//-----------------------------------------------------
-		var htmlLabelGroupObj = $("<div class='form-group'></div>")
-		var htmlLabelLabelObj = $("<label for='item_label_"+this.id+"_"+langcode+"' class='col-sm-3 control-label'>Item - "+karutaStr[LANG]['label']+"</label>");
-		var htmlLabelDivObj = $("<div class='col-sm-9'></div>");
-		var htmlLabelInputObj = $("<input id='item_label_"+this.id+"_"+langcode+"' type='text' class='form-control' name='label_Item' value=\""+this.label_node[langcode].text()+"\">");
-		$(htmlLabelInputObj).change(function (){
-			$(self.label_node[langcode]).text($(this).val());
-			UIFactory["Item"].update(self,langcode);
-		});
-		$(htmlLabelDivObj).append($(htmlLabelInputObj));
-		$(htmlLabelGroupObj).append($(htmlLabelLabelObj));
-		$(htmlLabelGroupObj).append($(htmlLabelDivObj));
-		$(htmlFormObj).append($(htmlLabelGroupObj));
-		//-----------------------------------------------------
 		var htmlValueGroupObj = $("<div class='form-group'></div>")
 		var htmlValueLabelObj = $("<label for='item_value_"+this.id+"_"+langcode+"' class='col-sm-3 control-label'>Item - "+karutaStr[LANG]['value']+"</label>");
 		var htmlValueDivObj = $("<div class='col-sm-9'></div>");
@@ -287,6 +271,19 @@ UIFactory["Item"].prototype.getEditor = function(type,langcode,disabled)
 		$(htmlValueGroupObj).append($(htmlValueLabelObj));
 		$(htmlValueGroupObj).append($(htmlValueDivObj));
 		$(htmlFormObj).append($(htmlValueGroupObj));
+		//-----------------------------------------------------
+		var htmlLabelGroupObj = $("<div class='form-group'></div>")
+		var htmlLabelLabelObj = $("<label for='item_label_"+this.id+"_"+langcode+"' class='col-sm-3 control-label'>Item - "+karutaStr[LANG]['label']+"</label>");
+		var htmlLabelDivObj = $("<div class='col-sm-9'></div>");
+		var htmlLabelInputObj = $("<input id='item_label_"+this.id+"_"+langcode+"' type='text' class='form-control' name='label_Item' value=\""+this.label_node[langcode].text()+"\">");
+		$(htmlLabelInputObj).change(function (){
+			$(self.label_node[langcode]).text($(this).val());
+			UIFactory["Item"].update(self,langcode);
+		});
+		$(htmlLabelDivObj).append($(htmlLabelInputObj));
+		$(htmlLabelGroupObj).append($(htmlLabelLabelObj));
+		$(htmlLabelGroupObj).append($(htmlLabelDivObj));
+		$(htmlFormObj).append($(htmlLabelGroupObj));
 		//-----------------------------------------------------
 	}
 	//------------------------

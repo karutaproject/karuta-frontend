@@ -376,46 +376,6 @@ var html = this.getView(dest,type,langcode);
 
 
 /// Editor
-//==================================
-UIFactory["Get_Resource"].update = function(selected_item,itself,langcode,type)
-//==================================
-{
-	try {
-		//-------- if function js -------------
-		execJS(itself,"update-resource-before");
-		//---------------------
-		var value = $(selected_item).attr('value');
-		var code = $(selected_item).attr('code');
-		var uuid = $(selected_item).attr('uuid');
-		var style = $(selected_item).attr('style');
-		//---------------------
-		if (itself.encrypted)
-			value = "rc4"+encrypt(value,g_rc4key);
-		if (itself.encrypted)
-			code = "rc4"+encrypt(code,g_rc4key);
-		//---------------------
-		$(itself.value_node[0]).text(value);
-		$(itself.code_node[0]).text(code);
-		$(itself.uuid_node[0]).text(uuid);
-		$(itself.style_node[0]).text(style.trim());
-		for (var i=0; i<languages.length;i++){
-			var label = $(selected_item).attr('label_'+languages[i]);
-			//---------------------
-			if (itself.encrypted)
-				label = "rc4"+encrypt(label,g_rc4key);
-			//---------------------
-			$(itself.label_node[i][0]).text(label);
-		}
-		//-------- if function js -------------
-		execJS(itself,'update-resource');
-		//---------------------
-		itself.save();
-	}
-	catch(e) {
-		console.log(e);
-		// do nothing
-	}
-};
 
 //==================================
 UIFactory["Get_Resource"].prototype.displayEditor = function(destid,type,langcode,disabled,cachable,resettable)
@@ -453,7 +413,7 @@ UIFactory["Get_Resource"].prototype.displayEditor = function(destid,type,langcod
 		var target = queryattr_value.substring(srce_indx+1); // label or text
 		//------------
 		var portfoliocode = cleanCode(replaceVariable(queryattr_value.substring(0,semtag_indx)));
-		var selfcode = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",UICom.root.node)).text();
+		var selfcode = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",g_portfolio_current)).text();
 		if (portfoliocode.indexOf('.')<0 && selfcode.indexOf('.')>0 && portfoliocode!='self')  // There is no project, we add the project of the current portfolio
 			portfoliocode = selfcode.substring(0,selfcode.indexOf('.')) + "." + portfoliocode;
 		if (portfoliocode=='self') {
@@ -481,7 +441,7 @@ UIFactory["Get_Resource"].prototype.displayEditor = function(destid,type,langcod
 	}
 	if (this.get_type=="import_comp"){
 		let portfoliocode = cleanCode(replaceVariable(this.query_portfolio));
-		let selfcode = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",UICom.root.node)).text();
+		let selfcode = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",g_portfolio_current)).text();
 		if (portfoliocode=='self') {
 			portfoliocode = selfcode;
 			cachable = false;
@@ -566,6 +526,7 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 		tableau2[i] = {'code':code,'libelle':libelle};
 	}
 	let newTableau1 = tableau1.sort(sortOn1);
+	var tabadded = [];
 	//------------------------------------------------------------
 	//------------------------------------------------------------
 	if (type=='select') {
@@ -1074,7 +1035,7 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 		var inputs = "<div id='get_multiple' class='multiple "+semtag+"'></div>";
 		var inputs_obj = $(inputs);
 		//-----search for already added------------------
-		if (this.unique!=undefined && this.unique!="") {
+		if (this.unique!=undefined && this.unique!="" && this.unique!="false") {
 			var targetid = this.targetid;
 			if (targetid=="")
 				targetid = this.parentid;
@@ -1095,7 +1056,7 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 		}
 		//----------remove allready added----------------
 		var newTableau2 = [];
-		if (this.unique!=undefined && this.unique!="") {
+		if (this.unique!=undefined && this.unique!="" && this.unique!="false") {
 			for ( var i = 0; i < newTableau1.length; ++i) {
 				const indx = tabadded.indexOf(newTableau1[i][0]);
 				if (indx==-1)
@@ -1176,7 +1137,7 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 				// ---------------------- children ---------
 				if (semtag2!="") {
 					var semtag_parent = semtag.replace("!","");
-					UIFactory.Get_Resource.getChildren(inputs_obj,self,langcode,srce,target,portfoliocode,semtag2,semtag_parent,original_code,cachable);
+					UIFactory.Get_Resource.getChildren(inputs_obj,self,langcode,srce,target,portfoliocode,semtag2,semtag_parent,original_code,cachable,tabadded);
 				}
 				//------------------------------------------
 			}
@@ -1450,7 +1411,7 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 };
 
 //==================================
-UIFactory["Get_Resource"].getChildren = function(dest,self,langcode,srce,target,portfoliocode,semtag,semtag_parent,code,cachable)
+UIFactory["Get_Resource"].getChildren = function(dest,self,langcode,srce,target,portfoliocode,semtag,semtag_parent,code,cachable,tabadded)
 //==================================
 {
 	var semtag2 = "";
@@ -1470,14 +1431,14 @@ UIFactory["Get_Resource"].getChildren = function(dest,self,langcode,srce,target,
 			success : function(data) {
 				if (cachable)
 					g_Get_Resource_caches[portfoliocode+semtag+semtag_parent+code] = data;
-				UIFactory.Get_Resource.parseChildren(dest,self,data,langcode,srce,target,portfoliocode,semtag,semtag_parent,code,semtag2,cachable)
+				UIFactory.Get_Resource.parseChildren(dest,self,data,langcode,srce,target,portfoliocode,semtag,semtag_parent,code,semtag2,cachable,tabadded)
 			}
 		});
 	}
 	//------------
 }
 //==================================
-UIFactory["Get_Resource"].parseChildren = function(dest,self,data,langcode,srce,target,portfoliocode,semtag,semtag_parent,code,semtag2,cachable)
+UIFactory["Get_Resource"].parseChildren = function(dest,self,data,langcode,srce,target,portfoliocode,semtag,semtag_parent,code,semtag2,cachable,tabadded)
 //==================================
 {
 	//-----Node ordering-------------------------------------------------------
@@ -1493,17 +1454,28 @@ UIFactory["Get_Resource"].parseChildren = function(dest,self,data,langcode,srce,
 		tableau1[i] = [code,nodes[i]];
 	}
 	var newTableau1 = tableau1.sort(sortOn1);
+	//----------remove allready added----------------------------------------------------------
+	var newTableau2 = [];
+	if (tabadded.length>0) {
+		for ( var i = 0; i < newTableau1.length; ++i) {
+			const indx = tabadded.indexOf(newTableau1[i][0]);
+			if (indx==-1)
+				newTableau2.push(newTableau1[i]);
+		}
+	} else {
+		newTableau2 = newTableau1;
+	}
 	//--------------------------------------------------------------------
-	for ( var i = 0; i < newTableau1.length; ++i) {
-		var uuid = $(newTableau1[i][1]).attr('id');
+	for ( var i = 0; i < newTableau2.length; ++i) {
+		var uuid = $(newTableau2[i][1]).attr('id');
 		//------------------------------
 		var input = "";
 		//------------------------------
 		var resource = null;
-		if ($("asmResource",newTableau1[i][1]).length==3)
-			resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i][1]); 
+		if ($("asmResource",newTableau2[i][1]).length==3)
+			resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau2[i][1]); 
 		else
-			resource = $("asmResource[xsi_type='nodeRes']",newTableau1[i][1]);
+			resource = $("asmResource[xsi_type='nodeRes']",newTableau2[i][1]);
 		//------------------------------
 		var code = $('code',resource).text();
 		var selectable = true;
@@ -1527,7 +1499,7 @@ UIFactory["Get_Resource"].parseChildren = function(dest,self,data,langcode,srce,
 		//------------------------------
 		input += "<div id='"+code+"' class='subget_ressource'>";
 		if (selectable) {
-			input += "	<input type='checkbox' name='multiple_"+self.id+"' value='"+$('value',resource).text()+"' code='"+$('code',resource).text()+"' class='multiple-item";
+			input += "	<input type='checkbox' uuid='"+uuid+"' name='multiple_"+self.id+"' value='"+$('value',resource).text()+"' code='"+$('code',resource).text()+"' class='multiple-item";
 			input += "' ";
 			for (var j=0; j<languages.length;j++){
 				if (target=='fileid' || target=='resource') {
@@ -1555,11 +1527,50 @@ UIFactory["Get_Resource"].parseChildren = function(dest,self,data,langcode,srce,
 }
 
 //==================================
+UIFactory["Get_Resource"].update = function(selected_item,itself,langcode,type)
+//==================================
+{
+	try {
+		//-------- if function js -------------
+		execJS(itself,"update-resource-before");
+		//---------------------
+		var value = $(selected_item).attr('value');
+		var code = $(selected_item).attr('code');
+		var uuid = $(selected_item).attr('uuid');
+		var style = $(selected_item).attr('style');
+		//---------------------
+		if (UICom.structure.ui[itself.id].semantictag.indexOf("g-select-variable")>-1) {
+			var variable_value = (value=="") ? code : value;
+			g_variables[UICom.structure.ui[itself.id].getCode()] = cleanCode(variable_value,true);
+		}
+		//---------------------
+		$(itself.value_node[0]).text(value);
+		$(itself.code_node[0]).text(code);
+		$(itself.uuid_node[0]).text(uuid);
+		$(itself.style_node[0]).text(style.trim());
+		for (var i=0; i<languages.length;i++){
+			var label = $(selected_item).attr('label_'+languages[i]);
+			//---------------------
+			if (itself.encrypted)
+				label = "rc4"+encrypt(label,g_rc4key);
+			//---------------------
+			$(itself.label_node[i][0]).text(label);
+		}
+		itself.save();
+		//-------- if function js -------------
+		execJS(itself,'update-resource-after');
+		//---------------------
+	}
+	catch(e) {
+		console.log(e);
+		// do nothing
+	}
+};
+
+//==================================
 UIFactory["Get_Resource"].prototype.save = function()
 //==================================
 {
-	if (UICom.structure.ui[this.id].semantictag.indexOf("g-select-variable")>-1)
-		updateVariable(this.node);
 	//------------------------------
 	var log = (UICom.structure.ui[this.id]!=undefined && UICom.structure.ui[this.id].logcode!=undefined && UICom.structure.ui[this.id].logcode!="");
 	if (log)

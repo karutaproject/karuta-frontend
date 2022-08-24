@@ -58,6 +58,7 @@ jqueryReportSpecificFunctions['.url_empty()'] = ".has(\"asmResource[xsi_type!='c
 jqueryReportSpecificFunctions['.text_not_empty()'] = ".has(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes'] > text[lang='#lang#']:not(:empty)\")";
 jqueryReportSpecificFunctions['.text_empty()'] = ".has(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes'] > text[lang='#lang#']:empty\")";
 jqueryReportSpecificFunctions['.submitted()'] = ".has(\"metadata-wad[submitted='Y']\")";
+jqueryReportSpecificFunctions['.not_submitted()'] = ".not(\":has(>metadata-wad[submitted=Y])\")";
 jqueryReportSpecificFunctions['.code_empty()'] = ".has(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes'] > code:empty\")";
 jqueryReportSpecificFunctions['.code_not_empty()'] = ".has(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes'] > code:not(:empty)\")";
 jqueryReportSpecificFunctions['.nodecode_empty()'] = ".has(\"asmResource[xsi_type='nodeRes'] > code:empty\")";
@@ -135,7 +136,6 @@ $.fn.hasNotChildSemtag = function (options)
 		return $(this);
 };
 
-
 //=====================================
 $.fn.hasChildSemtagAndResourceCodeContains = function (options)   // hasChildSemtagAndResourceCodeContains({"semtag":"s","value":"v"})
 //=====================================
@@ -146,6 +146,18 @@ $.fn.hasChildSemtagAndResourceCodeContains = function (options)   // hasChildSem
 	return result;
 };
 $.fn.test_hasChildSemtagAndResourceCodeContains = function (options) { return result = ($(this).hasChildSemtagAndResourceCodeContains(options).length>0) ? true : false;};
+$.fn.test_notHasChildSemtagAndResourceCodeContains = function (options) { return result = ($(this).hasChildSemtagAndResourceCodeContains(options).length>0) ? false : true;};
+
+//=====================================
+$.fn.hasNotChildSemtagAndResourceCodeContains = function (options)   // hasChildSemtagAndResourceCodeContains({"semtag":"s","value":"v"})
+//=====================================
+{
+	var result = $(this).hasChildSemtagAndResourceCodeContains(options);
+	if (result.length>0)
+		return [];
+	else
+		return $(this);
+};
 //=====================================
 
 //=====================================

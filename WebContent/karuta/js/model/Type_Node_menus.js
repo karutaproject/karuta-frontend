@@ -157,8 +157,9 @@ UIFactory["Node"].prototype.displayMenus = function(dest,langcode)
 //==================================================
 {
 	var html = this.getMenus(langcode);
-	$(dest).append(html);
-	//------------ Public URL -----------------
+//	$(dest).append(html);
+	$(dest).html(html);
+//------------ Public URL -----------------
 	if ($("#2world-"+this.id).length){
 		var shares = [];
 		var displayShare = [];
@@ -1259,7 +1260,8 @@ UIFactory["Node"].getXmlItemMenu = function(node,parentid,item,title,databack,ca
 									targetid = position;
 							}
 						}
-						onclick += "importBranch('"+targetid+"','"+foliocode+"','"+semtags[k]+"',"+databack+","+callback+",'"+param2+"',null,'"+targetid+"');"
+						onclick += "importBranch('"+targetid+"','"+foliocode+"','"+semtags[k]+"',"+databack+","+callback+",'"+param2+"');"  // to avoid jump to target
+//						onclick += "importBranch('"+targetid+"','"+foliocode+"','"+semtags[k]+"',"+databack+","+callback+",'"+param2+"',null,'"+targetid+"');"
 					}
 					// --------- fcts ------------
 					let jss = $("js",trgts[j]);
