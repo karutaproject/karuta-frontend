@@ -177,6 +177,7 @@ UIFactory["Document"].prototype.displayView = function(dest,type,langcode)
 {
 	var html = this.getView(dest,type,langcode);
 	$("#"+dest).html(html);
+	testFileSaved(this.id);
 };
 /// Editor
 //==================================
@@ -297,6 +298,8 @@ UIFactory["Document"].prototype.save = function(parent,delfile)
 		parent.refresh();
 	if (this.blockparent!=null)
 		this.blockparent.refresh();
+	// test if written
+	testFileSaved(this.id);
 };
 
 

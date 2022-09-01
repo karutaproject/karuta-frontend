@@ -581,7 +581,9 @@ UIFactory["Node"].prototype.displayAsmNode = function(dest,type,langcode,edit,re
 	}
 	//----------------- hide lbl-div if empty ------------------------------------
 	if (this.getLabel(null,'none',langcode)=="" && this.getButtons()=="" && this.getMenus(langcode)=="")
-		$("div[name='lbl-div']","#node_"+uuid).hide();
+		$("div[name='lbl-div']","#node_"+uuid).hide()
+	//------------------------------------------------------------------------------
+	execJS(this,"display-node-after");
 }
 
 //==============================================================================
@@ -842,6 +844,7 @@ UIFactory["Node"].prototype.displayView = function(dest,type,langcode)
 UIFactory["Node"].prototype.updateLabel = function(langcode)
 //==================================
 {
+	execJS(this,"update-node-before");
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
@@ -858,12 +861,14 @@ UIFactory["Node"].prototype.updateLabel = function(langcode)
 	//---------------------
 	this.save();
 	writeSaved(this.id);
+	execJS(this,"update-node-after");
 };
 
 //==================================
 UIFactory["Node"].prototype.update = function(langcode)
 //==================================
 {
+	execJS(this,"update-node-before");
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
@@ -892,6 +897,7 @@ UIFactory["Node"].prototype.update = function(langcode)
 	}
 	//---------------------
 	this.save();
+	execJS(this,"update-node-after");
 	writeSaved(this.id);
 };
 
@@ -938,7 +944,7 @@ UIFactory["Node"].prototype.getEditor = function(type,langcode)
 			if (g_userroles[0]=='designer' || USER.admin || editcoderoles.containsArrayElt(g_userroles) || editcoderoles.indexOf(this.userrole)>-1 || editcoderoles.indexOf($(USER.username_node).text())>-1) {
 				//---------------------- code ----------------------------
 				var htmlCodeGroupObj = $("<div class='form-group ncode'></div>")
-				var htmlCodeLabelObj = $("<label for='code_"+this.id+"' class='col-sm-3 control-label'>Code</label>");
+				var htmlCodeLabelObj = $("<label for='code_"+this.id+"' class='col-sm-3 control-label'>"+karutaStr[LANG]['code']+"</label>");
 				var htmlCodeDivObj = $("<div class='node-code'></div>");
 				var htmlCodeInputObj = $("<input id='code_"+this.id+"' type='text' class='form-control' name='input_code' value=\""+this.code_node.text()+"\">");
 				$(htmlCodeInputObj).change(function (){
@@ -950,7 +956,7 @@ UIFactory["Node"].prototype.getEditor = function(type,langcode)
 				$(htmlFormObj).append($(htmlCodeGroupObj));
 				//---------------------- value ----------------------------
 				var htmlValueGroupObj = $("<div class='form-group nvalue'></div>")
-				var htmlValueLabelObj = $("<label for='value_"+this.id+"' class='col-sm-3 control-label'>Value</label>");
+				var htmlValueLabelObj = $("<label for='value_"+this.id+"' class='col-sm-3 control-label'>"+karutaStr[LANG]['value']+"</label>");
 				var htmlValueDivObj = $("<div class='node-value'></div>");
 				var htmlValueInputObj = $("<input id='value_"+this.id+"' type='text' class='form-control' name='input_value' value=\""+this.value_node.text()+"\">");
 				$(htmlValueInputObj).change(function (){
@@ -1064,7 +1070,7 @@ UIFactory["Node"].remove = function(uuid,callback,param1,param2,param3,param4)
 		UICom.structure.ui[uuid].js = ($(node.metadatawad).attr('js')==undefined)?"":$(node.metadatawad).attr('js');
 	}
 	if (UICom.structure.ui[uuid].js!=undefined && UICom.structure.ui[uuid].js!="") {
-		var fcts = UICom.structure.ui[uuid].js.split(";");
+		var fcts = UICom.structure.ui[uuid].js.split("|");
 		for (var i=0;i<fcts.length;i++) {
 			var elts = fcts[i].split("/");
 			if (elts[0]=="delete") {
@@ -1085,6 +1091,9 @@ UIFactory["Node"].remove = function(uuid,callback,param1,param2,param3,param4)
 	if (remove) {
 		$("#"+uuid,g_portfolio_current).remove();
 		UICom.DeleteNode(uuid,callback,param1,param2,param3,param4);
+	} else {
+		$('#delete-window').modal('hide');
+		$('#wait-window').modal('hide');
 	}
 };
 
@@ -1935,10 +1944,10 @@ UIFactory['Node'].reloadUnit = function(uuid,redisplay,nodeid)
 	let node = null
 	if (nodeid!=null) {
 		node = document.getElementById("node_"+nodeid);
-		while (node.parentNode!=null && node.getAttribute("preview-uuid")==null)
+		while (node!=null && node.parentNode!=null && node.getAttribute("preview-uuid")==null)
 			node = node.parentNode;
 		previewuuid = $(node).attr("preview-uuid");
-		}
+	}
 	if (previewuuid!=null && node!=null) {
 		reloadPreviewBox(node)
 		$('#wait-window').modal('hide');

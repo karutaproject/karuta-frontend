@@ -157,8 +157,9 @@ UIFactory["Node"].prototype.displayMenus = function(dest,langcode)
 //==================================================
 {
 	var html = this.getMenus(langcode);
-	$(dest).append(html);
-	//------------ Public URL -----------------
+//	$(dest).append(html);
+	$(dest).html(html);
+//------------ Public URL -----------------
 	if ($("#2world-"+this.id).length){
 		var shares = [];
 		var displayShare = [];
@@ -306,9 +307,9 @@ UIFactory["Node"].getMenus = function(node,langcode)
 	//------------- specific menu ---------------
 	var no_monomenu = 0;
 	try {
-		if ((g_menuinreport || node.depth>0 || node.asmtype == 'asmUnitStructure' || node.asmtype == 'asmContext') && node.menuroles != undefined && node.menuroles.length>10 && (node.menuroles.indexOf(node.userrole)>-1 || node.menuroles.indexOf($(USER.username_node).text())>-1 || (node.menuroles.containsArrayElt(g_userroles) && node.menuroles.indexOf("designer")<0) || USER.admin || g_userroles[0]=='designer') ){
+		if ((g_menuinreport || node.depth>0 || node.asmtype == 'asmUnitStructure' || node.asmtype == 'asmContext') && replaceVariable(node.menuroles) != undefined && replaceVariable(node.menuroles).length>10 && (replaceVariable(node.menuroles).indexOf(node.userrole)>-1 || node.menuroles.indexOf($(USER.username_node).text())>-1 || (replaceVariable(node.menuroles).containsArrayElt(g_userroles) && replaceVariable(node.menuroles).indexOf("designer")<0) || USER.admin || g_userroles[0]=='designer') ){
 			//--------------------------------
-			if (node.menuroles.charAt(0)!="<") {
+			if (node.menuroles.charAt(0)!="<") {  //old menus ============================================================================================================
 				var mlabels = [];
 				var labelitems = node.menulabels.split(";");
 				for (var i=0; i<labelitems.length; i++){
@@ -849,8 +850,8 @@ UIFactory["Node"].addMenuElt = function(tag,noitem,nodeid,destmenu)
 UIFactory["Node"].duplicateMenuElt = function(tag,no,noitem,nodeid,destmenu)
 //==================================
 {	
-	const elt = menueltslist[noitem];
-	$(menueltslist[noitem])[0].append(elt.getElementsByTagName(tag)[0].cloneNode(true));
+	const elt = menueltslist[no];
+	$(menueltslist[noitem])[0].append(elt.cloneNode(true));
 	var value= xml2string(xmlDoc);
 	var node = UICom.structure["ui"][nodeid].node;
 	$($("metadata-wad",node)[0]).attr('menuroles',value);
@@ -1025,8 +1026,8 @@ UIFactory["Node"].prototype.displayEltMenu = function(cntidx,destmenu)
 	}
 	html += "<span>"+tag+"</span>";
 	if (del!=undefined && del=='y') {
-		html +="<i style='' class='button fas fa-trash-alt' onclick=\"UIFactory.Node.removeMenuElt('"+eltidx+"','"+this.id+"','"+destmenu+"')\" data-title='Supprimer' data-toggle='tooltip' data-placement='bottom' data-original-title='' title=''></i>";
-		html +="<i style='' class='button fas fa-clone' onclick=\"UIFactory.Node.duplicateMenuElt('"+tag+"','"+eltidx+"','"+cntidx+"','"+this.id+"','"+destmenu+"')\" data-title='Supprimer' data-toggle='tooltip' data-placement='bottom' data-original-title='' title=''></i>";
+		html +="<i style='' class='button fas fa-trash-alt' onclick=\"UIFactory.Node.removeMenuElt('"+eltidx+"','"+this.id+"','"+destmenu+"')\" data-title='"+karutaStr[LANG]["button-delete"]+"' data-toggle='tooltip' data-placement='bottom' data-original-title='' title=''></i>";
+		html +="<i style='' class='button fas fa-clone' onclick=\"UIFactory.Node.duplicateMenuElt('"+tag+"','"+eltidx+"','"+cntidx+"','"+this.id+"','"+destmenu+"')\" data-title='"+karutaStr[LANG]['button-duplicate']+"' data-toggle='tooltip' data-placement='bottom' data-original-title='' title=''></i>";
 	}
 	html += "</div>";
 	html += "<div id='content"+eltidx+"' class='menucontent'></div>"
@@ -1259,7 +1260,8 @@ UIFactory["Node"].getXmlItemMenu = function(node,parentid,item,title,databack,ca
 									targetid = position;
 							}
 						}
-						onclick += "importBranch('"+targetid+"','"+foliocode+"','"+semtags[k]+"',"+databack+","+callback+",'"+param2+"',null,'"+targetid+"');"
+						onclick += "importBranch('"+targetid+"','"+foliocode+"','"+semtags[k]+"',"+databack+","+callback+",'"+param2+"');"  // to avoid jump to target
+//						onclick += "importBranch('"+targetid+"','"+foliocode+"','"+semtags[k]+"',"+databack+","+callback+",'"+param2+"',null,'"+targetid+"');"
 					}
 					// --------- fcts ------------
 					let jss = $("js",trgts[j]);

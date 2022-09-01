@@ -196,7 +196,8 @@
 	.for-each-portfolio-js,
 	.for-each-portfolios-nodes,
 	.for-each-node,
-	.loop
+	.loop,
+	.for-each-vector
 	{
 		margin-top:7px;
 		border: 2px solid var(--report-loop-color);
@@ -213,15 +214,25 @@
 	}
 
 	// TABLE - ROW - CELL
-	.model-table {
+	.model-table,
+	.model-sort-table	 {
 		margin-top:7px;
 		border:2px solid Navy;
 	}
-	.model-row {
+
+	.model-thead,
+	.model-tbody {
+		margin-top:7px;
+		border:2px solid #33CC33;
+	}
+
+	.model-row,
+	.model-rw-thead {
 		margin-top:7px;
 		border:2px solid SeaGreen;
 	}
-	.model-cell {
+	.model-cell,
+	.model-th {
 		margin-top:7px;
 		border:2px solid Crimson;
 	}
@@ -288,6 +299,13 @@
 	{
 		margin-top:7px;
 		border:2px solid var(--report-alone-color);
+	}
+
+	// REFRESH
+	.refresh-button
+	{
+		margin-top:7px;
+		border:2px solid #FFCC00;
 	}
 }
 

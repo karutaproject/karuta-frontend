@@ -176,7 +176,7 @@ displayHTML["standard-resource-default"] =	"<div id='node_#uuid#' class='#displa
 											"		<div id='std_node_#uuid#' name='res-lbl-div' class='col-3 resource-label inside-full-height'>" +
 											"			<div><span id='label_node_#uuid#' class='label-libelle'></span><span id='help_#uuid#' class='ihelp'></span></div>" +
 											"		</div>" +
-											"			<table class='col-8' width='100%'><tr>" +
+											"			<table name='res-div' class='col-8' width='100%'><tr>" +
 										"					<td  width='80%'  name='res-div' class='td-resource'>" +
 											"					<div id='resource_#uuid#' class='resource inside-full'></div>" +
 											"					<div id='comments_#uuid#' class='comments'></div>" +

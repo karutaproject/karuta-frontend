@@ -96,6 +96,8 @@ UIFactory["Field"].prototype.getAttributes = function(type,langcode)
 UIFactory["Field"].prototype.getView = function(dest,type,langcode)
 //==================================
 {
+	if (UICom.structure.ui[this.id].semantictag.indexOf("g-select-variable")>-1)
+		updateVariable(this.node);
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
@@ -175,7 +177,7 @@ UIFactory["Field"].prototype.save = function()
 //==================================
 {
 	if (UICom.structure.ui[this.id].semantictag.indexOf("g-select-variable")>-1)
-		updateVariable(this.resource);
+		updateVariable(this.node);
 	//------------------------------
 	var log = (UICom.structure.ui[this.id]!=undefined && UICom.structure.ui[this.id].logcode!=undefined && UICom.structure.ui[this.id].logcode!="");
 	if (log)

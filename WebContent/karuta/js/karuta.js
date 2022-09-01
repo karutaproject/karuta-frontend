@@ -542,10 +542,9 @@ function messageBox()
 	html += "\n<div id='message-window' class='modal'>";
 	html += "\n		<div class='modal-dialog modal-dialog-scrollable'>";
 	html += "\n			<div class='modal-content'>";
-	html += "\n				<div id='message-window-body' class='modal-body'>";
-	html += "\n				</div>";
-	html += "\n				<div id='message-window-footer' class='modal-footer' >";
-	html += "\n				</div>";
+	html += "\n				<div id='message-window-header' class='modal-header'></div>";
+	html += "\n				<div id='message-window-body' class='modal-body'></div>";
+	html += "\n				<div id='message-window-footer' class='modal-footer'></div>";
 	html += "\n			</div>";
 	html += "\n		</div>";
 	html += "\n</div>";
@@ -614,7 +613,7 @@ function deleteandhidewindow(uuid,type,parentid,destid,callback,param1,param2,pa
 }
 
 //=======================================================================
-function confirmSubmit(uuid,submitall,js) 
+function confirmSubmit(uuid,submitall,js,text) 
 // =======================================================================
 {
 	if (js==null || js==undefined)
@@ -636,9 +635,9 @@ function confirmSubmit(uuid,submitall,js)
 		alertHTML(karutaStr[LANG]["document-required"]);
 	else
 	{
-		document.getElementById('delete-window-body').innerHTML = karutaStr[LANG]["confirm-submit"];
+		document.getElementById('delete-window-body').innerHTML = (text==null) ? karutaStr[LANG]["confirm-submit"] : text;
 		var buttons = "<button class='btn' onclick=\"javascript:$('#delete-window').modal('hide');\">" + karutaStr[LANG]["Cancel"] + "</button>";
-		buttons += "<button class='btn btn-danger' onclick=\"$('#delete-window').modal('hide');submit('"+uuid+"',"+submitall+");"+js+"\">" + karutaStr[LANG]["button-submit"] + "</button>";
+		buttons += "<button class='btn btn-danger' onclick=\"$('#delete-window').modal('hide');"+js+";submit('"+uuid+"',"+submitall+");\">" + karutaStr[LANG]["button-submit"] + "</button>";
 		document.getElementById('delete-window-footer').innerHTML = buttons;
 		$('#delete-window').modal('show');
     }
@@ -904,15 +903,17 @@ function previewPage(uuid,depth,type,langcode,edit)
 	$('body').append(previewbackdrop);
 
 	var previewwindow = document.createElement("DIV");
+	previewwindow.setAttribute("id", "preview-"+uuid);
 	previewwindow.setAttribute("class", "preview-window");
 	previewwindow.setAttribute("preview-uuid", uuid);
 	previewwindow.setAttribute("preview-edit", edit);
 	previewwindow.innerHTML =  previewBox(uuid);
 	$('body').append(previewwindow);
-	var header = "<button class='btn add-button' style='float:right' onclick=\"$('#preview-window-"+uuid+"').remove();$('#previewbackdrop-"+uuid+"').remove();\">"+karutaStr[LANG]['Close']+"</button>";
+	$("#preview-"+uuid).hide();
+	var header = "<button class='btn add-button' style='float:right' onclick=\"$('#preview-"+uuid+"').remove();$('#previewbackdrop-"+uuid+"').remove();\">"+karutaStr[LANG]['Close']+"</button>";
 	$("#preview-window-header-"+uuid).html(header);
 	$("#preview-window-body-"+uuid).html("");
-	if (UICom.structure['tree'][uuid]!=null) {
+/*	if (UICom.structure['tree'][uuid]!=null) {
 		if (edit==null)
 			g_report_edit = false;
 		else
@@ -922,7 +923,7 @@ function previewPage(uuid,depth,type,langcode,edit)
 		$("#previewbackdrop-"+uuid).show();
 		$("#preview-window-"+uuid).show();
 		window.scrollTo(0,0);
-	} else {
+	} else { */
 		$.ajax({
 			type : "GET",
 			dataType : "xml",
@@ -935,7 +936,7 @@ function previewPage(uuid,depth,type,langcode,edit)
 					g_report_edit = edit;
 				UICom.structure["ui"][uuid].displayNode('standard',UICom.structure['tree'][uuid],"preview-window-body-"+uuid,depth,langcode,g_report_edit);
 				g_report_edit = g_edit;
-				$("#preview-window-"+uuid).show();
+				$("#preview-"+uuid).show();
 				$("#previewbackdrop-"+uuid).show();
 				window.scrollTo(0,0);
 			},
@@ -948,7 +949,7 @@ function previewPage(uuid,depth,type,langcode,edit)
 				window.scrollTo(0,0);
 			}
 		});
-	}
+//	}
 }
 
 //==================================
@@ -1127,6 +1128,9 @@ function submit(uuid,submitall)
 					$(parent).hide();
 				if (UICom.structure.ui[$("#submit-"+uuid).parent().attr('dashboardid')].startday_node!=null)
 					register_report($("#submit-"+uuid).parent().attr('dashboardid'));
+			} else if ( $(".preview-window").length>0) {
+					$(".preview-window").remove();
+					$(".preview-backdrop").remove();
 			} else
 				UIFactory.Node.reloadUnit();
 		}
@@ -1145,6 +1149,10 @@ function reset(uuid)
 		url : urlS,
 		uuid : uuid,
 		success : function (data){
+			if ( $(".preview-window").length>0) {
+				$(".preview-window").remove();
+				$(".preview-backdrop").remove();
+			} else 
 			UIFactory.Node.reloadUnit();
 		}
 	});
@@ -1598,7 +1606,7 @@ function sendEmailPublicURL(encodeddata,email,langcode) {
 	//------------------------------
 
 	var img = document.querySelector('#config-send-email-logo');
-	var imgB64 = getDataUrl(img)//	$("#image-window-body").html("");
+	var imgB64 = getDataUrl(img);
 	var logo = "<img width='"+img.style.width+"' height='"+img.style.height+"' src=\""+imgB64+"\">";
 	message = logo + "<br>" + g_configVar['send-email-message'];
 	message = message.replace("##firstname##",USER.firstname);
@@ -1630,7 +1638,6 @@ function sendEmailPublicURL(encodeddata,email,langcode) {
 		}
 	});
 }
-
 
 //==================================
 function getLanguage() {
@@ -1971,6 +1978,7 @@ function setVariables(data)
 	try {
 		var select_variable_nodes = $("asmContext:has(metadata[semantictag*='g-select-variable'])",data);
 		for (var i=0;i<select_variable_nodes.length;i++) {
+			let attributes = UICom.structure.ui[$(select_variable_nodes[i]).attr("id")].resource.getAttributes();
 			var value = UICom.structure.ui[$(select_variable_nodes[i]).attr("id")].resource.getAttributes().value;
 			var code = UICom.structure.ui[$(select_variable_nodes[i]).attr("id")].resource.getAttributes().code;
 			var variable_value = (value=="") ? code : value;
@@ -1985,7 +1993,10 @@ function updateVariable(node)
 {
 	var value = UICom.structure.ui[$(node).attr("id")].resource.getAttributes().value;
 	var code = UICom.structure.ui[$(node).attr("id")].resource.getAttributes().code;
+	var text = UICom.structure.ui[$(node).attr("id")].resource.getAttributes().text;
 	var variable_value = (value=="") ? code : value;
+	if (variable_value==undefined)
+		variable_value = text;;
 	g_variables[UICom.structure.ui[$(node).attr("id")].getCode()] = cleanCode(variable_value,true);
 }
 
@@ -2533,15 +2544,22 @@ function replaceVariable(text,node,withquote)
 	if (withquote==null)
 		withquote = true;
 	if (text!=undefined && text!="") {
+		if (text.indexOf("##today-utc##"))
+			text = text.replaceAll('##today-utc##',new Date().getTime());
+		if (text.indexOf("##today##"))
+			text = text.replaceAll('##today##',new Date().toLocaleString());
 		if (text!=undefined && text.indexOf('lastimported')>-1) {
 			text = text.replaceAll('##lastimported-1##',"g_importednodestack[g_importednodestack.length-2]");
 			text = text.replaceAll('##lastimported-2##',"g_importednodestack[g_importednodestack.length-3]");
+			text = text.replaceAll('##lastimported-3##',"g_importednodestack[g_importednodestack.length-4]");
+			text = text.replaceAll('##lastimported-4##',"g_importednodestack[g_importednodestack.length-5]");
 			text = text.replaceAll('##lastimported##',"g_importednodestack[g_importednodestack.length-1]");
 		}
 		else if (text!=undefined && text.indexOf('##currentportfolio##')>-1) {
 			text = text.replaceAll('##currentportfolio##',portfolios_byid[portfolioid_current].code_node.text());
 		}
 		if (node!=null && node!=undefined && text!=undefined) {
+			//--------- currentnode--------------
 			if (withquote && text.indexOf('##current')>-1) {
 				text = text.replaceAll('##currentnode##',"'"+node.id+"'");
 				text = text.replaceAll('##currentcode##',"'"+$($("code",$("asmResource[xsi_type!='context'][xsi_type!='nodeRes']",node.node))).text()+"'");
@@ -2550,6 +2568,7 @@ function replaceVariable(text,node,withquote)
 				text = text.replaceAll('##currentnode##',node.id);
 				text = text.replaceAll('##currentcode##',$($("code",$("asmResource[xsi_type!='context'][xsi_type!='nodeRes']",node.node))).text());
 			}
+			//--------- parentcode--------------
 			if (withquote && text.indexOf('##parentnode##')>-1)
 				if (node.node!=undefined)
 					text = text.replaceAll('##parentnode##',"'"+$(node.node).parent().attr('id')+"'");
@@ -2560,6 +2579,18 @@ function replaceVariable(text,node,withquote)
 					text = text.replaceAll('##parentnode##',$(node.node).parent().attr('id'));
 				else
 					text = text.replaceAll('##parentnode##',$(node).parent().attr('id'));
+			//--------- parentcode--------------
+			if (withquote && text.indexOf('##parentparentnode##')>-1)
+				if (node.node!=undefined)
+					text = text.replaceAll('##parentparentnode##',"'"+$(node.node).parent().parent().attr('id')+"'");
+				else
+					text = text.replaceAll('##parentparentnode##',"'"+$(node).parent().parent().attr('id')+"'");
+			if (!withquote && text.indexOf('##parentparentnode##')>-1)
+				if (node.node!=undefined)
+					text = text.replaceAll('##parentparentnode##',$(node.node).parent().parent().attr('id'));
+				else
+					text = text.replaceAll('##parentparentnode##',$(node).parent().parent().attr('id'));
+			//--------- itselfrescode--------------
 			if (withquote && text.indexOf('##itselfrescode##')>-1)
 				text = text.replaceAll('##itselfrescode##',"'"+$($("code",$("asmResource[xsi_type!='context'][xsi_type!='nodeRes']",node.node))).text()+"'");
 	
@@ -2990,6 +3021,7 @@ function majcodenum (node) {
 function sortTable (tableid)
 //==================================
 {
+	
 	// adapted from Pierre Giraud - www.pierre-giraud.com
 	const compare = function(ids, asc){
 		return function(row1, row2){
@@ -3109,14 +3141,21 @@ function notExistChild (nodeid,semtag)
 //=========================================================
 
 //==================================
-function saveVector(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,w,d,r)
+function saveVector(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,d,w,r)
 //==================================
 {
-	var xml = "<vector>";
-//	xml += "<rights w='"+w+"' d='"+w+"' r='"+r+"'/>";
-	xml += "<a1>"+((a1==undefined)?"":a1)+"</a1><a2>"+((a2==undefined)?"":a2)+"</a2><a3>"+((a3==undefined)?"":a3)+"</a3><a4>"+((a4==undefined)?"":a4)+"</a4><a5>"+((a5==undefined)?"":a5)+"</a5><a6>"+((a6==undefined)?"":a6)+"</a6><a7>"+((a7==undefined)?"":a7)+"</a7><a8>"+((a8==undefined)?"":a8)+"</a8><a9>"+((a9==undefined)?"":a9)+"</a9><a10>"+((a10==undefined)?"":a10)+"</a10>";
-	xml += "</vector>"
+	if (d==undefined)
+		d = USER.username;
+	if (w==undefined)
+		w = "";
+	if (r==undefined)
+		r = "";
+	var xml = "<vectors>";
+	xml += "<rights w='"+w+"' d='"+d+"' r='"+r+"'/>";
+	xml += "<vector><a1>"+((a1==undefined)?"":a1)+"</a1><a2>"+((a2==undefined)?"":a2)+"</a2><a3>"+((a3==undefined)?"":a3)+"</a3><a4>"+((a4==undefined)?"":a4)+"</a4><a5>"+((a5==undefined)?"":a5)+"</a5><a6>"+((a6==undefined)?"":a6)+"</a6><a7>"+((a7==undefined)?"":a7)+"</a7><a8>"+((a8==undefined)?"":a8)+"</a8><a9>"+((a9==undefined)?"":a9)+"</a9><a10>"+((a10==undefined)?"":a10)+"</a10>";
+	xml += "</vector></vectors>"
 	$.ajax({
+		async:false,
 		type : "POST",
 		contentType: "application/xml",
 		dataType : "xml",
@@ -3185,6 +3224,7 @@ function deleteVector(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10)
 			url += "&a10="+a10;
 	url = serverBCK+"/vector?" + url;
 	$.ajax({
+		async:false,
 		type : "DELETE",
 		contentType: "application/xml",
 		dataType : "xml",
@@ -3266,7 +3306,19 @@ function searchVector(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10)
 	return result;
 }
 
-function deleteAllVectors(nodeid){
+//==================================
+function numberOfVector(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10)
+//==================================
+{
+	let search = $("vector",searchVector(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10));
+	const nb = search.length;
+	return nb;
+}
+
+//==================================
+function deleteAllVectors(nodeid)
+//==================================
+{
 	const date = UICom.structure.ui[nodeid].resource.getView();
 	let url = serverBCK+"/vector?";
 	if (date!=null)
@@ -3286,7 +3338,10 @@ function deleteAllVectors(nodeid){
 
 }
 
-function confirmDeleteAllVectors(nodeid){
+//==================================
+function confirmDeleteAllVectors(nodeid)
+//==================================
+{
 	let js = "deleteAllVectors('"+nodeid+"')";
 	confirmDelete(js);
 }
@@ -3353,6 +3408,25 @@ function testNumber(text) {
 	return result;
 }
 
+function testFileSaved(uuid) {
+	const url = serverBCK+"/resources/resource/file/"+uuid+"?lang="+languages[LANGCODE]+"&timestamp=" + new Date().getTime()
+	$.ajax({
+		async : false,
+		type : "GET",
+		contentType: "application/xml",
+		dataType : "text",
+		url : url,
+		success : function(data) {
+			if (data.length==0) {
+				$("#resource_"+uuid).html("<span style='color:red'> Not saved or Empty</span>");
+			}
+		},
+		error : function(data) {
+			$("#resource_"+uuid).html("<span style='color:red'> Not saved or Empty</span>");
+		}
+	});
+}
+
 //=========================================================
 // Functions for Menus
 //=========================================================
@@ -3363,10 +3437,38 @@ function testSubmitted(uuid) {
 	return UICom.structure.ui[uuid].submitted=="Y";
 }
 
+function testSubmitted(uuid,semtag) {
+	if (uuid == null)
+		uuid = $("#page").attr('uuid');
+	const nodes = $("*:has(>metadata[semantictag*="+semtag+"])",UICom.structure.ui[uuid].node);
+	if (nodes.length>0) {
+		const nodeid = $(nodes[0]).attr("id");
+		if (UICom.structure.ui[nodeid].submitted==undefined)
+			UICom.structure.ui[nodeid].setMetadata();
+		return UICom.structure.ui[nodeid].submitted=="Y";
+	} else {
+		return false;
+	}
+}
+
 function testNotSubmitted(uuid) {
 	if (UICom.structure.ui[uuid].submitted==undefined)
 		UICom.structure.ui[uuid].setMetadata();
 	return UICom.structure.ui[uuid].submitted!="Y";
+}
+
+function testNotSubmitted(uuid,semtag) {
+	if (uuid == null)
+		uuid = $("#page").attr('uuid');
+	const nodes = $("*:has(>metadata[semantictag*="+semtag+"])",UICom.structure.ui[uuid].node);
+	if (nodes.length>0) {
+		const nodeid = $(nodes[0]).attr("id");
+		if (UICom.structure.ui[nodeid].submitted==undefined)
+			UICom.structure.ui[nodeid].setMetadata();
+		return UICom.structure.ui[nodeid].submitted!="Y";
+	} else {
+		return true;
+	}
 }
 
 function testExist(semtag,uuid) {
@@ -3467,3 +3569,4 @@ function getDataUrl(img) {
 	ctx.drawImage(img, 0, 0);
 	return canvas.toDataURL('image/png');
 }
+

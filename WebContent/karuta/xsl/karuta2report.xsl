@@ -35,8 +35,104 @@
 			<xsl:apply-templates select='asmUnitStructure'/>
 		</table>
 	</xsl:template>
+	<!-- ================ sortable table ============================ -->
+	<xsl:template match="*[metadata/@semantictag='model-sort-table']">
+		<xsl:variable name="style">
+			<xsl:call-template name="style"/>
+		</xsl:variable>
+		<xsl:variable name="ref-init">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='ref-init']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="class">
+			<xsl:call-template name="class"/>
+		</xsl:variable>
+		<table>
+			<xsl:if test="not($class='')">
+				<xsl:attribute name="class"><xsl:value-of select="$class"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not($style='..')">
+				<xsl:attribute name="style"><xsl:value-of select="$style"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not($ref-init='')">
+				<xsl:attribute name="ref-init"><xsl:value-of select="$ref-init"/></xsl:attribute>
+			</xsl:if>
+			<xsl:apply-templates select='asmUnitStructure'/>
+		</table>
+	</xsl:template>
+	<!-- ================ thead ============================ -->
+	<xsl:template match="*[metadata/@semantictag='model-thead']">
+		<xsl:variable name="ref-init">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='ref-init']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="style">
+			<xsl:call-template name="style"/>
+		</xsl:variable>
+		<xsl:variable name="class">
+			<xsl:call-template name="class"/>
+		</xsl:variable>
+		<thead>
+			<xsl:if test="not($class='')">
+				<xsl:attribute name="class"><xsl:value-of select="$class"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not($style='..')">
+				<xsl:attribute name="style"><xsl:value-of select="$style"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not($ref-init='')">
+				<xsl:attribute name="ref-init"><xsl:value-of select="$ref-init"/></xsl:attribute>
+			</xsl:if>
+			<xsl:apply-templates select='asmUnitStructure'/>
+		</thead>
+	</xsl:template>
+	<!-- ================ tbody ============================ -->
+	<xsl:template match="*[metadata/@semantictag='model-tbody']">
+		<xsl:variable name="ref-init">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='ref-init']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="style">
+			<xsl:call-template name="style"/>
+		</xsl:variable>
+		<xsl:variable name="class">
+			<xsl:call-template name="class"/>
+		</xsl:variable>
+		<tbody>
+			<xsl:if test="not($class='')">
+				<xsl:attribute name="class"><xsl:value-of select="$class"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not($style='..')">
+				<xsl:attribute name="style"><xsl:value-of select="$style"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not($ref-init='')">
+				<xsl:attribute name="ref-init"><xsl:value-of select="$ref-init"/></xsl:attribute>
+			</xsl:if>
+			<xsl:apply-templates select='asmUnitStructure'/>
+		</tbody>
+	</xsl:template>
+	<!-- ================ th ============================ -->
+	<xsl:template match="*[metadata/@semantictag='model-th']">
+		<xsl:variable name="ref-init">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='ref-init']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="style">
+			<xsl:call-template name="style"/>
+		</xsl:variable>
+		<xsl:variable name="class">
+			<xsl:call-template name="class"/>
+		</xsl:variable>
+		<th>
+			<xsl:if test="not($class='')">
+				<xsl:attribute name="class"><xsl:value-of select="$class"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not($style='..')">
+				<xsl:attribute name="style"><xsl:value-of select="$style"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not($ref-init='')">
+				<xsl:attribute name="ref-init"><xsl:value-of select="$ref-init"/></xsl:attribute>
+			</xsl:if>
+			<xsl:apply-templates select='asmUnitStructure'/>
+		</th>
+	</xsl:template>
 	<!-- ================ row ============================ -->
-	<xsl:template match="*[metadata/@semantictag='model-row']">
+	<xsl:template match="*[metadata/@semantictag='model-row']|*[metadata/@semantictag='model-rw-thead']">
 		<xsl:variable name="ref-init">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='ref-init']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
@@ -724,6 +820,29 @@
 			</xsl:if>
 			<xsl:apply-templates select='asmUnitStructure'/>
 		</for-each-node-js>
+	</xsl:template>
+	<!-- ================ for-vector ============================ -->
+	<xsl:template match="*[metadata/@semantictag='for-each-vector']">
+		<xsl:variable name="ref-init">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='ref-init']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="countvar">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='countvar']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="select">
+			<xsl:value-of select="asmContext[metadata/@semantictag='select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"/>
+		</xsl:variable>
+		<xsl:variable name="display">
+			<xsl:value-of select="asmContext[metadata/@semantictag='display']/asmResource[@xsi_type='Field']/text[@lang=$lang]"/>
+		</xsl:variable>
+		<for-each-vector select='{$select}' display='{$display}'>
+			<xsl:if test="not($ref-init='')">
+				<xsl:attribute name="ref-init"><xsl:value-of select="$ref-init"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not($countvar='')">
+				<xsl:attribute name="countvar"><xsl:value-of select="$countvar"/></xsl:attribute>
+			</xsl:if>
+		</for-each-vector>
 	</xsl:template>
 	<!-- ================ for-each-portfolio-js ============================ -->
 	<xsl:template match="*[metadata/@semantictag='for-each-portfolio-js']">

@@ -2573,8 +2573,7 @@ button.selected-label {
 table.tablesorter thead tr th, table.tablesorter tfoot tr th
 {
 	min-width:150px;
-}
-
+}s
 
 table.tablesorter th.restore {
 	min-width:35px;
@@ -2734,6 +2733,8 @@ table.tablesorter th.restore {
 .hidesubmitbutton .showsubmitbutton .submitbutton {background-color:red;display:block}
 
 .hideresetbutton .resetbutton {display:none}
+.hidesubmittedbutton .submitted {display:none}
+.hidenotsubmittedbutton .not-submitted {display:none}
 
 .alert {
 	padding: 1px 5px;
