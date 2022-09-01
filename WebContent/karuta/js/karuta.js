@@ -897,6 +897,16 @@ function previewPage(uuid,depth,type,langcode,edit)
 	if (langcode==null)
 		langcode = LANGCODE;
 	//---------------------
+	if (type=='previewURL') {
+		$.ajax({
+			async:false,
+			type : "GET",
+			url : serverBCK+"/direct?i=" + uuid,
+			success : function(data) {
+				uuid = data;
+			}
+		});
+	}
 	var previewbackdrop = document.createElement("DIV");
 	previewbackdrop.setAttribute("class", "preview-backdrop");
 	previewbackdrop.setAttribute("id", "previewbackdrop-"+uuid);
@@ -913,43 +923,32 @@ function previewPage(uuid,depth,type,langcode,edit)
 	var header = "<button class='btn add-button' style='float:right' onclick=\"$('#preview-"+uuid+"').remove();$('#previewbackdrop-"+uuid+"').remove();\">"+karutaStr[LANG]['Close']+"</button>";
 	$("#preview-window-header-"+uuid).html(header);
 	$("#preview-window-body-"+uuid).html("");
-/*	if (UICom.structure['tree'][uuid]!=null) {
-		if (edit==null)
-			g_report_edit = false;
-		else
-			g_report_edit = edit;
-		UICom.structure["ui"][uuid].displayNode('standard',UICom.structure['tree'][uuid],"preview-window-body-"+uuid,depth,langcode,g_report_edit);
-		g_report_edit = g_edit;
-		$("#previewbackdrop-"+uuid).show();
-		$("#preview-window-"+uuid).show();
-		window.scrollTo(0,0);
-	} else { */
-		$.ajax({
-			type : "GET",
-			dataType : "xml",
-			url : serverBCK_API+"/nodes/node/" + uuid + "?resources=true",
-			success : function(data) {
-				UICom.parseStructure(data);
-				if (edit==null)
-					g_report_edit = false;
-				else
-					g_report_edit = edit;
-				UICom.structure["ui"][uuid].displayNode('standard',UICom.structure['tree'][uuid],"preview-window-body-"+uuid,depth,langcode,g_report_edit);
-				g_report_edit = g_edit;
-				$("#preview-"+uuid).show();
-				$("#previewbackdrop-"+uuid).show();
-				window.scrollTo(0,0);
-			},
-			error : function() {
-				var html = "";
-				html += "<div>" + karutaStr[languages[langcode]]['error-notfound'] + "</div>";
-				$("#preview-window-body-"+uuid).html(html);
-				$("#previewbackdrop-"+uuid).show();
-				$("#preview-window-"+uuid).show();
-				window.scrollTo(0,0);
-			}
-		});
-//	}
+	let url = serverBCK_API+"/nodes/node/" + uuid + "?resources=true";
+	$.ajax({
+		type : "GET",
+		dataType : "xml",
+		url : url,
+		success : function(data) {
+			UICom.parseStructure(data);
+			if (edit==null)
+				g_report_edit = false;
+			else
+				g_report_edit = edit;
+			UICom.structure["ui"][uuid].displayNode('standard',UICom.structure['tree'][uuid],"preview-window-body-"+uuid,depth,langcode,g_report_edit);
+			g_report_edit = g_edit;
+			$("#preview-"+uuid).show();
+			$("#previewbackdrop-"+uuid).show();
+			window.scrollTo(0,0);
+		},
+		error : function() {
+			var html = "";
+			html += "<div>" + karutaStr[languages[langcode]]['error-notfound'] + "</div>";
+			$("#preview-window-body-"+uuid).html(html);
+			$("#previewbackdrop-"+uuid).show();
+			$("#preview-window-"+uuid).show();
+			window.scrollTo(0,0);
+		}
+	});
 }
 
 //==================================
@@ -1638,6 +1637,7 @@ function sendEmailPublicURL(encodeddata,email,langcode) {
 		}
 	});
 }
+
 
 //==================================
 function getLanguage() {
@@ -3568,5 +3568,71 @@ function getDataUrl(img) {
 	canvas.height = img.height;
 	ctx.drawImage(img, 0, 0);
 	return canvas.toDataURL('image/png');
+}
+
+//================================================
+//================================================
+
+
+function getPreviewSharedURL(uuid) {
+	const email = "";
+	const role = 'enseignant';
+	const showtorole = 'enseignant';
+	const sharerole = 'etudiant';
+	const level = '2';
+	const duration = '500';
+	const urlS = serverBCK+'/direct?uuid='+uuid+'&role='+role+'&showtorole='+showtorole+'&l='+level+'&d='+duration+'&sharerole='+sharerole+'&type=showtorole';
+	let url = "";
+	$.ajax({
+		async:false,
+		type : "POST",
+		dataType : "text",
+		contentType: "application/xml",
+		url : urlS,
+		success : function (data){
+			url = data;
+		}
+
+	});
+	return url;
+}
+
+function demanderEvaluation3(nodeid,parentid,sendemail) { // par l'étudiant
+	let pageid = $("#page").attr('uuid');
+	const semtag = UICom.structure.ui[pageid].semantictag;
+	var type = "";
+	if (semtag.indexOf('sae')>-1)
+		type = 'sae';
+	else if (semtag.indexOf('stage')>-1)
+		type='stage';
+	else if (semtag.indexOf('autre')>-1)
+		type='action';
+	else if (semtag.indexOf('competence')>-1)
+		type='competence';
+	else if (semtag.indexOf('periode-universite')>-1)
+		type='periode-universite';
+	else if (semtag.indexOf('periode-entreprise')>-1)
+		type='periode-entreprise';
+	else if (semtag.indexOf('rapport-memoire')>-1)
+		type='rapport-memoire';
+	const previewURL = getPreviewSharedURL(pageid);
+//	const section_evaluation_action_id = $("*:has(>metadata[semantictag='section-evaluation-action'])",UICom.structure.ui[pageid].node).attr("id");
+	const js = "buildSaveEvaluationVector('"+nodeid+"','"+pageid+"','"+type+"-evaluation','"+previewURL+"');majDemEvalSAE('"+nodeid+"')";
+	const text = "Attention vous ne pourrez plus faire de modifications sur cette page. Voulez-vous continuer?";
+//	const section_reflexivite_action_id = $("*:has(>metadata[semantictag='section-reflexivite-action'])",UICom.structure.ui[pageid].node).attr("id");
+	const section_etudiant_soumission_id = $("*:has(>metadata[semantictag='section-etudiant-soumission'])",UICom.structure.ui[pageid].node).attr("id");
+	confirmSubmit(section_etudiant_soumission_id,false,js,text);
+}
+
+function displayEvaluation3(destid,date,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10) {
+	let html = "<tr>";
+	html += "<td>"+a6+"</td>";
+	const date_demande = new Date(parseInt(a7));
+	html += "<td>"+ date_demande.toLocaleString()+"</td>";
+	html += "<td>"+a8+"<span class='button fas fa-binoculars' onclick=\"previewPage('"+a5+"',100,'previewURL',null,true)\" data-title='Aperçu' data-toggle='tooltip' data-placement='bottom' ></span></td>";
+	html += "<td>"+a10+"</td>";
+	html += "<td>"+a9+"</td>";
+	html += "</tr>";
+	$("#"+destid).append(html);
 }
 
