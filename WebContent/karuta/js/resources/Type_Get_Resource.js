@@ -1558,6 +1558,7 @@ UIFactory["Get_Resource"].update = function(selected_item,itself,langcode,type)
 		}
 		itself.save();
 		//-------- if function js -------------
+		execJS(itself,'update-resource');
 		execJS(itself,'update-resource-after');
 		//---------------------
 	}

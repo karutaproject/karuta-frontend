@@ -278,6 +278,7 @@ UIFactory["Image"].prototype.displayView = function(dest,type,langcode)
 	$("#image_"+this.id).click(function(){
 		imageHTML("<img class='img-fluid' style='margin-left:auto;margin-right:auto' uuid='img_"+uuid+"' src='../../../"+serverBCK+"/resources/resource/file/"+uuid+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"' "+alt+" >");
 	});
+	testFileSaved(this.id);
 
 };
 
@@ -504,6 +505,8 @@ UIFactory["Image"].prototype.save = function(parent,delfile)
 		window.setTimeout(parent.refresh(),2000 );
 	if (this.blockparent!=null)
 		this.blockparent.refresh();
+	// test if written
+	testFileSaved(this.id);
 };
 
 //==================================

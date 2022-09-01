@@ -3408,6 +3408,25 @@ function testNumber(text) {
 	return result;
 }
 
+function testFileSaved(uuid) {
+	const url = serverBCK+"/resources/resource/file/"+uuid+"?lang="+languages[LANGCODE]+"&timestamp=" + new Date().getTime()
+	$.ajax({
+		async : false,
+		type : "GET",
+		contentType: "application/xml",
+		dataType : "text",
+		url : url,
+		success : function(data) {
+			if (data.length==0) {
+				$("#resource_"+uuid).html("<span style='color:red'> Not saved or Empty</span>");
+			}
+		},
+		error : function(data) {
+			$("#resource_"+uuid).html("<span style='color:red'> Not saved or Empty</span>");
+		}
+	});
+}
+
 //=========================================================
 // Functions for Menus
 //=========================================================
