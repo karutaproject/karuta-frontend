@@ -1,10 +1,29 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.portfolio.karuta</groupId>
+	<groupId>com.eportfolium.karuta</groupId>
 	<artifactId>karuta-frontend</artifactId>
 	<version>3.1.1-SNAPSHOT</version>
 	<packaging>war</packaging>
 	<name>karuta-frontend</name>
+
+    <scm>
+        <connection>scm:git:ssh://git@github.com/karutaproject/karuta-frontend.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com/karutaproject/karuta-frontend.git</developerConnection>
+        <url>https://github.com/karutaproject/karuta-frontend.git</url>
+        <tag>HEAD</tag>
+    </scm>
+
+    <distributionManagement>
+      <snapshotRepository>
+        <id>ossrh</id>
+        <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
+      </snapshotRepository>
+      <repository>
+        <id>ossrh</id>
+        <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+      </repository>
+    </distributionManagement>
+
 	<build>
 		<sourceDirectory>${basedir}/src</sourceDirectory>
 		<plugins>
