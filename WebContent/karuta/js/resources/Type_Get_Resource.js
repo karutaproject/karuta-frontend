@@ -944,7 +944,7 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 			// ---------------------- children ---------
 			if (semtag2!="") {
 				var semtag_parent = semtag.replace("!","");
-				UIFactory.Get_Resource.getChildren(radio_obj,self,langcode,srce,target,portfoliocode,semtag2,semtag_parent,original_code,cachable);
+				UIFactory.Get_Resource.getChildren(radio_obj,self,langcode,srce,target,portfoliocode,semtag2,semtag_parent,original_code,cachable,tabadded);
 			}
 			//------------------------------------------
 			$("#"+destid).append(radio_obj);
@@ -1421,7 +1421,7 @@ UIFactory["Get_Resource"].getChildren = function(dest,self,langcode,srce,target,
 	}
 	//------------
 	if (cachable && g_Get_Resource_caches[portfoliocode+semtag+semtag_parent+code]!=undefined && g_Get_Resource_caches[portfoliocode+semtag+semtag_parent+code]!="")
-		UIFactory.Get_Resource.parseChildren(dest,self,g_Get_Resource_caches[portfoliocode+semtag+semtag_parent+code],langcode,srce,target,portfoliocode,semtag,semtag_parent,code,semtag2,cachable)
+		UIFactory.Get_Resource.parseChildren(dest,self,g_Get_Resource_caches[portfoliocode+semtag+semtag_parent+code],langcode,srce,target,portfoliocode,semtag,semtag_parent,code,semtag2,cachable,tabadded)
 	else {
 		$.ajax({
 			async:false,
