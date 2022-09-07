@@ -929,7 +929,7 @@ function previewPage(uuid,depth,type,langcode,edit)
 		dataType : "xml",
 		url : url,
 		success : function(data) {
-			UICom.parseStructure(data);
+			UICom.parseStructure(data,false);
 			if (edit==null)
 				g_report_edit = false;
 			else
@@ -3431,43 +3431,43 @@ function testFileSaved(uuid) {
 // Functions for Menus
 //=========================================================
 
-function testSubmitted(uuid) {
-	if (UICom.structure.ui[uuid].submitted==undefined)
-		UICom.structure.ui[uuid].setMetadata();
-	return UICom.structure.ui[uuid].submitted=="Y";
-}
-
 function testSubmitted(uuid,semtag) {
 	if (uuid == null)
 		uuid = $("#page").attr('uuid');
-	const nodes = $("*:has(>metadata[semantictag*="+semtag+"])",UICom.structure.ui[uuid].node);
-	if (nodes.length>0) {
-		const nodeid = $(nodes[0]).attr("id");
-		if (UICom.structure.ui[nodeid].submitted==undefined)
-			UICom.structure.ui[nodeid].setMetadata();
-		return UICom.structure.ui[nodeid].submitted=="Y";
+	if (semtag!=null) {
+		const nodes = $("*:has(>metadata[semantictag*="+semtag+"])",UICom.structure.ui[uuid].node);
+		if (nodes.length>0) {
+			const nodeid = $(nodes[0]).attr("id");
+			if (UICom.structure.ui[nodeid].submitted==undefined)
+				UICom.structure.ui[nodeid].setMetadata();
+			return UICom.structure.ui[nodeid].submitted=="Y";
+		} else {
+			return true;
+		}
 	} else {
-		return false;
+		if (UICom.structure.ui[uuid].submitted==undefined)
+			UICom.structure.ui[uuid].setMetadata();
+		return UICom.structure.ui[uuid].submitted=="Y";
 	}
-}
-
-function testNotSubmitted(uuid) {
-	if (UICom.structure.ui[uuid].submitted==undefined)
-		UICom.structure.ui[uuid].setMetadata();
-	return UICom.structure.ui[uuid].submitted!="Y";
 }
 
 function testNotSubmitted(uuid,semtag) {
 	if (uuid == null)
 		uuid = $("#page").attr('uuid');
-	const nodes = $("*:has(>metadata[semantictag*="+semtag+"])",UICom.structure.ui[uuid].node);
-	if (nodes.length>0) {
-		const nodeid = $(nodes[0]).attr("id");
-		if (UICom.structure.ui[nodeid].submitted==undefined)
-			UICom.structure.ui[nodeid].setMetadata();
-		return UICom.structure.ui[nodeid].submitted!="Y";
+	if (semtag!=null) {
+		const nodes = $("*:has(>metadata[semantictag*="+semtag+"])",UICom.structure.ui[uuid].node);
+		if (nodes.length>0) {
+			const nodeid = $(nodes[0]).attr("id");
+			if (UICom.structure.ui[nodeid].submitted==undefined)
+				UICom.structure.ui[nodeid].setMetadata();
+			return UICom.structure.ui[nodeid].submitted!="Y";
+		} else {
+			return true;
+		}
 	} else {
-		return true;
+		if (UICom.structure.ui[uuid].submitted==undefined)
+			UICom.structure.ui[uuid].setMetadata();
+		return UICom.structure.ui[uuid].submitted!="Y";
 	}
 }
 
@@ -3572,67 +3572,4 @@ function getDataUrl(img) {
 
 //================================================
 //================================================
-
-
-function getPreviewSharedURL(uuid) {
-	const email = "";
-	const role = 'enseignant';
-	const showtorole = 'enseignant';
-	const sharerole = 'etudiant';
-	const level = '2';
-	const duration = '500';
-	const urlS = serverBCK+'/direct?uuid='+uuid+'&role='+role+'&showtorole='+showtorole+'&l='+level+'&d='+duration+'&sharerole='+sharerole+'&type=showtorole';
-	let url = "";
-	$.ajax({
-		async:false,
-		type : "POST",
-		dataType : "text",
-		contentType: "application/xml",
-		url : urlS,
-		success : function (data){
-			url = data;
-		}
-
-	});
-	return url;
-}
-
-function demanderEvaluation3(nodeid,parentid,sendemail) { // par l'étudiant
-	let pageid = $("#page").attr('uuid');
-	const semtag = UICom.structure.ui[pageid].semantictag;
-	var type = "";
-	if (semtag.indexOf('sae')>-1)
-		type = 'sae';
-	else if (semtag.indexOf('stage')>-1)
-		type='stage';
-	else if (semtag.indexOf('autre')>-1)
-		type='action';
-	else if (semtag.indexOf('competence')>-1)
-		type='competence';
-	else if (semtag.indexOf('periode-universite')>-1)
-		type='periode-universite';
-	else if (semtag.indexOf('periode-entreprise')>-1)
-		type='periode-entreprise';
-	else if (semtag.indexOf('rapport-memoire')>-1)
-		type='rapport-memoire';
-	const previewURL = getPreviewSharedURL(pageid);
-//	const section_evaluation_action_id = $("*:has(>metadata[semantictag='section-evaluation-action'])",UICom.structure.ui[pageid].node).attr("id");
-	const js = "buildSaveEvaluationVector('"+nodeid+"','"+pageid+"','"+type+"-evaluation','"+previewURL+"');majDemEvalSAE('"+nodeid+"')";
-	const text = "Attention vous ne pourrez plus faire de modifications sur cette page. Voulez-vous continuer?";
-//	const section_reflexivite_action_id = $("*:has(>metadata[semantictag='section-reflexivite-action'])",UICom.structure.ui[pageid].node).attr("id");
-	const section_etudiant_soumission_id = $("*:has(>metadata[semantictag='section-etudiant-soumission'])",UICom.structure.ui[pageid].node).attr("id");
-	confirmSubmit(section_etudiant_soumission_id,false,js,text);
-}
-
-function displayEvaluation3(destid,date,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10) {
-	let html = "<tr>";
-	html += "<td>"+a6+"</td>";
-	const date_demande = new Date(parseInt(a7));
-	html += "<td>"+ date_demande.toLocaleString()+"</td>";
-	html += "<td>"+a8+"<span class='button fas fa-binoculars' onclick=\"previewPage('"+a5+"',100,'previewURL',null,true)\" data-title='Aperçu' data-toggle='tooltip' data-placement='bottom' ></span></td>";
-	html += "<td>"+a10+"</td>";
-	html += "<td>"+a9+"</td>";
-	html += "</tr>";
-	$("#"+destid).append(html);
-}
 
