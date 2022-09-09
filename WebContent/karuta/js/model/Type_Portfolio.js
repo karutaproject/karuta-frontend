@@ -627,6 +627,7 @@ UIFactory["Portfolio"].reload = function(portfolioid)
 //==================================
 {
 	$.ajax({
+		async:false,
 		type : "GET",
 		dataType : "xml",
 		url : serverBCK_API+"/portfolios/portfolio/" + portfolioid + "?resources=true",

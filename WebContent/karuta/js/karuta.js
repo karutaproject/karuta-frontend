@@ -613,15 +613,21 @@ function deleteandhidewindow(uuid,type,parentid,destid,callback,param1,param2,pa
 }
 
 //=======================================================================
-function confirmSubmit(uuid,submitall,js,text) 
+function confirmSubmit(uuid,submitall,js1,text,js2) 
 // =======================================================================
 {
-	if (js==null || js==undefined)
-		js = "";
-	if (js!="" && js.indexOf('(')<0)
-		js = js + "('" + uuid + "')";
+	if (js1==null || js1==undefined)
+		js1 = "";
+	if (js1!="" && js1.indexOf('(')<0)
+		js1 = js1 + "('" + uuid + "')";
 	else 
-		js = replaceVariable(js);
+		js1 = replaceVariable(js1);
+	if (js2==null || js2==undefined)
+		js2 = "";
+	if (js2!="" && js2.indexOf('(')<0)
+		js2 = js2 + "('" + uuid + "')";
+	else 
+		js2 = replaceVariable(js2);
 	var href = "";
 	var type = "";
 	try {
@@ -637,7 +643,7 @@ function confirmSubmit(uuid,submitall,js,text)
 	{
 		document.getElementById('delete-window-body').innerHTML = (text==null) ? karutaStr[LANG]["confirm-submit"] : text;
 		var buttons = "<button class='btn' onclick=\"javascript:$('#delete-window').modal('hide');\">" + karutaStr[LANG]["Cancel"] + "</button>";
-		buttons += "<button class='btn btn-danger' onclick=\"$('#delete-window').modal('hide');"+js+";submit('"+uuid+"',"+submitall+");\">" + karutaStr[LANG]["button-submit"] + "</button>";
+		buttons += "<button class='btn btn-danger' onclick=\"$('#delete-window').modal('hide');"+js1+";submit('"+uuid+"',"+submitall+");"+js2+";\">" + karutaStr[LANG]["button-submit"] + "</button>";
 		document.getElementById('delete-window-footer').innerHTML = buttons;
 		$('#delete-window').modal('show');
     }
