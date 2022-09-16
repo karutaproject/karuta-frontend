@@ -868,9 +868,9 @@ UIFactory["Get_Get_Resource"].prototype.parse = function(destid,type,langcode,da
 			input += " style=\""+style+"\"></div>";
 			input += "<div  class='sel"+code+" radio-label' style=\""+style+"\">";
 			if (display_code)
-				input += code + " ";
+				input += "<span class='li-code'>"+code+"</span> ";
 			if (display_label)
-				input += $(srce+"[lang='"+languages[langcode]+"']",resource).text();
+				input += "<span class='li-label'>"+$(srce+"[lang='"+languages[langcode]+"']",resource).text()+"</span>";
 			input += "</div></input>";
 			var obj = $(input);
 			$(obj).click(function (){

@@ -222,7 +222,7 @@ UIFactory["Langue"].prototype.displayEditor = function(destid,type,lang)
 		html +="</td>";
 		html +="<td style='text-align:left'>";
 		html += "&nbsp;<a  class='btn  editbutton' onclick=\"javascript:UICom.structure.ui['"+this.parentid+"'].structured_resource.langues_byid['"+this.id+"'].displayView('"+destid+"','detail',lang,true);$('#collapse"+this.id+"').collapse('show');toggleZoom('"+this.id+"')\" data-title='éditer' rel='tooltip'>";
-		html += karutaStr[LANG]['quit'];
+		html += karutaStr[LANG]['Close'];
 		html += "</a>";
 		html +="</td>";
 		//---------------------------------------------------------
