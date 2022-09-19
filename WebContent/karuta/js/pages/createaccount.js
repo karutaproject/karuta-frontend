@@ -119,18 +119,27 @@ function displayKarutaCreateAccount()
 			html += "</div>";
 			$('body').html(html);
 			$('body').append(alertBox());
+
+			$.ajax({
+				type : "GET",
+				dataType : "json",
+				url : fileserverBCK_API+"/version",
+				data: "",
+				success: function (data) {
+					karuta_fileserver_version = data.version;
+					karuta_fileserver_date = data.buildTime;
+				}
+			});
 		
 			$.ajax({
 				async: false,
 				type : "GET",
-				dataType : "xml",
-				url : serverBCK+"/version",
+				dataType : "json",
+				url : serverBCK_API+"/version",
 				data: "",
 				success : function(data) {		
-					karuta_backend_version = $("number",$("#backend",data)).text();
-					karuta_backend_date = $("date",$("#backend",data)).text();
-					karuta_fileserver_version = $("number",$("#fileserver",data)).text();
-					karuta_fileserver_date = $("date",$("#fileserver",data)).text();
+					karuta_backend_version = data.version;
+					karuta_backend_date = data.buildTime;
 					$("#navigation-bar").html(getNavBar('create_account',null));
 					$("#login").html(getInputs());$("#welcome4").html(karutaStr[LANG]['create_account']);
 					applyNavbarConfiguration();

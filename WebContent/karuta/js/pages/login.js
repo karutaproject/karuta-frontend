@@ -215,14 +215,24 @@ function constructKarutaLogin(withKarutaLogin)
 	applyLoginConfiguration();
 	$.ajax({
 		type : "GET",
-		dataType : "xml",
-		url : serverBCK+"/version",
+		dataType : "json",
+		url : serverBCK_API+"/version",
 		data: "",
-		success : function(data) {
-			karuta_backend_version = $("number",$("#backend",data)).text();
-			karuta_backend_date = $("date",$("#backend",data)).text();
-			karuta_fileserver_version = $("number",$("#fileserver",data)).text();
-			karuta_fileserver_date = $("date",$("#fileserver",data)).text();
+		success: function (data) {
+			console.log(data.version);
+			karuta_backend_version = data.version;
+			karuta_backend_date = data.buildTime;
+		}
+	});
+	$.ajax({
+		type : "GET",
+		dataType : "json",
+		url : fileserverBCK_API+"/version",
+		data: "",
+		success: function (data) {
+			console.log(data.version);
+			karuta_fileserver_version = data.version;
+			karuta_fileserver_date = data.buildTime;
 		}
 	});
 	try {
