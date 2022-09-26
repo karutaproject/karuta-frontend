@@ -2572,7 +2572,10 @@ function replaceVariable(text,node,withquote)
 			}
 			if (!withquote && text.indexOf('##current')>-1) {
 				text = text.replaceAll('##currentnode##',node.id);
-				text = text.replaceAll('##currentcode##',$($("code",$("asmResource[xsi_type!='context'][xsi_type!='nodeRes']",node.node))).text());
+				if (node.asmtype=='asmContext')
+					text = text.replaceAll('##currentcode##',$($("code",$("asmResource[xsi_type!='context'][xsi_type!='nodeRes']",node.node))).text());
+				else
+					text = text.replaceAll('##currentcode##',$($("code",$("asmResource[xsi_type='nodeRes']",node.node))).text());
 			}
 			//--------- parentcode--------------
 			if (withquote && text.indexOf('##parentnode##')>-1)
