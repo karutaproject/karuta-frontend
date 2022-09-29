@@ -2964,7 +2964,7 @@ g_report_actions['draw-web-line'] = function (destid,action,no,data)
 		select = replaceVariable(select);
 		var points = getPoints(data,select);
 		var angle = 360 / points.length;
-		for (let i=0; i<points.length;i++){
+		for (var i=0; i<points.length;i++){
 			if (points[i].value!=null) {
 				points[i] = {'value': ((points[i].value - min)/(max-min))*svgaxislength, 'angle':angle*i};
 				drawValue(destid,points[i].value,points[i].angle,svgcenter,'svg-web-value'+pos);
