@@ -643,7 +643,7 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 				}
 				$(select).append($(select_item));
 			}
-			if (newTableau1.length==0) { // if no choice but already setted
+			if (newTableau1.length==0 || $("#button_"+langcode+self.id).html()=="&nbsp;") { // if no choice or not found but already setted
 				//-------------- update button -----
 				if (self_code!="" && self_label!="") {
 					//------------------------------
