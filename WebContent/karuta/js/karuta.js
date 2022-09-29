@@ -2550,6 +2550,11 @@ function replaceVariable(text,node,withquote)
 	if (withquote==null)
 		withquote = true;
 	if (text!=undefined && text!="") {
+		if (text.indexOf("##pagecode##")>-1){
+			const pageid = $("#page").attr('uuid');
+			const pagecode = UICom.structure.ui[pageid].getCode();
+			text = text.replaceAll('##pagecode##',cleanCode(pagecode));
+		}
 		if (text.indexOf("##today-utc##"))
 			text = text.replaceAll('##today-utc##',new Date().getTime());
 		if (text.indexOf("##today##"))
