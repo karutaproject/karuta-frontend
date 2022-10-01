@@ -16,15 +16,21 @@
 <xsl:template match="span"><xsl:apply-templates select="*|text()"/></xsl:template>
 <!-- =====================================-->
 
+<!-- =====================================-->
+<xsl:template match="div"><xsl:apply-templates select="span"/></xsl:template>
+<!-- =====================================-->
 
 <!-- =========================================================================-->
 <!-- =========================================================================-->
 <!-- =========================================================================-->
 
 <!-- =====================================-->
-<xsl:template match="table"><xsl:apply-templates select="tbody|tr"/></xsl:template>
+<xsl:template match="table"><xsl:apply-templates select="thead|tbody|tr"/></xsl:template>
 <!-- =====================================-->
 
+<!-- =====================================-->
+<xsl:template match="thead"><xsl:apply-templates select="tr"/></xsl:template>
+<!-- =====================================-->
 
 <!-- =====================================-->
 <xsl:template match="tbody"><xsl:apply-templates select="tr"/></xsl:template>
@@ -32,13 +38,14 @@
 
 
 <!-- =====================================-->
-<xsl:template match="tr"><xsl:apply-templates select="td[not(contains(@style,'display:none') or contains(@style,'display: none'))]"/>;
+<xsl:template match="tr"><xsl:apply-templates select="th|td[not(contains(@style,'display:none') or contains(@style,'display: none'))]"/>;
 </xsl:template>
 <!-- =====================================-->
 
 
 <!-- =====================================-->
-<xsl:template match="td"><xsl:if test="position()&gt;1">;</xsl:if><xsl:apply-templates select="span"/></xsl:template>
+<xsl:template match="td"><xsl:if test="position()&gt;1">;</xsl:if><xsl:apply-templates select="span|div|text()"/></xsl:template>
+<xsl:template match="th"><xsl:if test="position()&gt;1">;</xsl:if><xsl:apply-templates select="span|div"/></xsl:template>
 <!-- =====================================-->
 
 

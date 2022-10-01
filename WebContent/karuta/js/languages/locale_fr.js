@@ -115,6 +115,7 @@ karutaStr['fr']['error-existing-code']="ERREUR - Le code existe déjà. Veuillez
 karutaStr['fr']['error-existing-login']="ERREUR - Le login existe déjà ou une entrée est invalide. Veuillez choisir un autre login ou vérifiez les champs.";
 karutaStr['fr']['error-empty-code']="ERREUR - Le code ne peut être vide.";
 karutaStr['fr']['error-notfound']="ERREUR - non trouvé";
+karutaStr['fr']['error-filenotfound']="*** Fichier non sauvegardé ou manquant";
 
 //=========================================
 //========== NODE =========================
