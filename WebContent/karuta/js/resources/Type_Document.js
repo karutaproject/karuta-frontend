@@ -165,6 +165,22 @@ UIFactory["Document"].prototype.getView = function(dest,type,langcode)
 		if (type=='icon'){
 				html =  documentIcon[extension]; 
 		}
+		const url = serverBCK+"/resources/resource/file/"+nodefileid+"?lang="+languages[LANGCODE]+"&timestamp=" + new Date().getTime()
+		$.ajax({
+			async : false,
+			type : "GET",
+			contentType: "application/xml",
+			dataType : "text",
+			url : url,
+			success : function(data) {
+				if (data.length==0) {
+					html = karutaStr[LANG]['error-filenotfound'];
+				}
+			},
+			error : function(data) {
+				html = karutaStr[LANG]['error-filenotfound'];
+			}
+		});
 	} else {
 		html =  "<img src='../../karuta/img/document-icon.png' style='width:24px'>"+karutaStr[LANG]['no-document'];
 	}
@@ -177,7 +193,6 @@ UIFactory["Document"].prototype.displayView = function(dest,type,langcode)
 {
 	var html = this.getView(dest,type,langcode);
 	$("#"+dest).html(html);
-	testFileSaved(this.id);
 };
 /// Editor
 //==================================
@@ -298,8 +313,6 @@ UIFactory["Document"].prototype.save = function(parent,delfile)
 		parent.refresh();
 	if (this.blockparent!=null)
 		this.blockparent.refresh();
-	// test if written
-	testFileSaved(this.id);
 };
 
 

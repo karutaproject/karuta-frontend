@@ -741,7 +741,7 @@ function xml2CSV(content)
 	data = data.replace(/<br\/>/g, '\n');
 	data = data.replace(/(<img[^>]*?[^\/]\s*)(>)/g, "$1/$2");
 	data = data.replace(/"(?![^<]*>)/g, '""');
-	data = data.replace(/(<span[^>]*>)(?!<\/span)([\s\S]*?)(<\/span>)/g, "$1\"$2\"$3");
+//	data = data.replace(/(<span[^>]*>)(?!<\/span)([\s\S]*?)(<\/span>)/g, "$1\"$2\"$3");
 	data = data.replace('&nbsp;', ' ');
 	data = "<!DOCTYPE xsl:stylesheet [<!ENTITY nbsp \"\">]><div>" + data + "</div>";
 	var url =  "../../../"+serverBCK+"/xsl?xsl="+appliname+"/karuta/xsl/html2csv.xsl&parameters=lang:"+LANG+"&format=application/csv";
@@ -2054,7 +2054,7 @@ g_report_actions['node_resource'] = function (destid,action,no,data)
 				text += deleteButton(nodeid,type,null,null,'UIFactory.Node.reloadUnit',null,null);
 			}
 			//------------- private button -------------------
-			if (shownode) {
+			if (shownode && writenode) {
 				privatevalue = ($(node.metadatawad).attr('private')==undefined)?false:$(node.metadatawad).attr('private')=='Y';
 				if (privatevalue) {
 					text = "<span id='report"+nodeid+"' class='private'>"+text+"<span class='button fas fa-eye-slash' style='' onclick=\"showinreport('"+nodeid+"')\" title='"+karutaStr[LANG]["button-show"]+"' data-toggle='tooltip' data-placement='bottom'></span>"+"</span>";

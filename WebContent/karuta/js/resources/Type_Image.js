@@ -273,13 +273,27 @@ UIFactory["Image"].prototype.displayView = function(dest,type,langcode)
 	if ($(this.alt_node[langcode]).text()!=undefined) // backward compatibility
 		alt = "alt=\""+$(this.alt_node[langcode]).text()+"\" "; 
 	var html = this.getView(dest,type,langcode);
+	const url = serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[LANGCODE]+"&timestamp=" + new Date().getTime()
+	$.ajax({
+		async : false,
+		type : "GET",
+		contentType: "application/xml",
+		dataType : "text",
+		url : url,
+		success : function(data) {
+			if (data.length==0) {
+				html = karutaStr[LANG]['error-filenotfound'];
+			}
+		},
+		error : function(data) {
+			html = karutaStr[LANG]['error-filenotfound'];
+		}
+	});
 	$("#"+dest).html(html);
 	var uuid = this.id;
 	$("#image_"+this.id).click(function(){
 		imageHTML("<img class='img-fluid' style='margin-left:auto;margin-right:auto' uuid='img_"+uuid+"' src='../../../"+serverBCK+"/resources/resource/file/"+uuid+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"' "+alt+" >");
 	});
-	testFileSaved(this.id);
-
 };
 
 
