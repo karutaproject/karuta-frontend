@@ -1,5 +1,6 @@
-var karuta_version = "3.1 Beta3.5.3";
-var karuta_date = "2022-10-01";
+// Don't modify these two next lines, it's updated automatically by the maven package commands
+var karuta_version = "@project.version@";
+var karuta_date = "@build.timestamp@";
 
 var karuta_backend_version = "?";
 var karuta_backend_date = "?";
