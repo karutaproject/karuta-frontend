@@ -2188,11 +2188,11 @@ g_report_actions['menu'] = function (destid,action,no,data)
 		if(UICom.structure.ui[nodeid].menuroles==undefined) // in case of display before the node
 			UICom.structure.ui[nodeid].setMetadata();
 		document.getElementById(destid).setAttribute('dashboardid',dashboard_infos[dashboard_current].dashboardid);
-		$("#"+destid).attr('dashboardid',dashboard_infos[dashboard_current].dashboardid);
-		var text = "<span dashboardid='"+dashboard_infos[dashboard_current].dashboardid+"'></span>"
+//		$("#"+destid).attr('dashboardid',dashboard_infos[dashboard_current].dashboardid);
+		var text = "<span id='menu_"+nodeid+"' dashboardid='"+dashboard_infos[dashboard_current].dashboardid+"'></span>"
 		$("#"+destid).append($(text));
 		g_menuinreport = true;
-		UICom.structure.ui[nodeid].displayMenus("#"+destid,LANGCODE);
+		UICom.structure.ui[nodeid].displayMenus("#menu_"+nodeid,LANGCODE);
 		g_menuinreport = false;
 	}
 
