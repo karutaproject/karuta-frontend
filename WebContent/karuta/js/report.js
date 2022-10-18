@@ -937,11 +937,11 @@ g_report_actions['for-each-node'] = function (destid,action,no,data)
  	if (ref_init!=undefined) {
  		ref_init = replaceVariable(ref_init);
  		var ref_inits = ref_init.split("/"); // ref1/ref2/...
- 		for (let k=0;k<ref_inits.length;k++)
- 			g_variables[ref_inits[k]] = new Array();
- 	}
- 	//----------------------------------
- 	if (test!=undefined) 
+		for (let k=0;k<ref_inits.length;k++)
+			g_variables[ref_inits[k]] = new Array();
+	}
+	//----------------------------------
+	if (test!=undefined) 
 		test = replaceVariable(test);
 	if (select!=undefined) {
 		select = replaceVariable(select);
@@ -1531,6 +1531,9 @@ g_report_actions['for-each-portfolio'] = function (destid,action,no,data)
 		userid = USER.id;
 	var searchvalue = "";
 	var select = $(action).attr("select");
+	var test = $(action).attr("test");
+	if (test!=undefined) 
+		test = replaceVariable(test);
 	select = replaceVariable(select);
 	if (select.indexOf("code*=")>-1) {
 		if (select.indexOf("'")>-1)
@@ -1549,6 +1552,8 @@ g_report_actions['for-each-portfolio'] = function (destid,action,no,data)
 		success : function(data) {
 			UIFactory["Portfolio"].parse_add(data);
 			var items = $("portfolio",data);
+			if (test!="")
+				items = eval("items"+test);
 			var value = "";
 			var condition = "";
 			var portfolioid = "";
