@@ -122,18 +122,22 @@ UIFactory["Comments"].prototype.getView = function(dest,type,langcode)
 	if (dest!=null) {
 		this.display[dest] = langcode;
 	}
-	var html = "";
-	var text = $(this.text_node[langcode]).text();
-
-	html += "<div class='text'>"+text+"</div>";
-	html +="<div  class='author-date'>";
-	html +="<span name='author' class='author' id='author'>"+$(this.author_node).text()+"</span>";
-	if ($(this.author_node).text()!='' && $(this.date_node).text()!='')
-		html += " - ";
-	html +="<span name='date' class='date' id='date'>"+$(this.date_node).text()+"</span>";
-	html +="</div>";
-
-	return html;
+	if (type!='vector'){
+		var html = "";
+		var text = $(this.text_node[langcode]).text();
+		
+		html += "<div class='text'>"+text+"</div>";
+		html +="<div  class='author-date'>";
+		html +="<span name='author' class='author' id='author'>"+$(this.author_node).text()+"</span>";
+		if ($(this.author_node).text()!='' && $(this.date_node).text()!='')
+			html += " - ";
+		html +="<span name='date' class='date' id='date'>"+$(this.date_node).text()+"</span>";
+		html +="</div>";
+	
+		return html;
+	} else {
+		return $(this.text_node[langcode]).text();
+	}
 };
 
 //==================================
