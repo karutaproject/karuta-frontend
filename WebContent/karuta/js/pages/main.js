@@ -42,7 +42,7 @@ function fill_main_page(portfolioid)
 	//-------------------------------------------
 	var url = serverBCK_API+"/portfolios/portfolio/" + g_portfolioid + "?resources=true";
 	$.ajax({
-		async:true,
+		async:false,
 		type : "GET",
 		dataType : "xml",
 		url : url,
