@@ -6,7 +6,7 @@
     <version>3.2.2-SNAPSHOT</version>
     <packaging>war</packaging>
     <name>${project.groupId}:${project.artifactId}</name>
-    <description>The server file part of the Karuta project</description>
+    <description>The frontend part of the Karuta project</description>
     <url>https://www.eportfolium.com</url>
 
     <organization>
