@@ -1,4 +1,3 @@
-ATTENTION - La version officielle est dorénavant sur le [site ESup](https://github.com/EsupPortail/karuta-frontend)
 
 
 Karuta
@@ -22,7 +21,7 @@ Tomcat 9 is recommended.
 MySQL ou MariaDB
 
 #### Back-end
-1. Download karuta-backend zip file from karuta-backend repository
+1. Download karuta-backend zip file from karuta-backend repository.
 1. Unpack and import as existing project in Eclipse
 1. Edit and import the sql file in the "sql" directory with the desired database name
 1. Edit "WebContent/META-INF/context.xml" with the appropriate values
