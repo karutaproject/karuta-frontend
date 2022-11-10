@@ -2967,6 +2967,12 @@ g_actions['move-node'] = function moveNode(node)
 //=================================================
 {
 	var ok = false
+	//-----------------------------------
+	var test = $(node).attr("test");
+	if (test!=undefined) {
+		test = replaceVariable(test);
+		test = replaceBatchVariable(getTest(test),node);
+	}
 	//------------------------------------
 	var source = $("source",node).text();
 	var srce_idx = source.lastIndexOf(".");
@@ -2999,6 +3005,8 @@ g_actions['move-node'] = function moveNode(node)
 			url : url,
 			success : function(data) {
 				var nodes = $("node",data);
+				if (test!=undefined)
+					nodes = eval("$(nodes)"+test);
 				if (nodes.length>0){
 					nodeid = $(nodes[0]).attr('id');
 				} else {
@@ -3030,6 +3038,8 @@ g_actions['move-node'] = function moveNode(node)
 			url : url,
 			success : function(data) {
 				var nodes = $("node",data);
+				if (test!=undefined)
+					nodes = eval("$(nodes)"+test);
 				if (nodes.length>0){
 					destid = $(nodes[0]).attr('id');
 				} else {
