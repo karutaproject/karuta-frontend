@@ -2578,9 +2578,9 @@ function replaceVariable(text,node,withquote)
 			if (!withquote && text.indexOf('##current')>-1) {
 				text = text.replaceAll('##currentnode##',node.id);
 				if (node.asmtype=='asmContext')
-					text = text.replaceAll('##currentcode##',$($("code",$("asmResource[xsi_type!='context'][xsi_type!='nodeRes']",node.node))).text());
+					text = text.replaceAll('##currentcode##',$($("code",$("asmResource[xsi_type!='context'][xsi_type!='nodeRes']",node.node))[0]).text());
 				else
-					text = text.replaceAll('##currentcode##',$($("code",$("asmResource[xsi_type='nodeRes']",node.node))).text());
+					text = text.replaceAll('##currentcode##',$($("code",$("asmResource[xsi_type='nodeRes']",node.node))[0]).text());
 			}
 			//--------- parentcode--------------
 			if (withquote && text.indexOf('##parentnode##')>-1)
@@ -3425,7 +3425,7 @@ function testNumber(text) {
 function testFileSaved(uuid) {
 	const url = serverBCK+"/resources/resource/file/"+uuid+"?lang="+languages[LANGCODE]+"&timestamp=" + new Date().getTime()
 	$.ajax({
-		async : false,
+		async : true,
 		type : "GET",
 		contentType: "application/xml",
 		dataType : "text",

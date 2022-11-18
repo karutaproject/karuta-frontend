@@ -1767,7 +1767,7 @@ function import_get_get_multiple(parentid,targetid,title,parent_position,parent_
 		actions.push(JSON.parse(acts[i].replaceAll("|","\"")));
 	}
 	let js1 = "javascript:$('#edit-window').modal('hide')";
-	let js2 = "this.setAttribute('disabled',true);";
+	let js2 = "$('#edit-window').modal('hide');this.setAttribute('disabled',true);";
 	for (let i=0;i<actions.length;i++) {
 		//-----------------
 		let fctjs = "";

@@ -1532,7 +1532,10 @@ g_report_actions['for-each-portfolio'] = function (destid,action,no,data)
 	var searchvalue = "";
 	var select = $(action).attr("select");
 	select = replaceVariable(select);
-	if (select.indexOf("code*=")>-1) {
+	var test = $(action).attr("test");
+ 	if (test!=undefined) 
+ 		test = replaceVariable(test);
+ 	if (select.indexOf("code*=")>-1) {
 		if (select.indexOf("'")>-1)
 			searchvalue = select.substring(7,select.length-1);  // inside quote
 		else if (select.indexOf("//")>-1)
@@ -1549,6 +1552,8 @@ g_report_actions['for-each-portfolio'] = function (destid,action,no,data)
 		success : function(data) {
 			UIFactory["Portfolio"].parse_add(data);
 			var items = $("portfolio",data);
+			if (test!="")
+ 				items = eval("items"+test);
 			var value = "";
 			var condition = "";
 			var portfolioid = "";
