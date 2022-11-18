@@ -147,7 +147,7 @@ UIFactory["Document"].prototype.getView = function(dest,type,langcode)
 		nodefileid = nodefileid.substring(0,nodefileid.indexOf("_"));
 	//------------------------
 	var html = "";
-	if ($(this.filename_node[langcode]).text()!="") {
+	if ($(this.filename_node[langcode]).text()!="" && $(this.filename_node[langcode]).text().indexOf("Not saved or Empty")<0) {
 		var filename = $(this.filename_node[langcode]).text();
 		var extension = filename.substring(filename.lastIndexOf(".")+1).toLowerCase();
 		if (!documentIcon.includes(extension))
@@ -165,22 +165,6 @@ UIFactory["Document"].prototype.getView = function(dest,type,langcode)
 		if (type=='icon'){
 				html =  documentIcon[extension]; 
 		}
-		const url = serverBCK+"/resources/resource/file/"+nodefileid+"?lang="+languages[LANGCODE]+"&timestamp=" + new Date().getTime()
-		$.ajax({
-			async : false,
-			type : "GET",
-			contentType: "application/xml",
-			dataType : "text",
-			url : url,
-			success : function(data) {
-				if (data.length==0) {
-					html = karutaStr[LANG]['error-filenotfound'];
-				}
-			},
-			error : function(data) {
-				html = karutaStr[LANG]['error-filenotfound'];
-			}
-		});
 	} else {
 		html =  "<img src='../../karuta/img/document-icon.png' style='width:24px'>"+karutaStr[LANG]['no-document'];
 	}
@@ -227,6 +211,7 @@ UIFactory["Document"].update = function(data,uuid,langcode,parent,filename)
 		itself.resource.type_node[langcode].text(type);
 	}
 	itself.resource.save(parent);
+	testFileSaved(uuid,langcode);
 };
 
 //==================================
@@ -251,6 +236,7 @@ UIFactory["Document"].remove = function(uuid,langcode)
 	itself.resource.type_node[langcode].text(type);
 	var delfile = true;
 	itself.resource.save(null,delfile);
+	testFileSaved(uuid,langcode);
 };
 
 //==================================

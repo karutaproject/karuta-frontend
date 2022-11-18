@@ -3422,7 +3422,12 @@ function testNumber(text) {
 	return result;
 }
 
-function testFileSaved(uuid) {
+function testFileSaved(uuid,langcode) {
+	//---------------------
+	if (langcode==null)
+		langcode = LANGCODE;
+	//---------------------
+	var itself = UICom.structure["ui"][uuid];  // context node
 	const url = serverBCK+"/resources/resource/file/"+uuid+"?lang="+languages[LANGCODE]+"&timestamp=" + new Date().getTime()
 	$.ajax({
 		async : true,
@@ -3430,13 +3435,32 @@ function testFileSaved(uuid) {
 		contentType: "application/xml",
 		dataType : "text",
 		url : url,
+		langcode : langcode,
+		itself : itself,
 		success : function(data) {
 			if (data.length==0) {
-				$("#resource_"+uuid).html("<span style='color:red'> Not saved or Empty</span>");
+				const filename = "<span style='color:red'> Not saved or Empty</span>";
+				if (!this.itself.resource.multilingual) {
+					for (var langcode=0; langcode<languages.length; langcode++) {
+						itself.resource.filename_node[langcode].text(filename);
+					}
+				} else {
+					this.itself.resource.filename_node[this.langcode].text(filename);
+				}
+				this.itself.resource.save(parent);
+//				$("#resource_"+uuid).html("<span style='color:red'> Not saved or Empty</span>");
 			}
 		},
 		error : function(data) {
-			$("#resource_"+uuid).html("<span style='color:red'> Not saved or Empty</span>");
+			const filename = "<span style='color:red'> Not saved or Empty</span>";
+			if (!this.itself.resource.multilingual) {
+				for (var langcode=0; langcode<languages.length; langcode++) {
+					this.itself.resource.filename_node[langcode].text(filename);
+				}
+			} else {
+				this.itself.resource.filename_node[this.langcode].text(filename);
+			}
+			this.itself.resource.save(parent);
 		}
 	});
 }

@@ -207,55 +207,59 @@ UIFactory["Image"].prototype.getView = function(dest,type,langcode)
 		nodefileid = nodefileid.substring(0,nodefileid.indexOf("_"));
 	//------------------------
 	var html ="";
-	if (type=='default' || type=='none') {
-		html +="<div uuid='img_"+this.id+"'>";
-		if ($(this.filename_node[langcode]).text()!="") {
-			html += "<img style='display:inline;' id='image_"+this.id+"' src='../../../"+serverBCK+"/resources/resource/file/"+nodefileid+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"' "+image_size+" "+alt+" />";
+	if ($(this.filename_node[langcode]).text().indexOf("Not saved")<0) {
+		if (type=='default' || type=='none') {
+			html +="<div uuid='img_"+this.id+"'>";
+			if ($(this.filename_node[langcode]).text()!="") {
+				html += "<img style='display:inline;' id='image_"+this.id+"' src='../../../"+serverBCK+"/resources/resource/file/"+nodefileid+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"' "+image_size+" "+alt+" />";
+			}
+			else
+				html += "<img src='../../karuta/img/image-icon.png' height='25px'/>"+karutaStr[LANG]['no-image'];
+			html += "</div>";
 		}
-		else
-			html += "<img src='../../karuta/img/image-icon.png' height='25px'/>"+karutaStr[LANG]['no-image'];
-		html += "</div>";
-	}
-	if (type=='span') {
-		html +="<span uuid='img_"+this.id+"'>";
-		if ($(this.filename_node[langcode]).text()!="") {
-			html += "<img style='display:inline;' id='image_"+this.id+"' src='../../../"+serverBCK+"/resources/resource/file/"+nodefileid+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"' "+image_size+""+alt+"  />";
+		if (type=='span') {
+			html +="<span uuid='img_"+this.id+"'>";
+			if ($(this.filename_node[langcode]).text()!="") {
+				html += "<img style='display:inline;' id='image_"+this.id+"' src='../../../"+serverBCK+"/resources/resource/file/"+nodefileid+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"' "+image_size+""+alt+"  />";
+			}
+			else
+				html += "<img src='../../karuta/img/image-icon.png' height='25px'/>"+karutaStr[LANG]['no-image'];
+			html += "</span>";
 		}
-		else
-			html += "<img src='../../karuta/img/image-icon.png' height='25px'/>"+karutaStr[LANG]['no-image'];
-		html += "</span>";
-	}
-	if (type=='withoutlightbox' && $(this.filename_node[langcode]).text()!="") {
-		html += "<img uuid='img_"+this.id+"' src='../../../"+serverBCK+"/resources/resource/file/"+nodefileid+"?lang="+languages[langcode]+"&size=S&timestamp=" + new Date().getTime()+"' "+image_size+" "+alt+" />";
-	}
-	if (type=='withfilename'  && $(this.filename_node[langcode]).text()!=""){
-		html += "<a href='../../../"+serverBCK+"/resources/resource/file/"+nodefileid+"?lang="+languages[langcode]+"&size=L&timestamp=" + new Date().getTime()+"' data-lightbox='image-"+nodefileid+"' title=''>";
-		html += "<img uuid='img_"+this.id+"' src='../../../"+serverBCK+"/resources/resource/file/"+nodefileid+"?lang="+languages[langcode]+"&size=S&timestamp=" + new Date().getTime()+"' "+image_size+" "+alt+" />";		
-		html += "</a>";
-		html += " <span>"+$(this.filename_node[langcode]).text()+"</span>";
-	}
-	if (type=='withfilename-withoutlightbox'  && $(this.filename_node[langcode]).text()!=""){
-		html += "<img uuid='img_"+this.id+"' src='../../../"+serverBCK+"/resources/resource/file/"+nodefileid+"?lang="+languages[langcode]+"&size=S&timestamp=" + new Date().getTime()+"' "+image_size+" "+alt+" />";		
-		html += " <span>"+$(this.filename_node[langcode]).text()+"</span>";
-	}
-	if (type=='editor'  && $(this.filename_node[langcode]).text()!=""){
-		html += "<img uuid='img_"+this.id+"' src='../../../"+serverBCK+"/resources/resource/file/"+nodefileid+"?lang="+languages[langcode]+"&size=S&timestamp=" + new Date().getTime()+"' height='100' "+alt+" />";		
-		html += " <span>"+$(this.filename_node[langcode]).text()+"</span>";
-	}
-	if (type=='block') {
-		html +="<div uuid='img_"+this.id+"' style='height:100%'>";
-		if ($(this.filename_node[langcode]).text()!="") {
-			html += "<table width='100%' height='100%'><tr><td style='vertical-align:middle;text-align:center'>";
-			html += "<a href='../../../"+serverBCK+"/resources/resource/file/"+nodefileid+"?lang="+languages[langcode]+"&size=L&timestamp=" + new Date().getTime()+"' data-lightbox='image-"+this.id+"' title=''>";
-			html += "<img style='display:inline;max-height:218px;' id='image_"+nodefileid+"' src='../../../"+serverBCK+"/resources/resource/file/"+nodefileid+"?lang="+languages[langcode]+"&size=S&timestamp=" + new Date().getTime()+"' "+image_size+" "+alt+" />";
+		if (type=='withoutlightbox' && $(this.filename_node[langcode]).text()!="") {
+			html += "<img uuid='img_"+this.id+"' src='../../../"+serverBCK+"/resources/resource/file/"+nodefileid+"?lang="+languages[langcode]+"&size=S&timestamp=" + new Date().getTime()+"' "+image_size+" "+alt+" />";
+		}
+		if (type=='withfilename'  && $(this.filename_node[langcode]).text()!=""){
+			html += "<a href='../../../"+serverBCK+"/resources/resource/file/"+nodefileid+"?lang="+languages[langcode]+"&size=L&timestamp=" + new Date().getTime()+"' data-lightbox='image-"+nodefileid+"' title=''>";
+			html += "<img uuid='img_"+this.id+"' src='../../../"+serverBCK+"/resources/resource/file/"+nodefileid+"?lang="+languages[langcode]+"&size=S&timestamp=" + new Date().getTime()+"' "+image_size+" "+alt+" />";		
 			html += "</a>";
-			html += "</td></tr></table>";
-		} else {
-			html += "<table width='100%' height='100%'><tr><td style='vertical-align:middle;text-align:center'>";
-			html += "<img src='../../karuta/img/image-icon.png' height='150px' "+alt+" />"+karutaStr[LANG]['no-image'];
-			html += "</td></tr></table>";
+			html += " <span>"+$(this.filename_node[langcode]).text()+"</span>";
 		}
-		html += "</div>";
+		if (type=='withfilename-withoutlightbox'  && $(this.filename_node[langcode]).text()!=""){
+			html += "<img uuid='img_"+this.id+"' src='../../../"+serverBCK+"/resources/resource/file/"+nodefileid+"?lang="+languages[langcode]+"&size=S&timestamp=" + new Date().getTime()+"' "+image_size+" "+alt+" />";		
+			html += " <span>"+$(this.filename_node[langcode]).text()+"</span>";
+		}
+		if (type=='editor'  && $(this.filename_node[langcode]).text()!=""){
+			html += "<img uuid='img_"+this.id+"' src='../../../"+serverBCK+"/resources/resource/file/"+nodefileid+"?lang="+languages[langcode]+"&size=S&timestamp=" + new Date().getTime()+"' height='100' "+alt+" />";		
+			html += " <span>"+$(this.filename_node[langcode]).text()+"</span>";
+		}
+		if (type=='block') {
+			html +="<div uuid='img_"+this.id+"' style='height:100%'>";
+			if ($(this.filename_node[langcode]).text()!="") {
+				html += "<table width='100%' height='100%'><tr><td style='vertical-align:middle;text-align:center'>";
+				html += "<a href='../../../"+serverBCK+"/resources/resource/file/"+nodefileid+"?lang="+languages[langcode]+"&size=L&timestamp=" + new Date().getTime()+"' data-lightbox='image-"+this.id+"' title=''>";
+				html += "<img style='display:inline;max-height:218px;' id='image_"+nodefileid+"' src='../../../"+serverBCK+"/resources/resource/file/"+nodefileid+"?lang="+languages[langcode]+"&size=S&timestamp=" + new Date().getTime()+"' "+image_size+" "+alt+" />";
+				html += "</a>";
+				html += "</td></tr></table>";
+			} else {
+				html += "<table width='100%' height='100%'><tr><td style='vertical-align:middle;text-align:center'>";
+				html += "<img src='../../karuta/img/image-icon.png' height='150px' "+alt+" />"+karutaStr[LANG]['no-image'];
+				html += "</td></tr></table>";
+			}
+			html += "</div>";
+		}
+	} else {
+		html += "<span><img src='../../karuta/img/image-icon.png' height='25px'/>"+karutaStr[LANG]['no-image'] + "</span>";
 	}
 
 	return html;
@@ -273,22 +277,6 @@ UIFactory["Image"].prototype.displayView = function(dest,type,langcode)
 	if ($(this.alt_node[langcode]).text()!=undefined) // backward compatibility
 		alt = "alt=\""+$(this.alt_node[langcode]).text()+"\" "; 
 	var html = this.getView(dest,type,langcode);
-	const url = serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[LANGCODE]+"&timestamp=" + new Date().getTime()
-	$.ajax({
-		async : false,
-		type : "GET",
-		contentType: "application/xml",
-		dataType : "text",
-		url : url,
-		success : function(data) {
-			if (data.length==0) {
-				html = karutaStr[LANG]['error-filenotfound'];
-			}
-		},
-		error : function(data) {
-			html = karutaStr[LANG]['error-filenotfound'];
-		}
-	});
 	$("#"+dest).html(html);
 	var uuid = this.id;
 	$("#image_"+this.id).click(function(){
@@ -325,6 +313,7 @@ UIFactory["Image"].update = function(data,uuid,langcode,parent,filename)
 		itself.resource.type_node[langcode].text(type);
 	}
 	itself.resource.save(parent);
+	testFileSaved(uuid);
 };
 
 //==================================
@@ -352,6 +341,7 @@ UIFactory["Image"].remove = function(uuid,langcode)
 	}
 	var delfile = true;
 	itself.resource.save(null,delfile);
+	testFileSaved(uuid);
 };
 
 //==================================
