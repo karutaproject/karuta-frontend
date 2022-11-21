@@ -895,6 +895,15 @@ function reloadPreviewBox(node)
 		});
 	}
 }
+
+//=====================================================
+function reloadPreviewPage() {
+	let previewpageid = $(".preview-window").attr('preview-uuid');
+	$('#preview-'+previewpageid).remove();
+	$('#previewbackdrop-'+previewpageid).remove();
+	previewPage(previewpageid,100,"",null,g_report_edit); 
+}
+
 //==================================
 function previewPage(uuid,depth,type,langcode,edit) 
 //==================================
