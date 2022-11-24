@@ -1393,7 +1393,7 @@ function getSendSharingURL(nodeid,uuid,sharewithrole,sharetoemail,sharetoroles,l
 		if (shareduration=='?') {
 			shareduration = $("#duration").val();
 		}
-		if (sharetoemail!='' && shareduration!='') {
+		if (sharetoemail!='' && shareduration!='' && USER.email!=null && sharetoemail!=USER.email) {
 			getPublicURL(uuid,sharetoemail,sharerole,sharewithrole,sharelevel,shareduration,langcode,sharetomessage,sharetoobj);
 		}
 		if (shareoptions.indexOf('function:')>-1) {
@@ -3082,38 +3082,40 @@ function getTarget (knode,position_semtag)
 {
 	var node = knode.node;
 	var target = "";
-	if (position_semtag.indexOf("child.")>-1) {
-		var semtag = position_semtag.substring("child.".length);
-		target = $("*:has(>metadata[semantictag*='"+semtag+"'])",node);
-	} else	if (position_semtag.indexOf("sibling.")>-1) {
-		var semtag = position_semtag.substring("sibling.".length);
-		target = $("*:has(>metadata[semantictag*='"+semtag+"'])",$(node).parent());
-	} else if (position_semtag.indexOf("parent.parent.parent.parent.parent.")>-1) {
-		var semtag = position_semtag.substring("parent.parent.parent.parent.parent.".length);
-		target = $("*:has(>metadata[semantictag*='"+semtag+"'])",$(node).parent().parent().parent().parent().parent()).addBack("*:has(>metadata[semantictag*='"+semtag+"'])");
-	} else if (position_semtag.indexOf("parent.parent.parent.parent")>-1) {
-		var semtag = position_semtag.substring("parent.parent.parent.parent.".length);
-		target = $("*:has(>metadata[semantictag*='"+semtag+"'])",$(node).parent().parent().parent().parent()).addBack("*:has(>metadata[semantictag*='"+semtag+"'])");
-	} else if (position_semtag.indexOf("parent.parent.parent")>-1) {
-		var semtag = position_semtag.substring("parent.parent.parent.".length);
-		target = $("*:has(>metadata[semantictag*='"+semtag+"'])",$(node).parent().parent().parent()).addBack("*:has(>metadata[semantictag*='"+semtag+"'])");
-	} else if (position_semtag.indexOf("parent.parent")>-1) {
-		var semtag = position_semtag.substring("parent.parent.".length);
-		target = $("*:has(>metadata[semantictag*='"+semtag+"'])",$(node).parent().parent()).addBack("*:has(>metadata[semantictag*='"+semtag+"'])");
-	} else if (position_semtag.indexOf("parent.")>-1) {
-		var semtag = position_semtag.substring("parent.".length);
-		target = $("*:has(>metadata[semantictag*='"+semtag+"'])",$(node).parent()).addBack("*:has(>metadata[semantictag*='"+semtag+"'])");
-	} else if (position_semtag.indexOf(".")==0) {  // position is empty
-		var semtag = position_semtag.substring(".".length);
-		target = $("*:has(>metadata[semantictag*='"+semtag+"'])",g_portfolio_current);
-	} else {
-		target = $("*:has(>metadata[semantictag*='"+position_semtag+"'])",g_portfolio_current);
-		if (target.length==0) {
-			position_semtag = position_semtag.replace(".","|")
-			position_semtag = replaceVariable(position_semtag,knode,false);
-			const code = position_semtag.substring(0,position_semtag.indexOf("|"));
-			const semtag = position_semtag.substring(position_semtag.indexOf("|")+1);
-			target = $("*:has(>metadata[semantictag*='"+semtag+"']):has(code:contains('"+code+"'))",g_portfolio_current);
+	if (position_semtag!="##currentnode##.") {
+		if (position_semtag.indexOf("child.")>-1) {
+			var semtag = position_semtag.substring("child.".length);
+			target = $("*:has(>metadata[semantictag*='"+semtag+"'])",node);
+		} else	if (position_semtag.indexOf("sibling.")>-1) {
+			var semtag = position_semtag.substring("sibling.".length);
+			target = $("*:has(>metadata[semantictag*='"+semtag+"'])",$(node).parent());
+		} else if (position_semtag.indexOf("parent.parent.parent.parent.parent.")>-1) {
+			var semtag = position_semtag.substring("parent.parent.parent.parent.parent.".length);
+			target = $("*:has(>metadata[semantictag*='"+semtag+"'])",$(node).parent().parent().parent().parent().parent()).addBack("*:has(>metadata[semantictag*='"+semtag+"'])");
+		} else if (position_semtag.indexOf("parent.parent.parent.parent")>-1) {
+			var semtag = position_semtag.substring("parent.parent.parent.parent.".length);
+			target = $("*:has(>metadata[semantictag*='"+semtag+"'])",$(node).parent().parent().parent().parent()).addBack("*:has(>metadata[semantictag*='"+semtag+"'])");
+		} else if (position_semtag.indexOf("parent.parent.parent")>-1) {
+			var semtag = position_semtag.substring("parent.parent.parent.".length);
+			target = $("*:has(>metadata[semantictag*='"+semtag+"'])",$(node).parent().parent().parent()).addBack("*:has(>metadata[semantictag*='"+semtag+"'])");
+		} else if (position_semtag.indexOf("parent.parent")>-1) {
+			var semtag = position_semtag.substring("parent.parent.".length);
+			target = $("*:has(>metadata[semantictag*='"+semtag+"'])",$(node).parent().parent()).addBack("*:has(>metadata[semantictag*='"+semtag+"'])");
+		} else if (position_semtag.indexOf("parent.")>-1) {
+			var semtag = position_semtag.substring("parent.".length);
+			target = $("*:has(>metadata[semantictag*='"+semtag+"'])",$(node).parent()).addBack("*:has(>metadata[semantictag*='"+semtag+"'])");
+		} else if (position_semtag.indexOf(".")==0) {  // position is empty
+			var semtag = position_semtag.substring(".".length);
+			target = $("*:has(>metadata[semantictag*='"+semtag+"'])",g_portfolio_current);
+		} else {
+			target = $("*:has(>metadata[semantictag*='"+position_semtag+"'])",g_portfolio_current);
+			if (target.length==0) {
+				position_semtag = position_semtag.replace(".","|")
+				position_semtag = replaceVariable(position_semtag,knode,false);
+				const code = position_semtag.substring(0,position_semtag.indexOf("|"));
+				const semtag = position_semtag.substring(position_semtag.indexOf("|")+1);
+				target = $("*:has(>metadata[semantictag*='"+semtag+"']):has(code:contains('"+code+"'))",g_portfolio_current);
+			}
 		}
 	}
 	return target;
