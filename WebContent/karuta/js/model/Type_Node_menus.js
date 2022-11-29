@@ -1422,18 +1422,21 @@ UIFactory["Node"].getTargetArray = function(node,parentid,item)
 	if (trgts.length>0) {
 		for (let k=0;k<trgts.length;k++){
 			let position = $("position",trgts[k]).text();
-			let trgtsemtag = $("semtag",trgts[k]).text();
-			let trgtelt = (position!="")?position+"."+trgtsemtag:trgtsemtag;
-			let target = getTarget (node,trgtelt);
-			if (target.length>0) {
-				let targetid = $(target[0]).attr("id");
-				trgtarray.push(targetid);
-			} else if (position=='##lastimported##') {
+			if (position=='##lastimported##') {
 				trgtarray.push(position);
-			} else {
+			} else if (position=='##currentnode##') {
 				trgtarray.push(parentid);
+			} else {
+				let trgtsemtag = $("semtag",trgts[k]).text();
+				let trgtelt = (position!="")?position+"."+trgtsemtag:trgtsemtag;
+				let target = getTarget (node,trgtelt);
+				if (target.length>0) {
+					let targetid = $(target[0]).attr("id");
+					trgtarray.push(targetid);
+				} else {
+					trgtarray.push(parentid);
+				}
 			}
-			
 		}
 	}
 	return trgtarray;

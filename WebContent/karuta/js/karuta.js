@@ -895,6 +895,15 @@ function reloadPreviewBox(node)
 		});
 	}
 }
+
+//=====================================================
+function reloadPreviewPage() {
+	let previewpageid = $(".preview-window").attr('preview-uuid');
+	$('#preview-'+previewpageid).remove();
+	$('#previewbackdrop-'+previewpageid).remove();
+	previewPage(previewpageid,100,"",null,g_report_edit); 
+}
+
 //==================================
 function previewPage(uuid,depth,type,langcode,edit) 
 //==================================
@@ -1384,7 +1393,7 @@ function getSendSharingURL(nodeid,uuid,sharewithrole,sharetoemail,sharetoroles,l
 		if (shareduration=='?') {
 			shareduration = $("#duration").val();
 		}
-		if (sharetoemail!='' && shareduration!='') {
+		if (sharetoemail!='' && shareduration!='' && USER.email!=null && sharetoemail!=USER.email) {
 			getPublicURL(uuid,sharetoemail,sharerole,sharewithrole,sharelevel,shareduration,langcode,sharetomessage,sharetoobj);
 		}
 		if (shareoptions.indexOf('function:')>-1) {
@@ -2578,9 +2587,9 @@ function replaceVariable(text,node,withquote)
 			if (!withquote && text.indexOf('##current')>-1) {
 				text = text.replaceAll('##currentnode##',node.id);
 				if (node.asmtype=='asmContext')
-					text = text.replaceAll('##currentcode##',$($("code",$("asmResource[xsi_type!='context'][xsi_type!='nodeRes']",node.node))).text());
+					text = text.replaceAll('##currentcode##',$($("code",$("asmResource[xsi_type!='context'][xsi_type!='nodeRes']",node.node))[0]).text());
 				else
-					text = text.replaceAll('##currentcode##',$($("code",$("asmResource[xsi_type='nodeRes']",node.node))).text());
+					text = text.replaceAll('##currentcode##',$($("code",$("asmResource[xsi_type='nodeRes']",node.node))[0]).text());
 			}
 			//--------- parentcode--------------
 			if (withquote && text.indexOf('##parentnode##')>-1)
@@ -3073,38 +3082,40 @@ function getTarget (knode,position_semtag)
 {
 	var node = knode.node;
 	var target = "";
-	if (position_semtag.indexOf("child.")>-1) {
-		var semtag = position_semtag.substring("child.".length);
-		target = $("*:has(>metadata[semantictag*='"+semtag+"'])",node);
-	} else	if (position_semtag.indexOf("sibling.")>-1) {
-		var semtag = position_semtag.substring("sibling.".length);
-		target = $("*:has(>metadata[semantictag*='"+semtag+"'])",$(node).parent());
-	} else if (position_semtag.indexOf("parent.parent.parent.parent.parent.")>-1) {
-		var semtag = position_semtag.substring("parent.parent.parent.parent.parent.".length);
-		target = $("*:has(>metadata[semantictag*='"+semtag+"'])",$(node).parent().parent().parent().parent().parent()).addBack("*:has(>metadata[semantictag*='"+semtag+"'])");
-	} else if (position_semtag.indexOf("parent.parent.parent.parent")>-1) {
-		var semtag = position_semtag.substring("parent.parent.parent.parent.".length);
-		target = $("*:has(>metadata[semantictag*='"+semtag+"'])",$(node).parent().parent().parent().parent()).addBack("*:has(>metadata[semantictag*='"+semtag+"'])");
-	} else if (position_semtag.indexOf("parent.parent.parent")>-1) {
-		var semtag = position_semtag.substring("parent.parent.parent.".length);
-		target = $("*:has(>metadata[semantictag*='"+semtag+"'])",$(node).parent().parent().parent()).addBack("*:has(>metadata[semantictag*='"+semtag+"'])");
-	} else if (position_semtag.indexOf("parent.parent")>-1) {
-		var semtag = position_semtag.substring("parent.parent.".length);
-		target = $("*:has(>metadata[semantictag*='"+semtag+"'])",$(node).parent().parent()).addBack("*:has(>metadata[semantictag*='"+semtag+"'])");
-	} else if (position_semtag.indexOf("parent.")>-1) {
-		var semtag = position_semtag.substring("parent.".length);
-		target = $("*:has(>metadata[semantictag*='"+semtag+"'])",$(node).parent()).addBack("*:has(>metadata[semantictag*='"+semtag+"'])");
-	} else if (position_semtag.indexOf(".")==0) {  // position is empty
-		var semtag = position_semtag.substring(".".length);
-		target = $("*:has(>metadata[semantictag*='"+semtag+"'])",g_portfolio_current);
-	} else {
-		target = $("*:has(>metadata[semantictag*='"+position_semtag+"'])",g_portfolio_current);
-		if (target.length==0) {
-			position_semtag = position_semtag.replace(".","|")
-			position_semtag = replaceVariable(position_semtag,knode,false);
-			const code = position_semtag.substring(0,position_semtag.indexOf("|"));
-			const semtag = position_semtag.substring(position_semtag.indexOf("|")+1);
-			target = $("*:has(>metadata[semantictag*='"+semtag+"']):has(code:contains('"+code+"'))",g_portfolio_current);
+	if (position_semtag!="##currentnode##.") {
+		if (position_semtag.indexOf("child.")>-1) {
+			var semtag = position_semtag.substring("child.".length);
+			target = $("*:has(>metadata[semantictag*='"+semtag+"'])",node);
+		} else	if (position_semtag.indexOf("sibling.")>-1) {
+			var semtag = position_semtag.substring("sibling.".length);
+			target = $("*:has(>metadata[semantictag*='"+semtag+"'])",$(node).parent());
+		} else if (position_semtag.indexOf("parent.parent.parent.parent.parent.")>-1) {
+			var semtag = position_semtag.substring("parent.parent.parent.parent.parent.".length);
+			target = $("*:has(>metadata[semantictag*='"+semtag+"'])",$(node).parent().parent().parent().parent().parent()).addBack("*:has(>metadata[semantictag*='"+semtag+"'])");
+		} else if (position_semtag.indexOf("parent.parent.parent.parent")>-1) {
+			var semtag = position_semtag.substring("parent.parent.parent.parent.".length);
+			target = $("*:has(>metadata[semantictag*='"+semtag+"'])",$(node).parent().parent().parent().parent()).addBack("*:has(>metadata[semantictag*='"+semtag+"'])");
+		} else if (position_semtag.indexOf("parent.parent.parent")>-1) {
+			var semtag = position_semtag.substring("parent.parent.parent.".length);
+			target = $("*:has(>metadata[semantictag*='"+semtag+"'])",$(node).parent().parent().parent()).addBack("*:has(>metadata[semantictag*='"+semtag+"'])");
+		} else if (position_semtag.indexOf("parent.parent")>-1) {
+			var semtag = position_semtag.substring("parent.parent.".length);
+			target = $("*:has(>metadata[semantictag*='"+semtag+"'])",$(node).parent().parent()).addBack("*:has(>metadata[semantictag*='"+semtag+"'])");
+		} else if (position_semtag.indexOf("parent.")>-1) {
+			var semtag = position_semtag.substring("parent.".length);
+			target = $("*:has(>metadata[semantictag*='"+semtag+"'])",$(node).parent()).addBack("*:has(>metadata[semantictag*='"+semtag+"'])");
+		} else if (position_semtag.indexOf(".")==0) {  // position is empty
+			var semtag = position_semtag.substring(".".length);
+			target = $("*:has(>metadata[semantictag*='"+semtag+"'])",g_portfolio_current);
+		} else {
+			target = $("*:has(>metadata[semantictag*='"+position_semtag+"'])",g_portfolio_current);
+			if (target.length==0) {
+				position_semtag = position_semtag.replace(".","|")
+				position_semtag = replaceVariable(position_semtag,knode,false);
+				const code = position_semtag.substring(0,position_semtag.indexOf("|"));
+				const semtag = position_semtag.substring(position_semtag.indexOf("|")+1);
+				target = $("*:has(>metadata[semantictag*='"+semtag+"']):has(code:contains('"+code+"'))",g_portfolio_current);
+			}
 		}
 	}
 	return target;
@@ -3422,21 +3433,45 @@ function testNumber(text) {
 	return result;
 }
 
-function testFileSaved(uuid) {
+function testFileSaved(uuid,langcode) {
+	//---------------------
+	if (langcode==null)
+		langcode = LANGCODE;
+	//---------------------
+	var itself = UICom.structure["ui"][uuid];  // context node
 	const url = serverBCK+"/resources/resource/file/"+uuid+"?lang="+languages[LANGCODE]+"&timestamp=" + new Date().getTime()
 	$.ajax({
-		async : false,
+		async : true,
 		type : "GET",
 		contentType: "application/xml",
 		dataType : "text",
 		url : url,
+		langcode : langcode,
+		itself : itself,
 		success : function(data) {
 			if (data.length==0) {
-				$("#resource_"+uuid).html("<span style='color:red'> Not saved or Empty</span>");
+				const filename = "<span style='color:red'> Not saved or Empty</span>";
+				if (!this.itself.resource.multilingual) {
+					for (var langcode=0; langcode<languages.length; langcode++) {
+						itself.resource.filename_node[langcode].text(filename);
+					}
+				} else {
+					this.itself.resource.filename_node[this.langcode].text(filename);
+				}
+				this.itself.resource.save(parent);
+//				$("#resource_"+uuid).html("<span style='color:red'> Not saved or Empty</span>");
 			}
 		},
 		error : function(data) {
-			$("#resource_"+uuid).html("<span style='color:red'> Not saved or Empty</span>");
+			const filename = "<span style='color:red'> Not saved or Empty</span>";
+			if (!this.itself.resource.multilingual) {
+				for (var langcode=0; langcode<languages.length; langcode++) {
+					this.itself.resource.filename_node[langcode].text(filename);
+				}
+			} else {
+				this.itself.resource.filename_node[this.langcode].text(filename);
+			}
+			this.itself.resource.save(parent);
 		}
 	});
 }

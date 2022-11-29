@@ -130,18 +130,23 @@ function displayKarutaCreateAccount()
 					karuta_fileserver_date = data.buildTime;
 				}
 			});
-		
 			$.ajax({
-				async: false,
 				type : "GET",
 				dataType : "json",
 				url : serverBCK_API+"/version",
 				data: "",
-				success : function(data) {		
+				success: function (data) {		
 					karuta_backend_version = data.version;
 					karuta_backend_date = data.buildTime;
 					$("#navigation-bar").html(getNavBar('create_account',null));
 					$("#login").html(getInputs());$("#welcome4").html(karutaStr[LANG]['create_account']);
+					applyNavbarConfiguration();
+					applyLoginConfiguration();
+				},
+				error : function(jqxhr,textStatus) {
+					var navbar_html = getNavBar('list',null);
+					$("#navigation-bar").html(navbar_html);
+					$("a[data-toggle='tooltip']").tooltip({html: true, trigger: 'hover'});
 					applyNavbarConfiguration();
 					applyLoginConfiguration();
 				}

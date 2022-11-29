@@ -195,7 +195,7 @@ UIFactory["URL2Portfolio"].prototype.displayEditor = function(destid,type,langco
 		var htmlLabelDivObj = $("<div class='col-sm-9'></div>");
 		var htmlLabelInputObj = $("<input id='local_label_"+this.id+"_"+langcode+"' type='text' class='form-control' value=\""+this.local_label_node[langcode].text()+"\">");
 		$(htmlLabelInputObj).change(function (){
-			self.updateLabel(langcode);
+			self.update(langcode);
 		});
 		$(htmlLabelDivObj).append($(htmlLabelInputObj));
 		$(htmlLabelGroupObj).append($(htmlLabelLabelObj));
