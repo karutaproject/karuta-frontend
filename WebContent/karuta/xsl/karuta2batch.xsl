@@ -1008,6 +1008,135 @@
 
 	<!-- ====================================================================================== -->
 	<!-- ====================================================================================== -->
+	<!-- ================================ FOR-EACH-NODE ======================================= -->
+	<!-- ====================================================================================== -->
+	<!-- ====================================================================================== -->
+
+	<!-- ================ for-each-node ============================ -->
+	<xsl:template match="*[metadata/@semantictag='for-each-node']">
+		<xsl:variable name="varlabel">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='varlabel']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="source">
+			<xsl:call-template name='get-select'>
+				<xsl:with-param name='parent'>subsection-source</xsl:with-param>
+			</xsl:call-template>
+		</xsl:variable>
+		<for-each-node>
+			<source>
+				<xsl:value-of select='$source'/>
+			</source>
+			<xsl:apply-templates select='asmUnitStructure'/>
+		</for-each-node>
+	</xsl:template>
+	
+	<!-- ================ for-each-node-batch-variable ============================ -->
+	<xsl:template match="*[metadata/@semantictag='for-each-node-batch-variable']">
+		<xsl:variable name="varlabel">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='varlabel']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="semtag">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='node-semtag']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="test">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='test']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="select">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='todisplay']/asmResource[@xsi_type='Get_Resource']/value"></xsl:value-of>
+		</xsl:variable>
+		<for-each-node-batch-variable>
+			<xsl:if test="not($varlabel='')">
+				<xsl:attribute name="varlabel"><xsl:value-of select="$varlabel"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not($select='')">
+				<xsl:attribute name="select"><xsl:value-of select="$select"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not($semtag='')">
+				<xsl:attribute name="semtag"><xsl:value-of select="$semtag"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not($test='')">
+				<xsl:attribute name="test"><xsl:value-of select="$test"/></xsl:attribute>
+			</xsl:if>
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='text-value']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</for-each-node-batch-variable>
+	</xsl:template>
+	
+	<!-- ================ for-each-node-update-field ============================ -->
+	<xsl:template match="*[metadata/@semantictag='for-each-node-update-field']">
+		<xsl:variable name="semtag">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='node-semtag']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="test">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='test']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="filter-semtag">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='filter-semtag']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="filter-test">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='filter-test']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<update-resource type='Field' test="{$test}" filter-semtag="{$filter-semtag}" filter-test="{$filter-test}">
+			<attribute name='text' language-dependent='Y' replace-variable='Y'>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">text</xsl:with-param>
+				</xsl:call-template>
+			</attribute>
+		</update-resource>
+	</xsl:template>
+	
+	<!-- ====================================================================================== -->
+	<!-- ====================================================================================== -->
+	<!-- ================================ VARIABLE ============================================ -->
+	<!-- ====================================================================================== -->
+	<!-- ====================================================================================== -->
+
+	<!-- ================ variable ============================ -->
+	<xsl:template match="*[metadata/@semantictag='batch-variable']">
+		<xsl:variable name="varlabel">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='varlabel']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="source">
+			<xsl:call-template name='get-select'>
+				<xsl:with-param name='parent'>subsection-source</xsl:with-param>
+			</xsl:call-template>
+		</xsl:variable>
+		<xsl:variable name="select">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='todisplay']/asmResource[@xsi_type='Get_Resource']/value"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="function">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='function']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="aggregationselect">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='aggregationselect']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="aggregatetype">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='aggregatetype']/asmResource[@xsi_type='Get_Resource']/value"></xsl:value-of>
+		</xsl:variable>
+		<variable>
+			<xsl:if test="not($varlabel='')">
+				<xsl:attribute name="varlabel"><xsl:value-of select="$varlabel"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not($select='')">
+				<xsl:attribute name="select"><xsl:value-of select="$select"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not($aggregationselect='')">
+				<xsl:attribute name="aggregationselect"><xsl:value-of select="$aggregationselect"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not($aggregatetype='')">
+				<xsl:attribute name="aggregatetype"><xsl:value-of select="$aggregatetype"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not($function='')">
+				<xsl:attribute name="function"><xsl:value-of select="$function"/></xsl:attribute>
+			</xsl:if>
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='text-value']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+			<source>
+				<xsl:value-of select='$source'/>
+			</source>
+		</variable>
+	</xsl:template>
+
+	<!-- ====================================================================================== -->
+	<!-- ====================================================================================== -->
 	<!-- ================================ USERGROUP =========================================== -->
 	<!-- ====================================================================================== -->
 	<!-- ====================================================================================== -->
@@ -1357,6 +1486,7 @@
 			</uuid>
 		</delete-tree-byid>
 	</xsl:template>
+
 
 	<!-- ====================================================================================== -->
 	<!-- ====================================================================================== -->

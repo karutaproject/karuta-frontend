@@ -3572,6 +3572,242 @@ g_actions['update-url2portfolio'] = function update_url2portfolio(node)
 	});
 	return (ok!=0 && ok == nodes.length);
 }
+
+//=============================================================================
+//=============================================================================
+//====================== Variable =============================================
+//=============================================================================
+//=============================================================================
+
+//==================================
+g_actions['variable'] = function (node)
+//==================================
+{
+	var ok = false
+	//-----------------------------------
+	var text = "";
+	var varlabel = $(node).attr("varlabel");
+	//-----------------------------------
+	var test = $(node).attr("test");
+	if (test!=undefined) {
+		test = replaceVariable(test);
+		test = replaceBatchVariable(getTest(test),node);
+	}
+	//------------------------------------
+	var source = $("source",node).text();
+	var srce_idx = source.lastIndexOf(".");
+	var srce_treeref = source.substring(0,srce_idx);
+	var srce_semtag = source.substring(srce_idx+1);
+	//------------- source -----------------------
+	var nodeid = "";
+	if (source.indexOf('#current_node')+source.indexOf('#uuid')>-2){
+		if (source.indexOf('#current_node')>-1)
+			nodeid = g_current_node_uuid;
+		else
+			nodeid = replaceVariable(b_replaceVariable(treeref)); // select = porfolio_uuid.#uuid
+	} else {
+		//------------  --------------------
+		var url = "";
+		if (srce_treeref.indexOf("#")>-1)
+			url = serverBCK_API+"/nodes?portfoliocode=" + srce_treeref.substring(1) + "&semtag="+srce_semtag;	
+		else
+			url = serverBCK_API+"/nodes?portfoliocode=" + g_trees[srce_treeref][1] + "&semtag="+srce_semtag;
+		//--------------------------------
+		var nodes ='';
+		$.ajax({
+			async: false,
+			type : "GET",
+			dataType : "xml",
+			url : url,
+			success : function(data) {
+				nodes = $("node",data);
+				UICom.parseStructure(data,false);
+				if (test!=undefined)
+					nodes = eval("$(nodes)"+test);
+				if (nodes.length>0){
+					nodeid = $(nodes[0]).attr('id');
+				} else {
+					//$("#batch-log").append("<br>- <span class='danger'>ERROR </span> in move NOT FOUND - source="+source);
+				}
+			},
+			error : function(data) {
+				$("#batch-log").append("<br>- <span class='danger'>ERROR</span> in variable - source="+source);
+			}
+		});
+	}
+	//---------- node-resource -----------
+	//------------------------------------
+	const select = $(node).attr("select");
+	if (select!=undefined && select.length>0) {
+		//---------- node-resource -----------
+		if (select=='resource') {
+			text = UICom.structure["ui"][nodeid].resource.getView("dashboard_"+nodeid,null,null,true);
+			
+		}
+		else if (select=='resource code') {
+			text = UICom.structure["ui"][nodeid].resource.getCode();
+		}
+		else if (select=='resource value') {
+			text = UICom.structure["ui"][nodeid].resource.getValue("dashboard_value_"+nodeid);
+			prefix_id += "value_";
+		}
+		else if (select=='resource label') {
+			text = UICom.structure["ui"][nodeid].resource.getLabel();
+		}
+		else if (select=='node label') {
+			text = UICom.structure["ui"][nodeid].getLabel();
+		}
+		else if (select=='node code') {
+			text = UICom.structure["ui"][nodeid].getCode();
+		}
+		else if (select=='node value') {
+			text = UICom.structure["ui"][nodeid].getValue();
+		}
+		else if (select=='resourcelastmodified') {
+			text = new Date(parseInt(UICom.structure["ui"][nodeid].resource.lastmodified_node.text())).toLocaleString();
+		}
+		else if (select=='nodelastmodified') {
+			text = new Date(parseInt(UICom.structure["ui"][nodeid].lastmodified_node.text())).toLocaleString();
+		}
+		else if (select=='uuid') {
+			text = nodeid;
+		}
+		else if (select=='node context') {
+			text = UICom.structure["ui"][nodeid].getContext("dashboard_context_"+nodeid);
+			prefix_id += "context_";
+		}
+	}
+	//------------------------------
+	$("#batch-log").append("<br>- Variable " + varlabel + " = " + text );
+	g_variables[varlabel] = text;
+}
+
+//=============================================================================
+//=============================================================================
+//====================== FOR-EACH-NODE ========================================
+//=============================================================================
+//=============================================================================
+
+//==================================
+g_actions['for-each-node'] = function (node)
+//==================================
+{
+	var ok = false
+	//-----------------------------------
+	var test = $(node).attr("test");
+	if (test!=undefined) {
+		test = replaceVariable(test);
+		test = replaceBatchVariable(getTest(test),node);
+	}
+	//------------------------------------
+	var source = $("source",node).text();
+	var srce_idx = source.lastIndexOf(".");
+	var srce_treeref = source.substring(0,srce_idx);
+	var srce_semtag = source.substring(srce_idx+1);
+	//------------- source -----------------------
+	if (source.indexOf('#current_node')+source.indexOf('#uuid')>-2){
+		if (source.indexOf('#current_node')>-1)
+			nodeid = g_current_node_uuid;
+		else
+			nodeid = replaceVariable(b_replaceVariable(treeref)); // select = porfolio_uuid.#uuid
+	} else {
+		//------------  --------------------
+		var url = "";
+		if (srce_treeref.indexOf("#")>-1)
+			url = serverBCK_API+"/nodes?portfoliocode=" + srce_treeref.substring(1) + "&semtag="+srce_semtag;	
+		else
+			url = serverBCK_API+"/nodes?portfoliocode=" + g_trees[srce_treeref][1] + "&semtag="+srce_semtag;
+		//--------------------------------
+		$.ajax({
+			async: false,
+			type : "GET",
+			dataType : "xml",
+			url : url,
+			success : function(data) {
+				UICom.parseStructure(data,false);
+				let nodes = $("nodes",data);
+				UICom.parseStructure(data,false);
+				if (test!=undefined)
+					nodes = eval("$(nodes)"+test);
+				let actions = $(node).children();
+				for (let i=0; i<nodes.length; i++){
+					for (let i=0; i<actions.length;i++){
+						var tagname = $(actions[i])[0].tagName;
+						g_report_actions[tagname](actions[i],nodes[i]);
+					}
+				}
+			},
+			error : function() {
+				$("#batch-log").append("<br>- <span class='danger'>ERROR</span> in for-each-node - source="+source);
+			}
+		});
+	}
+}
+
+//==================================
+g_actions['for-each-node-batch-variable'] = function (node,data)
+//==================================
+{
+	var ok = false
+	//-----------------------------------
+	var text = "";
+	var varlabel = $(node).attr("varlabel");
+	//-----------------------------------
+	var test = $(node).attr("test");
+	if (test!=undefined) {
+		test = replaceVariable(test);
+		test = replaceBatchVariable(getTest(test),node);
+	}
+	//------------------------------------
+	var semtag = $(node).attr("semtag");
+	const nodes = $("*:has(>metadata[semantictag*='"+semtag+"'])",data)
+	const nodeid = $(nodes[0]).attr('id');
+	//---------- node-resource -----------
+	//------------------------------------
+	const select = $(node).attr("select");
+	if (select!=undefined && select.length>0) {
+		//---------- node-resource -----------
+		if (select=='resource') {
+			text = UICom.structure["ui"][nodeid].resource.getView("dashboard_"+nodeid,null,null,true);
+			
+		}
+		else if (select=='resource code') {
+			text = UICom.structure["ui"][nodeid].resource.getCode();
+		}
+		else if (select=='resource value') {
+			text = UICom.structure["ui"][nodeid].resource.getValue("dashboard_value_"+nodeid);
+			prefix_id += "value_";
+		}
+		else if (select=='resource label') {
+			text = UICom.structure["ui"][nodeid].resource.getLabel();
+		}
+		else if (select=='node label') {
+			text = UICom.structure["ui"][nodeid].getLabel();
+		}
+		else if (select=='node code') {
+			text = UICom.structure["ui"][nodeid].getCode();
+		}
+		else if (select=='node value') {
+			text = UICom.structure["ui"][nodeid].getValue();
+		}
+		else if (select=='resourcelastmodified') {
+			text = new Date(parseInt(UICom.structure["ui"][nodeid].resource.lastmodified_node.text())).toLocaleString();
+		}
+		else if (select=='nodelastmodified') {
+			text = new Date(parseInt(UICom.structure["ui"][nodeid].lastmodified_node.text())).toLocaleString();
+		}
+		else if (select=='uuid') {
+			text = nodeid;
+		}
+		else if (select=='node context') {
+			text = UICom.structure["ui"][nodeid].getContext("dashboard_context_"+nodeid);
+			prefix_id += "context_";
+		}
+	}
+	//------------------------------
+	$("#batch-log").append("<br>- Variable " + varlabel + " = " + text );
+	g_variables[varlabel] = text;
+}
 //==========================================================================
 //==========================================================================
 //==========================================================================
