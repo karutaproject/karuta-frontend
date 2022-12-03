@@ -1014,24 +1014,18 @@
 
 	<!-- ================ for-each-node ============================ -->
 	<xsl:template match="*[metadata/@semantictag='for-each-node']">
-		<xsl:variable name="varlabel">
-			<xsl:value-of select=".//asmContext[metadata/@semantictag='varlabel']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
-		</xsl:variable>
 		<xsl:variable name="source">
 			<xsl:call-template name='get-select'>
 				<xsl:with-param name='parent'>subsection-source</xsl:with-param>
 			</xsl:call-template>
 		</xsl:variable>
-		<for-each-node>
-			<source>
-				<xsl:value-of select='$source'/>
-			</source>
+		<for-each-node source="{$source}">
 			<xsl:apply-templates select='asmUnitStructure'/>
 		</for-each-node>
 	</xsl:template>
 	
-	<!-- ================ for-each-node-batch-variable ============================ -->
-	<xsl:template match="*[metadata/@semantictag='for-each-node-batch-variable']">
+	<!-- ================ fen-batch-variable ============================ -->
+	<xsl:template match="*[metadata/@semantictag='fen-batch-variable']">
 		<xsl:variable name="varlabel">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='varlabel']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
@@ -1044,7 +1038,7 @@
 		<xsl:variable name="select">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='todisplay']/asmResource[@xsi_type='Get_Resource']/value"></xsl:value-of>
 		</xsl:variable>
-		<for-each-node-batch-variable>
+		<fen-batch-variable>
 			<xsl:if test="not($varlabel='')">
 				<xsl:attribute name="varlabel"><xsl:value-of select="$varlabel"/></xsl:attribute>
 			</xsl:if>
@@ -1058,11 +1052,11 @@
 				<xsl:attribute name="test"><xsl:value-of select="$test"/></xsl:attribute>
 			</xsl:if>
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='text-value']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
-		</for-each-node-batch-variable>
+		</fen-batch-variable>
 	</xsl:template>
 	
 	<!-- ================ for-each-node-update-field ============================ -->
-	<xsl:template match="*[metadata/@semantictag='for-each-node-update-field']">
+	<xsl:template match="*[metadata/@semantictag='fen-update-field']">
 		<xsl:variable name="semtag">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='node-semtag']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
@@ -1075,13 +1069,13 @@
 		<xsl:variable name="filter-test">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='filter-test']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
-		<update-resource type='Field' test="{$test}" filter-semtag="{$filter-semtag}" filter-test="{$filter-test}">
+		<fen-update-resource type='Field' semtag="{$semtag}" test="{$test}" filter-semtag="{$filter-semtag}" filter-test="{$filter-test}">
 			<attribute name='text' language-dependent='Y' replace-variable='Y'>
 				<xsl:call-template name="txtval">
 					<xsl:with-param name="semtag">text</xsl:with-param>
 				</xsl:call-template>
 			</attribute>
-		</update-resource>
+		</fen-update-resource>
 	</xsl:template>
 	
 	<!-- ====================================================================================== -->

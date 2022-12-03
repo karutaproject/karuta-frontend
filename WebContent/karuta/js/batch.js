@@ -3700,7 +3700,7 @@ g_actions['for-each-node'] = function (node)
 		test = replaceBatchVariable(getTest(test),node);
 	}
 	//------------------------------------
-	var source = $("source",node).text();
+	var source = $(node).attr("source");
 	var srce_idx = source.lastIndexOf(".");
 	var srce_treeref = source.substring(0,srce_idx);
 	var srce_semtag = source.substring(srce_idx+1);
@@ -3725,16 +3725,29 @@ g_actions['for-each-node'] = function (node)
 			url : url,
 			success : function(data) {
 				UICom.parseStructure(data,false);
-				let nodes = $("nodes",data);
+				let nodes = $("node",data);
 				UICom.parseStructure(data,false);
 				if (test!=undefined)
 					nodes = eval("$(nodes)"+test);
 				let actions = $(node).children();
 				for (let i=0; i<nodes.length; i++){
-					for (let i=0; i<actions.length;i++){
-						var tagname = $(actions[i])[0].tagName;
-						g_report_actions[tagname](actions[i],nodes[i]);
-					}
+					const nodeid = $(nodes[i]).attr('id');
+					$.ajax({
+						async : false,
+						type : "GET",
+						dataType : "xml",
+						url : serverBCK_API+"/nodes/node/"+nodeid,
+						success : function(data) {
+							for (let j=0; j<actions.length;j++){
+								var tagname = $(actions[j])[0].tagName;
+								g_actions[tagname](actions[j],data);
+							}
+						},
+						error : function(data) {
+							$("#batch-log").append("<br>- ***NOT FOUND <span class='danger'>ERROR - for-each-node "+srce_semtag+"</span>");
+						}
+					});
+					
 				}
 			},
 			error : function() {
@@ -3745,7 +3758,7 @@ g_actions['for-each-node'] = function (node)
 }
 
 //==================================
-g_actions['for-each-node-batch-variable'] = function (node,data)
+g_actions['fen-batch-variable'] = function (node,data)
 //==================================
 {
 	var ok = false
@@ -3808,6 +3821,75 @@ g_actions['for-each-node-batch-variable'] = function (node,data)
 	$("#batch-log").append("<br>- Variable " + varlabel + " = " + text );
 	g_variables[varlabel] = text;
 }
+
+//=================================================
+g_actions['fen-update-resource'] = function updateResource(node,data)
+//=================================================
+{
+	var ok = 0;
+	var type = $(node).attr("type");
+	var attributes = $("attribute",node)
+	var semtag = $(node).attr("semtag");
+	//----------Test --------
+	var test = $(node).attr("test");
+	if (test!=undefined) {
+		test = replaceBatchVariable(test);
+		test=getTest(test);
+	}
+	var filter_semtag = $(node).attr("filter-semtag");
+	var filter_test = $(node).attr("filter-test");
+	if (filter_test!=undefined) {
+		filter_test = replaceBatchVariable(filter_test);
+		filter_test=getTest(filter_test);
+	}
+	//--------------------------------
+	let nodes = $("*:has(>metadata[semantictag*='"+semtag+"'])",data).addBack("*:has(>metadata[semantictag*='"+semtag+"'])");
+	//-------------------
+	if (nodes.length>0){
+		for (var i=0; i<nodes.length; i++){
+			//-------------------
+			var nodeid = $(nodes[i]).attr('id');
+			var resource = $("asmResource[xsi_type='"+type+"']",nodes[i]);
+			for (var j=0; j<attributes.length; j++){
+				var attribute_name = $(attributes[j]).attr("name");
+				var language_dependent = $(attributes[j]).attr("language-dependent");
+				var replace_variable = $(attributes[j]).attr("replace-variable");
+				var attribute_value = "";
+				if (replace_variable=='Y')
+					attribute_value = getTxtvals($("attribute[name='"+attribute_name+"']",node));
+				else
+					attribute_value = getTxtvalsWithoutReplacement($("attribute[name='"+attribute_name+"']",node));
+				if (language_dependent=='Y')
+					$(attribute_name+"[lang='"+LANG+"']",resource).text(attribute_value);
+				else
+					$(attribute_name,resource).text(attribute_value);
+			}
+			var data = "<asmResource xsi_type='"+type+"'>" + $(resource).html() + "</asmResource>";
+			var strippeddata = data.replace(/xmlns=\"http:\/\/www.w3.org\/1999\/xhtml\"/g,"");  // remove xmlns attribute
+			//-------------------
+			$.ajax({
+				async : false,
+				type : "PUT",
+				contentType: "application/xml",
+				dataType : "text",
+				data : strippeddata,
+				url : serverBCK_API+"/resources/resource/" + nodeid,
+				success : function(data) {
+					ok++;
+					$("#batch-log").append("<br>- resource updated "+type+" - "+semtag+" - "+attribute_value);
+				},
+				error : function(data) {
+					$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in update resource "+type+" - "+semtag+":"+attribute_value);
+				}
+			});
+			//-------------------
+		}
+	} else {
+		$("#batch-log").append("<br>- ***NOT FOUND <span class='danger'>ERROR - fen-update-resource "+type+"</span>");
+	}
+	return (ok!=0 && ok == nodes.length);
+}
+
 //==========================================================================
 //==========================================================================
 //==========================================================================
