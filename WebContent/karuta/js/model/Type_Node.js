@@ -473,6 +473,8 @@ UIFactory["Node"].prototype.displayAsmNode = function(dest,type,langcode,edit,re
 		html = html.replace(/#displayview#/g,displayview).replace(/#displaytype#/g,type).replace(/#uuid#/g,uuid).replace(/#nodetype#/g,this.nodetype).replace(/#semtag#/g,this.semantictag).replace(/#cssclass#/g,this.cssclass);
 		html = html.replace(/#node-orgclass#/g,this.displayitselforg)
 		html = html.replace(/#content-orgclass#/g,this.displaychildorg)
+		if (this.privatevalue)
+		 html = html.replace(/#priv#/g,'private');
 		if (nodetype=='asmUnit' || nodetype=='asmStructure')
 			html = html.replace(/#first#/g,"first-node");
 		if (!refresh) {
@@ -1881,7 +1883,7 @@ UIFactory["Node"].prototype.getButtons = function(dest,type,langcode,inline,dept
 		}
 	}
 	//------------- private button -------------------
-	if (this.writenode && (this.showroles.containsArrayElt(g_userroles) || this.showroles.indexOf($(USER.username_node).text())>-1 || USER.admin || g_userroles[0]=='designer') && this.showroles!='none' && this.showroles!='') {
+	if (/*this.writenode && */(this.showroles.containsArrayElt(g_userroles) || this.showroles.indexOf($(USER.username_node).text())>-1 || USER.admin || g_userroles[0]=='designer') && this.showroles!='none' && this.showroles!='') {
 		if (this.privatevalue) {
 			html += "<span class='button fas fa-eye-slash' style='"+menus_color+"' onclick=\"javascript:show('"+this.id+"')\" data-title='"+karutaStr[LANG]["button-show"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
 		} else {
