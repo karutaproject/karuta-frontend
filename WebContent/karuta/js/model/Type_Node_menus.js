@@ -1239,7 +1239,7 @@ UIFactory["Node"].getXmlItemMenu = function(node,parentid,item,title,databack,ca
 					if (type=='import-component-w-today-date') {
 						databack = true;
 						callback = 'UIFactory.Calendar.updateaddedpart';
-						param2 = replaceVariable( ($("calendar-semtag",itemelts[i]).length>0)?$("calendar-semtag",itemelts[i]).text():"" );
+						param2 = replaceVariable( ($("updatedtag",itemelts[i]).length>0)?$("updatedtag",itemelts[i]).text():"" );
 					}
 					if (type=='import') {
 						databack = false;
