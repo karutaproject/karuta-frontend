@@ -3729,7 +3729,12 @@ g_actions['for-each-node'] = function (node)
 				UICom.parseStructure(data,false);
 				if (test!=undefined)
 					nodes = eval("$(nodes)"+test);
+				$("#batch-log").append("<br>" + nodes.length + " nodes");
 				let actions = $(node).children();
+				$("#batch-log").append("<br>Actions : ");
+				for (let j=0; j<actions.length;j++){
+					$("#batch-log").append($(actions[j])[0].tagName+" / ");
+				}
 				for (let i=0; i<nodes.length; i++){
 					const nodeid = $(nodes[i]).attr('id');
 					$.ajax({
@@ -3888,6 +3893,54 @@ g_actions['fen-update-resource'] = function updateResource(node,data)
 		$("#batch-log").append("<br>- ***NOT FOUND <span class='danger'>ERROR - fen-update-resource "+type+"</span>");
 	}
 	return (ok!=0 && ok == nodes.length);
+}
+
+//=================================================
+g_actions['fen-move-node'] = function (node,data)
+//=================================================
+{
+	var ok = false
+	//-----------------------------------
+	var source_test = $(node).attr("source-test");
+	if (source_test!=undefined) {
+		source_test = replaceVariable(source_test);
+		source_test = replaceBatchVariable(getTest(source_test),node);
+	}
+	//------------------------------------
+	var source = $(node).attr("source");
+	//-----------------------------------
+	var target_test = $(node).attr("target-test");
+	if (target_test!=undefined) {
+		target_test = replaceVariable(target_test);
+		target_test = replaceBatchVariable(getTest(target_test),node);
+	}
+	//------------------------------------
+	var target = $(node).attr("target");
+	//------------- source -----------------------
+	let source_nodes = $("*:has(>metadata[semantictag*='"+source+"'])",data).addBack("*:has(>metadata[semantictag*='"+source+"'])");
+	if (source_test!=undefined)
+		source_nodes = eval("$(source_nodes)"+source_test);
+	const nodeid = $(source_nodes[0]).attr("id");
+	//------------- target -----------------------
+	let target_nodes = $("*:has(>metadata[semantictag*='"+target+"'])",data).addBack("*:has(>metadata[semantictag*='"+target+"'])");
+	if (target_test!=undefined)
+		target_nodes = eval("$(target_nodes)"+target_test);
+	const destid = $(target_nodes[0]).attr("id");
+	//----------------- move node ------------------------
+	$.ajax({
+		async:false,
+		type : "POST",
+		dataType : "text",
+		url : serverBCK_API+"/nodes/node/" + nodeid + "/parentof/"+destid,
+		success : function(data) {
+			$("#batch-log").append("<br>- node moved from -"+source+ " to "+target);
+			ok = true
+		},
+		error : function(jqxhr,textStatus) {
+			$("#batch-log").append("<br>- <span class='danger'>ERROR</span> in move from -"+source+ " to "+target);
+		}
+	});
+	return ok;
 }
 
 //==========================================================================
