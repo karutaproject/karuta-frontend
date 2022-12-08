@@ -94,15 +94,19 @@ function callSend()
 }
 
 //==============================
-function getLogin(encrypt_url,lang,withKarutaLogin)
+function getLogin(encrypt_url,lang,withKarutaLogin,g_with_code)
 //==============================
 {
+	//g_with_code = true;
+	if (g_with_code==null)
+		g_with_code = false;
+
 	var html = "";
 	html += "<div id='connection-cas'>";
 	html += "	<h5 id='connection-cas1'>"+karutaStr[LANG]['connection-cas1']+"</h5>";
 	html += "	<button class='button-login' onclick='javascript:callCAS()'>"+karutaStr[LANG]['login']+"</button>";
 	html += "</div>"
-	if (withKarutaLogin) {
+	if (withKarutaLogin && !g_with_code) {
 		html += "<div id='login-karuta'>"
 		html += "	<h5 id='connection-cas2'>"+karutaStr[LANG]['connection-cas2']+"</h5>";
 		html += "	<input id='useridentifier' class='form-control' placeholder=\""+karutaStr[LANG]['username']+"\" type='text'>";
@@ -110,7 +114,31 @@ function getLogin(encrypt_url,lang,withKarutaLogin)
 		html += "	<button class='button-login' onclick=\"javascript:callSubmit('"+encrypt_url+"','"+lang+"')\">"+karutaStr[LANG]['login']+"</button>";
 		html += "</div>"
 	}
+	if (g_with_code!=undefined && g_with_code) {
+		html +="<div id='ask-email'>"
+		html += "<p><br/>"+karutaStr[LANG]['new-code']+"</p>";
+		html += "<input id='useridentifier_new' class='form-control' placeholder=\""+karutaStr[LANG]['email']+"\" type='text'/>";
+		html += "<input id='useridentifier' type='hidden'/>";
+		html += "<button id='form-send' onclick='callCode()'>"+karutaStr[LANG]['button-send']+"</button>";
+		html += "</div>"
+		html += "<p><br/>"+karutaStr[LANG]['tipnewpassword']+"</p>";
+		html +="<div id='ask-code' style='display:none'>"
+		html += "	<input id='password' class='form-control' placeholder=\"Code\" type='password'>";
+		html += "	<button class='button-login' onclick=\"javascript:callSubmit('"+encrypt_url+"','"+lang+"')\">"+karutaStr[LANG]['login']+"</button>";
+		html += "</div>"
+		return html;
+	}
 	return html;
+}
+
+//==============================
+function callCode()
+//==============================
+{
+	$("#ask-email").hide();
+	document.getElementById("useridentifier").value = document.getElementById("useridentifier_new").value
+	callSend();
+	$("#ask-code").show();
 }
 
 //==============================
