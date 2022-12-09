@@ -252,6 +252,7 @@ function constructKarutaLogin(withKarutaLogin)
 			karuta_backend_date = data.buildTime;
 		}
 	});
+/*
 	$.ajax({
 		type : "GET",
 		dataType : "json",
@@ -262,6 +263,7 @@ function constructKarutaLogin(withKarutaLogin)
 			karuta_fileserver_date = data.buildTime;
 		}
 	});
+*/
 	try {
 		specificLoginFunction();
 	} catch(e) {
