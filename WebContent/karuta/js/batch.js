@@ -333,8 +333,8 @@ function processListActions(list)
 		}
 		if (actiontype=='if-then-else') {
 			var if_action = $('if-part',actionnode).children()[0]; // only one action in test
-			var then_actions = $($('then-part',actionnode)[0]).children();
-			var else_actions = $($('else-part',actionnode)[0]).children();
+			var then_actions = $($('>then-part',actionnode)[0]).children();
+			var else_actions = $($('>else-part',actionnode)[0]).children();
 			var actiontype = $(if_action).prop("nodeName");
 			var actionnode = if_action;
 			$("#batch-log").append("<br>================ IF ===============================");			
