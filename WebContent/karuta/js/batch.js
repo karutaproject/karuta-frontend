@@ -333,8 +333,8 @@ function processListActions(list)
 		}
 		if (actiontype=='if-then-else') {
 			var if_action = $('if-part',actionnode).children()[0]; // only one action in test
-			var then_actions = $($('then-part',actionnode)[0]).children();
-			var else_actions = $($('else-part',actionnode)[0]).children();
+			var then_actions = $($('>then-part',actionnode)[0]).children();
+			var else_actions = $($('>else-part',actionnode)[0]).children();
 			var actiontype = $(if_action).prop("nodeName");
 			var actionnode = if_action;
 			$("#batch-log").append("<br>================ IF ===============================");			
@@ -3572,6 +3572,399 @@ g_actions['update-url2portfolio'] = function update_url2portfolio(node)
 	});
 	return (ok!=0 && ok == nodes.length);
 }
+
+//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
+//------------------------ Batch - Test ---------------------------------
+//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
+
+//=================================================
+g_actions['test'] = function (node)
+//=================================================
+{
+	var ok = false;
+	var test = $(node).attr("toeval");
+	try {
+		test = replaceVariable(replaceBatchVariable(test));
+		ok = eval(test);
+	}
+	catch(err) {
+		ok = false;
+	}
+	return ok;
+}
+
+//=============================================================================
+//=============================================================================
+//====================== Variable =============================================
+//=============================================================================
+//=============================================================================
+
+//==================================
+g_actions['variable'] = function (node)
+//==================================
+{
+	var ok = false
+	//-----------------------------------
+	var text = "";
+	var varlabel = $(node).attr("varlabel");
+	//-----------------------------------
+	var test = $(node).attr("test");
+	if (test!=undefined) {
+		test = replaceVariable(test);
+		test = replaceBatchVariable(getTest(test),node);
+	}
+	//------------------------------------
+	var source = $("source",node).text();
+	var srce_idx = source.lastIndexOf(".");
+	var srce_treeref = source.substring(0,srce_idx);
+	var srce_semtag = source.substring(srce_idx+1);
+	//------------- source -----------------------
+	var nodeid = "";
+	if (source.indexOf('#current_node')+source.indexOf('#uuid')>-2){
+		if (source.indexOf('#current_node')>-1)
+			nodeid = g_current_node_uuid;
+		else
+			nodeid = replaceVariable(b_replaceVariable(treeref)); // select = porfolio_uuid.#uuid
+	} else {
+		//------------  --------------------
+		var url = "";
+		if (srce_treeref.indexOf("#")>-1)
+			url = serverBCK_API+"/nodes?portfoliocode=" + srce_treeref.substring(1) + "&semtag="+srce_semtag;	
+		else
+			url = serverBCK_API+"/nodes?portfoliocode=" + g_trees[srce_treeref][1] + "&semtag="+srce_semtag;
+		//--------------------------------
+		var nodes ='';
+		$.ajax({
+			async: false,
+			type : "GET",
+			dataType : "xml",
+			url : url,
+			success : function(data) {
+				nodes = $("node",data);
+				UICom.parseStructure(data,false);
+				if (test!=undefined)
+					nodes = eval("$(nodes)"+test);
+				if (nodes.length>0){
+					nodeid = $(nodes[0]).attr('id');
+				} else {
+					//$("#batch-log").append("<br>- <span class='danger'>ERROR </span> in move NOT FOUND - source="+source);
+				}
+			},
+			error : function(data) {
+				$("#batch-log").append("<br>- <span class='danger'>ERROR</span> in variable - source="+source);
+			}
+		});
+	}
+	//---------- node-resource -----------
+	//------------------------------------
+	const select = $(node).attr("select");
+	if (select!=undefined && select.length>0) {
+		//---------- node-resource -----------
+		if (select=='resource') {
+			text = UICom.structure["ui"][nodeid].resource.getView("dashboard_"+nodeid,null,null,true);
+			
+		}
+		else if (select=='resource code') {
+			text = UICom.structure["ui"][nodeid].resource.getCode();
+		}
+		else if (select=='resource value') {
+			text = UICom.structure["ui"][nodeid].resource.getValue("dashboard_value_"+nodeid);
+			prefix_id += "value_";
+		}
+		else if (select=='resource label') {
+			text = UICom.structure["ui"][nodeid].resource.getLabel();
+		}
+		else if (select=='node label') {
+			text = UICom.structure["ui"][nodeid].getLabel();
+		}
+		else if (select=='node code') {
+			text = UICom.structure["ui"][nodeid].getCode();
+		}
+		else if (select=='node value') {
+			text = UICom.structure["ui"][nodeid].getValue();
+		}
+		else if (select=='resourcelastmodified') {
+			text = new Date(parseInt(UICom.structure["ui"][nodeid].resource.lastmodified_node.text())).toLocaleString();
+		}
+		else if (select=='nodelastmodified') {
+			text = new Date(parseInt(UICom.structure["ui"][nodeid].lastmodified_node.text())).toLocaleString();
+		}
+		else if (select=='uuid') {
+			text = nodeid;
+		}
+		else if (select=='node context') {
+			text = UICom.structure["ui"][nodeid].getContext("dashboard_context_"+nodeid);
+			prefix_id += "context_";
+		}
+	}
+	//------------------------------
+	$("#batch-log").append("<br>- Variable " + varlabel + " = " + text );
+	g_variables[varlabel] = text;
+}
+
+//=============================================================================
+//=============================================================================
+//====================== FOR-EACH-NODE ========================================
+//=============================================================================
+//=============================================================================
+
+//==================================
+g_actions['for-each-node'] = function (node)
+//==================================
+{
+	var ok = false
+	//-----------------------------------
+	var test = $(node).attr("test");
+	if (test!=undefined) {
+		test = replaceVariable(test);
+		test = replaceBatchVariable(getTest(test),node);
+	}
+	//------------------------------------
+	var source = $(node).attr("source");
+	var srce_idx = source.lastIndexOf(".");
+	var srce_treeref = source.substring(0,srce_idx);
+	var srce_semtag = source.substring(srce_idx+1);
+	//------------- source -----------------------
+	if (source.indexOf('#current_node')+source.indexOf('#uuid')>-2){
+		if (source.indexOf('#current_node')>-1)
+			nodeid = g_current_node_uuid;
+		else
+			nodeid = replaceVariable(b_replaceVariable(treeref)); // select = porfolio_uuid.#uuid
+	} else {
+		//------------  --------------------
+		var url = "";
+		if (srce_treeref.indexOf("#")>-1)
+			url = serverBCK_API+"/nodes?portfoliocode=" + srce_treeref.substring(1) + "&semtag="+srce_semtag;	
+		else
+			url = serverBCK_API+"/nodes?portfoliocode=" + g_trees[srce_treeref][1] + "&semtag="+srce_semtag;
+		//--------------------------------
+		$.ajax({
+			async: false,
+			type : "GET",
+			dataType : "xml",
+			url : url,
+			success : function(data) {
+				UICom.parseStructure(data,false);
+				let nodes = $("node",data);
+				UICom.parseStructure(data,false);
+				if (test!=undefined)
+					nodes = eval("$(nodes)"+test);
+				$("#batch-log").append("<br>" + nodes.length + " nodes");
+				let actions = $(node).children();
+				$("#batch-log").append("<br>Actions : ");
+				for (let j=0; j<actions.length;j++){
+					$("#batch-log").append($(actions[j])[0].tagName+" / ");
+				}
+				for (let i=0; i<nodes.length; i++){
+					const nodeid = $(nodes[i]).attr('id');
+					$.ajax({
+						async : false,
+						type : "GET",
+						dataType : "xml",
+						url : serverBCK_API+"/nodes/node/"+nodeid,
+						success : function(data) {
+							for (let j=0; j<actions.length;j++){
+								var tagname = $(actions[j])[0].tagName;
+								g_actions[tagname](actions[j],data);
+							}
+						},
+						error : function(data) {
+							$("#batch-log").append("<br>- ***NOT FOUND <span class='danger'>ERROR - for-each-node "+srce_semtag+"</span>");
+						}
+					});
+					
+				}
+			},
+			error : function() {
+				$("#batch-log").append("<br>- <span class='danger'>ERROR</span> in for-each-node - source="+source);
+			}
+		});
+	}
+}
+
+//==================================
+g_actions['fen-batch-variable'] = function (node,data)
+//==================================
+{
+	var ok = false
+	//-----------------------------------
+	var text = "";
+	var varlabel = $(node).attr("varlabel");
+	//-----------------------------------
+	var test = $(node).attr("test");
+	if (test!=undefined) {
+		test = replaceVariable(test);
+		test = replaceBatchVariable(getTest(test),node);
+	}
+	//------------------------------------
+	var semtag = $(node).attr("semtag");
+	const nodes = $("*:has(>metadata[semantictag*='"+semtag+"'])",data)
+	const nodeid = $(nodes[0]).attr('id');
+	//---------- node-resource -----------
+	//------------------------------------
+	const select = $(node).attr("select");
+	if (select!=undefined && select.length>0) {
+		//---------- node-resource -----------
+		if (select=='resource') {
+			text = UICom.structure["ui"][nodeid].resource.getView("dashboard_"+nodeid,null,null,true);
+			
+		}
+		else if (select=='resource code') {
+			text = UICom.structure["ui"][nodeid].resource.getCode();
+		}
+		else if (select=='resource value') {
+			text = UICom.structure["ui"][nodeid].resource.getValue("dashboard_value_"+nodeid);
+			prefix_id += "value_";
+		}
+		else if (select=='resource label') {
+			text = UICom.structure["ui"][nodeid].resource.getLabel();
+		}
+		else if (select=='node label') {
+			text = UICom.structure["ui"][nodeid].getLabel();
+		}
+		else if (select=='node code') {
+			text = UICom.structure["ui"][nodeid].getCode();
+		}
+		else if (select=='node value') {
+			text = UICom.structure["ui"][nodeid].getValue();
+		}
+		else if (select=='resourcelastmodified') {
+			text = new Date(parseInt(UICom.structure["ui"][nodeid].resource.lastmodified_node.text())).toLocaleString();
+		}
+		else if (select=='nodelastmodified') {
+			text = new Date(parseInt(UICom.structure["ui"][nodeid].lastmodified_node.text())).toLocaleString();
+		}
+		else if (select=='uuid') {
+			text = nodeid;
+		}
+		else if (select=='node context') {
+			text = UICom.structure["ui"][nodeid].getContext("dashboard_context_"+nodeid);
+			prefix_id += "context_";
+		}
+	}
+	//------------------------------
+	$("#batch-log").append("<br>- Variable " + varlabel + " = " + text );
+	g_variables[varlabel] = text;
+}
+
+//=================================================
+g_actions['fen-update-resource'] = function updateResource(node,data)
+//=================================================
+{
+	var ok = 0;
+	var type = $(node).attr("type");
+	var attributes = $("attribute",node)
+	var semtag = $(node).attr("semtag");
+	//----------Test --------
+	var test = $(node).attr("test");
+	if (test!=undefined) {
+		test = replaceBatchVariable(test);
+		test=getTest(test);
+	}
+	var filter_semtag = $(node).attr("filter-semtag");
+	var filter_test = $(node).attr("filter-test");
+	if (filter_test!=undefined) {
+		filter_test = replaceBatchVariable(filter_test);
+		filter_test=getTest(filter_test);
+	}
+	//--------------------------------
+	let nodes = $("*:has(>metadata[semantictag*='"+semtag+"'])",data).addBack("*:has(>metadata[semantictag*='"+semtag+"'])");
+	//-------------------
+	if (nodes.length>0){
+		for (var i=0; i<nodes.length; i++){
+			//-------------------
+			var nodeid = $(nodes[i]).attr('id');
+			var resource = $("asmResource[xsi_type='"+type+"']",nodes[i]);
+			for (var j=0; j<attributes.length; j++){
+				var attribute_name = $(attributes[j]).attr("name");
+				var language_dependent = $(attributes[j]).attr("language-dependent");
+				var replace_variable = $(attributes[j]).attr("replace-variable");
+				var attribute_value = "";
+				if (replace_variable=='Y')
+					attribute_value = getTxtvals($("attribute[name='"+attribute_name+"']",node));
+				else
+					attribute_value = getTxtvalsWithoutReplacement($("attribute[name='"+attribute_name+"']",node));
+				if (language_dependent=='Y')
+					$(attribute_name+"[lang='"+LANG+"']",resource).text(attribute_value);
+				else
+					$(attribute_name,resource).text(attribute_value);
+			}
+			var data = "<asmResource xsi_type='"+type+"'>" + $(resource).html() + "</asmResource>";
+			var strippeddata = data.replace(/xmlns=\"http:\/\/www.w3.org\/1999\/xhtml\"/g,"");  // remove xmlns attribute
+			//-------------------
+			$.ajax({
+				async : false,
+				type : "PUT",
+				contentType: "application/xml",
+				dataType : "text",
+				data : strippeddata,
+				url : serverBCK_API+"/resources/resource/" + nodeid,
+				success : function(data) {
+					ok++;
+					$("#batch-log").append("<br>- resource updated "+type+" - "+semtag+" - "+attribute_value);
+				},
+				error : function(data) {
+					$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in update resource "+type+" - "+semtag+":"+attribute_value);
+				}
+			});
+			//-------------------
+		}
+	} else {
+		$("#batch-log").append("<br>- ***NOT FOUND <span class='danger'>ERROR - fen-update-resource "+type+"</span>");
+	}
+	return (ok!=0 && ok == nodes.length);
+}
+
+//=================================================
+g_actions['fen-move-node'] = function (node,data)
+//=================================================
+{
+	var ok = false
+	//-----------------------------------
+	var source_test = $(node).attr("source-test");
+	if (source_test!=undefined) {
+		source_test = replaceVariable(source_test);
+		source_test = replaceBatchVariable(getTest(source_test),node);
+	}
+	//------------------------------------
+	var source = $(node).attr("source");
+	//-----------------------------------
+	var target_test = $(node).attr("target-test");
+	if (target_test!=undefined) {
+		target_test = replaceVariable(target_test);
+		target_test = replaceBatchVariable(getTest(target_test),node);
+	}
+	//------------------------------------
+	var target = $(node).attr("target");
+	//------------- source -----------------------
+	let source_nodes = $("*:has(>metadata[semantictag*='"+source+"'])",data).addBack("*:has(>metadata[semantictag*='"+source+"'])");
+	if (source_test!=undefined)
+		source_nodes = eval("$(source_nodes)"+source_test);
+	const nodeid = $(source_nodes[0]).attr("id");
+	//------------- target -----------------------
+	let target_nodes = $("*:has(>metadata[semantictag*='"+target+"'])",data).addBack("*:has(>metadata[semantictag*='"+target+"'])");
+	if (target_test!=undefined)
+		target_nodes = eval("$(target_nodes)"+target_test);
+	const destid = $(target_nodes[0]).attr("id");
+	//----------------- move node ------------------------
+	$.ajax({
+		async:false,
+		type : "POST",
+		dataType : "text",
+		url : serverBCK_API+"/nodes/node/" + nodeid + "/parentof/"+destid,
+		success : function(data) {
+			$("#batch-log").append("<br>- node moved from -"+source+ " to "+target);
+			ok = true
+		},
+		error : function(jqxhr,textStatus) {
+			$("#batch-log").append("<br>- <span class='danger'>ERROR</span> in move from -"+source+ " to "+target);
+		}
+	});
+	return ok;
+}
+
 //==========================================================================
 //==========================================================================
 //==========================================================================

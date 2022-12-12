@@ -1993,11 +1993,11 @@ function setVariables(data)
 	try {
 		var select_variable_nodes = $("asmContext:has(metadata[semantictag*='g-select-variable'])",data);
 		for (var i=0;i<select_variable_nodes.length;i++) {
-			let attributes = UICom.structure.ui[$(select_variable_nodes[i]).attr("id")].resource.getAttributes();
-			var value = UICom.structure.ui[$(select_variable_nodes[i]).attr("id")].resource.getAttributes().value;
-			var code = UICom.structure.ui[$(select_variable_nodes[i]).attr("id")].resource.getAttributes().code;
-			var variable_value = (value=="") ? code : value;
-			g_variables[UICom.structure.ui[$(select_variable_nodes[i]).attr("id")].getCode()] = cleanCode(variable_value,true);
+			const value = UICom.structure.ui[$(select_variable_nodes[i]).attr("id")].resource.getAttributes().value;
+			const code = UICom.structure.ui[$(select_variable_nodes[i]).attr("id")].resource.getAttributes().code;
+			const variable_value = (value=="") ? code : value;
+			const varname = UICom.structure.ui[$(select_variable_nodes[i]).attr("id")].getCode();
+			g_variables[varname] = cleanCode(variable_value,true);
 		}
 	} catch(e){}
 }
