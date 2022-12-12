@@ -256,7 +256,7 @@ function constructKarutaLogin(withKarutaLogin)
 	$.ajax({
 		type : "GET",
 		dataType : "json",
-		url : fileserverBCK_API+"/version",
+		url : serverBCK_API+"/fileserver-version",
 		data: "",
 		success: function (data) {
 			karuta_fileserver_version = data.version;
