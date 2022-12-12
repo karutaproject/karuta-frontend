@@ -65,7 +65,7 @@ function callSubmit()
 		});
 	}
 }
-	
+
 	//==============================
 	function getInputs()
 	//==============================
@@ -123,7 +123,7 @@ function displayKarutaCreateAccount()
 			$.ajax({
 				type : "GET",
 				dataType : "json",
-				url : fileserverBCK_API+"/version",
+				url : serverBCK_API+"/fileserver-version",
 				data: "",
 				success: function (data) {
 					karuta_fileserver_version = data.version;
@@ -135,7 +135,7 @@ function displayKarutaCreateAccount()
 				dataType : "json",
 				url : serverBCK_API+"/version",
 				data: "",
-				success: function (data) {		
+				success: function (data) {
 					karuta_backend_version = data.version;
 					karuta_backend_date = data.buildTime;
 					$("#navigation-bar").html(getNavBar('create_account',null));
@@ -259,7 +259,7 @@ function setLoginTechnicalVariables()
 }
 
 //=======================================================================
-function setConfigLoginColor(root,configname) 
+function setConfigLoginColor(root,configname)
 // =======================================================================
 {
 	var color = g_configVar[configname];
@@ -301,13 +301,13 @@ function applyLoginConfiguration()
 	if (g_configVar['login-subtitle']!=undefined) {
 		$('#welcome2').html(g_configVar['login-subtitle']);
 		$("#welcome2").attr("style",g_configVar['login-subtitle-style']);
-	} else 
+	} else
 		$('#welcome2').html(welcome2[LANG]);
 	//---------------------
 	if (g_configVar['login-subtext']!=undefined) {
 		$('#welcome3').html(g_configVar['login-subtext']);
 		$("#welcome3").attr("style",g_configVar['login-subtext-style']);
-	} else 
+	} else
 		$('#welcome3').html(welcome3[LANG]);
 	//---------------------
 	setConfigLoginColor(root,'login-background-color');
