@@ -119,7 +119,7 @@ function displayKarutaCreateAccount()
 			html += "</div>";
 			$('body').html(html);
 			$('body').append(alertBox());
-/*
+
 			$.ajax({
 				type : "GET",
 				dataType : "json",
@@ -130,7 +130,6 @@ function displayKarutaCreateAccount()
 					karuta_fileserver_date = data.buildTime;
 				}
 			});
-*/
 			$.ajax({
 				type : "GET",
 				dataType : "json",
