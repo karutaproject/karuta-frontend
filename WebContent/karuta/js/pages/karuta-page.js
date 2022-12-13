@@ -83,7 +83,6 @@ function displayKarutaPage()
 				url: serverBCK_API + "/fileserver-version",
 				data: "",
 				success: function (data) {
-					console.log(data.version);
 					karuta_fileserver_version = data.version;
 					karuta_fileserver_date = data.buildTime;
 				}
@@ -94,7 +93,6 @@ function displayKarutaPage()
 				url : serverBCK_API+"/version",
 				data: "",
 				success: function (data) {
-					console.log(data.version);
 					karuta_backend_version = data.version;
 					karuta_backend_date = data.buildTime;
 					var navbar_html = getNavBar('list',null);

@@ -247,7 +247,6 @@ function constructKarutaLogin(withKarutaLogin)
 		url : serverBCK_API+"/version",
 		data: "",
 		success: function (data) {
-			console.log(data.version);
 			karuta_backend_version = data.version;
 			karuta_backend_date = data.buildTime;
 		}
