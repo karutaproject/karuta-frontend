@@ -94,10 +94,34 @@ function callSend()
 }
 
 //==============================
+function callLoginCode()
+//==============================
+{
+	var data = "<credential><login>"+document.getElementById("useridentifier_new").value+"</login></credential>";
+	$.ajaxSetup({
+		Accept: "application/xml",
+		contentType: "application/xml"
+		});
+	$.ajax({
+		type : "POST",
+		dataType : "text",
+		url : serverBCK_API+"/credential/forgot",
+		data: data,
+		success : function(data) {
+			alertHTML(karutaStr[LANG]['code-sent']);
+		},
+		error : function(jqxhr,textStatus) {
+			alertHTML("Identification : "+karutaStr[LANG]['inexistent-user']);
+		}
+	});
+}
+
+
+//==============================
 function getLogin(encrypt_url,lang,withKarutaLogin,g_with_code)
 //==============================
 {
-	//g_with_code = true;
+//	g_with_code = true;
 	if (g_with_code==null)
 		g_with_code = false;
 
@@ -123,7 +147,7 @@ function getLogin(encrypt_url,lang,withKarutaLogin,g_with_code)
 		html += "</div>"
 		html += "<p><br/>"+karutaStr[LANG]['tipnewpassword']+"</p>";
 		html +="<div id='ask-code' style='display:none'>"
-		html += "	<input id='password' class='form-control' placeholder=\"Code\" type='password'>";
+		html += "	<input id='password' class='form-control' placeholder=\"Code\" type='text' autocomplete='off''>";
 		html += "	<button class='button-login' onclick=\"javascript:callSubmit('"+encrypt_url+"','"+lang+"')\">"+karutaStr[LANG]['login']+"</button>";
 		html += "</div>"
 		return html;
@@ -137,7 +161,7 @@ function callCode()
 {
 	$("#ask-email").hide();
 	document.getElementById("useridentifier").value = document.getElementById("useridentifier_new").value
-	callSend();
+	callLoginCode();
 	$("#ask-code").show();
 }
 
