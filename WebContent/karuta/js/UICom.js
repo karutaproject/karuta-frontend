@@ -161,7 +161,7 @@ var UICom =
 						var edittargetroles = ($("metadata-wad",child).attr('edittargetroles')==undefined)?'none':$("metadata-wad",child).attr('edittargetroles');
 						var delnoderoles = ($("metadata-wad",child).attr('delnoderoles')==undefined)?'none':$("metadata-wad",child).attr('delnoderoles');
 						$.ajax({
-							async : false,
+							async : true,
 							type : "GET",
 							dataType : "xml",
 							url : serverBCK_API+"/nodes/node/" + targetid + "?resources=true",

@@ -1777,7 +1777,7 @@ UIFactory["Node"].getSubNodes = function(root, idmoved, typemoved,semtag)
 			var label = UICom.structure["ui"][uuid].label_node[langcode].text();
 			var name = UICom.structure["ui"][uuid].asmtype;
 			if (name!='asmContext' && (typemoved != "asmUnit" || name != "asmUnit") && (uuid !=idmoved)){
-				if (semantictag.indexOf("welcome-unit")<0 && (semtag=='' || (semtag!='' && semantictag==semtag)))
+				if (semantictag.indexOf("welcome-unit")<0 && (semtag=='' || (semtag!='' && semantictag.indexOf(semtag)>-1)))
 					html += "<option uuid = '"+uuid+"'>"+label+"</option>";
 				html += UIFactory["Node"].getSubNodes(UICom.structure["tree"][uuid], idmoved, typemoved,semtag);
 			}
