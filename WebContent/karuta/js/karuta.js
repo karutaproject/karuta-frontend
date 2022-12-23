@@ -2264,7 +2264,8 @@ function getImg(semtag,data,langcode,fluid)
 //==============================
 {
 	var result = "";
-	if ($("filename[lang='"+languages[langcode]+"']",$("asmResource[xsi_type='Image']",$("metadata[semantictag='"+semtag+"']",data).parent())).text()!="") {
+	const filename = $("filename[lang='"+languages[langcode]+"']",$("asmResource[xsi_type='Image']",$("metadata[semantictag='"+semtag+"']",data).parent())).text();
+	if (filename!="<span style='color:red'> Not saved or Empty</span>") {
 		if (langcode==null)
 			langcode = LANGCODE;
 		if (fluid==null)
