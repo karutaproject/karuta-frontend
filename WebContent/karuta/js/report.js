@@ -1556,7 +1556,7 @@ g_report_actions['for-each-portfolio'] = function (destid,action,no,data)
  				items = eval("items"+test);
 			var value = "";
 			var condition = "";
-			var portfolioid = "";fro-eac-portfolio
+			var portfolioid = "";
 			//----------- optional sort -----------------------
 			var sortag = $(action).attr("sortag");
 			var sortelt = $(action).attr("sortelt");
