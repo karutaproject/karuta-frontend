@@ -149,7 +149,8 @@ var UICom =
 				var childTree = new UICom.Tree(child);
 				currentNode.children.push(id);
 				UICom.structure["tree"][id] = childTree;
-				UICom.structure["ui"][id] = new UIFactory["Node"](child);
+				if (UICom.structure["ui"][id]==undefined) // check if already parsed
+					UICom.structure["ui"][id] = new UIFactory["Node"](child);
 				if (name=='asmContext') {
 					resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",child);
 					resource_type = $(resource).attr("xsi_type");

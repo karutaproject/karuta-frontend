@@ -314,7 +314,7 @@ displayHTML["standard-node-card"]  =	"<div id='node_#uuid#' class='card #display
 //====================================================================
 displayHTML["standard-resource-card"]  =	"<div id='node_#uuid#' class='card #displayview# #displaytype# #nodetype# #semtag# #cssclass#  #resourcetype# #priv# #node-orgclass#'>" +
 											"	<div id='std_node_#uuid#' name='res-lbl-div' class='card-header'>" +
-											 "		<span id='buttons-#uuid#' class='buttons'></span>" +
+											"		<span id='menus-#uuid#' class='menus'/><span id='buttons-#uuid#' class='buttons'/>" +
 											 "		<span id='label_node_#uuid#' class='label-libelle'></span><span id='help_#uuid#' class='ihelp'></span>" +
 											 "	</div>" +
 											 "	<div class='card-body' name='res-div'>" +
