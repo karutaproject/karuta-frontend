@@ -33,7 +33,7 @@ function initKarutaPage()
 	$('body').append(messageBox());
 	$('body').append(imageBox());
 	$('body').append(LangueBox());
-	
+
 	//--------------------------
 	var spinner1 = new Spinner().spin(document.getElementById('wait-spin'));
 	var spinner2 = new Spinner().spin(document.getElementById('export-spin'));
@@ -76,26 +76,23 @@ function displayKarutaPage()
 			html += "<div id='main-exec-batch' class='container-fluid' style='display:none'></div>";
 			html += "<div id='main-exec-report' class='container-fluid' style='display:none'></div>";
 			$("#main-container").html(html);
-/*
+
 			$.ajax({
 				type: "GET",
 				dataType: "json",
-				url: fileserverBCK_API + "/version",
+				url: serverBCK_API + "/fileserver-version",
 				data: "",
 				success: function (data) {
-					console.log(data.version);
 					karuta_fileserver_version = data.version;
 					karuta_fileserver_date = data.buildTime;
 				}
 			});
-*/
 			$.ajax({
 				type : "GET",
 				dataType : "json",
 				url : serverBCK_API+"/version",
 				data: "",
-				success: function (data) {		
-					console.log(data.version);
+				success: function (data) {
 					karuta_backend_version = data.version;
 					karuta_backend_date = data.buildTime;
 					var navbar_html = getNavBar('list',null);
@@ -155,7 +152,7 @@ function increaseFontSize()
 //==============================
 {
 	var root = document.documentElement;
-	var coeffsize = root.style.getPropertyValue('--font-size-coeff') * 1.1;	
+	var coeffsize = root.style.getPropertyValue('--font-size-coeff') * 1.1;
 	root.style.setProperty('--font-size-coeff',coeffsize);
 }
 
@@ -164,7 +161,7 @@ function decreaseFontSize()
 //==============================
 {
 	var root = document.documentElement;
-	var coeffsize = root.style.getPropertyValue('--font-size-coeff') * 0.9;	
+	var coeffsize = root.style.getPropertyValue('--font-size-coeff') * 0.9;
 	root.style.setProperty('--font-size-coeff',coeffsize);
 }
 
