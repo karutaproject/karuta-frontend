@@ -411,6 +411,7 @@ karutaStr['en']['username']="Login";
 karutaStr['en']['lastname']="Last Name";
 karutaStr['en']['firstname']="First Name";
 karutaStr['en']['email']="Email";
+karutaStr['en']['code']="Code";
 karutaStr['en']['change_password']="Change Password";
 karutaStr['en']['change_name']="Change Name";
 karutaStr['en']['password']="Password";
@@ -429,7 +430,7 @@ karutaStr['en']['delete-temporary-users']="Delete All";
 karutaStr['en']['delete-empty-users']="Delete Selection";
 karutaStr['en']['c-a-s']="C/A/S";
 karutaStr['en']['too-much-users']="There are more than 200 users. Click 'See' button to display them or search using the input above."
-karutaStr['en']['new-code']="Send our email address.You will receive a code to connect."
+karutaStr['en']['new-code']="Send your login.You will receive a code to connect."
 
 //=========================================
 //========== ROLES ========================

@@ -726,7 +726,6 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 					html += "label_"+languages[j]+"=\"fileid-"+uuid+"\" ";
 				}
 				html += " style=\""+style+"\">";
-				html += ">";
 				
 				if (display_code)
 					html += code+" ";
