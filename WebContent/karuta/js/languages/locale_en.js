@@ -76,6 +76,8 @@ karutaStr['en']['confirm-password']="Confirm password";
 karutaStr['en']['password-mismatch']="The two passwords do not match.";
 karutaStr['en']['saved']="Saved";
 karutaStr['en']['password-sent']="A new password has been sent by email.";
+karutaStr['en']['code-sent']="A code has been sent by email.";
+karutaStr['en']['message-code-text']="Your code :";
 karutaStr['en']['new-account']="You don't have an account?";
 karutaStr['en']['sign-up']="Sign Up!";
 karutaStr['en']['disconnected']="Oups! Maybe you have accidentally been disconnected! Reload the page to verify.";
@@ -409,6 +411,7 @@ karutaStr['en']['username']="Login";
 karutaStr['en']['lastname']="Last Name";
 karutaStr['en']['firstname']="First Name";
 karutaStr['en']['email']="Email";
+karutaStr['en']['code']="Code";
 karutaStr['en']['change_password']="Change Password";
 karutaStr['en']['change_name']="Change Name";
 karutaStr['en']['password']="Password";
@@ -427,7 +430,7 @@ karutaStr['en']['delete-temporary-users']="Delete All";
 karutaStr['en']['delete-empty-users']="Delete Selection";
 karutaStr['en']['c-a-s']="C/A/S";
 karutaStr['en']['too-much-users']="There are more than 200 users. Click 'See' button to display them or search using the input above."
-karutaStr['en']['new-code']="Send our email address.You will receive a code to connect."
+karutaStr['en']['new-code']="Send your login.You will receive a code to connect."
 
 //=========================================
 //========== ROLES ========================

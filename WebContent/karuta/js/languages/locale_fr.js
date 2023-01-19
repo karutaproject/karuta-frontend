@@ -76,6 +76,8 @@ karutaStr['fr']['confirm-password']="Confirmez mot de passe";
 karutaStr['fr']['password-mismatch']="Les deux mots de passe ne correspondent pas.";
 karutaStr['fr']['saved']="Enregistré";
 karutaStr['fr']['password-sent']="Un nouveau mot de passe a été envoyé par courriel.";
+karutaStr['fr']['code-sent']="Un code a été envoyé par courriel.";
+karutaStr['fr']['message-code-text']="Votre code :";
 karutaStr['fr']['new-account']="Vous n'avez pas de compte?";
 karutaStr['fr']['sign-up']="Inscrivez-vous!";
 karutaStr['fr']['disconnected']="Oups! Erreur de sauvegarde. Vous avez peut-être été accidentellement déconnecté! Vérifiez en rechargeant la page.";
@@ -409,6 +411,7 @@ karutaStr['fr']['username']="Login";
 karutaStr['fr']['lastname']="Nom";
 karutaStr['fr']['firstname']="Prénom";
 karutaStr['fr']['email']="Courriel";
+karutaStr['fr']['code']="Code";
 karutaStr['fr']['change_password']="Changer le mot de passe";
 karutaStr['fr']['change_name']="Changer vos prénom et nom";
 karutaStr['fr']['password']="Mot de passe";
@@ -427,7 +430,7 @@ karutaStr['fr']['delete-temporary-users']="Supprimer tous";
 karutaStr['fr']['delete-empty-users']="Supprimer la sélection";
 karutaStr['fr']['c-a-s']="C/A/S";
 karutaStr['fr']['too-much-users']="Il y a plus de 200 usagers actifs. Cliquez sur le bouton 'Voir' pour les afficher ou faites une recherche ci-dessus."
-karutaStr['fr']['new-code']="Envoyez votre adresse courriel. Vous recevrez une code pour vous connecter."
+karutaStr['fr']['new-code']="Envoyez votre login. Vous recevrez une code pour vous connecter."
 
 //=========================================
 //========== ROLES ========================

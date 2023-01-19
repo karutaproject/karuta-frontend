@@ -94,19 +94,66 @@ function callSend()
 }
 
 //==============================
-function getLogin(encrypt_url,lang,withKarutaLogin,g_with_code)
+function callLoginCode()
 //==============================
 {
-	//g_with_code = true;
-	if (g_with_code==null)
-		g_with_code = false;
+	const identifier = document.getElementById("useridentifier").value;
+	if (identifier=='root' || identifier.substring(0,5)=='root#') {
+		let html = "";
+		html += "	<input id='password' class='form-control' placeholder=\""+karutaStr[LANG]['password']+"\" type='password'>";
+		html += "	<button class='button-login' onclick=\"javascript:callSubmit('"+encrypt_url+"','"+lang+"')\">"+karutaStr[LANG]['login']+"</button>";
+		$("#ask-login").hide();
+		$("#ask-code").html(html);
+	}
+	else {
+		var data = "<credential><login>"+identifier+"</login></credential>";
+		$.ajax({
+			Accept: "application/xml",
+			contentType: "application/xml",
+			type : "POST",
+			dataType : "text",
+			url : serverBCK_API+"/credential/forgot",
+			data: data,
+			success : function(data) {
+				alertHTML(karutaStr[LANG]['code-sent']);
+				let html = "";
+				html += "	<input id='password' class='form-control' placeholder=\""+karutaStr[LANG]['code']+"\" type='text' autocomplete='off''>";
+				html += "	<button class='button-login' onclick=\"javascript:callSubmit('"+encrypt_url+"','"+lang+"')\">"+karutaStr[LANG]['login']+"</button>";	
+				$("#ask-login").hide();
+				$("#ask-code").html(html);
+			},
+			error : function(jqxhr,textStatus) {
+				alertHTML("Identification : "+karutaStr[LANG]['inexistent-user']);
+			}
+		});
+	}
+}
+
+//==============================
+function getLogin(encrypt_url,lang,withKarutaLogin)
+//==============================
+{
+	let result ="";
+	try {
+		result = getLogin2(encrypt_url,lang,withKarutaLogin,g_login_code);
+	} catch (ex) {// if g_login_code is undefined
+		const g_login_code = false;
+		result = getLogin2(encrypt_url,lang,withKarutaLogin,g_login_code);
+	}
+	return result;
+}
+
+//==============================
+function getLogin2(encrypt_url,lang,withKarutaLogin,g_login_code)
+//==============================
+{
 
 	var html = "";
 	html += "<div id='connection-cas'>";
 	html += "	<h5 id='connection-cas1'>"+karutaStr[LANG]['connection-cas1']+"</h5>";
 	html += "	<button class='button-login' onclick='javascript:callCAS()'>"+karutaStr[LANG]['login']+"</button>";
 	html += "</div>"
-	if (withKarutaLogin && !g_with_code) {
+	if (withKarutaLogin && !g_login_code) {
 		html += "<div id='login-karuta'>"
 		html += "	<h5 id='connection-cas2'>"+karutaStr[LANG]['connection-cas2']+"</h5>";
 		html += "	<input id='useridentifier' class='form-control' placeholder=\""+karutaStr[LANG]['username']+"\" type='text'>";
@@ -114,17 +161,14 @@ function getLogin(encrypt_url,lang,withKarutaLogin,g_with_code)
 		html += "	<button class='button-login' onclick=\"javascript:callSubmit('"+encrypt_url+"','"+lang+"')\">"+karutaStr[LANG]['login']+"</button>";
 		html += "</div>"
 	}
-	if (g_with_code!=undefined && g_with_code) {
-		html +="<div id='ask-email'>"
+	if (g_login_code) {
+		html +="<div id='ask-login'>"
 		html += "<p><br/>"+karutaStr[LANG]['new-code']+"</p>";
-		html += "<input id='useridentifier_new' class='form-control' placeholder=\""+karutaStr[LANG]['email']+"\" type='text'/>";
-		html += "<input id='useridentifier' type='hidden'/>";
+		html += "<input id='useridentifier' class='form-control' placeholder=\""+karutaStr[LANG]['username']+"\" type='text'/>";
 		html += "<button id='form-send' onclick='callCode()'>"+karutaStr[LANG]['button-send']+"</button>";
 		html += "</div>"
 		html += "<p><br/>"+karutaStr[LANG]['tipnewpassword']+"</p>";
-		html +="<div id='ask-code' style='display:none'>"
-		html += "	<input id='password' class='form-control' placeholder=\"Code\" type='password'>";
-		html += "	<button class='button-login' onclick=\"javascript:callSubmit('"+encrypt_url+"','"+lang+"')\">"+karutaStr[LANG]['login']+"</button>";
+		html +="<div id='ask-code'>"
 		html += "</div>"
 		return html;
 	}
@@ -135,10 +179,7 @@ function getLogin(encrypt_url,lang,withKarutaLogin,g_with_code)
 function callCode()
 //==============================
 {
-	$("#ask-email").hide();
-	document.getElementById("useridentifier").value = document.getElementById("useridentifier_new").value
-	callSend();
-	$("#ask-code").show();
+	callLoginCode();
 }
 
 //==============================
