@@ -945,6 +945,7 @@ function previewPage(uuid,depth,type,langcode,edit)
 		url : url,
 		success : function(data) {
 			UICom.parseStructure(data,false);
+			setVariables(data);
 			if (edit==null)
 				g_report_edit = false;
 			else

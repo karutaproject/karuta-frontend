@@ -178,6 +178,7 @@ UIFactory["Get_Get_Resource"].prototype.getView = function(dest,type,langcode)
 			html += label;
 		if (($(this.code_node).text()).indexOf("&")>-1)
 			html += " ["+$(this.value_node).text()+ "] ";
+		html = "<span class='"+ cleanCode(code) + "'>" + html + "</span>";
 	}
 	if (this.preview)
 		html+= "&nbsp;<span class='button preview-button fas fa-binoculars' onclick=\"previewPage('"+this.uuid_node.text()+"',100,'standard') \" data-title='"+karutaStr[LANG]["preview"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
