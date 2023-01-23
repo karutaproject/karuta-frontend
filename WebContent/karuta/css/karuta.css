@@ -2573,7 +2573,7 @@ s table.tablesorter th.restore {
   padding-left: 40px;
 }
 
-/* for submitted / not submitted alert */
+/* for submitted / not submitted alert / sahring */
 .hidesubmitbutton .submitbutton {
   display: none;
 }
@@ -2613,6 +2613,10 @@ s table.tablesorter th.restore {
 }
 
 .hide-span-label span[name=label] {
+  display: none;
+}
+
+.hidesharingbutton .sharing-button {
   display: none;
 }
 

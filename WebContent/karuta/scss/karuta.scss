@@ -2727,7 +2727,7 @@ table.tablesorter th.restore {
 		padding-left:40px;
 	}
 
-/* for submitted / not submitted alert */
+/* for submitted / not submitted alert / sahring */
 
 .hidesubmitbutton .submitbutton {display:none}
 .hidesubmitbutton .showsubmitbutton .submitbutton {background-color:red;display:block}
@@ -2756,6 +2756,8 @@ table.tablesorter th.restore {
 .hide-span-label {
 	span[name=label] {display:none}
 }
+
+.hidesharingbutton .sharing-button {display:none}
 
 /* ====================
 	EUROPASS
