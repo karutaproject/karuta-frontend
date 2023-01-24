@@ -39,7 +39,7 @@ menuItems['import-today-date']= ["trgt","function"];
 menuItems['import-component-w-today-date']= ["trgt","function"];
 menuItems['get_single']= ["trgt"];
 menuItems['menu']= ["item"];
-menuItems['item']= ["import","function","switchBTW","import_get_multiple","import_get_get_multiple","execReportforBatchCSV","import-today-date","import-component-w-today-date"];
+menuItems['item']= ["import","function","switchBTW","import_get_multiple","import_get_get_multiple","execReportforBatchCSV","import-component-w-today-date"];
 menuItems['g_actions']= ["import-component","import-elts-from","import-proxy"];
 menuItems['gg_search']= ["search-source","#or","search-in-parent","#or","search-w-parent"];
 menuItems['gg_actions']= ["import-component","import-elts-from","#line","import","import-component-w-today-date","import-today-date"];
@@ -1217,6 +1217,12 @@ UIFactory["Node"].getXmlItemMenu = function(node,parentid,item,title,databack,ca
 		}
 
 		//-----------------------------------------------------------
+		//-------- import import-today-date -------------
+		//-----------------------------------------------------------
+		else if (type=='import-today-date') {
+			onclick += "importAndSetDateToday('"+parentid+"','"+parentid+"','','karuta.karuta-resources','Calendar','Calendar');";
+		}
+		//-----------------------------------------------------------
 		//-------- import import-component-w-today-date -------------
 		//-----------------------------------------------------------
 		else if (type=='import' || type=='import-component-w-today-date') {
@@ -1288,7 +1294,7 @@ UIFactory["Node"].getXmlItemMenu = function(node,parentid,item,title,databack,ca
 			let actions = "";
 			let imports = "";
 			// --------- boxlabel ------------
-			let boxlabel = replaceVariable( ($("boxlabel",itemelts[i]).length>0)?$("boxlabel",itemelts[i]).text():"" );
+			let boxlabel = replaceVariable( ($("boxlabel",itemelts[i]).text().length>0)?UIFactory.Node.getMenuLabel($("boxlabel",itemelts[i]).text(),LANGCODE):UIFactory.Node.getMenuLabel($("itemlabel",item).text(),LANGCODE));
 			// --------- unique ------------
 			let unique = ($("unique",itemelts[i]).length>0)?$("unique",itemelts[i]).text():"";
 			// --------- search ------------
@@ -1352,7 +1358,7 @@ UIFactory["Node"].getXmlItemMenu = function(node,parentid,item,title,databack,ca
 		//-----------------------------------------------------------
 		else if (type=='import_get_get_multiple') {
 			// --------- boxlabel ------------
-			let boxlabel = replaceVariable( ($("boxlabel",itemelts[i]).length>0)?$("boxlabel",itemelts[i]).text():"" );
+			let boxlabel = replaceVariable( ($("boxlabel",itemelts[i]).text().length>0)?UIFactory.Node.getMenuLabel($("boxlabel",itemelts[i]).text(),LANGCODE):UIFactory.Node.getMenuLabel($("itemlabel",item).text(),LANGCODE));
 			// --------- unique ------------
 			let unique = ($("unique",itemelts[i]).length>0)?$("unique",itemelts[i]).text():"";
 			// --------- parent ------------
