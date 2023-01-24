@@ -446,8 +446,11 @@ function setLoginTechnicalVariables()
 			loadLanguages(function() {
 				getLanguage();
 			});
-			//---------Tecnical Support--------------
-			g_configVar['technical-support'] = getText('config-technical-support','Field','text',data,LANGCODE);
+			//---------Technical Support--------------
+			g_configVar['tech-support'] = getText('config-tech-support','Get_Resource','value',data);
+			g_configVar['tech-email'] = getText('config-tech-email','Field','text',data,LANGCODE);
+			g_configVar['tech-url'] = getText('config-technical-support','Field','text',data,LANGCODE);
+			g_configVar['technical-support'] = getText('config-technical-support','Field','text',data,LANGCODE); // for backward compatibility
 			//---------Navigation Bar--------------
 			g_configVar['navbar-brand-logo'] = getImg('config-navbar-brand-logo',data,LANGCODE);
 			g_configVar['navbar-brand-logo-style'] = getContentStyle('config-navbar-brand-logo',data);
