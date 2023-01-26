@@ -939,6 +939,9 @@ body,
 #main-portfolio #portfolio-container .menus a {
   color: var(--portfolio-buttons-color);
 }
+#main-portfolio #portfolio-container .menus .dropdown .btn {
+  color: var(--portfolio-buttons-color);
+}
 #main-portfolio #portfolio-container .button {
   color: var(--portfolio-buttons-color);
 }
