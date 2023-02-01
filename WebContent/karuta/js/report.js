@@ -2217,7 +2217,7 @@ g_report_actions['variable'] = function (destid,action,no,data)
 	var attr_help = "";
 	var prefix_id = "";
 	try {
-		var varlabel = $(action).attr("varlabel");
+		var varlabel = replaceVariable($(action).attr("varlabel"));
 		var ref = $(action).attr("ref");
 		var aggregatetype = $(action).attr("aggregatetype");
 		var fct = $(action).attr("function");
