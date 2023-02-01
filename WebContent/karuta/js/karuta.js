@@ -2638,7 +2638,7 @@ function replaceVariable(text,node,withquote)
 				var i = text.substring(text.indexOf("[")+1,text.indexOf("]"));
 				i = replaceVariable(i);
 				if (g_variables[variable_value]!=undefined && g_variables[variable_value].length>=i)
-					text = g_variables[variable_value][i];
+					text = text.replace("##"+variable_name+"##", g_variables[variable_value][i]);
 				}
 			n++; // to avoid infinite loop
 		}
