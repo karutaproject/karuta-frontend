@@ -2873,12 +2873,12 @@ g_actions['import-node'] = function importNode(node)
 	else
 		srcecode = g_trees[srcecode][1];
 	
-	var srcetag = source.substring(idx_source+1);
+	var srcetag = replaceBatchVariable(replaceVariable(b_replaceVariable(source.substring(idx_source+1))));
 	//------------------------------------
 	var select = $(node).attr("select");
 	var idx = select.lastIndexOf(".");
 	var treeref = select.substring(0,idx);
-	var semtag = select.substring(idx+1);
+	var semtag = replaceBatchVariable(replaceVariable(b_replaceVariable(select.substring(idx+1))));
 	//------------------------------------
 	if (select.indexOf('#current_node')+select.indexOf('#uuid')>-2){
 		if (select.indexOf('#current_node')>-1)
