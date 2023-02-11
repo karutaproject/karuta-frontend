@@ -954,6 +954,8 @@ UIFactory["Get_Get_Resource"].prototype.parse = function(destid,type,langcode,da
 	if (type.indexOf('multiple')>-1) {
 	//------------------------------------------------------------
 	//------------------------------------------------------------
+		let html = "<div class='selectAll'><input type='checkbox' onchange='toggleCheckboxMultiple(this)'> "+karutaStr[LANG]['select-deselect']+"</div>";
+		$("#"+destid).append(html);
 		var inputs = "<div id='get_get_multiple' class='multiple'></div>";
 		var inputs_obj = $(inputs);
 		//-----search for already added------------------

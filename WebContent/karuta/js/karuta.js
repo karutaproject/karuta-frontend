@@ -3424,6 +3424,13 @@ function decode(s) {
 	return result
 }
 
+function toggleCheckboxMultiple(obj) {
+	if (obj.checked) 
+		$('input[name*=multiple]').prop('checked', true);
+	else 
+		$('input[name*=multiple]').prop('checked', false)
+}
+
 //=========================================================
 // Functions for Resources
 //=========================================================

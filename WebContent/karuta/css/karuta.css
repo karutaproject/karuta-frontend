@@ -76,6 +76,12 @@ body,
   cursor: pointer;
 }
 
+.selectAll {
+  border-bottom: 1px solid var(--portfolio-resource-border-color);
+  margin-bottom: 10px;
+  font-size: 80%;
+}
+
 /* ====================== */
 /*    @DRAFT@       */
 /* ====================== */

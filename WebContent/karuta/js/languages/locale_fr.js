@@ -108,6 +108,7 @@ karutaStr["fr"]["copied"] = "Copié";
 karutaStr["fr"]["waitreport"] = "Patience, le rapport est exécuté sur le serveur. Revenez dans quelques minutes pour visualiser le rapport.";
 karutaStr["fr"]["instruction-export-menu"] = "Copier le menu Ajouter et le coller dans l'élément où vous voulez l'importer.";
 karutaStr["fr"]["back"] = "Cliquer pour revenir en arrière";
+karutaStr["fr"]["select-deselect"] = "Sélectionner/Désélectionner tout";
 
 //=========================================
 //========== ERRORS =======================
