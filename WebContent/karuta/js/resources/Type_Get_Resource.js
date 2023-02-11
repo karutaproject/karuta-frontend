@@ -1906,7 +1906,7 @@ function import_get_multiple(parentid,targetid,title,query_portfolio,query_semta
 		actions.push(JSON.parse(acts[i].replaceAll("|","\"")));
 	}
 	let js1 = "$('#edit-window').modal('hide')";
-	let js2 = "this.setAttribute('disabled',true);";
+	let js2 = "this.setAttribute('disabled',true);$('#edit-window').modal('hide');";
 	for (let i=0;i<actions.length;i++) {
 		//-----------------
 		let fctjs = "";
