@@ -958,10 +958,10 @@ function previewPage(uuid,depth,type,langcode,edit)
 		},
 		error : function() {
 			var html = "";
-			html += "<div>" + karutaStr[languages[langcode]]['error-notfound'] + "</div>";
+			html += "<div style='margin:50px'>" + karutaStr[languages[langcode]]['error-notfound'] + "</div>";
 			$("#preview-window-body-"+uuid).html(html);
 			$("#previewbackdrop-"+uuid).show();
-			$("#preview-window-"+uuid).show();
+			$("#preview-"+uuid).show();
 			window.scrollTo(0,0);
 		}
 	});
