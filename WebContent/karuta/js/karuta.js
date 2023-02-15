@@ -1400,17 +1400,20 @@ function getSendSharingURL(nodeid,uuid,sharewithrole,sharetoemail,sharetoroles,l
 		}
 		if (sharetoemail!='' && shareduration!='' && USER.email!=null && sharetoemail!=USER.email) {
 			getPublicURL(uuid,sharetoemail,sharerole,sharewithrole,sharelevel,shareduration,langcode,sharetomessage,sharetoobj);
-		}
-		if (shareoptions.indexOf('function:')>-1) {
-			var functionelts = shareoptions.substring(9).split('/');
-			var functionstring = functionelts[0] + "(";
-			for (var i=1; i<functionelts.length; i++) {
-				functionstring += functionelts[i];
-				if (i<functionelts.length-1)
-					functionstring += ",";
+			if (shareoptions.indexOf('function:')>-1) {
+				var functionelts = shareoptions.substring(9).split('/');
+				var functionstring = functionelts[0] + "(";
+				for (var i=1; i<functionelts.length; i++) {
+					functionstring += functionelts[i];
+					if (i<functionelts.length-1)
+						functionstring += ",";
+				}
+				functionstring += ")";
+				eval (functionstring);
 			}
-			functionstring += ")";
-			eval (functionstring);
+		} else if (sharetoemail==USER.email){
+			let html = karutaStr[LANG]["noemail-yourself"];
+			$("#edit-window-body").html(html);
 		}
 	});
 	$("#edit-window-footer").append(obj);
