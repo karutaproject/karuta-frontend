@@ -512,18 +512,21 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 	let tableau1 = new Array();
 	let tableau2 = new Array();
 	for ( var i = 0; i < $(nodes).length; i++) {
-		let resource = null;
-		if ($("asmResource",nodes[i]).length==3)
-			resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",nodes[i]); 
-		else
-			resource = $("asmResource[xsi_type='nodeRes']",nodes[i]);
-		let code = $('code',resource).text();
-		let libelle = $(srce+"[lang='"+languages[langcode]+"']",resource).text();
-		if (code.indexOf("~")<0)   // si ~ on trie sur le libellé sinon sur le code
-			tableau1[i] = [code,nodes[i]];
-		else
-			tableau1[i] = [libelle,nodes[i]]
-		tableau2[i] = {'code':code,'libelle':libelle};
+		const langnotvisible = ($("metadata-wad",nodes[i]).attr('langnotvisible')==undefined)?'':$("metadata-wad",nodes[i]).attr('langnotvisible');
+		if (langnotvisible!=karutaStr[languages[LANGCODE]]['language']) {
+			let resource = null;
+			if ($("asmResource",nodes[i]).length==3)
+				resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",nodes[i]); 
+			else
+				resource = $("asmResource[xsi_type='nodeRes']",nodes[i]);
+			let code = $('code',resource).text();
+			let libelle = $(srce+"[lang='"+languages[langcode]+"']",resource).text();
+			if (code.indexOf("~")<0)   // si ~ on trie sur le libellé sinon sur le code
+				tableau1[i] = [code,nodes[i]];
+			else
+				tableau1[i] = [libelle,nodes[i]]
+			tableau2[i] = {'code':code,'libelle':libelle};
+		}
 	}
 	let newTableau1 = tableau1.sort(sortOn1);
 	var tabadded = [];

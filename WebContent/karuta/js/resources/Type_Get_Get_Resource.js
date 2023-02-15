@@ -693,13 +693,16 @@ UIFactory["Get_Get_Resource"].prototype.parse = function(destid,type,langcode,da
 	var nodes = $("node",data);
 	var tableau1 = new Array();
 	for ( var i = 0; i < $(nodes).length; i++) {
-		var resource = null;
-		if ($("asmResource",nodes[i]).length==3)
-			resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",nodes[i]); 
-		else
-			resource = $("asmResource[xsi_type='nodeRes']",nodes[i]);
-		var code = $('code',resource).text();
-		tableau1[i] = [code,nodes[i]];
+		const langnotvisible = ($("metadata-wad",nodes[i]).attr('langnotvisible')==undefined)?'':$("metadata-wad",nodes[i]).attr('langnotvisible');
+		if (langnotvisible!=karutaStr[languages[LANGCODE]]['language']) {
+			var resource = null;
+			if ($("asmResource",nodes[i]).length==3)
+				resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",nodes[i]); 
+			else
+				resource = $("asmResource[xsi_type='nodeRes']",nodes[i]);
+			var code = $('code',resource).text();
+			tableau1[i] = [code,nodes[i]];
+		}
 	}
 	var newTableau1 = tableau1.sort(sortOn1);
 	var tabadded = [];
