@@ -273,7 +273,6 @@ $.fn.nodeValueContains = function (options)
 	var result = $(this).has(">asmResource[xsi_type='nodeRes']>value:contains('"+parameters.value+"')");
 	if (parameters.function!="")
 		result = eval("$(result)."+parameters.function);
-	return result;
 };
 $.fn.test_nodeValueContains = function (options) { return result = ($(this).nodeValueContains(options).length>0) ? true : false;};
 //=====================================
