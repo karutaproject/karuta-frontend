@@ -149,6 +149,10 @@ function getNavBar(type,portfolioid,edit)
 		html += "	<div class='dropdown-menu versions' aria-labelledby='navbar-brand-logo'>";
 		html += "		<a class='dropdown-item'><b>Versions</b></a>";
 		html += "		<div class='dropdown-divider'></div>";
+		if (karuta_version=='@project.version@' && typeof karuta_version_eportfolium!='undefined') {
+			karuta_version = karuta_version_eportfolium;
+			karuta_date = karuta_date_eportfolium;
+		}
 		html += "		<a class='dropdown-item'>Karuta-frontend : "+karuta_version+" (" +karuta_date+")</a>";
 		html += "		<a class='dropdown-item'>Karuta-backend : "+karuta_backend_version+" (" +karuta_backend_date+")</a>";
 		html += "		<a class='dropdown-item'>Karuta-fileserver : "+karuta_fileserver_version+" (" +karuta_fileserver_date+")</a>";
@@ -1396,17 +1400,20 @@ function getSendSharingURL(nodeid,uuid,sharewithrole,sharetoemail,sharetoroles,l
 		}
 		if (sharetoemail!='' && shareduration!='' && USER.email!=null && sharetoemail!=USER.email) {
 			getPublicURL(uuid,sharetoemail,sharerole,sharewithrole,sharelevel,shareduration,langcode,sharetomessage,sharetoobj);
-		}
-		if (shareoptions.indexOf('function:')>-1) {
-			var functionelts = shareoptions.substring(9).split('/');
-			var functionstring = functionelts[0] + "(";
-			for (var i=1; i<functionelts.length; i++) {
-				functionstring += functionelts[i];
-				if (i<functionelts.length-1)
-					functionstring += ",";
+			if (shareoptions.indexOf('function:')>-1) {
+				var functionelts = shareoptions.substring(9).split('/');
+				var functionstring = functionelts[0] + "(";
+				for (var i=1; i<functionelts.length; i++) {
+					functionstring += functionelts[i];
+					if (i<functionelts.length-1)
+						functionstring += ",";
+				}
+				functionstring += ")";
+				eval (functionstring);
 			}
-			functionstring += ")";
-			eval (functionstring);
+		} else if (sharetoemail==USER.email){
+			let html = karutaStr[LANG]["noemail-yourself"];
+			$("#edit-window-body").html(html);
 		}
 	});
 	$("#edit-window-footer").append(obj);
