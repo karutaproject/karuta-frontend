@@ -1721,6 +1721,21 @@ function toggleContent(uuid) {
 }
 
 //==================================
+function toggleContentInReport(uuid) {
+//==================================
+	if ($("#toggleContent_"+uuid).hasClass("fa-plus")) {
+		$("#toggleContent_"+uuid).removeClass("fa-plus")
+		$("#toggleContent_"+uuid).addClass("fa-minus")
+		$("#content-"+uuid).show();
+	} else {
+		$("#toggleContent_"+uuid).removeClass("fa-minus")
+		$("#toggleContent_"+uuid).addClass("fa-plus")
+		$("#content-"+uuid).hide();
+	}
+}
+
+
+//==================================
 function toggleSharing(uuid) {
 //==================================
 	if ($("#toggleSharing_"+uuid).hasClass("fa-minus")) {

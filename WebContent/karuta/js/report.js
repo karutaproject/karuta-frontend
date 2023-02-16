@@ -853,6 +853,37 @@ function genDashboardContent(destid,uuid,parent,root_node)
 //#######################################################################################################################################
 //#######################################################################################################################################
 
+//=============================================================================
+//=============================================================================
+//================================= COLLAPSABLE SECTION =======================
+//=============================================================================
+//=============================================================================
+
+//==================================
+g_report_actions['collapsable-section'] = function (destid,action,no,data)
+//==================================
+{
+	//---------------------------
+	var titre = $(">titre",action).text();
+	titre = replaceVariable(titre);
+	var style = replaceVariable($(action).attr("style"));
+	var cssclass = replaceVariable($(action).attr("class"));
+	//-----------------
+	var html = "<div id='collapsable"+destid+'-'+no+"' style='margin-bottom:5px;"+style+"' class='"+cssclass+"'>";
+	html += "<span id='toggleContent_"+destid+'-'+no+"' style='float:left' class='button fas fa-minus' onclick=\"toggleContentInReport('"+destid+'-'+no+"')\"></span>";
+	html += "<span name='titre'>"+titre+"</span>";
+	html += "<div id='content-"+destid+'-'+no+"'></div>";
+	html += "</div>";
+	$("#"+destid).append($(html));
+	//---------------------------
+	var actions = $(action).children();
+	for (let i=0; i<actions.length;i++){
+		var tagname = $(actions[i])[0].tagName;
+		if (g_report_actions[tagname]!=undefined)
+			g_report_actions[tagname]('content-'+destid+'-'+no,actions[i],i.toString(),data);
+	}
+}
+
 
 //=============================================================================
 //=============================================================================
@@ -1113,7 +1144,6 @@ g_report_actions['goparent'] = function (destid,action,no,data)
 		var tagname = $(actions[i])[0].tagName;
 		g_report_actions[tagname](destid,actions[i],no+'-'+i.toString(),parent);
 	}
-
 }
 
 //=============================================================================
@@ -1216,7 +1246,7 @@ g_report_actions['row'] = function (destid,action,no,data)
 	var cssclass = replaceVariable($(action).attr("class"));
 	if (cssclass==undefined)
 		cssclass="";
-	var html = "<tr id='"+destid+'-'+no+"' style='"+style+"' class='"+cssclass+"'></table>";
+	var html = "<tr id='"+destid+'-'+no+"' style='"+style+"' class='"+cssclass+"'></tr>";
 	$("#"+destid).append($(html));
 	//---------------------------
 	var actions = $(action).children();
