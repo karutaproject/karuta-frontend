@@ -164,9 +164,11 @@ $.fn.hasNotChildSemtagAndResourceCodeContains = function (options)   // hasChild
 $.fn.resourceCodeContains = function (options)
 //=====================================
 {
-	var defaults= { "value":"v"};
+	var defaults= { "value":"v","function":""};
 	var parameters = $.extend(defaults, options);
 	var result = $(this).has(">asmResource[xsi_type!='context'][xsi_type!='nodeRes']>code:contains('"+parameters.value+"')");
+	if (parameters.function!="")
+		result = eval("$(result)."+parameters.function);
 	return result;
 };
 $.fn.test_resourceCodeContains = function (options) { return result = ($(this).resourceCodeContains(options).length>0) ? true : false;};
@@ -176,9 +178,11 @@ $.fn.test_resourceCodeContains = function (options) { return result = ($(this).r
 $.fn.resourceTextContains = function (options)
 //=====================================
 {
-	var defaults= { "value":"v"};
+	var defaults= { "value":"v","function":""};
 	var parameters = $.extend(defaults, options);
 	var result = $(this).has(">asmResource[xsi_type!='context'][xsi_type!='nodeRes']>text[lang='"+languages[LANGCODE]+"']:contains('"+parameters.value+"')");
+	if (parameters.function!="")
+		result = eval("$(result)."+parameters.function);
 	return result;
 };
 $.fn.test_resourceTextContains = function (options) { return result = ($(this).resourceTextContains(options).length>0) ? true : false;};
@@ -188,9 +192,11 @@ $.fn.test_resourceTextContains = function (options) { return result = ($(this).r
 $.fn.resourceValueContains = function (options)
 //=====================================
 {
-	var defaults= { "value":"v"};
+	var defaults= { "value":"v","function":""};
 	var parameters = $.extend(defaults, options);
 	var result = $(this).has(">asmResource[xsi_type!='context'][xsi_type!='nodeRes']>value:contains('"+parameters.value+"')");
+	if (parameters.function!="")
+		result = eval("$(result)."+parameters.function);
 	return result;
 };
 $.fn.test_resourceValueContains = function (options) { return result = ($(this).resourceValueContains(options).length>0) ? true : false;};
@@ -200,32 +206,36 @@ $.fn.test_resourceValueContains = function (options) { return result = ($(this).
 $.fn.resourceFilenameContains = function (options)
 //=====================================
 {
-	var defaults= { "value":"v"};
+	var defaults= { "value":"v","function":""};
 	var parameters = $.extend(defaults, options);
 	var result = $(this).has(">asmResource[xsi_type!='context'][xsi_type!='nodeRes']>filename[lang='"+languages[LANGCODE]+"']:contains('"+parameters.value+"')");
+	if (parameters.function!="")
+		result = eval("$(result)."+parameters.function);
 	return result;
 };
 $.fn.test_resourceFilenameContains = function (options) { return result = ($(this).resourceFilenameContains(options).length>0) ? true : false;};
 //=====================================
 
 //=====================================
-$.fn.nodeCodeContains = function (options)
+$.fn.nodeCodeContains = function (options) // nodeCodeContains({"value":"12","function:'last()'"})
 //=====================================
 {
-	var defaults= { "value":"v"};
+	var defaults= { "value":"v","function":""};
 	var parameters = $.extend(defaults, options);
 	var result = $(this).has(">asmResource[xsi_type='nodeRes']>code:contains('"+parameters.value+"')");
+	if (parameters.function!="")
+		result = eval("$(result)."+parameters.function);
 	return result;
 };
 $.fn.test_nodeCodeContains = function (options) { return result = ($(this).nodeCodeContains(options).length>0) ? true : false;};
 //=====================================
 
 //=====================================
-$.fn.nodeCodeEquals = function (options) // nodeCodeEquals({"value":"12"})
+$.fn.nodeCodeEquals = function (options) // nodeCodeEquals({"value":"12","function:'last()'"})
 //=====================================
 {
 	var result = [];
-	var defaults= { "value":"v"};
+	var defaults= { "value":"v", "function":""};
 	var parameters = $.extend(defaults, options);
 	var nodes = $(this).has(">asmResource[xsi_type='nodeRes']>code:contains('"+parameters.value+"')");
 	for (let i=0; i<nodes.length;i++){
@@ -233,6 +243,8 @@ $.fn.nodeCodeEquals = function (options) // nodeCodeEquals({"value":"12"})
 		if (code == parameters.value)
 			result.push(nodes[i]);
 	}
+	if (parameters.function!="")
+		result = eval("$(result)."+parameters.function);
 	return result;
 };
 $.fn.test_nodeCodeEquals = function (options) { return result = ($(this).nodeCodeEquals(options).length>0) ? true : false;};
@@ -242,9 +254,11 @@ $.fn.test_nodeCodeEquals = function (options) { return result = ($(this).nodeCod
 $.fn.nodeLabelContains = function (options)
 //=====================================
 {
-	var defaults= { "value":"v"};
+	var defaults= { "value":"v","function":""};
 	var parameters = $.extend(defaults, options);
 	var result = $(this).has(">asmResource[xsi_type='nodeRes']>label[lang='"+languages[LANGCODE]+"']:contains('"+parameters.value+"')");
+	if (parameters.function!="")
+		result = eval("$(result)."+parameters.function);
 	return result;
 };
 $.fn.test_nodeLabelContains = function (options) { return result = ($(this).nodeLabelContains(options).length>0) ? true : false;};
@@ -254,9 +268,11 @@ $.fn.test_nodeLabelContains = function (options) { return result = ($(this).node
 $.fn.nodeValueContains = function (options)  
 //=====================================
 {
-	var defaults= { "value":"v"};
+	var defaults= { "value":"v","function":""};
 	var parameters = $.extend(defaults, options);
 	var result = $(this).has(">asmResource[xsi_type='nodeRes']>value:contains('"+parameters.value+"')");
+	if (parameters.function!="")
+		result = eval("$(result)."+parameters.function);
 	return result;
 };
 $.fn.test_nodeValueContains = function (options) { return result = ($(this).nodeValueContains(options).length>0) ? true : false;};
