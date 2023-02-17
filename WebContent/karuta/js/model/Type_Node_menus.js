@@ -615,7 +615,7 @@ UIFactory["Node"].getMenus = function(node,langcode)
 			}
 		}
 	} catch(e){
-		alertHTML('Menu Error: check the format: '+e);
+		alertHTML('Menu Error: check the format: '+e+" -- "+ node.getLabel() + " -- " + node.menuroles);
 	}
 	//------------- submit  -------------------
 	if (node.submitroles!='none' && node.submitroles!='') {
