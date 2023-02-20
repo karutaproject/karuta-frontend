@@ -2642,6 +2642,9 @@ function replaceVariable(text,node,withquote)
 				text = text.replaceAll('##itselfrescode##',"'"+$($("code",$("asmResource[xsi_type!='context'][xsi_type!='nodeRes']",node.node))).text()+"'");
 	
 		}
+		if (text!=undefined && text.indexOf('##userlogin##')>-1) {
+			text = text.replaceAll('##userlogin##',USER.username);
+		}
 		var n=0;
 		while (text!=undefined && text.indexOf("{##")>-1 && n<100) {
 			var test_string = text.substring(text.indexOf("{##")+3); // test_string = abcd{##variable##}efgh.....

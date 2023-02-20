@@ -1300,6 +1300,10 @@ UIFactory["Node"].getXmlItemMenu = function(node,parentid,item,title,databack,ca
 			// --------- search ------------
 			let search = $("search",itemelts[i])[0];
 			let search_foliocode = replaceVariable( ($("foliocode",search).length>0)?$("foliocode",search).text():"" );
+			if (search_foliocode.indexOf("*")>-1) {
+				const portfolios = UIFactory.Portfolio.search_bycode(search_foliocode.replaceAll('*',''));
+				search_foliocode = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",portfolios)[0]).text();
+			}
 			let search_semtag = replaceVariable( ($("semtag",search).length>0)?$("semtag",search).text():"" );
 			let search_object = replaceVariable( ($("object",search).length>0)?$("object",search).text():"" );
 			// --------import-comp ------

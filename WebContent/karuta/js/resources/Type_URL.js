@@ -134,13 +134,19 @@ UIFactory["URL"].prototype.getView = function(dest,type,langcode)
 		label = url;
 	if(type=='url') {
 		if (url!="")
-			html = "<a href='"+url+"' target='_blank'> "+label+"</a>";
+			if (url.indexOf('javascript:')>-1)
+				html = "<a href='"+url+"'> "+label+"</a>";
+			else
+				html = "<a href='"+url+"' target='_blank'> "+label+"</a>";
 		else
 			html =  " "+karutaStr[LANG]['no-URL'];
 	}
 	if(type=='standard' || type=='none') {
 		if (url!="")
-			html = "<a href='"+url+"' target='_blank'><img src='../../karuta/img/link-icon.png' style='width:25px'> "+label+"</a>";
+			if (url.indexOf('javascript:')>-1)
+				html = "<a href='"+url+"'><img src='../../karuta/img/link-icon.png' style='width:25px'> "+label+"</a>";
+			else
+				html = "<a href='"+url+"' target='_blank'><img src='../../karuta/img/link-icon.png' style='width:25px'> "+label+"</a>";
 		else
 			html =  "<img src='../../karuta/img/link-icon.png' style='width:25px'> "+karutaStr[LANG]['no-URL'];
 	}
