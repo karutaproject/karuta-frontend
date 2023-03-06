@@ -257,6 +257,38 @@ UIFactory["Node"].prototype.displayNode = function(type,root,dest,depth,langcode
 						UIFactory.Bubble.getPublicURL(uuid,g_userroles[0]);
 					}
 				}
+				//------------ Tabs SubSection -----------------
+				if (this.semantictag=="tabs-section"){
+					alreadyDisplayed = true;
+					let html_tabs = "<ul class='tabs-headers nav nav-tabs' role='tablist'>";
+					let html_panels = "<div class='tabs-contents tab-content'>";
+					for( var i=0; i<root.children.length; ++i ) {
+						// Recurse
+						let child = UICom.structure["tree"][root.children[i]];
+						let childnode = UICom.structure["ui"][root.children[i]];
+						let childlabel = childnode.getLabel();
+						var style = childnode.getLabelStyle();
+						html_tabs += "<li class='nav-item'><a class='nav-link' style='"+style+"' href='#display-"+uuid+"-"+i+"' aria-controls='edit-window-body-main' role='tab' data-toggle='tab'>"+childlabel+"</a></li>";
+						html_panels += "<div role='tabpanel' class='tab-pane' id='display-"+uuid+"-"+i+"'></div>";
+					}
+					html_tabs += "</ul>";
+					html_panels +="</div>";
+					$("#"+dest).append (html_tabs);
+					$("#"+dest).append (html_panels);
+					for( var i=0; i<root.children.length; ++i ) {
+						// Recurse
+						let child = UICom.structure["tree"][root.children[i]];
+						let childnode = UICom.structure["ui"][root.children[i]];
+						let childsemtag = $(childnode.metadata).attr('semantictag');
+						let original_edit = edit;
+						if (this.submitted=='Y' && this.submitall=='Y')
+							edit = false;
+						childnode.displayNode(type,child, 'display-'+uuid+'-'+i, this.depth-1,langcode,edit,inline,backgroundParent,root,menu);
+
+						edit = original_edit;
+					}
+
+				}
 				//------------ Default  -----------------
 				if (!alreadyDisplayed) {
 					for( var i=0; i<root.children.length; ++i ) {

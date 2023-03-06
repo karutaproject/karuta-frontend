@@ -257,6 +257,7 @@ UIFactory["Node"].getMenus = function(node,langcode)
 		var param3 = null;
 		var param4 = null;
 		html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','asmUnitStructure','asmUnitStructure',databack,callback,param2,param3,param4);
+		html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','tabs-section','tabs-section',databack,callback,param2,param3,param4);
 		html += "<hr>";
 		html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','TextField','TextField',databack,callback,param2,param3,param4);
 		html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','Field','Field',databack,callback,param2,param3,param4);

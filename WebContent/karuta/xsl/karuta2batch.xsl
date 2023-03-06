@@ -5,7 +5,7 @@
 <xsl:stylesheet version="1.0"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<xsl:output method="xml" />
-	<xsl:param name="lang">fr</xsl:param>
+	<xsl:param name="lang">en</xsl:param>
 	<xsl:template match="/">
 		<model>
 			<xsl:apply-templates select='//asmRoot/asmUnitStructure'/>
@@ -1154,6 +1154,24 @@
 			</source>
 		</variable>
 	</xsl:template>
+
+<!-- ================ variable ============================ -->
+	<xsl:template match="*[metadata/@semantictag='batch-value-variable']">
+		<xsl:variable name="varlabel">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='varlabel']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<variable-value>
+			<xsl:if test="not($varlabel='')">
+				<xsl:attribute name="varlabel"><xsl:value-of select="$varlabel"/></xsl:attribute>
+			</xsl:if>
+			<text>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">value</xsl:with-param>
+				</xsl:call-template>
+			</text>
+		</variable-value>
+	</xsl:template>
+
 
 	<!-- ====================================================================================== -->
 	<!-- ====================================================================================== -->

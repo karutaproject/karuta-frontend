@@ -481,6 +481,23 @@ body,
   content: "▼";
 }
 
+/* ====================== */
+/*    TABS SECTION        */
+/* ====================== */
+.tabs-headers,
+.tabs-contents {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.tab-pane > .asmUnitStructure:first-child > div[name=lbl-div] .title {
+  display: none;
+}
+
+a.nav-link.active {
+  border-bottom: 0px solid transparent;
+}
+
 /* ============================ */
 /*     PAGE USERS / USERSGROUP  */
 /* ============================ */

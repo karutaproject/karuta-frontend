@@ -568,6 +568,7 @@ karutaStr['en']['asmRoot']="Root";
 karutaStr['en']['asmStructure']="Section";
 karutaStr['en']['asmUnit']="Page";
 karutaStr['en']['asmUnitStructure']="Subsection";
+karutaStr['en']['tabs-section']="Subsection (tabs)";
 
 karutaStr['en']['TextField']="Long Text";
 karutaStr['en']['Field']="Short Text";

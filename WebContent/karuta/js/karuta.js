@@ -2588,9 +2588,9 @@ function replaceVariable(text,node,withquote)
 			const pagecode = UICom.structure.ui[pageid].getCode();
 			text = text.replaceAll('##pagecode##',cleanCode(pagecode));
 		}
-		if (text.indexOf("##today-utc##"))
+		if (text.indexOf("##today-utc##")>-1)
 			text = text.replaceAll('##today-utc##',new Date().getTime());
-		if (text.indexOf("##today##"))
+		if (text.indexOf("##today##")>-1)
 			text = text.replaceAll('##today##',new Date().toLocaleString());
 		if (text!=undefined && text.indexOf('lastimported')>-1) {
 			text = text.replaceAll('##lastimported-1##',"g_importednodestack[g_importednodestack.length-2]");
@@ -3653,6 +3653,11 @@ function getDataUrl(img) {
 	return canvas.toDataURL('image/png');
 }
 
+function setUniqueNodeCode(nodeid) {
+	const code = new Date().getTime()+"@";
+	$(UICom.structure.ui[nodeid].code_node).text(code);
+	UICom.structure.ui[nodeid].save();
+}
 //================================================
 //================================================
 

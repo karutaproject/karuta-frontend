@@ -461,6 +461,7 @@ UIFactory["Get_Resource"].prototype.displayEditor = function(destid,type,langcod
 			self.parse(destid,type,langcode,g_Get_Resource_caches[portfoliocode+semtag],disabled,srce,resettable,target,semtag,null,portfoliocode,semtag2,cachable);
 		else {
 			$.ajax({
+				async:false,
 				type : "GET",
 				dataType : "xml",
 				url : serverBCK_API+"/nodes?portfoliocode=" + portfoliocode + "&semtag="+semtag.replace("!",""),
@@ -1046,7 +1047,7 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 			var query_semtag = this.query_semtag;
 			var data = UICom.structure.ui[targetid].node;
 			var searchsemtag = (this.unique=='true')?query_semtag:this.unique;
-			var allreadyadded = $("*:has(>metadata[semantictag*="+searchsemtag+"])",data);
+			var allreadyadded = allreadyadded = $("*:has(>metadata[semantictag*="+searchsemtag+"])",data);
 			var tabadded = [];
 			for ( var i = 0; i < allreadyadded.length; i++) {
 				let resource = null;
@@ -1110,8 +1111,7 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 				//------------------------------
 				input += "<div id='"+code+"' style=\""+style+"\">";
 				if (selectable) {
-					input += "	<input type='checkbox' uuid='"+uuid+"' name='multiple_"+self.id+"' value='"+$('value',resource).text()+"' code='"+$('code',resource).text()+"' class='multiple-item";
-					input += "' ";
+					input += "	<input type='checkbox' id='input-"+code+"' uuid='"+uuid+"' name='multiple_"+self.id+"' value='"+$('value',resource).text()+"' code='"+$('code',resource).text()+"' class='multiple-item'";
 					for (var j=0; j<languages.length;j++){
 						if (target=='fileid' || target=='resource') {
 							if (target=='fileid')
@@ -1137,7 +1137,9 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 				}
 				input += "</div>";
 				var input_obj = $(input);
-				$(inputs_obj).append(input_obj);
+				$(inputs_obj).append(input);
+				if (target!='fileid' && target!='resource' && target!='nodelabel') // to avoid unescape if html tags in label 
+					$("#input-"+code,inputs_obj).attr("label_"+languages[langcode],$(srce+"[lang='"+languages[langcode]+"']",resource).html());
 				// ---------------------- children ---------
 				if (semtag2!="") {
 					var semtag_parent = semtag.replace("!","");
