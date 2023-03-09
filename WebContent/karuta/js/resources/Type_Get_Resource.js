@@ -1111,17 +1111,17 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 				//------------------------------
 				input += "<div id='"+code+"' style=\""+style+"\">";
 				if (selectable) {
-					input += "	<input type='checkbox' id='input-"+code+"' uuid='"+uuid+"' name='multiple_"+self.id+"' value='"+$('value',resource).text()+"' code='"+$('code',resource).text()+"' class='multiple-item'";
+					input += "	<input type='checkbox' id='input-"+uuid+"' uuid='"+uuid+"' name='multiple_"+self.id+"' value='"+$('value',resource).text()+"' code='"+$('code',resource).text()+"' class='multiple-item'";
 					for (var j=0; j<languages.length;j++){
 						if (target=='fileid' || target=='resource') {
 							if (target=='fileid')
-								input += "label_"+languages[j] + "=\"" + target + "-" + uuid + "\" ";
+								input += " label_"+languages[j] + "=\"" + target + "-" + uuid + "\" ";
 							else
-								input += "label_"+languages[j] + "=\"" + target + ":" + uuid + "|semtag:"+semtag+"|label:"+$("label[lang='"+languages[j]+"']",resource).text()+"\" ";
+								input += " label_"+languages[j] + "=\"" + target + ":" + uuid + "|semtag:"+semtag+"|label:"+$("label[lang='"+languages[j]+"']",resource).text()+"\" ";
 						} else if (target=='nodelabel')
-							input += "label_"+languages[j]+"=\"nodelabel:"+uuid + "|semtag:"+semtag+"|label:"+UICom.structure["ui"][uuid].getLabel(null,'none')+"\" ";
+							input += " label_"+languages[j]+"=\"nodelabel:"+uuid + "|semtag:"+semtag+"|label:"+UICom.structure["ui"][uuid].getLabel(null,'none')+"\" ";
 						else 
-							input += "label_"+languages[j]+"=\""+$(srce+"[lang='"+languages[j]+"']",resource).text()+"\" ";
+							input += " label_"+languages[j]+"=\""+$(srce+"[lang='"+languages[j]+"']",resource).text()+"\" ";
 					}
 					if (disabled)
 						input += "disabled";
@@ -1139,7 +1139,7 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 				var input_obj = $(input);
 				$(inputs_obj).append(input);
 				if (target!='fileid' && target!='resource' && target!='nodelabel') // to avoid unescape if html tags in label 
-					$("#input-"+code,inputs_obj).attr("label_"+languages[langcode],$(srce+"[lang='"+languages[langcode]+"']",resource).html());
+					$("#input-"+uuid,inputs_obj).attr("label_"+languages[langcode],$(srce+"[lang='"+languages[langcode]+"']",resource).html());
 				// ---------------------- children ---------
 				if (semtag2!="") {
 					var semtag_parent = semtag.replace("!","");

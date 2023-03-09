@@ -116,9 +116,9 @@ UIFactory["Node"].getSingleMenu = function(parentid,menus,targetid,title,databac
 //==================================================
 {	// note: #xxx is to avoid to scroll to the top of the page
 	var menus_style = UICom.structure.ui[parentid].getMenuStyle();
-	var html = "<a class='button add-button btn' style='"+menus_style+"' onclick=\"";
+	var html = "<button class='button add-button btn' style='"+menus_style+"' onclick=\"";
 	html += UIFactory.Node.getEltMenu(parentid,menus,targetid,title,databack,callback,param2,param3,param4);
-	html += "</a>";
+	html += "</button>";
 	return html;
 };
 

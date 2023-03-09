@@ -962,7 +962,7 @@ a.nav-link.active {
 #main-portfolio #portfolio-container .menus a {
   color: var(--portfolio-buttons-color);
 }
-#main-portfolio #portfolio-container .menus .dropdown .btn {
+#main-portfolio #portfolio-container .add-button {
   color: var(--portfolio-buttons-color);
 }
 #main-portfolio #portfolio-container .button {
