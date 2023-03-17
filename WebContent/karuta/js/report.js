@@ -225,7 +225,7 @@ $.fn.nodeCodeContains = function (options) // nodeCodeContains({"value":"12","fu
 	var result = $(this).has(">asmResource[xsi_type='nodeRes']>code:contains('"+parameters.value+"')");
 	if (parameters.function!="")
 		result = eval("$(result)."+parameters.function);
-	return result;
+	return $(result);
 };
 $.fn.test_nodeCodeContains = function (options) { return result = ($(this).nodeCodeContains(options).length>0) ? true : false;};
 //=====================================
@@ -915,8 +915,8 @@ g_report_actions['if-then-else'] = function (destid,action,no,data)
 		test = r_getTest(test);
 		test = replaceVariable(test);
 	}
-	var then_actions = $($('then-part',action)[0]).children();
-	var else_actions = $($('else-part',action)[0]).children();
+	var then_actions = $($('>then-part',action)[0]).children();
+	var else_actions = $($('>else-part',action)[0]).children();
 	if (eval(test)){
 		for (let i=0; i<then_actions.length;i++){
 			var tagname = $(then_actions[i])[0].tagName;
