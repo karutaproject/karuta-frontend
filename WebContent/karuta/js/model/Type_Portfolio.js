@@ -135,6 +135,22 @@ function dragPortfolio(ev)
 //--------------------------------------------------------------
 
 //==================================
+UIFactory["Portfolio"].prototype.getCode = function()
+//==================================
+{
+	return this.code_node.text();
+}
+
+//==================================
+UIFactory["Portfolio"].prototype.getLabel = function(langcode)
+//==================================
+{
+	if (langcode==null)
+		langcode = LANGCODE;
+	return this.label_node[langcode].text()
+}
+
+//==================================
 UIFactory["Portfolio"].prototype.displayOwner = function(dest)
 //==================================
 {

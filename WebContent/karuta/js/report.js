@@ -1580,7 +1580,16 @@ g_report_actions['for-each-portfolio'] = function (destid,action,no,data)
 	var test = $(action).attr("test");
  	if (test!=undefined) 
  		test = replaceVariable(test);
- 	if (select.indexOf("code*=")>-1) {
+	else
+		test = "";
+	//--------------------
+	let load = true; //  by default we load each porfolio to have access to its content
+	if (select.indexOf('@noload@')>-1){
+		load = false;
+		select = select.replaceAll('@noload@','');
+	}
+	//---------------
+	if (select.indexOf("code*=")>-1) {
 		if (select.indexOf("'")>-1)
 			searchvalue = select.substring(7,select.length-1);  // inside quote
 		else if (select.indexOf("//")>-1)
@@ -1719,26 +1728,34 @@ g_report_actions['for-each-portfolio'] = function (destid,action,no,data)
 				//------------------------------------
 				if (condition){
 					portfolioid = items_list[j].id;
-					portfolioid_current = portfolioid;
-					$.ajax({
-						async:false,
-						type : "GET",
-						dataType : "xml",
-						j : j,
-						url : serverBCK_API+"/portfolios/portfolio/" + portfolioid + "?resources=true",
-						success : function(data) {
-							if (report_not_in_a_portfolio){
-								UICom.structure["tree"] = {};
-								UICom.structure["ui"] = {};
+					portfolioid_current = portfolioid;					portfoliocode_current = portfolioid;
+					if (load) {
+						$.ajax({
+							async:false,
+							type : "GET",
+							dataType : "xml",
+							j : j,
+							url : serverBCK_API+"/portfolios/portfolio/" + portfolioid + "?resources=true",
+							success : function(data) {
+								if (report_not_in_a_portfolio){
+									UICom.structure["tree"] = {};
+									UICom.structure["ui"] = {};
+								}
+								UICom.parseStructure(data,true, null, null,true);
+								var actions = $(action).children();
+								for (let i=0; i<actions.length;i++){
+									var tagname = $(actions[i])[0].tagName;
+									g_report_actions[tagname](destid,actions[i],no+'-'+this.j.toString()+i.toString(),data);
+								};
 							}
-							UICom.parseStructure(data,true, null, null,true);
-							var actions = $(action).children();
-							for (let i=0; i<actions.length;i++){
-								var tagname = $(actions[i])[0].tagName;
-								g_report_actions[tagname](destid,actions[i],no+'-'+j.toString()+i.toString(),data);
-							};
-						}
-					});
+						});
+					} else {
+						var actions = $(action).children();
+						for (let i=0; i<actions.length;i++){
+							var tagname = $(actions[i])[0].tagName;
+							g_report_actions[tagname](destid,actions[i],no+'-'+j.toString()+i.toString(),data);
+						};
+					}
 				}
 				//------------------------------------
 			}
@@ -2547,6 +2564,12 @@ g_report_actions['text'] = function (destid,action,no,data,is_out_csv)
 	var nodeid = $(data).attr("id");
 	var text = $(action).text();
 	text = replaceVariable(text);
+	//-------------------
+	if (text.indexOf('function:')>-1) {
+		const functionstring = text.substring(9);
+		text = eval (functionstring);
+	}
+	//-------------------
 	var style = replaceVariable($(action).attr("style"));
 	var cssclass = replaceVariable($(action).attr("class"));
 	var ref = $(action).attr("ref");
@@ -2673,17 +2696,22 @@ g_report_actions['url2portfolio'] = function (destid,action,no,data)
 	var cssclass = replaceVariable($(action).attr("class"));
 	var code = $(action).attr("code");
 	code = replaceVariable(code);
-	var url = serverBCK_API+"/portfolios/portfolio/code/" + code;
-	$.ajax({
-		async: false,
-		type : "GET",
-		dataType : "xml",
-		url : url,
-		success : function(data) {
-			uuid = $("portfolio",data).attr("id");
-			label = $("label[lang='"+languages[LANGCODE]+"']",$("asmRoot>asmResource[xsi_type='nodeRes']",data)[0]).text();
-		}
-	});
+	if (code!=portfolios_byid[portfolioid_current].getCode()) {
+		var url = serverBCK_API+"/portfolios/portfolio/code/" + code;
+		$.ajax({
+			async: false,
+			type : "GET",
+			dataType : "xml",
+			url : url,
+			success : function(data) {
+				uuid = $("portfolio",data).attr("id");
+				label = $("label[lang='"+languages[LANGCODE]+"']",$("asmRoot>asmResource[xsi_type='nodeRes']",data)[0]).text();
+			}
+		});
+	} else {
+		uuid = portfolioid_current;
+		label = portfolios_byid[portfolioid_current].getLabel();
+	}
 	text = "<span id='"+nodeid+"' style='"+style+"' class='URL2Portfolio-link "+cssclass+"' onclick=\"display_main_page('"+uuid+"')\">"+label+"</span>";
 	$("#"+destid).append($(text));
 	$("#"+nodeid).attr("style",style);
