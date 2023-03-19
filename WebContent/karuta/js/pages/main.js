@@ -65,6 +65,8 @@ function fill_main_page(portfolioid)
 			$("body").addClass(root_semantictag);
 			// -----------ROLE---------------
 			var role = $("asmRoot",data).attr("role");
+			if (role=="" && !USER.admin)
+				role = 'auditeur';
 			if (role!="") {
 				g_userroles[0] = g_userroles[1] = role;
 			} else {
