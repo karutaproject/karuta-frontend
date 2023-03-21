@@ -2016,11 +2016,19 @@ function setVariables(data)
 	try {
 		var select_variable_nodes = $("asmContext:has(metadata[semantictag*='g-select-variable'])",data);
 		for (var i=0;i<select_variable_nodes.length;i++) {
+			updateVariable(select_variable_nodes[i]);
+/*
 			const value = UICom.structure.ui[$(select_variable_nodes[i]).attr("id")].resource.getAttributes().value;
 			const code = UICom.structure.ui[$(select_variable_nodes[i]).attr("id")].resource.getAttributes().code;
-			const variable_value = (value=="") ? code : value;
+			const utc = UICom.structure.ui[$(select_variable_nodes[i]).attr("id")].resource.getAttributes().utc;
+			let variable_value = code;
+			if (variable_value==undefined)
+				variable_value = value;
+			if (variable_value==undefined)
+				variable_value = utc;
 			const varname = UICom.structure.ui[$(select_variable_nodes[i]).attr("id")].getCode();
 			g_variables[varname] = cleanCode(variable_value,true);
+*/
 		}
 	} catch(e){}
 }
@@ -2032,9 +2040,12 @@ function updateVariable(node)
 	var value = UICom.structure.ui[$(node).attr("id")].resource.getAttributes().value;
 	var code = UICom.structure.ui[$(node).attr("id")].resource.getAttributes().code;
 	var text = UICom.structure.ui[$(node).attr("id")].resource.getAttributes().text;
+	var utc = UICom.structure.ui[$(node).attr("id")].resource.getAttributes().utc;
 	var variable_value = (value=="") ? code : value;
 	if (variable_value==undefined)
-		variable_value = text;;
+		variable_value = text;
+	if (variable_value==undefined)
+		variable_value = utc;
 	g_variables[UICom.structure.ui[$(node).attr("id")].getCode()] = cleanCode(variable_value,true);
 }
 
