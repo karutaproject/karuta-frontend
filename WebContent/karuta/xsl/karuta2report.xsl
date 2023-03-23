@@ -968,6 +968,9 @@
 		<xsl:variable name="countvar">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='countvar']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
+		<xsl:variable name="portfolio">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='portfolio']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
 		<xsl:variable name="nodetype">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='nodetype']/asmResource[@xsi_type='Get_Resource']/value"></xsl:value-of>
 		</xsl:variable>
@@ -981,6 +984,9 @@
 		<for-each-node>
 			<xsl:if test="not($ref-init='')">
 				<xsl:attribute name="ref-init"><xsl:value-of select="$ref-init"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not($portfolio='')">
+				<xsl:attribute name="portfolio"><xsl:value-of select="$portfolio"/></xsl:attribute>
 			</xsl:if>
 			<xsl:if test="not($countvar='')">
 				<xsl:attribute name="countvar"><xsl:value-of select="$countvar"/></xsl:attribute>

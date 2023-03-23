@@ -978,6 +978,7 @@ g_report_actions['for-each-node'] = function (destid,action,no,data)
 	var select = $(action).attr("select");
 	var test = $(action).attr("test");
 	var countvar = $(action).attr("countvar");
+	var portfoliocode = $(action).attr("portfolio");
 	//----------------------------------
  	var ref_init = $(action).attr("ref-init");
  	if (ref_init!=undefined) {
@@ -986,11 +987,30 @@ g_report_actions['for-each-node'] = function (destid,action,no,data)
  		for (let k=0;k<ref_inits.length;k++)
  			g_variables[ref_inits[k]] = new Array();
  	}
- 	//----------------------------------
+	//----------------------------------
  	if (test!=undefined) 
 		test = replaceVariable(test);
 	if (select!=undefined) {
 		select = replaceVariable(select);
+		//----------------------------------
+		if (portfoliocode!=undefined) {
+			portfoliocode = replaceVariable(portfoliocode);
+			$.ajax({
+				async:false,
+				type : "GET",
+				dataType : "xml",
+				url : serverBCK_API+"/portfolios/portfolio/code/" + portfoliocode +"?resources=true",
+				success : function(data_portfolio) {
+					if (report_not_in_a_portfolio){
+						UICom.structure["tree"] = {};
+						UICom.structure["ui"] = {};
+					}
+					UICom.parseStructure(data_portfolio,true, null, null,true);
+					data = data_portfolio;
+				}
+			});
+		}
+		//----------------------------------
 		var selector = null;
 		if (test.indexOf('notFound')<0)
 			selector = r_getSelector(select,test);

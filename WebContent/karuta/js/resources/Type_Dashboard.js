@@ -34,6 +34,12 @@ UIFactory["Dashboard"] = function( node )
 	}
 	this.lastmodified_node = $("lastmodified",$("asmResource[xsi_type='Dashboard']",node));
 	//--------------------
+	if ($("print",$("asmResource[xsi_type='Dashboard']",node)).length==0){  // for backward compatibility
+		var newelement = createXmlElement("print");
+		$("asmResource[xsi_type='Dashboard']",node)[0].appendChild(newelement);
+	}
+	this.print_node = $("print",$("asmResource[xsi_type='Dashboard']",node));
+	//--------------------
 	if ($("csv",$("asmResource[xsi_type='Dashboard']",node)).length==0){  // for backward compatibility
 		var newelement = createXmlElement("csv");
 		$("asmResource[xsi_type='Dashboard']",node)[0].appendChild(newelement);
@@ -144,12 +150,17 @@ UIFactory["Dashboard"].prototype.displayView = function(dest,langcode)
 	if (g_userroles[0]!='designer')
 		$("#sub_node_"+uuid).hide();
 	//-----------------------------------------------------
-	$("#extra_"+uuid).append($("<div id='extra_button_"+uuid+"' class='dashboard-buttons btn-group'></div>"));
+	$("#extra_"+uuid).append($("<div id='extra_button_"+uuid+"' style='float:right' class='dashboard-buttons btn-group'></div>"));
 	$("#extra_"+uuid).append($("<div id='dashboard_"+uuid+"' class='createreport'></div>"));
 	var root_node = g_portfolio_current;
 	var parent_node = UICom.structure.ui[$(this.parent).attr("id")];
 	genDashboardContent("dashboard_"+uuid,uuid,parent_node,root_node);
 	//---------- display csv or pdf -------
+	var print_roles = $(UICom.structure["ui"][uuid].resource.print_node).text();
+	if (print_roles.indexOf('all')>-1 || print_roles.containsArrayElt(g_userroles) || (print_roles!='' && (g_userroles[0]=='designer' || USER.admin))) {
+		const button = "<span class='button fas fa-print' onclick=\"printSection('#node_"+this.id+"',"+g_report_edit+")\" data-title='"+karutaStr[LANG]["button-print"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
+		$("#extra_button_"+uuid).append(button);
+	}
 	var csv_roles = $(UICom.structure["ui"][uuid].resource.csv_node).text();
 	if (csv_roles.indexOf('all')>-1 || csv_roles.containsArrayElt(g_userroles) || (csv_roles!='' && (g_userroles[0]=='designer' || USER.admin))) {
 		$("#extra_button_"+uuid).append($("<div class='csv-button button' onclick=\"javascript:xml2CSV('dashboard_"+uuid+"')\">CSV</div>"));				
@@ -216,6 +227,19 @@ UIFactory["Dashboard"].prototype.getEditor = function(type,langcode,disabled)
 		$(htmlFormObj).append($(htmlTextGroupObj));
 		//-----------------------------------------------------
 		var htmlCsvGroupObj = $("<div class='form-group'></div>")
+		var htmlCsvLabelObj = $("<label for='print_"+this.id+"' class='col-sm-3 control-label'>"+karutaStr[LANG]['print']+"</label>");
+		var htmlCsvDivObj = $("<div class='col-sm-9'></div>");
+		var htmlCsvInputObj = $("<input id='print_"+this.id+"' type='text' class='form-control' value=\""+this.print_node.text()+"\">");
+		$(htmlCsvInputObj).change(function (){
+			$(self.print_node).text($(this).val());
+			UIFactory["Dashboard"].update(self,langcode);
+		});
+		$(htmlCsvDivObj).append($(htmlCsvInputObj));
+		$(htmlCsvGroupObj).append($(htmlCsvLabelObj));
+		$(htmlCsvGroupObj).append($(htmlCsvDivObj));
+		$(htmlFormObj).append($(htmlCsvGroupObj));
+		//-----------------------------------------------------
+/*		var htmlCsvGroupObj = $("<div class='form-group'></div>")
 		var htmlCsvLabelObj = $("<label for='csv_"+this.id+"' class='col-sm-3 control-label'>"+karutaStr[LANG]['csv']+"</label>");
 		var htmlCsvDivObj = $("<div class='col-sm-9'></div>");
 		var htmlCsvInputObj = $("<input id='csv_"+this.id+"' type='text' class='form-control' value=\""+this.csv_node.text()+"\">");
@@ -252,7 +276,7 @@ UIFactory["Dashboard"].prototype.getEditor = function(type,langcode,disabled)
 		$(htmlrtfDivObj).append($(htmlrtfInputObj));
 		$(htmlrtfGroupObj).append($(htmlrtfLabelObj));
 		$(htmlrtfGroupObj).append($(htmlrtfDivObj));
-		$(htmlFormObj).append($(htmlrtfGroupObj));
+		$(htmlFormObj).append($(htmlrtfGroupObj)); */
 		//-----------------------------------------------------
 		var htmlimgGroupObj = $("<div class='form-group'></div>")
 		var htmlimgLabelObj = $("<label for='img_"+this.id+"' class='col-sm-3 control-label'>"+karutaStr[LANG]['img']+"</label>");

@@ -478,6 +478,7 @@ karutaStr['fr']['csv']="Rôles - Bouton CSV";
 karutaStr['fr']['pdf']="Rôles - Bouton PDF";
 karutaStr['fr']['rtf']="Rôles - Bouton RTF";
 karutaStr['fr']['img']="Rôles - Bouton PNG";
+karutaStr['fr']['print']="Rôles - Bouton Imprimer";
 karutaStr['fr']['document-required']="Vous devez spécifier un document avant de le soumettre !";
 karutaStr['fr']['size-upload']="Votre fichier est trop volumineux : seuls les fichiers de moins de " + g_configVar['maxfilesizeupload'] + " Mo sont autorisés !";
 karutaStr['fr']['local-label']="Libellé local";

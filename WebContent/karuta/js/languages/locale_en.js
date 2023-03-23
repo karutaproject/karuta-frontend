@@ -478,6 +478,7 @@ karutaStr['en']['csv']="Roles - Button CSV";
 karutaStr['en']['pdf']="Roles - Button PDF";
 karutaStr['en']['rtf']="Rôles - Button RTF";
 karutaStr['en']['img']="Rôles - Button PNG";
+karutaStr['en']['print']="Rôles - Button Print";
 karutaStr['en']['document-required']="You have to specify a document before to submit !";
 karutaStr['en']['size-upload']="Your file is so big : it must be less than " + g_configVar['maxfilesizeupload'] + " Mo !";
 karutaStr['en']['local-label']="Local Label";

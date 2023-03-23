@@ -392,6 +392,7 @@ if (execJS(this,"display-if")) {
 		//---------------- display label ---------------------------------
 		$("#label_node_"+uuid).html(this.getView('label_node_'+uuid));
 		//----------- Buttons & Menus -----------
+		const menus_color = this.getMenuStyle();
 		if(edit) {
 			var buttons = "";
 			if (this.xsi_type.indexOf("Block")>-1) {
@@ -400,7 +401,7 @@ if (execJS(this,"display-if")) {
 			buttons += this.getButtons();
 			//------------- print button -------------------
 			if ((this.printroles.containsArrayElt(g_userroles) || this.printroles.indexOf($(USER.username_node).text())>-1 || USER.admin || g_userroles[0]=='designer') && this.printroles!='none' && this.printroles!='') {
-					buttons += "<span class='button fas fa-print' onclick=\"printSection('#node_"+this.id+"',"+g_report_edit+")\" data-title='"+karutaStr[LANG]["button-print"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
+				buttons += "<span class='button fas fa-print' style='"+menus_color+"' onclick=\"printSection('#node_"+this.id+"',"+g_report_edit+")\" data-title='"+karutaStr[LANG]["button-print"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
 			}
 			if (buttons!="")
 				buttons = "<div class='btn-group'>"+buttons+"</div><!-- class='btn-group' -->"
@@ -411,7 +412,7 @@ if (execJS(this,"display-if")) {
 		} else {
 			//------------- print button -------------------
 			if ((this.printroles.containsArrayElt(g_userroles) || this.printroles.indexOf($(USER.username_node).text())>-1 || USER.admin || g_userroles[0]=='designer') && this.printroles!='none' && this.printroles!='') {
-				var buttons = "<span class='button fas fa-print'  onclick=\"printSection('#node_"+this.id+"',"+g_report_edit+")\" data-title='"+karutaStr[LANG]["button-print"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
+				var buttons = "<span class='button fas fa-print' style='"+menus_color+"' onclick=\"printSection('#node_"+this.id+"',"+g_report_edit+")\" data-title='"+karutaStr[LANG]["button-print"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
 				$("#buttons-"+uuid).html(buttons);
 			}
 		}
@@ -422,7 +423,7 @@ if (execJS(this,"display-if")) {
 		}
 		//------------- print button -------------------
 		if ((this.printroles.containsArrayElt(g_userroles) || this.printroles.indexOf($(USER.username_node).text())>-1 || USER.admin || g_userroles[0]=='designer') && this.printroles!='none' && this.printroles!='') {
-				html += "<span class='button fas fa-print'  onclick=\"javascript:printSection('#node_"+this.id+"')\" data-title='"+karutaStr[LANG]["button-print"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
+				html += "<span class='button fas fa-print' style='"+menus_color+"' onclick=\"javascript:printSection('#node_"+this.id+"')\" data-title='"+karutaStr[LANG]["button-print"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
 		}
 		//----------------- hide lbl-div if empty ------------------------------------
 		if (this.getLabel(null,'none',langcode)=="" && this.getButtons(langcode)=="" && this.getMenus(langcode)=="")
@@ -521,6 +522,7 @@ UIFactory["Node"].prototype.displayAsmNode = function(dest,type,langcode,edit,re
 		style = replaceVariable(this.getNodeStyle(uuid));
 		$("#node_"+uuid).attr("style",style);
 	}
+	const menus_color = this.getMenuStyle();
 	//-------------------- label style -------------------
 	if (this.depth>1) {
 		style = UIFactory.Node.getLabelStyle(uuid);
@@ -537,7 +539,6 @@ UIFactory["Node"].prototype.displayAsmNode = function(dest,type,langcode,edit,re
 	}
 	//-------------------- collapsible -------------------
 	if (this.collapsible=='Y') {
-		var menus_color  = this.getMenuStyle()
 		$("#collapsible_"+uuid).show();
 		$("#collapsible_"+uuid).html("<span id='toggleContent_"+uuid+"' class='button' style='"+menus_color+"'></span>");
 		$("#collapsible_"+uuid).attr("onclick","javascript:toggleContent('"+uuid+"')");
