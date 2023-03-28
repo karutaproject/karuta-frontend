@@ -1108,7 +1108,7 @@ UIFactory["Node"].remove = function(uuid,callback,param1,param2,param3,param4)
 		var fcts = UICom.structure.ui[uuid].js.split("|");
 		for (var i=0;i<fcts.length;i++) {
 			var elts = fcts[i].split("/");
-			if (elts[0]=="delete") {
+			if (elts[0]=="delete" || elts[0]=="delete-before") {
 				if (elts[1].indexOf("(")<0)
 					eval(elts[1]+"(uuid)");
 				else
@@ -1126,6 +1126,15 @@ UIFactory["Node"].remove = function(uuid,callback,param1,param2,param3,param4)
 	if (remove) {
 		$("#"+uuid,g_portfolio_current).remove();
 		UICom.DeleteNode(uuid,callback,param1,param2,param3,param4);
+		for (var i=0;i<fcts.length;i++) {
+			var elts = fcts[i].split("/");
+			if (elts[0]=="delete-after") {
+				if (elts[1].indexOf("(")<0)
+					eval(elts[1]+"(uuid)");
+				else
+					eval(replaceVariable(elts[1],UICom.structure.ui[uuid]));
+			}
+		}
 	} else {
 		$('#delete-window').modal('hide');
 		$('#wait-window').modal('hide');

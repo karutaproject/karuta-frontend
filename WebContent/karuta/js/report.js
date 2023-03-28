@@ -2025,6 +2025,7 @@ g_report_actions['node_resource'] = function (destid,action,no,data)
 {
 	var text = "";
 	var style = "";
+	var cssclass = "";
 	var attr_help = "";
 	var prefix_id = "";
 	try {
@@ -2040,6 +2041,7 @@ g_report_actions['node_resource'] = function (destid,action,no,data)
 		var nodenopencil = ($(action).attr("nodenopencil")==undefined)? "":$(action).attr("nodenopencil");
 		var nodenopencilroles = ($(action).attr("nodenopencilroles")==undefined)? "":$(action).attr("nodenopencilroles");
 		style = replaceVariable($(action).attr("style"));
+		cssclass = replaceVariable($(action).attr("class"));
 		var selector = r_getSelector(select);
 		var node = $(selector.jquery,data);
 		if (node.length==0) // try the node itself
@@ -2132,7 +2134,7 @@ g_report_actions['node_resource'] = function (destid,action,no,data)
 					g_variables[ref] = new Array();
 				g_variables[ref][g_variables[ref].length] = text;
 			}
-			text = "<span id='dashboard_node_resource"+nodeid+"' style='"+style+"'>"+text+"</span>";
+			text = "<span id='dashboard_node_resource"+nodeid+"' style='"+style+"' class='"+cssclass+"'>"+text+"</span>";
 			if (g_report_edit && writenode && nodenopencil!='Y' && !nodenopencilroles.containsArrayElt(g_userroles)) {
 				text += "<span class='button fas fa-pencil-alt' data-toggle='modal' data-target='#edit-window' onclick=\"javascript:getEditBox('"+nodeid+"')\" data-title='"+karutaStr[LANG]["button-edit"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
 			}
