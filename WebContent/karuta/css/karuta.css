@@ -494,10 +494,6 @@ body,
   display: none;
 }
 
-a.nav-link.active {
-  border-bottom: 0px solid transparent;
-}
-
 /* ============================ */
 /*     PAGE USERS / USERSGROUP  */
 /* ============================ */

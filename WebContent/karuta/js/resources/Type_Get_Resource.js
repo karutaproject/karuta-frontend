@@ -332,11 +332,22 @@ UIFactory["Get_Resource"].prototype.getView = function(dest,type,langcode,indash
 			if (code.indexOf("*")>-1)
 				html += "<span name='code'>" + cleanCode(code) + "</span> ";
 			if (code.indexOf("%")<0) {
-				if (label.indexOf("fileid-")>-1)
+				if (label.indexOf("fileid-")>-1) {
+					if (UICom.structure["ui"][label.substring(7)]==undefined)
+						$.ajax({
+							async: false,
+							type : "GET",
+							dataType : "xml",
+							url : serverBCK_API+"/nodes/node/" + label.substring(7),
+							success : function(data) {
+								UICom.parseStructure(data,false);
+							}
+						});
 					html += UICom.structure["ui"][label.substring(7)].resource.getView();
-				else
+				} else {
 					html += "<span name='label'>" + label + "</span> ";
 				}
+			}
 			if (code.indexOf("&")>-1)
 				html += " ["+$(this.value_node).text()+ "] ";
 			if (this.preview)

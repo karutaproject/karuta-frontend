@@ -1150,6 +1150,7 @@ function submit(uuid,submitall)
 			} else if ( $(".preview-window").length>0) {
 					$(".preview-window").remove();
 					$(".preview-backdrop").remove();
+					UIFactory.Node.reloadUnit();
 			} else
 				UIFactory.Node.reloadUnit();
 		}
