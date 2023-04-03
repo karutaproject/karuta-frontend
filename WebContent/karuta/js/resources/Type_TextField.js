@@ -243,7 +243,7 @@ UIFactory["TextField"].prototype.displayEditor = function(destid,type,langcode,d
 	if (g_userroles[0]=='designer' || USER.admin) {
 		htmleditor = true;
 	}
-	$("#footer-before-close").html("<button class='btn' onclick='UICom.structure.ui['"+uuid+"'].resource.update('"+langcode+"')'>"+karutaStr[LANG]['Save']+"</button>");
+	$("#footer-before-close").html("<button class='btn' onclick=\"UICom.structure.ui['"+uuid+"'].resource.update('"+langcode+"')\">"+karutaStr[LANG]['Save']+"</button>");
 	$("#"+uuid+"_edit_"+langcode+(inline?'inline':'')).wysihtml5(
 		{
 			toolbar:{"size":"xs","font-styles": false,"html":htmleditor,"blockquote": true,"image": false,"link": false},
