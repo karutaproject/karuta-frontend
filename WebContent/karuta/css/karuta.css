@@ -76,6 +76,12 @@ body,
   cursor: pointer;
 }
 
+.selectAll {
+  border-bottom: 1px solid var(--portfolio-resource-border-color);
+  margin-bottom: 10px;
+  font-size: 80%;
+}
+
 /* ====================== */
 /*    @DRAFT@       */
 /* ====================== */
@@ -473,6 +479,19 @@ body,
 
 .openSign::before {
   content: "▼";
+}
+
+/* ====================== */
+/*    TABS SECTION        */
+/* ====================== */
+.tabs-headers,
+.tabs-contents {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.tab-pane > .asmUnitStructure:first-child > div[name=lbl-div] .title {
+  display: none;
 }
 
 /* ============================ */
@@ -937,6 +956,9 @@ body,
   color: var(--portfolio-link-color);
 }
 #main-portfolio #portfolio-container .menus a {
+  color: var(--portfolio-buttons-color);
+}
+#main-portfolio #portfolio-container .add-button {
   color: var(--portfolio-buttons-color);
 }
 #main-portfolio #portfolio-container .button {
@@ -2573,7 +2595,7 @@ s table.tablesorter th.restore {
   padding-left: 40px;
 }
 
-/* for submitted / not submitted alert */
+/* for submitted / not submitted alert / sahring */
 .hidesubmitbutton .submitbutton {
   display: none;
 }
@@ -2613,6 +2635,10 @@ s table.tablesorter th.restore {
 }
 
 .hide-span-label span[name=label] {
+  display: none;
+}
+
+.hidesharingbutton .sharing-button {
   display: none;
 }
 

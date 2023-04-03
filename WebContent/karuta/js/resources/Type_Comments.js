@@ -122,17 +122,28 @@ UIFactory["Comments"].prototype.getView = function(dest,type,langcode)
 	if (dest!=null) {
 		this.display[dest] = langcode;
 	}
+	//---------------------
+	if (type==null) {
+		type = 'default';
+	}
+	//---------------------
+	const text = $(this.text_node[langcode]).text();
+	const author = $(this.author_node).text();
+	const date = $(this.date_node).text();
+	//----------------
 	var html = "";
-	var text = $(this.text_node[langcode]).text();
-
-	html += "<div class='text'>"+text+"</div>";
-	html +="<div  class='author-date'>";
-	html +="<span name='author' class='author' id='author'>"+$(this.author_node).text()+"</span>";
-	if ($(this.author_node).text()!='' && $(this.date_node).text()!='')
-		html += " - ";
-	html +="<span name='date' class='date' id='date'>"+$(this.date_node).text()+"</span>";
-	html +="</div>";
-
+	if (type=='default') {
+		html += "<div class='text'>"+text+"</div>";
+		html +="<div  class='author-date'>";
+		html +="<span name='author' class='author' id='author'>"+author+"</span>";
+		if (author!='' && date!='')
+			html += " - ";
+		html +="<span name='date' class='date' id='date'>"+date+"</span>";
+		html +="</div>";
+	}
+	if (type=='vector') {
+		html += text + "|" + author + "|" + date;
+	}
 	return html;
 };
 

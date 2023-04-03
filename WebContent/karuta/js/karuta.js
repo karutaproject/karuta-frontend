@@ -149,6 +149,10 @@ function getNavBar(type,portfolioid,edit)
 		html += "	<div class='dropdown-menu versions' aria-labelledby='navbar-brand-logo'>";
 		html += "		<a class='dropdown-item'><b>Versions</b></a>";
 		html += "		<div class='dropdown-divider'></div>";
+		if (karuta_version=='@project.version@' && typeof karuta_version_eportfolium!='undefined') {
+			karuta_version = karuta_version_eportfolium;
+			karuta_date = karuta_date_eportfolium;
+		}
 		html += "		<a class='dropdown-item'>Karuta-frontend : "+karuta_version+" (" +karuta_date+")</a>";
 		html += "		<a class='dropdown-item'>Karuta-backend : "+karuta_backend_version+" (" +karuta_backend_date+")</a>";
 		html += "		<a class='dropdown-item'>Karuta-fileserver : "+karuta_fileserver_version+" (" +karuta_fileserver_date+")</a>";
@@ -945,6 +949,7 @@ function previewPage(uuid,depth,type,langcode,edit)
 		url : url,
 		success : function(data) {
 			UICom.parseStructure(data,false);
+			setVariables(data);
 			if (edit==null)
 				g_report_edit = false;
 			else
@@ -957,10 +962,10 @@ function previewPage(uuid,depth,type,langcode,edit)
 		},
 		error : function() {
 			var html = "";
-			html += "<div>" + karutaStr[languages[langcode]]['error-notfound'] + "</div>";
+			html += "<div style='margin:50px'>" + karutaStr[languages[langcode]]['error-notfound'] + "</div>";
 			$("#preview-window-body-"+uuid).html(html);
 			$("#previewbackdrop-"+uuid).show();
-			$("#preview-window-"+uuid).show();
+			$("#preview-"+uuid).show();
 			window.scrollTo(0,0);
 		}
 	});
@@ -1145,6 +1150,7 @@ function submit(uuid,submitall)
 			} else if ( $(".preview-window").length>0) {
 					$(".preview-window").remove();
 					$(".preview-backdrop").remove();
+					UIFactory.Node.reloadUnit();
 			} else
 				UIFactory.Node.reloadUnit();
 		}
@@ -1395,17 +1401,20 @@ function getSendSharingURL(nodeid,uuid,sharewithrole,sharetoemail,sharetoroles,l
 		}
 		if (sharetoemail!='' && shareduration!='' && USER.email!=null && sharetoemail!=USER.email) {
 			getPublicURL(uuid,sharetoemail,sharerole,sharewithrole,sharelevel,shareduration,langcode,sharetomessage,sharetoobj);
-		}
-		if (shareoptions.indexOf('function:')>-1) {
-			var functionelts = shareoptions.substring(9).split('/');
-			var functionstring = functionelts[0] + "(";
-			for (var i=1; i<functionelts.length; i++) {
-				functionstring += functionelts[i];
-				if (i<functionelts.length-1)
-					functionstring += ",";
+			if (shareoptions.indexOf('function:')>-1) {
+				var functionelts = shareoptions.substring(9).split('/');
+				var functionstring = functionelts[0] + "(";
+				for (var i=1; i<functionelts.length; i++) {
+					functionstring += functionelts[i];
+					if (i<functionelts.length-1)
+						functionstring += ",";
+				}
+				functionstring += ")";
+				eval (functionstring);
 			}
-			functionstring += ")";
-			eval (functionstring);
+		} else if (sharetoemail==USER.email){
+			let html = karutaStr[LANG]["noemail-yourself"];
+			$("#edit-window-body").html(html);
 		}
 	});
 	$("#edit-window-footer").append(obj);
@@ -1720,6 +1729,21 @@ function toggleContent(uuid) {
 }
 
 //==================================
+function toggleContentInReport(uuid) {
+//==================================
+	if ($("#toggleContent_"+uuid).hasClass("fa-plus")) {
+		$("#toggleContent_"+uuid).removeClass("fa-plus")
+		$("#toggleContent_"+uuid).addClass("fa-minus")
+		$("#content-"+uuid).show();
+	} else {
+		$("#toggleContent_"+uuid).removeClass("fa-minus")
+		$("#toggleContent_"+uuid).addClass("fa-plus")
+		$("#content-"+uuid).hide();
+	}
+}
+
+
+//==================================
 function toggleSharing(uuid) {
 //==================================
 	if ($("#toggleSharing_"+uuid).hasClass("fa-minus")) {
@@ -1993,11 +2017,19 @@ function setVariables(data)
 	try {
 		var select_variable_nodes = $("asmContext:has(metadata[semantictag*='g-select-variable'])",data);
 		for (var i=0;i<select_variable_nodes.length;i++) {
+			updateVariable(select_variable_nodes[i]);
+/*
 			const value = UICom.structure.ui[$(select_variable_nodes[i]).attr("id")].resource.getAttributes().value;
 			const code = UICom.structure.ui[$(select_variable_nodes[i]).attr("id")].resource.getAttributes().code;
-			const variable_value = (value=="") ? code : value;
+			const utc = UICom.structure.ui[$(select_variable_nodes[i]).attr("id")].resource.getAttributes().utc;
+			let variable_value = code;
+			if (variable_value==undefined)
+				variable_value = value;
+			if (variable_value==undefined)
+				variable_value = utc;
 			const varname = UICom.structure.ui[$(select_variable_nodes[i]).attr("id")].getCode();
 			g_variables[varname] = cleanCode(variable_value,true);
+*/
 		}
 	} catch(e){}
 }
@@ -2009,9 +2041,12 @@ function updateVariable(node)
 	var value = UICom.structure.ui[$(node).attr("id")].resource.getAttributes().value;
 	var code = UICom.structure.ui[$(node).attr("id")].resource.getAttributes().code;
 	var text = UICom.structure.ui[$(node).attr("id")].resource.getAttributes().text;
+	var utc = UICom.structure.ui[$(node).attr("id")].resource.getAttributes().utc;
 	var variable_value = (value=="") ? code : value;
 	if (variable_value==undefined)
-		variable_value = text;;
+		variable_value = text;
+	if (variable_value==undefined)
+		variable_value = utc;
 	g_variables[UICom.structure.ui[$(node).attr("id")].getCode()] = cleanCode(variable_value,true);
 }
 
@@ -2265,7 +2300,7 @@ function getImg(semtag,data,langcode,fluid)
 {
 	var result = "";
 	const filename = $("filename[lang='"+languages[langcode]+"']",$("asmResource[xsi_type='Image']",$("metadata[semantictag='"+semtag+"']",data).parent())).text();
-	if (filename!="<span style='color:red'> Not saved or Empty</span>") {
+	if (filename!="") {
 		if (langcode==null)
 			langcode = LANGCODE;
 		if (fluid==null)
@@ -2565,9 +2600,9 @@ function replaceVariable(text,node,withquote)
 			const pagecode = UICom.structure.ui[pageid].getCode();
 			text = text.replaceAll('##pagecode##',cleanCode(pagecode));
 		}
-		if (text.indexOf("##today-utc##"))
+		if (text.indexOf("##today-utc##")>-1)
 			text = text.replaceAll('##today-utc##',new Date().getTime());
-		if (text.indexOf("##today##"))
+		if (text.indexOf("##today##")>-1)
 			text = text.replaceAll('##today##',new Date().toLocaleString());
 		if (text!=undefined && text.indexOf('lastimported')>-1) {
 			text = text.replaceAll('##lastimported-1##',"g_importednodestack[g_importednodestack.length-2]");
@@ -2619,6 +2654,9 @@ function replaceVariable(text,node,withquote)
 				text = text.replaceAll('##itselfrescode##',"'"+$($("code",$("asmResource[xsi_type!='context'][xsi_type!='nodeRes']",node.node))).text()+"'");
 	
 		}
+		if (text!=undefined && text.indexOf('##userlogin##')>-1) {
+			text = text.replaceAll('##userlogin##',USER.username);
+		}
 		var n=0;
 		while (text!=undefined && text.indexOf("{##")>-1 && n<100) {
 			var test_string = text.substring(text.indexOf("{##")+3); // test_string = abcd{##variable##}efgh.....
@@ -2637,7 +2675,7 @@ function replaceVariable(text,node,withquote)
 				var i = text.substring(text.indexOf("[")+1,text.indexOf("]"));
 				i = replaceVariable(i);
 				if (g_variables[variable_value]!=undefined && g_variables[variable_value].length>=i)
-					text = g_variables[variable_value][i];
+					text = text.replace("##"+variable_name+"##", g_variables[variable_value][i]);
 				}
 			n++; // to avoid infinite loop
 		}
@@ -3423,6 +3461,13 @@ function decode(s) {
 	return result
 }
 
+function toggleCheckboxMultiple(obj) {
+	if (obj.checked) 
+		$('input[name*=multiple]').prop('checked', true);
+	else 
+		$('input[name*=multiple]').prop('checked', false)
+}
+
 //=========================================================
 // Functions for Resources
 //=========================================================
@@ -3620,6 +3665,11 @@ function getDataUrl(img) {
 	return canvas.toDataURL('image/png');
 }
 
+function setUniqueNodeCode(nodeid) {
+	const code = new Date().getTime()+"@";
+	$(UICom.structure.ui[nodeid].code_node).text(code);
+	UICom.structure.ui[nodeid].save();
+}
 //================================================
 //================================================
 

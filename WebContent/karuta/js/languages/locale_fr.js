@@ -108,6 +108,8 @@ karutaStr["fr"]["copied"] = "Copié";
 karutaStr["fr"]["waitreport"] = "Patience, le rapport est exécuté sur le serveur. Revenez dans quelques minutes pour visualiser le rapport.";
 karutaStr["fr"]["instruction-export-menu"] = "Copier le menu Ajouter et le coller dans l'élément où vous voulez l'importer.";
 karutaStr["fr"]["back"] = "Cliquer pour revenir en arrière";
+karutaStr["fr"]["select-deselect"] = "Sélectionner/Désélectionner tout";
+karutaStr["fr"]["noemail-yourself"] = "Vous ne pouvez utiliser votre courriel.";
 
 //=========================================
 //========== ERRORS =======================
@@ -476,6 +478,7 @@ karutaStr['fr']['csv']="Rôles - Bouton CSV";
 karutaStr['fr']['pdf']="Rôles - Bouton PDF";
 karutaStr['fr']['rtf']="Rôles - Bouton RTF";
 karutaStr['fr']['img']="Rôles - Bouton PNG";
+karutaStr['fr']['print']="Rôles - Bouton Imprimer";
 karutaStr['fr']['document-required']="Vous devez spécifier un document avant de le soumettre !";
 karutaStr['fr']['size-upload']="Votre fichier est trop volumineux : seuls les fichiers de moins de " + g_configVar['maxfilesizeupload'] + " Mo sont autorisés !";
 karutaStr['fr']['local-label']="Libellé local";
@@ -566,6 +569,7 @@ karutaStr['fr']['asmRoot']="Root";
 karutaStr['fr']['asmStructure']="Section";
 karutaStr['fr']['asmUnit']="Page";
 karutaStr['fr']['asmUnitStructure']="Sous-section";
+karutaStr['fr']['tabs-section']="Sous-section (onglets)";
 
 karutaStr['fr']['TextField']="Texte long";
 karutaStr['fr']['Field']="Texte court";

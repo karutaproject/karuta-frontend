@@ -332,11 +332,22 @@ UIFactory["Get_Resource"].prototype.getView = function(dest,type,langcode,indash
 			if (code.indexOf("*")>-1)
 				html += "<span name='code'>" + cleanCode(code) + "</span> ";
 			if (code.indexOf("%")<0) {
-				if (label.indexOf("fileid-")>-1)
+				if (label.indexOf("fileid-")>-1) {
+					if (UICom.structure["ui"][label.substring(7)]==undefined)
+						$.ajax({
+							async: false,
+							type : "GET",
+							dataType : "xml",
+							url : serverBCK_API+"/nodes/node/" + label.substring(7),
+							success : function(data) {
+								UICom.parseStructure(data,false);
+							}
+						});
 					html += UICom.structure["ui"][label.substring(7)].resource.getView();
-				else
+				} else {
 					html += "<span name='label'>" + label + "</span> ";
 				}
+			}
 			if (code.indexOf("&")>-1)
 				html += " ["+$(this.value_node).text()+ "] ";
 			if (this.preview)
@@ -461,6 +472,7 @@ UIFactory["Get_Resource"].prototype.displayEditor = function(destid,type,langcod
 			self.parse(destid,type,langcode,g_Get_Resource_caches[portfoliocode+semtag],disabled,srce,resettable,target,semtag,null,portfoliocode,semtag2,cachable);
 		else {
 			$.ajax({
+				async:false,
 				type : "GET",
 				dataType : "xml",
 				url : serverBCK_API+"/nodes?portfoliocode=" + portfoliocode + "&semtag="+semtag.replace("!",""),
@@ -512,18 +524,21 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 	let tableau1 = new Array();
 	let tableau2 = new Array();
 	for ( var i = 0; i < $(nodes).length; i++) {
-		let resource = null;
-		if ($("asmResource",nodes[i]).length==3)
-			resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",nodes[i]); 
-		else
-			resource = $("asmResource[xsi_type='nodeRes']",nodes[i]);
-		let code = $('code',resource).text();
-		let libelle = $(srce+"[lang='"+languages[langcode]+"']",resource).text();
-		if (code.indexOf("~")<0)   // si ~ on trie sur le libellé sinon sur le code
-			tableau1[i] = [code,nodes[i]];
-		else
-			tableau1[i] = [libelle,nodes[i]]
-		tableau2[i] = {'code':code,'libelle':libelle};
+		const langnotvisible = ($("metadata-wad",nodes[i]).attr('langnotvisible')==undefined)?'':$("metadata-wad",nodes[i]).attr('langnotvisible');
+		if (langnotvisible!=karutaStr[languages[LANGCODE]]['language']) {
+			let resource = null;
+			if ($("asmResource",nodes[i]).length==3)
+				resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",nodes[i]); 
+			else
+				resource = $("asmResource[xsi_type='nodeRes']",nodes[i]);
+			let code = $('code',resource).text();
+			let libelle = $(srce+"[lang='"+languages[langcode]+"']",resource).text();
+			if (code.indexOf("~")<0)   // si ~ on trie sur le libellé sinon sur le code
+				tableau1[i] = [code,nodes[i]];
+			else
+				tableau1[i] = [libelle,nodes[i]]
+			tableau2[i] = {'code':code,'libelle':libelle};
+		}
 	}
 	let newTableau1 = tableau1.sort(sortOn1);
 	var tabadded = [];
@@ -1031,6 +1046,8 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 	if (type.indexOf('multiple')>-1) {
 	//------------------------------------------------------------
 	//------------------------------------------------------------
+		let html = "<div class='selectAll'><input type='checkbox' onchange='toggleCheckboxMultiple(this)'> "+karutaStr[LANG]['select-deselect']+"</div>";
+		$("#"+destid).append(html);
 		var inputs = "<div id='get_multiple' class='multiple "+semtag+"'></div>";
 		var inputs_obj = $(inputs);
 		//-----search for already added------------------
@@ -1041,7 +1058,7 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 			var query_semtag = this.query_semtag;
 			var data = UICom.structure.ui[targetid].node;
 			var searchsemtag = (this.unique=='true')?query_semtag:this.unique;
-			var allreadyadded = $("*:has(>metadata[semantictag*="+searchsemtag+"])",data);
+			var allreadyadded = allreadyadded = $("*:has(>metadata[semantictag*="+searchsemtag+"])",data);
 			var tabadded = [];
 			for ( var i = 0; i < allreadyadded.length; i++) {
 				let resource = null;
@@ -1105,18 +1122,17 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 				//------------------------------
 				input += "<div id='"+code+"' style=\""+style+"\">";
 				if (selectable) {
-					input += "	<input type='checkbox' uuid='"+uuid+"' name='multiple_"+self.id+"' value='"+$('value',resource).text()+"' code='"+$('code',resource).text()+"' class='multiple-item";
-					input += "' ";
+					input += "	<input type='checkbox' id='input-"+uuid+"' uuid='"+uuid+"' name='multiple_"+self.id+"' value='"+$('value',resource).text()+"' code='"+$('code',resource).text()+"' class='multiple-item'";
 					for (var j=0; j<languages.length;j++){
 						if (target=='fileid' || target=='resource') {
 							if (target=='fileid')
-								input += "label_"+languages[j] + "=\"" + target + "-" + uuid + "\" ";
+								input += " label_"+languages[j] + "=\"" + target + "-" + uuid + "\" ";
 							else
-								input += "label_"+languages[j] + "=\"" + target + ":" + uuid + "|semtag:"+semtag+"|label:"+$("label[lang='"+languages[j]+"']",resource).text()+"\" ";
+								input += " label_"+languages[j] + "=\"" + target + ":" + uuid + "|semtag:"+semtag+"|label:"+$("label[lang='"+languages[j]+"']",resource).text()+"\" ";
 						} else if (target=='nodelabel')
-							input += "label_"+languages[j]+"=\"nodelabel:"+uuid + "|semtag:"+semtag+"|label:"+UICom.structure["ui"][uuid].getLabel(null,'none')+"\" ";
+							input += " label_"+languages[j]+"=\"nodelabel:"+uuid + "|semtag:"+semtag+"|label:"+UICom.structure["ui"][uuid].getLabel(null,'none')+"\" ";
 						else 
-							input += "label_"+languages[j]+"=\""+$(srce+"[lang='"+languages[j]+"']",resource).text()+"\" ";
+							input += " label_"+languages[j]+"=\""+$(srce+"[lang='"+languages[j]+"']",resource).text()+"\" ";
 					}
 					if (disabled)
 						input += "disabled";
@@ -1132,7 +1148,9 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 				}
 				input += "</div>";
 				var input_obj = $(input);
-				$(inputs_obj).append(input_obj);
+				$(inputs_obj).append(input);
+				if (target!='fileid' && target!='resource' && target!='nodelabel') // to avoid unescape if html tags in label 
+					$("#input-"+uuid,inputs_obj).attr("label_"+languages[langcode],$(srce+"[lang='"+languages[langcode]+"']",resource).html());
 				// ---------------------- children ---------
 				if (semtag2!="") {
 					var semtag_parent = semtag.replace("!","");
@@ -1904,7 +1922,7 @@ function import_get_multiple(parentid,targetid,title,query_portfolio,query_semta
 		actions.push(JSON.parse(acts[i].replaceAll("|","\"")));
 	}
 	let js1 = "$('#edit-window').modal('hide')";
-	let js2 = "this.setAttribute('disabled',true);";
+	let js2 = "this.setAttribute('disabled',true);$('#edit-window').modal('hide');";
 	for (let i=0;i<actions.length;i++) {
 		//-----------------
 		let fctjs = "";

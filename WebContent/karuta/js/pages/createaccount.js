@@ -144,8 +144,8 @@ function displayKarutaCreateAccount()
 					applyLoginConfiguration();
 				},
 				error : function(jqxhr,textStatus) {
-					var navbar_html = getNavBar('list',null);
-					$("#navigation-bar").html(navbar_html);
+					$("#navigation-bar").html(getNavBar('create_account',null));
+					$("#login").html(getInputs());$("#welcome4").html(karutaStr[LANG]['create_account']);
 					$("a[data-toggle='tooltip']").tooltip({html: true, trigger: 'hover'});
 					applyNavbarConfiguration();
 					applyLoginConfiguration();

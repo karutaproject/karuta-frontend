@@ -108,6 +108,8 @@ karutaStr["en"]["copied"] = "Copied";
 karutaStr["en"]["waitreport"] = "Wait, the report is executed on the server. Come back in a few minutes to view the report.";
 karutaStr["en"]["instruction-export-menu"] = "Copy the menu and paste it where you want to import it.";
 karutaStr["en"]["back"] = "Click to go back";
+karutaStr["en"]["select-deselect"] = "Select/Deselect All";
+karutaStr["en"]["noemail-yourself"] = "You cannot use your email address.";
 
 //=========================================
 //========== ERRORS =======================
@@ -476,6 +478,7 @@ karutaStr['en']['csv']="Roles - Button CSV";
 karutaStr['en']['pdf']="Roles - Button PDF";
 karutaStr['en']['rtf']="Rôles - Button RTF";
 karutaStr['en']['img']="Rôles - Button PNG";
+karutaStr['en']['print']="Rôles - Button Print";
 karutaStr['en']['document-required']="You have to specify a document before to submit !";
 karutaStr['en']['size-upload']="Your file is so big : it must be less than " + g_configVar['maxfilesizeupload'] + " Mo !";
 karutaStr['en']['local-label']="Local Label";
@@ -566,6 +569,7 @@ karutaStr['en']['asmRoot']="Root";
 karutaStr['en']['asmStructure']="Section";
 karutaStr['en']['asmUnit']="Page";
 karutaStr['en']['asmUnitStructure']="Subsection";
+karutaStr['en']['tabs-section']="Subsection (tabs)";
 
 karutaStr['en']['TextField']="Long Text";
 karutaStr['en']['Field']="Short Text";

@@ -229,7 +229,6 @@ UIFactory["TextField"].prototype.displayEditor = function(destid,type,langcode,d
 		html += ">"+text+"</textarea></div>";
 	}
 	else if(type.indexOf('x')>-1) {
-//		var width = type.substring(0,type.indexOf('x'));
 		var height = type.substring(type.indexOf('x')+1);
 		html += "<div id='div_"+this.id+"'><textarea id='"+this.id+"_edit_"+langcode+(inline?'inline':'')+"' style='height:"+height+"px' ";
 		if (disabled)
@@ -244,7 +243,7 @@ UIFactory["TextField"].prototype.displayEditor = function(destid,type,langcode,d
 	if (g_userroles[0]=='designer' || USER.admin) {
 		htmleditor = true;
 	}
-	$("#footer-before-close").html("<button class='btn' onclick='UICom.structure.ui['"+uuid+"'].resource.update('"+langcode+"')'>"+karutaStr[LANG]['Save']+"</button>");
+	$("#footer-before-close").html("<button class='btn' onclick=\"UICom.structure.ui['"+uuid+"'].resource.update('"+langcode+"')\">"+karutaStr[LANG]['Save']+"</button>");
 	$("#"+uuid+"_edit_"+langcode+(inline?'inline':'')).wysihtml5(
 		{
 			toolbar:{"size":"xs","font-styles": false,"html":htmleditor,"blockquote": true,"image": false,"link": false},
@@ -253,7 +252,7 @@ UIFactory["TextField"].prototype.displayEditor = function(destid,type,langcode,d
 			'events': {
 				'load': function(){try{$('.wysihtml5-sandbox').contents().find('body').on("keyup", function(){UICom.structure['ui'][uuid].resource.updateCounterWords(langcode);});}catch(e){}; },
 				'change': function(){UICom.structure['ui'][uuid].resource.update(langcode);},
-				'blur': function(){UICom.structure['ui'][uuid].resource.update(langcode);}
+//				'blur': function(){UICom.structure['ui'][uuid].resource.update(langcode);}
 			},
 			parserRules: {
 				classes: {
@@ -266,31 +265,6 @@ UIFactory["TextField"].prototype.displayEditor = function(destid,type,langcode,d
 			}
 		}
 	);
-	/*
-	  	$("#"+uuid+"_edit_"+langcode+(inline?'inline':'')).wysihtml5(
-		{
-			toolbar:{"size":"xs","font-styles": false,"html":htmleditor,"blockquote": true,"image": false,"link": false},
-			"uuid":uuid,
-			"locale":LANG,
-			'events': {
-				'load': function(){try{$('.wysihtml5-sandbox').contents().find('body').on("keyup", function(){UICom.structure['ui'][currentTexfieldUuid].resource.updateCounterWords(langcode);});}catch(e){}; },
-				'change': function(){UICom.structure['ui'][currentTexfieldUuid].resource.update(langcode);},
-				'focus': function(){currentTexfieldUuid=uuid;currentTexfieldInterval = setInterval(function(){UICom.structure['ui'][currentTexfieldUuid].resource.update(langcode);}, g_wysihtml5_autosave);},
-				'blur': function(){clearInterval(currentTexfieldInterval);}
-			},
-			parserRules: {
-				classes: {
-					"style": 1,
-					"class": 1
-				}
-			},
-			tags: {
-				span: {}
-			}
-		}
-	);
-
-	 */
 	//------------------------------------------------
 };
 

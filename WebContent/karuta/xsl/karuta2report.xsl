@@ -442,6 +442,33 @@
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='text-value']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</text>
 	</xsl:template>
+	<!-- ================ collapsable-section ============================ -->
+	<xsl:template match="*[metadata/@semantictag='collapsable-section']">
+		<xsl:variable name="style">
+			<xsl:call-template name="style"/>
+		</xsl:variable>
+		<xsl:variable name="ref">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='ref']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="class">
+			<xsl:call-template name="class"/>
+		</xsl:variable>
+		<collapsable-section>
+			<xsl:if test="not($class='')">
+				<xsl:attribute name="class"><xsl:value-of select="$class"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not($ref='')">
+				<xsl:attribute name="ref"><xsl:value-of select="$ref"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not($style='..')">
+				<xsl:attribute name="style"><xsl:value-of select="$style"/></xsl:attribute>
+			</xsl:if>
+			<titre>
+				<xsl:value-of select="./asmContext[metadata/@semantictag='text-value']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+			</titre>
+			<xsl:apply-templates select='asmUnitStructure'/>
+		</collapsable-section>
+	</xsl:template>
 	<!-- ================ node_resource ============================ -->
 	<xsl:template match="*[metadata/@semantictag='node_resource']">
 		<xsl:variable name="editresroles">
@@ -633,7 +660,6 @@
 			</xsl:if>
 			<text>
 				<xsl:value-of select=".//asmContext[metadata/@semantictag='text-value']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
-			
 			</text>
 		</url2unit>
 	</xsl:template>
@@ -942,6 +968,9 @@
 		<xsl:variable name="countvar">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='countvar']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
+		<xsl:variable name="portfolio">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='portfolio']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
 		<xsl:variable name="nodetype">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='nodetype']/asmResource[@xsi_type='Get_Resource']/value"></xsl:value-of>
 		</xsl:variable>
@@ -955,6 +984,9 @@
 		<for-each-node>
 			<xsl:if test="not($ref-init='')">
 				<xsl:attribute name="ref-init"><xsl:value-of select="$ref-init"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not($portfolio='')">
+				<xsl:attribute name="portfolio"><xsl:value-of select="$portfolio"/></xsl:attribute>
 			</xsl:if>
 			<xsl:if test="not($countvar='')">
 				<xsl:attribute name="countvar"><xsl:value-of select="$countvar"/></xsl:attribute>
