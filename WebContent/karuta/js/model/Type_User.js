@@ -1037,11 +1037,11 @@ UIFactory["User"].remove = function(userid,from_page)
 		data : "",
 		success : function(data) {
 			if (from_page==null){
+				fill_list_users();
 				$("#user-refresh").click();
-				fill_list_usersgroups();
 			}
 			else if (from_page=="UsersGroup"){
-				fill_list_users();
+				fill_list_usersgroups();
 				$("#user-refresh").click();
 			}
 		}
