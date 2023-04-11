@@ -231,4 +231,3 @@ function display_main_page(portfolioid)
 	fill_main_page(portfolioid);
 	show_main_page();
 }
-
