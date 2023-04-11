@@ -595,6 +595,24 @@ function processReportActions(destid,actions,data)
 //===============================================================
 
 //==================================
+function prevnextbuttons(dashboard_current,first,last,max,NOELT,NBELT)
+//==================================
+{
+	const jsprev = "$('#'+dashboard_current).html('');g_variables['NOELT'] = '" + (parseInt(NOELT) - parseInt(NBELT)) + "';r_processPortfolio(0,dashboard_infos[dashboard_current].xmlReport,dashboard_current,dashboard_infos[dashboard_current].data,0);"
+	const jsnext = "$('#'+dashboard_current).html('');g_variables['NOELT'] = '" + (parseInt(NOELT) + parseInt(NBELT)) + "';r_processPortfolio(0,dashboard_infos[dashboard_current].xmlReport,dashboard_current,dashboard_infos[dashboard_current].data,0);"
+	const htlmprev = "<button class='btn' onclick=\""+jsprev+"\">"+karutaStr[LANG]['prev']+"</button> ";
+	const htmlnumbers = " " + first +" - "+ last + "/" + max;
+	const htmlnext = " <button class='btn' onclick=\""+jsnext+"\">"+karutaStr[LANG]['next']+"</button>";
+	$("#"+dashboard_current).append("<br/>");
+	if (parseInt(NOELT)>=parseInt(NBELT))
+		$("#"+dashboard_current).append(htlmprev);
+	$("#"+dashboard_current).append(htmlnumbers);
+	if (parseInt(NOELT)+parseInt(NBELT)<max)
+		$("#"+dashboard_current).append(htmlnext);
+}
+
+
+//==================================
 function refresh_report(dashboard_current)
 //==================================
 {
@@ -1108,12 +1126,8 @@ g_report_actions['for-each-node-js'] = function (destid,action,no,data)
 			}
 		});
 	}
-	if (NBELT!="" && NOELT!="" && parseInt(NOELT)+parseInt(NBELT)<nodeids.length) {
-		g_variables["NOELT"] = parseInt(NOELT) + parseInt(NBELT);
-		let js = "$(\"#\"+dashboard_current).html(\"\");r_processPortfolio(0,dashboard_infos[dashboard_current].xmlReport,dashboard_current,dashboard_infos[dashboard_current].data,0);"
-		let next = "<br>"+first +" - "+ last + "/" +nodeids.length+ " <button class='btn' onclick='"+js+"'>NEXT</button>"
-		$("#"+dashboard_current).append(next);
-	}
+	if (NBELT!="" && NOELT!="")
+		prevnextbuttons(dashboard_current,first,last,portfolioids.length,NOELT,NBELT);
 }
 
 
@@ -1779,12 +1793,8 @@ g_report_actions['for-each-portfolio'] = function (destid,action,no,data)
 				}
 				//------------------------------------
 			}
-			if (NBELT!="" && NOELT!="" && parseInt(NOELT)+parseInt(NBELT)<items_list.length) {
-				g_variables["NOELT"] = parseInt(NOELT) + parseInt(NBELT);
-				let js = "$(\"#\"+dashboard_current).html(\"\");r_processPortfolio(0,dashboard_infos[dashboard_current].xmlReport,dashboard_current,dashboard_infos[dashboard_current].data,0);"
-				let next = "<br>"+first +" - "+ last + "/" +items_list.length+ " <button class='btn' onclick='"+js+"'>NEXT</button>"
-				$("#"+dashboard_current).append(next);
-			}
+			if (NBELT!="" && NOELT!="")
+				prevnextbuttons(dashboard_current,first,last,portfolioids.length,NOELT,NBELT);
 		}
 	});
 }
@@ -1844,12 +1854,8 @@ g_report_actions['for-each-portfolio-js'] = function (destid,action,no,data)
 			}
 		});
 	}
-	if (NBELT!="" && NOELT!="" && parseInt(NOELT)+parseInt(NBELT)<portfolioids.length) {
-		g_variables["NOELT"] = parseInt(NOELT) + parseInt(NBELT);
-		let js = "$(\"#\"+dashboard_current).html(\"\");r_processPortfolio(0,dashboard_infos[dashboard_current].xmlReport,dashboard_current,dashboard_infos[dashboard_current].data,0);"
-		let next = "<br>"+first +" - "+ last + "/" +portfolioids.length+ " <button class='btn' onclick='"+js+"'>"+karutaStr[LANG]['next']+"</button>"
-		$("#"+dashboard_current).append(next);
-	}
+	if (NBELT!="" && NOELT!="")
+		prevnextbuttons(dashboard_current,first,last,portfolioids.length,NOELT,NBELT);
 }
 
 //=============================================================================
@@ -3325,10 +3331,6 @@ g_report_actions['for-each-vector'] = function (destid,action,no,data)
 		let a10 = $("a10",vectors[j]).text();
 		eval(display);
 	}
-	if (NBELT!="" && NOELT!="" && parseInt(NOELT)+parseInt(NBELT)<vectors.length) {
-		g_variables["NOELT"] = parseInt(NOELT) + parseInt(NBELT);
-		let js = "$(\"#\"+dashboard_current).html(\"\");r_processPortfolio(0,dashboard_infos[dashboard_current].xmlReport,dashboard_current,dashboard_infos[dashboard_current].data,0);"
-		let next = "<br>"+first +" - "+ last + "/" +vectors.length+ " <button class='btn' onclick='"+js+"'>NEXT</button>"
-		$("#"+dashboard_current).append(next);
-	}
+	if (NBELT!="" && NOELT!="")
+		prevnextbuttons(dashboard_current,first,last,portfolioids.length,NOELT,NBELT);
 }

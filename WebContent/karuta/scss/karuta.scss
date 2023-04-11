@@ -3319,6 +3319,7 @@ table.tablesorter th.restore {
 			overflow: visible !important;
 			overflow-y : visible !important;
 		}
+		#main-container {font-size:130% !important;}
 		
 		#saved-window,
 		#navigation-bar,
@@ -3329,7 +3330,7 @@ table.tablesorter th.restore {
 		.buttons,
 		.buttons-menus,
 		.btn-group {
-			display:none !important;
+			block:none !important;
 		}
 	
 		a:after {

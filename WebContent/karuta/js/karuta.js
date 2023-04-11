@@ -1175,6 +1175,7 @@ function reset(uuid)
 {
 	var urlS = serverBCK_API+'/nodes/node/'+uuid+'/action/reset';
 	$.ajax({
+		async:false,
 		type : "POST",
 		dataType : "text",
 		contentType: "application/xml",
