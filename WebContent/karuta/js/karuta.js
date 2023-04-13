@@ -715,10 +715,12 @@ function getURLParameter(sParam) {
 function displayBack() {
 //==================================
 	g_backstack.pop();
+	if (g_backstack.length==0) return;
 	let uuid = g_backstack[g_backstack.length-1].uuid
 	let portfolioid = g_backstack[g_backstack.length-1].portfolioid;
 	if (portfolioid!=g_portfolioid) {
-			var url = serverBCK_API+"/portfolios/portfolio/" + portfolioid + "?resources=true";
+			g_portfolioid = portfolioid;
+			var url = serverBCK_API+"/portfolios/portfolio/" + g_portfolioid + "?resources=true";
 			$.ajax({
 				async:true,
 				type : "GET",
@@ -729,6 +731,7 @@ function displayBack() {
 					g_userroles = [];
 					g_portfolio_current = data;
 					g_portfolio_rootid = $("asmRoot",data).attr("id");
+					setCSSportfolio(data);
 					//-------------------------
 					var portfoliocode = portfolios_byid[g_portfolioid].code_node.text();
 					if (typeof(rewriteURL) == 'function')
@@ -770,12 +773,28 @@ function displayBack() {
 					});
 					// --------------------------
 					UICom.parseStructure(data,true);
+					$("#sub-bar").html(UIFactory.Portfolio.getNavBar(g_display_type,LANGCODE,g_edit,g_portfolioid));
 					if (g_bar_type.indexOf('horizontal')>-1) {
-						UIFactory["Portfolio"].displayHorizontalMenu(UICom.root,'menu_bar','standard',LANGCODE,g_edit,UICom.rootid);
-					} else {
-						UIFactory["Portfolio"].displaySidebar(UICom.root,'sidebar','standard',LANGCODE,g_edit,UICom.rootid);
+						UIFactory.Portfolio.displayPortfolio('portfolio-container',g_display_type,LANGCODE,g_edit);
+						$("#portfolio-container").attr('role',role);
 					}
-					displayPage(uuid);
+					else {
+						let html ="";
+						html += "	<div id='main-row' class='row'>";
+						if (g_display_sidebar) {
+							html += "		<div class='col-md-3' id='sidebar'></div>";
+							html += "		<div class='col-md-9' id='contenu'></div>";
+						} else {
+							html += "		<div class='col-md-3' id='sidebar' style='display:none'></div>";
+							html += "		<div class='col-md-12' id='contenu'></div>";
+						}
+						html += "	</div>";
+						$("#portfolio-container").html(html);
+						$("#portfolio-container").attr('role',role);
+						$("#edit-window").attr('role',role);
+						UIFactory["Portfolio"].displaySidebar(UICom.root,'sidebar',g_display_type,LANGCODE,g_edit,g_portfolio_rootid);
+					}
+					$("#sidebar_"+uuid).click();
 			}
 		});
 	} else {

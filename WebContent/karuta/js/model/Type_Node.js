@@ -128,6 +128,8 @@ UIFactory["Node"] = function( node )
 			this.structured_resource = new UIFactory[this.xsi_type](node);
 		}
 		//--------------------
+		this.displaytest = this.metadata.getAttribute('displaytest');
+		//--------------------
 		if ($("lastmodified",$("asmResource[xsi_type='nodeRes']",node)).length==0){  // for backward compatibility
 			var newelement = createXmlElement("lastmodified");
 			$("asmResource[xsi_type='nodeRes']",node)[0].appendChild(newelement);
@@ -158,7 +160,13 @@ UIFactory["Node"].prototype.displayNode = function(type,root,dest,depth,langcode
 	this.setMetadata(dest,depth,langcode,edit,inline,backgroundParent,parent,menu,inblock);
 	var alreadyDisplayed = false;
 	//---------------------------------------
-	if (this.visible && this.langnotvisible!=karutaStr[languages[LANGCODE]]['language']) {
+	let displayItem = true;
+	const displaytest = this.displaytest;
+	if (displaytest!='' && g_userroles[0]!='designer' && !eval(displaytest) ) {
+		displayItem = false;
+	}
+	//---------------------------------------
+	if (this.visible && this.langnotvisible!=karutaStr[languages[LANGCODE]]['language'] && displayItem) {
 		var node = UICom.structure["ui"][uuid];
 		var structure_node =   node.resource==null 
 							|| node.resource.type!='Proxy' 
@@ -1366,7 +1374,11 @@ UIFactory["Node"].displaySidebar = function(root,destid,type,langcode,edit,paren
 	if (type=='standard' || type=='translate' || type=='raw') {
 		for( var i=0;i<root.children.length;i++ )
 		{
-			UIFactory.Node.displaySidebarItem(root.children[i],destid,type,langcode,edit,parentid);
+			const uuid = root.children[i];
+			const name = UICom.structure.tree[uuid].node.tagName;
+			const resource_type = UICom.structure.ui[uuid].resource_type;
+			if (name == "asmStructure" || name == "asmRoot" || name == "asmUnit" || (resource_type!=null && resource_type == "URL2Portfolio"));
+				UIFactory.Node.displaySidebarItem(root.children[i],destid,type,langcode,edit,parentid);
 		}
 	}};
 
@@ -1384,43 +1396,62 @@ UIFactory["Node"].displaySidebar = function(root,destid,type,langcode,edit,paren
 		var display = ($(node.metadatawad).attr('display')==undefined)?'Y':$(node.metadatawad).attr('display');
 		var langnotvisible = ($(node.metadatawad).attr('langnotvisible')==undefined)?'':$(node.metadatawad).attr('langnotvisible');
 		var privatevalue = ($(node.metadatawad).attr('private')==undefined)?false:$(node.metadatawad).attr('private')=='Y';
+		const resource_type = UICom.structure.ui[uuid].resource_type;
 		if (langnotvisible!=karutaStr[languages[LANGCODE]]['language'] && (display=='N' && (g_userroles[0]=='designer' || USER.admin)) || (display=='Y' && (seenoderoles.indexOf("all")>-1 || showtoroles.indexOf("all")>-1 || seenoderoles.containsArrayElt(g_userroles) || showtoroles.containsArrayElt(g_userroles) || g_userroles[0]=='designer'))) {
-			if(name == "asmUnit") // Click on Unit
-			{
-				var html = "";
-				var depth = 99;
-				html += "<div class='sidebar-item ";
-				if (privatevalue)
-					html+= "private"
-				html += "' id='parent-"+uuid+"' role='tablist'>";
-				html += "  <a style='cursor:pointer' id='sidebar_"+uuid+"' href='#' class='sidebar-link' onclick=\"displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+")\" >"+text+"</a>";
-				html += "</div><!-- panel -->";
-				$("#"+destid).append($(html));
+			let displayItem = true;
+			const displaytest = $(node.metadata).attr('displaytest');
+			if (displaytest!=undefined && g_userroles[0]!='designer' && !eval(displaytest) ) {
+				displayItem = false;
 			}
-			if(name == "asmStructure" || name == "asmRoot") // Click on Structure
+			if (displayItem)
 			{
-				var depth = 1;
-				var html = "";
-				html += "<div class='sidebar-item ";
-				if (privatevalue)
-					html+= "private"
-				html += "' id='parent-"+uuid+"' role='tablist'>";
-				html += "  <div  class='sidebar-link' style='cursor:pointer' redisplay=\"displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+")\" >";
-				if (localStorage.getItem('sidebar'+uuid)!=undefined && localStorage.getItem('sidebar'+uuid)=='open')
-					html += "  <small ><span onclick=\"toggleSidebarPlusMinus('"+uuid+"')\" id='toggle_"+uuid+"' class='fas fa-minus' style='float:right;padding-left:5px;margin-right:5px;'></span></small>";
-				else
-					html += "  <small ><span onclick=\"toggleSidebarPlusMinus('"+uuid+"')\" id='toggle_"+uuid+"' class='fas fa-plus' style='float:right;padding-left:5px;margin-right:5px;'></span></small>";
-				html += "  <a class='sidebar-link' href='#' onclick=\"toggleSidebarPlus('"+uuid+"');displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+")\" id='sidebar_"+uuid+"'>"+text+"</a>";
-				html += "  </div>"
-				if (localStorage.getItem('sidebar'+uuid)!=undefined && localStorage.getItem('sidebar'+uuid)=='open')
-					html += "<div id='collapse"+uuid+"' class='panel-collapse collapse show' role='tabpanel' aria-labelledby='sidebar_"+uuid+"'>";
-				else
-					html += "<div id='collapse"+uuid+"' class='panel-collapse collapse' role='tabpanel' aria-labelledby='sidebar_"+uuid+"'>";
-				html += "<div id='panel-body"+uuid+"' class='panel-body'></div><!-- panel-body -->";
-				html += "</div><!-- panel-collapse -->";
-				html += "</div><!-- panel -->";
-				$("#"+destid).append($(html));
-				UIFactory["Node"].displaySidebar(UICom.structure["tree"][itemid],'panel-body'+uuid,type,langcode,g_edit,uuid);
+				if(name == "asmUnit")
+				{
+					var html = "";
+					var depth = 99;
+					html += "<div class='sidebar-item ";
+					if (privatevalue)
+						html+= "private"
+					html += "' id='parent-"+uuid+"' role='tablist'>";
+					html += "  <a style='cursor:pointer' id='sidebar_"+uuid+"' href='#' class='sidebar-link' onclick=\"displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+")\" >"+text+"</a>";
+					html += "</div><!-- panel -->";
+					$("#"+destid).append($(html));
+				}
+				if(name == "asmStructure" || name == "asmRoot")
+				{
+					var depth = 1;
+					var html = "";
+					html += "<div class='sidebar-item ";
+					if (privatevalue)
+						html+= "private"
+					html += "' id='parent-"+uuid+"' role='tablist'>";
+					html += "  <div  class='sidebar-link' style='cursor:pointer' redisplay=\"displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+")\" >";
+					if (localStorage.getItem('sidebar'+uuid)!=undefined && localStorage.getItem('sidebar'+uuid)=='open')
+						html += "  <small ><span onclick=\"toggleSidebarPlusMinus('"+uuid+"')\" id='toggle_"+uuid+"' class='fas fa-minus' style='float:right;padding-left:5px;margin-right:5px;'></span></small>";
+					else
+						html += "  <small ><span onclick=\"toggleSidebarPlusMinus('"+uuid+"')\" id='toggle_"+uuid+"' class='fas fa-plus' style='float:right;padding-left:5px;margin-right:5px;'></span></small>";
+					html += "  <a class='sidebar-link' href='#' onclick=\"toggleSidebarPlus('"+uuid+"');displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+")\" id='sidebar_"+uuid+"'>"+text+"</a>";
+					html += "  </div>"
+					if (localStorage.getItem('sidebar'+uuid)!=undefined && localStorage.getItem('sidebar'+uuid)=='open')
+						html += "<div id='collapse"+uuid+"' class='panel-collapse collapse show' role='tabpanel' aria-labelledby='sidebar_"+uuid+"'>";
+					else
+						html += "<div id='collapse"+uuid+"' class='panel-collapse collapse' role='tabpanel' aria-labelledby='sidebar_"+uuid+"'>";
+					html += "<div id='panel-body"+uuid+"' class='panel-body'></div><!-- panel-body -->";
+					html += "</div><!-- panel-collapse -->";
+					html += "</div><!-- panel -->";
+					$("#"+destid).append($(html));
+					UIFactory["Node"].displaySidebar(UICom.structure["tree"][itemid],'panel-body'+uuid,type,langcode,g_edit,uuid);
+				}
+				if (name=='asmContext' && resource_type == "URL2Portfolio") {
+					var html = "";
+					html = "<div style='cursor:pointer' class='sidebar-item ";
+					if (privatevalue)
+						html+= "private"
+					html += "' id='parent-"+uuid+"' role='tablist'>";
+					html += UICom.structure["ui"][uuid].resource.getView();
+					html += "</div><!-- panel -->";
+					$("#"+destid).append($(html));					
+				}
 			}
 		}
 
@@ -1455,45 +1486,64 @@ UIFactory["Node"].displaySidebar = function(root,destid,type,langcode,edit,paren
 			var display = ($(node.metadatawad).attr('display')==undefined)?'Y':$(node.metadatawad).attr('display');
 			var langnotvisible = ($(node.metadatawad).attr('langnotvisible')==undefined)?'':$(node.metadatawad).attr('langnotvisible');
 			var privatevalue = ($(node.metadatawad).attr('private')==undefined)?false:$(node.metadatawad).attr('private')=='Y';
+			const resource_type = UICom.structure.ui[uuid].resource_type;
 			if (langnotvisible!=karutaStr[languages[LANGCODE]]['language'] && ( (display=='N' && (g_userroles[0]=='designer' || USER.admin)) || (display=='Y' && (seenoderoles.indexOf("all")>-1 || showtoroles.indexOf("all")>-1 || seenoderoles.containsArrayElt(g_userroles) || showtoroles.containsArrayElt(g_userroles) || g_userroles[0]=='designer')))) {
-				if(name == "asmUnit" && level==0) // first level
+			let displayItem = true;
+			const displaytest = $(node.metadata).attr('displaytest');
+			if (displaytest!=undefined && g_userroles[0]!='designer' && !eval(displaytest) ) {
+				displayItem = false;
+			}
+			if (displayItem)
 				{
-					$("#"+destid).removeClass("nodisplay");
-					var html = "";
-					var depth = 99;
-					html += "<div class='dropdown-submenu";
-					if (privatevalue)
-						html+= "private"
-					html += "' id='parent-"+uuid+"' role='tabdivst'>";
-					html += "<div class='dropdown-item' style='cursor:pointer ";
-					if (g_configVar['portfolio-hmenu-logo']!="" && uuid==welcomeid)
-						html += ";display:none";
-					html += "' onclick=\"displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+")\" id='sidebar_"+uuid+"'>"+text+"</div>";
-
-					$("#"+destid).append($(html));
-				}
-				if(name == "asmUnit" && level==1) // in a dropdown
-				{
-					$("#"+destid).removeClass("nodisplay");
-					var html = "";
-					var depth = 99;
-					html += "<div class='dropdown-item' style='cursor:pointer' onclick=\"displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+")\" id='sidebar_"+uuid+"'>"+text+"</div>";
-					$("#"+destid).append($(html));
-				}
-				if(name == "asmStructure") // Click on Structure
-				{
-					$("#"+destid).removeClass("nodisplay");
-					var depth = 1;
-					var html = "";
-					html += "<div class='dropdown-submenu";
-					if (privatevalue)
-						html+= "private"
-					html += "' id='parent-"+uuid+"' role='tabdivst'>";
-					html += "<div class='dropdown-item' style='cursor:pointer' onclick=\"displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+")\" id='sidebar_"+uuid+"'>"+text+"</div>";
-					html += "<div id='dropdown"+uuid+"' class='dropdown-menu nodisplay' aria-labelledby='sidebar_"+uuid+"'></div>";
-					html += "</div>";
-					$("#"+destid).append($(html));
-					UIFactory["Node"].displayHorizontalMenu(UICom.structure["tree"][root.children[i]],'dropdown'+uuid,type,langcode,g_edit,uuid,1);
+					if(name == "asmUnit" && level==0) // first level
+					{
+						$("#"+destid).removeClass("nodisplay");
+						var html = "";
+						var depth = 99;
+						html += "<div class='dropdown-submenu";
+						if (privatevalue)
+							html+= "private"
+						html += "' id='parent-"+uuid+"' role='tabdivst'>";
+						html += "<div class='dropdown-item' style='cursor:pointer ";
+						if (g_configVar['portfolio-hmenu-logo']!="" && uuid==welcomeid)
+							html += ";display:none";
+						html += "' onclick=\"displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+")\" id='sidebar_"+uuid+"'>"+text+"</div>";
+	
+						$("#"+destid).append($(html));
+					}
+					if(name == "asmUnit" && level==1) // in a dropdown
+					{
+						$("#"+destid).removeClass("nodisplay");
+						var html = "";
+						var depth = 99;
+						html += "<div class='dropdown-item' style='cursor:pointer' onclick=\"displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+")\" id='sidebar_"+uuid+"'>"+text+"</div>";
+						$("#"+destid).append($(html));
+					}
+					if(name == "asmStructure") // Click on Structure
+					{
+						$("#"+destid).removeClass("nodisplay");
+						var depth = 1;
+						var html = "";
+						html += "<div class='dropdown-submenu";
+						if (privatevalue)
+							html+= "private"
+						html += "' id='parent-"+uuid+"' role='tabdivst'>";
+						html += "<div class='dropdown-item' style='cursor:pointer' onclick=\"displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+")\" id='sidebar_"+uuid+"'>"+text+"</div>";
+						html += "<div id='dropdown"+uuid+"' class='dropdown-menu nodisplay' aria-labelledby='sidebar_"+uuid+"'></div>";
+						html += "</div>";
+						$("#"+destid).append($(html));
+						UIFactory["Node"].displayHorizontalMenu(UICom.structure["tree"][root.children[i]],'dropdown'+uuid,type,langcode,g_edit,uuid,1);
+					}
+					if (name=='asmContext' && resource_type == "URL2Portfolio") {
+						var html = "";
+						html = "<div style='cursor:pointer' class=' ";
+						if (privatevalue)
+							html+= "private"
+						html += "' id='parent-"+uuid+"' role='tablist'>";
+						html += UICom.structure["ui"][uuid].resource.getView(null,'horizontal-menu');
+						html += "</div><!-- panel -->";
+						$("#"+destid).append($(html));					
+					}
 				}
 			}
 		}
@@ -1522,45 +1572,58 @@ UIFactory["Node"].displaySidebar = function(root,destid,type,langcode,edit,paren
 			var display = ($(node.metadatawad).attr('display')==undefined)?'Y':$(node.metadatawad).attr('display');
 			var langnotvisible = ($(node.metadatawad).attr('langnotvisible')==undefined)?'':$(node.metadatawad).attr('langnotvisible');
 			var privatevalue = ($(node.metadatawad).attr('private')==undefined)?false:$(node.metadatawad).attr('private')=='Y';
+			const resource_type = UICom.structure.ui[uuid].resource_type;
 			if (langnotvisible!=karutaStr[languages[LANGCODE]]['language'] && ( (display=='N' && (g_userroles[0]=='designer' || USER.admin)) || (display=='Y' && (seenoderoles.indexOf("all")>-1 || showtoroles.indexOf("all")>-1 || seenoderoles.containsArrayElt(g_userroles) || showtoroles.containsArrayElt(g_userroles) || g_userroles[0]=='designer')))) {
-				if(name == "asmUnit" && level==0) // first level
-				{
-					$("#"+destid).removeClass("nodisplay");
-					var html = "";
-					var depth = 99;
-					html += "<a onclick=\"displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+")\" id='sidebar_"+uuid+"'>"+text+"</a>";
-//					html += "<div class='dropdown-submenu";
-//					if (privatevalue)
-//						html+= "private"
-//					html += "' id='parent-"+uuid+"' role='tabdivst'>";
-//					html += "<div class='dropdown-item' style='cursor:pointer' onclick=\"displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+")\" id='sidebar_"+uuid+"'>"+text+"</div>";
-					$("#"+destid).append($(html));
+				let displayItem = true;
+				const displaytest = $(node.metadata).attr('displaytest');
+				if (displaytest!=undefined && g_userroles[0]!='designer' && !eval(displaytest) ) {
+					displayItem = false;
 				}
-				if(name == "asmUnit" && level==1) // in a dropdown
+				if (displayItem)
 				{
-					$("#"+destid).removeClass("nodisplay");
-					var html = "";
-					var depth = 99;
-					html += "<a onclick=\"displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+")\" id='sidebar_"+uuid+"'>"+text+"</a>";
-//			//				html += "<div class='dropdown-item' style='cursor:pointer' onclick=\"displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+")\" id='sidebar_"+uuid+"'>"+text+"</div>";
-					$("#"+destid).append($(html));
-				}
-				if(name == "asmStructure") // Click on Structure
-				{
-					$("#"+destid).removeClass("nodisplay");
-					var depth = 1;
-					var html = "";
-					html += "<div class='subnav";
-					if (privatevalue)
-						html+= "private"
-					if (g_bar_type=='horizontal-right')
-						html += " justify-content-end";
-					html += "' id='parent-"+uuid+"' role='tabdivst'>";
-					html += "<a onclick=\"displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+")\" id='sidebar_"+uuid+"'>"+text+"</a>";
-					html += "<div id='dropdown"+uuid+"' class='subnav-content' aria-labelledby='sidebar_"+uuid+"'></div>";
-					html += "</div>";
-					$("#"+destid).append($(html));
-					UIFactory["Node"].displayHorizontalMenu2(UICom.structure["tree"][root.children[i]],'dropdown'+uuid,type,langcode,g_edit,uuid,1);
+					if(name == "asmUnit" && level==0) // first level
+					{
+						$("#"+destid).removeClass("nodisplay");
+						var html = "";
+						var depth = 99;
+						html += "<a onclick=\"displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+")\" id='sidebar_"+uuid+"'>"+text+"</a>";
+						$("#"+destid).append($(html));
+					}
+					if(name == "asmUnit" && level==1) // in a dropdown
+					{
+						$("#"+destid).removeClass("nodisplay");
+						var html = "";
+						var depth = 99;
+						html += "<a onclick=\"displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+")\" id='sidebar_"+uuid+"'>"+text+"</a>";
+						$("#"+destid).append($(html));
+					}
+					if(name == "asmStructure") // Click on Structure
+					{
+						$("#"+destid).removeClass("nodisplay");
+						var depth = 1;
+						var html = "";
+						html += "<div class='subnav";
+						if (privatevalue)
+							html+= "private"
+						if (g_bar_type=='horizontal-right')
+							html += " justify-content-end";
+						html += "' id='parent-"+uuid+"' role='tabdivst'>";
+						html += "<a onclick=\"displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+")\" id='sidebar_"+uuid+"'>"+text+"</a>";
+						html += "<div id='dropdown"+uuid+"' class='subnav-content' aria-labelledby='sidebar_"+uuid+"'></div>";
+						html += "</div>";
+						$("#"+destid).append($(html));
+						UIFactory["Node"].displayHorizontalMenu2(UICom.structure["tree"][root.children[i]],'dropdown'+uuid,type,langcode,g_edit,uuid,1);
+					}
+					if (name=='asmContext' && resource_type == "URL2Portfolio") {
+						var html = "";
+						html = "<div style='cursor:pointer' class='sidebar-item ";
+						if (privatevalue)
+							html+= "private"
+						html += "' id='parent-"+uuid+"' role='tablist'>";
+						html += UICom.structure["ui"][uuid].resource.getView(null,'horizontal-menu');
+						html += "</div><!-- panel -->";
+						$("#"+destid).append($(html));					
+					}
 				}
 			}
 		}

@@ -109,12 +109,13 @@ UIFactory["URL2Portfolio"].prototype.getView = function(dest,type,langcode)
 	var local_label = this.local_label_node[langcode].text();
 	if (local_label!="")
 		label = local_label;
-	if (this.encrypted)
-		label = decrypt(label.substring(3),g_rc4key);
 	if (label=='')
 		label = "---";
 	var html ="";
-		html = "<div  class='URL2Portfolio-link' onclick=\"display_main_page('"+this.uuid_node.text()+"')\">"+label+"</div>";
+	html += "<div  class='URL2Portfolio-link ";
+	if (type=='horizontal-menu')
+		html+= "dropdown-item ";
+	html += "onclick=\"display_main_page('"+this.uuid_node.text()+"')\">"+label+"</div>";
 	return html;
 };
 
