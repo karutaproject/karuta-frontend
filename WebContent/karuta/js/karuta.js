@@ -83,6 +83,7 @@ function setDesignerRole(role)
 	if (g_display_type=='standard' || g_display_type=='raw'){
 		var uuid = $("#page").attr('uuid');
 		var html = "";
+		$("#portfolio_bar").html("");
 		if (g_bar_type.indexOf('horizontal')>-1) {
 			UIFactory.Portfolio.displayPortfolio('portfolio-container',g_display_type,LANGCODE,g_edit);
 			$("#portfolio-container").attr('role',role);
@@ -166,7 +167,7 @@ function getNavBar(type,portfolioid,edit)
 	html += "			<ul id='navbar-icons' class='mr-auto navbar-nav'>";
 	//---------------------HOME - TECHNICAL SUPPORT-----------------------
 	if (type=='login' || type=="create_account") {
-		if (g_configVar['tech-support']!=undefined) {
+		if (g_configVar['tech-support']!=undefined && g_configVar['tech-support']!='') {
 			if (g_configVar['tech-support']=='email')
 				html += "<li id='navbar-mailto' class='nav-item icon'><a class='nav-link' href='mailto:"+g_configVar['tech-email']+"?subject="+karutaStr[LANG]['technical_support']+" ("+appliname+")' data-title='"+karutaStr[LANG]["technical_support"]+"' data-toggle='tooltip' data-placement='bottom'><i class='fas fa-envelope' data-title='"+karutaStr[LANG]["technical_support"]+"' data-toggle='tooltip' data-placement='bottom'></i></a></li>";
 			else
@@ -175,7 +176,7 @@ function getNavBar(type,portfolioid,edit)
 			html += "<li id='navbar-mailto' class='nav-item icon'><a class='nav-link' href='mailto:"+g_configVar['technical-support']+"?subject="+karutaStr[LANG]['technical_support']+" ("+appliname+")' data-title='"+karutaStr[LANG]["technical_support"]+"' data-toggle='tooltip' data-placement='bottom'><i class='fas fa-envelope' data-title='"+karutaStr[LANG]["technical_support"]+"' data-toggle='tooltip' data-placement='bottom'></i></a></li>";
 	} else if (USER.username.indexOf("karuser")<0) {
 		html += "			<li id='navbar-home' class='nav-item icon'><a class='nav-link' onclick='show_list_page()' data-title='"+karutaStr[LANG]["home"]+"' data-toggle='tooltip' data-placement='bottom'><i class='fas fa-home'></i></a></li>";
-		if (g_configVar['tech-support']!=undefined) {
+		if (g_configVar['tech-support']!=undefined && g_configVar['tech-support']!='') {
 			if (g_configVar['tech-support']=='email')
 				html += "<li id='navbar-mailto' class='nav-item icon'><a class='nav-link' href='mailto:"+g_configVar['tech-email']+"?subject="+karutaStr[LANG]['technical_support']+" ("+appliname+")' data-title='"+karutaStr[LANG]["technical_support"]+"' data-toggle='tooltip' data-placement='bottom'><i class='fas fa-envelope' data-title='"+karutaStr[LANG]["technical_support"]+"' data-toggle='tooltip' data-placement='bottom'></i></a></li>";
 			else
@@ -3230,6 +3231,29 @@ function notExistChild (nodeid,semtag)
 		return false;
 }
 
+//==================================
+function testIfDisplay (nodeid)
+//==================================
+{
+	let displayItem = true;
+	if (g_userroles[0]!='designer') {
+		let displaytest = $(UICom.structure.ui[nodeid].metadata).attr('displaytest');
+		if (displaytest!=undefined && displaytest.startsWith(".")) {
+			for (fct in jqueryReportSpecificFunctions) {
+				if (displaytest.indexOf(fct)>-1) {
+					displaytest = displaytest.replace(fct,jqueryReportSpecificFunctions[fct]);
+					if (displaytest.indexOf("#lang#")>-1)
+						displaytest = displaytest.replace(/#lang#/g,languages[LANGCODE]);
+				}
+			}
+			displaytest = '$(UICom.structure.ui[nodeid].node)' + displaytest;
+			displayItem = eval(displaytest).length>0;
+		} else if (displaytest!=undefined && displaytest!="" && !eval(displaytest) ) {
+			displayItem = false;
+		}
+	}
+	return displayItem
+}
 
 
 //=========================================================
@@ -3655,6 +3679,7 @@ function deleteSameCode(uuid,targetsemtag,srcesemtag){
 function moveup(nodeid) {
 	UIFactory.Node.upNode(nodeid);
 }
+
 
 
 //================================================

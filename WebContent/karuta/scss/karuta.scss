@@ -897,7 +897,7 @@
 
 	.topbarmenu{
 		min-height: 4rem;
-		padding-top: 1.4rem;
+		padding-top: 1rem;
 		li.selected {
 			font-weight:bold;
 			color: var(--portfolio-sidebar-selected-text-color);
@@ -923,7 +923,6 @@
 		.dropdown-submenu {
 			position: relative;
 			&>.dropdown-menu {
-//				top: 2.4rem;
 				left:0px;
 				width:200px;
 				margin-top: -6px;
@@ -1019,6 +1018,56 @@
 			}
 		}
 	
+		/* ====================== */
+		/*      PORTFOLIOBAR      */
+		/* ====================== */
+		#portfolio_bar {
+			font-size:130%;
+			width:100%;
+			background-color: var(--portfolio-sidebar-background-color);
+			color: var(--portfolio-sidebar-text-color);
+			padding-top:15px;
+			min-height: 100%;
+			padding-left:0px;
+			padding-right:0px;
+			border-bottom:1px solid var(--portfolio-sidebar-separator-color);
+			.portfolio-selected a {
+				font-weight:bold;
+			}
+			.sidebar-item{
+				padding-left:15px;
+				padding-top:4px;
+				padding-bottom:4px;
+				a {
+					width:100%;
+				}
+				.sidebar-item {
+					padding-top:2px;
+					padding-bottom:2px;
+				}
+			}
+			.sidebar-link {
+				color: var(--portfolio-sidebar-text-color);
+				padding-right:9px;
+				a {
+					color: var(--portfolio-sidebar-text-color);
+				}
+				a:hover {
+					color: var(--portfolio-sidebar-selected-text-color);
+				}
+			}
+			.portfolio-selected{
+//				padding-right:5px;
+				a {
+					font-weight:bold;
+					color: var(--portfolio-sidebar-selected-text-color);
+				}
+			}
+			a.sidebar-link:hover {
+				color: var(--portfolio-sidebar-selected-text-color);
+			}
+		}
+
 		#portfolio-container {
 			background-color: var(--portfolio-background-color);
 			

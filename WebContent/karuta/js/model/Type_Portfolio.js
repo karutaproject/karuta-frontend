@@ -572,22 +572,10 @@ UIFactory["Portfolio"].getNavBar = function (type,langcode,edit,portfolioid)
 	//------------------------------------------------
 	html += "		</ul>";
 	html += "</nav>";
-	html += "<nav id='menu_bar' class='navbar navbar-expand-md navbar-light bg-lightfont'>";
-	html += "</nav>";
+	html += "<nav id='portfolio_bar' class='navbar navbar-expand-md navbar-light bg-lightfont' style='display:none'></nav>";
+	html += "<nav id='menu_bar' class='navbar navbar-expand-md navbar-light bg-lightfont'></nav>";
 	return html;
 }
-
-/*
-//======================
-UIFactory["Portfolio"].displayNodes = function(destid,tree,semtag,langcode,edit)
-//======================
-{	
-	$("#"+destid).html("");
-	var rootnodeid = $("*:has(metadata[semantictag="+semtag+"])",tree).attr("id");
-	var depth = 99;
-	UIFactory['Node'].displayNode('standard',UICom.structure['tree'][rootnodeid],destid,depth,langcode,edit);
-};
-*/
 
 /// Editor
 //==================================
@@ -666,6 +654,7 @@ UIFactory["Portfolio"].reloadparse = function(portfolioid)
 			UICom.parseStructure(data,true);
 			setVariables(data);
 			UIFactory["Portfolio"].parse_add(data);
+			$("#portfolio_bar").html("");
 			$("#sidebar").html("");
 			UIFactory["Portfolio"].displaySidebar(UICom.root,'sidebar',null,null,g_edit,UICom.root);
 			$('[data-toggle=tooltip]').tooltip({html: true, trigger: 'hover'}); 

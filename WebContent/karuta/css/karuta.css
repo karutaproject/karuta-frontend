@@ -824,7 +824,7 @@ body,
 /* ====================== */
 .topbarmenu {
   min-height: 4rem;
-  padding-top: 1.4rem;
+  padding-top: 1rem;
 }
 .topbarmenu li.selected {
   font-weight: bold;
@@ -931,6 +931,11 @@ body,
 /* ==================================================================== */
 /*                          PORTFOLIO                                   */
 /* ==================================================================== */
+#main-portfolio {
+  /* ====================== */
+  /*      PORTFOLIOBAR      */
+  /* ====================== */
+}
 #main-portfolio.container-fluid {
   padding-left: 0px;
   padding-right: 0px;
@@ -942,6 +947,49 @@ body,
 #main-portfolio #toggle-mode .portfolio-label:hover,
 #main-portfolio a .portfolio-label:hover {
   cursor: pointer;
+}
+#main-portfolio #portfolio_bar {
+  font-size: 130%;
+  width: 100%;
+  background-color: var(--portfolio-sidebar-background-color);
+  color: var(--portfolio-sidebar-text-color);
+  padding-top: 15px;
+  min-height: 100%;
+  padding-left: 0px;
+  padding-right: 0px;
+  border-bottom: 1px solid var(--portfolio-sidebar-separator-color);
+}
+#main-portfolio #portfolio_bar .portfolio-selected a {
+  font-weight: bold;
+}
+#main-portfolio #portfolio_bar .sidebar-item {
+  padding-left: 15px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+#main-portfolio #portfolio_bar .sidebar-item a {
+  width: 100%;
+}
+#main-portfolio #portfolio_bar .sidebar-item .sidebar-item {
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+#main-portfolio #portfolio_bar .sidebar-link {
+  color: var(--portfolio-sidebar-text-color);
+  padding-right: 9px;
+}
+#main-portfolio #portfolio_bar .sidebar-link a {
+  color: var(--portfolio-sidebar-text-color);
+}
+#main-portfolio #portfolio_bar .sidebar-link a:hover {
+  color: var(--portfolio-sidebar-selected-text-color);
+}
+#main-portfolio #portfolio_bar .portfolio-selected a {
+  font-weight: bold;
+  color: var(--portfolio-sidebar-selected-text-color);
+}
+#main-portfolio #portfolio_bar a.sidebar-link:hover {
+  color: var(--portfolio-sidebar-selected-text-color);
 }
 #main-portfolio #portfolio-container {
   background-color: var(--portfolio-background-color);

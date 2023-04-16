@@ -115,6 +115,7 @@ UIFactory["URL2Portfolio"].prototype.getView = function(dest,type,langcode)
 	html += "<div  class='URL2Portfolio-link ";
 	if (type=='horizontal-menu')
 		html+= "dropdown-item ";
+	html += "' "
 	html += "onclick=\"display_main_page('"+this.uuid_node.text()+"')\">"+label+"</div>";
 	return html;
 };
@@ -274,11 +275,8 @@ UIFactory["URL2Portfolio"].parse = function(destid,type,langcode,data,self,disab
 				});
 				$(select).append($(select_item_a));
 				//-------------- update button -----
-				if (code!="" && self_code==$('code',resource).text()) {
-					if (($('code',resource).text()).indexOf("#")>-1)
-						$("#button_"+self.id).html(code+" "+label[langcode]);
-					else
-						$("#button_"+self.id).html(label[langcode]);
+				if (code!="" && self_code==uuid) {
+					$("#button_"+self.id).html(label[langcode]);
 					$("#button_"+self.id).attr('class', 'btn btn-default select select-label').addClass("sel"+code);
 				}
 			}

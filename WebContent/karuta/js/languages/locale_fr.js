@@ -110,6 +110,7 @@ karutaStr["fr"]["instruction-export-menu"] = "Copier le menu Ajouter et le colle
 karutaStr["fr"]["back"] = "Cliquer pour revenir en arrière";
 karutaStr["fr"]["select-deselect"] = "Sélectionner/Désélectionner tout";
 karutaStr["fr"]["noemail-yourself"] = "Vous ne pouvez utiliser votre courriel.";
+karutaStr["fr"]["displaytest"] = "Affichage - Test JS";
 
 //=========================================
 //========== ERRORS =======================
