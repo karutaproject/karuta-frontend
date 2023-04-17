@@ -77,16 +77,12 @@ UIFactory["URL2Portfolio"].prototype.getAttributes = function(type,langcode)
 	if (this.multilingual!=undefined && !this.multilingual)
 		langcode = 0;
 	//---------------------
-	if (dest!=null) {
-		this.display[dest]=langcode;
-	}
-	//---------------------
 	if (type==null)
 		type = 'default';
 	//---------------------
 	if (type=='default') {
 		result['restype'] = this.type;
-		result['uuid'] = this.uuid_node[langcode].text();
+		result['uuid'] = this.uuid_node.text();
 		result['label'] = this.label_node[langcode].text();
 		result['local_label'] = this.local_label_node[langcode].text();
 	}
@@ -156,6 +152,26 @@ UIFactory["URL2Portfolio"].update = function(selected_item,itself,langcode,type)
 };
 
 //==================================
+UIFactory["URL2Portfolio"].prototype.updateLabel = function(langcode)
+//==================================
+{
+	//---------------------
+	if (langcode==null)
+		langcode = LANGCODE;
+	var label = $.trim($("#local_label_"+this.id+"_"+langcode).val());
+	$(this.local_label_node[langcode]).text(label);
+	//---------------------
+	if (!this.multilingual) {
+		for (var i=0; i<languages.length; i++) {
+			$(this.local_label_node[i]).text(label);
+		}
+	}
+	//---------------------
+	this.save();
+	writeSaved(this.id);
+};
+
+//==================================
 UIFactory["URL2Portfolio"].prototype.displayEditor = function(destid,type,langcode,disabled,cachable,resettable)
 //==================================
 {
@@ -197,7 +213,7 @@ UIFactory["URL2Portfolio"].prototype.displayEditor = function(destid,type,langco
 		var htmlLabelDivObj = $("<div class='col-sm-9'></div>");
 		var htmlLabelInputObj = $("<input id='local_label_"+this.id+"_"+langcode+"' type='text' class='form-control' value=\""+this.local_label_node[langcode].text()+"\">");
 		$(htmlLabelInputObj).change(function (){
-			self.update(langcode);
+			self.updateLabel(langcode);
 		});
 		$(htmlLabelDivObj).append($(htmlLabelInputObj));
 		$(htmlLabelGroupObj).append($(htmlLabelLabelObj));

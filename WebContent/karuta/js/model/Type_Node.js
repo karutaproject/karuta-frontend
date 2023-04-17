@@ -1374,7 +1374,10 @@ UIFactory["Node"].displayPortfolioMenuItem = function(uuid,destid,type,langcode)
 		const rootid = UICom.rootid;
 		$("#sidebar_"+rootid).hide();
 		html += "	<a id='sidebar_"+rootid+"' onclick=\"displayPage('"+rootid+"',1,'"+type+"','"+langcode+"',"+g_edit+")\">";
-		html += 		UICom.structure["ui"][rootid].getLabel('sidebar_'+rootid);
+		if (UICom.structure.ui[uuid].resource.getAttributes().local_label!='')
+			html += UICom.structure.ui[uuid].resource.getAttributes().local_label;
+		else
+			html += UICom.structure["ui"][rootid].getLabel('sidebar_'+rootid);
 		html += "	</a>";
 	} else {
 		html += UICom.structure["ui"][uuid].resource.getView();
@@ -1412,9 +1415,17 @@ UIFactory["Node"].displaySidebar = function(root,destid,type,langcode,edit,paren
 					uuid = root.children[i];
 					resource_type = UICom.structure.ui[uuid].resource_type;
 				}
+				if ($(".sidebar-item","#portfolio_bar").length<2) {
+					$("#portfolio_bar").hide();
+					$("#sidebar_"+UICom.rootid).show();
+				}
 			} else if (name == "asmStructure" || name == "asmRoot" || name == "asmUnit" || (resource_type!=null && resource_type == "URL2Portfolio")) {}
 				UIFactory.Node.displaySidebarItem(root.children[i],destid,type,langcode,edit,parentid);
 			i++;
+			if ($(".sidebar-item","#portfolio_bar").length<2) {
+				$("#portfolio_bar").show();
+				$("#sidebar_"+UICom.rootid).hide();
+			}
 		}
 	}};
 
@@ -1522,12 +1533,17 @@ UIFactory["Node"].displaySidebar = function(root,destid,type,langcode,edit,paren
 			if (i==0 && resource_type!=null && resource_type == "URL2Portfolio") {
 				$("#portfolio_bar").show();
 				while (i<root.children.length && resource_type == "URL2Portfolio" ) {
-					UIFactory.Node.displayPortfolioMenuItem(uuid,'portfolio_bar',type,langcode,edit,parentid);
+					if (testIfDisplay(uuid))
+						UIFactory.Node.displayPortfolioMenuItem(uuid,'portfolio_bar',type,langcode,edit,parentid);
 					i++;
 					uuid = root.children[i];
 					resource_type = UICom.structure.ui[uuid].resource_type;
 				}
 				i--;
+				if ($(".sidebar-item","#portfolio_bar").length<2) {
+					$("#portfolio_bar").hide();
+					$("#sidebar_"+UICom.rootid).show();
+				}
 			//--------------------------------------------------
 			} else if (testIfDisplay(uuid) && langnotvisible!=karutaStr[languages[LANGCODE]]['language'] && ( (display=='N' && (g_userroles[0]=='designer' || USER.admin)) || (display=='Y' && (seenoderoles.indexOf("all")>-1 || showtoroles.indexOf("all")>-1 || seenoderoles.containsArrayElt(g_userroles) || showtoroles.containsArrayElt(g_userroles) || g_userroles[0]=='designer')))) {
 				if(name == "asmUnit" && level==0) // first level
@@ -1613,12 +1629,17 @@ UIFactory["Node"].displaySidebar = function(root,destid,type,langcode,edit,paren
 			if (i==0 && resource_type!=null && resource_type == "URL2Portfolio") {
 				$("#portfolio_bar").show();
 				while (i<root.children.length && resource_type == "URL2Portfolio" ) {
-					UIFactory.Node.displayPortfolioMenuItem(uuid,'portfolio_bar',type,langcode,edit,parentid);
+					if (testIfDisplay(uuid))
+						UIFactory.Node.displayPortfolioMenuItem(uuid,'portfolio_bar',type,langcode,edit,parentid);
 					i++;
 					uuid = root.children[i];
 					resource_type = UICom.structure.ui[uuid].resource_type;
 				}
 				i--;
+				if ($(".sidebar-item","#portfolio_bar").length<2) {
+					$("#portfolio_bar").hide();
+					$("#sidebar_"+UICom.rootid).show();
+				}
 			//--------------------------------------------------
 			} else if (testIfDisplay(uuid) && langnotvisible!=karutaStr[languages[LANGCODE]]['language'] && ( (display=='N' && (g_userroles[0]=='designer' || USER.admin)) || (display=='Y' && (seenoderoles.indexOf("all")>-1 || showtoroles.indexOf("all")>-1 || seenoderoles.containsArrayElt(g_userroles) || showtoroles.containsArrayElt(g_userroles) || g_userroles[0]=='designer')))) {
 				if(name == "asmUnit" && level==0) // first level
