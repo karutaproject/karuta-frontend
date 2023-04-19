@@ -789,6 +789,8 @@ UIFactory["Get_Get_Resource"].prototype.parse = function(destid,type,langcode,da
 					var html = "";
 					if (display_code)
 						html += code+" ";
+					if (display_value)
+						html += value+" ";
 					if (display_label)
 						html += $(this).attr("label_"+languages[langcode]);
 					$("#button_"+self.id).attr("style",style);
@@ -803,6 +805,8 @@ UIFactory["Get_Get_Resource"].prototype.parse = function(destid,type,langcode,da
 				var html = "";
 				if (display_code)
 					html += code+" ";
+				if (display_value)
+					html += value+" ";
 				if (display_label)
 					html += $(srce+"[lang='"+languages[langcode]+"']",resource).text();
 				$("#button_"+self.id).attr("style",style);

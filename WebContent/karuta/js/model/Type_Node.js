@@ -1128,6 +1128,7 @@ UIFactory["Node"].remove = function(uuid,callback,param1,param2,param3,param4)
 	if (remove) {
 		$("#"+uuid,g_portfolio_current).remove();
 		UICom.DeleteNode(uuid,callback,param1,param2,param3,param4);
+		var fcts = UICom.structure.ui[uuid].js.split("|");
 		for (var i=0;i<fcts.length;i++) {
 			var elts = fcts[i].split("/");
 			if (elts[0]=="delete-after") {
