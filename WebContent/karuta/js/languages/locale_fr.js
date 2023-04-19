@@ -446,7 +446,7 @@ karutaStr['fr']['select_role']="Sélectionner un rôle";
 //========== BATCH ========================
 //=========================================
 
-karutaStr['fr']['batch']="Exécuter un script de batch <span style='font-size:70%' class='badge badge-secondary'>Utiliser Firefox pour suivre l'exécution du batch</span>";
+karutaStr['fr']['batch']="Exécuter un script de batch";
 karutaStr['fr']['upload_csv']="Téléverser un fichier CSV";
 karutaStr['fr']['process_csv']="Exécuter";
 karutaStr['fr']['create_user_portfolios']="Créer un usager et ses portfolios";
