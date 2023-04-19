@@ -574,10 +574,7 @@ UIFactory["Node"].getMenus = function(node,langcode)
 						for (var j=0;j<items.length;j++) {
 							var condition = ($("condition",items[j]).length>0)?$("condition",items[j]).text():"";
 							if (UIFactory.Node.testDisplay(node,roles,condition)) {
-//								if(menulabel!="")
-//									title = UIFactory.Node.getMenuLabel(menulabel,langcode);
-//								else
-									title = UIFactory.Node.getMenuLabel($("itemlabel",items[j]).text(),langcode);
+								title = UIFactory.Node.getMenuLabel($("itemlabel",items[j]).text(),langcode);
 								let temphtml = "<button class='button add-button btn' style='"+menus_style+"' onclick=\"##\">" + title + "</button> ";
 								//---------------------target----------------------------------------
 								var parentid = node.id; // default value
@@ -1295,7 +1292,7 @@ UIFactory["Node"].getXmlItemMenu = function(node,parentid,item,title,databack,ca
 			let actions = "";
 			let imports = "";
 			// --------- boxlabel ------------
-			let boxlabel = replaceVariable( ($("boxlabel",itemelts[i]).text().length>0)?UIFactory.Node.getMenuLabel($("boxlabel",itemelts[i]).text(),LANGCODE):UIFactory.Node.getMenuLabel($("itemlabel",item).text(),LANGCODE));
+			let boxlabel = replaceVariable( ($("boxlabel",itemelts[i]).text().length>0)?$("boxlabel",itemelts[i]).text():UIFactory.Node.getMenuLabel($("itemlabel",item).text(),LANGCODE));
 			// --------- unique ------------
 			let unique = ($("unique",itemelts[i]).length>0)?$("unique",itemelts[i]).text():"";
 			// --------- search ------------
@@ -1319,7 +1316,7 @@ UIFactory["Node"].getXmlItemMenu = function(node,parentid,item,title,databack,ca
 					let trgtarray = UIFactory.Node.getTargetArray(node,parentid,imports[j]);
 					actions += "{|type|:|import_component|,|parentid|:|"+parentid+"|,|foliocode|:|"+foliocode+"|,|semtag|:|"+semtag+"|,|updatedtag|:|"+updatedtag+"|,|trgts|:|"+trgtarray.toString()+"|,|fcts|:|"+fctarray.toString()+"|};";
 				}
-				onclick += "import_get_multiple('"+parentid+"','','"+boxlabel+"','"+search_foliocode+"','"+search_semtag+"','"+search_object+"','"+actions+"','"+unique+"');";
+				onclick += "import_get_multiple('"+parentid+"','','"+boxlabel.replaceAll("'","&quot;")+"','"+search_foliocode+"','"+search_semtag+"','"+search_object+"','"+actions+"','"+unique+"');";
 			}
 			// --------import-proxy ------
 			imports = $("import-proxy",itemelts[i]);
@@ -1333,7 +1330,7 @@ UIFactory["Node"].getXmlItemMenu = function(node,parentid,item,title,databack,ca
 					let trgtarray = UIFactory.Node.getTargetArray(node,parentid,imports[j]);
 					actions += "{|type|:|import_proxy|,|parentid|:|"+parentid+"|,|foliocode|:|"+foliocode+"|,|semtag|:|"+semtag+"|,|updatedtag|:|"+updatedtag+"|,|trgts|:|"+trgtarray.toString()+"|,|fcts|:|"+fctarray.toString()+"|};";
 				}
-				onclick += "import_get_multiple('"+parentid+"','','"+boxlabel+"','"+search_foliocode+"','"+search_semtag+"','"+search_object+"','"+actions+"','"+unique+"');";
+				onclick += "import_get_multiple('"+parentid+"','','"+boxlabel.replaceAll("'","&quot;")+"','"+search_foliocode+"','"+search_semtag+"','"+search_object+"','"+actions+"','"+unique+"');";
 			}
 			// --------import-elts ------
 			imports = $("import-elts",itemelts[i]);
@@ -1343,7 +1340,7 @@ UIFactory["Node"].getXmlItemMenu = function(node,parentid,item,title,databack,ca
 					let trgtarray = UIFactory.Node.getTargetArray(node,parentid,itemelts[i]);
 					actions += "{|type|:|import_elts|,|parentid|:|"+parentid+"|,|foliocode|:|"+search_foliocode+"|,|trgts|:|"+trgtarray.toString()+"|,|fcts|:|"+fctarray.toString()+"|};";
 				}
-				onclick += "import_get_multiple('"+parentid+"','','"+boxlabel+"','"+search_foliocode+"','"+search_semtag+"','"+search_object+"','"+actions+"','"+unique+"');";
+				onclick += "import_get_multiple('"+parentid+"','','"+boxlabel.replaceAll("'","&quot;")+"','"+search_foliocode+"','"+search_semtag+"','"+search_object+"','"+actions+"','"+unique+"');";
 			}
 			// --------import-elts-from ------
 			imports = $("import-elts-from",itemelts[i]);
@@ -1355,7 +1352,7 @@ UIFactory["Node"].getXmlItemMenu = function(node,parentid,item,title,databack,ca
 					let trgtarray = UIFactory.Node.getTargetArray(node,parentid,itemelts[i]);
 					actions += "{|type|:|import_elts-from|,|parentid|:|"+parentid+"|,|foliocode|:|"+foliocode+"|,|trgts|:|"+trgtarray.toString()+"|,|fcts|:|"+fctarray.toString()+"|};";
 				}
-				onclick += "import_get_multiple('"+parentid+"','','"+boxlabel+"','"+search_foliocode+"','"+search_semtag+"','"+search_object+"','"+actions+"','"+unique+"');";
+				onclick += "import_get_multiple('"+parentid+"','','"+boxlabel.replaceAll("'","&quot;")+"','"+search_foliocode+"','"+search_semtag+"','"+search_object+"','"+actions+"','"+unique+"');";
 			}
 		}
 		//-----------------------------------------------------------
@@ -1363,7 +1360,7 @@ UIFactory["Node"].getXmlItemMenu = function(node,parentid,item,title,databack,ca
 		//-----------------------------------------------------------
 		else if (type=='import_get_get_multiple') {
 			// --------- boxlabel ------------
-			let boxlabel = replaceVariable( ($("boxlabel",itemelts[i]).text().length>0)?UIFactory.Node.getMenuLabel($("boxlabel",itemelts[i]).text(),LANGCODE):UIFactory.Node.getMenuLabel($("itemlabel",item).text(),LANGCODE));
+			let boxlabel = replaceVariable( ($("boxlabel",itemelts[i]).text().length>0)?$("boxlabel",itemelts[i]).text():UIFactory.Node.getMenuLabel($("itemlabel",item).text(),LANGCODE));
 			// --------- unique ------------
 			let unique = ($("unique",itemelts[i]).length>0)?$("unique",itemelts[i]).text():"";
 			// --------- parent ------------
@@ -1385,7 +1382,7 @@ UIFactory["Node"].getXmlItemMenu = function(node,parentid,item,title,databack,ca
 			// -------- actions ------------
 			let actions = UIFactory.Node.getActions(parentid,node,itemelts[i]);
 			// -----------------------------
-			onclick += "import_get_get_multiple('"+parentid+"','','"+boxlabel+"','"+parent_position+"','"+parent_semtag+"','"+search_foliocode+"','"+search_parent_semtag+"','"+search_semtag+"','"+search_object+"','"+actions+"','"+unique+"');";
+			onclick += "import_get_get_multiple('"+parentid+"','','"+boxlabel.replaceAll("'","&quot;")+"','"+parent_position+"','"+parent_semtag+"','"+search_foliocode+"','"+search_parent_semtag+"','"+search_semtag+"','"+search_object+"','"+actions+"','"+unique+"');";
 			//------------------------------------
 		}
 	}
