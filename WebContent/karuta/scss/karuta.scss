@@ -945,6 +945,10 @@
 			left:-198px;
 			border-radius: 6px 0 0 6px;
 		}
+		.selected{
+				font-weight:bold;
+				color: var(--portfolio-sidebar-selected-text-color);
+		}
 
 	}
 

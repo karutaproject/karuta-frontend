@@ -1423,8 +1423,8 @@ UIFactory["Node"].displaySidebar = function(root,destid,type,langcode,edit,paren
 				UIFactory.Node.displaySidebarItem(root.children[i],destid,type,langcode,edit,parentid);
 			i++;
 			if ($(".sidebar-item","#portfolio_bar").length<2) {
-				$("#portfolio_bar").show();
-				$("#sidebar_"+UICom.rootid).hide();
+				$("#portfolio_bar").hide();
+				$("#sidebar_"+UICom.rootid).show();
 			}
 		}
 	}};

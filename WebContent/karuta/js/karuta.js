@@ -2153,7 +2153,8 @@ function displayTechSupportForm(langcode)
 		langcode = LANGCODE;
 	//---------------------
 	$("#edit-window-footer").html("");
-	$("#edit-window-title").html(karutaStr[LANG]['technical-support']);
+	$("#edit-window-type").html("");
+	$("#edit-window-title").html(karutaStr[LANG]['technical_support']);
 	var js1 = "javascript:$('#edit-window').modal('hide')";
 	var send_button = "<button id='send_button' class='btn'>"+karutaStr[LANG]['button-send']+"</button>";
 	var obj = $(send_button);

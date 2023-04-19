@@ -873,6 +873,10 @@ body,
   left: -198px;
   border-radius: 6px 0 0 6px;
 }
+#menu_bar .selected {
+  font-weight: bold;
+  color: var(--portfolio-sidebar-selected-text-color);
+}
 
 #breadcrumb {
   background-color: var(--portfolio-sidebar-background-color);

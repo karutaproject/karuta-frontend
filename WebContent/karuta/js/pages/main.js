@@ -178,7 +178,7 @@ function fill_main_page(portfolioid)
 				$("#contenu").removeClass().addClass('col-md-12').addClass('col-sm-12');
 			}
 			//---------------------------
-			var welcomes = $("asmUnit:has(metadata[semantictag*='WELCOME'])",data);
+			var welcomes = $("*:has(>metadata[semantictag*='WELCOME'])",data);
 			if (welcomes.length==0) // for backward compatibility
 				welcomes = $("asmUnit:has(metadata[semantictag*='welcome-unit'])",data);
 			if (welcomes.length>0){
