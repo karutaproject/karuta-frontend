@@ -1697,9 +1697,15 @@ g_actions['update-resource'] = function updateResource(node)
 							attribute_value = getTxtvals($("attribute[name='"+attribute_name+"']",node));
 						else
 							attribute_value = getTxtvalsWithoutReplacement($("attribute[name='"+attribute_name+"']",node));
-						if (language_dependent=='Y')
-							$(attribute_name+"[lang='"+LANG+"']",resource).text(attribute_value);
-						else
+						if (language_dependent=='Y') {
+							if ($("metadata",nodes[i]).attr("multilingual-resource")=="Y") {
+								$(attribute_name+"[lang='"+LANG+"']",resource).text(attribute_value);
+							} else {
+								for (var langcode=0; langcode<languages.length; langcode++) {
+									$(attribute_name+"[lang='"+languages[langcode]+"']",resource).text(attribute_value);
+								}
+							}
+						} else
 							$(attribute_name,resource).text(attribute_value);
 					}
 					var data = "<asmResource xsi_type='"+type+"'>" + $(resource).html() + "</asmResource>";
@@ -1795,8 +1801,16 @@ g_actions['update-node-resource'] = function updateResource(node)
 					//--------------------------------
 					if (code!="")
 						$("code",resource).text(code);
-					if (label!="")
-						$("label[lang='"+LANG+"']",resource).text(label);
+					if (label!="") {
+						
+						if ($("metadata",nodes[i]).attr("multilingual-node")=="Y") {
+							$("label[lang='"+LANG+"']",resource).text(label);
+						} else {
+							for (var langcode=0; langcode<languages.length; langcode++) {
+								$("label[lang='"+languages[langcode]+"']",resource).text(label);
+							}
+						}
+					}
 					var data = "<asmResource xsi_type='nodeRes'>" + $(resource).html() + "</asmResource>";
 					var strippeddata = data.replace(/xmlns=\"http:\/\/www.w3.org\/1999\/xhtml\"/g,"");  // remove xmlns attribute
 					//-------------------
@@ -3902,7 +3916,13 @@ g_actions['fen-update-resource'] = function updateResource(node,data)
 				else
 					attribute_value = getTxtvalsWithoutReplacement($("attribute[name='"+attribute_name+"']",node));
 				if (language_dependent=='Y')
-					$(attribute_name+"[lang='"+LANG+"']",resource).text(attribute_value);
+					if ($("metadata",nodes[i]).attr("multilingual-resource")=="Y") {
+						$(attribute_name+"[lang='"+LANG+"']",resource).text(attribute_value);
+					} else {
+						for (var langcode=0; langcode<languages.length; langcode++) {
+							$(attribute_name+"[lang='"+languages[langcode]+"']",resource).text(attribute_value);
+						}
+					}
 				else
 					$(attribute_name,resource).text(attribute_value);
 			}
