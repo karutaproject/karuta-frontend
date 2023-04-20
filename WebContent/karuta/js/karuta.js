@@ -834,7 +834,11 @@ function displayPage(uuid,depth,type,langcode) {
 	$("#contenu").html("<div id='page' uuid='"+uuid+"'></div>");
 	$('.selected').removeClass('selected');
 	if (g_bar_type.indexOf("horizontal")>-1){  // update breadcrumb
-		$("#sidebar_"+uuid).addClass('selected');
+		let node = UICom.structure.ui[uuid].node;
+		while ($(node).parent().length>0) {
+			$("#sidebar_"+$(node).attr("id")).addClass('selected');
+			node = $(node).parent();
+		}
 		if (g_breadcrumb=="@1") {
 			var nodeid = uuid;
 			var breadcrumb = " &gt; <span onclick=\"displayPage('"+nodeid+"')\">" + UICom.structure.ui[nodeid].getLabel(null,'none') + "</span>";
