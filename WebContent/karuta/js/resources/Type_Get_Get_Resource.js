@@ -751,11 +751,15 @@ UIFactory["Get_Get_Resource"].prototype.parse = function(destid,type,langcode,da
 			var code = $('code',resource).text();
 			var display_code = false;
 			var display_label = true;
+			var display_value = false;
 			if (code.indexOf("$")>-1) 
 				display_label = false;
 			if (code.indexOf("@")<0) {
 				display_code = true;
 			}
+				if (code.indexOf("?")>-1) {
+					display_value = true;
+				}
 			code = cleanCode(code);
 			//------------------------------
 			var select_item = null;

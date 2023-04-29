@@ -191,7 +191,7 @@ UIFactory["Calendar"].prototype.displayEditor = function(dest,type,langcode,disa
 		minViewMode = "days";
 	$(input1).datepicker({minViewMode:minViewMode,format:format,language:LANG});
 	$(input1).datepicker().on('changeDate', function (ev) {
-		$(self.utc).text(ev.date.getTime());
+		$(self.utc).text($(this).datepicker('getDate').getTime());
 		$(self.text_node[langcode]).text($(this).val());
 		UIFactory.Calendar.update(self,langcode);
 	});

@@ -91,7 +91,7 @@ $.fn.hasAttr = function (options)
 	var parameters = $.extend(defaults, options); 
 	return this.each(function() {
 		if ($(">"+parameters.meta,this).attr(parameters.attribute) != undefined)
-			return this;
+			return $(this);
 	});
 };
 $.fn.test_hasAttr = function (options) { return result = ($(this).hasAttr(options).length>0) ? true : false;};
@@ -108,7 +108,7 @@ $.fn.hasNotAttr = function (options)
 		if ($(">"+parameters.meta,this).attr(parameters.attribute) == undefined)
 			result.push(this);
 	});
-	return result;
+	return $(result);
 };
 $.fn.test_hasNotAttr = function (options) { return result = ($(this).hasNotAttr(options).length>0) ? true : false;};
 //=====================================
@@ -120,7 +120,7 @@ $.fn.hasChildSemtag = function (options)
 	var defaults= { "semtag":"s"};
 	var parameters = $.extend(defaults, options);
 	var result = $(this).has("*:has('>metadata[semantictag*=" + parameters.semtag + "]')");
-	return result;
+	return $(result);
 };
 $.fn.test_hasChildSemtag = function (options) { return result = ($(this).hasChildSemtag(options).length>0) ? true : false;};
 //=====================================
@@ -143,7 +143,7 @@ $.fn.hasChildSemtagAndResourceCodeContains = function (options)   // hasChildSem
 	var defaults= {"semtag":"s","value":"v"};
 	var parameters = $.extend(defaults, options);
 	var result = $(this).has("*:has('>metadata[semantictag*=" + parameters.semtag + "]'):has('asmResource[xsi_type!=context][xsi_type!=nodeRes]>code:contains("+parameters.value+")')");
-	return result;
+	return $(result);
 };
 $.fn.test_hasChildSemtagAndResourceCodeContains = function (options) { return result = ($(this).hasChildSemtagAndResourceCodeContains(options).length>0) ? true : false;};
 $.fn.test_notHasChildSemtagAndResourceCodeContains = function (options) { return result = ($(this).hasChildSemtagAndResourceCodeContains(options).length>0) ? false : true;};
@@ -169,7 +169,7 @@ $.fn.resourceCodeContains = function (options)
 	var result = $(this).has(">asmResource[xsi_type!='context'][xsi_type!='nodeRes']>code:contains('"+parameters.value+"')");
 	if (parameters.function!="")
 		result = eval("$(result)."+parameters.function);
-	return result;
+	return $(result);
 };
 $.fn.test_resourceCodeContains = function (options) { return result = ($(this).resourceCodeContains(options).length>0) ? true : false;};
 //=====================================
@@ -183,7 +183,7 @@ $.fn.resourceTextContains = function (options)
 	var result = $(this).has(">asmResource[xsi_type!='context'][xsi_type!='nodeRes']>text[lang='"+languages[LANGCODE]+"']:contains('"+parameters.value+"')");
 	if (parameters.function!="")
 		result = eval("$(result)."+parameters.function);
-	return result;
+	return $(result);
 };
 $.fn.test_resourceTextContains = function (options) { return result = ($(this).resourceTextContains(options).length>0) ? true : false;};
 //=====================================
@@ -197,7 +197,7 @@ $.fn.resourceValueContains = function (options)
 	var result = $(this).has(">asmResource[xsi_type!='context'][xsi_type!='nodeRes']>value:contains('"+parameters.value+"')");
 	if (parameters.function!="")
 		result = eval("$(result)."+parameters.function);
-	return result;
+	return $(result);
 };
 $.fn.test_resourceValueContains = function (options) { return result = ($(this).resourceValueContains(options).length>0) ? true : false;};
 //=====================================
@@ -211,7 +211,7 @@ $.fn.resourceFilenameContains = function (options)
 	var result = $(this).has(">asmResource[xsi_type!='context'][xsi_type!='nodeRes']>filename[lang='"+languages[LANGCODE]+"']:contains('"+parameters.value+"')");
 	if (parameters.function!="")
 		result = eval("$(result)."+parameters.function);
-	return result;
+	return $(result);
 };
 $.fn.test_resourceFilenameContains = function (options) { return result = ($(this).resourceFilenameContains(options).length>0) ? true : false;};
 //=====================================
@@ -245,7 +245,7 @@ $.fn.nodeCodeEquals = function (options) // nodeCodeEquals({"value":"12","functi
 	}
 	if (parameters.function!="")
 		result = eval("$(result)."+parameters.function);
-	return result;
+	return $(result);
 };
 $.fn.test_nodeCodeEquals = function (options) { return result = ($(this).nodeCodeEquals(options).length>0) ? true : false;};
 //=====================================
@@ -259,7 +259,7 @@ $.fn.nodeLabelContains = function (options)
 	var result = $(this).has(">asmResource[xsi_type='nodeRes']>label[lang='"+languages[LANGCODE]+"']:contains('"+parameters.value+"')");
 	if (parameters.function!="")
 		result = eval("$(result)."+parameters.function);
-	return result;
+	return $(result);
 };
 $.fn.test_nodeLabelContains = function (options) { return result = ($(this).nodeLabelContains(options).length>0) ? true : false;};
 //=====================================
@@ -273,6 +273,7 @@ $.fn.nodeValueContains = function (options)
 	var result = $(this).has(">asmResource[xsi_type='nodeRes']>value:contains('"+parameters.value+"')");
 	if (parameters.function!="")
 		result = eval("$(result)."+parameters.function);
+	return $(result);
 };
 $.fn.test_nodeValueContains = function (options) { return result = ($(this).nodeValueContains(options).length>0) ? true : false;};
 //=====================================
@@ -290,7 +291,7 @@ $.fn.utcBetween = function (options)
 		if (replaceVariable(parameters.min) < utc && utc < replaceVariable(parameters.max))
 			result.push(this[i])
 	}
-	return result;
+	return $(result);
 };
 $.fn.test_utcBetween = function (options) { return result = ($(this).utcBetween(options).length>0) ? true : false;};
 //=====================================
@@ -308,7 +309,7 @@ $.fn.utcGreater = function (options)
 		if (replaceVariable(parameters.min) < utc)
 			result.push(this[i])
 	}
-	return result;
+	return $(result);
 };
 $.fn.test_utcGreater = function (options) { return result = ($(this).utcGreater(options).length>0) ? true : false;};
 //=====================================
@@ -326,7 +327,7 @@ $.fn.utcLower = function (options)
 		if (utc < replaceVariable(parameters.max))
 			result.push(this[i])
 	}
-	return result;
+	return $(result);
 };
 $.fn.test_utcLower = function (options) { return result = ($(this).utcLower(options).length>0) ? true : false;};
 //=====================================
@@ -352,7 +353,7 @@ $.fn.hasAncestorSemtagAndNodeCodeContains = function (options)   // hasChildSemt
 		if (search.length>0)
 			result.push(this[i])
 	}
-	return result;
+	return $(result);
 };
 $.fn.test_hasAncestorSemtagAndNodeCodeContains = function (options) { return result = ($(this).hasAncestorSemtagAndNodeCodeContains(options).length>0) ? true : false;};
 //=====================================
@@ -364,7 +365,7 @@ $.fn.hasParentSemtagAndNodeCodeContains = function (options)   // hasChildSemtag
 	var defaults= {"semtag":"s","value":"v"};
 	var parameters = $.extend(defaults, options);
 	var result = $(this).addBack().parent().has("*:has('>metadata[semantictag*=" + parameters.semtag + "]'):has('asmResource[xsi_type!=context][xsi_type!=nodeRes]>code:contains("+parameters.value+")')");
-	return result;
+	return $(result);
 };
 $.fn.test_hasParentSemtagAndNodeCodeContains = function (options) { return result = ($(this).hasParentSemtagAndNodeCodeContains(options).length>0) ? true : false;};
 //=====================================
@@ -376,7 +377,7 @@ $.fn.hasParentParentSemtagAndNodeCodeContains = function (options)   // hasChild
 	var defaults= {"semtag":"s","value":"v"};
 	var parameters = $.extend(defaults, options);
 	var result = $(this).addBack().parent().parent().has("*:has('>metadata[semantictag*=" + parameters.semtag + "]'):has('asmResource[xsi_type!=context][xsi_type!=nodeRes]>code:contains("+parameters.value+")')");
-	return result;
+	return $(result);
 };
 $.fn.test_hasParentParentSemtagAndNodeCodeContains = function (options) { return result = ($(this).hasParentParentSemtagAndNodeCodeContains(options).length>0) ? true : false;};
 
@@ -387,7 +388,7 @@ $.fn.hasParentParentParentSemtagAndNodeCodeContains = function (options)   // ha
 	var defaults= {"semtag":"s","value":"v"};
 	var parameters = $.extend(defaults, options);
 	var result = $(this).addBack().parent().parent().parent().has("*:has('>metadata[semantictag*=" + parameters.semtag + "]'):has('asmResource[xsi_type!=context][xsi_type!=nodeRes]>code:contains("+parameters.value+")')");
-	return result;
+	return $(result);
 };
 $.fn.test_hasParentParentParentSemtagAndNodeCodeContains = function (options) { return result = ($(this).hasParentParentParentSemtagAndNodeCodeContains(options).length>0) ? true : false;};
 
@@ -397,8 +398,8 @@ $.fn.sortOnChildSemtag = function (options)
 {
 	var defaults= { "semtag":"s","sorton":"s"};
 	var parameters = $.extend(defaults, options);
-	var result = $(this).sort(function(a, b){ return $(parameters.sorton,$("asmResource[xsi_type!='context'][xsi_type!='nodeRes']",$("*>metadata[semantictag*=" + parameters.semtag + "]",$(a)))).text() > $(parameters.sorton,$("asmResource[xsi_type!='context'][xsi_type!='nodeRes']",$("*>metadata[semantictag*=" + parameters.semtag + "]",$(b)))).text() ? 1 : -1; });
-	return result;
+	var result = $(this).sort(function(a, b){ return ($(parameters.sorton,$("asmResource[xsi_type!='context'][xsi_type!='nodeRes']",$("*:has(\">metadata[semantictag*=" + parameters.semtag + "]\")",a))).text() > $(parameters.sorton,$("asmResource[xsi_type!='context'][xsi_type!='nodeRes']",$("*:has(\">metadata[semantictag*=" + parameters.semtag + "]\")",b))).text()) ? 1 : -1; });
+	return $(result);
 };
 
 //=====================================
@@ -407,9 +408,41 @@ $.fn.invsortOnChildSemtag = function (options)
 {
 	var defaults= { "semtag":"s","sorton":"s"};
 	var parameters = $.extend(defaults, options);
-	var result = $(this).sort(function(a, b){ return $(parameters.sorton,$("asmResource[xsi_type!='context'][xsi_type!='nodeRes']",$("*>metadata[semantictag*=" + parameters.semtag + "]",$(a)))).text() > $(parameters.sorton,$("asmResource[xsi_type!='context'][xsi_type!='nodeRes']",$("*>metadata[semantictag*=" + parameters.semtag + "]",$(b)))).text() ? -1 : 1; });
-	return result;
+	var result = $(this).sort(function(a, b){ return ($(parameters.sorton,$("asmResource[xsi_type!='context'][xsi_type!='nodeRes']",$("*:has(\">metadata[semantictag*=" + parameters.semtag + "]\")",a))).text() > $(parameters.sorton,$("asmResource[xsi_type!='context'][xsi_type!='nodeRes']",$("*:has(\">metadata[semantictag*=" + parameters.semtag + "]\")",b))).text()) ? -1 : 1; });
+	return $(result);
 };
+
+//=====================================
+$.fn.hasChildSubmitted = function (options)  
+//=====================================
+{
+	var result = [];
+	var defaults= {"semtag":"s"};
+	var parameters = $.extend(defaults, options);
+	for (let i=0;i<this.length;i++){
+		var node = $("asmContext:has('>metadata[semantictag*=" + parameters.semtag + "]')",this[i]);
+		if ($(node).has("metadata-wad[submitted='Y'])"))
+			result.push(this[i])
+	}
+	return $(result);
+};
+$.fn.test_hasChildSubmitted = function (options) { return result = ($(this).hasChildSubmitted(options).length>0) ? true : false;};
+
+//=====================================
+$.fn.hasChildNotSubmitted = function (options)  
+//=====================================
+{
+	var result = [];
+	var defaults= {"semtag":"s"};
+	var parameters = $.extend(defaults, options);
+	for (let i=0;i<this.length;i++){
+		var node = $("*:has('>metadata[semantictag*=" + parameters.semtag + "]')",this[i]);
+		if ($(node).has(">metadata-wad[submitted!='Y']").length>0)
+			result.push(this[i])
+	}
+	return $(result);
+};
+$.fn.test_hasChildNotSubmitted = function (options) { return result = ($(this).hasChildNotSubmitted(options).length>0) ? true : false;};
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------

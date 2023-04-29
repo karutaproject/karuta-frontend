@@ -146,7 +146,7 @@ function getTxtvalsWithoutReplacement(node)
 			if (select.indexOf('function(')>-1) {
 				fct = select.substring(9,select.indexOf(','))
 				select = select.substring(select.indexOf(',')+1,select.indexOf(')'))
-			}
+			}			
 			//---------- text ------
 			if (select.indexOf("//")>-1) {
 				if (select=="//today")
@@ -165,9 +165,28 @@ function getTxtvalsWithoutReplacement(node)
 			//-------------
 		} else {
 			text = $(txtvals[i]).text();
-			if (text=="//today")
+			//---------- function ---
+			if (text.indexOf('function(')>-1) {
+				const fct = text.substring(9,text.indexOf(','))
+				text = text.substring(text.indexOf(',')+1,text.indexOf(')'));
+				text = replaceBatchVariable(text);
+				try {
+					text = eval(fct+"('"+text+"')");
+				}
+				catch(err) {
+					$("#batch-log").append("<br>- ***<span class='danger'>ERROR </span> "+err.message);
+				}
+			} else if (text.indexOf('function:')>-1) {
+				text = replaceBatchVariable(text.substring(9));
+				try {
+					text = eval(text);
+				}
+				catch(err) {
+					$("#batch-log").append("<br>- ***<span class='danger'>ERROR - </span> "+err.message);
+				}
+			} else if (text=="//today") {
 				text = new Date().toLocaleString();
-			if (text.indexOf('numline()')>-1) {
+			} else if (text.indexOf('numline()')>-1) {
 				text = text.replace(/numline()/g,g_noline);
 				text = eval(text);
 			}
@@ -3631,7 +3650,7 @@ g_actions['variable-value'] = function (node)
 	//-----------------------------------
 }
 //==================================
-g_actions['variable'] = function (node)
+g_actions['batch-variable'] = function (node)
 //==================================
 {
 	var ok = false

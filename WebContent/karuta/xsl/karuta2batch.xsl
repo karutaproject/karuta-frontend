@@ -1132,7 +1132,7 @@
 		<xsl:variable name="aggregatetype">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='aggregatetype']/asmResource[@xsi_type='Get_Resource']/value"></xsl:value-of>
 		</xsl:variable>
-		<variable>
+		<batch-variable>
 			<xsl:if test="not($varlabel='')">
 				<xsl:attribute name="varlabel"><xsl:value-of select="$varlabel"/></xsl:attribute>
 			</xsl:if>
@@ -1152,7 +1152,7 @@
 			<source>
 				<xsl:value-of select='$source'/>
 			</source>
-		</variable>
+		</batch-variable>
 	</xsl:template>
 
 <!-- ================ variable ============================ -->
