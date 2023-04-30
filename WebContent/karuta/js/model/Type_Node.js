@@ -260,13 +260,12 @@ UIFactory["Node"].prototype.displayNode = function(type,root,dest,depth,langcode
 					}
 				}
 				//------------ Tabs SubSection -----------------
-				if (this.semantictag=="tabs-section"){
+				if (this.semantictag.indexOf("tabs-section")>-1){
 					alreadyDisplayed = true;
 					let html_tabs = "<ul class='tabs-headers nav nav-tabs' role='tablist'>";
 					let html_panels = "<div class='tabs-contents tab-content'>";
 					for( var i=0; i<root.children.length; ++i ) {
 						// Recurse
-						let child = UICom.structure["tree"][root.children[i]];
 						let childnode = UICom.structure["ui"][root.children[i]];
 						let childlabel = childnode.getLabel();
 						var style = childnode.getLabelStyle();
@@ -275,13 +274,13 @@ UIFactory["Node"].prototype.displayNode = function(type,root,dest,depth,langcode
 					}
 					html_tabs += "</ul>";
 					html_panels +="</div>";
-					$("#"+dest).append (html_tabs);
-					$("#"+dest).append (html_panels);
+					$("#content-"+uuid).append (html_tabs);
+					$("#content-"+uuid).append (html_panels);
+					$("a[href='#display-"+uuid+"-0']").click();
 					for( var i=0; i<root.children.length; ++i ) {
 						// Recurse
 						let child = UICom.structure["tree"][root.children[i]];
 						let childnode = UICom.structure["ui"][root.children[i]];
-						let childsemtag = $(childnode.metadata).attr('semantictag');
 						let original_edit = edit;
 						if (this.submitted=='Y' && this.submitall=='Y')
 							edit = false;

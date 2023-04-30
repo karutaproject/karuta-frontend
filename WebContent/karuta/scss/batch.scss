@@ -50,6 +50,8 @@
 		float:left;
 		margin-right:5px;
 	}
+	.dropdown-item[onclick*=sem-tag] {display:none}
+	.for-each-node .dropdown-item[onclick*=sem-tag] {display:block}
 	span.chkbox-comments.xcreate-person,
 	span.chkbox-comments.xdelete-person,
 	span.chkbox-comments.xinactivate-person,
@@ -363,6 +365,7 @@
 	.for-each-line,
 	.for-each-tree,
 	.for-each-person,
+	.for-each-node,
 	.actions {
 		margin-top:7px;
 		border:1px dashed var(--batch-instruction-color);

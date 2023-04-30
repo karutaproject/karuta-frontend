@@ -43,6 +43,12 @@
   float: left;
   margin-right: 5px;
 }
+.batch .dropdown-item[onclick*=sem-tag] {
+  display: none;
+}
+.batch .for-each-node .dropdown-item[onclick*=sem-tag] {
+  display: block;
+}
 .batch span.chkbox-comments.xcreate-person,
 .batch span.chkbox-comments.xdelete-person,
 .batch span.chkbox-comments.xinactivate-person,
@@ -323,6 +329,7 @@
 .batch .for-each-line,
 .batch .for-each-tree,
 .batch .for-each-person,
+.batch .for-each-node,
 .batch .actions {
   margin-top: 7px;
   border: 1px dashed var(--batch-instruction-color);

@@ -1634,7 +1634,8 @@ table[name=res-div] {
 .row .card.col-md-8,
 .row .card.col-md-9,
 .row .card.col-md-10,
-.row .card.col-md-11 {
+.row .card.col-md-11,
+.row .card.col-md-12 {
   padding-left: 0px;
   padding-right: 0px;
   margin-left: 5px;
@@ -1673,6 +1674,9 @@ table[name=res-div] {
 .row .card.col-md-11 {
   flex: 0 0 calc(((100% - 15px) * 11 / 12) - 15px);
 }
+.row .card.col-md-12 {
+  flex: 0 0 calc(((100% - 15px) * 12 / 12) - 5px);
+}
 .row .card .card.col-md-2:first-child,
 .row .card .card.col-md-3:first-child,
 .row .card .card.col-md-4:first-child,
@@ -1682,7 +1686,8 @@ table[name=res-div] {
 .row .card .card.col-md-8:first-child,
 .row .card .card.col-md-9:first-child,
 .row .card .card.col-md-10:first-child,
-.row .card .card.col-md-11:first-child {
+.row .card .card.col-md-11:first-child,
+.row .card .card.col-md-12:first-child {
   margin-left: 0px;
 }
 
