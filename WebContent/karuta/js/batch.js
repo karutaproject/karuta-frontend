@@ -3286,8 +3286,13 @@ g_actions['send-email'] = function (node)
 	const subject = getTxtvals($("subject",node));
 	const message = getTxtvals($("message",node));
 	const email = getTxtvals($("email",node));
-	const result = sendEmail(email,subject,message,cc,bcc,alert);{	$("#batch-log").append("<br>- Variable "+varlabel+" = "+text);
+	const ok = sendEmail(email,subject,message,cc,bcc,alert);
+	if (ok)
+		$("#batch-log").append("<br>- send-email: "+email+ " sent");
+	else
+		$("#batch-log").append("<span class='danger'>ERROR <span> - send-email: "+email+ " errot");
 	//-----------------------------------
+	return ok;
 }
 
 //=============================================================================

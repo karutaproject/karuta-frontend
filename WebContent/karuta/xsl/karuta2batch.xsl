@@ -940,6 +940,26 @@
 		</update-resource>
 	</xsl:template>
 
+	<xsl:template match="*[metadata/@semantictag='send-email']">
+		<send-email>
+			<email>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">email</xsl:with-param>
+				</xsl:call-template>
+			</email>
+			<subject>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">subject</xsl:with-param>
+				</xsl:call-template>
+			</subject>
+			<message>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">message</xsl:with-param>
+				</xsl:call-template>
+			</message>
+		</send-email>
+	</xsl:template>
+
 	<!-- ====================================================================================== -->
 	<!-- ====================================================================================== -->
 	<!-- ================================ FOR-EACH-NODE ======================================= -->

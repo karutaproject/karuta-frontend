@@ -1735,7 +1735,7 @@ function sendEmail(email,subject,message,cc,bcc,alert) {
 				$('#edit-window').modal('hide');
 				alertHTML(karutaStr[LANG]['email-sent']);
 			} else {
-				return karutaStr[LANG]['email-sent'];
+				return true;
 			}
 		},
 		error: function() {
@@ -1743,7 +1743,7 @@ function sendEmail(email,subject,message,cc,bcc,alert) {
 				$('#edit-window').modal('hide');
 				alertHTML(karutaStr[LANG]['email-sent-error']);
 			} else {
-				return karutaStr[LANG]['email-sent-error'];
+				return false;
 			}
 		}
 	});
