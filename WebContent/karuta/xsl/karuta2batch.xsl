@@ -507,13 +507,7 @@
 		<xsl:variable name="test">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='test']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
-		<xsl:variable name="filter-semtag">
-			<xsl:value-of select=".//asmContext[metadata/@semantictag='filter-semtag']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
-		</xsl:variable>
-		<xsl:variable name="filter-test">
-			<xsl:value-of select=".//asmContext[metadata/@semantictag='filter-test']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
-		</xsl:variable>
-		<submitall select="{$select}" test="{$test}" filter-semtag="{$filter-semtag}" filter-test="{$filter-test}">
+		<submitall select="{$select}" test="{$test}" >
 		</submitall>
 	</xsl:template>
 
@@ -526,13 +520,7 @@
 		<xsl:variable name="test">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='test']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
-		<xsl:variable name="filter-semtag">
-			<xsl:value-of select=".//asmContext[metadata/@semantictag='filter-semtag']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
-		</xsl:variable>
-		<xsl:variable name="filter-test">
-			<xsl:value-of select=".//asmContext[metadata/@semantictag='filter-test']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
-		</xsl:variable>
-		<delete-node select="{$select}" test="{$test}" filter-semtag="{$filter-semtag}" filter-test="{$filter-test}">
+		<delete-node select="{$select}" test="{$test}" >
 		</delete-node>
 	</xsl:template>
 
@@ -545,13 +533,7 @@
 		<xsl:variable name="test">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='test']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
-		<xsl:variable name="filter-semtag">
-			<xsl:value-of select=".//asmContext[metadata/@semantictag='filter-semtag']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
-		</xsl:variable>
-		<xsl:variable name="filter-test">
-			<xsl:value-of select=".//asmContext[metadata/@semantictag='filter-test']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
-		</xsl:variable>
-		<update-node-resource type='NodeResource' select="{$select}" test="{$test}" filter-semtag="{$filter-semtag}" filter-test="{$filter-test}">
+		<update-node-resource type='NodeResource' select="{$select}" test="{$test}">
 			<newcode>
 				<xsl:call-template name="txtval">
 					<xsl:with-param name="semtag">node-code</xsl:with-param>
@@ -571,33 +553,18 @@
 				<xsl:with-param name='parent'>subsection-target</xsl:with-param>
 			</xsl:call-template>
 		</xsl:variable>
-		<xsl:variable name="target-test">
-			<xsl:value-of select=".//subsection-target/asmContext[metadata/@semantictag='test']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
-		</xsl:variable>
-		<xsl:variable name="target-filter-semtag">
-			<xsl:value-of select=".//subsection-target/asmContext[metadata/@semantictag='filter-semtag']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
-		</xsl:variable>
-		<xsl:variable name="target-filter-test">
-			<xsl:value-of select=".//subsection-target/asmContext[metadata/@semantictag='filter-test']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		<xsl:variable name="test">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='test']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
 		<xsl:variable name="source">
 			<xsl:call-template name='get-select'>
 				<xsl:with-param name='parent'>subsection-source</xsl:with-param>
 			</xsl:call-template>
 		</xsl:variable>
-		<xsl:variable name="source-test">
-			<xsl:value-of select=".//subsection-source/asmContext[metadata/@semantictag='test']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
-		</xsl:variable>
-		<xsl:variable name="source-filter-semtag">
-			<xsl:value-of select=".//subsection-source/asmContext[metadata/@semantictag='filter-semtag']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
-		</xsl:variable>
-		<xsl:variable name="source-filter-test">
-			<xsl:value-of select=".//subsection-source/asmContext[metadata/@semantictag='filter-test']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
-		</xsl:variable>
 		<xsl:variable name="old-source">#<xsl:call-template name="txtval"><xsl:with-param name="semtag">import-source</xsl:with-param></xsl:call-template></xsl:variable>
 		<xsl:variable name="dest"><xsl:value-of select=".//asmContext[metadata/@semantictag='destination-select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of></xsl:variable>
 		<xsl:variable name="srce"><xsl:value-of select=".//asmContext[metadata/@semantictag='source-select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of></xsl:variable>
-		<import-node select="{$destination}{$dest}" source="{$srce}{$old-source}" source-test="{$source-test}" source-filter-semtag="{$source-filter-semtag}" source-filter-test="{$source-filter-test}" target-filter-semtag="{$target-filter-semtag}" target-filter-test="{$target-filter-test}" >
+		<import-node select="{$destination}{$dest}" source="{$srce}{$old-source}" test="{$test}" >
 			<source>
 				<xsl:value-of select='$source'/>
 			</source>
@@ -610,17 +577,23 @@
 				<xsl:with-param name='parent'>subsection-target</xsl:with-param>
 			</xsl:call-template>
 		</xsl:variable>
+		<xsl:variable name="dest-test">
+			<xsl:value-of select=".//*[metadata/@semantictag='subsection-target']//asmContext[metadata/@semantictag='test']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
 		<xsl:variable name="source">
 			<xsl:call-template name='get-select'>
 				<xsl:with-param name='parent'>subsection-source</xsl:with-param>
 			</xsl:call-template>
+		</xsl:variable>
+		<xsl:variable name="srce-test">
+			<xsl:value-of select=".//*[metadata/@semantictag='subsection-source']//asmContext[metadata/@semantictag='test']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
 		<!-- old -->
 			<xsl:variable name="old-source">#<xsl:call-template name="txtval"><xsl:with-param name="semtag">import-source</xsl:with-param></xsl:call-template></xsl:variable>
 			<xsl:variable name="dest"><xsl:value-of select=".//asmContext[metadata/@semantictag='destination-select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of></xsl:variable>
 			<xsl:variable name="srce"><xsl:value-of select=".//asmContext[metadata/@semantictag='source-select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of></xsl:variable>
 		<!-- end old -->
-		<move-node select="{$destination}{$dest}" source="{$srce}{$old-source}">
+		<move-node select="{$destination}{$dest}" source="{$srce}{$old-source}" srce-test="{$srce-test}" dest-test="{$dest-test}" >
 			<source>
 				<xsl:value-of select='$source'/>
 			</source>
@@ -674,13 +647,7 @@
 		<xsl:variable name="test">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='test']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
-		<xsl:variable name="filter-semtag">
-			<xsl:value-of select=".//asmContext[metadata/@semantictag='filter-semtag']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
-		</xsl:variable>
-		<xsl:variable name="filter-test">
-			<xsl:value-of select=".//asmContext[metadata/@semantictag='filter-test']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
-		</xsl:variable>
-		<update-resource type='Field' select="{$select}" test="{$test}" filter-semtag="{$filter-semtag}" filter-test="{$filter-test}">
+		<update-resource type='Field' select="{$select}" test="{$test}">
 			<xsl:if test="$source!=''">
 				<source select="{$source}"/>
 			</xsl:if>
@@ -704,13 +671,7 @@
 		<xsl:variable name="test">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='test']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
-		<xsl:variable name="filter-semtag">
-			<xsl:value-of select=".//asmContext[metadata/@semantictag='filter-semtag']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
-		</xsl:variable>
-		<xsl:variable name="filter-test">
-			<xsl:value-of select=".//asmContext[metadata/@semantictag='filter-test']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
-		</xsl:variable>
-		<update-resource type='TextField' select="{$select}" test="{$test}" filter-semtag="{$filter-semtag}" filter-test="{$filter-test}">
+		<update-resource type='TextField' select="{$select}" test="{$test}" >
 			<xsl:if test="$source!=''">
 				<source select="{$source}"/>
 			</xsl:if>
@@ -732,13 +693,7 @@
 		<xsl:variable name="test">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='test']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
-		<xsl:variable name="filter-semtag">
-			<xsl:value-of select=".//asmContext[metadata/@semantictag='filter-semtag']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
-		</xsl:variable>
-		<xsl:variable name="filter-test">
-			<xsl:value-of select=".//asmContext[metadata/@semantictag='filter-test']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
-		</xsl:variable>
-		<update-resource type='Calendar' select="{$select}" test="{$test}" filter-semtag="{$filter-semtag}" filter-test="{$filter-test}">
+		<update-resource type='Calendar' select="{$select}" test="{$test}" >
 			<attribute name='minViewMode' language-dependent='N'>
 				<txtval>
 					<xsl:value-of select=".//asmContext[metadata/@semantictag='minViewMode']/asmResource[@xsi_type='Field']/text"></xsl:value-of>
@@ -771,13 +726,7 @@
 		<xsl:variable name="test">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='test']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
-		<xsl:variable name="filter-semtag">
-			<xsl:value-of select=".//asmContext[metadata/@semantictag='filter-semtag']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
-		</xsl:variable>
-		<xsl:variable name="filter-test">
-			<xsl:value-of select=".//asmContext[metadata/@semantictag='filter-test']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
-		</xsl:variable>
-		<update-resource type='Variable' select="{$select}" test="{$test}" filter-semtag="{$filter-semtag}" filter-test="{$filter-test}">
+		<update-resource type='Variable' select="{$select}" test="{$test}" >
 			<xsl:if test="$variable-name!=''">
 				<attribute name='name' language-dependent='N' replace-variable='Y'>
 					<txtval>
@@ -809,13 +758,7 @@
 		<xsl:variable name="test">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='test']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
-		<xsl:variable name="filter-semtag">
-			<xsl:value-of select=".//asmContext[metadata/@semantictag='filter-semtag']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
-		</xsl:variable>
-		<xsl:variable name="filter-test">
-			<xsl:value-of select=".//asmContext[metadata/@semantictag='filter-test']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
-		</xsl:variable>
-		<update-resource type='Document' select="{$select}" test="{$test}" filter-semtag="{$filter-semtag}" filter-test="{$filter-test}">
+		<update-resource type='Document' select="{$select}" test="{$test}" >
 			<attribute name='filename' language-dependent='Y'>
 				<xsl:value-of select=".//asmContext[metadata/@semantictag='filename']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 			</attribute>
@@ -832,52 +775,50 @@
 	</xsl:template>
 
 	<xsl:template match="*[metadata/@semantictag='update-proxy']">
-		<xsl:variable name="select">
+		<xsl:variable name="destination">
 			<xsl:call-template name='get-select'>
 				<xsl:with-param name='parent'>subsection-target</xsl:with-param>
 			</xsl:call-template>
+		</xsl:variable>
+		<xsl:variable name="dest-test">
+			<xsl:value-of select=".//*[metadata/@semantictag='subsection-target']//asmContext[metadata/@semantictag='test']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
 		<xsl:variable name="source">
 			<xsl:call-template name='get-select'>
 				<xsl:with-param name='parent'>subsection-source</xsl:with-param>
 			</xsl:call-template>
 		</xsl:variable>
-		<xsl:variable name="test">
-			<xsl:value-of select=".//asmContext[metadata/@semantictag='test']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		<xsl:variable name="srce-test">
+			<xsl:value-of select=".//*[metadata/@semantictag='subsection-source']//asmContext[metadata/@semantictag='test']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
-		<xsl:variable name="filter-semtag">
-			<xsl:value-of select=".//asmContext[metadata/@semantictag='filter-semtag']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
-		</xsl:variable>
-		<xsl:variable name="filter-test">
-			<xsl:value-of select=".//asmContext[metadata/@semantictag='filter-test']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
-		</xsl:variable>
-		<update-proxy type='Proxy' select="{$select}" test="{$test}" filter-semtag="{$filter-semtag}" filter-test="{$filter-test}">
-			<source select="{$source}"/>
+			<update-proxy type='Proxy' select="{$destination}" srce-test="{$srce-test}" dest-test="{$dest-test}" >
+			<source>
+				<xsl:value-of select='$source'/>
+			</source>
 		</update-proxy>
 	</xsl:template>
 
 	<xsl:template match="*[metadata/@semantictag='update-url2unit']">
-		<xsl:variable name="select">
+		<xsl:variable name="destination">
 			<xsl:call-template name='get-select'>
 				<xsl:with-param name='parent'>subsection-target</xsl:with-param>
 			</xsl:call-template>
+		</xsl:variable>
+		<xsl:variable name="dest-test">
+			<xsl:value-of select=".//*[metadata/@semantictag='subsection-target']//asmContext[metadata/@semantictag='test']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
 		<xsl:variable name="source">
 			<xsl:call-template name='get-select'>
 				<xsl:with-param name='parent'>subsection-source</xsl:with-param>
 			</xsl:call-template>
 		</xsl:variable>
-		<xsl:variable name="test">
-			<xsl:value-of select=".//asmContext[metadata/@semantictag='test']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		<xsl:variable name="srce-test">
+			<xsl:value-of select=".//*[metadata/@semantictag='subsection-source']//asmContext[metadata/@semantictag='test']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
-		<xsl:variable name="filter-semtag">
-			<xsl:value-of select=".//asmContext[metadata/@semantictag='filter-semtag']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
-		</xsl:variable>
-		<xsl:variable name="filter-test">
-			<xsl:value-of select=".//asmContext[metadata/@semantictag='filter-test']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
-		</xsl:variable>
-		<update-url2unit type='URL2Unit' select="{$select}" test="{$test}" filter-semtag="{$filter-semtag}" filter-test="{$filter-test}">
-			<source select="{$source}"/>
+		<update-url2unit type='URL2Unit' select="{$destination}" srce-test="{$srce-test}" dest-test="{$dest-test}" >
+			<source>
+				<xsl:value-of select='$source'/>
+			</source>
 		</update-url2unit>
 	</xsl:template>
 
@@ -893,14 +834,10 @@
 		<xsl:variable name="test">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='test']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
-		<xsl:variable name="filter-semtag">
-			<xsl:value-of select=".//asmContext[metadata/@semantictag='filter-semtag']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
-		</xsl:variable>
-		<xsl:variable name="filter-test">
-			<xsl:value-of select=".//asmContext[metadata/@semantictag='filter-test']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
-		</xsl:variable>
-		<update-url2portfolio type='URL2Portfolio' select="{$select}" test="{$test}" filter-semtag="{$filter-semtag}" filter-test="{$filter-test}">
-			<source select="{$source}"/>
+		<update-url2portfolio type='URL2Portfolio' select="{$select}" test="{$test}" >
+			<source>
+				<xsl:value-of select='$source'/>
+			</source>
 		</update-url2portfolio>
 	</xsl:template>
 
@@ -916,13 +853,7 @@
 		<xsl:variable name="test">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='test']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
-		<xsl:variable name="filter-semtag">
-			<xsl:value-of select=".//asmContext[metadata/@semantictag='filter-semtag']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
-		</xsl:variable>
-		<xsl:variable name="filter-test">
-			<xsl:value-of select=".//asmContext[metadata/@semantictag='filter-test']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
-		</xsl:variable>
-		<update-resource type='Dashboard' select="{$select}" test="{$test}" filter-semtag="{$filter-semtag}" filter-test="{$filter-test}">
+		<update-resource type='Dashboard' select="{$select}" test="{$test}" >
 			<xsl:if test="$source!=''">
 				<source select="{$source}"/>
 			</xsl:if>
@@ -943,13 +874,7 @@
 		<xsl:variable name="test">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='test']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
-		<xsl:variable name="filter-semtag">
-			<xsl:value-of select=".//asmContext[metadata/@semantictag='filter-semtag']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
-		</xsl:variable>
-		<xsl:variable name="filter-test">
-			<xsl:value-of select=".//asmContext[metadata/@semantictag='filter-test']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
-		</xsl:variable>
-		<update-resource type='Item' select="{$select}" test="{$test}" filter-semtag="{$filter-semtag}" filter-test="{$filter-test}">
+		<update-resource type='Item' select="{$select}" test="{$test}" >
 			<attribute name='code' language-dependent='N' replace-variable='Y'>
 				<xsl:call-template name="txtval">
 					<xsl:with-param name="semtag">code</xsl:with-param>
@@ -977,13 +902,7 @@
 		<xsl:variable name="test">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='test']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
-		<xsl:variable name="filter-semtag">
-			<xsl:value-of select=".//asmContext[metadata/@semantictag='filter-semtag']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
-		</xsl:variable>
-		<xsl:variable name="filter-test">
-			<xsl:value-of select=".//asmContext[metadata/@semantictag='filter-test']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
-		</xsl:variable>
-		<update-resource type='Get_Resource' select="{$select}" test="{$test}" filter-semtag="{$filter-semtag}" filter-test="{$filter-test}">
+		<update-resource type='Get_Resource' select="{$select}" test="{$test}" >
 			<attribute name='code' language-dependent='N' replace-variable='Y'>
 				<xsl:call-template name="txtval">
 					<xsl:with-param name="semtag">code</xsl:with-param>
@@ -1009,13 +928,7 @@
 		<xsl:variable name="test">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='test']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
-		<xsl:variable name="filter-semtag">
-			<xsl:value-of select=".//asmContext[metadata/@semantictag='filter-semtag']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
-		</xsl:variable>
-		<xsl:variable name="filter-test">
-			<xsl:value-of select=".//asmContext[metadata/@semantictag='filter-test']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
-		</xsl:variable>
-		<update-resource type='Color' select="{$select}" test="{$test}" filter-semtag="{$filter-semtag}" filter-test="{$filter-test}">
+		<update-resource type='Color' select="{$select}" test="{$test}" >
 			<xsl:if test="$source!=''">
 				<source select="{$source}"/>
 			</xsl:if>
@@ -1084,13 +997,7 @@
 		<xsl:variable name="test">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='test']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
-		<xsl:variable name="filter-semtag">
-			<xsl:value-of select=".//asmContext[metadata/@semantictag='filter-semtag']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
-		</xsl:variable>
-		<xsl:variable name="filter-test">
-			<xsl:value-of select=".//asmContext[metadata/@semantictag='filter-test']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
-		</xsl:variable>
-		<fen-update-resource type='Field' semtag="{$semtag}" test="{$test}" filter-semtag="{$filter-semtag}" filter-test="{$filter-test}">
+		<fen-update-resource type='Field' semtag="{$semtag}" test="{$test}" >
 			<attribute name='text' language-dependent='Y' replace-variable='Y'>
 				<xsl:call-template name="txtval">
 					<xsl:with-param name="semtag">text</xsl:with-param>
