@@ -3281,12 +3281,12 @@ g_actions['batch-variable'] = function (node)
 g_actions['send-email'] = function (node)
 //==================================
 {
-	var ok = false
+	let ok = false
 	//-----------------------------------
 	const subject = getTxtvals($("subject",node));
 	const message = getTxtvals($("message",node));
 	const email = getTxtvals($("email",node));
-	const ok = sendEmail(email,subject,message,cc,bcc,alert);
+	ok = sendEmail(email,subject,message,cc,bcc,alert);
 	if (ok)
 		$("#batch-log").append("<br>- send-email: "+email+ " sent");
 	else

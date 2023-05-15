@@ -256,8 +256,8 @@ UIFactory["Audio"].prototype.displayEditor = function(destid,type,langcode)
 	let record_only = ($(UICom.structure.ui[this.id].metadata).attr('audio-record-only')==undefined)?'N':$(UICom.structure.ui[this.id].metadata).attr('audio-record-only');
 	if (record_only!="Y") {
 		html +="<ul id='audio-nav-tabs' class='nav nav-tabs' role='tablist'>";
-		html +=" <li class='nav-item'><a class='nav-link active' href='#edit-window-upload' aria-controls='edit-window-upload' role='tab' data-toggle='tab'>Téléverser un fichier audio</a></li>";
-		html +=" <li class='nav-item'><a class='nav-link' href='#edit-window-record' aria-controls='edit-window-record' role='tab' data-toggle='tab'>Enregistrer un fichier audio</a></li>";
+		html +=" <li class='nav-item'><a class='nav-link active' href='#edit-window-upload' aria-controls='edit-window-upload' role='tab' data-toggle='tab'>"+karutaStr[languages[LANGCODE]]['upload-audio']+"</a></li>";
+		html +=" <li class='nav-item'><a class='nav-link' href='#edit-window-record' aria-controls='edit-window-record' role='tab' data-toggle='tab'>"+karutaStr[languages[LANGCODE]]['record-audio']+"</a></li>";
 		html +="</ul>";
 		html +="<div class='tab-content'>";
 		html +=" <div role='tabpanel' class='tab-pane active' id='edit-window-upload' style='margin-top:10px'>";

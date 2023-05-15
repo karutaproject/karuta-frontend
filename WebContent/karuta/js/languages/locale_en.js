@@ -295,8 +295,14 @@ karutaStr['en']['target']="Semantic Tag of import place";
 karutaStr['en']['object']="Search Element";
 karutaStr['en']['start-semtag']="Start Semantic Tag";
 karutaStr['en']['destination-semtag']="Destination Semantic Tag";
-karutaStr['en']['audio-record-only']="Record only";
 karutaStr['en']['unique']="No duplicates";
+karutaStr['en']['audio-record-only']="Record only";
+karutaStr['en']['picture-record-only']="Take Picture only";
+karutaStr['en']['upload-audio']="Upload an Audio File";
+karutaStr['en']['record-audio']="Record an Audio File";
+karutaStr['en']['upload-image']="Upload an Audio File";
+karutaStr['en']['take-image']="Take Picture";
+karutaStr['en']['save-image']="Save Picture";
 
 //=========================================
 //========== ADMIN ========================

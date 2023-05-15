@@ -474,6 +474,9 @@ UIFactory["Node"].prototype.displayMetadataAttributesEditor = function(destid)
 	if (name=='asmContext' && this.resource.type=='Audio') {
 		this.displayMetadataAttributeEditor('metadata-part1','audio-record-only',true);
 	}
+	if (name=='asmContext' && this.resource.type=='Image') {
+		this.displayMetadataAttributeEditor('metadata-part1','picture-record-only',true);
+	}
 //	if (!model)
 	this.displayRights('metadata-rights');
 	if (model)

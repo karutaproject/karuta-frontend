@@ -295,8 +295,14 @@ karutaStr['fr']['target']="Tag sémantique où importer";
 karutaStr['fr']['object']="Élément à rechercher";
 karutaStr['fr']['start-semtag']="Tag sémantique de départ";
 karutaStr['fr']['destination-semtag']="Tag sémantique d'arrivée";
-karutaStr['fr']['audio-record-only']="Enregistrement seulement";
 karutaStr['fr']['unique']="Sans doublons";
+karutaStr['fr']['audio-record-only']="Enregistrement seulement";
+karutaStr['fr']['picture-record-only']="Prise de photo seulement";
+karutaStr['fr']['upload-audio']="Téléverser un fichier audio";
+karutaStr['fr']['record-audio']="Enregistrer un fichier audio";
+karutaStr['fr']['upload-image']="Téléverser une image";
+karutaStr['fr']['take-image']="Prendre une photo";
+karutaStr['fr']['save-image']="Sauver la photo";
 
 //=========================================
 //========== ADMIN ========================
