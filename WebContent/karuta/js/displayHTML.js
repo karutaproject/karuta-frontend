@@ -147,7 +147,7 @@ displayHTML["standard-struct-default"] =	"<div id='node_#uuid#' class='#displayv
 											"		<div id='collapsible_#uuid#' class='collapsible'></div>" +
 											"		<div id='std_node_#uuid#' class='node-label'>" +
 											"			<span id='menus-#uuid#' class='menus'/><span id='buttons-#uuid#' class='buttons'/>" +
-											"			<div><span class='label-node' id='label_node_#uuid#'></span><span id='help_#uuid#' class='ihelp'></span></div>" +
+											"			<div><span class='label-node' id='label_node_#uuid#'></span></div>" +
 											"			<div id='comments_#uuid#' class='comments'></div>" +
 											"			<div id='metainfo_#uuid#' class='metainfo'></div>" +
 											"			<div id='cssinfo_#uuid#' class='cssinfo'></div>" +
@@ -160,7 +160,7 @@ displayHTML["standard-node-default"] =	"<div id='node_#uuid#' class='#displayvie
 										"		<div id='collapsible_#uuid#' class='collapsible'></div>" +
 										"		<div id='std_node_#uuid#' class='node-label'>" +
 										"			<div class='edit-bar'><span id='menus-#uuid#' class='menus'/><span id='buttons-#uuid#' class='buttons'/></div>" +
-										"			<div><span class='label-node' id='label_node_#uuid#'></span><span id='help_#uuid#' class='ihelp'></span></div>" +
+										"			<div><span class='label-node' id='label_node_#uuid#'></span></div>" +
 										"			<div id='portfoliocode_#uuid#' class='portfoliocode'></div>" +
 										"			<div id='comments_#uuid#' class='comments'></div>" +
 										"			<div id='metainfo_#uuid#' class='metainfo'></div>" +

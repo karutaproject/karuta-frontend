@@ -3283,6 +3283,8 @@ function testIfDisplay (nodeid)
 	let displayItem = true;
 	if (g_userroles[0]!='designer') {
 		let displaytest = $(UICom.structure.ui[nodeid].metadata).attr('displaytest');
+		if (displaytest!=undefined)
+			displaytest = displaytest.replaceAll("##currentnode##","nodeid");
 		if (displaytest!=undefined && displaytest.startsWith(".")) {
 			for (fct in jqueryReportSpecificFunctions) {
 				if (displaytest.indexOf(fct)>-1) {
@@ -3773,6 +3775,18 @@ function setUniqueNodeCode(nodeid) {
 	UICom.structure.ui[nodeid].save();
 }
 
+function testPageVisited(uuid,role) {
+	if (g_userroles[0]==role) {
+		const visited = $("asmContext:has(metadata[semantictag*='visited-date'])",UICom.structure.ui[uuid].node);
+		const visitedid =  $(visited).attr("id");
+		const today = new Date();
+		UICom.structure.ui[visitedid].value_node.text(today.getTime());
+		UICom.structure.ui[visitedid].resource.text_node[LANGCODE].text(today.toLocaleString());
+		UICom.structure.ui[visitedid].save();
+		UICom.structure.ui[visitedid].resource.save();
+	}
+	return true;
+}
 //================================================
 //================================================
 //============== Function JQuery =================
