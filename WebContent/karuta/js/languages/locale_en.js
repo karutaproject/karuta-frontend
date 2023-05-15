@@ -300,8 +300,8 @@ karutaStr['en']['audio-record-only']="Record only";
 karutaStr['en']['picture-record-only']="Take Picture only";
 karutaStr['en']['upload-audio']="Upload an Audio File";
 karutaStr['en']['record-audio']="Record an Audio File";
-karutaStr['en']['upload-image']="Upload an Audio File";
-karutaStr['en']['take-image']="Take Picture";
+karutaStr['en']['upload-image']="Upload an Image";
+karutaStr['en']['take-image']="Take a Picture";
 karutaStr['en']['save-image']="Save Picture";
 
 //=========================================

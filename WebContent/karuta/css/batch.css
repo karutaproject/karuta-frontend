@@ -103,6 +103,8 @@
 .batch span.chkbox-comments.xfor-each-node,
 .batch span.chkbox-comments.xactions,
 .batch span.chkbox-comments.xsubmitall,
+.batch span.chkbox-comments.xsend-email,
+.batch span.chkbox-comments.xvariable,
 .batch span.chkbox-comments.xif-then-else,
 .batch span.chkbox-comments.xif-action,
 .batch span.chkbox-comments.xthen-part,
@@ -139,6 +141,7 @@
   --batch-resource-color: orange;
   --batch-uuid-color: #ff66ff;
   --batch-instruction-color: #990000;
+  --batch-utilities-color: #CACACA;
 }
 .batch .create-person {
   margin-top: 7px;
@@ -346,6 +349,12 @@
 .batch .else-part {
   margin-bottom: 7px;
   border: 1px dashed var(--batch-instruction-color);
+}
+
+.send-email,
+.batch-variable {
+  margin-top: 7px;
+  border: 1px solid var(--batch-utilities-color);
 }
 
 /*# sourceMappingURL=batch.css.map */

@@ -3286,11 +3286,11 @@ g_actions['send-email'] = function (node)
 	const subject = getTxtvals($("subject",node));
 	const message = getTxtvals($("message",node));
 	const email = getTxtvals($("email",node));
-	ok = sendEmail(email,subject,message,cc,bcc,alert);
+	ok = sendEmail(email,subject,message,null,null,false);
 	if (ok)
-		$("#batch-log").append("<br>- send-email: "+email+ " sent");
+		$("#batch-log").append("<br>- email to: "+email+ " sent");
 	else
-		$("#batch-log").append("<span class='danger'>ERROR <span> - send-email: "+email+ " errot");
+		$("#batch-log").append("<span class='danger'>ERROR <span> - send-email: "+email+ " error");
 	//-----------------------------------
 	return ok;
 }

@@ -1702,20 +1702,11 @@ function sendEmailPublicURL(encodeddata,email,langcode) {
 //==================================
 function sendEmail(email,subject,message,cc,bcc,alert) {
 //==================================
-	cc (cc==null)? "":cc;
-	bcc (bcc==null)? "":bcc;
-	//---------------
-	const img = document.querySelector('#config-send-email-logo');
-	const imgB64 = getDataUrl(img);
-	const logo = "<img width='"+img.style.width+"' height='"+img.style.height+"' src=\""+imgB64+"\">";
-	//---------------
-	message += logo + "<br>" ;
+	let ok = true;
+	cc = (cc==null)? "":cc;
+	bcc = (bcc==null)? "":bcc;
 	message = message.replace("##firstname##",USER.firstname);
 	message = message.replace("##lastname##",USER.lastname);
-	//---transform message-------
-	var elt = document.createElement("p");
-	elt.textContent = message;
-	message = elt.innerHTML;
 	//------------------------------
 	var xml ="<node>";
 	xml +="<sender>"+$(USER.email_node).text()+"</sender>";
@@ -1725,6 +1716,7 @@ function sendEmail(email,subject,message,cc,bcc,alert) {
 	xml +="<recipient_cc>"+cc+"</recipient_cc><recipient_bcc>"+bcc+"</recipient_bcc>";
 	xml +="</node>";
 	$.ajax({
+		async:false,
 		contentType: "application/xml",
 		type : "POST",
 		dataType : "xml",
@@ -1734,19 +1726,17 @@ function sendEmail(email,subject,message,cc,bcc,alert) {
 			if (alert) {
 				$('#edit-window').modal('hide');
 				alertHTML(karutaStr[LANG]['email-sent']);
-			} else {
-				return true;
 			}
 		},
 		error: function() {
+			ok = false;
 			if (alert) {
 				$('#edit-window').modal('hide');
 				alertHTML(karutaStr[LANG]['email-sent-error']);
-			} else {
-				return false;
 			}
 		}
 	});
+	return ok;
 }
 
 

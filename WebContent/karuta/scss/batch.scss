@@ -109,6 +109,8 @@
 	span.chkbox-comments.xfor-each-node,
 	span.chkbox-comments.xactions,
 	span.chkbox-comments.xsubmitall,
+	span.chkbox-comments.xsend-email,
+	span.chkbox-comments.xvariable,
 	span.chkbox-comments.xif-then-else,
 	span.chkbox-comments.xif-action,
 	span.chkbox-comments.xthen-part,
@@ -148,6 +150,7 @@
 	--batch-resource-color : orange;
 	--batch-uuid-color : #ff66ff;
 	--batch-instruction-color : #990000;
+	--batch-utilities-color : #CACACA;
 
 	//----- PERSON ---
 	.create-person {
@@ -384,5 +387,12 @@
 		border:1px dashed var(--batch-instruction-color);
 	}
 }
+
+	//----- UTILITIES ---
+	.send-email,
+	.batch-variable {
+		margin-top:7px;
+		border:1px solid var(--batch-utilities-color);
+	}
 
 
