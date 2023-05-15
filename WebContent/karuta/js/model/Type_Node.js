@@ -264,20 +264,24 @@ UIFactory["Node"].prototype.displayNode = function(type,root,dest,depth,langcode
 					alreadyDisplayed = true;
 					let html_tabs = "<ul class='tabs-headers nav nav-tabs' role='tablist'>";
 					let html_panels = "<div class='tabs-contents tab-content'>";
-					for( var i=0; i<root.children.length; ++i ) {
-						// Recurse
+					for( let i=0; i<root.children.length; ++i ) {
 						let childnode = UICom.structure["ui"][root.children[i]];
 						let childlabel = childnode.getLabel();
 						var style = childnode.getLabelStyle();
-						html_tabs += "<li class='nav-item'><a class='nav-link' style='"+style+"' href='#display-"+uuid+"-"+i+"' aria-controls='edit-window-body-main' role='tab' data-toggle='tab'>"+childlabel+"</a></li>";
+						html_tabs += "<li class='nav-item'><a class='nav-link' style='"+style+"' href='#display-"+uuid+"-"+i+"' onclick=\"localStorage.setItem('#display-"+uuid+"','-"+i+"')\" role='tab' data-toggle='tab'>"+childlabel+"</a></li>";
 						html_panels += "<div role='tabpanel' class='tab-pane' id='display-"+uuid+"-"+i+"'></div>";
 					}
 					html_tabs += "</ul>";
 					html_panels +="</div>";
 					$("#content-"+uuid).append (html_tabs);
 					$("#content-"+uuid).append (html_panels);
-					$("a[href='#display-"+uuid+"-0']").click();
-					for( var i=0; i<root.children.length; ++i ) {
+					if (localStorage.getItem('#display-'+uuid)!=undefined){
+						$("a[href='#display-"+uuid+localStorage.getItem('#display-'+uuid)).click();
+					} else {
+						$("a[href='#display-"+uuid+"-0']").click();
+						localStorage.setItem('#display-'+uuid,'-0');
+					}
+					for( let i=0; i<root.children.length; ++i ) {
 						// Recurse
 						let child = UICom.structure["tree"][root.children[i]];
 						let childnode = UICom.structure["ui"][root.children[i]];
@@ -285,7 +289,6 @@ UIFactory["Node"].prototype.displayNode = function(type,root,dest,depth,langcode
 						if (this.submitted=='Y' && this.submitall=='Y')
 							edit = false;
 						childnode.displayNode(type,child, 'display-'+uuid+'-'+i, this.depth-1,langcode,edit,inline,backgroundParent,root,menu);
-
 						edit = original_edit;
 					}
 
