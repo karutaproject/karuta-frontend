@@ -993,7 +993,7 @@ UIFactory["PortfolioFolder"].checkPortfolios = function()
 				$("#portfolios-label").hide();
 			else {
 				if (nb_folders==0 || !USER.admin)
-					UIFactory.PortfolioFolder.loadAndDisplayPortfolios('portfolio-content2-rightside','list');
+					UIFactory.PortfolioFolder.loadAndDisplayPortfolios('portfolio-content2-rightside');
 			}
 		},
 		error : function(jqxhr,textStatus) {
@@ -1019,7 +1019,7 @@ UIFactory["PortfolioFolder"].loadAndDisplayPortfolios = function(dest,type)
 			var visibleid = "";
 			var autoload = "";
 			try {
-				specificDisplayPortfolios();
+				specificDisplayPortfolios(type);
 			} catch(e) {
 				for (var i=0;i<portfolios_list.length;i++){
 					//--------------------------
@@ -1033,7 +1033,9 @@ UIFactory["PortfolioFolder"].loadAndDisplayPortfolios = function(dest,type)
 				}
 				$("#portfolios-nb").html(nb_visibleportfolios);
 				//---------------------------------------------------------------------------------------------
-				if (nb_visibleportfolios>0 || autoload!="" )
+				if (type!=undefined)
+						UIFactory.PortfolioFolder.displayPortfolios('project-portfolios','false',type,portfoliosnotinfolders);
+				else if (nb_visibleportfolios>0 || autoload!="" )
 					if (nb_visibleportfolios>9 && portfoliosnotinfolders.length>9)
 						UIFactory.PortfolioFolder.displayPortfolios('project-portfolios','false','list',portfoliosnotinfolders);
 					else if (nb_visibleportfolios>1 && autoload=="")
@@ -1050,6 +1052,7 @@ UIFactory["PortfolioFolder"].loadAndDisplayPortfolios = function(dest,type)
 					display_main_page(portfolios_list[0].id);
 					UIFactory.PortfolioFolder.displayPortfolios('card-deck-portfolios','false','card',portfoliosnotinfolders);
 				}				
+				//---------------------------------------------------------------------------------------------
 			}
 		},
 		error : function(jqxhr,textStatus) {
@@ -1079,9 +1082,9 @@ UIFactory["PortfolioFolder"].displayPortfolios = function(dest,parentcode,type,i
 	html += "	<div class='col-6 folder-label'>"+karutaStr[LANG]['portfolios']+"</div>";
 	//---------------------------------------
 	html += "	<div class='col-2'>";
-	html += "		<span class='fa fa-th' style='cursor:pointer;font-size:130%;margin-top:4px' onclick=\"UIFactory.PortfolioFolder.displayPortfolios('card-deck-portfolios','false','card',portfoliosnotinfolders);" +
+	html += "		<span class='fa fa-th' style='cursor:pointer;font-size:130%;margin-top:4px' onclick=\"UIFactory.PortfolioFolder.loadAndDisplayPortfolios('card-deck-portfolios','card');" +
 			";\"></span>&nbsp;";
-	html += "		<span class='fa fa-list' style='cursor:pointer;font-size:130%' onclick=\"UIFactory.PortfolioFolder.displayPortfolios('card-deck-portfolios','false','list',portfoliosnotinfolders);\"></span>";
+	html += "		<span class='fa fa-list' style='cursor:pointer;font-size:130%' onclick=\"UIFactory.PortfolioFolder.loadAndDisplayPortfolios('card-deck-portfolios','list');\"></span>";
 	html += "	</div>";
 	html += "</div>";
 	$("#portfolio-rightside-header").html("<div class='folder-header'>"+html+"</div>");

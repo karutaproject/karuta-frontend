@@ -22,6 +22,7 @@ karutaStr['en']['Create']="Create";
 karutaStr['en']['Change']="Change";
 karutaStr['en']['Save']="Save";
 karutaStr['en']['OK']="OK";
+karutaStr['en']['Enter']="Enter";
 karutaStr['en']['Close']="Close";
 karutaStr['en']['Cancel']="Cancel";
 karutaStr['en']['register']="Register";

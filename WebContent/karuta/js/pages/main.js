@@ -17,7 +17,7 @@ function show_main_page()
 }
 
 //==============================
-function fill_main_page(portfolioid)
+function fill_main_page(portfolioid,userrole)
 //==============================
 {
 	setLanguageMenu("fill_main_page()");
@@ -34,13 +34,16 @@ function fill_main_page(portfolioid)
 	if (portfolioid!=null)
 		g_portfolioid = portfolioid;
 	//-------------------------------------------
-	userrole = g_userroles[0];
-	if (userrole=='undefined')
+	if (userrole==undefined)
+		userrole = g_userrole;
+	if (userrole==undefined)
+		userrole = g_userroles[0];
+	if (userrole==undefined)
 		userrole = "";
 	//-------------------------------------------
 	USER.admin = USER.admin_original; // reset if role playing when reload
 	//-------------------------------------------
-	var url = serverBCK_API+"/portfolios/portfolio/" + g_portfolioid + "?resources=true";
+	var url = serverBCK_API+"/portfolios/portfolio/" + g_portfolioid + "?resources=true&userrole="+userrole;
 	$.ajax({
 		async:true,
 		type : "GET",
@@ -73,7 +76,7 @@ function fill_main_page(portfolioid)
 				g_visible = localStorage.getItem('metadata');
 				toggleMetadata(g_visible);
 			}
-			$.ajax({
+/*			$.ajax({
 				async:false,
 				type : "GET",
 				dataType : "xml",
@@ -89,7 +92,7 @@ function fill_main_page(portfolioid)
 						}
 					}
 				}
-			});
+			});*/
 			// --------------------------
 			UICom.parseStructure(data,true);
 			// --------Display Type------------------
@@ -223,11 +226,61 @@ function fill_main_page(portfolioid)
 }
 
 //==============================
+function chooseRole(portfolioid)
+//==============================
+{
+	$('#edit-window').modal('hide')
+	g_userrole = $("input:checked",$("#edit-window-body")).val();
+	fill_main_page(portfolioid,g_userrole);
+	show_main_page();
+}
+
+//==============================
 function display_main_page(portfolioid)
 //==============================
 {
+	g_userroles = [];
+	$.ajax({
+		async:false,
+		type : "GET",
+		dataType : "xml",
+		url : serverBCK_API+"/rolerightsgroups/all/users?portfolio=" + portfolioid,
+		success : function(data) {
+			const rrgs = $("rrg",data);
+			for (let i=0;i<rrgs.length;i++) {
+				const label = $("label",rrgs[i]).text();
+				const users = $("user",rrgs[i]);
+				for (let j=0;j<users.length;j++) {
+					if ($(users[j]).attr("id")==USER.id)
+						g_userroles.push(label);
+				}
+			}
+		}
+	});
+	if (g_userroles.length>1){
+		let html = "";
+		for (let i=0; i<g_userroles.length; i++){
+			html += "<br><input type='radio' name='radio_group' value='"+g_userroles[i]+"'> "+g_userroles[i];
+		}
+		const js1 = "javascript:$('#edit-window').modal('hide')";
+		const js2 = "chooseRole('"+portfolioid+"')";
+		const footer = "<button class='btn' onclick=\""+js2+";\">"+karutaStr[LANG]['Enter']+"</button><button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
+		$("#edit-window-footer").html(footer);
+		$("#edit-window-footer").html(footer);
+		$("#edit-window-title").html(karutaStr[LANG]['select_role']);
+		$("#edit-window-body").html(html);
+		$("#edit-window-body-node").html("");
+		$("#edit-window-type").html("");
+		$("#edit-window-body-metadata").html("");
+		$("#edit-window-body-metadata-epm").html("");
+		$('#edit-window').modal('show');
+	} else {
+		userrole = g_userroles[0];
+		fill_main_page(portfolioid,userrole);
+		show_main_page();
+	}
 	$("#sub-bar").show();
 	$("#welcome-bar").hide();
-	fill_main_page(portfolioid);
-	show_main_page();
+//	fill_main_page(portfolioid);
+//	show_main_page();
 }

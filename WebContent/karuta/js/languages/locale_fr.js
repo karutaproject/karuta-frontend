@@ -22,6 +22,7 @@ karutaStr['fr']['Create']="Créer";
 karutaStr['fr']['Change']="Changer";
 karutaStr['fr']['Save']="Enregistrer";
 karutaStr['fr']['OK']="Sauvegarder";
+karutaStr['fr']['Enter']="Entrer";
 karutaStr['fr']['Close']="Fermer";
 karutaStr['fr']['Cancel']="Annuler";
 karutaStr['fr']['register']="Inscrire";
