@@ -59,7 +59,7 @@ UIFactory["Calendar"] = function( node )
 		var newelement = createXmlElement("utc");
 		$("asmResource[xsi_type='Calendar']",node)[0].appendChild(newelement);
 	}
-	this.utc = $("utc",$("asmResource[xsi_type='Calendar']",node))
+	this.utc = $("utc",$("asmResource[xsi_type='Calendar']",node));
 	//--------------------
 	if ($("version",$("asmResource[xsi_type='"+this.type+"']",node)).length==0){  // for backward compatibility
 		var newelement = createXmlElement("version");

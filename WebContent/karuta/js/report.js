@@ -2036,8 +2036,9 @@ g_report_actions['variable'] = function (destid,action,no,data)
 					//----------------------------
 					if (selector.type=='resource') {
 						text = UICom.structure["ui"][nodeid].resource.getView("dashboard_"+nodeid,null,null,true);
-					}
-					else if (selector.type=='resource code') {
+					} else if (selector.type=='resource utc') {
+						text = $(UICom.structure["ui"][nodeid].resource.getAttributes('utc')).text();
+					} else if (selector.type=='resource code') {
 						text = UICom.structure["ui"][nodeid].resource.getCode();
 					}
 					else if (selector.type=='resource value') {
