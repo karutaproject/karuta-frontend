@@ -1768,6 +1768,9 @@ g_report_actions['node_resource'] = function (destid,action,no,data)
 			if (selector.type=='resource code') {
 				text = UICom.structure["ui"][nodeid].resource.getCode();
 			}
+			if (selector.type=='resource utc') {
+				text = UICom.structure["ui"][nodeid].resource.getAttributes('utc');
+			}
 			if (selector.type=='resource value') {
 				text = UICom.structure["ui"][nodeid].resource.getValue("dashboard_value_"+nodeid);
 				prefix_id += "value_";

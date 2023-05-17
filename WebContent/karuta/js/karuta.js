@@ -3735,6 +3735,11 @@ function moveup(nodeid) {
 //================================================
 //================================================
 
+function goTo(semtag) {
+	const uuid =$( $("*:has(>metadata[semantictag*='"+semtag+"'])",g_portfolio_current)[0]).attr("id");
+	$("#sidebar_"+uuid).click();
+}
+
 function execJS(node,tag){
 	var test = true;
 	if (UICom.structure["ui"][node.id].js==undefined)
@@ -3846,6 +3851,30 @@ $.fn.hasNotChildSemtag = function (options)
 	else
 		return $(this);
 };
+
+//=====================================
+$.fn.hasChildCodeContains = function (options)   // hasChildCodeContains({"semtag":"s","value":"v"})
+//=====================================
+{
+	var defaults= {"value":"v"};
+	var parameters = $.extend(defaults, options);
+	var result = $(this).has("asmResource>code:contains('"+parameters.value+"')");
+	return $(result);
+};
+$.fn.test_hasChildCodeContains = function (options) { return result = ($(this).hasChildCodeContains(options).length>0) ? true : false;};
+$.fn.test_notHasChildCodeContains = function (options) { return result = ($(this).hasChildCodeContains(options).length>0) ? false : true;};
+
+//=====================================
+$.fn.hasChildSemtagAndCodeContains = function (options)   // hasChildSemtagAndCodeContains({"semtag":"s","value":"v"})
+//=====================================
+{
+	var defaults= {"semtag":"s","value":"v"};
+	var parameters = $.extend(defaults, options);
+	var result = $(this).has("*:has('>metadata[semantictag*=" + parameters.semtag + "]'):has(\">asmResource[xsi_type='nodeRes']>code:contains('"+parameters.value+"')\")");
+	return $(result);
+};
+$.fn.test_hasChildSemtagAndCodeContains = function (options) { return result = ($(this).hasChildSemtagAndCodeContains(options).length>0) ? true : false;};
+$.fn.test_notHasChildSemtagAndCodeContains = function (options) { return result = ($(this).hasChildSemtagAndCodeContains(options).length>0) ? false : true;};
 
 //=====================================
 $.fn.hasChildSemtagAndResourceCodeContains = function (options)   // hasChildSemtagAndResourceCodeContains({"semtag":"s","value":"v"})
