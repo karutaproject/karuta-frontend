@@ -1501,6 +1501,7 @@ function getSendSharingURL(nodeid,uuid,sharewithrole,sharetoemail,sharetoroles,l
 		addautocomplete(document.getElementById('email'), emailsarray);
 	}
 	//--------------------------
+	$("#edit-window").modal('show');
 }
 
 
@@ -2677,6 +2678,13 @@ function replaceVariable(text,node,withquote)
 			const pageid = $("#page").attr('uuid');
 			const pagecode = UICom.structure.ui[pageid].getCode();
 			text = text.replaceAll('##pagecode##',cleanCode(pagecode));
+		}
+		if (text.indexOf("##pageid##")>-1){
+			const pageid = $("#page").attr('uuid');
+			if (withquote && text.indexOf('##current')>-1)
+				text = text.replaceAll('##pageid##',"'"+pageid+"'");
+			else
+				text = text.replaceAll('##pageid##',pageid);
 		}
 		if (text.indexOf("##today-utc##")>-1)
 			text = text.replaceAll('##today-utc##',new Date().getTime());
