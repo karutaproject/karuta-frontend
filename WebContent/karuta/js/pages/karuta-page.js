@@ -372,6 +372,7 @@ function setConfigurationTechVariables(langcode)
 				var filename = $("filename[lang='"+languages[langcode]+"']",$("asmResource[xsi_type='Document']",jsfile_nodes[i])).text();
 				var url = "../../../"+serverBCK+"/resources/resource/file/"+fileid;
 				$.ajax({
+					async:false,
 					url: url,
 					filename:filename,
 					dataType: "script",
@@ -388,6 +389,7 @@ function setConfigurationTechVariables(langcode)
 				var filename = $("filename[lang='"+languages[langcode]+"']",$("asmResource[xsi_type='Document']",jsfile_nodes[i])).text();
 				var url = "../../../"+serverBCK+"/resources/resource/file/"+fileid;
 				$.ajax({
+					async:false,
 					url: url,
 					filename:filename,
 					dataType: "text",
