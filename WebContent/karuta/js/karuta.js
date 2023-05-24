@@ -4036,7 +4036,7 @@ $.fn.utcBetween = function (options)
 	for (let i=0;i<this.length;i++){
 		var node = $("asmContext:has('>metadata[semantictag*=" + parameters.semtag + "]')",this[i]);		
 		var utc = $("utc",node).text();
-		if (replaceVariable(parameters.min) < utc && utc < replaceVariable(parameters.max))
+		if (replaceVariable(parameters.m) < utc && utc < replaceVariable(parameters.M))
 			result.push(this[i])
 	}
 	return $(result);

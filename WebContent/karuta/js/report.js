@@ -1769,7 +1769,7 @@ g_report_actions['node_resource'] = function (destid,action,no,data)
 				text = UICom.structure["ui"][nodeid].resource.getCode();
 			}
 			if (selector.type=='resource utc') {
-				text = UICom.structure["ui"][nodeid].resource.getAttributes('utc');
+				text = UICom.structure["ui"][nodeid].resource.getAttributes()['utc'];
 			}
 			if (selector.type=='resource value') {
 				text = UICom.structure["ui"][nodeid].resource.getValue("dashboard_value_"+nodeid);
@@ -1780,6 +1780,9 @@ g_report_actions['node_resource'] = function (destid,action,no,data)
 			}
 			if (selector.type=='node label') {
 				text = UICom.structure["ui"][nodeid].getLabel();
+			}
+			if (selector.type=='node point label') {
+				text = "<a href='#' data-toggle='tooltip' title=\""+UICom.structure.ui[nodeid].getLabel('none')+"\"><i class='fas fa-circle'></i></a>";
 			}
 			if (selector.type=='node code') {
 				text = UICom.structure["ui"][nodeid].getCode();
@@ -2037,7 +2040,7 @@ g_report_actions['variable'] = function (destid,action,no,data)
 					if (selector.type=='resource') {
 						text = UICom.structure["ui"][nodeid].resource.getView("dashboard_"+nodeid,null,null,true);
 					} else if (selector.type=='resource utc') {
-						text = $(UICom.structure["ui"][nodeid].resource.getAttributes('utc')).text();
+						text = UICom.structure["ui"][nodeid].resource.getAttributes()['utc'];
 					} else if (selector.type=='resource code') {
 						text = UICom.structure["ui"][nodeid].resource.getCode();
 					}
