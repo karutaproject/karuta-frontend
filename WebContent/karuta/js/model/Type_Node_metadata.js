@@ -41,6 +41,7 @@ UIFactory["Node"].prototype.setMetadata = function(dest,depth,langcode,edit,inli
 	//------------------------
 	this.semantictag =  ($("metadata",data)[0]==undefined || $($("metadata",data)[0]).attr('semantictag')==undefined)?'': $($("metadata",data)[0]).attr('semantictag');
 	this.displaytest = ($(node.metadata).attr('displaytest')==undefined)?'':$(node.metadata).attr('displaytest');
+	this.displayclick = ($(node.metadata).attr('displayclick')==undefined)?'':$(node.metadata).attr('displayclick');
 	this.collapsed = ($(node.metadata).attr('collapsed')==undefined)?'N':$(node.metadata).attr('collapsed');
 	if (!g_designerrole && sessionStorage.getItem('collapsed'+uuid)!=undefined)
 		this.collapsed = (sessionStorage.getItem('collapsed'+uuid)==undefined)?'N':sessionStorage.getItem('collapsed'+uuid);
@@ -470,6 +471,9 @@ UIFactory["Node"].prototype.displayMetadataAttributesEditor = function(destid)
 	}
 	if (resource_type!="asmRoot") {
 		this.displayMetadataAttributeEditor('metadata-part1','displaytest');
+	}
+	if (resource_type=="asmUnit" || resource_type!="asmStructure") {
+		this.displayMetadataAttributeEditor('metadata-part1','displayclick');
 	}
 	if (name=='asmContext' && this.resource.type=='Audio') {
 		this.displayMetadataAttributeEditor('metadata-part1','audio-record-only',true);

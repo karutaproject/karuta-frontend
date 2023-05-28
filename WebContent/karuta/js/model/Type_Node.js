@@ -129,6 +129,7 @@ UIFactory["Node"] = function( node )
 		}
 		//--------------------
 		this.displaytest = this.metadata.getAttribute('displaytest');
+		this.displayclick = this.metadata.getAttribute('displayclick');
 		//--------------------
 		if ($("lastmodified",$("asmResource[xsi_type='nodeRes']",node)).length==0){  // for backward compatibility
 			var newelement = createXmlElement("lastmodified");
@@ -1369,25 +1370,27 @@ UIFactory["Node"].displayPortfolioMenuItem = function(uuid,destid,type,langcode)
 		langcode = LANGCODE;
 	//---------------------
 	const portfolioid = UICom.structure.ui[uuid].resource.uuid_node.text();
-	let html = "";
-	html += "<div style='cursor:pointer' class='sidebar-item ";
-	if (g_portfolioid==portfolioid)
-		html += "portfolio-selected";
-	html += "' id='parent-"+uuid+"' role='tablist'>";
-	if (g_portfolioid==portfolioid) {
-		const rootid = UICom.rootid;
-		$("#sidebar_"+rootid).hide();
-		html += "	<a id='sidebar_"+rootid+"' onclick=\"displayPage('"+rootid+"',1,'"+type+"','"+langcode+"',"+g_edit+")\">";
-		if (UICom.structure.ui[uuid].resource.getAttributes().local_label!='')
-			html += UICom.structure.ui[uuid].resource.getAttributes().local_label;
-		else
-			html += UICom.structure["ui"][rootid].getLabel('sidebar_'+rootid);
-		html += "	</a>";
-	} else {
-		html += UICom.structure["ui"][uuid].resource.getView();
-		html += "</div><!-- panel -->";
+	if (portfolioid!="") {
+		let html = "";
+		html += "<div style='cursor:pointer' class='sidebar-item ";
+		if (g_portfolioid==portfolioid)
+			html += "portfolio-selected";
+		html += "' id='parent-"+uuid+"' role='tablist'>";
+		if (g_portfolioid==portfolioid) {
+			const rootid = UICom.rootid;
+			$("#sidebar_"+rootid).hide();
+			html += "	<a id='sidebar_"+rootid+"' onclick=\"displayPage('"+rootid+"',1,'"+type+"','"+langcode+"',"+g_edit+")\">";
+			if (UICom.structure.ui[uuid].resource.getAttributes().local_label!='')
+				html += UICom.structure.ui[uuid].resource.getAttributes().local_label;
+			else
+				html += UICom.structure["ui"][rootid].getLabel('sidebar_'+rootid);
+			html += "	</a>";
+		} else {
+			html += UICom.structure["ui"][uuid].resource.getView();
+			html += "</div><!-- panel -->";
+		}
+		$("#"+destid).append($(html));
 	}
-	$("#"+destid).append($(html));
 }
 
 //----------------------------------------------------------------------------------------------------------------------------
@@ -1457,7 +1460,7 @@ UIFactory["Node"].displaySidebar = function(root,destid,type,langcode,edit,paren
 				if (privatevalue)
 					html+= "private"
 				html += "' id='parent-"+uuid+"' role='tablist'>";
-				html += "  <a style='cursor:pointer' id='sidebar_"+uuid+"' href='#' class='sidebar-link' onclick=\"displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+")\" >"+text+"</a>";
+				html += "  <a style='cursor:pointer' id='sidebar_"+uuid+"' href='#' class='sidebar-link' onclick=\"displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+");pageClick ('"+uuid+"')\" >"+text+"</a>";
 				html += "</div><!-- panel -->";
 				$("#"+destid).append($(html));
 			}
@@ -1562,7 +1565,7 @@ UIFactory["Node"].displaySidebar = function(root,destid,type,langcode,edit,paren
 					html += "<div class='dropdown-item' style='cursor:pointer ";
 					if (g_configVar['portfolio-hmenu-logo']!="" && uuid==welcomeid)
 						html += ";display:none";
-					html += "' onclick=\"displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+")\" id='sidebar_"+uuid+"'>"+text+"</div>";
+					html += "' onclick=\"displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+");pageClick ('"+uuid+"')\" id='sidebar_"+uuid+"'>"+text+"</div>";
 					$("#"+destid).append($(html));
 				}
 				if(name == "asmUnit" && level==1) // in a dropdown
@@ -1570,7 +1573,7 @@ UIFactory["Node"].displaySidebar = function(root,destid,type,langcode,edit,paren
 					$("#"+destid).removeClass("nodisplay");
 					var html = "";
 					var depth = 99;
-					html += "<div class='dropdown-item' style='cursor:pointer' onclick=\"displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+")\" id='sidebar_"+uuid+"'>"+text+"</div>";
+					html += "<div class='dropdown-item' style='cursor:pointer' onclick=\"displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+");pageClick ('"+uuid+"')\" id='sidebar_"+uuid+"'>"+text+"</div>";
 					$("#"+destid).append($(html));
 				}
 				if(name == "asmStructure") // Click on Structure
@@ -1651,7 +1654,7 @@ UIFactory["Node"].displaySidebar = function(root,destid,type,langcode,edit,paren
 					$("#"+destid).removeClass("nodisplay");
 					var html = "";
 					var depth = 99;
-					html += "<a onclick=\"displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+")\" id='sidebar_"+uuid+"'>"+text+"</a>";
+					html += "<a onclick=\"displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+");pageClick ('"+uuid+"')\" id='sidebar_"+uuid+"'>"+text+"</a>";
 					$("#"+destid).append($(html));
 				}
 				if(name == "asmUnit" && level==1) // in a dropdown
@@ -1659,7 +1662,7 @@ UIFactory["Node"].displaySidebar = function(root,destid,type,langcode,edit,paren
 					$("#"+destid).removeClass("nodisplay");
 					var html = "";
 					var depth = 99;
-					html += "<a onclick=\"displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+")\" id='sidebar_"+uuid+"'>"+text+"</a>";
+					html += "<a onclick=\"displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+");pageClick ('"+uuid+"')\" id='sidebar_"+uuid+"'>"+text+"</a>";
 					$("#"+destid).append($(html));
 				}
 				if(name == "asmStructure") // Click on Structure

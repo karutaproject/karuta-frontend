@@ -939,9 +939,11 @@ function reloadPreviewBox(node)
 //=====================================================
 function reloadPreviewPage() {
 	let previewpageid = $(".preview-window").attr('preview-uuid');
-	$('#preview-'+previewpageid).remove();
-	$('#previewbackdrop-'+previewpageid).remove();
-	previewPage(previewpageid,100,"",null,g_report_edit); 
+	if (previewpageid!=undefined) {
+		$('#preview-'+previewpageid).remove();
+		$('#previewbackdrop-'+previewpageid).remove();
+		previewPage(previewpageid,100,"",null,g_report_edit);
+	}
 }
 
 //==================================
@@ -1005,6 +1007,24 @@ function previewPage(uuid,depth,type,langcode,edit)
 			window.scrollTo(0,0);
 		}
 	});
+}
+//==================================
+function previewPortfolioPage(partialcode,semtag,depth,type,langcode,edit) 
+//==================================
+{
+	if (partialcode!=undefined && semtag!=undefined) {
+		const portfoliocode = $("code",$(">asmResource[xsi_type='nodeRes']",$("asmRoot",$(UIFactory.Portfolio.search_bycode(partialcode))))).text();
+		$.ajax({
+			async : false,
+			type : "GET",
+			dataType : "xml",
+			url : serverBCK_API+"/nodes?portfoliocode=" + portfoliocode + "&semtag="+semtag,
+			success : function(data) {
+				const uuid = $("node",data).attr("id");
+				previewPage(uuid,depth,type,langcode,edit) ;
+			}
+		});
+	}
 }
 
 //==================================
@@ -2740,8 +2760,9 @@ function replaceVariable(text,node,withquote)
 				text = text.replaceAll('##itselfrescode##',"'"+$($("code",$("asmResource[xsi_type!='context'][xsi_type!='nodeRes']",node.node))).text()+"'");
 	
 		}
-		if (text!=undefined && text.indexOf('##userlogin##')>-1) {
+		if (text!=undefined && (text.indexOf('##userlogin##')>-1 || text.indexOf('##accountlogin##')>-1)) {
 			text = text.replaceAll('##userlogin##',USER.username);
+			text = text.replaceAll('##accountlogin##',USER.username);
 		}
 		var n=0;
 		while (text!=undefined && text.indexOf("{##")>-1 && n<100) {
@@ -3310,6 +3331,19 @@ function testIfDisplay (nodeid)
 	return displayItem
 }
 
+//==================================
+function pageClick (nodeid)
+//==================================
+{
+	if (g_userroles[0]!='designer') {
+		let displayclick = $(UICom.structure.ui[nodeid].metadata).attr('displayclick');
+		if (displayclick!=undefined) {
+			displayclick = displayclick.replaceAll("##currentnode##","nodeid");
+			eval(displayclick);
+		}
+	}
+}
+
 
 //=========================================================
 //==================API Vector Functions===================
@@ -3735,6 +3769,15 @@ function moveup(nodeid) {
 	UIFactory.Node.upNode(nodeid);
 }
 
+function getCode(semtag,uuid) {
+	const nodes = $("*:has(>metadata[semantictag*="+semtag+"])",UICom.structure.ui[uuid].node);
+	if ($("asmResource",nodes[0]).length==3) {
+		resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",nodes[0]); 
+	} else {
+		resource = $("asmResource[xsi_type='nodeRes']",nodes[0]);
+	}
+	return $("code",resource).text();
+}
 
 
 //================================================
@@ -3788,7 +3831,7 @@ function setUniqueNodeCode(nodeid) {
 	UICom.structure.ui[nodeid].save();
 }
 
-function testPageVisited(uuid,role) {
+function setPageVisited(uuid,role) {
 	if (g_userroles[0]==role) {
 		const visited = $("asmContext:has(metadata[semantictag*='visited-date'])",UICom.structure.ui[uuid].node);
 		const visitedid =  $(visited).attr("id");
@@ -3798,7 +3841,6 @@ function testPageVisited(uuid,role) {
 		UICom.structure.ui[visitedid].save();
 		UICom.structure.ui[visitedid].resource.save();
 	}
-	return true;
 }
 //================================================
 //================================================

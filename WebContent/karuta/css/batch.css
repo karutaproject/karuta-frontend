@@ -105,6 +105,7 @@
 .batch span.chkbox-comments.xsubmitall,
 .batch span.chkbox-comments.xsend-email,
 .batch span.chkbox-comments.xvariable,
+.batch span.chkbox-comments.xbatch-variable,
 .batch span.chkbox-comments.xif-then-else,
 .batch span.chkbox-comments.xif-action,
 .batch span.chkbox-comments.xthen-part,
@@ -319,7 +320,8 @@
   margin-top: 7px;
   border: 1px solid var(--batch-resource-color);
 }
-.batch .update-url2unit {
+.batch .update-url2unit,
+.batch .update-url2portfolio {
   margin-top: 7px;
   border: 1px solid var(--batch-resource-color);
 }

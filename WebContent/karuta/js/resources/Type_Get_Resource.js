@@ -2005,7 +2005,7 @@ function import_get_multiple(parentid,targetid,title,query_portfolio,query_semta
 	getResource.query_object = query_object;
 	getResource.targetid = targetid;
 	getResource.unique = unique;
-	getResource.displayEditor("get-resource-node");
+	getResource.displayEditor("get-resource-node",null,null,false,false);
 	$('#edit-window').modal('show');
 }
 

@@ -112,6 +112,7 @@ karutaStr["en"]["back"] = "Click to go back";
 karutaStr["en"]["select-deselect"] = "Select/Deselect All";
 karutaStr["en"]["noemail-yourself"] = "You cannot use your email address.";
 karutaStr["en"]["displaytest"] = "Display - JS Test";
+karutaStr["en"]["displayclick"] = "Display - Click";
 karutaStr["en"]["toogle-sidebar"] = "Show/Hide Sidebar";
 
 //=========================================

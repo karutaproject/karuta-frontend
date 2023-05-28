@@ -112,6 +112,7 @@ karutaStr["fr"]["back"] = "Cliquer pour revenir en arrière";
 karutaStr["fr"]["select-deselect"] = "Sélectionner/Désélectionner tout";
 karutaStr["fr"]["noemail-yourself"] = "Vous ne pouvez pas utiliser votre propre courriel.";
 karutaStr["fr"]["displaytest"] = "Affichage - Test JS";
+karutaStr["fr"]["displayclick"] = "Affichage - Clic";
 karutaStr["fr"]["toogle-sidebar"] = "Montrer/cacher la navigation";
 
 //=========================================
