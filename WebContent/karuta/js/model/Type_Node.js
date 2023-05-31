@@ -1415,7 +1415,6 @@ UIFactory["Node"].displaySidebar = function(root,destid,type,langcode,edit,paren
 			let name = UICom.structure.tree[uuid].node.tagName;
 			let resource_type = UICom.structure.ui[uuid].resource_type;
 			if (i==0 && resource_type!=null && resource_type == "URL2Portfolio") {
-				$("#portfolio_bar").show();
 				while (i<root.children.length && resource_type == "URL2Portfolio" ) {
 					UIFactory.Node.displayPortfolioMenuItem(uuid,'portfolio_bar',type,langcode,edit,parentid);
 					i++;
@@ -1586,7 +1585,7 @@ UIFactory["Node"].displaySidebar = function(root,destid,type,langcode,edit,paren
 						html+= "private"
 					html += "' id='parent-"+uuid+"' role='tabdivst'>";
 					html += "<div class='dropdown-item' style='cursor:pointer' onclick=\"displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+")\" id='sidebar_"+uuid+"'>"+text+"</div>";
-					html += "<div id='dropdown"+uuid+"' class='dropdown-menu nodisplay' aria-labelledby='sidebar_"+uuid+"'></div>";
+					html += "<div id='dropdown"+uuid+"' class='dropdown-menu dropdown-menu-right nodisplay' aria-labelledby='sidebar_"+uuid+"'></div>";
 					html += "</div>";
 					$("#"+destid).append($(html));
 					UIFactory["Node"].displayHorizontalMenu(UICom.structure["tree"][root.children[i]],'dropdown'+uuid,type,langcode,g_edit,uuid,1);

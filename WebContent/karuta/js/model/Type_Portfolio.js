@@ -572,7 +572,7 @@ UIFactory["Portfolio"].getNavBar = function (type,langcode,edit,portfolioid)
 	//------------------------------------------------
 	html += "		</ul>";
 	html += "</nav>";
-	html += "<nav id='portfolio_bar' class='navbar navbar-expand-md navbar-light bg-lightfont justify-content-center' style='display:none'></nav>";
+	html += "<nav id='portfolio_bar' class='navbar navbar-expand-md navbar-light bg-lightfont justify-content-center'></nav>";
 	html += "<nav id='menu_bar' class='navbar navbar-expand-md navbar-light bg-lightfont'></nav>";
 	return html;
 }

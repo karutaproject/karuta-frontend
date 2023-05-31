@@ -855,7 +855,6 @@ body,
   position: relative;
 }
 #menu_bar .dropdown-submenu > .dropdown-menu {
-  left: 0px;
   width: 200px;
   margin-top: -6px;
   margin-left: -1px;

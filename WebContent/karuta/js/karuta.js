@@ -946,6 +946,12 @@ function reloadPreviewPage() {
 	}
 }
 
+//=====================================================
+function reloadPage() {
+	UIFactory.Node.reloadUnit();
+}
+
+
 //==================================
 function previewPage(uuid,depth,type,langcode,edit) 
 //==================================
