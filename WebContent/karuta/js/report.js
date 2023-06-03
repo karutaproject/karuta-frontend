@@ -2000,6 +2000,11 @@ g_report_actions['variable'] = function (destid,action,no,data)
 				}
 				text = sum;
 			}
+			if (aggregatetype=="max" && g_variables[select]!=undefined){
+				text = Math.max(...g_variables[select]);
+				if (text==-Infinity)
+					text = 0;
+			}
 			if (aggregatetype=="avg" && g_variables[select]!=undefined){
 				var sum = 0;
 				for (let i=0;i<g_variables[select].length;i++){
@@ -2010,12 +2015,6 @@ g_report_actions['variable'] = function (destid,action,no,data)
 				if (text.toString().indexOf(".")>-1)
 					text = text.toFixed(2);
 				
-			}
-			if (ref!=undefined && ref!="") {
-				ref = replaceVariable(ref);
-				if (g_variables[ref]==undefined)
-					g_variables[ref] = new Array();
-				g_variables[ref][g_variables[ref].length] = text;
 			}
 			if (!$.isNumeric(text))
 				text="";
@@ -2622,35 +2621,42 @@ function getTextSize(destid,text,svgfontsize,svgfontname) {
 
 function getPoints(data,select) {
 	var points = [];
-	var selector = r_getSelector(select,null);
-	var nodes = $(selector.jquery,data).filter(selector.filter1);
-	nodes = eval("nodes"+selector.filter2);
-	var angle = 360 / nodes.length;
-	for (let i=0; i<nodes.length;i++){
-		//---------------------------
-		var nodeid = $(nodes[i]).attr("id");
-		if (selector.type=='resource') {
-			text = UICom.structure["ui"][nodeid].resource.getView("svg_"+nodeid,'none');
-		} else if (selector.type=='resource code') {
-			text = UICom.structure["ui"][nodeid].resource.getCode();
-		} else if (selector.type=='resource value') {
-			text = UICom.structure["ui"][nodeid].resource.getValue("svg_value_"+nodeid);
-		} else if (selector.type=='resource label') {
-			text = UICom.structure["ui"][nodeid].resource.getLabel(null,'none');
-		} else if (selector.type=='node label') {
-			text = UICom.structure["ui"][nodeid].getLabel(null,'none');
-		} else if (selector.type=='node value') {
-			text = UICom.structure["ui"][nodeid].getValue();
-		} else if (selector.type=='node code') {
-			text = UICom.structure["ui"][nodeid].getCode();
-		} else if (selector.type=='node context') {
-			text = UICom.structure["ui"][nodeid].getContext("svg_context_"+nodeid,'none');
+	if (select.indexOf("var:")>-1) {
+		const varlabel = select.substring(5,5+select.substring(5).indexOf("."));
+		for (let i=0; i<g_variables[varlabel].length;i++){
+			points[points.length] = {'value':g_variables[varlabel][i],'x':0,'y':0};
 		}
-		if (text.length>0)
-			points[points.length] = {'value': parseInt(text),'x':0,'y':0};
-		else
-			points[points.length] = {'value': null};
-	};
+	} else {
+		var selector = r_getSelector(select,null);
+		var nodes = $(selector.jquery,data).filter(selector.filter1);
+		nodes = eval("nodes"+selector.filter2);
+		var angle = 360 / nodes.length;
+		for (let i=0; i<nodes.length;i++){
+			//---------------------------
+			var nodeid = $(nodes[i]).attr("id");
+			if (selector.type=='resource') {
+				text = UICom.structure["ui"][nodeid].resource.getView("svg_"+nodeid,'none');
+			} else if (selector.type=='resource code') {
+				text = UICom.structure["ui"][nodeid].resource.getCode();
+			} else if (selector.type=='resource value') {
+				text = UICom.structure["ui"][nodeid].resource.getValue("svg_value_"+nodeid);
+			} else if (selector.type=='resource label') {
+				text = UICom.structure["ui"][nodeid].resource.getLabel(null,'none');
+			} else if (selector.type=='node label') {
+				text = UICom.structure["ui"][nodeid].getLabel(null,'none');
+			} else if (selector.type=='node value') {
+				text = UICom.structure["ui"][nodeid].getValue();
+			} else if (selector.type=='node code') {
+				text = UICom.structure["ui"][nodeid].getCode();
+			} else if (selector.type=='node context') {
+				text = UICom.structure["ui"][nodeid].getContext("svg_context_"+nodeid,'none');
+			}
+			if (text.length>0)
+				points[points.length] = {'value': parseInt(text),'x':0,'y':0};
+			else
+				points[points.length] = {'value': null};
+		};
+	}
 	return points;
 }
 
