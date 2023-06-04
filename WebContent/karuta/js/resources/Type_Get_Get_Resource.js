@@ -217,10 +217,11 @@ UIFactory["Get_Get_Resource"].update = function(selected_item,itself,langcode,ty
 			$(itself.label_node[i][0]).text(label);
 		}
 		$(itself.lastmodified_node).text(new Date().getTime());
+		itself.save();
 		//-----------------------
 		execJS(itself,'update-resource');
+		execJS(itself,'update-resource-after');
 		//-----------------------
-		itself.save();
 	}
 	catch(e) {
 		console.log(e);
