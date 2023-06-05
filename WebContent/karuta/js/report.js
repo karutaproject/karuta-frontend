@@ -2379,7 +2379,10 @@ g_report_actions['url2unit'] = function (destid,action,no,data)
 	}
 	if (text!="")
 		label = replaceVariable(text);
-	html = "<span id='"+nodeid+"' style='"+style+"' class='report-url2unit "+cssclass+"' onclick=\"$('#sidebar_"+targetid+"').click()\">"+label+"</span>";
+	html = "<span id='"+nodeid+"' style='"+style+"' class='report-url2unit "+cssclass+"' onclick=\"$('#sidebar_"+targetid+"').click()\"";
+	if (text!="")
+		html += "data-toggle='tooltip' title=\""+UICom.structure.ui[nodeid].getLabel('none')+"\"";
+	html +=">"+label+"</span>";
 	$("#"+destid).append($(html));
 	$("#"+nodeid).attr("style",style);
 }

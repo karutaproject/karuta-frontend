@@ -988,6 +988,7 @@ function previewPage(uuid,depth,type,langcode,edit)
 	$("#preview-window-body-"+uuid).html("");
 	let url = serverBCK_API+"/nodes/node/" + uuid + "?resources=true";
 	$.ajax({
+		async:false,
 		type : "GET",
 		dataType : "xml",
 		url : url,
@@ -1019,7 +1020,11 @@ function previewPortfolioPage(partialcode,semtag,depth,type,langcode,edit)
 //==================================
 {
 	if (partialcode!=undefined && semtag!=undefined) {
-		const portfoliocode = $("code",$(">asmResource[xsi_type='nodeRes']",$("asmRoot",$(UIFactory.Portfolio.search_bycode(partialcode))))).text();
+		let portfoliocode = "";
+		if (partialcode="self")
+			portfoliocode = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",g_portfolio_current)).text();
+		else
+			portfoliocode = $("code",$(">asmResource[xsi_type='nodeRes']",$("asmRoot",$(UIFactory.Portfolio.search_bycode(partialcode))))).text();
 		$.ajax({
 			async : false,
 			type : "GET",
@@ -4082,10 +4087,14 @@ $.fn.utcBetween = function (options)
 	var defaults= {"semtag":"s","min":"m","max":"M"};
 	var parameters = $.extend(defaults, options);
 	for (let i=0;i<this.length;i++){
-		var node = $("asmContext:has('>metadata[semantictag*=" + parameters.semtag + "]')",this[i]);		
-		var utc = $("utc",node).text();
-		if (replaceVariable(parameters.m) < utc && utc < replaceVariable(parameters.M))
-			result.push(this[i])
+		const nodes = $("asmContext:has('>metadata[semantictag*=" + parameters.semtag + "]')",this[i]);
+		for (let j=0;j<nodes.length;j++){
+			var utc = $("utc",nodes[i]).text();
+			if (replaceVariable(parameters.m) < utc && utc < replaceVariable(parameters.M)){
+				result.push(this[i]);
+				break;
+			}
+		}
 	}
 	return $(result);
 };
