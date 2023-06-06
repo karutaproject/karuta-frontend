@@ -1021,7 +1021,7 @@ function previewPortfolioPage(partialcode,semtag,depth,type,langcode,edit)
 {
 	if (partialcode!=undefined && semtag!=undefined) {
 		let portfoliocode = "";
-		if (partialcode="self")
+		if (partialcode=="self")
 			portfoliocode = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",g_portfolio_current)).text();
 		else
 			portfoliocode = $("code",$(">asmResource[xsi_type='nodeRes']",$("asmRoot",$(UIFactory.Portfolio.search_bycode(partialcode))))).text();
