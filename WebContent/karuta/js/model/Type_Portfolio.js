@@ -604,7 +604,6 @@ UIFactory["Portfolio"].prototype.getEditor = function(type,lang)
 	return obj;
 };
 
-
 //==================================
 UIFactory["Portfolio"].load = function(portfolioid,level) 
 //==================================
@@ -872,6 +871,26 @@ UIFactory["Portfolio"].getid_bycode = function(code,resources)
 		success : function(data) {
 			var portfolio = $("portfolio", data);
 			result = $(portfolio).attr('id');
+		}
+	});
+	return result;
+};
+
+//==================================
+UIFactory["Portfolio"].getdata_bycode = function(code) 
+//==================================
+{
+	const portfolio = UIFactory.Portfolio.search_bycode(code);
+	const portfoliocode = $($("code",portfolio)[0]).text();
+	var result = "";
+	var url = serverBCK_API+"/portfolios/portfolio/code/" + portfoliocode +"?resources=true";
+	$.ajax({
+		async: false,
+		type : "GET",
+		dataType : "xml",
+		url : url,
+		success : function(data) {
+			result = data;
 		}
 	});
 	return result;

@@ -664,6 +664,13 @@ UIFactory["Node"].getMenus = function(node,langcode)
 		}
 	}
 	//------------- share node button ---------------
+	if (g_portfolioid=="") {
+		const portfolioelt = $("*:has(>metadata[semantictag*='portfolioid'])",node.node);
+		if (portfolioelt.length>0) {
+			const portfolioeltid = $($(portfolioelt)[0]).attr("id");
+			g_portfolioid = UICom.structure.ui[portfolioeltid].resource.getView()
+		}
+	}
 	if (node.depth>0 && node.shareroles!='none' && node.shareroles!='' && g_portfolioid!='') {
 		try {
 			var shares = [];

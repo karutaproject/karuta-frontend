@@ -50,12 +50,12 @@ function displayKarutaPage()
 		url : serverBCK_API+"/credential",
 		data: "",
 		success : function(data) {
+			setConfigurationTechVariables(LANGCODE);
+			setConfigurationUIVariables(LANGCODE);
 			getLanguage();
 			loadLanguages(function() {
 //				getLanguage();
 			});
-			setConfigurationTechVariables(LANGCODE);
-			setConfigurationUIVariables(LANGCODE);
 			applyKarutaConfiguration();
 			USER = new UIFactory["User"]($("user",data));
 			//--------------------------
