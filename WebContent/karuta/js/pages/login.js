@@ -233,7 +233,7 @@ function displayKarutaLogin()
 		url : serverBCK_API+"/credential/login",
 		data: data,
 		success : function(data) {
-			constructKarutaLogin(true);
+			constructKarutaLogin(true && g_configVar['localLogin']);
 		},
 		error : function(jqxhr,textStatus) {
 			if (jqxhr.status == '404') {
@@ -308,7 +308,7 @@ function constructKarutaLogin(withKarutaLogin)
 	}
 	$('#password').keypress(function(e) {
 		var code= (e.keyCode ? e.keyCode : e.which);
-		if (code == 13)
+		if (code == 13)ih2ef
 			callSubmit();
 	});
 	//----------------------------------------------
