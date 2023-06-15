@@ -233,6 +233,8 @@ function displayKarutaLogin()
 		url : serverBCK_API+"/credential/login",
 		data: data,
 		success : function(data) {
+			if (typeof(localLogin) == 'undefined')
+				localLogin = true;
 			constructKarutaLogin(true && localLogin);
 		},
 		error : function(jqxhr,textStatus) {
