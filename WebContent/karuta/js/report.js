@@ -61,6 +61,7 @@ jqueryReportSpecificFunctions['.submitted()'] = ".has(\"metadata-wad[submitted='
 jqueryReportSpecificFunctions['.not_submitted()'] = ".not(\":has(>metadata-wad[submitted=Y])\")";
 jqueryReportSpecificFunctions['.code_empty()'] = ".has(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes'] > code:empty\")";
 jqueryReportSpecificFunctions['.code_not_empty()'] = ".has(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes'] > code:not(:empty)\")";
+jqueryReportSpecificFunctions['.uuid_not_empty()'] = ".has(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes'] > uuid:not(:empty)\")";
 jqueryReportSpecificFunctions['.nodecode_empty()'] = ".has(\"asmResource[xsi_type='nodeRes'] > code:empty\")";
 jqueryReportSpecificFunctions['.nodecode_not_empty()'] = ".has(\"asmResource[xsi_type='nodeRes'] > code:not(:empty)\")";
 jqueryReportSpecificFunctions['.filename_or_url_not_empty()'] = ".has(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes'] > filename[lang='#lang#']:not(:empty),asmResource[xsi_type!='context'][xsi_type!='nodeRes']  > url[lang='#lang#']:not(:empty)\")";
