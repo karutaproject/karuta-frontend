@@ -251,7 +251,7 @@ function display_main_page(portfolioid)
 				const label = $("label",rrgs[i]).text();
 				const users = $("user",rrgs[i]);
 				for (let j=0;j<users.length;j++) {
-					if ($(users[j]).attr("id")==USER.id)
+					if ($(users[j]).attr("id")==USER.id && label!=USER.username)
 						g_userroles.push(label);
 				}
 			}

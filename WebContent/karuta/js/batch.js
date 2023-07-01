@@ -343,7 +343,7 @@ function getTargetNodes(node,data,teststr)
 				}
 			},
 			error : function(data) {
-					$("#batch-log").append("<br>- ***NOT FOUND <span class='danger'>ERROR - update-node-resource - type: "+type+"</span>");
+					$("#batch-log").append("<br>- ***NOT FOUND <span class='danger'>ERROR - update-node-resource - semtag: "+semtag+"</span>");
 			}
 		});
 	} else {
@@ -2810,8 +2810,34 @@ g_actions['import-node'] = function importNode(node,data)
 				}
 			});
 		}
-	} else {
-		$("#batch-log").append("<br>- <span class='danger'>ERROR</span> NOT FOUND - semtag="+semtag+ " source="+source);
+	} else if (getSemtag(node)=="#uuid"){
+		const select = $(node).attr("select");
+		var treeref_idx = select.lastIndexOf(".");
+		var treeref = select.substring(0,treeref_idx);
+		destid = replaceVariable(b_replaceVariable(treeref)); // select = porfolio_uuid.#uuid
+		let urlS = serverBCK_API+"/nodes/node/import/"+destid+"?srcetag="+srcetag+"&srcecode="+srcecode;
+		$.ajax({
+			async:false,
+			type : "POST",
+			dataType : "text",
+			url : urlS,
+			data : "",
+			destid:destid,
+			success : function(data) {
+				if (data.indexOf("llegal operation")<0) {
+					ok = true;
+					g_current_node_uuid = data;
+					$("#batch-log").append("<br>- node ("+g_current_node_uuid+") added at ("+this.destid+") - semtag="+getSemtag(node)+ " source="+srcetag);
+				} else{
+					$("#batch-log").append("<br>- <span class='danger'>ERROR</span> SOURCE NOT FOUND - semtag="+getSemtag(node)+ " source="+srcetag);
+				}
+			},
+			error : function(data) {
+				$("#batch-log").append("<br>- <span class='danger'>ERROR</span> in import node("+this.destid+") - semtag="+getSemtag(node)+ " source="+srcetag);
+			}
+		});
+	}else {
+		$("#batch-log").append("<br>- <span class='danger'>ERROR</span> NOT FOUND - semtag="+getSemtag(node)+ " source="+srcetag);
 	}
 	return ok;
 }
@@ -3339,7 +3365,6 @@ g_actions['for-each-node'] = function (node)
 			success : function(data) {
 				UICom.parseStructure(data,false);
 				let nodes = $("node",data);
-				UICom.parseStructure(data,false);
 				if (test!=undefined)
 					nodes = eval("$(nodes)"+test);
 				$("#batch-log").append("<br>" + nodes.length + " node(s)");
@@ -3356,6 +3381,7 @@ g_actions['for-each-node'] = function (node)
 						dataType : "xml",
 						url : serverBCK_API+"/nodes/node/"+nodeid,
 						success : function(data) {
+							UICom.parseStructure(data,false);
 							for (let j=0; j<actions.length;j++){
 								var tagname = $(actions[j])[0].tagName;
 								g_actions[tagname](actions[j],data);

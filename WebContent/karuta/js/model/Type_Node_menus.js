@@ -1384,6 +1384,10 @@ UIFactory["Node"].getXmlItemMenu = function(node,parentid,item,title,databack,ca
 			else if ($("search-w-parent",itemelts[i]).length>0)
 				search = $("search-w-parent",itemelts[i])[0];
 			let search_foliocode = replaceVariable( ($("foliocode",search).length>0)?$("foliocode",search).text():"" );
+			if (search_foliocode.indexOf("*")>-1) {
+				const portfolios = UIFactory.Portfolio.search_bycode(search_foliocode.replaceAll('*',''));
+				search_foliocode = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",portfolios)[0]).text();
+			}
 			let search_parent_semtag = replaceVariable( ($("parent-semtag",search).length>0)?$("parent-semtag",search).text():"" );
 			let search_semtag = replaceVariable( ($("semtag",search).length>0)?$("semtag",search).text():"" );
 			let search_object = replaceVariable( ($("object",search).length>0)?$("object",search).text():"" );
