@@ -1234,6 +1234,10 @@ UIFactory["Node"].getXmlItemMenu = function(node,parentid,item,title,databack,ca
 			// --------- srce ------------
 			let srce = $("srce",itemelts[i])[0];
 			let foliocode = replaceVariable( ($("foliocode",srce).length>0)?$("foliocode",srce).text():"" );
+			if (foliocode.indexOf("*")>-1) {
+				const portfolios = UIFactory.Portfolio.search_bycode(foliocode.replaceAll('*',''));
+				foliocode = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",portfolios)[0]).text();
+			}
 			let semtag = replaceVariable( ($("semtag",srce).length>0)?$("semtag",srce).text():"" );
 //			let calendar_semtag = replaceVariable( ($("calendar-semtag",itemelts[i]).length>0)?$("calendar-semtag",itemelts[i]).text():"" );
 			// --------- targets ------------

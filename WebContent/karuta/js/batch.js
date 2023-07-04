@@ -3310,7 +3310,12 @@ g_actions['send-email'] = function (node)
 	let ok = false
 	//-----------------------------------
 	const subject = getTxtvals($("subject",node));
-	const message = getTxtvals($("message",node));
+	let message = getTxtvals($("message",node));
+	const elt = document.createElement("p");
+	elt.textContent = message;
+	message = elt.innerHTML;
+	message = message.replace(/..\/..\/..\/..\/..\/../g, window.location.protocol+"//"+window.location.host);
+
 	const email = getTxtvals($("email",node));
 	ok = sendEmail(email,subject,message,null,null,false);
 	if (ok)
