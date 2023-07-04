@@ -217,10 +217,11 @@ UIFactory["Get_Get_Resource"].update = function(selected_item,itself,langcode,ty
 			$(itself.label_node[i][0]).text(label);
 		}
 		$(itself.lastmodified_node).text(new Date().getTime());
+		itself.save();
 		//-----------------------
 		execJS(itself,'update-resource');
+		execJS(itself,'update-resource-after');
 		//-----------------------
-		itself.save();
 	}
 	catch(e) {
 		console.log(e);
@@ -751,11 +752,15 @@ UIFactory["Get_Get_Resource"].prototype.parse = function(destid,type,langcode,da
 			var code = $('code',resource).text();
 			var display_code = false;
 			var display_label = true;
+			var display_value = false;
 			if (code.indexOf("$")>-1) 
 				display_label = false;
 			if (code.indexOf("@")<0) {
 				display_code = true;
 			}
+				if (code.indexOf("?")>-1) {
+					display_value = true;
+				}
 			code = cleanCode(code);
 			//------------------------------
 			var select_item = null;
@@ -789,6 +794,8 @@ UIFactory["Get_Get_Resource"].prototype.parse = function(destid,type,langcode,da
 					var html = "";
 					if (display_code)
 						html += code+" ";
+					if (display_value)
+						html += value+" ";
 					if (display_label)
 						html += $(this).attr("label_"+languages[langcode]);
 					$("#button_"+self.id).attr("style",style);
@@ -803,6 +810,8 @@ UIFactory["Get_Get_Resource"].prototype.parse = function(destid,type,langcode,da
 				var html = "";
 				if (display_code)
 					html += code+" ";
+				if (display_value)
+					html += value+" ";
 				if (display_label)
 					html += $(srce+"[lang='"+languages[langcode]+"']",resource).text();
 				$("#button_"+self.id).attr("style",style);

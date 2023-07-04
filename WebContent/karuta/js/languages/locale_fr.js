@@ -22,6 +22,7 @@ karutaStr['fr']['Create']="Créer";
 karutaStr['fr']['Change']="Changer";
 karutaStr['fr']['Save']="Enregistrer";
 karutaStr['fr']['OK']="Sauvegarder";
+karutaStr['fr']['Enter']="Entrer";
 karutaStr['fr']['Close']="Fermer";
 karutaStr['fr']['Cancel']="Annuler";
 karutaStr['fr']['register']="Inscrire";
@@ -109,7 +110,10 @@ karutaStr["fr"]["waitreport"] = "Patience, le rapport est exécuté sur le serve
 karutaStr["fr"]["instruction-export-menu"] = "Copier le menu Ajouter et le coller dans l'élément où vous voulez l'importer.";
 karutaStr["fr"]["back"] = "Cliquer pour revenir en arrière";
 karutaStr["fr"]["select-deselect"] = "Sélectionner/Désélectionner tout";
-karutaStr["fr"]["noemail-yourself"] = "Vous ne pouvez utiliser votre courriel.";
+karutaStr["fr"]["noemail-yourself"] = "Vous ne pouvez pas utiliser votre propre courriel.";
+karutaStr["fr"]["displaytest"] = "Affichage - Test JS";
+karutaStr["fr"]["displayclick"] = "Affichage - Clic";
+karutaStr["fr"]["toogle-sidebar"] = "Montrer/cacher la navigation";
 
 //=========================================
 //========== ERRORS =======================
@@ -293,8 +297,14 @@ karutaStr['fr']['target']="Tag sémantique où importer";
 karutaStr['fr']['object']="Élément à rechercher";
 karutaStr['fr']['start-semtag']="Tag sémantique de départ";
 karutaStr['fr']['destination-semtag']="Tag sémantique d'arrivée";
-karutaStr['fr']['audio-record-only']="Enregistrement seulement";
 karutaStr['fr']['unique']="Sans doublons";
+karutaStr['fr']['audio-record-only']="Enregistrement seulement";
+karutaStr['fr']['picture-record-only']="Prise de photo seulement";
+karutaStr['fr']['upload-audio']="Téléverser un fichier audio";
+karutaStr['fr']['record-audio']="Enregistrer un fichier audio";
+karutaStr['fr']['upload-image']="Téléverser une image";
+karutaStr['fr']['take-image']="Prendre une photo";
+karutaStr['fr']['save-image']="Sauver la photo";
 
 //=========================================
 //========== ADMIN ========================
@@ -444,7 +454,7 @@ karutaStr['fr']['select_role']="Sélectionner un rôle";
 //========== BATCH ========================
 //=========================================
 
-karutaStr['fr']['batch']="Exécuter un script de batch <span style='font-size:70%' class='badge badge-secondary'>Utiliser Firefox pour suivre l'exécution du batch</span>";
+karutaStr['fr']['batch']="Exécuter un script de batch";
 karutaStr['fr']['upload_csv']="Téléverser un fichier CSV";
 karutaStr['fr']['process_csv']="Exécuter";
 karutaStr['fr']['create_user_portfolios']="Créer un usager et ses portfolios";
@@ -478,7 +488,6 @@ karutaStr['fr']['csv']="Rôles - Bouton CSV";
 karutaStr['fr']['pdf']="Rôles - Bouton PDF";
 karutaStr['fr']['rtf']="Rôles - Bouton RTF";
 karutaStr['fr']['img']="Rôles - Bouton PNG";
-karutaStr['fr']['print']="Rôles - Bouton Imprimer";
 karutaStr['fr']['document-required']="Vous devez spécifier un document avant de le soumettre !";
 karutaStr['fr']['size-upload']="Votre fichier est trop volumineux : seuls les fichiers de moins de " + g_configVar['maxfilesizeupload'] + " Mo sont autorisés !";
 karutaStr['fr']['local-label']="Libellé local";

@@ -19,6 +19,13 @@ if( UIFactory === undefined )
   var UIFactory = {};
 }
 
+var Image_streaming = false;
+var Image_video = null;
+var Image_canvas = null;
+var Image_photo = null;
+var Image_startbutton = null;
+var Image_tracks = null;
+
 
 /// Define our type
 //==================================
@@ -354,146 +361,181 @@ UIFactory["Image"].prototype.displayEditor = function(destid,type,langcode,disab
 		langcode = LANGCODE;
 	//---------------------
 	var html ="";
-	html += " <span id='editimage_"+this.id+"_"+langcode+"'>"+this.getView('editimage_'+this.id+"_"+langcode,'editor',langcode)+"</span> ";
-	var url = serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode];
-	html +=" <div id='divfileupload_"+this.id+"_"+langcode+"' >";
-	html +=" <input id='fileupload_"+this.id+"_"+langcode+"' type='file' name='uploadfile' data-url='"+url+"'>";
-	html += "</div>";
-	html +=" <div id='progress_"+this.id+"_"+langcode+"''><div class='bar' style='width: 0%;'></div></div>";
-	html += "<span id='fileimage_"+this.id+"_"+langcode+"'>"+$(this.filename_node[langcode]).text()+"</span>";
-	html += "<span id='loaded_"+this.id+langcode+"'></span>"
-	html +=  " <button type='button' class='btn ' onclick=\"UIFactory.Image.remove('"+this.id+"',"+langcode+")\">"+karutaStr[LANG]['button-delete']+"</button>";
-	if (USER.admin || g_userroles[0]=='designer') {
-		var semtag =  ($("metadata",this.node)[0]==undefined || $($("metadata",this.node)[0]).attr('semantictag')==undefined)?'': $($("metadata",this.node)[0]).attr('semantictag');
-		if (semtag=="config-img-css")
-			html += "<div class='iamge-url'>url : ../../../"+serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"</div>";
+
+	let record_only = ($(UICom.structure.ui[this.id].metadata).attr('picture-record-only')==undefined)?'N':$(UICom.structure.ui[this.id].metadata).attr('picture-record-only');
+	if (record_only!="Y") {
+		html +="<ul id='audio-nav-tabs' class='nav nav-tabs' role='tablist'>";
+		html +=" <li class='nav-item'><a class='nav-link active' href='#edit-window-upload' aria-controls='edit-window-upload' role='tab' data-toggle='tab'>"+karutaStr[languages[LANGCODE]]['upload-image']+"</a></li>";
+		html +=" <li class='nav-item'><a class='nav-link' href='#edit-window-record' onclick=\"setcamera('"+this.id+"')\" aria-controls='edit-window-record' role='tab' data-toggle='tab'>"+karutaStr[languages[LANGCODE]]['take-image']+"</a></li>";
+		html +="</ul>";
+		html +="<div class='tab-content'>";
+		html +=" <div role='tabpanel' class='tab-pane active' id='edit-window-upload' style='margin-top:10px'>";
+		html +=" </div>";
+		html +=" <div role='tabpanel' class='tab-pane' id='edit-window-record' style='margin-top:10px'>";
+		html +=" </div>";
+		html += "</div>";
+	} else {
+		html +=" <div role='tabpanel' class='tab-pane' id='edit-window-record' style='margin-top:10px'>";
 	}
+
 	$("#"+destid).append($(html));
-	var loadedid = 'loaded_'+this.id+langcode;
-	$('#fileupload_'+this.id+"_"+langcode).fileupload({
-		add: function(e, data) {
-			$("#wait-window").modal('show');
-			filename = data.originalFiles[0]['name'];
-			if(data.originalFiles[0]['size'] > g_configVar['maxfilesizeupload'] * 1024 * 1024) {
+
+	var url = serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode];
+
+	if (record_only!="Y") {
+		//-----------------uploader-------------------------
+		html = " <span id='editimage_"+this.id+"_"+langcode+"'>"+this.getView('editimage_'+this.id+"_"+langcode,'editor',langcode)+"</span> ";
+		html +=" <div id='divfileupload_"+this.id+"_"+langcode+"' >";
+		html +=" <input id='fileupload_"+this.id+"_"+langcode+"' type='file' name='uploadfile' data-url='"+url+"'>";
+		html += "</div>";
+		html +=" <div id='progress_"+this.id+"_"+langcode+"''><div class='bar' style='width: 0%;'></div></div>";
+		html += "<span id='fileimage_"+this.id+"_"+langcode+"'>"+$(this.filename_node[langcode]).text()+"</span>";
+		html += "<span id='loaded_"+this.id+langcode+"'></span>"
+		html +=  " <button type='button' class='btn ' onclick=\"UIFactory.Image.remove('"+this.id+"',"+langcode+")\">"+karutaStr[LANG]['button-delete']+"</button>";
+		if (USER.admin || g_userroles[0]=='designer') {
+			var semtag =  ($("metadata",this.node)[0]==undefined || $($("metadata",this.node)[0]).attr('semantictag')==undefined)?'': $($("metadata",this.node)[0]).attr('semantictag');
+			if (semtag=="config-img-css")
+				html += "<div class='iamge-url'>url : ../../../"+serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"</div>";
+		}
+		$("#edit-window-upload").append($(html));
+		var loadedid = 'loaded_'+this.id+langcode;
+		$('#fileupload_'+this.id+"_"+langcode).fileupload({
+			add: function(e, data) {
+				$("#wait-window").modal('show');
+				filename = data.originalFiles[0]['name'];
+				if(data.originalFiles[0]['size'] > g_configVar['maxfilesizeupload'] * 1024 * 1024) {
+					$("#wait-window").modal('hide');
+					alertHTML(karutaStr[languages[LANGCODE]]['size-upload']);
+				} else {
+					data.submit();
+				}
+			},
+			dataType: 'json',
+			progressall: function (e, data) {
+				$("#progress_"+this.id+"_"+langcode).css('border','1px solid lightgrey');
+				var progress = parseInt(data.loaded / data.total * 100, 10);
+				$('#progress_'+this.id+"_"+langcode+' .bar').css('width',progress + '%');
+			},
+			done: function (e, data) {
 				$("#wait-window").modal('hide');
-				alertHTML(karutaStr[languages[LANGCODE]]['size-upload']);
-			} else {
-				data.submit();
+				var uuid = data.url.substring(data.url.lastIndexOf('/')+1,data.url.indexOf('?'));
+				UIFactory["Image"].update(data.result,uuid,langcode,parent,filename);
+				$("#"+loadedid).html(" <i class='fa fa-check'></i>");
 			}
-		},
-		dataType: 'json',
-		progressall: function (e, data) {
-			$("#progress_"+this.id+"_"+langcode).css('border','1px solid lightgrey');
-			var progress = parseInt(data.loaded / data.total * 100, 10);
-			$('#progress_'+this.id+"_"+langcode+' .bar').css('width',progress + '%');
-		},
-		done: function (e, data) {
-			$("#wait-window").modal('hide');
-			var uuid = data.url.substring(data.url.lastIndexOf('/')+1,data.url.indexOf('?'));
-			UIFactory["Image"].update(data.result,uuid,langcode,parent,filename);
-			$("#"+loadedid).html(" <i class='fa fa-check'></i>");
-		}
-	});
-	var resizeroles = $("metadata-wad",this.node).attr('resizeroles');
-	if (resizeroles==undefined)
-		resizeroles="";
-	if ((g_userroles[0]=='designer' || USER.admin || resizeroles.containsArrayElt(g_userroles) || resizeroles.indexOf(this.userrole)>-1) ) {
-		//---------------------
-		var htmlFormObj = $("<form class='form-horizontal' style='margin-top:10px'></form>");
-		//---------------------
-		var width = $(this.width_node[langcode]).text();
-		if (this.encrypted)
-			width = decrypt(width.substring(3),g_rc4key);
-		var htmlWidthGroupObj = $("<div class='form-group'></div>")
-		var htmlWidthLabelObj = $("<label for='width_"+this.id+"_"+langcode+"' class='col-sm-3 control-label'>"+karutaStr[LANG]['width']+"</label>");
-		var htmlWidthDivObj = $("<div class='col-sm-9'></div>");
-		var htmlWidthInputObj = $("<input id='width_"+this.id+"_"+langcode+"' type='text' class='form-control' value=\""+width+"\">");
-		var self = this;
-		$(htmlWidthInputObj).change(function (){
-			$(self.width_node[langcode]).text($(this).val());
-			self.save();
 		});
-		$(htmlWidthDivObj).append($(htmlWidthInputObj));
-		$(htmlWidthGroupObj).append($(htmlWidthLabelObj));
-		$(htmlWidthGroupObj).append($(htmlWidthDivObj));
-		$(htmlFormObj).append($(htmlWidthGroupObj));
-		//---------------------
-		var height = $(this.height_node[langcode]).text();
-		if (this.encrypted)
-			height = decrypt(height.substring(3),g_rc4key);
-		var htmlHeightGroupObj = $("<div class='form-group'></div>")
-		var htmlHeightLabelObj = $("<label for='height_"+this.id+"_"+langcode+"' class='col-sm-3 control-label'>"+karutaStr[LANG]['height']+"</label>");
-		var htmlHeightDivObj = $("<div class='col-sm-9'></div>");
-		var htmlHeightInputObj = $("<input id='height_"+this.id+"_"+langcode+"' type='text' class='form-control' value=\""+height+"\">");
-		var self = this;
-		$(htmlHeightInputObj).change(function (){
-			$(self.height_node[langcode]).text($(this).val());
-			self.save();
-		});
-		$(htmlHeightDivObj).append($(htmlHeightInputObj));
-		$(htmlHeightGroupObj).append($(htmlHeightLabelObj));
-		$(htmlHeightGroupObj).append($(htmlHeightDivObj));
-		$(htmlFormObj).append($(htmlHeightGroupObj));
-		//---------------------
-		var alt = $(this.alt_node[langcode]).text();
-		if (this.encrypted)
-			alt = decrypt(alt.substring(3),g_rc4key);
-		var htmlaltGroupObj = $("<div class='form-group'></div>")
-		var htmlaltLabelObj = $("<label for='alt_"+this.id+"_"+langcode+"' class='col-sm-3 control-label'>"+karutaStr[LANG]['alt']+"</label>");
-		var htmlaltDivObj = $("<div class='col-sm-9'></div>");
-		var htmlaltInputObj = $("<input id='alt_"+this.id+"_"+langcode+"' type='text' class='form-control' value=\""+alt+"\">");
-		var self = this;
-		$(htmlaltInputObj).change(function (){
-			$(self.alt_node[langcode]).text($(this).val());
-			self.save();
-		});
-		$(htmlaltDivObj).append($(htmlaltInputObj));
-		$(htmlaltGroupObj).append($(htmlaltLabelObj));
-		$(htmlaltGroupObj).append($(htmlaltDivObj));
-		$(htmlFormObj).append($(htmlaltGroupObj));
-		//---------------------
-		if (g_userroles[0]=='designer' || USER.admin) {
+		var resizeroles = $("metadata-wad",this.node).attr('resizeroles');
+		if (resizeroles==undefined)
+			resizeroles="";
+		if ((g_userroles[0]=='designer' || USER.admin || resizeroles.containsArrayElt(g_userroles) || resizeroles.indexOf(this.userrole)>-1) ) {
 			//---------------------
-			var code = $(this.code_node).text();
+			var htmlFormObj = $("<form class='form-horizontal' style='margin-top:10px'></form>");
+			//---------------------
+			var width = $(this.width_node[langcode]).text();
 			if (this.encrypted)
-				code = decrypt(code.substring(3),g_rc4key);
-			var htmlcodeGroupObj = $("<div class='form-group'></div>")
-			var htmlcodeLabelObj = $("<label for='code_"+this.id+"_"+langcode+"' class='col-sm-3 control-label'>"+karutaStr[LANG]['code']+"</label>");
-			var htmlcodeDivObj = $("<div class='col-sm-9'></div>");
-			var htmlcodeInputObj = $("<input id='code_"+this.id+"_"+langcode+"' type='text' class='form-control' value=\""+code+"\">");
+				width = decrypt(width.substring(3),g_rc4key);
+			var htmlWidthGroupObj = $("<div class='form-group'></div>")
+			var htmlWidthLabelObj = $("<label for='width_"+this.id+"_"+langcode+"' class='col-sm-3 control-label'>"+karutaStr[LANG]['width']+"</label>");
+			var htmlWidthDivObj = $("<div class='col-sm-9'></div>");
+			var htmlWidthInputObj = $("<input id='width_"+this.id+"_"+langcode+"' type='text' class='form-control' value=\""+width+"\">");
 			var self = this;
-			$(htmlcodeInputObj).change(function (){
-				$(self.code_node).text($(this).val());
+			$(htmlWidthInputObj).change(function (){
+				$(self.width_node[langcode]).text($(this).val());
 				self.save();
 			});
-			$(htmlcodeDivObj).append($(htmlcodeInputObj));
-			$(htmlcodeGroupObj).append($(htmlcodeLabelObj));
-			$(htmlcodeGroupObj).append($(htmlcodeDivObj));
-			$(htmlFormObj).append($(htmlcodeGroupObj));
+			$(htmlWidthDivObj).append($(htmlWidthInputObj));
+			$(htmlWidthGroupObj).append($(htmlWidthLabelObj));
+			$(htmlWidthGroupObj).append($(htmlWidthDivObj));
+			$(htmlFormObj).append($(htmlWidthGroupObj));
 			//---------------------
-			var value = $(this.value_node).text();
+			var height = $(this.height_node[langcode]).text();
 			if (this.encrypted)
-				value = decrypt(value.substring(3),g_rc4key);
-			var htmlvalueGroupObj = $("<div class='form-group'></div>")
-			var htmlvalueLabelObj = $("<label for='value_"+this.id+"_"+langcode+"' class='col-sm-3 control-label'>"+karutaStr[LANG]['value']+"</label>");
-			var htmlvalueDivObj = $("<div class='col-sm-9'></div>");
-			var htmlvalueInputObj = $("<input id='value_"+this.id+"_"+langcode+"' type='text' class='form-control' value=\""+value+"\">");
-			var self = this;
-			$(htmlvalueInputObj).change(function (){
-				$(self.value_node).text($(this).val());
+				height = decrypt(height.substring(3),g_rc4key);
+			var htmlHeightGroupObj = $("<div class='form-group'></div>")
+			var htmlHeightLabelObj = $("<label for='height_"+this.id+"_"+langcode+"' class='col-sm-3 control-label'>"+karutaStr[LANG]['height']+"</label>");
+			var htmlHeightDivObj = $("<div class='col-sm-9'></div>");
+			var htmlHeightInputObj = $("<input id='height_"+this.id+"_"+langcode+"' type='text' class='form-control' value=\""+height+"\">");
+			$(htmlHeightInputObj).change(function (){
+				$(self.height_node[langcode]).text($(this).val());
 				self.save();
 			});
-			$(htmlvalueDivObj).append($(htmlvalueInputObj));
-			$(htmlvalueGroupObj).append($(htmlvalueLabelObj));
-			$(htmlvalueGroupObj).append($(htmlvalueDivObj));
-			$(htmlFormObj).append($(htmlvalueGroupObj));
+			$(htmlHeightDivObj).append($(htmlHeightInputObj));
+			$(htmlHeightGroupObj).append($(htmlHeightLabelObj));
+			$(htmlHeightGroupObj).append($(htmlHeightDivObj));
+			$(htmlFormObj).append($(htmlHeightGroupObj));
 			//---------------------
+			var alt = $(this.alt_node[langcode]).text();
+			if (this.encrypted)
+				alt = decrypt(alt.substring(3),g_rc4key);
+			var htmlaltGroupObj = $("<div class='form-group'></div>")
+			var htmlaltLabelObj = $("<label for='alt_"+this.id+"_"+langcode+"' class='col-sm-3 control-label'>"+karutaStr[LANG]['alt']+"</label>");
+			var htmlaltDivObj = $("<div class='col-sm-9'></div>");
+			var htmlaltInputObj = $("<input id='alt_"+this.id+"_"+langcode+"' type='text' class='form-control' value=\""+alt+"\">");
+			$(htmlaltInputObj).change(function (){
+				$(self.alt_node[langcode]).text($(this).val());
+				self.save();
+			});
+			$(htmlaltDivObj).append($(htmlaltInputObj));
+			$(htmlaltGroupObj).append($(htmlaltLabelObj));
+			$(htmlaltGroupObj).append($(htmlaltDivObj));
+			$(htmlFormObj).append($(htmlaltGroupObj));
+			//---------------------
+			if (g_userroles[0]=='designer' || USER.admin) {
+				//---------------------
+				var code = $(this.code_node).text();
+				if (this.encrypted)
+					code = decrypt(code.substring(3),g_rc4key);
+				var htmlcodeGroupObj = $("<div class='form-group'></div>")
+				var htmlcodeLabelObj = $("<label for='code_"+this.id+"_"+langcode+"' class='col-sm-3 control-label'>"+karutaStr[LANG]['code']+"</label>");
+				var htmlcodeDivObj = $("<div class='col-sm-9'></div>");
+				var htmlcodeInputObj = $("<input id='code_"+this.id+"_"+langcode+"' type='text' class='form-control' value=\""+code+"\">");
+				$(htmlcodeInputObj).change(function (){
+					$(self.code_node).text($(this).val());
+					self.save();
+				});
+				$(htmlcodeDivObj).append($(htmlcodeInputObj));
+				$(htmlcodeGroupObj).append($(htmlcodeLabelObj));
+				$(htmlcodeGroupObj).append($(htmlcodeDivObj));
+				$(htmlFormObj).append($(htmlcodeGroupObj));
+				//---------------------
+				var value = $(this.value_node).text();
+				if (this.encrypted)
+					value = decrypt(value.substring(3),g_rc4key);
+				var htmlvalueGroupObj = $("<div class='form-group'></div>")
+				var htmlvalueLabelObj = $("<label for='value_"+this.id+"_"+langcode+"' class='col-sm-3 control-label'>"+karutaStr[LANG]['value']+"</label>");
+				var htmlvalueDivObj = $("<div class='col-sm-9'></div>");
+				var htmlvalueInputObj = $("<input id='value_"+this.id+"_"+langcode+"' type='text' class='form-control' value=\""+value+"\">");
+				$(htmlvalueInputObj).change(function (){
+					$(self.value_node).text($(this).val());
+					self.save();
+				});
+				$(htmlvalueDivObj).append($(htmlvalueInputObj));
+				$(htmlvalueGroupObj).append($(htmlvalueLabelObj));
+				$(htmlvalueGroupObj).append($(htmlvalueDivObj));
+				$(htmlFormObj).append($(htmlvalueGroupObj));
+				//---------------------
+			}
+			//---------------------
+		$("#edit-window-upload").append($(htmlFormObj));
+			//---------------------
+	//		UIFactory.Image.resizeImage(this.id);
 		}
-		//---------------------
-		$("#"+destid).append(htmlFormObj);
-		//---------------------
-//		UIFactory.Image.resizeImage(this.id);
 	}
+	//-----------------recorder-------------------------
+	html  = "<div class='camera'>";
+	html += "<video id='video'>Video stream not available.</video>";
+	html += "<div style='margin:10px' ><button class='btn' id='startbutton'>"+karutaStr[languages[LANGCODE]]['take-image']+"</button></div>";
+	html += "</div>";
+	html += "<canvas id='canvas' style='display:none'></canvas>";
+	html += "<img id='photo' alt='The screen capture will appear in this box.'> ";
+	$("#edit-window-record").append($(html));
+	Image_video = document.getElementById('video');
+	Image_canvas = document.getElementById('canvas');
+	Image_photo = document.getElementById('photo');
+	Image_startbutton = document.getElementById('startbutton');
+	if (record_only=="Y") {
+		setcamera(this.id);
+	}
+
 };
 
 //==================================
@@ -522,3 +564,116 @@ UIFactory["Image"].prototype.refresh = function()
 	};		
 };
 
+//==================================
+function clearphoto()
+//==================================
+{
+	var context = Image_canvas.getContext('2d');
+	context.fillStyle = "#FFF";
+	context.fillRect(0, 0, Image_canvas.width, Image_canvas.height);
+
+	var data = canvas.toDataURL('image/png');
+	Image_photo.setAttribute('src', data);
+}
+
+//==================================
+function takephoto(width,height)
+//==================================
+{
+	var context = Image_canvas.getContext('2d');
+	if (width && height) {
+		Image_canvas.width = width;
+		Image_canvas.height = height;
+		context.drawImage(video, 0, 0, width, height);
+		var data = Image_canvas.toDataURL('image/png');
+		Image_photo.setAttribute('src', data);
+	} else {
+		clearphoto();
+	}
+}
+
+//==================================
+function dataURLToBlob(dataURL) 
+//==================================
+{
+	var parts = dataURL.split(';base64,');
+	var contentType = parts[0].split(':')[1];
+	var raw = window.atob(parts[1]);
+	var rawLength = raw.length;
+	var uInt8Array = new Uint8Array(rawLength);
+	for (var i = 0; i < rawLength; ++i) {
+		uInt8Array[i] = raw.charCodeAt(i);
+	}
+	return new Blob([uInt8Array], {type: contentType});
+}
+
+//==================================
+function setcamera (nodeid)
+//==================================
+{
+	Image_streaming = false;
+	var width = 320;    // We will scale the photo width to this
+	var height = 0;     // This will be computed based on the input stream
+	navigator.mediaDevices.getUserMedia({video: true, audio: false})
+		.then(function(stream) {
+			Image_tracks = stream.getTracks();
+			Image_video.srcObject = stream;
+			Image_video.play();
+		})
+		.catch(function(err) {
+			 console.log("An error occurred: " + err);
+		});
+
+	Image_video.addEventListener('canplay', function(ev){
+		if (!Image_streaming) {
+			height = Image_video.videoHeight / (Image_video.videoWidth/width);
+			// Firefox currently has a bug where the height can't be read from
+			// the video, so we will make assumptions if this happens.
+			if (isNaN(height)) {
+				height = width / (4/3);
+			}
+			Image_video.setAttribute('width', width);
+			Image_video.setAttribute('height', height);
+			Image_canvas.setAttribute('width', width);
+			Image_canvas.setAttribute('height', height);
+			Image_streaming = true;
+		}
+	}, false);
+
+	startbutton.addEventListener('click', function(ev){
+		takephoto(width,height);
+		ev.preventDefault();
+	}, false);
+	
+	clearphoto();
+	$("button",$("#edit-window-footer")).attr("onclick","Image_tracks.forEach(track => track.stop());$('#edit-window').modal('hide');")
+	$("#footer-before-close").html("<button class='btn' onclick=\"saveImage('"+nodeid+"');$('#edit-window').modal('hide');\">"+karutaStr[LANG]['Save']+"</button>");
+	$('#edit-window').on('hidden.bs.modal', function (e) {
+		Image_tracks.forEach(track => track.stop());
+	})
+}
+
+//==================================
+function saveImage(nodeid) 
+//==================================
+{
+	Image_tracks.forEach(track => track.stop());
+	const data = document.getElementById('photo').getAttribute('src');
+	const blob = dataURLToBlob(data);
+	var fd = new FormData();
+	fd.append('uploadfile', blob);
+	const url = serverBCK+"/resources/resource/file/"+nodeid+"?lang="+languages[LANGCODE];
+	$.ajax({
+		async : false,
+		type: 'POST',
+		url: url,
+		data: fd,
+		processData: false,
+		contentType: false,
+		success : function(data) {
+			var uuid = data.files[0].url.substring(data.files[0].url.lastIndexOf('/')+1);
+			UIFactory["Image"].update(data,uuid,LANGCODE,parent,'picture');
+			$('#edit-window').modal('hide');
+		}
+	});
+}

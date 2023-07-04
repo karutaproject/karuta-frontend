@@ -132,7 +132,7 @@ UIFactory["Comments"].prototype.getView = function(dest,type,langcode)
 	const date = $(this.date_node).text();
 	//----------------
 	var html = "";
-	if (type=='default') {
+	if (type=='default' || type=='none') {
 		html += "<div class='text'>"+text+"</div>";
 		html +="<div  class='author-date'>";
 		html +="<span name='author' class='author' id='author'>"+author+"</span>";

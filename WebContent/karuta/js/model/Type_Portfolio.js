@@ -509,8 +509,8 @@ UIFactory["Portfolio"].getNavBar = function (type,langcode,edit,portfolioid)
 	var html = "";
 	var rootid = $(UICom.root.node).attr('id');
 	html += "<nav id='navbar1' class='navbar navbar-expand-md navbar-dark'>";
-	html += "	<a  id='toggleSideBar' onclick='toggleSideBar()' class='nav-item button icon'><i class='fa fa-bars'></i></a>";
 	html += "	<a  id='backbutton' onclick='displayBack()' class='nav-item button icon' style='font-size:150%' data-title='"+karutaStr[LANG]["back"]+"' data-toggle='tooltip' data-placement='bottom'><i class='fas fa-arrow-circle-left'></i></a>";
+	html += "	<a  id='toggleSideBar' onclick='toggleSideBar()' class='nav-item button icon' data-title='"+karutaStr[LANG]["toogle-sidebar"]+"' data-toggle='tooltip' data-placement='bottom'><i class='fa fa-bars'></i></a>";
 	html += "	<a class='navbar-brand' id='sidebar_"+rootid+"' onclick=\"displayPage('"+rootid+"',1,'"+type+"','"+langcode+"',"+g_edit+")\">";
 	html += 		UICom.structure["ui"][rootid].getLabel('sidebar_'+rootid);
 	html += "	</a>";
@@ -544,7 +544,7 @@ UIFactory["Portfolio"].getNavBar = function (type,langcode,edit,portfolioid)
 	}
 	//-------------------- ROLES-------------------------
 	if (g_userroles[0]=='designer' || USER.admin) {
-		setDesignerRole('designer');
+		//setDesignerRole('designer');
 		html += "		<li class='nav-item dropdown'>";
 		html += "			<a class='nav-link dropdown-toggle' href='#' id='actionsRoles' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>";
 		html += 				karutaStr[LANG]['role']+" : <span id='userrole'>designer</span>";
@@ -572,22 +572,10 @@ UIFactory["Portfolio"].getNavBar = function (type,langcode,edit,portfolioid)
 	//------------------------------------------------
 	html += "		</ul>";
 	html += "</nav>";
-	html += "<nav id='menu_bar' class='navbar navbar-expand-md navbar-light bg-lightfont'>";
-	html += "</nav>";
+	html += "<nav id='portfolio_bar' class='navbar navbar-expand-md navbar-light bg-lightfont justify-content-center'></nav>";
+	html += "<nav id='menu_bar' class='navbar navbar-expand-md navbar-light bg-lightfont'></nav>";
 	return html;
 }
-
-/*
-//======================
-UIFactory["Portfolio"].displayNodes = function(destid,tree,semtag,langcode,edit)
-//======================
-{	
-	$("#"+destid).html("");
-	var rootnodeid = $("*:has(metadata[semantictag="+semtag+"])",tree).attr("id");
-	var depth = 99;
-	UIFactory['Node'].displayNode('standard',UICom.structure['tree'][rootnodeid],destid,depth,langcode,edit);
-};
-*/
 
 /// Editor
 //==================================
@@ -615,7 +603,6 @@ UIFactory["Portfolio"].prototype.getEditor = function(type,lang)
 	});
 	return obj;
 };
-
 
 //==================================
 UIFactory["Portfolio"].load = function(portfolioid,level) 
@@ -666,6 +653,7 @@ UIFactory["Portfolio"].reloadparse = function(portfolioid)
 			UICom.parseStructure(data,true);
 			setVariables(data);
 			UIFactory["Portfolio"].parse_add(data);
+			$("#portfolio_bar").html("");
 			$("#sidebar").html("");
 			UIFactory["Portfolio"].displaySidebar(UICom.root,'sidebar',null,null,g_edit,UICom.root);
 			$('[data-toggle=tooltip]').tooltip({html: true, trigger: 'hover'}); 
@@ -883,6 +871,26 @@ UIFactory["Portfolio"].getid_bycode = function(code,resources)
 		success : function(data) {
 			var portfolio = $("portfolio", data);
 			result = $(portfolio).attr('id');
+		}
+	});
+	return result;
+};
+
+//==================================
+UIFactory["Portfolio"].getdata_bycode = function(code) 
+//==================================
+{
+	const portfolio = UIFactory.Portfolio.search_bycode(code);
+	const portfoliocode = $($("code",portfolio)[0]).text();
+	var result = "";
+	var url = serverBCK_API+"/portfolios/portfolio/code/" + portfoliocode +"?resources=true";
+	$.ajax({
+		async: false,
+		type : "GET",
+		dataType : "xml",
+		url : url,
+		success : function(data) {
+			result = data;
 		}
 	});
 	return result;

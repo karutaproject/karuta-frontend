@@ -897,7 +897,7 @@
 
 	.topbarmenu{
 		min-height: 4rem;
-		padding-top: 1.4rem;
+		padding-top: 1rem;
 		li.selected {
 			font-weight:bold;
 			color: var(--portfolio-sidebar-selected-text-color);
@@ -923,8 +923,7 @@
 		.dropdown-submenu {
 			position: relative;
 			&>.dropdown-menu {
-//				top: 2.4rem;
-				left:0px;
+//				left:0px;
 				width:200px;
 				margin-top: -6px;
 				margin-left: -1px;
@@ -945,6 +944,10 @@
 			top:0.4rem;
 			left:-198px;
 			border-radius: 6px 0 0 6px;
+		}
+		.selected{
+				font-weight:bold;
+				color: var(--portfolio-sidebar-selected-text-color);
 		}
 
 	}
@@ -1019,6 +1022,56 @@
 			}
 		}
 	
+		/* ====================== */
+		/*      PORTFOLIOBAR      */
+		/* ====================== */
+		#portfolio_bar {
+			font-size:130%;
+			width:100%;
+			background-color: var(--portfolio-sidebar-background-color);
+			color: var(--portfolio-sidebar-text-color);
+			padding-top:15px;
+			min-height: 100%;
+			padding-left:0px;
+			padding-right:0px;
+			border-bottom:1px solid var(--portfolio-sidebar-separator-color);
+			.portfolio-selected a {
+				font-weight:bold;
+			}
+			.sidebar-item{
+				padding-left:15px;
+				padding-top:4px;
+				padding-bottom:4px;
+				a {
+					width:100%;
+				}
+				.sidebar-item {
+					padding-top:2px;
+					padding-bottom:2px;
+				}
+			}
+			.sidebar-link {
+				color: var(--portfolio-sidebar-text-color);
+				padding-right:9px;
+				a {
+					color: var(--portfolio-sidebar-text-color);
+				}
+				a:hover {
+					color: var(--portfolio-sidebar-selected-text-color);
+				}
+			}
+			.portfolio-selected{
+//				padding-right:5px;
+				a {
+					font-weight:bold;
+					color: var(--portfolio-sidebar-selected-text-color);
+				}
+			}
+			a.sidebar-link:hover {
+				color: var(--portfolio-sidebar-selected-text-color);
+			}
+		}
+
 		#portfolio-container {
 			background-color: var(--portfolio-background-color);
 			
@@ -1332,6 +1385,15 @@
 				width:30px;
 			}
 		}
+	}
+
+/* ====================
+	Visited Date 
+   ====================*/
+
+	div.asmContext.standard-resource-xwide.visited-date {
+		padding-top:0px;
+		font-size:80%;
 	}
 
 /* ====================
@@ -1734,7 +1796,8 @@
 		.card.col-md-8,
 		.card.col-md-9,
 		.card.col-md-10,
-		.card.col-md-11 {
+		.card.col-md-11,
+		.card.col-md-12 {
 			padding-left:0px;
 			padding-right:0px;
 			margin-left:5px;
@@ -1752,6 +1815,7 @@
 		.card.col-md-9 {flex: 0 0 calc(((100% - 15px) * 9 / 12) - 15px);}
 		.card.col-md-10 {flex: 0 0 calc(((100% - 15px) * 10 / 12) - 15px);}
 		.card.col-md-11 {flex: 0 0 calc(((100% - 15px) * 11 / 12) - 15px);}
+		.card.col-md-12 {flex: 0 0 calc(((100% - 15px) * 12 / 12) - 5px);}
 		
 		.card .card.col-md-2,
 		.card .card.col-md-3,
@@ -1762,7 +1826,8 @@
 		.card .card.col-md-8,
 		.card .card.col-md-9,
 		.card .card.col-md-10,
-		.card .card.col-md-11 {
+		.card .card.col-md-11,
+		.card .card.col-md-12 {
 			&:first-child {margin-left:0px;}
 		}
 
@@ -3319,6 +3384,7 @@ table.tablesorter th.restore {
 			overflow: visible !important;
 			overflow-y : visible !important;
 		}
+		#main-container {font-size:130% !important;}
 		
 		#saved-window,
 		#navigation-bar,
@@ -3329,7 +3395,7 @@ table.tablesorter th.restore {
 		.buttons,
 		.buttons-menus,
 		.btn-group {
-			display:none !important;
+			block:none !important;
 		}
 	
 		a:after {

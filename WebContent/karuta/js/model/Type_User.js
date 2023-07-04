@@ -403,7 +403,8 @@ UIFactory["User"].displayActiveIndexed = function(dest,type,index,nb_index)
 		last = UsersActive_list.length;
 	for (var i=first; i<last;i++){
 		var item = UsersActive_list[i];
-		html += item.getView(dest,type);
+		if (item.username.split('-').length<=4 && item.username.indexOf('#')<=10)
+			html += item.getView(dest,type);
 		html += "</div>";
 	}
 	$("#"+dest).html($(html));
@@ -1037,11 +1038,11 @@ UIFactory["User"].remove = function(userid,from_page)
 		data : "",
 		success : function(data) {
 			if (from_page==null){
+				fill_list_users();
 				$("#user-refresh").click();
-				fill_list_usersgroups();
 			}
 			else if (from_page=="UsersGroup"){
-				fill_list_users();
+				fill_list_usersgroups();
 				$("#user-refresh").click();
 			}
 		}

@@ -233,7 +233,9 @@ function displayKarutaLogin()
 		url : serverBCK_API+"/credential/login",
 		data: data,
 		success : function(data) {
-			constructKarutaLogin(true);
+			if (typeof(localLogin) == 'undefined')
+				localLogin = true;
+			constructKarutaLogin(true && localLogin);
 		},
 		error : function(jqxhr,textStatus) {
 			if (jqxhr.status == '404') {
@@ -308,7 +310,7 @@ function constructKarutaLogin(withKarutaLogin)
 	}
 	$('#password').keypress(function(e) {
 		var code= (e.keyCode ? e.keyCode : e.which);
-		if (code == 13)
+		if (code == 13)ih2ef
 			callSubmit();
 	});
 	//----------------------------------------------
@@ -446,8 +448,11 @@ function setLoginTechnicalVariables()
 			loadLanguages(function() {
 				getLanguage();
 			});
-			//---------Tecnical Support--------------
-			g_configVar['technical-support'] = getText('config-technical-support','Field','text',data,LANGCODE);
+			//---------Technical Support--------------
+			g_configVar['tech-support'] = getText('config-tech-support','Get_Resource','value',data);
+			g_configVar['tech-email'] = getText('config-tech-email','Field','text',data,LANGCODE);
+			g_configVar['tech-url'] = getText('config-technical-support','Field','text',data,LANGCODE);
+			g_configVar['technical-support'] = getText('config-technical-support','Field','text',data,LANGCODE); // for backward compatibility
 			//---------Navigation Bar--------------
 			g_configVar['navbar-brand-logo'] = getImg('config-navbar-brand-logo',data,LANGCODE);
 			g_configVar['navbar-brand-logo-style'] = getContentStyle('config-navbar-brand-logo',data);
@@ -471,12 +476,17 @@ function setLoginTechnicalVariables()
 			jsfile_nodes = $("asmContext:has(metadata[semantictag='config-file-js'])",data);
 			for (var i=0; i<jsfile_nodes.length; i++){
 				var fileid = $(jsfile_nodes[i]).attr("id");
+				var filename = $("filename[lang='"+languages[LANGCODE]+"']",$("asmResource[xsi_type='Document']",jsfile_nodes[i])).text();
 				var url = "../../../"+serverBCK+"/resources/resource/file/"+fileid;
 				$.ajax({
+					async:false,
 					url: url,
+					filename:filename,
 					dataType: "script",
+					success:function(data){
+						console.log("js file loaded : "+this.filename)
+					}
 				});
-				console.log("JS file loaded")
 			}
 			// --------CSS Text------------------
 			var csstext = $("text[lang='"+LANG+"']",$("asmResource[xsi_type='TextField']",$("asmContext:has(metadata[semantictag='config-css'])",data))).text();

@@ -22,6 +22,7 @@ karutaStr['en']['Create']="Create";
 karutaStr['en']['Change']="Change";
 karutaStr['en']['Save']="Save";
 karutaStr['en']['OK']="OK";
+karutaStr['en']['Enter']="Enter";
 karutaStr['en']['Close']="Close";
 karutaStr['en']['Cancel']="Cancel";
 karutaStr['en']['register']="Register";
@@ -110,6 +111,9 @@ karutaStr["en"]["instruction-export-menu"] = "Copy the menu and paste it where y
 karutaStr["en"]["back"] = "Click to go back";
 karutaStr["en"]["select-deselect"] = "Select/Deselect All";
 karutaStr["en"]["noemail-yourself"] = "You cannot use your email address.";
+karutaStr["en"]["displaytest"] = "Display - JS Test";
+karutaStr["en"]["displayclick"] = "Display - Click";
+karutaStr["en"]["toogle-sidebar"] = "Show/Hide Sidebar";
 
 //=========================================
 //========== ERRORS =======================
@@ -293,8 +297,14 @@ karutaStr['en']['target']="Semantic Tag of import place";
 karutaStr['en']['object']="Search Element";
 karutaStr['en']['start-semtag']="Start Semantic Tag";
 karutaStr['en']['destination-semtag']="Destination Semantic Tag";
-karutaStr['en']['audio-record-only']="Record only";
 karutaStr['en']['unique']="No duplicates";
+karutaStr['en']['audio-record-only']="Record only";
+karutaStr['en']['picture-record-only']="Take Picture only";
+karutaStr['en']['upload-audio']="Upload an Audio File";
+karutaStr['en']['record-audio']="Record an Audio File";
+karutaStr['en']['upload-image']="Upload an Image";
+karutaStr['en']['take-image']="Take a Picture";
+karutaStr['en']['save-image']="Save Picture";
 
 //=========================================
 //========== ADMIN ========================
@@ -478,7 +488,6 @@ karutaStr['en']['csv']="Roles - Button CSV";
 karutaStr['en']['pdf']="Roles - Button PDF";
 karutaStr['en']['rtf']="Rôles - Button RTF";
 karutaStr['en']['img']="Rôles - Button PNG";
-karutaStr['en']['print']="Rôles - Button Print";
 karutaStr['en']['document-required']="You have to specify a document before to submit !";
 karutaStr['en']['size-upload']="Your file is so big : it must be less than " + g_configVar['maxfilesizeupload'] + " Mo !";
 karutaStr['en']['local-label']="Local Label";

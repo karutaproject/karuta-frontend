@@ -4,9 +4,9 @@ let menuElts = {};
 menuElts ["menu"]= "<menu del='y'><menulabel/></menu>";
 menuElts ["item"]= "<item del='y'><itemlabel/><roles/><condition/></item>";
 menuElts ["function"]= "<function del='y'><js/></function>";
-menuElts ["import"]= "<import del='y'><srce><foliocode/><semtag/></srce><trgt><position>##currentnode##</position><semtag/></trgt></import>";
+menuElts ["import"]= "<import del='y'><srce><foliocode/><semtag/></srce><trgt><position>##currentnode##</position><semtag/><function del='y'><js>getEditBox(##lastimported##)</js></function></trgt></import>";
 menuElts ["import-today-date"]= "<import-today-date del='y'><nop/><trgt><position>##currentnode##</position><semtag/></trgt></import-today-date>";
-menuElts ["import-component-w-today-date"]= "<import-component-w-today-date del='y'><srce><foliocode/><semtag/><updatedtag/></srce><trgt><position>##currentnode##</position><semtag/></trgt></import-component-w-today-date>";
+menuElts ["import-component-w-today-date"]= "<import-component-w-today-date del='y'><srce><foliocode/><semtag/><updatedtag/></srce><trgt><position>##currentnode##</position><semtag/><function del='y'><js>getEditBox(##lastimported##)</js></function></trgt></import-component-w-today-date>";
 menuElts ["moveTO"]= "<moveTO del='y'><start-semtag/><destination-semtag/></moveTO>";
 menuElts ["switchBTW"]= "<switchBTW del='y'><start-semtag/><destination-semtag/></switchBTW>";
 menuElts ["import-component"]= "<import-component del='y'><srce><foliocode/><semtag/><updatedtag/></srce><trgt><position>##currentnode##</position><semtag/></trgt></import-component>";
@@ -275,7 +275,7 @@ UIFactory["Node"].getMenus = function(node,langcode)
 		html += "<hr>";
 		html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','SendEmail','SendEmail',databack,callback,param2,param3,param4);
 		html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','Dashboard','Dashboard',databack,callback,param2,param3,param4);
-		html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','Report','Report',databack,callback,param2,param3,param4);
+//		html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','Report','Report',databack,callback,param2,param3,param4);
 		html += "<hr>";
 		html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-structured-resources','DocumentBlock','DocumentBlock',databack,callback,param2,param3,param4);
 		html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-structured-resources','URLBlock','URLBlock',databack,callback,param2,param3,param4);
@@ -574,10 +574,7 @@ UIFactory["Node"].getMenus = function(node,langcode)
 						for (var j=0;j<items.length;j++) {
 							var condition = ($("condition",items[j]).length>0)?$("condition",items[j]).text():"";
 							if (UIFactory.Node.testDisplay(node,roles,condition)) {
-//								if(menulabel!="")
-//									title = UIFactory.Node.getMenuLabel(menulabel,langcode);
-//								else
-									title = UIFactory.Node.getMenuLabel($("itemlabel",items[j]).text(),langcode);
+								title = UIFactory.Node.getMenuLabel($("itemlabel",items[j]).text(),langcode);
 								let temphtml = "<button class='button add-button btn' style='"+menus_style+"' onclick=\"##\">" + title + "</button> ";
 								//---------------------target----------------------------------------
 								var parentid = node.id; // default value
@@ -667,6 +664,13 @@ UIFactory["Node"].getMenus = function(node,langcode)
 		}
 	}
 	//------------- share node button ---------------
+	if (g_portfolioid=="") {
+		const portfolioelt = $("*:has(>metadata[semantictag*='portfolioid'])",node.node);
+		if (portfolioelt.length>0) {
+			const portfolioeltid = $($(portfolioelt)[0]).attr("id");
+			g_portfolioid = UICom.structure.ui[portfolioeltid].resource.getView()
+		}
+	}
 	if (node.depth>0 && node.shareroles!='none' && node.shareroles!='' && g_portfolioid!='') {
 		try {
 			var shares = [];
@@ -1230,6 +1234,10 @@ UIFactory["Node"].getXmlItemMenu = function(node,parentid,item,title,databack,ca
 			// --------- srce ------------
 			let srce = $("srce",itemelts[i])[0];
 			let foliocode = replaceVariable( ($("foliocode",srce).length>0)?$("foliocode",srce).text():"" );
+			if (foliocode.indexOf("*")>-1) {
+				const portfolios = UIFactory.Portfolio.search_bycode(foliocode.replaceAll('*',''));
+				foliocode = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",portfolios)[0]).text();
+			}
 			let semtag = replaceVariable( ($("semtag",srce).length>0)?$("semtag",srce).text():"" );
 //			let calendar_semtag = replaceVariable( ($("calendar-semtag",itemelts[i]).length>0)?$("calendar-semtag",itemelts[i]).text():"" );
 			// --------- targets ------------
@@ -1295,7 +1303,7 @@ UIFactory["Node"].getXmlItemMenu = function(node,parentid,item,title,databack,ca
 			let actions = "";
 			let imports = "";
 			// --------- boxlabel ------------
-			let boxlabel = replaceVariable( ($("boxlabel",itemelts[i]).text().length>0)?UIFactory.Node.getMenuLabel($("boxlabel",itemelts[i]).text(),LANGCODE):UIFactory.Node.getMenuLabel($("itemlabel",item).text(),LANGCODE));
+			let boxlabel = replaceVariable( ($("boxlabel",itemelts[i]).text().length>0)?$("boxlabel",itemelts[i]).text():UIFactory.Node.getMenuLabel($("itemlabel",item).text(),LANGCODE));
 			// --------- unique ------------
 			let unique = ($("unique",itemelts[i]).length>0)?$("unique",itemelts[i]).text():"";
 			// --------- search ------------
@@ -1319,7 +1327,7 @@ UIFactory["Node"].getXmlItemMenu = function(node,parentid,item,title,databack,ca
 					let trgtarray = UIFactory.Node.getTargetArray(node,parentid,imports[j]);
 					actions += "{|type|:|import_component|,|parentid|:|"+parentid+"|,|foliocode|:|"+foliocode+"|,|semtag|:|"+semtag+"|,|updatedtag|:|"+updatedtag+"|,|trgts|:|"+trgtarray.toString()+"|,|fcts|:|"+fctarray.toString()+"|};";
 				}
-				onclick += "import_get_multiple('"+parentid+"','','"+boxlabel+"','"+search_foliocode+"','"+search_semtag+"','"+search_object+"','"+actions+"','"+unique+"');";
+//				onclick += "import_get_multiple('"+parentid+"','','"+boxlabel.replaceAll("'","&rsquo;")+"','"+search_foliocode+"','"+search_semtag+"','"+search_object+"','"+actions+"','"+unique+"');";
 			}
 			// --------import-proxy ------
 			imports = $("import-proxy",itemelts[i]);
@@ -1333,7 +1341,7 @@ UIFactory["Node"].getXmlItemMenu = function(node,parentid,item,title,databack,ca
 					let trgtarray = UIFactory.Node.getTargetArray(node,parentid,imports[j]);
 					actions += "{|type|:|import_proxy|,|parentid|:|"+parentid+"|,|foliocode|:|"+foliocode+"|,|semtag|:|"+semtag+"|,|updatedtag|:|"+updatedtag+"|,|trgts|:|"+trgtarray.toString()+"|,|fcts|:|"+fctarray.toString()+"|};";
 				}
-				onclick += "import_get_multiple('"+parentid+"','','"+boxlabel+"','"+search_foliocode+"','"+search_semtag+"','"+search_object+"','"+actions+"','"+unique+"');";
+//				onclick += "import_get_multiple('"+parentid+"','','"+boxlabel.replaceAll("'","&rsquo;")+"','"+search_foliocode+"','"+search_semtag+"','"+search_object+"','"+actions+"','"+unique+"');";
 			}
 			// --------import-elts ------
 			imports = $("import-elts",itemelts[i]);
@@ -1343,7 +1351,7 @@ UIFactory["Node"].getXmlItemMenu = function(node,parentid,item,title,databack,ca
 					let trgtarray = UIFactory.Node.getTargetArray(node,parentid,itemelts[i]);
 					actions += "{|type|:|import_elts|,|parentid|:|"+parentid+"|,|foliocode|:|"+search_foliocode+"|,|trgts|:|"+trgtarray.toString()+"|,|fcts|:|"+fctarray.toString()+"|};";
 				}
-				onclick += "import_get_multiple('"+parentid+"','','"+boxlabel+"','"+search_foliocode+"','"+search_semtag+"','"+search_object+"','"+actions+"','"+unique+"');";
+//				onclick += "import_get_multiple('"+parentid+"','','"+boxlabel.replaceAll("'","&rsquo;")+"','"+search_foliocode+"','"+search_semtag+"','"+search_object+"','"+actions+"','"+unique+"');";
 			}
 			// --------import-elts-from ------
 			imports = $("import-elts-from",itemelts[i]);
@@ -1351,19 +1359,20 @@ UIFactory["Node"].getXmlItemMenu = function(node,parentid,item,title,databack,ca
 				for (let j=0;j<imports.length;j++){
 					let srce = $("srce",imports[j])[0];
 					let foliocode = replaceVariable( ($("foliocode",srce).length>0)?$("foliocode",srce).text():"" );
-					let fctarray = UIFactory.Node.getFunctionArray(node,itemelts[i]);
-					let trgtarray = UIFactory.Node.getTargetArray(node,parentid,itemelts[i]);
+					let fctarray = UIFactory.Node.getFunctionArray(node,imports[j]);
+					let trgtarray = UIFactory.Node.getTargetArray(node,parentid,imports[j]);
 					actions += "{|type|:|import_elts-from|,|parentid|:|"+parentid+"|,|foliocode|:|"+foliocode+"|,|trgts|:|"+trgtarray.toString()+"|,|fcts|:|"+fctarray.toString()+"|};";
 				}
-				onclick += "import_get_multiple('"+parentid+"','','"+boxlabel+"','"+search_foliocode+"','"+search_semtag+"','"+search_object+"','"+actions+"','"+unique+"');";
+//				onclick += "import_get_multiple('"+parentid+"','','"+boxlabel.replaceAll("'","&rsquo;")+"','"+search_foliocode+"','"+search_semtag+"','"+search_object+"','"+actions+"','"+unique+"');";
 			}
+			onclick += "import_get_multiple('"+parentid+"','','"+boxlabel.replaceAll("'","&rsquo;")+"','"+search_foliocode+"','"+search_semtag+"','"+search_object+"','"+actions+"','"+unique+"');";
 		}
 		//-----------------------------------------------------------
 		//------------------------- get_get_multiple ----------------
 		//-----------------------------------------------------------
 		else if (type=='import_get_get_multiple') {
 			// --------- boxlabel ------------
-			let boxlabel = replaceVariable( ($("boxlabel",itemelts[i]).text().length>0)?UIFactory.Node.getMenuLabel($("boxlabel",itemelts[i]).text(),LANGCODE):UIFactory.Node.getMenuLabel($("itemlabel",item).text(),LANGCODE));
+			let boxlabel = replaceVariable( ($("boxlabel",itemelts[i]).text().length>0)?$("boxlabel",itemelts[i]).text():UIFactory.Node.getMenuLabel($("itemlabel",item).text(),LANGCODE));
 			// --------- unique ------------
 			let unique = ($("unique",itemelts[i]).length>0)?$("unique",itemelts[i]).text():"";
 			// --------- parent ------------
@@ -1379,13 +1388,17 @@ UIFactory["Node"].getXmlItemMenu = function(node,parentid,item,title,databack,ca
 			else if ($("search-w-parent",itemelts[i]).length>0)
 				search = $("search-w-parent",itemelts[i])[0];
 			let search_foliocode = replaceVariable( ($("foliocode",search).length>0)?$("foliocode",search).text():"" );
+			if (search_foliocode.indexOf("*")>-1) {
+				const portfolios = UIFactory.Portfolio.search_bycode(search_foliocode.replaceAll('*',''));
+				search_foliocode = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",portfolios)[0]).text();
+			}
 			let search_parent_semtag = replaceVariable( ($("parent-semtag",search).length>0)?$("parent-semtag",search).text():"" );
 			let search_semtag = replaceVariable( ($("semtag",search).length>0)?$("semtag",search).text():"" );
 			let search_object = replaceVariable( ($("object",search).length>0)?$("object",search).text():"" );
 			// -------- actions ------------
 			let actions = UIFactory.Node.getActions(parentid,node,itemelts[i]);
 			// -----------------------------
-			onclick += "import_get_get_multiple('"+parentid+"','','"+boxlabel+"','"+parent_position+"','"+parent_semtag+"','"+search_foliocode+"','"+search_parent_semtag+"','"+search_semtag+"','"+search_object+"','"+actions+"','"+unique+"');";
+			onclick += "import_get_get_multiple('"+parentid+"','','"+boxlabel.replaceAll("'","&rsquo;")+"','"+parent_position+"','"+parent_semtag+"','"+search_foliocode+"','"+search_parent_semtag+"','"+search_semtag+"','"+search_object+"','"+actions+"','"+unique+"');";
 			//------------------------------------
 		}
 	}

@@ -50,6 +50,8 @@
 		float:left;
 		margin-right:5px;
 	}
+	.dropdown-item[onclick*=sem-tag] {display:none}
+	.for-each-node .dropdown-item[onclick*=sem-tag] {display:block}
 	span.chkbox-comments.xcreate-person,
 	span.chkbox-comments.xdelete-person,
 	span.chkbox-comments.xinactivate-person,
@@ -98,12 +100,18 @@
 	span.chkbox-comments.xupdate-document,
 	span.chkbox-comments.xupdate-variable,
 	span.chkbox-comments.xupdate-proxy,
+	span.chkbox-comments.xupdate-url2portfolio,
 	span.chkbox-comments.xupdate-url2unit,
 	span.chkbox-comments.xupdate-item,
 //	span.chkbox-comments.xfor-each-line,
 //	span.chkbox-comments.xfor-each-tree,
 //	span.chkbox-comments.xfor-each-person,
+	span.chkbox-comments.xfor-each-node,
 	span.chkbox-comments.xactions,
+	span.chkbox-comments.xsubmitall,
+	span.chkbox-comments.xsend-email,
+	span.chkbox-comments.xvariable,
+	span.chkbox-comments.xbatch-variable,
 	span.chkbox-comments.xif-then-else,
 	span.chkbox-comments.xif-action,
 	span.chkbox-comments.xthen-part,
@@ -143,6 +151,7 @@
 	--batch-resource-color : orange;
 	--batch-uuid-color : #ff66ff;
 	--batch-instruction-color : #990000;
+	--batch-utilities-color : #CACACA;
 
 	//----- PERSON ---
 	.create-person {
@@ -345,7 +354,8 @@
 		margin-top:7px;
 		border:1px solid var(--batch-resource-color);
 	}
-	.update-url2unit{
+	.update-url2unit,
+	.update-url2portfolio{
 		margin-top:7px;
 		border:1px solid var(--batch-resource-color);
 	}
@@ -363,6 +373,7 @@
 	.for-each-line,
 	.for-each-tree,
 	.for-each-person,
+	.for-each-node,
 	.actions {
 		margin-top:7px;
 		border:1px dashed var(--batch-instruction-color);
@@ -378,5 +389,12 @@
 		border:1px dashed var(--batch-instruction-color);
 	}
 }
+
+	//----- UTILITIES ---
+	.send-email,
+	.batch-variable {
+		margin-top:7px;
+		border:1px solid var(--batch-utilities-color);
+	}
 
 

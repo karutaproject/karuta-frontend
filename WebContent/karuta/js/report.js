@@ -61,6 +61,7 @@ jqueryReportSpecificFunctions['.submitted()'] = ".has(\"metadata-wad[submitted='
 jqueryReportSpecificFunctions['.not_submitted()'] = ".not(\":has(>metadata-wad[submitted=Y])\")";
 jqueryReportSpecificFunctions['.code_empty()'] = ".has(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes'] > code:empty\")";
 jqueryReportSpecificFunctions['.code_not_empty()'] = ".has(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes'] > code:not(:empty)\")";
+jqueryReportSpecificFunctions['.uuid_not_empty()'] = ".has(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes'] > uuid:not(:empty)\")";
 jqueryReportSpecificFunctions['.nodecode_empty()'] = ".has(\"asmResource[xsi_type='nodeRes'] > code:empty\")";
 jqueryReportSpecificFunctions['.nodecode_not_empty()'] = ".has(\"asmResource[xsi_type='nodeRes'] > code:not(:empty)\")";
 jqueryReportSpecificFunctions['.filename_or_url_not_empty()'] = ".has(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes'] > filename[lang='#lang#']:not(:empty),asmResource[xsi_type!='context'][xsi_type!='nodeRes']  > url[lang='#lang#']:not(:empty)\")";
@@ -82,335 +83,6 @@ let jqueryReportSpecificTests = {};
 jqueryReportSpecificTests['##currentnode##'] = "$(##currentnode##.node)";
 
 //-----------------------------------------------------------------------------
-
-//=====================================
-$.fn.hasAttr = function (options)
-//=====================================
-{
-	var defaults= {"attribute":"id","meta":"metadata"};
-	var parameters = $.extend(defaults, options); 
-	return this.each(function() {
-		if ($(">"+parameters.meta,this).attr(parameters.attribute) != undefined)
-			return this;
-	});
-};
-$.fn.test_hasAttr = function (options) { return result = ($(this).hasAttr(options).length>0) ? true : false;};
-//=====================================
-
-//=====================================
-$.fn.hasNotAttr = function (options)
-//=====================================
-{
-	var defaults= {"attribute":"id","meta":"metadata"};
-	var parameters = $.extend(defaults, options);
-	var result = [];
-	this.each(function() {
-		if ($(">"+parameters.meta,this).attr(parameters.attribute) == undefined)
-			result.push(this);
-	});
-	return result;
-};
-$.fn.test_hasNotAttr = function (options) { return result = ($(this).hasNotAttr(options).length>0) ? true : false;};
-//=====================================
-
-//=====================================
-$.fn.hasChildSemtag = function (options)
-//=====================================
-{
-	var defaults= { "semtag":"s"};
-	var parameters = $.extend(defaults, options);
-	var result = $(this).has("*:has('>metadata[semantictag*=" + parameters.semtag + "]')");
-	return result;
-};
-$.fn.test_hasChildSemtag = function (options) { return result = ($(this).hasChildSemtag(options).length>0) ? true : false;};
-//=====================================
-
-//=====================================
-$.fn.hasNotChildSemtag = function (options)
-//=====================================
-{
-	var result = $(this).hasChildSemtag(options);
-	if (result.length>0)
-		return [];
-	else
-		return $(this);
-};
-
-//=====================================
-$.fn.hasChildSemtagAndResourceCodeContains = function (options)   // hasChildSemtagAndResourceCodeContains({"semtag":"s","value":"v"})
-//=====================================
-{
-	var defaults= {"semtag":"s","value":"v"};
-	var parameters = $.extend(defaults, options);
-	var result = $(this).has("*:has('>metadata[semantictag*=" + parameters.semtag + "]'):has('asmResource[xsi_type!=context][xsi_type!=nodeRes]>code:contains("+parameters.value+")')");
-	return result;
-};
-$.fn.test_hasChildSemtagAndResourceCodeContains = function (options) { return result = ($(this).hasChildSemtagAndResourceCodeContains(options).length>0) ? true : false;};
-$.fn.test_notHasChildSemtagAndResourceCodeContains = function (options) { return result = ($(this).hasChildSemtagAndResourceCodeContains(options).length>0) ? false : true;};
-
-//=====================================
-$.fn.hasNotChildSemtagAndResourceCodeContains = function (options)   // hasChildSemtagAndResourceCodeContains({"semtag":"s","value":"v"})
-//=====================================
-{
-	var result = $(this).hasChildSemtagAndResourceCodeContains(options);
-	if (result.length>0)
-		return [];
-	else
-		return $(this);
-};
-//=====================================
-
-//=====================================
-$.fn.resourceCodeContains = function (options)
-//=====================================
-{
-	var defaults= { "value":"v","function":""};
-	var parameters = $.extend(defaults, options);
-	var result = $(this).has(">asmResource[xsi_type!='context'][xsi_type!='nodeRes']>code:contains('"+parameters.value+"')");
-	if (parameters.function!="")
-		result = eval("$(result)."+parameters.function);
-	return result;
-};
-$.fn.test_resourceCodeContains = function (options) { return result = ($(this).resourceCodeContains(options).length>0) ? true : false;};
-//=====================================
-
-//=====================================
-$.fn.resourceTextContains = function (options)
-//=====================================
-{
-	var defaults= { "value":"v","function":""};
-	var parameters = $.extend(defaults, options);
-	var result = $(this).has(">asmResource[xsi_type!='context'][xsi_type!='nodeRes']>text[lang='"+languages[LANGCODE]+"']:contains('"+parameters.value+"')");
-	if (parameters.function!="")
-		result = eval("$(result)."+parameters.function);
-	return result;
-};
-$.fn.test_resourceTextContains = function (options) { return result = ($(this).resourceTextContains(options).length>0) ? true : false;};
-//=====================================
-
-//=====================================
-$.fn.resourceValueContains = function (options)
-//=====================================
-{
-	var defaults= { "value":"v","function":""};
-	var parameters = $.extend(defaults, options);
-	var result = $(this).has(">asmResource[xsi_type!='context'][xsi_type!='nodeRes']>value:contains('"+parameters.value+"')");
-	if (parameters.function!="")
-		result = eval("$(result)."+parameters.function);
-	return result;
-};
-$.fn.test_resourceValueContains = function (options) { return result = ($(this).resourceValueContains(options).length>0) ? true : false;};
-//=====================================
-
-//=====================================
-$.fn.resourceFilenameContains = function (options)
-//=====================================
-{
-	var defaults= { "value":"v","function":""};
-	var parameters = $.extend(defaults, options);
-	var result = $(this).has(">asmResource[xsi_type!='context'][xsi_type!='nodeRes']>filename[lang='"+languages[LANGCODE]+"']:contains('"+parameters.value+"')");
-	if (parameters.function!="")
-		result = eval("$(result)."+parameters.function);
-	return result;
-};
-$.fn.test_resourceFilenameContains = function (options) { return result = ($(this).resourceFilenameContains(options).length>0) ? true : false;};
-//=====================================
-
-//=====================================
-$.fn.nodeCodeContains = function (options) // nodeCodeContains({"value":"12","function:'last()'"})
-//=====================================
-{
-	var defaults= { "value":"v","function":""};
-	var parameters = $.extend(defaults, options);
-	var result = $(this).has(">asmResource[xsi_type='nodeRes']>code:contains('"+parameters.value+"')");
-	if (parameters.function!="")
-		result = eval("$(result)."+parameters.function);
-	return $(result);
-};
-$.fn.test_nodeCodeContains = function (options) { return result = ($(this).nodeCodeContains(options).length>0) ? true : false;};
-//=====================================
-
-//=====================================
-$.fn.nodeCodeEquals = function (options) // nodeCodeEquals({"value":"12","function:'last()'"})
-//=====================================
-{
-	var result = [];
-	var defaults= { "value":"v", "function":""};
-	var parameters = $.extend(defaults, options);
-	var nodes = $(this).has(">asmResource[xsi_type='nodeRes']>code:contains('"+parameters.value+"')");
-	for (let i=0; i<nodes.length;i++){
-		var code = $("code",$(">asmResource[xsi_type='nodeRes']",nodes[i])).text();
-		if (code == parameters.value)
-			result.push(nodes[i]);
-	}
-	if (parameters.function!="")
-		result = eval("$(result)."+parameters.function);
-	return result;
-};
-$.fn.test_nodeCodeEquals = function (options) { return result = ($(this).nodeCodeEquals(options).length>0) ? true : false;};
-//=====================================
-
-//=====================================
-$.fn.nodeLabelContains = function (options)
-//=====================================
-{
-	var defaults= { "value":"v","function":""};
-	var parameters = $.extend(defaults, options);
-	var result = $(this).has(">asmResource[xsi_type='nodeRes']>label[lang='"+languages[LANGCODE]+"']:contains('"+parameters.value+"')");
-	if (parameters.function!="")
-		result = eval("$(result)."+parameters.function);
-	return result;
-};
-$.fn.test_nodeLabelContains = function (options) { return result = ($(this).nodeLabelContains(options).length>0) ? true : false;};
-//=====================================
-
-//=====================================
-$.fn.nodeValueContains = function (options)  
-//=====================================
-{
-	var defaults= { "value":"v","function":""};
-	var parameters = $.extend(defaults, options);
-	var result = $(this).has(">asmResource[xsi_type='nodeRes']>value:contains('"+parameters.value+"')");
-	if (parameters.function!="")
-		result = eval("$(result)."+parameters.function);
-};
-$.fn.test_nodeValueContains = function (options) { return result = ($(this).nodeValueContains(options).length>0) ? true : false;};
-//=====================================
-
-//=====================================
-$.fn.utcBetween = function (options)  
-//=====================================
-{
-	var result = [];
-	var defaults= {"semtag":"s","min":"m","max":"M"};
-	var parameters = $.extend(defaults, options);
-	for (let i=0;i<this.length;i++){
-		var node = $("asmContext:has('>metadata[semantictag*=" + parameters.semtag + "]')",this[i]);		
-		var utc = $("utc",node).text();
-		if (replaceVariable(parameters.min) < utc && utc < replaceVariable(parameters.max))
-			result.push(this[i])
-	}
-	return result;
-};
-$.fn.test_utcBetween = function (options) { return result = ($(this).utcBetween(options).length>0) ? true : false;};
-//=====================================
-
-//=====================================
-$.fn.utcGreater = function (options)  
-//=====================================
-{
-	var result = [];
-	var defaults= {"semtag":"s","min":"m"};
-	var parameters = $.extend(defaults, options);
-	for (let i=0;i<this.length;i++){
-		var node = $("asmContext:has('>metadata[semantictag*=" + parameters.semtag + "]')",this[i]);		
-		var utc = $("utc",node).text();
-		if (replaceVariable(parameters.min) < utc)
-			result.push(this[i])
-	}
-	return result;
-};
-$.fn.test_utcGreater = function (options) { return result = ($(this).utcGreater(options).length>0) ? true : false;};
-//=====================================
-
-//=====================================
-$.fn.utcLower = function (options)  
-//=====================================
-{
-	var result = [];
-	var defaults= {"semtag":"s","max":"M"};
-	var parameters = $.extend(defaults, options);
-	for (let i=0;i<this.length;i++){
-		var node = $("asmContext:has('>metadata[semantictag*=" + parameters.semtag + "]')",this[i]);		
-		var utc = $("utc",node).text();
-		if (utc < replaceVariable(parameters.max))
-			result.push(this[i])
-	}
-	return result;
-};
-$.fn.test_utcLower = function (options) { return result = ($(this).utcLower(options).length>0) ? true : false;};
-//=====================================
-
-//=====================================
-$.fn.hasAncestorSemtagAndNodeCodeContains = function (options)   // hasChildSemtagAndResourceCodeContains({"semtag":"s","value":"v"})
-//=====================================
-{
-	var defaults= {"semtag":"s","value":"v"};
-	var parameters = $.extend(defaults, options);
-	var result = [];
-	for (let i=0;i<this.length;i++){
-		var parent = $(this[i]).parent();
-		var tagname = $(parent).prop("tagName");
-		var search = [];
-		while (tagname!='asmRoot' && search.length==0){
-			search = $(parent).has("*:has('>metadata[semantictag*=" + parameters.semtag + "]'):has('asmResource[xsi_type=nodeRes]>code:contains("+parameters.value+")')");
-			if (search.length==0)
-				search = $(parent).has(">metadata[semantictag*=" + parameters.semtag + "]:has('asmResource[xsi_type=nodeRes]>code:contains("+parameters.value+")')");
-			parent = $(parent).parent();
-			tagname = $(parent).prop("tagName");
-		}
-		if (search.length>0)
-			result.push(this[i])
-	}
-	return result;
-};
-$.fn.test_hasAncestorSemtagAndNodeCodeContains = function (options) { return result = ($(this).hasAncestorSemtagAndNodeCodeContains(options).length>0) ? true : false;};
-//=====================================
-
-//=====================================
-$.fn.hasParentSemtagAndNodeCodeContains = function (options)   // hasChildSemtagAndResourceCodeContains({"semtag":"s","value":"v"})
-//=====================================
-{
-	var defaults= {"semtag":"s","value":"v"};
-	var parameters = $.extend(defaults, options);
-	var result = $(this).addBack().parent().has("*:has('>metadata[semantictag*=" + parameters.semtag + "]'):has('asmResource[xsi_type!=context][xsi_type!=nodeRes]>code:contains("+parameters.value+")')");
-	return result;
-};
-$.fn.test_hasParentSemtagAndNodeCodeContains = function (options) { return result = ($(this).hasParentSemtagAndNodeCodeContains(options).length>0) ? true : false;};
-//=====================================
-
-//=====================================
-$.fn.hasParentParentSemtagAndNodeCodeContains = function (options)   // hasChildSemtagAndResourceCodeContains({"semtag":"s","value":"v"})
-//=====================================
-{
-	var defaults= {"semtag":"s","value":"v"};
-	var parameters = $.extend(defaults, options);
-	var result = $(this).addBack().parent().parent().has("*:has('>metadata[semantictag*=" + parameters.semtag + "]'):has('asmResource[xsi_type!=context][xsi_type!=nodeRes]>code:contains("+parameters.value+")')");
-	return result;
-};
-$.fn.test_hasParentParentSemtagAndNodeCodeContains = function (options) { return result = ($(this).hasParentParentSemtagAndNodeCodeContains(options).length>0) ? true : false;};
-
-//=====================================
-$.fn.hasParentParentParentSemtagAndNodeCodeContains = function (options)   // hasChildSemtagAndResourceCodeContains({"semtag":"s","value":"v"})
-//=====================================
-{
-	var defaults= {"semtag":"s","value":"v"};
-	var parameters = $.extend(defaults, options);
-	var result = $(this).addBack().parent().parent().parent().has("*:has('>metadata[semantictag*=" + parameters.semtag + "]'):has('asmResource[xsi_type!=context][xsi_type!=nodeRes]>code:contains("+parameters.value+")')");
-	return result;
-};
-$.fn.test_hasParentParentParentSemtagAndNodeCodeContains = function (options) { return result = ($(this).hasParentParentParentSemtagAndNodeCodeContains(options).length>0) ? true : false;};
-
-//=====================================
-$.fn.sortOnChildSemtag = function (options)
-//=====================================
-{
-	var defaults= { "semtag":"s","sorton":"s"};
-	var parameters = $.extend(defaults, options);
-	var result = $(this).sort(function(a, b){ return $(parameters.sorton,$("asmResource[xsi_type!='context'][xsi_type!='nodeRes']",$("*>metadata[semantictag*=" + parameters.semtag + "]",$(a)))).text() > $(parameters.sorton,$("asmResource[xsi_type!='context'][xsi_type!='nodeRes']",$("*>metadata[semantictag*=" + parameters.semtag + "]",$(b)))).text() ? 1 : -1; });
-	return result;
-};
-
-//=====================================
-$.fn.invsortOnChildSemtag = function (options)
-//=====================================
-{
-	var defaults= { "semtag":"s","sorton":"s"};
-	var parameters = $.extend(defaults, options);
-	var result = $(this).sort(function(a, b){ return $(parameters.sorton,$("asmResource[xsi_type!='context'][xsi_type!='nodeRes']",$("*>metadata[semantictag*=" + parameters.semtag + "]",$(a)))).text() > $(parameters.sorton,$("asmResource[xsi_type!='context'][xsi_type!='nodeRes']",$("*>metadata[semantictag*=" + parameters.semtag + "]",$(b)))).text() ? -1 : 1; });
-	return result;
-};
-
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
@@ -593,6 +265,24 @@ function processReportActions(destid,actions,data)
 //===============================================================
 //===============================================================
 //===============================================================
+
+//==================================
+function prevnextbuttons(dashboard_current,first,last,max,NOELT,NBELT)
+//==================================
+{
+	const jsprev = "$('#'+dashboard_current).html('');g_variables['NOELT'] = '" + (parseInt(NOELT) - parseInt(NBELT)) + "';r_processPortfolio(0,dashboard_infos[dashboard_current].xmlReport,dashboard_current,dashboard_infos[dashboard_current].data,0);"
+	const jsnext = "$('#'+dashboard_current).html('');g_variables['NOELT'] = '" + (parseInt(NOELT) + parseInt(NBELT)) + "';r_processPortfolio(0,dashboard_infos[dashboard_current].xmlReport,dashboard_current,dashboard_infos[dashboard_current].data,0);"
+	const htlmprev = "<button class='btn' onclick=\""+jsprev+"\">"+karutaStr[LANG]['prev']+"</button> ";
+	const htmlnumbers = " " + first +" - "+ last + "/" + max;
+	const htmlnext = " <button class='btn' onclick=\""+jsnext+"\">"+karutaStr[LANG]['next']+"</button>";
+	$("#"+dashboard_current).append("<br/>");
+	if (parseInt(NOELT)>=parseInt(NBELT))
+		$("#"+dashboard_current).append(htlmprev);
+	$("#"+dashboard_current).append(htmlnumbers);
+	if (parseInt(NOELT)+parseInt(NBELT)<max)
+		$("#"+dashboard_current).append(htmlnext);
+}
+
 
 //==================================
 function refresh_report(dashboard_current)
@@ -1108,12 +798,8 @@ g_report_actions['for-each-node-js'] = function (destid,action,no,data)
 			}
 		});
 	}
-	if (NBELT!="" && NOELT!="" && parseInt(NOELT)+parseInt(NBELT)<nodeids.length) {
-		g_variables["NOELT"] = parseInt(NOELT) + parseInt(NBELT);
-		let js = "$(\"#\"+dashboard_current).html(\"\");r_processPortfolio(0,dashboard_infos[dashboard_current].xmlReport,dashboard_current,dashboard_infos[dashboard_current].data,0);"
-		let next = "<br>"+first +" - "+ last + "/" +nodeids.length+ " <button class='btn' onclick='"+js+"'>NEXT</button>"
-		$("#"+dashboard_current).append(next);
-	}
+	if (NBELT!="" && NOELT!="")
+		prevnextbuttons(dashboard_current,first,last,portfolioids.length,NOELT,NBELT);
 }
 
 
@@ -1779,12 +1465,8 @@ g_report_actions['for-each-portfolio'] = function (destid,action,no,data)
 				}
 				//------------------------------------
 			}
-			if (NBELT!="" && NOELT!="" && parseInt(NOELT)+parseInt(NBELT)<items_list.length) {
-				g_variables["NOELT"] = parseInt(NOELT) + parseInt(NBELT);
-				let js = "$(\"#\"+dashboard_current).html(\"\");r_processPortfolio(0,dashboard_infos[dashboard_current].xmlReport,dashboard_current,dashboard_infos[dashboard_current].data,0);"
-				let next = "<br>"+first +" - "+ last + "/" +items_list.length+ " <button class='btn' onclick='"+js+"'>NEXT</button>"
-				$("#"+dashboard_current).append(next);
-			}
+			if (NBELT!="" && NOELT!="")
+				prevnextbuttons(dashboard_current,first,last,portfolioids.length,NOELT,NBELT);
 		}
 	});
 }
@@ -1844,12 +1526,8 @@ g_report_actions['for-each-portfolio-js'] = function (destid,action,no,data)
 			}
 		});
 	}
-	if (NBELT!="" && NOELT!="" && parseInt(NOELT)+parseInt(NBELT)<portfolioids.length) {
-		g_variables["NOELT"] = parseInt(NOELT) + parseInt(NBELT);
-		let js = "$(\"#\"+dashboard_current).html(\"\");r_processPortfolio(0,dashboard_infos[dashboard_current].xmlReport,dashboard_current,dashboard_infos[dashboard_current].data,0);"
-		let next = "<br>"+first +" - "+ last + "/" +portfolioids.length+ " <button class='btn' onclick='"+js+"'>"+karutaStr[LANG]['next']+"</button>"
-		$("#"+dashboard_current).append(next);
-	}
+	if (NBELT!="" && NOELT!="")
+		prevnextbuttons(dashboard_current,first,last,portfolioids.length,NOELT,NBELT);
 }
 
 //=============================================================================
@@ -2091,6 +1769,9 @@ g_report_actions['node_resource'] = function (destid,action,no,data)
 			if (selector.type=='resource code') {
 				text = UICom.structure["ui"][nodeid].resource.getCode();
 			}
+			if (selector.type=='resource utc') {
+				text = UICom.structure["ui"][nodeid].resource.getAttributes()['utc'];
+			}
 			if (selector.type=='resource value') {
 				text = UICom.structure["ui"][nodeid].resource.getValue("dashboard_value_"+nodeid);
 				prefix_id += "value_";
@@ -2100,6 +1781,9 @@ g_report_actions['node_resource'] = function (destid,action,no,data)
 			}
 			if (selector.type=='node label') {
 				text = UICom.structure["ui"][nodeid].getLabel();
+			}
+			if (selector.type=='node point label') {
+				text = "<a href='#' data-toggle='tooltip' title=\""+UICom.structure.ui[nodeid].getLabel('none')+"\"><i class='fas fa-circle'></i></a>";
 			}
 			if (selector.type=='node code') {
 				text = UICom.structure["ui"][nodeid].getCode();
@@ -2317,6 +2001,11 @@ g_report_actions['variable'] = function (destid,action,no,data)
 				}
 				text = sum;
 			}
+			if (aggregatetype=="max" && g_variables[select]!=undefined){
+				text = Math.max(...g_variables[select]);
+				if (text==-Infinity)
+					text = 0;
+			}
 			if (aggregatetype=="avg" && g_variables[select]!=undefined){
 				var sum = 0;
 				for (let i=0;i<g_variables[select].length;i++){
@@ -2327,12 +2016,6 @@ g_report_actions['variable'] = function (destid,action,no,data)
 				if (text.toString().indexOf(".")>-1)
 					text = text.toFixed(2);
 				
-			}
-			if (ref!=undefined && ref!="") {
-				ref = replaceVariable(ref);
-				if (g_variables[ref]==undefined)
-					g_variables[ref] = new Array();
-				g_variables[ref][g_variables[ref].length] = text;
 			}
 			if (!$.isNumeric(text))
 				text="";
@@ -2356,8 +2039,9 @@ g_report_actions['variable'] = function (destid,action,no,data)
 					//----------------------------
 					if (selector.type=='resource') {
 						text = UICom.structure["ui"][nodeid].resource.getView("dashboard_"+nodeid,null,null,true);
-					}
-					else if (selector.type=='resource code') {
+					} else if (selector.type=='resource utc') {
+						text = UICom.structure["ui"][nodeid].resource.getAttributes()['utc'];
+					} else if (selector.type=='resource code') {
 						text = UICom.structure["ui"][nodeid].resource.getCode();
 					}
 					else if (selector.type=='resource value') {
@@ -2696,7 +2380,10 @@ g_report_actions['url2unit'] = function (destid,action,no,data)
 	}
 	if (text!="")
 		label = replaceVariable(text);
-	html = "<span id='"+nodeid+"' style='"+style+"' class='report-url2unit "+cssclass+"' onclick=\"$('#sidebar_"+targetid+"').click()\">"+label+"</span>";
+	html = "<span id='"+nodeid+"' style='"+style+"' class='report-url2unit "+cssclass+"' onclick=\"$('#sidebar_"+targetid+"').click()\"";
+	if (text!="")
+		html += "data-toggle='tooltip' title=\""+UICom.structure.ui[nodeid].getLabel('none')+"\"";
+	html +=">"+label+"</span>";
 	$("#"+destid).append($(html));
 	$("#"+nodeid).attr("style",style);
 }
@@ -2938,35 +2625,42 @@ function getTextSize(destid,text,svgfontsize,svgfontname) {
 
 function getPoints(data,select) {
 	var points = [];
-	var selector = r_getSelector(select,null);
-	var nodes = $(selector.jquery,data).filter(selector.filter1);
-	nodes = eval("nodes"+selector.filter2);
-	var angle = 360 / nodes.length;
-	for (let i=0; i<nodes.length;i++){
-		//---------------------------
-		var nodeid = $(nodes[i]).attr("id");
-		if (selector.type=='resource') {
-			text = UICom.structure["ui"][nodeid].resource.getView("svg_"+nodeid,'none');
-		} else if (selector.type=='resource code') {
-			text = UICom.structure["ui"][nodeid].resource.getCode();
-		} else if (selector.type=='resource value') {
-			text = UICom.structure["ui"][nodeid].resource.getValue("svg_value_"+nodeid);
-		} else if (selector.type=='resource label') {
-			text = UICom.structure["ui"][nodeid].resource.getLabel(null,'none');
-		} else if (selector.type=='node label') {
-			text = UICom.structure["ui"][nodeid].getLabel(null,'none');
-		} else if (selector.type=='node value') {
-			text = UICom.structure["ui"][nodeid].getValue();
-		} else if (selector.type=='node code') {
-			text = UICom.structure["ui"][nodeid].getCode();
-		} else if (selector.type=='node context') {
-			text = UICom.structure["ui"][nodeid].getContext("svg_context_"+nodeid,'none');
+	if (select.indexOf("var:")>-1) {
+		const varlabel = select.substring(5,5+select.substring(5).indexOf("."));
+		for (let i=0; i<g_variables[varlabel].length;i++){
+			points[points.length] = {'value':g_variables[varlabel][i],'x':0,'y':0};
 		}
-		if (text.length>0)
-			points[points.length] = {'value': parseInt(text),'x':0,'y':0};
-		else
-			points[points.length] = {'value': null};
-	};
+	} else {
+		var selector = r_getSelector(select,null);
+		var nodes = $(selector.jquery,data).filter(selector.filter1);
+		nodes = eval("nodes"+selector.filter2);
+		var angle = 360 / nodes.length;
+		for (let i=0; i<nodes.length;i++){
+			//---------------------------
+			var nodeid = $(nodes[i]).attr("id");
+			if (selector.type=='resource') {
+				text = UICom.structure["ui"][nodeid].resource.getView("svg_"+nodeid,'none');
+			} else if (selector.type=='resource code') {
+				text = UICom.structure["ui"][nodeid].resource.getCode();
+			} else if (selector.type=='resource value') {
+				text = UICom.structure["ui"][nodeid].resource.getValue("svg_value_"+nodeid);
+			} else if (selector.type=='resource label') {
+				text = UICom.structure["ui"][nodeid].resource.getLabel(null,'none');
+			} else if (selector.type=='node label') {
+				text = UICom.structure["ui"][nodeid].getLabel(null,'none');
+			} else if (selector.type=='node value') {
+				text = UICom.structure["ui"][nodeid].getValue();
+			} else if (selector.type=='node code') {
+				text = UICom.structure["ui"][nodeid].getCode();
+			} else if (selector.type=='node context') {
+				text = UICom.structure["ui"][nodeid].getContext("svg_context_"+nodeid,'none');
+			}
+			if (text.length>0)
+				points[points.length] = {'value': parseInt(text),'x':0,'y':0};
+			else
+				points[points.length] = {'value': null};
+		};
+	}
 	return points;
 }
 
@@ -3325,10 +3019,6 @@ g_report_actions['for-each-vector'] = function (destid,action,no,data)
 		let a10 = $("a10",vectors[j]).text();
 		eval(display);
 	}
-	if (NBELT!="" && NOELT!="" && parseInt(NOELT)+parseInt(NBELT)<vectors.length) {
-		g_variables["NOELT"] = parseInt(NOELT) + parseInt(NBELT);
-		let js = "$(\"#\"+dashboard_current).html(\"\");r_processPortfolio(0,dashboard_infos[dashboard_current].xmlReport,dashboard_current,dashboard_infos[dashboard_current].data,0);"
-		let next = "<br>"+first +" - "+ last + "/" +vectors.length+ " <button class='btn' onclick='"+js+"'>NEXT</button>"
-		$("#"+dashboard_current).append(next);
-	}
+	if (NBELT!="" && NOELT!="")
+		prevnextbuttons(dashboard_current,first,last,portfolioids.length,NOELT,NBELT);
 }

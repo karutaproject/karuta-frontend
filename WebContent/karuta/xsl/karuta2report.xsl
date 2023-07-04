@@ -86,7 +86,7 @@
 	<!-- ================ tbody ============================ -->
 	<xsl:template match="*[metadata/@semantictag='model-tbody']">
 		<xsl:variable name="ref-init">
-			<xsl:value-of select=".//asmContext[metadata/@semantictag='ref-init']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+			<xsl:value-of select="asmContext[metadata/@semantictag='ref-init']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
 		<xsl:variable name="style">
 			<xsl:call-template name="style"/>
@@ -110,7 +110,7 @@
 	<!-- ================ th ============================ -->
 	<xsl:template match="*[metadata/@semantictag='model-th']">
 		<xsl:variable name="ref-init">
-			<xsl:value-of select=".//asmContext[metadata/@semantictag='ref-init']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+			<xsl:value-of select="asmContext[metadata/@semantictag='ref-init']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
 		<xsl:variable name="style">
 			<xsl:call-template name="style"/>
@@ -134,7 +134,7 @@
 	<!-- ================ row ============================ -->
 	<xsl:template match="*[metadata/@semantictag='model-row']|*[metadata/@semantictag='model-rw-thead']">
 		<xsl:variable name="ref-init">
-			<xsl:value-of select=".//asmContext[metadata/@semantictag='ref-init']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+			<xsl:value-of select="asmContext[metadata/@semantictag='ref-init']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
 		<xsl:variable name="style">
 			<xsl:call-template name="style"/>
@@ -158,7 +158,7 @@
 	<!-- ================ cell ============================ -->
 	<xsl:template match="*[metadata/@semantictag='model-cell']">
 		<xsl:variable name="colspan">
-			<xsl:value-of select=".//asmContext[metadata/@semantictag='colspan']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+			<xsl:value-of select="asmContext[metadata/@semantictag='colspan']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
 		<xsl:variable name="style">
 			<xsl:call-template name="style"/>
@@ -205,7 +205,7 @@
 	<!-- ================ autorefresh ============================ -->
 	<xsl:template match="*[metadata/@semantictag='model-autorefresh']">
 		<xsl:variable name="delay">
-			<xsl:value-of select=".//asmContext[metadata/@semantictag='delay']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+			<xsl:value-of select="asmContext[metadata/@semantictag='delay']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
 		<autorefresh>
 			<xsl:if test="not($delay='')">
@@ -716,6 +716,41 @@
 			</xsl:if>
 		</preview2unit>
 	</xsl:template>
+		<!-- ================ preview+icon ============================ -->
+	<xsl:template match="*[metadata/@semantictag='preview-icon']">
+		<xsl:variable name="style">
+			<xsl:call-template name="style"/>
+		</xsl:variable>
+		<xsl:variable name="semtag">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='semtag']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="fileid">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='icon']/asmResource[@xsi_type='Image']/fileid"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="editable">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='editable']/asmResource[@xsi_type='Get_Resource']/value"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="select">asmUnit.<xsl:value-of select="$semtag"/></xsl:variable>
+		<xsl:variable name="class">
+			<xsl:call-template name="class"/>
+		</xsl:variable>
+		<preview-icon>
+			<xsl:attribute name="fileid"><xsl:value-of select="$fileid"/></xsl:attribute>
+			<xsl:if test="not($editable='')">
+				<xsl:attribute name="editable"><xsl:value-of select="$editable"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not($class='')">
+				<xsl:attribute name="class"><xsl:value-of select="$class"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not($select='..')">
+				<xsl:attribute name="select"><xsl:value-of select="$select"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not($style='..')">
+				<xsl:attribute name="style"><xsl:value-of select="$style"/></xsl:attribute>
+			</xsl:if>
+		</preview-icon>
+	</xsl:template>
+	
 	<!-- ================ JSFunction ============================ -->
 	<xsl:template match="*[metadata/@semantictag='jsfunction']">
 		<xsl:variable name="function">
@@ -739,10 +774,10 @@
 	<!-- ================ for-each-person ============================ -->
 	<xsl:template match="*[metadata/@semantictag='for-each-person']">
 		<xsl:variable name="ref-init">
-			<xsl:value-of select=".//asmContext[metadata/@semantictag='ref-init']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+			<xsl:value-of select="asmContext[metadata/@semantictag='ref-init']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
 		<xsl:variable name="countvar">
-			<xsl:value-of select=".//asmContext[metadata/@semantictag='countvar']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+			<xsl:value-of select="asmContext[metadata/@semantictag='countvar']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
 		<xsl:variable name="select">
 			<xsl:value-of select="asmContext[metadata/@semantictag='select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"/>
@@ -760,7 +795,7 @@
 	<!-- ================ loop ============================ -->
 	<xsl:template match="*[metadata/@semantictag='loop']">
 		<xsl:variable name="ref-init">
-			<xsl:value-of select=".//asmContext[metadata/@semantictag='ref-init']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+			<xsl:value-of select="asmContext[metadata/@semantictag='ref-init']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
 		<xsl:variable name="variable">
 			<xsl:value-of select="asmContext[metadata/@semantictag='variable']/asmResource[@xsi_type='Field']/text[@lang=$lang]"/>
@@ -790,10 +825,10 @@
 	<!-- ================ for-each-portfolio ============================ -->
 	<xsl:template match="*[metadata/@semantictag='for-each-portfolio']">
 		<xsl:variable name="ref-init">
-			<xsl:value-of select=".//asmContext[metadata/@semantictag='ref-init']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+			<xsl:value-of select="asmContext[metadata/@semantictag='ref-init']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
 		<xsl:variable name="countvar">
-			<xsl:value-of select=".//asmContext[metadata/@semantictag='countvar']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+			<xsl:value-of select="asmContext[metadata/@semantictag='countvar']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
 		<xsl:variable name="select">
 			<xsl:value-of select="asmContext[metadata/@semantictag='select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"/>
@@ -802,10 +837,10 @@
 			<xsl:value-of select="asmContext[metadata/@semantictag='sortag']/asmResource[@xsi_type='Field']/text[@lang=$lang]"/>
 		</xsl:variable>
 		<xsl:variable name="sortelt">
-			<xsl:value-of select=".//asmContext[metadata/@semantictag='sortelt']/asmResource[@xsi_type='Get_Resource']/value"></xsl:value-of>
+			<xsl:value-of select="asmContext[metadata/@semantictag='sortelt']/asmResource[@xsi_type='Get_Resource']/value"></xsl:value-of>
 		</xsl:variable>
 		<xsl:variable name="test">
-			<xsl:value-of select=".//asmContext[metadata/@semantictag='test']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+			<xsl:value-of select="asmContext[metadata/@semantictag='test']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
  		<for-each-portfolio select='{$select}'>
 			<xsl:if test="not($ref-init='')">

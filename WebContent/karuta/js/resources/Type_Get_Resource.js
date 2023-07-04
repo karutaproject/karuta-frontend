@@ -636,6 +636,8 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 						var html = "";
 						if (display_code)
 							html += code+" ";
+						if (display_value)
+							html += value+" ";
 						if (display_label)
 							html += $(this).attr("label_"+languages[langcode]);
 						$("#button_"+langcode+self.id).attr("style",style);
@@ -650,6 +652,8 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 					var html = "";
 					if (display_code)
 						html += code+" ";
+					if (display_value)
+						html += value+" ";
 					if (display_label)
 						html += $(srce+"[lang='"+languages[langcode]+"']",resource).text();
 					$("#button_"+langcode+self.id).attr("style",style);
@@ -673,6 +677,8 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 					var html = "";
 					if (display_code)
 						html += self_code+" ";
+					if (display_value)
+						html += value+" ";
 					if (display_label)
 						html += self_label;
 					$("#button_"+langcode+self.id).attr("style",style);
@@ -1999,7 +2005,7 @@ function import_get_multiple(parentid,targetid,title,query_portfolio,query_semta
 	getResource.query_object = query_object;
 	getResource.targetid = targetid;
 	getResource.unique = unique;
-	getResource.displayEditor("get-resource-node");
+	getResource.displayEditor("get-resource-node",null,null,false,false);
 	$('#edit-window').modal('show');
 }
 

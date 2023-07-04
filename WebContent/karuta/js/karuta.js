@@ -83,6 +83,7 @@ function setDesignerRole(role)
 	if (g_display_type=='standard' || g_display_type=='raw'){
 		var uuid = $("#page").attr('uuid');
 		var html = "";
+		$("#portfolio_bar").html("");
 		if (g_bar_type.indexOf('horizontal')>-1) {
 			UIFactory.Portfolio.displayPortfolio('portfolio-container',g_display_type,LANGCODE,g_edit);
 			$("#portfolio-container").attr('role',role);
@@ -166,10 +167,22 @@ function getNavBar(type,portfolioid,edit)
 	html += "			<ul id='navbar-icons' class='mr-auto navbar-nav'>";
 	//---------------------HOME - TECHNICAL SUPPORT-----------------------
 	if (type=='login' || type=="create_account") {
-		html += "			<li id='navbar-mailto' class='nav-item icon'><a class='nav-link' href='mailto:"+g_configVar['technical-support']+"?subject="+karutaStr[LANG]['technical_support']+" ("+appliname+")' data-title='"+karutaStr[LANG]["button-technical-support"]+"' data-toggle='tooltip' data-placement='bottom'><i class='fas fa-envelope' data-title='"+karutaStr[LANG]["technical_support"]+"' data-toggle='tooltip' data-placement='bottom'></i></a></li>";
+		if (g_configVar['tech-support']!=undefined && g_configVar['tech-support']!='') {
+			if (g_configVar['tech-support']=='email')
+				html += "<li id='navbar-mailto' class='nav-item icon'><a class='nav-link' href='mailto:"+g_configVar['tech-email']+"?subject="+karutaStr[LANG]['technical_support']+" ("+appliname+")' data-title='"+karutaStr[LANG]["technical_support"]+"' data-toggle='tooltip' data-placement='bottom'><i class='fas fa-envelope' data-title='"+karutaStr[LANG]["technical_support"]+"' data-toggle='tooltip' data-placement='bottom'></i></a></li>";
+			else
+				html += "<li id='navbar-mailto' class='nav-item icon'><a class='nav-link' target='_blank' href='"+g_configVar['tech-url']+"' data-title='"+karutaStr[LANG]["technical_support"]+"' data-toggle='tooltip' data-placement='bottom'><i class='fa-solid fa-ticket'></i></a></li>";
+		} else
+			html += "<li id='navbar-mailto' class='nav-item icon'><a class='nav-link' href='mailto:"+g_configVar['technical-support']+"?subject="+karutaStr[LANG]['technical_support']+" ("+appliname+")' data-title='"+karutaStr[LANG]["technical_support"]+"' data-toggle='tooltip' data-placement='bottom'><i class='fas fa-envelope' data-title='"+karutaStr[LANG]["technical_support"]+"' data-toggle='tooltip' data-placement='bottom'></i></a></li>";
 	} else if (USER.username.indexOf("karuser")<0) {
 		html += "			<li id='navbar-home' class='nav-item icon'><a class='nav-link' onclick='show_list_page()' data-title='"+karutaStr[LANG]["home"]+"' data-toggle='tooltip' data-placement='bottom'><i class='fas fa-home'></i></a></li>";
-		html += "			<li id='navbar-mailto' class='nav-item icon'><a class='nav-link' href='javascript:displayTechSupportForm()' data-title='"+karutaStr[LANG]["technical_support"]+"' data-toggle='tooltip' data-placement='bottom'><i class='fas fa-envelope'></i></a></li>";
+		if (g_configVar['tech-support']!=undefined && g_configVar['tech-support']!='') {
+			if (g_configVar['tech-support']=='email')
+				html += "<li id='navbar-mailto' class='nav-item icon'><a class='nav-link' href='mailto:"+g_configVar['tech-email']+"?subject="+karutaStr[LANG]['technical_support']+" ("+appliname+")' data-title='"+karutaStr[LANG]["technical_support"]+"' data-toggle='tooltip' data-placement='bottom'><i class='fas fa-envelope' data-title='"+karutaStr[LANG]["technical_support"]+"' data-toggle='tooltip' data-placement='bottom'></i></a></li>";
+			else
+				html += "<li id='navbar-mailto' class='nav-item icon'><a class='nav-link' target='_blank' href='"+g_configVar['tech-url']+"' data-title='"+karutaStr[LANG]["technical_support"]+"' data-toggle='tooltip' data-placement='bottom'><i class='fa-solid fa-ticket'></i></a></li>";
+		} else
+			html += "<li id='navbar-mailto' class='nav-item icon'><a class='nav-link' href='mailto:"+g_configVar['technical-support']+"?subject="+karutaStr[LANG]['technical_support']+" ("+appliname+")' data-title='"+karutaStr[LANG]["technical_support"]+"' data-toggle='tooltip' data-placement='bottom'><i class='fas fa-envelope' data-title='"+karutaStr[LANG]["technical_support"]+"' data-toggle='tooltip' data-placement='bottom'></i></a></li>";
 	}
 	//-------------------LANGUAGES---------------------------displayTechSupportForm(langcode)
 	if (languages.length>1) {
@@ -703,10 +716,12 @@ function getURLParameter(sParam) {
 function displayBack() {
 //==================================
 	g_backstack.pop();
+	if (g_backstack.length==0) return;
 	let uuid = g_backstack[g_backstack.length-1].uuid
 	let portfolioid = g_backstack[g_backstack.length-1].portfolioid;
 	if (portfolioid!=g_portfolioid) {
-			var url = serverBCK_API+"/portfolios/portfolio/" + portfolioid + "?resources=true";
+			g_portfolioid = portfolioid;
+			var url = serverBCK_API+"/portfolios/portfolio/" + g_portfolioid + "?resources=true";
 			$.ajax({
 				async:true,
 				type : "GET",
@@ -717,6 +732,7 @@ function displayBack() {
 					g_userroles = [];
 					g_portfolio_current = data;
 					g_portfolio_rootid = $("asmRoot",data).attr("id");
+					setCSSportfolio(data);
 					//-------------------------
 					var portfoliocode = portfolios_byid[g_portfolioid].code_node.text();
 					if (typeof(rewriteURL) == 'function')
@@ -758,12 +774,28 @@ function displayBack() {
 					});
 					// --------------------------
 					UICom.parseStructure(data,true);
+					$("#sub-bar").html(UIFactory.Portfolio.getNavBar(g_display_type,LANGCODE,g_edit,g_portfolioid));
 					if (g_bar_type.indexOf('horizontal')>-1) {
-						UIFactory["Portfolio"].displayHorizontalMenu(UICom.root,'menu_bar','standard',LANGCODE,g_edit,UICom.rootid);
-					} else {
-						UIFactory["Portfolio"].displaySidebar(UICom.root,'sidebar','standard',LANGCODE,g_edit,UICom.rootid);
+						UIFactory.Portfolio.displayPortfolio('portfolio-container',g_display_type,LANGCODE,g_edit);
+						$("#portfolio-container").attr('role',role);
 					}
-					displayPage(uuid);
+					else {
+						let html ="";
+						html += "	<div id='main-row' class='row'>";
+						if (g_display_sidebar) {
+							html += "		<div class='col-md-3' id='sidebar'></div>";
+							html += "		<div class='col-md-9' id='contenu'></div>";
+						} else {
+							html += "		<div class='col-md-3' id='sidebar' style='display:none'></div>";
+							html += "		<div class='col-md-12' id='contenu'></div>";
+						}
+						html += "	</div>";
+						$("#portfolio-container").html(html);
+						$("#portfolio-container").attr('role',role);
+						$("#edit-window").attr('role',role);
+						UIFactory["Portfolio"].displaySidebar(UICom.root,'sidebar',g_display_type,LANGCODE,g_edit,g_portfolio_rootid);
+					}
+					$("#sidebar_"+uuid).click();
 			}
 		});
 	} else {
@@ -802,7 +834,11 @@ function displayPage(uuid,depth,type,langcode) {
 	$("#contenu").html("<div id='page' uuid='"+uuid+"'></div>");
 	$('.selected').removeClass('selected');
 	if (g_bar_type.indexOf("horizontal")>-1){  // update breadcrumb
-		$("#sidebar_"+uuid).addClass('selected');
+		let node = UICom.structure.ui[uuid].node;
+		while ($(node).parent().length>0) {
+			$("#sidebar_"+$(node).attr("id")).addClass('selected');
+			node = $(node).parent();
+		}
 		if (g_breadcrumb=="@1") {
 			var nodeid = uuid;
 			var breadcrumb = " &gt; <span onclick=\"displayPage('"+nodeid+"')\">" + UICom.structure.ui[nodeid].getLabel(null,'none') + "</span>";
@@ -903,72 +939,108 @@ function reloadPreviewBox(node)
 //=====================================================
 function reloadPreviewPage() {
 	let previewpageid = $(".preview-window").attr('preview-uuid');
-	$('#preview-'+previewpageid).remove();
-	$('#previewbackdrop-'+previewpageid).remove();
-	previewPage(previewpageid,100,"",null,g_report_edit); 
+	if (previewpageid!=undefined) {
+		$('#preview-'+previewpageid).remove();
+		$('#previewbackdrop-'+previewpageid).remove();
+		previewPage(previewpageid,100,"",null,g_report_edit);
+	}
 }
 
+//=====================================================
+function reloadPage() {
+	UIFactory.Node.reloadUnit();
+}
+
+
 //==================================
-function previewPage(uuid,depth,type,langcode,edit) 
+function previewPage(uuid,depth,type,langcode,edit,reload) 
 //==================================
 {
-	//---------------------
-	if (langcode==null)
-		langcode = LANGCODE;
-	//---------------------
-	if (type=='previewURL') {
+	if (uuid!=null) {
+		//---------------------
+		if (langcode==null)
+			langcode = LANGCODE;
+		//---------------------
+		if (type=='previewURL') {
+			$.ajax({
+				async:false,
+				type : "GET",
+				url : serverBCK+"/direct?i=" + uuid,
+				success : function(data) {
+					uuid = data;
+				}
+			});
+		}
+		var previewbackdrop = document.createElement("DIV");
+		previewbackdrop.setAttribute("class", "preview-backdrop");
+		previewbackdrop.setAttribute("id", "previewbackdrop-"+uuid);
+		$('body').append(previewbackdrop);
+	
+		var previewwindow = document.createElement("DIV");
+		previewwindow.setAttribute("id", "preview-"+uuid);
+		previewwindow.setAttribute("class", "preview-window");
+		previewwindow.setAttribute("preview-uuid", uuid);
+		previewwindow.setAttribute("preview-edit", edit);
+		previewwindow.innerHTML =  previewBox(uuid);
+		$('body').append(previewwindow);
+		$("#preview-"+uuid).hide();
+		var header = "<button class='btn add-button' style='float:right' onclick=\"$('#preview-"+uuid+"').remove();$('#previewbackdrop-"+uuid+"').remove();";
+		if (reload!=null && reload)
+			header += "reloadPage();"
+		header +="\">"+karutaStr[LANG]['Close']+"</button>";
+		$("#preview-window-header-"+uuid).html(header);
+		$("#preview-window-body-"+uuid).html("");
+		let url = serverBCK_API+"/nodes/node/" + uuid + "?resources=true";
 		$.ajax({
 			async:false,
 			type : "GET",
-			url : serverBCK+"/direct?i=" + uuid,
+			dataType : "xml",
+			url : url,
 			success : function(data) {
-				uuid = data;
+				UICom.parseStructure(data,false);
+				setVariables(data);
+				if (edit==null)
+					g_report_edit = false;
+				else
+					g_report_edit = edit;
+				UICom.structure["ui"][uuid].displayNode('standard',UICom.structure['tree'][uuid],"preview-window-body-"+uuid,depth,langcode,g_report_edit);
+				g_report_edit = g_edit;
+				$("#preview-"+uuid).show();
+				$("#previewbackdrop-"+uuid).show();
+				window.scrollTo(0,0);
+			},
+			error : function() {
+				var html = "";
+				html += "<div style='margin:50px'>" + karutaStr[languages[langcode]]['error-notfound'] + "</div>";
+				$("#preview-window-body-"+uuid).html(html);
+				$("#previewbackdrop-"+uuid).show();
+				$("#preview-"+uuid).show();
+				window.scrollTo(0,0);
 			}
 		});
 	}
-	var previewbackdrop = document.createElement("DIV");
-	previewbackdrop.setAttribute("class", "preview-backdrop");
-	previewbackdrop.setAttribute("id", "previewbackdrop-"+uuid);
-	$('body').append(previewbackdrop);
-
-	var previewwindow = document.createElement("DIV");
-	previewwindow.setAttribute("id", "preview-"+uuid);
-	previewwindow.setAttribute("class", "preview-window");
-	previewwindow.setAttribute("preview-uuid", uuid);
-	previewwindow.setAttribute("preview-edit", edit);
-	previewwindow.innerHTML =  previewBox(uuid);
-	$('body').append(previewwindow);
-	$("#preview-"+uuid).hide();
-	var header = "<button class='btn add-button' style='float:right' onclick=\"$('#preview-"+uuid+"').remove();$('#previewbackdrop-"+uuid+"').remove();\">"+karutaStr[LANG]['Close']+"</button>";
-	$("#preview-window-header-"+uuid).html(header);
-	$("#preview-window-body-"+uuid).html("");
-	let url = serverBCK_API+"/nodes/node/" + uuid + "?resources=true";
-	$.ajax({
-		type : "GET",
-		dataType : "xml",
-		url : url,
-		success : function(data) {
-			UICom.parseStructure(data,false);
-			setVariables(data);
-			if (edit==null)
-				g_report_edit = false;
-			else
-				g_report_edit = edit;
-			UICom.structure["ui"][uuid].displayNode('standard',UICom.structure['tree'][uuid],"preview-window-body-"+uuid,depth,langcode,g_report_edit);
-			g_report_edit = g_edit;
-			$("#preview-"+uuid).show();
-			$("#previewbackdrop-"+uuid).show();
-			window.scrollTo(0,0);
-		},
-		error : function() {
-			var html = "";
-			html += "<div style='margin:50px'>" + karutaStr[languages[langcode]]['error-notfound'] + "</div>";
-			$("#preview-window-body-"+uuid).html(html);
-			$("#previewbackdrop-"+uuid).show();
-			$("#preview-"+uuid).show();
-			window.scrollTo(0,0);
-		}
-	});
+}
+//==================================
+function previewPortfolioPage(partialcode,semtag,depth,type,langcode,edit,reload) 
+//==================================
+{
+	if (partialcode!=undefined && semtag!=undefined) {
+		let portfoliocode = "";
+		if (partialcode=="self")
+			portfoliocode = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",g_portfolio_current)).text();
+		else
+			portfoliocode = $("code",$(">asmResource[xsi_type='nodeRes']",$("asmRoot",$(UIFactory.Portfolio.search_bycode(partialcode))))).text();
+		$.ajax({
+			async : false,
+			type : "GET",
+			dataType : "xml",
+			url : serverBCK_API+"/nodes?portfoliocode=" + portfoliocode + "&semtag="+semtag,
+			success : function(data) {
+				const uuid = $("node",data).attr("id");
+				previewPage(uuid,depth,type,langcode,edit,reload) ;
+			}
+		});
+	}
 }
 
 //==================================
@@ -1163,6 +1235,7 @@ function reset(uuid)
 {
 	var urlS = serverBCK_API+'/nodes/node/'+uuid+'/action/reset';
 	$.ajax({
+		async:false,
 		type : "POST",
 		dataType : "text",
 		contentType: "application/xml",
@@ -1464,6 +1537,7 @@ function getSendSharingURL(nodeid,uuid,sharewithrole,sharetoemail,sharetoroles,l
 		addautocomplete(document.getElementById('email'), emailsarray);
 	}
 	//--------------------------
+	$("#edit-window").modal('show');
 }
 
 
@@ -1629,9 +1703,13 @@ function sendEmailPublicURL(encodeddata,email,langcode) {
 	//------------------------------
 
 	var img = document.querySelector('#config-send-email-logo');
-	var imgB64 = getDataUrl(img);
-	var logo = "<img width='"+img.style.width+"' height='"+img.style.height+"' src=\""+imgB64+"\">";
-	message = logo + "<br>" + g_configVar['send-email-message'];
+	if (img!=null) {
+		var imgB64 = getDataUrl(img);
+		var logo = "<img width='"+img.style.width+"' height='"+img.style.height+"' src=\""+imgB64+"\">";
+		message = logo + "<br>" + g_configVar['send-email-message'];
+	} else {
+		message = g_configVar['send-email-message'];
+	}
 	message = message.replace("##firstname##",USER.firstname);
 	message = message.replace("##lastname##",USER.lastname);
 	const urlhtml = g_configVar['send-email-url']==""?g_configVar['send-email-image']:g_configVar['send-email-url']
@@ -1660,6 +1738,46 @@ function sendEmailPublicURL(encodeddata,email,langcode) {
 			alertHTML(karutaStr[LANG]['email-sent']);
 		}
 	});
+}
+
+//==================================
+function sendEmail(email,subject,message,cc,bcc,alert) {
+//==================================
+	let ok = true;
+	cc = (cc==null)? "":cc;
+	bcc = (bcc==null)? "":bcc;
+	message = message.replace("##firstname##",USER.firstname);
+	message = message.replace("##lastname##",USER.lastname);
+	//------------------------------
+	var xml ="<node>";
+	xml +="<sender>"+$(USER.email_node).text()+"</sender>";
+	xml +="<recipient>"+email+"</recipient>";
+	xml +="<subject>"+subject+"</subject>";
+	xml +="<message>"+message+"</message>";
+	xml +="<recipient_cc>"+cc+"</recipient_cc><recipient_bcc>"+bcc+"</recipient_bcc>";
+	xml +="</node>";
+	$.ajax({
+		async:false,
+		contentType: "application/xml",
+		type : "POST",
+		dataType : "xml",
+		url : "../../../"+serverBCK+"/mail",
+		data: xml,
+		success : function() {
+			if (alert) {
+				$('#edit-window').modal('hide');
+				alertHTML(karutaStr[LANG]['email-sent']);
+			}
+		},
+		error: function() {
+			ok = false;
+			if (alert) {
+				$('#edit-window').modal('hide');
+				alertHTML(karutaStr[LANG]['email-sent-error']);
+			}
+		}
+	});
+	return ok;
 }
 
 
@@ -2120,7 +2238,8 @@ function displayTechSupportForm(langcode)
 		langcode = LANGCODE;
 	//---------------------
 	$("#edit-window-footer").html("");
-	$("#edit-window-title").html(karutaStr[LANG]['technical-support']);
+	$("#edit-window-type").html("");
+	$("#edit-window-title").html(karutaStr[LANG]['technical_support']);
 	var js1 = "javascript:$('#edit-window').modal('hide')";
 	var send_button = "<button id='send_button' class='btn'>"+karutaStr[LANG]['button-send']+"</button>";
 	var obj = $(send_button);
@@ -2600,6 +2719,13 @@ function replaceVariable(text,node,withquote)
 			const pagecode = UICom.structure.ui[pageid].getCode();
 			text = text.replaceAll('##pagecode##',cleanCode(pagecode));
 		}
+		if (text.indexOf("##pageid##")>-1){
+			const pageid = $("#page").attr('uuid');
+			if (withquote && text.indexOf('##current')>-1)
+				text = text.replaceAll('##pageid##',"'"+pageid+"'");
+			else
+				text = text.replaceAll('##pageid##',pageid);
+		}
 		if (text.indexOf("##today-utc##")>-1)
 			text = text.replaceAll('##today-utc##',new Date().getTime());
 		if (text.indexOf("##today##")>-1)
@@ -2654,8 +2780,9 @@ function replaceVariable(text,node,withquote)
 				text = text.replaceAll('##itselfrescode##',"'"+$($("code",$("asmResource[xsi_type!='context'][xsi_type!='nodeRes']",node.node))).text()+"'");
 	
 		}
-		if (text!=undefined && text.indexOf('##userlogin##')>-1) {
+		if (text!=undefined && (text.indexOf('##userlogin##')>-1 || text.indexOf('##accountlogin##')>-1)) {
 			text = text.replaceAll('##userlogin##',USER.username);
+			text = text.replaceAll('##accountlogin##',USER.username);
 		}
 		var n=0;
 		while (text!=undefined && text.indexOf("{##")>-1 && n<100) {
@@ -3198,6 +3325,44 @@ function notExistChild (nodeid,semtag)
 		return false;
 }
 
+//==================================
+function testIfDisplay (nodeid)
+//==================================
+{
+	let displayItem = true;
+	if (g_userroles[0]!='designer') {
+		let displaytest = $(UICom.structure.ui[nodeid].metadata).attr('displaytest');
+		if (displaytest!=undefined)
+			displaytest = displaytest.replaceAll("##currentnode##","nodeid");
+		if (displaytest!=undefined && displaytest.startsWith(".")) {
+			for (fct in jqueryReportSpecificFunctions) {
+				if (displaytest.indexOf(fct)>-1) {
+					displaytest = displaytest.replace(fct,jqueryReportSpecificFunctions[fct]);
+					if (displaytest.indexOf("#lang#")>-1)
+						displaytest = displaytest.replace(/#lang#/g,languages[LANGCODE]);
+				}
+			}
+			displaytest = '$(UICom.structure.ui[nodeid].node)' + displaytest;
+			displayItem = eval(displaytest).length>0;
+		} else if (displaytest!=undefined && displaytest!="" && !eval(displaytest) ) {
+			displayItem = false;
+		}
+	}
+	return displayItem
+}
+
+//==================================
+function pageClick (nodeid)
+//==================================
+{
+	if (g_userroles[0]!='designer') {
+		let displayclick = $(UICom.structure.ui[nodeid].metadata).attr('displayclick');
+		if (displayclick!=undefined) {
+			displayclick = displayclick.replaceAll("##currentnode##","nodeid");
+			eval(displayclick);
+		}
+	}
+}
 
 
 //=========================================================
@@ -3624,12 +3789,27 @@ function moveup(nodeid) {
 	UIFactory.Node.upNode(nodeid);
 }
 
+function getCode(semtag,uuid) {
+	const nodes = $("*:has(>metadata[semantictag*="+semtag+"])",UICom.structure.ui[uuid].node);
+	if ($("asmResource",nodes[0]).length==3) {
+		resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",nodes[0]); 
+	} else {
+		resource = $("asmResource[xsi_type='nodeRes']",nodes[0]);
+	}
+	return $("code",resource).text();
+}
+
 
 //================================================
 //================================================
 //============== Function JS =====================
 //================================================
 //================================================
+
+function goTo(semtag) {
+	const uuid =$( $("*:has(>metadata[semantictag*='"+semtag+"'])",g_portfolio_current)[0]).attr("id");
+	$("#sidebar_"+uuid).click();
+}
 
 function execJS(node,tag){
 	var test = true;
@@ -3670,6 +3850,447 @@ function setUniqueNodeCode(nodeid) {
 	$(UICom.structure.ui[nodeid].code_node).text(code);
 	UICom.structure.ui[nodeid].save();
 }
+
+function setPageVisited(uuid,role) {
+	if (g_userroles[0]==role) {
+		const visited = $("asmContext:has(metadata[semantictag*='visited-date'])",UICom.structure.ui[uuid].node);
+		const visitedid =  $(visited).attr("id");
+		const today = new Date();
+		UICom.structure.ui[visitedid].value_node.text(today.getTime());
+		UICom.structure.ui[visitedid].resource.text_node[LANGCODE].text(today.toLocaleString());
+		UICom.structure.ui[visitedid].save();
+		UICom.structure.ui[visitedid].resource.save();
+	}
+}
+
+function removeContentNode(nodeid){
+	$("#content-"+nodeid).remove();
+}
+
+//================================================
+//================================================
+//============== Function JQuery =================
 //================================================
 //================================================
 
+
+//=====================================
+$.fn.hasAttr = function (options)
+//=====================================
+{
+	var defaults= {"attribute":"id","meta":"metadata"};
+	var parameters = $.extend(defaults, options); 
+	return this.each(function() {
+		if ($(">"+parameters.meta,this).attr(parameters.attribute) != undefined)
+			return $(this);
+	});
+};
+$.fn.test_hasAttr = function (options) { return result = ($(this).hasAttr(options).length>0) ? true : false;};
+//=====================================
+
+//=====================================
+$.fn.hasNotAttr = function (options)
+//=====================================
+{
+	var defaults= {"attribute":"id","meta":"metadata"};
+	var parameters = $.extend(defaults, options);
+	var result = [];
+	this.each(function() {
+		if ($(">"+parameters.meta,this).attr(parameters.attribute) == undefined)
+			result.push(this);
+	});
+	return $(result);
+};
+$.fn.test_hasNotAttr = function (options) { return result = ($(this).hasNotAttr(options).length>0) ? true : false;};
+//=====================================
+
+//=====================================
+$.fn.hasChildSemtag = function (options)
+//=====================================
+{
+	var defaults= { "semtag":"s"};
+	var parameters = $.extend(defaults, options);
+	var result = $(this).has("*:has('>metadata[semantictag*=" + parameters.semtag + "]')");
+	return $(result);
+};
+$.fn.test_hasChildSemtag = function (options) { return result = ($(this).hasChildSemtag(options).length>0) ? true : false;};
+//=====================================
+
+//=====================================
+$.fn.hasNotChildSemtag = function (options)
+//=====================================
+{
+	var result = $(this).hasChildSemtag(options);
+	if (result.length>0)
+		return [];
+	else
+		return $(this);
+};
+
+//=====================================
+$.fn.hasChildCodeContains = function (options)   // hasChildCodeContains({"semtag":"s","value":"v"})
+//=====================================
+{
+	var defaults= {"value":"v"};
+	var parameters = $.extend(defaults, options);
+	var result = $(this).has("asmResource>code:contains('"+parameters.value+"')");
+	return $(result);
+};
+$.fn.test_hasChildCodeContains = function (options) { return result = ($(this).hasChildCodeContains(options).length>0) ? true : false;};
+$.fn.test_notHasChildCodeContains = function (options) { return result = ($(this).hasChildCodeContains(options).length>0) ? false : true;};
+
+//=====================================
+$.fn.hasChildSemtagAndCodeContains = function (options)   // hasChildSemtagAndCodeContains({"semtag":"s","value":"v"})
+//=====================================
+{
+	var defaults= {"semtag":"s","value":"v"};
+	var parameters = $.extend(defaults, options);
+	var result = $(this).has("*:has('>metadata[semantictag*=" + parameters.semtag + "]'):has(\">asmResource[xsi_type='nodeRes']>code:contains('"+parameters.value+"')\")");
+	return $(result);
+};
+$.fn.test_hasChildSemtagAndCodeContains = function (options) { return result = ($(this).hasChildSemtagAndCodeContains(options).length>0) ? true : false;};
+$.fn.test_notHasChildSemtagAndCodeContains = function (options) { return result = ($(this).hasChildSemtagAndCodeContains(options).length>0) ? false : true;};
+
+//=====================================
+$.fn.hasChildSemtagAndResourceCodeContains = function (options)   // hasChildSemtagAndResourceCodeContains({"semtag":"s","value":"v"})
+//=====================================
+{
+	var defaults= {"semtag":"s","value":"v"};
+	var parameters = $.extend(defaults, options);
+	var result = $(this).has("*:has('>metadata[semantictag*=" + parameters.semtag + "]'):has('asmResource[xsi_type!=context][xsi_type!=nodeRes]>code:contains("+parameters.value+")')");
+	return $(result);
+};
+$.fn.test_hasChildSemtagAndResourceCodeContains = function (options) { return result = ($(this).hasChildSemtagAndResourceCodeContains(options).length>0) ? true : false;};
+$.fn.test_notHasChildSemtagAndResourceCodeContains = function (options) { return result = ($(this).hasChildSemtagAndResourceCodeContains(options).length>0) ? false : true;};
+
+//=====================================
+$.fn.hasNotChildSemtagAndResourceCodeContains = function (options)   // hasChildSemtagAndResourceCodeContains({"semtag":"s","value":"v"})
+//=====================================
+{
+	var result = $(this).hasChildSemtagAndResourceCodeContains(options);
+	if (result.length>0)
+		return [];
+	else
+		return $(this);
+};
+//=====================================
+
+//=====================================
+$.fn.resourceCodeContains = function (options)
+//=====================================
+{
+	var defaults= { "value":"v","function":""};
+	var parameters = $.extend(defaults, options);
+	var result = $(this).has(">asmResource[xsi_type!='context'][xsi_type!='nodeRes']>code:contains('"+parameters.value+"')");
+	if (parameters.function!="")
+		result = eval("$(result)."+parameters.function);
+	return $(result);
+};
+$.fn.test_resourceCodeContains = function (options) { return result = ($(this).resourceCodeContains(options).length>0) ? true : false;};
+//=====================================
+
+//=====================================
+$.fn.resourceTextContains = function (options)
+//=====================================
+{
+	var defaults= { "value":"v","function":""};
+	var parameters = $.extend(defaults, options);
+	var result = $(this).has(">asmResource[xsi_type!='context'][xsi_type!='nodeRes']>text[lang='"+languages[LANGCODE]+"']:contains('"+parameters.value+"')");
+	if (parameters.function!="")
+		result = eval("$(result)."+parameters.function);
+	return $(result);
+};
+$.fn.test_resourceTextContains = function (options) { return result = ($(this).resourceTextContains(options).length>0) ? true : false;};
+//=====================================
+
+//=====================================
+$.fn.resourceValueContains = function (options)
+//=====================================
+{
+	var defaults= { "value":"v","function":""};
+	var parameters = $.extend(defaults, options);
+	var result = $(this).has(">asmResource[xsi_type!='context'][xsi_type!='nodeRes']>value:contains('"+parameters.value+"')");
+	if (parameters.function!="")
+		result = eval("$(result)."+parameters.function);
+	return $(result);
+};
+$.fn.test_resourceValueContains = function (options) { return result = ($(this).resourceValueContains(options).length>0) ? true : false;};
+//=====================================
+
+//=====================================
+$.fn.resourceFilenameContains = function (options)
+//=====================================
+{
+	var defaults= { "value":"v","function":""};
+	var parameters = $.extend(defaults, options);
+	var result = $(this).has(">asmResource[xsi_type!='context'][xsi_type!='nodeRes']>filename[lang='"+languages[LANGCODE]+"']:contains('"+parameters.value+"')");
+	if (parameters.function!="")
+		result = eval("$(result)."+parameters.function);
+	return $(result);
+};
+$.fn.test_resourceFilenameContains = function (options) { return result = ($(this).resourceFilenameContains(options).length>0) ? true : false;};
+//=====================================
+
+//=====================================
+$.fn.nodeCodeContains = function (options) // nodeCodeContains({"value":"12","function:'last()'"})
+//=====================================
+{
+	var defaults= { "value":"v","function":""};
+	var parameters = $.extend(defaults, options);
+	var result = $(this).has(">asmResource[xsi_type='nodeRes']>code:contains('"+parameters.value+"')");
+	if (parameters.function!="")
+		result = eval("$(result)."+parameters.function);
+	return $(result);
+};
+$.fn.test_nodeCodeContains = function (options) { return result = ($(this).nodeCodeContains(options).length>0) ? true : false;};
+//=====================================
+
+//=====================================
+$.fn.nodeCodeEquals = function (options) // nodeCodeEquals({"value":"12","function:'last()'"})
+//=====================================
+{
+	var result = [];
+	var defaults= { "value":"v", "function":""};
+	var parameters = $.extend(defaults, options);
+	var nodes = $(this).has(">asmResource[xsi_type='nodeRes']>code:contains('"+parameters.value+"')");
+	for (let i=0; i<nodes.length;i++){
+		var code = $("code",$(">asmResource[xsi_type='nodeRes']",nodes[i])).text();
+		if (code == parameters.value)
+			result.push(nodes[i]);
+	}
+	if (parameters.function!="")
+		result = eval("$(result)."+parameters.function);
+	return $(result);
+};
+$.fn.test_nodeCodeEquals = function (options) { return result = ($(this).nodeCodeEquals(options).length>0) ? true : false;};
+//=====================================
+
+//=====================================
+$.fn.nodeLabelContains = function (options)
+//=====================================
+{
+	var defaults= { "value":"v","function":""};
+	var parameters = $.extend(defaults, options);
+	var result = $(this).has(">asmResource[xsi_type='nodeRes']>label[lang='"+languages[LANGCODE]+"']:contains('"+parameters.value+"')");
+	if (parameters.function!="")
+		result = eval("$(result)."+parameters.function);
+	return $(result);
+};
+$.fn.test_nodeLabelContains = function (options) { return result = ($(this).nodeLabelContains(options).length>0) ? true : false;};
+//=====================================
+
+//=====================================
+$.fn.nodeValueContains = function (options)  
+//=====================================
+{
+	var defaults= { "value":"v","function":""};
+	var parameters = $.extend(defaults, options);
+	var result = $(this).has(">asmResource[xsi_type='nodeRes']>value:contains('"+parameters.value+"')");
+	if (parameters.function!="")
+		result = eval("$(result)."+parameters.function);
+	return $(result);
+};
+$.fn.test_nodeValueContains = function (options) { return result = ($(this).nodeValueContains(options).length>0) ? true : false;};
+//=====================================
+
+//=====================================
+$.fn.utcBetween = function (options)  
+//=====================================
+{
+	var result = [];
+	var defaults= {"semtag":"s","min":"m","max":"M"};
+	var parameters = $.extend(defaults, options);
+	for (let i=0;i<this.length;i++){
+		const nodes = $("asmContext:has('>metadata[semantictag*=" + parameters.semtag + "]')",this[i]);
+		for (let j=0;j<nodes.length;j++){
+			var utc = $("utc",nodes[i]).text();
+			if (replaceVariable(parameters.m) < utc && utc < replaceVariable(parameters.M)){
+				result.push(this[i]);
+				break;
+			}
+		}
+	}
+	return $(result);
+};
+$.fn.test_utcBetween = function (options) { return result = ($(this).utcBetween(options).length>0) ? true : false;};
+//=====================================
+
+//=====================================
+$.fn.utcGreater = function (options)  
+//=====================================
+{
+	var result = [];
+	var defaults= {"semtag":"s","min":"m"};
+	var parameters = $.extend(defaults, options);
+	for (let i=0;i<this.length;i++){
+		var node = $("asmContext:has('>metadata[semantictag*=" + parameters.semtag + "]')",this[i]);		
+		var utc = $("utc",node).text();
+		if (replaceVariable(parameters.min) < utc)
+			result.push(this[i])
+	}
+	return $(result);
+};
+$.fn.test_utcGreater = function (options) { return result = ($(this).utcGreater(options).length>0) ? true : false;};
+//=====================================
+
+//=====================================
+$.fn.utcLower = function (options)  
+//=====================================
+{
+	var result = [];
+	var defaults= {"semtag":"s","max":"M"};
+	var parameters = $.extend(defaults, options);
+	for (let i=0;i<this.length;i++){
+		var node = $("asmContext:has('>metadata[semantictag*=" + parameters.semtag + "]')",this[i]);		
+		var utc = $("utc",node).text();
+		if (utc < replaceVariable(parameters.max))
+			result.push(this[i])
+	}
+	return $(result);
+};
+$.fn.test_utcLower = function (options) { return result = ($(this).utcLower(options).length>0) ? true : false;};
+//=====================================
+
+
+//=====================================
+$.fn.sortOnChildSemtag = function (options)
+//=====================================
+{
+	var defaults= { "semtag":"s","sorton":"s"};
+	var parameters = $.extend(defaults, options);
+	var result = $(this).sort(function(a, b){ return ($(parameters.sorton,$("asmResource[xsi_type!='context'][xsi_type!='nodeRes']",$("*:has(\">metadata[semantictag*=" + parameters.semtag + "]\")",a))).text() > $(parameters.sorton,$("asmResource[xsi_type!='context'][xsi_type!='nodeRes']",$("*:has(\">metadata[semantictag*=" + parameters.semtag + "]\")",b))).text()) ? 1 : -1; });
+	return $(result);
+};
+
+//=====================================
+$.fn.invsortOnChildSemtag = function (options)
+//=====================================
+{
+	var defaults= { "semtag":"s","sorton":"s"};
+	var parameters = $.extend(defaults, options);
+	var result = $(this).sort(function(a, b){ return ($(parameters.sorton,$("asmResource[xsi_type!='context'][xsi_type!='nodeRes']",$("*:has(\">metadata[semantictag*=" + parameters.semtag + "]\")",a))).text() > $(parameters.sorton,$("asmResource[xsi_type!='context'][xsi_type!='nodeRes']",$("*:has(\">metadata[semantictag*=" + parameters.semtag + "]\")",b))).text()) ? -1 : 1; });
+	return $(result);
+};
+
+//=====================================
+$.fn.hasChildSubmitted = function (options)  
+//=====================================
+{
+	var result = [];
+	var defaults= {"semtag":"s"};
+	var parameters = $.extend(defaults, options);
+	for (let i=0;i<this.length;i++){
+		var node = $("asmContext:has('>metadata[semantictag*=" + parameters.semtag + "]')",this[i]);
+		if ($(node).has("metadata-wad[submitted='Y'])"))
+			result.push(this[i])
+	}
+	return $(result);
+};
+$.fn.test_hasChildSubmitted = function (options) { return result = ($(this).hasChildSubmitted(options).length>0) ? true : false;};
+
+//=====================================
+$.fn.hasChildNotSubmitted = function (options)  
+//=====================================
+{
+	var result = [];
+	var defaults= {"semtag":"s"};
+	var parameters = $.extend(defaults, options);
+	for (let i=0;i<this.length;i++){
+		var node = $("*:has('>metadata[semantictag*=" + parameters.semtag + "]')",this[i]);
+		if ($(node).has(">metadata-wad[submitted!='Y']").length>0)
+			result.push(this[i])
+	}
+	return $(result);
+};
+$.fn.test_hasChildNotSubmitted = function (options) { return result = ($(this).hasChildNotSubmitted(options).length>0) ? true : false;};
+
+//---------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------
+//--------------------- NOT USABLE IN BATCH ---------------------------------------------
+//---------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------
+
+//=====================================
+$.fn.hasAncestorSemtag = function (options)   // hasChildSemtagAndResourceCodeContains({"semtag":"s","value":"v"})
+//=====================================
+{
+	var defaults= {"semtag":"s"};
+	var parameters = $.extend(defaults, options);
+	var result = [];
+	for (let i=0;i<this.length;i++){
+		var parent = $(this[i]).parent();
+		var tagname = $(parent).prop("tagName");
+		var search = [];
+		while (tagname!='asmRoot' && search.length==0){
+			search = $(parent).has(">metadata[semantictag*=" + parameters.semtag + "]");
+			parent = $(parent).parent();
+			tagname = $(parent).prop("tagName");
+		}
+		if (search.length>0)
+			result.push(this[i])
+	}
+	return $(result);
+};
+$.fn.test_hasAncestorSemtag = function (options) { return result = ($(this).hasAncestorSemtag(options).length>0) ? true : false;};
+//=====================================
+
+//=====================================
+$.fn.hasAncestorSemtagAndNodeCodeContains = function (options)   // hasChildSemtagAndResourceCodeContains({"semtag":"s","value":"v"})
+//=====================================
+{
+	var defaults= {"semtag":"s","value":"v"};
+	var parameters = $.extend(defaults, options);
+	var result = [];
+	for (let i=0;i<this.length;i++){
+		var parent = $(this[i]).parent();
+		var tagname = $(parent).prop("tagName");
+		var search = [];
+		while (tagname!='asmRoot' && search.length==0){
+			search = $(parent).has("*:has('>metadata[semantictag*=" + parameters.semtag + "]'):has('asmResource[xsi_type=nodeRes]>code:contains("+parameters.value+")')");
+			if (search.length==0)
+				search = $(parent).has(">metadata[semantictag*=" + parameters.semtag + "]:has('asmResource[xsi_type=nodeRes]>code:contains("+parameters.value+")')");
+			parent = $(parent).parent();
+			tagname = $(parent).prop("tagName");
+		}
+		if (search.length>0)
+			result.push(this[i])
+	}
+	return $(result);
+};
+$.fn.test_hasAncestorSemtagAndNodeCodeContains = function (options) { return result = ($(this).hasAncestorSemtagAndNodeCodeContains(options).length>0) ? true : false;};
+//=====================================
+
+
+//=====================================
+$.fn.hasParentSemtagAndNodeCodeContains = function (options)   // hasChildSemtagAndResourceCodeContains({"semtag":"s","value":"v"})
+//=====================================
+{
+	var defaults= {"semtag":"s","value":"v"};
+	var parameters = $.extend(defaults, options);
+	var result = $(this).addBack().parent().has("*:has('>metadata[semantictag*=" + parameters.semtag + "]'):has('asmResource[xsi_type!=context][xsi_type!=nodeRes]>code:contains("+parameters.value+")')");
+	return $(result);
+};
+$.fn.test_hasParentSemtagAndNodeCodeContains = function (options) { return result = ($(this).hasParentSemtagAndNodeCodeContains(options).length>0) ? true : false;};
+//=====================================
+
+//=====================================
+$.fn.hasParentParentSemtagAndNodeCodeContains = function (options)   // hasChildSemtagAndResourceCodeContains({"semtag":"s","value":"v"})
+//=====================================
+{
+	var defaults= {"semtag":"s","value":"v"};
+	var parameters = $.extend(defaults, options);
+	var result = $(this).addBack().parent().parent().has("*:has('>metadata[semantictag*=" + parameters.semtag + "]'):has('asmResource[xsi_type!=context][xsi_type!=nodeRes]>code:contains("+parameters.value+")')");
+	return $(result);
+};
+$.fn.test_hasParentParentSemtagAndNodeCodeContains = function (options) { return result = ($(this).hasParentParentSemtagAndNodeCodeContains(options).length>0) ? true : false;};
+
+//=====================================
+$.fn.hasParentParentParentSemtagAndNodeCodeContains = function (options)   // hasChildSemtagAndResourceCodeContains({"semtag":"s","value":"v"})
+//=====================================
+{
+	var defaults= {"semtag":"s","value":"v"};
+	var parameters = $.extend(defaults, options);
+	var result = $(this).addBack().parent().parent().parent().has("*:has('>metadata[semantictag*=" + parameters.semtag + "]'):has('asmResource[xsi_type!=context][xsi_type!=nodeRes]>code:contains("+parameters.value+")')");
+	return $(result);
+};
+$.fn.test_hasParentParentParentSemtagAndNodeCodeContains = function (options) { return result = ($(this).hasParentParentParentSemtagAndNodeCodeContains(options).length>0) ? true : false;};

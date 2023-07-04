@@ -43,6 +43,12 @@
   float: left;
   margin-right: 5px;
 }
+.batch .dropdown-item[onclick*=sem-tag] {
+  display: none;
+}
+.batch .for-each-node .dropdown-item[onclick*=sem-tag] {
+  display: block;
+}
 .batch span.chkbox-comments.xcreate-person,
 .batch span.chkbox-comments.xdelete-person,
 .batch span.chkbox-comments.xinactivate-person,
@@ -91,9 +97,15 @@
 .batch span.chkbox-comments.xupdate-document,
 .batch span.chkbox-comments.xupdate-variable,
 .batch span.chkbox-comments.xupdate-proxy,
+.batch span.chkbox-comments.xupdate-url2portfolio,
 .batch span.chkbox-comments.xupdate-url2unit,
 .batch span.chkbox-comments.xupdate-item,
+.batch span.chkbox-comments.xfor-each-node,
 .batch span.chkbox-comments.xactions,
+.batch span.chkbox-comments.xsubmitall,
+.batch span.chkbox-comments.xsend-email,
+.batch span.chkbox-comments.xvariable,
+.batch span.chkbox-comments.xbatch-variable,
 .batch span.chkbox-comments.xif-then-else,
 .batch span.chkbox-comments.xif-action,
 .batch span.chkbox-comments.xthen-part,
@@ -130,6 +142,7 @@
   --batch-resource-color: orange;
   --batch-uuid-color: #ff66ff;
   --batch-instruction-color: #990000;
+  --batch-utilities-color: #CACACA;
 }
 .batch .create-person {
   margin-top: 7px;
@@ -307,7 +320,8 @@
   margin-top: 7px;
   border: 1px solid var(--batch-resource-color);
 }
-.batch .update-url2unit {
+.batch .update-url2unit,
+.batch .update-url2portfolio {
   margin-top: 7px;
   border: 1px solid var(--batch-resource-color);
 }
@@ -323,6 +337,7 @@
 .batch .for-each-line,
 .batch .for-each-tree,
 .batch .for-each-person,
+.batch .for-each-node,
 .batch .actions {
   margin-top: 7px;
   border: 1px dashed var(--batch-instruction-color);
@@ -336,6 +351,12 @@
 .batch .else-part {
   margin-bottom: 7px;
   border: 1px dashed var(--batch-instruction-color);
+}
+
+.send-email,
+.batch-variable {
+  margin-top: 7px;
+  border: 1px solid var(--batch-utilities-color);
 }
 
 /*# sourceMappingURL=batch.css.map */

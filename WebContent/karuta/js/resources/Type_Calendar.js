@@ -59,7 +59,7 @@ UIFactory["Calendar"] = function( node )
 		var newelement = createXmlElement("utc");
 		$("asmResource[xsi_type='Calendar']",node)[0].appendChild(newelement);
 	}
-	this.utc = $("utc",$("asmResource[xsi_type='Calendar']",node))
+	this.utc = $("utc",$("asmResource[xsi_type='Calendar']",node));
 	//--------------------
 	if ($("version",$("asmResource[xsi_type='"+this.type+"']",node)).length==0){  // for backward compatibility
 		var newelement = createXmlElement("version");
@@ -191,7 +191,7 @@ UIFactory["Calendar"].prototype.displayEditor = function(dest,type,langcode,disa
 		minViewMode = "days";
 	$(input1).datepicker({minViewMode:minViewMode,format:format,language:LANG});
 	$(input1).datepicker().on('changeDate', function (ev) {
-		$(self.utc).text(ev.date.getTime());
+		$(self.utc).text($(this).datepicker('getDate').getTime());
 		$(self.text_node[langcode]).text($(this).val());
 		UIFactory.Calendar.update(self,langcode);
 	});

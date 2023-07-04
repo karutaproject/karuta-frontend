@@ -824,7 +824,7 @@ body,
 /* ====================== */
 .topbarmenu {
   min-height: 4rem;
-  padding-top: 1.4rem;
+  padding-top: 1rem;
 }
 .topbarmenu li.selected {
   font-weight: bold;
@@ -852,7 +852,6 @@ body,
   position: relative;
 }
 #menu_bar .dropdown-submenu > .dropdown-menu {
-  left: 0px;
   width: 200px;
   margin-top: -6px;
   margin-left: -1px;
@@ -872,6 +871,10 @@ body,
   top: 0.4rem;
   left: -198px;
   border-radius: 6px 0 0 6px;
+}
+#menu_bar .selected {
+  font-weight: bold;
+  color: var(--portfolio-sidebar-selected-text-color);
 }
 
 #breadcrumb {
@@ -931,6 +934,11 @@ body,
 /* ==================================================================== */
 /*                          PORTFOLIO                                   */
 /* ==================================================================== */
+#main-portfolio {
+  /* ====================== */
+  /*      PORTFOLIOBAR      */
+  /* ====================== */
+}
 #main-portfolio.container-fluid {
   padding-left: 0px;
   padding-right: 0px;
@@ -942,6 +950,49 @@ body,
 #main-portfolio #toggle-mode .portfolio-label:hover,
 #main-portfolio a .portfolio-label:hover {
   cursor: pointer;
+}
+#main-portfolio #portfolio_bar {
+  font-size: 130%;
+  width: 100%;
+  background-color: var(--portfolio-sidebar-background-color);
+  color: var(--portfolio-sidebar-text-color);
+  padding-top: 15px;
+  min-height: 100%;
+  padding-left: 0px;
+  padding-right: 0px;
+  border-bottom: 1px solid var(--portfolio-sidebar-separator-color);
+}
+#main-portfolio #portfolio_bar .portfolio-selected a {
+  font-weight: bold;
+}
+#main-portfolio #portfolio_bar .sidebar-item {
+  padding-left: 15px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+#main-portfolio #portfolio_bar .sidebar-item a {
+  width: 100%;
+}
+#main-portfolio #portfolio_bar .sidebar-item .sidebar-item {
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+#main-portfolio #portfolio_bar .sidebar-link {
+  color: var(--portfolio-sidebar-text-color);
+  padding-right: 9px;
+}
+#main-portfolio #portfolio_bar .sidebar-link a {
+  color: var(--portfolio-sidebar-text-color);
+}
+#main-portfolio #portfolio_bar .sidebar-link a:hover {
+  color: var(--portfolio-sidebar-selected-text-color);
+}
+#main-portfolio #portfolio_bar .portfolio-selected a {
+  font-weight: bold;
+  color: var(--portfolio-sidebar-selected-text-color);
+}
+#main-portfolio #portfolio_bar a.sidebar-link:hover {
+  color: var(--portfolio-sidebar-selected-text-color);
 }
 #main-portfolio #portfolio-container {
   background-color: var(--portfolio-background-color);
@@ -1218,6 +1269,14 @@ body,
 }
 #get-resource-node .btn-group.select-label button.dropdown-toggle {
   width: 30px;
+}
+
+/* ====================
+	Visited Date 
+   ====================*/
+div.asmContext.standard-resource-xwide.visited-date {
+  padding-top: 0px;
+  font-size: 80%;
 }
 
 /* ====================
@@ -1579,7 +1638,8 @@ table[name=res-div] {
 .row .card.col-md-8,
 .row .card.col-md-9,
 .row .card.col-md-10,
-.row .card.col-md-11 {
+.row .card.col-md-11,
+.row .card.col-md-12 {
   padding-left: 0px;
   padding-right: 0px;
   margin-left: 5px;
@@ -1618,6 +1678,9 @@ table[name=res-div] {
 .row .card.col-md-11 {
   flex: 0 0 calc((100% - 15px) * 11 / 12 - 15px);
 }
+.row .card.col-md-12 {
+  flex: 0 0 calc((100% - 15px) * 12 / 12 - 5px);
+}
 .row .card .card.col-md-2:first-child,
 .row .card .card.col-md-3:first-child,
 .row .card .card.col-md-4:first-child,
@@ -1627,7 +1690,8 @@ table[name=res-div] {
 .row .card .card.col-md-8:first-child,
 .row .card .card.col-md-9:first-child,
 .row .card .card.col-md-10:first-child,
-.row .card .card.col-md-11:first-child {
+.row .card .card.col-md-11:first-child,
+.row .card .card.col-md-12:first-child {
   margin-left: 0px;
 }
 
@@ -3158,6 +3222,9 @@ s table.tablesorter th.restore {
     overflow: visible !important;
     overflow-y: visible !important;
   }
+  #main-container {
+    font-size: 130% !important;
+  }
   #saved-window,
 #navigation-bar,
 #sub-bar,
@@ -3167,7 +3234,7 @@ s table.tablesorter th.restore {
 .buttons,
 .buttons-menus,
 .btn-group {
-    display: none !important;
+    block: none !important;
   }
   a:after {
     content: none !important;
