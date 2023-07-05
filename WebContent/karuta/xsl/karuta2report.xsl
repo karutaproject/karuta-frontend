@@ -686,6 +686,29 @@
 			</xsl:if>
 		</url2portfolio>
 	</xsl:template>
+	<!-- ================ preview2portfolio ============================ -->
+	<xsl:template match="*[metadata/@semantictag='preview2portfolio']">
+		<xsl:variable name="style">
+			<xsl:call-template name="style"/>
+		</xsl:variable>
+		<xsl:variable name="code">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='code']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="class">
+			<xsl:call-template name="class"/>
+		</xsl:variable>
+		<preview2portfolio>
+			<xsl:if test="not($class='')">
+				<xsl:attribute name="class"><xsl:value-of select="$class"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not($code='..')">
+				<xsl:attribute name="code"><xsl:value-of select="$code"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not($style='..')">
+				<xsl:attribute name="style"><xsl:value-of select="$style"/></xsl:attribute>
+			</xsl:if>
+		</preview2portfolio>
+	</xsl:template>
 	<!-- ================ preview2unit ============================ -->
 	<xsl:template match="*[metadata/@semantictag='preview2unit']">
 		<xsl:variable name="style">
@@ -716,7 +739,7 @@
 			</xsl:if>
 		</preview2unit>
 	</xsl:template>
-		<!-- ================ preview+icon ============================ -->
+		<!-- ================ preview2unit+icon ============================ -->
 	<xsl:template match="*[metadata/@semantictag='preview-icon']">
 		<xsl:variable name="style">
 			<xsl:call-template name="style"/>
