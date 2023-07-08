@@ -2,6 +2,16 @@ karutaStr['fr'] = new Array();
 karutaStr['en'] = new Array();
 var plugin_resources = new Array();
 var g_configDefaultVar = {};
+
+//------------------------------
+var i = getURLParameter('i');
+//------------------------------
+var lang = getURLParameter('lang');
+if (lang==null)
+	lang = LANG ;
+//-------------------------------
+
+
 //==============================
 function initKarutaPage()
 //==============================
@@ -108,7 +118,23 @@ function displayKarutaPage()
 				}
 			});
 			//-------------------------------
-			display_list_page();
+			if (i!=undefined) {
+				$.ajax({
+					type : "GET",
+					dataType : "xml",
+					url : serverBCK_API+"/portfolios?active=1&project=false",
+					success : function(data) {
+						UIFactory["Portfolio"].parse_add(data);
+						display_main_page(i);
+					},
+					error : function(jqxhr,textStatus) {
+						alertHTML("Server Error GET active=1&project=false: "+textStatus);
+						$("#wait-window").modal('hide');
+					}
+				});
+			} else
+				display_list_page();
+			
 			//-------------------------------
 		},
 		error : function(jqxhr,textStatus) {

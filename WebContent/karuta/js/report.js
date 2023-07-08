@@ -2428,7 +2428,7 @@ g_report_actions['preview2portfolio'] = function (destid,action,no,data)
 	//------------------------
 	const edit = false;
 	text = "<span id='"+nodeid+"' style='"+style+"' class='report-preview2portfolio "+cssclass+"'>"+label+"</span>&nbsp;";
-	const hrefurl = window.location.toString().substring(0,window.location.toString().indexOf("karuta.htm")) + "preview.htm?i="+uuid+"&lang=" + LANG;
+	const hrefurl = window.location.toString() + "?i="+uuid+"&lang=" + LANG;
 	text += "<a href='"+hrefurl+"' target='_blank'><i class='fas fa-binoculars'></i></a>";
 //	text += "<span class='button fas fa-binoculars' onclick=\"previewPortfolio('"+uuid+"','standard',null,"+edit+") \" data-title='"+karutaStr[LANG]["preview"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
 	//------------------------
