@@ -141,7 +141,10 @@ function displayKarutaPage()
 			loadLanguages(function() {
 				getLanguage();
 				alertHTML(karutaStr[LANG]['not-logged']);
-				window.location="login.htm?lang="+LANG;
+				if (i!=undefined)
+					window.location="login.htm?i="+i+"&lang="+LANG;
+				else
+					window.location="login.htm?lang="+LANG;
 			});
 		}
 	});
