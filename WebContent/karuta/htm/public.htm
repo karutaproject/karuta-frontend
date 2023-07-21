@@ -21,6 +21,19 @@
 		<script src="../../other/js/jquery-3.3.1.min.js"></script>
 		<script src="../../other/js/popper.min.js"></script>
 		<script src="../../other/bootstrap-4.4.0-dist/js/bootstrap.min.js"></script>
+		<script>
+			var pathname = window.location.pathname;
+			var appliname = pathname.substring(0,pathname.substring(1).indexOf('/')+1);
+			var url = "../../.." + appliname + "-config/_init.js"
+			$.ajax({
+				async:false,
+				url: url,
+				dataType: "script",
+				error : function(jqxhr,textStatus) {
+					alert(appliname + "-config/_init.js not found");
+				}
+			});
+		</script>
 		<!-- =============================================================== -->
 		<script src="../../karuta/js/karuta.js"></script>
 		<script src="../../karuta/js/UICom.js"></script>
@@ -132,17 +145,6 @@
 	</head>
 	<body>
 		<script>
-			var pathname = window.location.pathname;
-			var appliname = pathname.substring(0,pathname.substring(1).indexOf('/')+1);
-			var url = "../../.." + appliname + "-config/_init.js"
-			$.ajax({
-				async:false,
-				url: url,
-				dataType: "script",
-				error : function(jqxhr,textStatus) {
-					alert(appliname + "-config/_init.js not found");
-				}
-			});
 			window.addEventListener("load", function() {
 				try {
 					displayKarutaPublic();

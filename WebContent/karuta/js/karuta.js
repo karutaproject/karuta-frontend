@@ -175,7 +175,7 @@ function getNavBar(type,portfolioid,edit)
 		} else
 			html += "<li id='navbar-mailto' class='nav-item icon'><a class='nav-link' href='mailto:"+g_configVar['technical-support']+"?subject="+karutaStr[LANG]['technical_support']+" ("+appliname+")' data-title='"+karutaStr[LANG]["technical_support"]+"' data-toggle='tooltip' data-placement='bottom'><i class='fas fa-envelope' data-title='"+karutaStr[LANG]["technical_support"]+"' data-toggle='tooltip' data-placement='bottom'></i></a></li>";
 	} else if (USER.username.indexOf("karuser")<0) {
-		html += "			<li id='navbar-home' class='nav-item icon'><a class='nav-link' onclick='show_list_page()' data-title='"+karutaStr[LANG]["home"]+"' data-toggle='tooltip' data-placement='bottom'><i class='fas fa-home'></i></a></li>";
+		html += "			<li id='navbar-home' class='nav-item icon'><a class='nav-link' onclick='show_list_page();fill_list_page()' data-title='"+karutaStr[LANG]["home"]+"' data-toggle='tooltip' data-placement='bottom'><i class='fas fa-home'></i></a></li>";
 		if (g_configVar['tech-support']!=undefined && g_configVar['tech-support']!='') {
 			if (g_configVar['tech-support']=='email')
 				html += "<li id='navbar-mailto' class='nav-item icon'><a class='nav-link' href='mailto:"+g_configVar['tech-email']+"?subject="+karutaStr[LANG]['technical_support']+" ("+appliname+")' data-title='"+karutaStr[LANG]["technical_support"]+"' data-toggle='tooltip' data-placement='bottom'><i class='fas fa-envelope' data-title='"+karutaStr[LANG]["technical_support"]+"' data-toggle='tooltip' data-placement='bottom'></i></a></li>";
@@ -1020,6 +1020,7 @@ function previewPage(uuid,depth,type,langcode,edit,reload)
 		});
 	}
 }
+
 //==================================
 function previewPortfolioPage(partialcode,semtag,depth,type,langcode,edit,reload) 
 //==================================
@@ -1041,6 +1042,159 @@ function previewPortfolioPage(partialcode,semtag,depth,type,langcode,edit,reload
 			}
 		});
 	}
+}
+
+//==================================
+function previewPortfolio(uuid,langcode,edit,reload,type) 
+//==================================
+{
+	if (uuid!=null) {
+		//---------------------
+		if (langcode==null)
+			langcode = LANGCODE;
+		//---------------------
+		if (type=='previewURL') {
+			$.ajax({
+				async:false,
+				type : "GET",
+				url : serverBCK+"/direct?i=" + uuid,
+				success : function(data) {
+					uuid = data;
+				}
+			});
+		}
+		var previewbackdrop = document.createElement("DIV");
+		previewbackdrop.setAttribute("class", "preview-backdrop");
+		previewbackdrop.setAttribute("id", "previewbackdrop-"+uuid);
+		$('body').append(previewbackdrop);
+	
+		var previewwindow = document.createElement("DIV");
+		previewwindow.setAttribute("id", "preview-"+uuid);
+		previewwindow.setAttribute("class", "preview-window");
+		previewwindow.setAttribute("preview-uuid", uuid);
+		previewwindow.setAttribute("preview-edit", edit);
+		previewwindow.innerHTML =  previewBox(uuid);
+		$('body').append(previewwindow);
+		$("#preview-"+uuid).hide();
+		var header = "<button class='btn add-button' style='float:right' onclick=\"$('#preview-"+uuid+"').remove();$('#previewbackdrop-"+uuid+"').remove();";
+		if (reload!=null && reload)
+			header += "reloadPage();"
+		header +="\">"+karutaStr[LANG]['Close']+"</button>";
+		$("#preview-window-header-"+uuid).html(header);
+		let html = "<div id='preview-window-body-sub-bar-"+uuid+"' class=''></div>";
+		html    += "<div id='preview-window-body-portfolio-container-"+uuid+"' class='' role='all'></div>";
+		$("#preview-window-body-"+uuid).html(html);
+		//-------------------
+		var url = serverBCK_API+"/portfolios/portfolio/" + g_portfolioid + "?resources=true&userrole="+userrole;
+		$.ajax({
+			async:true,
+			type : "GET",
+			dataType : "xml",
+			url : url,
+			success : function(data) {
+				var root_semantictag = $("metadata",$("asmRoot",data)).attr('semantictag');
+				$("#preview-window-body-"+uuid).addClass(root_semantictag);
+				// --------------------------
+				UICom.parseStructure(data,false);
+				// --------Display Type------------------
+				g_display_type = $("metadata[display-type]",data).attr('display-type');
+				if (g_display_type=="" || g_display_type==null || g_display_type==undefined)
+					g_display_type = 'standard';
+				// --------CSS File------------------
+				var cssfile = $("metadata[cssfile]",data).attr('cssfile');
+				if (cssfile!=undefined && cssfile!=''){
+					if (cssfile.indexOf(".css")<0)
+						cssfile += ".css";
+					$('<link/>', { rel: 'stylesheet', type: 'text/css', href: '../../application/css/'+cssfile}).appendTo('head');
+				}
+				//-------------------------------------------------
+				/*
+				 * var config_unit = $("asmUnit:has(metadata[semantictag*='configuration-unit'])",data);
+				if (config_unit.length==0) { // for backward compatibility and portfolios without config
+//					if (g_configDefaultVar.length>0)
+						resetConfigurationPortfolioVariable();
+//					setCSSportfolio("");
+					setCSSportfolioOLD(data);
+				} else {
+					setConfigurationPortfolioVariable(config_unit,true);
+					setCSSportfolio(config_unit);
+				}
+				setVariables(data);
+				*/
+				// --------------------------
+				if (g_display_type=="standard" || g_display_type=="raw") {
+					if (USER.creator)
+						g_edit = true;
+					else {
+						var editmode = $("metadata[editmode]",data).attr('editmode');
+						if (editmode=="" || editmode==null || editmode==undefined)
+							g_edit = false;
+						else
+							g_edit = (editmode=='Y');
+						}
+				} else if (g_display_type=="model" || g_display_type=="translate") {
+					g_edit = true;
+				}
+				//$("#preview-window-body-sub-bar-"+uuid).html(UIFactory.Portfolio.getNavBar(g_display_type,LANGCODE,g_edit,uuid));
+				//-------------- DEFAULT_ROLE -------------
+				//$("#preview-window-body-portfolio-container").attr('role',g_userroles[0]);
+				//-------------------------------------------------
+				UIFactory.Portfolio.displayPortfolio('preview-window-body-portfolio-container-'+uuid,g_display_type,LANGCODE,g_edit);
+				// --------------------------
+				try {
+					specificEnterDisplayPortfolio();
+				} catch(e) {
+					// do nothing
+				}
+				// --------------------------
+				if (g_bar_type.indexOf('horizontal')>-1) {
+					$("#preview-window-body-toggleSideBar").hide();
+				}
+				//---------------------------
+				var welcomes = $("*:has(>metadata[semantictag*='WELCOME'])",data);
+				if (welcomes.length==0) // for backward compatibility
+					welcomes = $("asmUnit:has(metadata[semantictag*='welcome-unit'])",data);
+				if (welcomes.length>0){
+					var welcomeid = $(welcomes[0]).attr('id');
+					var node = UICom.structure['ui'][welcomeid];
+					var display = ($(node.metadatawad).attr('display')==undefined)?'Y':$(node.metadatawad).attr('display');
+					if (display=='Y')
+						$("#preview-window-bodysidebar_"+welcomeid).click();
+					else {
+						var root = $("asmRoot",data);
+						var rootid = $(root[0]).attr('id');
+						$("#preview-window-bodysidebar_"+rootid).click();
+					}
+				} else {
+					var root = $("asmRoot",data);
+					var rootid = $(root[0]).attr('id');
+					$("#sidebar_"+rootid).click();
+				}
+				//---------------------------
+				//fillEditBoxBody();
+				//=====================================================
+				$('[data-toggle=tooltip]').tooltip({html: true, trigger: 'hover'}); 
+				$(document).click(function(e) {
+					if (!$(e.target).is('.tooltip')) {
+						$('.tooltip').hide();
+					}
+				});
+				//=====================================================
+				$("#wait-window").modal('hide');
+				$("#preview-"+uuid).modal('show');
+				//---------------------------
+			},
+			error : function(jqxhr,textStatus) {
+				if (jqxhr.status=="403")
+					alertHTML("Sorry. A problem occurs : no right to see this portfolio (" + g_portfolioid + ")");
+				
+				else {
+					alertHTML("<h4>Error in fill_main_page</h4><h5>responseText</h5><p>"+jqxhr.responseText+"</p><h5>textStatus</h5><p>"+textStatus+"<h5>status</h5><p>"+jqxhr.status);
+					}
+				$("#wait-window").modal('hide');
+			}
+		});
+	}		//---------------------
 }
 
 //==================================

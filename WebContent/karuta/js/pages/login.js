@@ -40,6 +40,8 @@ function callSubmit(encrypt_url,lang)
 		success : function(data) {
 			if (self.encrypt_url=="")
 				window.location="karuta.htm";
+			else if (self.encrypt_url.length==36)
+				window.location="karuta.htm?i="+self.encrypt_url+"&lang="+self.lang
 			else
 				window.location="public.htm?i="+self.encrypt_url+"&lang="+self.lang
 		},

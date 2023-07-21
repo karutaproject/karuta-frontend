@@ -21,17 +21,24 @@
 		<script src="../../other/js/jquery-3.3.1.min.js"></script>
 		<script src="../../other/js/popper.min.js"></script>
 		<script src="../../other/bootstrap-4.4.0-dist/js/bootstrap.min.js"></script>
+		<script>
+			var pathname = window.location.pathname;
+			var appliname = pathname.substring(0,pathname.substring(1).indexOf('/')+1);
+			var url = "../../.." + appliname + "-config/_init.js"
+			$.ajax({
+				async:false,
+				url: url,
+				dataType: "script",
+				error : function(jqxhr,textStatus) {
+					alert(appliname + "-config/_init.js not found");
+				}
+			});
+		</script>
 		<!-- =============================================================== -->
 		<script src="../../karuta/js/karuta.js"></script>
 		<script src="../../karuta/js/UICom.js"></script>
 		<script src="../../karuta/js/report.js"></script>
 		<script src="../../karuta/js/batch.js"></script>
-		<!-- =============================================================== -->
-		<script src="../../karuta/js/displayHTML.js"></script>
-		<script src="../../karuta/js/pages/karuta-page.js"></script>
-		<script src="../../karuta/js/pages/list.js"></script>
-		<script src="../../karuta/js/pages/main.js"></script>
-		<script src="../../karuta/js/pages/users.js"></script>
 		<!-- =============================================================== -->
 		<script src="../../karuta/js/pages/usersgroups.js"></script>
 		<script src="../../karuta/js/pages/portfoliosgroups.js"></script>
@@ -80,6 +87,12 @@
 		<script src="../../karuta/js/model/Type_Node_menus.js"></script>
 		<script src="../../karuta/js/model/Type_User.js"></script>
 		<script src="../../karuta/js/model/Type_UsersGroup.js"></script>
+		<!-- =============================================================== -->
+		<script src="../../karuta/js/displayHTML.js"></script>
+		<script src="../../karuta/js/pages/karuta-page.js"></script>
+		<script src="../../karuta/js/pages/list.js"></script>
+		<script src="../../karuta/js/pages/main.js"></script>
+		<script src="../../karuta/js/pages/users.js"></script>
 		<!-- =============================================================== -->
 		<script src="../../karuta/js/version.js"></script>
 		<!-- =============================================================== -->
@@ -134,17 +147,6 @@
 	</head>
 	<body>
 		<script>
-			var pathname = window.location.pathname;
-			var appliname = pathname.substring(0,pathname.substring(1).indexOf('/')+1);
-			var url = "../../.." + appliname + "-config/_init.js"
-			$.ajax({
-				async:false,
-				url: url,
-				dataType: "script",
-				error : function(jqxhr,textStatus) {
-					alert(appliname + "-config/_init.js not found");
-				}
-			});
 			initKarutaPage();
 			window.addEventListener("load", function() {
 				displayKarutaPage();

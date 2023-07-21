@@ -76,23 +76,6 @@ function fill_main_page(portfolioid,userrole)
 				g_visible = localStorage.getItem('metadata');
 				toggleMetadata(g_visible);
 			}
-/*			$.ajax({
-				async:false,
-				type : "GET",
-				dataType : "xml",
-				url : serverBCK_API+"/rolerightsgroups/all/users?portfolio=" + g_portfolioid,
-				success : function(data) {
-					const rrgs = $("rrg",data);
-					for (let i=0;i<rrgs.length;i++) {
-						const label = $("label",rrgs[i]).text();
-						const users = $("user",rrgs[i]);
-						for (let j=0;j<users.length;j++) {
-							if ($(users[j]).attr("id")==USER.id)
-								g_userroles.push(label);
-						}
-					}
-				}
-			});*/
 			// --------------------------
 			UICom.parseStructure(data,true);
 			// --------Display Type------------------
@@ -218,6 +201,7 @@ function fill_main_page(portfolioid,userrole)
 				alertHTML("Sorry. A problem occurs : no right to see this portfolio (" + g_portfolioid + ")");
 			
 			else {
+				alertDisconnected();
 				alertHTML("<h4>Error in fill_main_page</h4><h5>responseText</h5><p>"+jqxhr.responseText+"</p><h5>textStatus</h5><p>"+textStatus+"<h5>status</h5><p>"+jqxhr.status);
 				}
 			$("#wait-window").modal('hide');
@@ -281,6 +265,4 @@ function display_main_page(portfolioid)
 	}
 	$("#sub-bar").show();
 	$("#welcome-bar").hide();
-//	fill_main_page(portfolioid);
-//	show_main_page();
 }

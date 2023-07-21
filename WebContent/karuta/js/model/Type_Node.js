@@ -1400,7 +1400,7 @@ UIFactory["Node"].displayPortfolioMenuItem = function(uuid,destid,type,langcode)
 //----------------------------------------------------------------------------------------------------------------------------
 
 //===========================================
-UIFactory["Node"].displaySidebar = function(root,destid,type,langcode,edit,parentid)
+UIFactory["Node"].displaySidebar = function(root,destid,type,langcode,edit,parentid,open)
 //===========================================
 {
 	//---------------------
@@ -1426,7 +1426,7 @@ UIFactory["Node"].displaySidebar = function(root,destid,type,langcode,edit,paren
 					$("#sidebar_"+UICom.rootid).show();
 				}
 			} else if (name == "asmStructure" || name == "asmRoot" || name == "asmUnit" || (resource_type!=null && resource_type == "URL2Portfolio")) {}
-				UIFactory.Node.displaySidebarItem(root.children[i],destid,type,langcode,edit,parentid);
+				UIFactory.Node.displaySidebarItem(root.children[i],destid,type,langcode,edit,parentid,open);
 			i++;
 			if ($(".sidebar-item","#portfolio_bar").length<2) {
 				$("#portfolio_bar").hide();
@@ -1436,9 +1436,11 @@ UIFactory["Node"].displaySidebar = function(root,destid,type,langcode,edit,paren
 	}};
 
 	//===========================================
-	UIFactory["Node"].displaySidebarItem = function(itemid,destid,type,langcode,edit,parentid)
+	UIFactory["Node"].displaySidebarItem = function(itemid,destid,type,langcode,edit,parentid,open)
 	//===========================================
 	{
+		if (open == undefined)
+			open = false;
 		var child = UICom.structure["tree"][itemid].node;
 		var name = child.tagName;
 		var uuid = $(child).attr("id");
@@ -1478,7 +1480,7 @@ UIFactory["Node"].displaySidebar = function(root,destid,type,langcode,edit,paren
 					html += "  <small ><span onclick=\"toggleSidebarPlusMinus('"+uuid+"')\" id='toggle_"+uuid+"' class='fas fa-plus' style='float:right;padding-left:5px;margin-right:5px;'></span></small>";
 				html += "  <a class='sidebar-link' href='#' onclick=\"toggleSidebarPlus('"+uuid+"');displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+")\" id='sidebar_"+uuid+"'>"+text+"</a>";
 				html += "  </div>"
-				if (localStorage.getItem('sidebar'+uuid)!=undefined && localStorage.getItem('sidebar'+uuid)=='open')
+				if (localStorage.getItem('sidebar'+uuid)!=undefined && localStorage.getItem('sidebar'+uuid)=='open' || open)
 					html += "<div id='collapse"+uuid+"' class='panel-collapse collapse show' role='tabpanel' aria-labelledby='sidebar_"+uuid+"'>";
 				else
 					html += "<div id='collapse"+uuid+"' class='panel-collapse collapse' role='tabpanel' aria-labelledby='sidebar_"+uuid+"'>";
@@ -1486,7 +1488,7 @@ UIFactory["Node"].displaySidebar = function(root,destid,type,langcode,edit,paren
 				html += "</div><!-- panel-collapse -->";
 				html += "</div><!-- panel -->";
 				$("#"+destid).append($(html));
-				UIFactory["Node"].displaySidebar(UICom.structure["tree"][itemid],'panel-body'+uuid,type,langcode,g_edit,uuid);
+				UIFactory["Node"].displaySidebar(UICom.structure["tree"][itemid],'panel-body'+uuid,type,langcode,g_edit,uuid,open);
 			}
 			if (name=='asmContext' && resource_type == "URL2Portfolio") {
 				var html = "";

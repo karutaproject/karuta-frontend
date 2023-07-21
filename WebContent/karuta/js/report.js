@@ -2343,8 +2343,10 @@ g_report_actions['preview2unit'] = function (destid,action,no,data)
 		targetid = UICom.structure["ui"][nodeid].getUuid();
 		label = UICom.structure["ui"][nodeid].getLabel(null,'none');
 	}
+	//-------------------
 	text = "<span id='"+nodeid+"' style='"+style+"' class='report-preview2unit "+cssclass+"'>"+label+"</span>&nbsp;";
 	text += "<span class='button fas fa-binoculars' onclick=\"previewPage('"+targetid+"',100,'standard',null,"+edit+") \" data-title='"+karutaStr[LANG]["preview"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
+	//-------------------
 	$("#"+destid).append($(text));
 	$("#"+nodeid).attr("style",style);
 }
@@ -2378,13 +2380,60 @@ g_report_actions['url2unit'] = function (destid,action,no,data)
 		targetid = UICom.structure["ui"][nodeid].getUuid();
 		label = UICom.structure["ui"][nodeid].getLabel(null,'none');
 	}
+	//-------------------
 	if (text!="")
 		label = replaceVariable(text);
 	html = "<span id='"+nodeid+"' style='"+style+"' class='report-url2unit "+cssclass+"' onclick=\"$('#sidebar_"+targetid+"').click()\"";
 	if (text!="")
 		html += "data-toggle='tooltip' title=\""+UICom.structure.ui[nodeid].getLabel('none')+"\"";
 	html +=">"+label+"</span>";
+	//-------------------
 	$("#"+destid).append($(html));
+	$("#"+nodeid).attr("style",style);
+}
+
+//=============================================================================
+//=============================================================================
+//======================== PREVIEW2PORTFOLIO ======================================
+//=============================================================================
+//=============================================================================
+
+//==================================
+g_report_actions['preview2portfolio'] = function (destid,action,no,data)
+//==================================
+{
+	var nodeid = $(data).attr("id");
+	var uuid = "";
+	var label = "";
+	var style = replaceVariable($(action).attr("style"));
+	var cssclass = replaceVariable($(action).attr("class"));
+	var code = $(action).attr("code");
+	code = replaceVariable(code);
+	if (code!=portfolios_byid[portfolioid_current].getCode()) {
+		var url = serverBCK_API+"/portfolios/portfolio/code/" + code;
+		$.ajax({
+			async: false,
+			type : "GET",
+			dataType : "xml",
+			url : url,
+			success : function(data) {
+				uuid = $("portfolio",data).attr("id");
+				label = $("label[lang='"+languages[LANGCODE]+"']",$("asmRoot>asmResource[xsi_type='nodeRes']",data)[0]).text();
+			}
+		});
+	} else {
+		uuid = portfolioid_current;
+		label = portfolios_byid[portfolioid_current].getLabel();
+	}
+	//------------------------
+	const edit = false;
+	text = "<span id='"+nodeid+"' style='"+style+"' class='report-preview2portfolio "+cssclass+"'>"+label+"</span>&nbsp;";
+	const location = window.location.toString();
+	const hrefurl = location.substring(0,location.indexOf(".htm")+4) + "?i="+uuid+"&lang=" + LANG;
+	text += "<a href='"+hrefurl+"' target='_blank'><i class='fas fa-binoculars'></i></a>";
+//	text += "<span class='button fas fa-binoculars' onclick=\"previewPortfolio('"+uuid+"','standard',null,"+edit+") \" data-title='"+karutaStr[LANG]["preview"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
+	//------------------------
+	$("#"+destid).append($(text));
 	$("#"+nodeid).attr("style",style);
 }
 
@@ -2421,7 +2470,9 @@ g_report_actions['url2portfolio'] = function (destid,action,no,data)
 		uuid = portfolioid_current;
 		label = portfolios_byid[portfolioid_current].getLabel();
 	}
+	//------------------------
 	text = "<span id='"+nodeid+"' style='"+style+"' class='URL2Portfolio-link "+cssclass+"' onclick=\"display_main_page('"+uuid+"')\">"+label+"</span>";
+	//------------------------
 	$("#"+destid).append($(text));
 	$("#"+nodeid).attr("style",style);
 }
