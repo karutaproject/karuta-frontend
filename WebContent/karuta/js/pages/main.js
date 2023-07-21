@@ -201,6 +201,7 @@ function fill_main_page(portfolioid,userrole)
 				alertHTML("Sorry. A problem occurs : no right to see this portfolio (" + g_portfolioid + ")");
 			
 			else {
+				alertDisconnected();
 				alertHTML("<h4>Error in fill_main_page</h4><h5>responseText</h5><p>"+jqxhr.responseText+"</p><h5>textStatus</h5><p>"+textStatus+"<h5>status</h5><p>"+jqxhr.status);
 				}
 			$("#wait-window").modal('hide');
