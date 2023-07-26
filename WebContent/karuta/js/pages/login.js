@@ -312,7 +312,7 @@ function constructKarutaLogin(withKarutaLogin)
 	}
 	$('#password').keypress(function(e) {
 		var code= (e.keyCode ? e.keyCode : e.which);
-		if (code == 13)ih2ef
+		if (code == 13)
 			callSubmit();
 	});
 	//----------------------------------------------
