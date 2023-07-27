@@ -2052,7 +2052,10 @@ g_report_actions['variable'] = function (destid,action,no,data)
 						text = UICom.structure["ui"][nodeid].resource.getLabel();
 					}
 					else if (selector.type=='node label') {
-						text = UICom.structure["ui"][nodeid].getLabel();
+						text = UICom.structure["ui"][nodeid].getLabel(); //node.submitteddate
+					}
+					else if (selector.type=='submitteddate') {
+						text = UICom.structure["ui"][nodeid].submitteddate;
 					}
 					else if (selector.type=='node code') {
 						text = UICom.structure["ui"][nodeid].getCode();
