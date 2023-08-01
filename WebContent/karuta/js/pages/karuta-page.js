@@ -5,6 +5,7 @@ var g_configDefaultVar = {};
 
 //------------------------------
 var i = getURLParameter('i');
+var iid = getURLParameter('ii');
 //------------------------------
 var lang = getURLParameter('lang');
 if (lang==null)
@@ -132,7 +133,29 @@ function displayKarutaPage()
 						$("#wait-window").modal('hide');
 					}
 				});
-			} else
+			} else if (iid!=undefined) {
+				$.ajax({
+					async:false,
+					type : "GET",
+					url : serverBCK+"/direct?i=" + iid,
+					success : function(data) {
+						g_uuid = data;
+						$.ajax({
+							type : "GET",
+							dataType : "xml",
+							url : serverBCK_API+"/portfolios?active=1&project=false",
+							success : function(data) {
+								UIFactory["Portfolio"].parse_add(data);
+								display_main_page(g_uuid);
+							},
+							error : function(jqxhr,textStatus) {
+								alertHTML("Server Error GET active=1&project=false: "+textStatus);
+								$("#wait-window").modal('hide');
+							}
+						});
+					}
+				});
+			} else 
 				display_list_page();
 			
 			//-------------------------------

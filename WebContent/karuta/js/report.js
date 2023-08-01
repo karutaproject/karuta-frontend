@@ -1729,6 +1729,8 @@ g_report_actions['node_resource'] = function (destid,action,no,data)
 		if (node.length>0 || select.substring(0,1)=="."){
 			var nodeid = $(node).attr("id");
 			//----------------------------
+			if (UICom.structure.ui[nodeid].editresroles==undefined)
+				UICom.structure.ui[nodeid].setMetadata();
 			var node = UICom.structure["ui"][nodeid];
 			g_variables["currentnode"] = "UICom.structure.ui['"+nodeid+"']";
 			var writenode = ($(node.node).attr('write')=='Y')? true:false;
@@ -1801,6 +1803,9 @@ g_report_actions['node_resource'] = function (destid,action,no,data)
 			}
 			if (selector.type=='nodelastmodified') {
 				text = new Date(parseInt(UICom.structure["ui"][nodeid].lastmodified_node.text())).toLocaleString();
+			}
+			else if (selector.type=='submitteddate') {
+				text = UICom.structure["ui"][nodeid].submitteddate;  //node.submitteddate
 			}
 			if (selector.type=='node value') {
 				text = UICom.structure["ui"][nodeid].getValue();
@@ -2052,10 +2057,10 @@ g_report_actions['variable'] = function (destid,action,no,data)
 						text = UICom.structure["ui"][nodeid].resource.getLabel();
 					}
 					else if (selector.type=='node label') {
-						text = UICom.structure["ui"][nodeid].getLabel(); //node.submitteddate
+						text = UICom.structure["ui"][nodeid].getLabel();
 					}
 					else if (selector.type=='submitteddate') {
-						text = UICom.structure["ui"][nodeid].submitteddate;
+						text = UICom.structure["ui"][nodeid].submitteddate;  //node.submitteddate
 					}
 					else if (selector.type=='node code') {
 						text = UICom.structure["ui"][nodeid].getCode();

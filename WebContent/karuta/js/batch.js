@@ -2466,7 +2466,7 @@ g_actions['update-resource'] = function updateResource(node,data)
 			//-------------------
 		}
 	} else {
-		$("#batch-log").append("<br>- ***NOT FOUND <span class='danger'>ERROR - update-resource "+type+"</span>");
+		$("#batch-log").append("<br>- ***NOT FOUND <span class='danger'>ERROR - update-resource "+type+" -"+getSemtag(node)+"</span>");
 	}
 	return (ok!=0 && ok == nodes.length);
 }
@@ -3116,7 +3116,7 @@ g_actions['update-url2portfolio'] = function update_url2portfolio(node,data)
 	const nodes = getTargetNodes(node,data,"dest-test");
 	//----------------------------------------
 	if (nodes.length>0){	
-			for (i=0; i<nodes.length; i++){
+			for (let i=0; i<nodes.length; i++){
 				ok++;
 				var targetid = $(nodes[i]).attr('id');
 				//----- get target ----------------
@@ -3165,6 +3165,7 @@ g_actions['test'] = function (node)
 	try {
 		test = replaceVariable(replaceBatchVariable(test));
 		ok = eval(test);
+		$("#batch-log").append("<br>- TEST -"+ test +" = " + ok);
 	}
 	catch(err) {
 		ok = false;
