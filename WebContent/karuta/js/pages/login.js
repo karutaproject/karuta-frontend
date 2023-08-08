@@ -339,6 +339,7 @@ function applyLoginConfiguration()
 	var root = document.documentElement;
 	//========================================
 	$('body').css("background-image", g_configVar['login-background-image']);
+	$('body').css("background-size", "cover");
 	//========================================
 	$('#welcome1').html(g_configVar['login-logo']);
 	$("#welcome1").attr("style",g_configVar['login-logo_style']);
