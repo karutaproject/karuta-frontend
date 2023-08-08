@@ -188,7 +188,7 @@ UIFactory["Document"].update = function(data,uuid,langcode,parent,filename)
 	if (langcode==null)
 		langcode = LANGCODE;
 	//---------------------
-	$(itself.lastmodified_node).text(new Date().getTime());
+	itself.resource.lastmodified_node.text(new Date().getTime());
 	var filename = filename; //data.files[0].name;
 	var size = data.files[0].size;
 	var type = data.files[0].type;

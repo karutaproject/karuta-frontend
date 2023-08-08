@@ -223,7 +223,7 @@ UIFactory["Video"].update = function(data,uuid,langcode)
 //==================================
 {
 	var itself = UICom.structure["ui"][uuid];  // context node
-	$(itself.lastmodified_node).text(new Date().getTime());
+	itself.resource.lastmodified_node.text(new Date().getTime());
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;

@@ -46,7 +46,7 @@ function callSubmit(encrypt_url,lang)
 				window.location="public.htm?i="+self.encrypt_url+"&lang="+self.lang
 		},
 		error : function(jqxhr,textStatus) {
-			alertHTML("Identification : "+jqxhr.responseText);
+			alertHTML(karutaStr[LANG]['error-login']);
 		}
 	});
 }
@@ -339,6 +339,7 @@ function applyLoginConfiguration()
 	var root = document.documentElement;
 	//========================================
 	$('body').css("background-image", g_configVar['login-background-image']);
+	$('body').css("background-size", "cover");
 	//========================================
 	$('#welcome1').html(g_configVar['login-logo']);
 	$("#welcome1").attr("style",g_configVar['login-logo_style']);

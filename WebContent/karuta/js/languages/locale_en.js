@@ -124,6 +124,7 @@ karutaStr['en']['error-existing-login']="ERROR - The login already exists or an 
 karutaStr['en']['error-empty-code']="ERROR - The code cannot be empty.";
 karutaStr['en']['error-notfound']="ERROR - not found";
 karutaStr['en']['error-filenotfound']="*** File not saved or missing";
+karutaStr['en']['error-login']="Connection Error : your login or your password is incorrect.";
 
 //=========================================
 //========== NODE =====================
@@ -564,7 +565,7 @@ karutaStr['en']['not-number']="This is not a number.";
 //========== TECHNICAL SUPPORT ============
 //=========================================
 
-karutaStr['en']['technical-support']="Technical Support";
+karutaStr['en']['technical_support']="Technical Support";
 karutaStr['en']['application-server']="Application";
 karutaStr['en']['user-name']="Your Name";
 karutaStr['en']['user-email']="Your email";
