@@ -46,7 +46,7 @@ function callSubmit(encrypt_url,lang)
 				window.location="public.htm?i="+self.encrypt_url+"&lang="+self.lang
 		},
 		error : function(jqxhr,textStatus) {
-			alertHTML("Identification : "+jqxhr.responseText);
+			alertHTML(karutaStr[LANG]['error-login']);
 		}
 	});
 }

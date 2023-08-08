@@ -346,6 +346,41 @@ function setConfigurationPortfolioVariable(data,local,langcode)
 	g_configVar['svg-web7-color'] = getText('svg-web7-color','Color','text',data,langcode);
 	g_configVar['svg-web8-color'] = getText('svg-web8-color','Color','text',data,langcode);
 	g_configVar['svg-web9-color'] = getText('svg-web9-color','Color','text',data,langcode);
+	//----- Load Plugins + Javascript Files
+	var jsfile_nodes = [];
+	jsfile_nodes = $("asmContext:has(metadata[semantictag='config-file-js'])",data);
+	for (var i=0; i<jsfile_nodes.length; i++){
+		var fileid = $(jsfile_nodes[i]).attr("id");
+		var filename = $("filename[lang='"+languages[langcode]+"']",$("asmResource[xsi_type='Document']",jsfile_nodes[i])).text();
+		var url = "../../../"+serverBCK+"/resources/resource/file/"+fileid;
+		$.ajax({
+			async:false,
+			url: url,
+			filename:filename,
+			dataType: "script",
+			success:function(data){
+				console.log("js file loaded : "+this.filename)
+			}
+		});
+	}
+	//----- Load CSS Files
+	var jsfile_nodes = [];
+	jsfile_nodes = $("asmContext:has(metadata[semantictag='config-file-css'])",data);
+	for (var i=0; i<jsfile_nodes.length; i++){
+		var fileid = $(jsfile_nodes[i]).attr("id");
+		var filename = $("filename[lang='"+languages[langcode]+"']",$("asmResource[xsi_type='Document']",jsfile_nodes[i])).text();
+		var url = "../../../"+serverBCK+"/resources/resource/file/"+fileid;
+		$.ajax({
+			async:false,
+			url: url,
+			filename:filename,
+			dataType: "text",
+			success:function(data){
+				console.log("CSS file loaded : "+this.filename)
+				$("head").append("<style>" + data + "</style>");
+			}
+		});
+	}
 }
 
 //==============================
