@@ -247,7 +247,7 @@ function getTargetUrl(node)
 	const select = $(node).attr("select");
 	const idx = select.lastIndexOf(".");
 	const treeref = select.substring(0,idx);
-	const semtag = select.substring(idx+1);
+	const semtag = replaceBatchVariable(replaceVariable(select.substring(idx+1)));
 	if (semtag=='#current_node')
 		url = serverBCK_API+"/nodes/node/"+g_current_node_uuid;
 	else if (semtag=='#uuid') {
@@ -326,6 +326,7 @@ function getTargetNodes(node,data,teststr)
 {
 	let nodes = new Array();
 	let semtag = getSemtag(node);
+	semtag = replaceBatchVariable(replaceVariable(semtag));
 	//--------------------------
 	if (semtag=="#current_node" || data==undefined || data==null) {
 		let url = getTargetUrl(node);
@@ -3214,6 +3215,7 @@ g_actions['batch-variable'] = function (node)
 	var srce_idx = source.lastIndexOf(".");
 	var srce_treeref = source.substring(0,srce_idx);
 	var srce_semtag = source.substring(srce_idx+1);
+	srce_semtag = replaceBatchVariable(replaceVariable(srce_semtag))
 	//------------- source -----------------------
 	var nodeid = "";
 	if (source.indexOf('#current_node')+source.indexOf('#uuid')>-2){
@@ -3349,6 +3351,7 @@ g_actions['for-each-node'] = function (node)
 	var srce_idx = source.lastIndexOf(".");
 	var srce_treeref = source.substring(0,srce_idx);
 	var srce_semtag = source.substring(srce_idx+1);
+	srce_semtag = replaceBatchVariable(replaceVariable(srce_semtag))
 	//------------- source -----------------------
 	if (source.indexOf('#current_node')+source.indexOf('#uuid')>-2){
 		if (source.indexOf('#current_node')>-1)
