@@ -300,7 +300,7 @@ function getSourceUrl(node)
 	var select = $("source",node).text();
 	var idx = select.lastIndexOf(".");
 	var treeref = select.substring(0,idx);
-	var semtag = select.substring(idx+1);
+	const semtag = replaceBatchVariable(replaceVariable(select.substring(idx+1)));
 	if (semtag=='#current_node')
 		url = serverBCK_API+"/nodes/node/"+g_current_node_uuid;
 	else if (semtag=='#uuid') {
@@ -377,6 +377,7 @@ function getSourceNodes(node,data,teststr)
 //==================================
 {
 	var semtag = getSource(node);
+	semtag = replaceBatchVariable(replaceVariable(semtag));
 	//--------------------------
 	if (semtag=="#current_node" || data==undefined || data==null) {
 		let url = getSourceUrl(node);
