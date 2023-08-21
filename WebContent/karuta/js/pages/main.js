@@ -106,7 +106,7 @@ function fill_main_page(portfolioid,userrole)
 //				setCSSportfolio("");
 				setCSSportfolioOLD(data);
 			} else {
-				setConfigurationPortfolioVariable(config_unit,true);
+				setConfigurationPortfolioVariable(data,true);
 				setCSSportfolio(config_unit);
 			}
 			setVariables(data);

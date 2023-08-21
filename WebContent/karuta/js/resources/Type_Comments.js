@@ -236,7 +236,30 @@ UIFactory["Comments"].prototype.displayEditor = function(destid,type,langcode,di
 		html += ">"+text+"</textarea></div>";
 	}
 	$("#"+destid).append($(html));
-	$("#"+uuid+"_edit_"+langcode).wysihtml5({toolbar:{"size":"xs","font-styles": false,"html":true,"blockquote": false,"image": false,"link": false},"uuid":uuid,"locale":LANG,'events': {'change': function(){UICom.structure['ui'][currentTexfieldUuid].resource.update(langcode);},'focus': function(){currentTexfieldUuid=uuid;currentTexfieldInterval = setInterval(function(){UICom.structure['ui'][currentTexfieldUuid].resource.update(langcode);}, g_wysihtml5_autosave);},'blur': function(){clearInterval(currentTexfieldInterval);}}});
+	let htmleditor = false;
+	if (g_userroles[0]=='designer' || USER.admin) {
+		htmleditor = true;
+	}
+	$("#"+uuid+"_edit_"+langcode).wysihtml5(
+			{
+				toolbar:{"size":"xs","font-styles": false,"html":htmleditor,"blockquote": true,"image": false,"link": false},
+				"uuid":uuid,
+				"locale":LANG,
+				'events': {
+					'load': function(){try{$('.wysihtml5-sandbox').contents().find('body').on("keyup", function(){UICom.structure['ui'][uuid].resource.updateCounterWords(langcode);});}catch(e){}; },
+					'change': function(){UICom.structure['ui'][uuid].resource.update(langcode);},
+				},
+				parserRules: {
+					classes: {
+						"style": 1,
+						"class": 1
+					}
+				},
+				tags: {
+					span: {}
+				}
+			}
+		);
 	//------------------------------------------------
 };
 
