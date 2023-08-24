@@ -445,6 +445,8 @@ function setLoginTechnicalVariables()
 			//---------Languages--------------
 			g_configVar['default-language'] = getText('default-language','Get_Resource','code',data,0);
 			var language_nodes = $("metadata[semantictag='portfolio-language']",data);
+			if (language_nodes.length>0)
+				languages = [];
 			for (i=0;i<language_nodes.length;i++){
 				languages[i] = $("code",$("asmResource[xsi_type='Get_Resource']",$(language_nodes[i]).parent())).text();
 			}
