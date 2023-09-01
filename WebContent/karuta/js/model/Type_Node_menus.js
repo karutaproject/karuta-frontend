@@ -1144,6 +1144,7 @@ UIFactory["Node"].testDisplay = function(node,roles,condition)
 {
 	var display = false;
 	condition = replaceVariable(condition,node);
+	condition = condition.replaceAll("++","&&");
 	if (roles.indexOf(node.userrole)>-1 || roles.indexOf($(USER.username_node).text())>-1 || (roles.containsArrayElt(g_userroles) && g_userroles[0]!='designer') || USER.admin || g_userroles[0]=='designer'){
 		if (condition==""){
 			display = true;

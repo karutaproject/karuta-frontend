@@ -138,6 +138,8 @@ function getTxtvalsWithoutReplacement(node)
 			if (select.indexOf("//")>-1) {
 				if (select=="//today")
 					text = new Date().toLocaleString();
+				else if (select=="//today_milli")
+					text = Date.now();
 				else
 					text = eval("g_json."+select.substring(2));
 			} else if (select.indexOf("/")>-1) {
@@ -173,6 +175,8 @@ function getTxtvalsWithoutReplacement(node)
 				}
 			} else if (text=="//today") {
 				text = new Date().toLocaleString();
+			} else if (select=="//today_milli") {
+					text = Date.now();
 			} else if (text.indexOf('numline()')>-1) {
 				text = text.replace(/numline()/g,g_noline);
 				text = eval(text);
@@ -204,6 +208,8 @@ function getvarvals(node)
 				if (select.indexOf("//")>-1) {
 					if (select=="//today")
 						text = new Date().toLocaleString();
+					else if (select=="//today_milli")
+						text = Date.now();
 					else
 						text = eval("g_json."+select.substring(2));
 				} else if (items[i].indexOf("/")>-1)
