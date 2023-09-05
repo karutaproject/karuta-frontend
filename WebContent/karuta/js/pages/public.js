@@ -13,6 +13,7 @@ function getURLParameter(sParam) {
 
 //------------------------------
 var iid = getURLParameter('i');
+var nid = getURLParameter('n');
 //------------------------------
 var lang = getURLParameter('lang');
 if (lang==null)
@@ -77,6 +78,8 @@ function displayKarutaPublic()
 			setConfigurationTechVariables(LANGCODE);
 			setConfigurationUIVariables(LANGCODE);
 			applyKarutaConfiguration();
+			url : serverBCK_API+"/nodes/node/" + g_uuid,
+			
 			//----------------
 			$.ajax({
 				async:false,
@@ -84,11 +87,12 @@ function displayKarutaPublic()
 				dataType : "xml",
 				url : serverBCK_API+"/nodes/node/" + g_uuid,
 				success : function(data) {
+					let nodeid = (nid!=undefined)? nid : g_uuid;
 					g_edit = true; //no edit button
 					g_portfolio_current = data;
 					UICom.parseStructure(data);
 					var depth = 99;
-					var rootnode = UICom.structure['ui'][g_uuid];
+					var rootnode = UICom.structure['ui'][nodeid];
 					if (rootnode.asmtype=='asmRoot' || rootnode.asmtype=='asmStructure')
 						depth = 1;
 					// --------------------------
@@ -104,17 +108,17 @@ function displayKarutaPublic()
 					setCSSportfolio(data);
 					setLanguage(lang,'publichtm');
 					if (rootnode.asmtype=='asmRoot' || rootnode.asmtype=='asmStructure') {
-						UIFactory.Node.displaySidebarItem(g_uuid,'sidebar-parent','standard',LANGCODE,false,g_uuid);
-//						UIFactory["Node"].displaySidebar(UICom.structure['tree'][g_uuid],'sidebar','standard',LANGCODE,false,g_uuid);
+						UIFactory.Node.displaySidebarItem(nodeid,'sidebar-parent','standard',LANGCODE,false,nodeid);
+//						UIFactory["Node"].displaySidebar(UICom.structure['tree'][nodeid],'sidebar','standard',LANGCODE,false,nodeid);
 					}
-					$("#contenu").html("<div id='page' uuid='"+g_uuid+"'></div>");
+					$("#contenu").html("<div id='page' uuid='"+nodeid+"'></div>");
 					var semtag =  ($("metadata",rootnode.node)[0]==undefined || $($("metadata",rootnode.node)[0]).attr('semantictag')==undefined)?'': $($("metadata",rootnode.node)[0]).attr('semantictag');
 					if (semtag == 'bubble_level1') {
 						$("#main-container").html("");
-						UICom.structure["ui"][g_uuid].displayNode('standard',UICom.structure['tree'][g_uuid],'main-container',depth,LANGCODE,true);
+						UICom.structure["ui"][nodeid].displayNode('standard',UICom.structure['tree'][nodeid],'main-container',depth,LANGCODE,true);
 					}
 					else
-						UICom.structure["ui"][g_uuid].displayNode('standard',UICom.structure['tree'][g_uuid],'contenu',depth,LANGCODE,true);
+						UICom.structure["ui"][nodeid].displayNode('standard',UICom.structure['tree'][nodeid],'contenu',depth,LANGCODE,true);
 					var welcomes = $("asmUnit:has(metadata[semantictag*='WELCOME'])",data);
 					if (welcomes.length==0) // for backward compatibility
 						welcomes = $("asmUnit:has(metadata[semantictag*='welcome-unit'])",data);

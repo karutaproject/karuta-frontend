@@ -125,6 +125,7 @@ karutaStr['fr']['error-empty-code']="ERREUR - Le code ne peut être vide.";
 karutaStr['fr']['error-notfound']="ERREUR - non trouvé";
 karutaStr['fr']['error-filenotfound']="*** Fichier non sauvegardé ou manquant";
 karutaStr['fr']['error-login']="Erreur à la connexion : votre login ou votre mot de passe est incorrect.";
+karutaStr['fr']['error-delete']="Vous ne pouvez pas supprimer cet élément.";
 
 //=========================================
 //========== NODE =========================
