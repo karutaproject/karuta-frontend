@@ -3230,6 +3230,8 @@ g_actions['batch-variable'] = function (node)
 			nodeid = g_current_node_uuid;
 		else
 			nodeid = replaceVariable(b_replaceVariable(treeref)); // select = porfolio_uuid.#uuid
+	} else if (source.indexOf('#current_portfolio')>-1){
+		nodeid = g_trees[srce_treeref][0];
 	} else {
 		//------------  --------------------
 		var url = "";

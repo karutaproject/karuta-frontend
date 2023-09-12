@@ -343,6 +343,9 @@ function applyLoginConfiguration()
 	//========================================
 	$('#welcome1').html(g_configVar['login-logo']);
 	$("#welcome1").attr("style",g_configVar['login-logo_style']);
+	$("#welcome1").click(function(){
+		$("#login-karuta").show();
+	});
 	//---------------------
 	if (g_configVar['login-subtitle']!=undefined && g_configVar['login-subtitle']!="") {
 		$('#welcome2').html(g_configVar['login-subtitle']);
