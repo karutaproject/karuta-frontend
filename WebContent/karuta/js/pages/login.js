@@ -343,6 +343,9 @@ function applyLoginConfiguration()
 	//========================================
 	$('#welcome1').html(g_configVar['login-logo']);
 	$("#welcome1").attr("style",g_configVar['login-logo_style']);
+	$("#welcome1").click(function(){
+		$("#login-karuta").show();
+	});
 	//---------------------
 	if (g_configVar['login-subtitle']!=undefined && g_configVar['login-subtitle']!="") {
 		$('#welcome2').html(g_configVar['login-subtitle']);
@@ -445,6 +448,8 @@ function setLoginTechnicalVariables()
 			//---------Languages--------------
 			g_configVar['default-language'] = getText('default-language','Get_Resource','code',data,0);
 			var language_nodes = $("metadata[semantictag='portfolio-language']",data);
+			if (language_nodes.length>0)
+				languages = [];
 			for (i=0;i<language_nodes.length;i++){
 				languages[i] = $("code",$("asmResource[xsi_type='Get_Resource']",$(language_nodes[i]).parent())).text();
 			}

@@ -125,6 +125,7 @@ karutaStr['en']['error-empty-code']="ERROR - The code cannot be empty.";
 karutaStr['en']['error-notfound']="ERROR - not found";
 karutaStr['en']['error-filenotfound']="*** File not saved or missing";
 karutaStr['en']['error-login']="Connection Error : your login or your password is incorrect.";
+karutaStr['en']['error-delete']="You cannot delete this item.";
 
 //=========================================
 //========== NODE =====================

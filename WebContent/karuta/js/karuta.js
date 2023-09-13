@@ -185,7 +185,7 @@ function getNavBar(type,portfolioid,edit)
 				html += "<li id='navbar-mailto' class='nav-item icon'><a class='nav-link' target='_blank' href='"+g_configVar['tech-url']+"' data-title='"+karutaStr[LANG]["technical_support"]+"' data-toggle='tooltip' data-placement='bottom'><i class='fa-solid fa-ticket'></i></a></li>";
 		} else
 			html += "<li id='navbar-mailto' class='nav-item icon'><a class='nav-link' href='mailto:"+g_configVar['technical-support']+"?subject="+karutaStr[LANG]['technical_support']+" ("+appliname+")' data-title='"+karutaStr[LANG]["technical_support"]+"' data-toggle='tooltip' data-placement='bottom'><i class='fas fa-envelope' data-title='"+karutaStr[LANG]["technical_support"]+"' data-toggle='tooltip' data-placement='bottom'></i></a></li>";
-		html += "<li id='navbar-home' class='nav-item icon'><a class='nav-link' onclick='show_list_page()' data-title='"+karutaStr[LANG]["home"]+"' data-toggle='tooltip' data-placement='bottom'><i class='fas fa-home'></i></a></li>";
+//		html += "<li id='navbar-home' class='nav-item icon'><a class='nav-link' onclick='show_list_page()' data-title='"+karutaStr[LANG]["home"]+"' data-toggle='tooltip' data-placement='bottom'><i class='fas fa-home'></i></a></li>";
 	}
 	//-------------------LANGUAGES---------------------------
 	if (languages.length>1) {
@@ -2871,6 +2871,7 @@ function replaceVariable(text,node,withquote)
 	if (withquote==null)
 		withquote = true;
 	if (text!=undefined && text!="") {
+		text = text.replaceAll("++","&&");
 		if (text.indexOf("##pagecode##")>-1){
 			const pageid = $("#page").attr('uuid');
 			const pagecode = UICom.structure.ui[pageid].getCode();

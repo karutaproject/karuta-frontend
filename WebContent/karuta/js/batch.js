@@ -138,6 +138,8 @@ function getTxtvalsWithoutReplacement(node)
 			if (select.indexOf("//")>-1) {
 				if (select=="//today")
 					text = new Date().toLocaleString();
+				else if (select=="//today_milli")
+					text = Date.now();
 				else
 					text = eval("g_json."+select.substring(2));
 			} else if (select.indexOf("/")>-1) {
@@ -173,6 +175,8 @@ function getTxtvalsWithoutReplacement(node)
 				}
 			} else if (text=="//today") {
 				text = new Date().toLocaleString();
+			} else if (select=="//today_milli") {
+					text = Date.now();
 			} else if (text.indexOf('numline()')>-1) {
 				text = text.replace(/numline()/g,g_noline);
 				text = eval(text);
@@ -204,6 +208,8 @@ function getvarvals(node)
 				if (select.indexOf("//")>-1) {
 					if (select=="//today")
 						text = new Date().toLocaleString();
+					else if (select=="//today_milli")
+						text = Date.now();
 					else
 						text = eval("g_json."+select.substring(2));
 				} else if (items[i].indexOf("/")>-1)
@@ -247,7 +253,7 @@ function getTargetUrl(node)
 	const select = $(node).attr("select");
 	const idx = select.lastIndexOf(".");
 	const treeref = select.substring(0,idx);
-	const semtag = select.substring(idx+1);
+	const semtag = replaceBatchVariable(replaceVariable(select.substring(idx+1)));
 	if (semtag=='#current_node')
 		url = serverBCK_API+"/nodes/node/"+g_current_node_uuid;
 	else if (semtag=='#uuid') {
@@ -300,7 +306,7 @@ function getSourceUrl(node)
 	var select = $("source",node).text();
 	var idx = select.lastIndexOf(".");
 	var treeref = select.substring(0,idx);
-	var semtag = select.substring(idx+1);
+	const semtag = replaceBatchVariable(replaceVariable(select.substring(idx+1)));
 	if (semtag=='#current_node')
 		url = serverBCK_API+"/nodes/node/"+g_current_node_uuid;
 	else if (semtag=='#uuid') {
@@ -326,6 +332,7 @@ function getTargetNodes(node,data,teststr)
 {
 	let nodes = new Array();
 	let semtag = getSemtag(node);
+	semtag = replaceBatchVariable(replaceVariable(semtag));
 	//--------------------------
 	if (semtag=="#current_node" || data==undefined || data==null) {
 		let url = getTargetUrl(node);
@@ -376,6 +383,7 @@ function getSourceNodes(node,data,teststr)
 //==================================
 {
 	var semtag = getSource(node);
+	semtag = replaceBatchVariable(replaceVariable(semtag));
 	//--------------------------
 	if (semtag=="#current_node" || data==undefined || data==null) {
 		let url = getSourceUrl(node);
@@ -3214,6 +3222,7 @@ g_actions['batch-variable'] = function (node)
 	var srce_idx = source.lastIndexOf(".");
 	var srce_treeref = source.substring(0,srce_idx);
 	var srce_semtag = source.substring(srce_idx+1);
+	srce_semtag = replaceBatchVariable(replaceVariable(srce_semtag))
 	//------------- source -----------------------
 	var nodeid = "";
 	if (source.indexOf('#current_node')+source.indexOf('#uuid')>-2){
@@ -3221,6 +3230,8 @@ g_actions['batch-variable'] = function (node)
 			nodeid = g_current_node_uuid;
 		else
 			nodeid = replaceVariable(b_replaceVariable(treeref)); // select = porfolio_uuid.#uuid
+	} else if (source.indexOf('#current_portfolio')>-1){
+		nodeid = g_trees[srce_treeref][0];
 	} else {
 		//------------  --------------------
 		var url = "";
@@ -3349,6 +3360,7 @@ g_actions['for-each-node'] = function (node)
 	var srce_idx = source.lastIndexOf(".");
 	var srce_treeref = source.substring(0,srce_idx);
 	var srce_semtag = source.substring(srce_idx+1);
+	srce_semtag = replaceBatchVariable(replaceVariable(srce_semtag))
 	//------------- source -----------------------
 	if (source.indexOf('#current_node')+source.indexOf('#uuid')>-2){
 		if (source.indexOf('#current_node')>-1)

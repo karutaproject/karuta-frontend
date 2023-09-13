@@ -1144,6 +1144,7 @@ UIFactory["Node"].testDisplay = function(node,roles,condition)
 {
 	var display = false;
 	condition = replaceVariable(condition,node);
+	condition = condition.replaceAll("++","&&");
 	if (roles.indexOf(node.userrole)>-1 || roles.indexOf($(USER.username_node).text())>-1 || (roles.containsArrayElt(g_userroles) && g_userroles[0]!='designer') || USER.admin || g_userroles[0]=='designer'){
 		if (condition==""){
 			display = true;
@@ -1321,6 +1322,10 @@ UIFactory["Node"].getXmlItemMenu = function(node,parentid,item,title,databack,ca
 				for (let j=0;j<imports.length;j++){
 					let srce = $("srce",imports[j])[0];
 					let foliocode = replaceVariable( ($("foliocode",srce).length>0)?$("foliocode",srce).text():"" );
+					if (foliocode.indexOf("*")>-1) {
+						const portfolios = UIFactory.Portfolio.search_bycode(foliocode.replaceAll('*',''));
+						foliocode = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",portfolios)[0]).text();
+					}
 					let semtag = replaceVariable( ($("semtag",srce).length>0)?$("semtag",srce).text():"" );
 					let updatedtag = replaceVariable( ($("updatedtag",srce).length>0)?$("updatedtag",srce).text():"" );
 					let fctarray = UIFactory.Node.getFunctionArray(node,imports[j]);
@@ -1335,6 +1340,10 @@ UIFactory["Node"].getXmlItemMenu = function(node,parentid,item,title,databack,ca
 				for (let j=0;j<imports.length;j++){
 					let srce = $("srce",imports[j])[0];
 					let foliocode = replaceVariable( ($("foliocode",srce).length>0)?$("foliocode",srce).text():"" );
+					if (foliocode.indexOf("*")>-1) {
+						const portfolios = UIFactory.Portfolio.search_bycode(foliocode.replaceAll('*',''));
+						foliocode = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",portfolios)[0]).text();
+					}
 					let semtag = replaceVariable( ($("semtag",srce).length>0)?$("semtag",srce).text():"" );
 					let updatedtag = replaceVariable( ($("updatedtag",srce).length>0)?$("updatedtag",srce).text():"" );
 					let fctarray = UIFactory.Node.getFunctionArray(node,imports[j]);
@@ -1359,6 +1368,10 @@ UIFactory["Node"].getXmlItemMenu = function(node,parentid,item,title,databack,ca
 				for (let j=0;j<imports.length;j++){
 					let srce = $("srce",imports[j])[0];
 					let foliocode = replaceVariable( ($("foliocode",srce).length>0)?$("foliocode",srce).text():"" );
+					if (foliocode.indexOf("*")>-1) {
+						const portfolios = UIFactory.Portfolio.search_bycode(foliocode.replaceAll('*',''));
+						foliocode = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",portfolios)[0]).text();
+					}
 					let fctarray = UIFactory.Node.getFunctionArray(node,imports[j]);
 					let trgtarray = UIFactory.Node.getTargetArray(node,parentid,imports[j]);
 					actions += "{|type|:|import_elts-from|,|parentid|:|"+parentid+"|,|foliocode|:|"+foliocode+"|,|trgts|:|"+trgtarray.toString()+"|,|fcts|:|"+fctarray.toString()+"|};";

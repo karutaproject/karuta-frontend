@@ -1145,6 +1145,7 @@ UIFactory["Node"].remove = function(uuid,callback,param1,param2,param3,param4)
 	} else {
 		$('#delete-window').modal('hide');
 		$('#wait-window').modal('hide');
+		alertHTML(karutaStr[LANG]['error-delete'])
 	}
 };
 
