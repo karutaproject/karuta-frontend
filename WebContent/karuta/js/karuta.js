@@ -2871,6 +2871,7 @@ function replaceVariable(text,node,withquote)
 	if (withquote==null)
 		withquote = true;
 	if (text!=undefined && text!="") {
+		text = text.replaceAll("++","&&");
 		if (text.indexOf("##pagecode##")>-1){
 			const pageid = $("#page").attr('uuid');
 			const pagecode = UICom.structure.ui[pageid].getCode();
