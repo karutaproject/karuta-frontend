@@ -154,7 +154,12 @@ function getLogin2(encrypt_url,lang,withKarutaLogin,g_login_code)
 	html += "<div id='connection-cas'>";
 	html += "	<h5 id='connection-cas1'>"+karutaStr[LANG]['connection-cas1']+"</h5>";
 	html += "	<button class='button-login' onclick='javascript:callCAS()'>"+karutaStr[LANG]['login']+"</button>";
-	html += "</div>"
+	html += "</div>";
+	html += "<div id='connection-openid'>";
+	html += " 	<img width='200px' src='../../karuta/img/microsoft-logo.png'>";
+	html += "	<h5>Vous avez un compte Microsoft</h5>";
+	html += "	<button class='button-login' onclick='callOpenid()'>Connexion</button>";
+	html += "</div>";
 	if (withKarutaLogin && !g_login_code) {
 		html += "<div id='login-karuta'>"
 		html += "	<h5 id='connection-cas2'>"+karutaStr[LANG]['connection-cas2']+"</h5>";
@@ -279,9 +284,12 @@ function constructKarutaLogin(withKarutaLogin)
 	$("#navigation-bar").html(getNavBar('login',null));
 	$("#login").html($(getLogin(encrypt_url,lang,withKarutaLogin)));
 	$("#connection-cas").hide();
+	$("#connection-openid").hide();
 	$("#useridentifier").focus();
 	if (typeof cas_url != 'undefined' && cas_url!="")
 		$("#connection-cas").show();
+	if (typeof openid != 'undefined' && openid_url!="")
+		$("#connection-openid").show();
 	if (!withKarutaLogin)
 		g_configVar['login-new-password-display'] = '0';
 	applyNavbarConfiguration();
@@ -538,4 +546,15 @@ function setConfigLoginColor(root,configname)
 	var color = g_configVar[configname];
 	if (color!=undefined)
 		root.style.setProperty("--"+configname,color);
+}
+
+
+//==================================
+function callOpenid()
+//==================================
+{
+//	var url = window.location.href;
+//	var serverURL = url.substring(0,url.lastIndexOf(appliname+"/")-1);
+	var locationURL = openid_url+"?client_id=";
+	window.location = locationURL;
 }
