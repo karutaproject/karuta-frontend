@@ -149,8 +149,11 @@ function getTxtvalsWithoutReplacement(node)
 			else
 				text = eval("g_json.lines["+g_noline+"]."+select);
 			//---------- function ---
-			if (fct!=null)
-				text = eval(fct+"('"+text+"')");
+			if (fct!=null) {
+				if (select.indexOf("###")>-1)
+				select = replaceBatchVariable(select);
+				text = eval(fct+"('"+select+"')");
+			}
 			//-------------
 		} else {
 			text = $(txtvals[i]).text();
