@@ -925,7 +925,7 @@ function reloadPreviewBox(node)
 			dataType : "xml",
 			url : serverBCK_API+"/nodes/node/" + uuid + "?resources=true",
 			success : function(data) {
-				UICom.parseStructure(data);
+				UICom.parseStructure(data,false);
 				if (edit==null)
 					g_report_edit = false;
 				else
