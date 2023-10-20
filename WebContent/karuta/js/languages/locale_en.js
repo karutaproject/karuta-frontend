@@ -114,6 +114,7 @@ karutaStr["en"]["noemail-yourself"] = "You cannot use your email address.";
 karutaStr["en"]["displaytest"] = "Display - JS Test";
 karutaStr["en"]["displayclick"] = "Display - Click";
 karutaStr["en"]["toogle-sidebar"] = "Show/Hide Sidebar";
+karutaStr["en"]["last-modified"] = "Last Modified";
 
 //=========================================
 //========== ERRORS =======================

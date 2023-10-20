@@ -106,6 +106,11 @@ UIFactory["Field"].prototype.getView = function(dest,type,langcode)
 		this.display[dest] = langcode;
 	}
 	var html = $(this.text_node[langcode]).text();
+	//-------
+	const result = execJS(this,'display-resource-after');
+	if (typeof result == 'string')
+		html += result;
+	//-------
 	return html;
 };
 

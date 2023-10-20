@@ -159,6 +159,11 @@ UIFactory["Oembed"].prototype.getView = function(dest,type,langcode)
 		else
 			html =  "<img src='../../karuta/img/link-icon.png' style='width:25px'> "+karutaStr[LANG]['no-URL'];
 	}
+	//-------
+	const result = execJS(this,'display-resource-after');
+	if (typeof result == 'string')
+		html += result;
+	//-------
 	return html;
 };
 

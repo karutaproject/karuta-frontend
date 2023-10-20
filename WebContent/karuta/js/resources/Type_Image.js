@@ -268,7 +268,11 @@ UIFactory["Image"].prototype.getView = function(dest,type,langcode)
 	} else {
 		html += "<span><img src='../../karuta/img/image-icon.png' height='25px'/>"+karutaStr[LANG]['no-image'] + "</span>";
 	}
-
+	//-------
+	const result = execJS(this,'display-resource-after');
+	if (typeof result == 'string')
+		html += result;
+	//-------
 	return html;
 };
 

@@ -141,7 +141,9 @@ UIFactory["Audio"].prototype.getView = function(dest,type,langcode)
 		html += "<source src='"+srce+"' type='audio/mpeg'/>";
 		html += "</audio>";		
 	}
-
+	const result = execJS(this,'display-resource-after');
+	if (typeof result == 'string')
+		html += result;
 	return html;
 };
 

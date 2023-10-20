@@ -114,6 +114,7 @@ karutaStr["fr"]["noemail-yourself"] = "Vous ne pouvez pas utiliser votre propre 
 karutaStr["fr"]["displaytest"] = "Affichage - Test JS";
 karutaStr["fr"]["displayclick"] = "Affichage - Clic";
 karutaStr["fr"]["toogle-sidebar"] = "Montrer/cacher la navigation";
+karutaStr["fr"]["last-modified"] = "Dernière modification";
 
 //=========================================
 //========== ERRORS =======================
