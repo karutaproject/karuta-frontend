@@ -106,11 +106,14 @@ UIFactory["Field"].prototype.getView = function(dest,type,langcode)
 		this.display[dest] = langcode;
 	}
 	var html = $(this.text_node[langcode]).text();
-	//-------
-	const result = execJS(this,'display-resource-after');
-	if (typeof result == 'string')
-		html += result;
-	//-------
+	//------------------if function js-----------------
+	const result1 = execJS(this,'display-resource-before');
+	if (typeof result1 == 'string')
+		html = result1 + html;
+	const result2 = execJS(this,'display-resource-after');
+	if (typeof result2 == 'string')
+		html = html + result2;
+	//------------------------------------------
 	return html;
 };
 

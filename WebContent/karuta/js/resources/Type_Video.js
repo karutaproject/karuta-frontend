@@ -157,6 +157,14 @@ UIFactory["Video"].prototype.getView = function(dest,type,langcode)
 		html += "<source src='"+srce+"' type=\"video/mp4\"></source>";
 		html += "</video>";
 	}
+	//------------------if function js-----------------
+	const result1 = execJS(this,'display-resource-before');
+	if (typeof result1 == 'string')
+		html = result1 + html;
+	const result2 = execJS(this,'display-resource-after');
+	if (typeof result2 == 'string')
+		html = html + result2;
+	//------------------------------------------
 	return html;
 };
 
@@ -164,28 +172,7 @@ UIFactory["Video"].prototype.getView = function(dest,type,langcode)
 UIFactory["Video"].prototype.displayView = function(dest,type,langcode)
 //==================================
 {
-	//---------------------
-	if (langcode==null)
-		langcode = LANGCODE;
-	//---------------------
-	if (dest!=null) {
-		this.display[dest] = langcode;
-	}
-	//---------------------
-	if (type==null)
-		type = "html5";
-	//------------------------
-	var nodefileid = this.id;
-	if (nodefileid.indexOf("_")>-1) // proxy-audio
-		nodefileid = nodefileid.substring(0,nodefileid.indexOf("_"));
-	//------------------------
-	var html ="";
-	if (type=='html5') {
-		html += "<video width='100%' controls>";
-		var srce = serverBCK+"/resources/resource/file/"+nodefileid+"?lang="+languages[langcode]+"&type=.mp4";
-		html += "<source src='"+srce+"' type=\"video/mp4\"></source>";
-		html += "</video>";
-	}
+	var html = this.getView(dest,type,langcode);
 	$("#"+dest).html(html);
 };
 

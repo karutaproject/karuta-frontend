@@ -884,8 +884,6 @@ UIFactory["Node"].prototype.displayView = function(dest,type,langcode)
 UIFactory["Node"].prototype.updateLabel = function(langcode)
 //==================================
 {
-	execJS(this,"update-node-before");
-	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
 	var label = $.trim($("#label_"+this.id+"_"+langcode).val());
@@ -901,44 +899,45 @@ UIFactory["Node"].prototype.updateLabel = function(langcode)
 	//---------------------
 	this.save();
 	writeSaved(this.id);
-	execJS(this,"update-node-after");
 };
 
 //==================================
 UIFactory["Node"].prototype.update = function(langcode)
 //==================================
 {
-	execJS(this,"update-node-before");
-	//---------------------
-	if (langcode==null)
-		langcode = LANGCODE;
-	//---------------------
-	if ($("#code_"+this.id).length){
-		var code = $.trim($("#code_"+this.id).val());
-		$(this.code_node).text(code);
-		$(UICom.structure.ui[this.id].code_node).text(code);
-	}
-	//---------------------
-	if ($("#value_"+this.id).length){
-		var value = $.trim($("#value_"+this.id).val());
-		$(this.value_node).text(value);
-		$(UICom.structure.ui[this.id].value_node).text(value);
-	}
-	//---------------------
-	var label = $.trim($("#label_"+this.id+"_"+langcode).val());
-	$(this.label_node[langcode]).text(label);
-	$(UICom.structure.ui[this.id].label_node[langcode]).text(label);
-	//---------------------
-	if (!this.multilingual) {
-		for (var i=0; i<languages.length; langcode++) {
-			$(this.label_node[i]).text(label);
-			$(UICom.structure.ui[this.id].label_node[i]).text(label);
+	if (execJS(this,"update-node-if")) {
+		execJS(this,"update-node-before");
+		//---------------------
+		if (langcode==null)
+			langcode = LANGCODE;
+		//---------------------
+		if ($("#code_"+this.id).length){
+			var code = $.trim($("#code_"+this.id).val());
+			$(this.code_node).text(code);
+			$(UICom.structure.ui[this.id].code_node).text(code);
 		}
+		//---------------------
+		if ($("#value_"+this.id).length){
+			var value = $.trim($("#value_"+this.id).val());
+			$(this.value_node).text(value);
+			$(UICom.structure.ui[this.id].value_node).text(value);
+		}
+		//---------------------
+		var label = $.trim($("#label_"+this.id+"_"+langcode).val());
+		$(this.label_node[langcode]).text(label);
+		$(UICom.structure.ui[this.id].label_node[langcode]).text(label);
+		//---------------------
+		if (!this.multilingual) {
+			for (var i=0; i<languages.length; langcode++) {
+				$(this.label_node[i]).text(label);
+				$(UICom.structure.ui[this.id].label_node[i]).text(label);
+			}
+		}
+		//---------------------
+		this.save();
+		execJS(this,"update-node-after");
+		writeSaved(this.id);
 	}
-	//---------------------
-	this.save();
-	execJS(this,"update-node-after");
-	writeSaved(this.id);
 };
 
 
@@ -1103,45 +1102,16 @@ UIFactory["Node"].prototype.remove = function()
 UIFactory["Node"].remove = function(uuid,callback,param1,param2,param3,param4)
 //==================================
 {
-	let remove = true;
-	//-------- if function js -------------
-	if (UICom.structure.ui[uuid].js==undefined){
-		var node = UICom.structure.ui[uuid];
-		UICom.structure.ui[uuid].js = ($(node.metadatawad).attr('js')==undefined)?"":$(node.metadatawad).attr('js');
-	}
-	if (UICom.structure.ui[uuid].js!=undefined && UICom.structure.ui[uuid].js!="") {
-		var fcts = UICom.structure.ui[uuid].js.split("|");
-		for (var i=0;i<fcts.length;i++) {
-			var elts = fcts[i].split("/");
-			if (elts[0]=="delete" || elts[0]=="delete-before") {
-				if (elts[1].indexOf("(")<0)
-					eval(elts[1]+"(uuid)");
-				else
-					eval(replaceVariable(elts[1],UICom.structure.ui[uuid]));
-			}
-			if (elts[0]=="delete-if") {
-				if (elts[1].indexOf("(")<0) 
-					remove = eval(elts[1]+"(uuid)");
-				else
-					remove = eval(replaceVariable(elts[1],UICom.structure.ui[uuid]));
-			}
-		}
-	}
-	//------------------------------------
-	if (remove) {
+	const itself = UICom.structure["ui"][uuid];  // context node
+	if (execJS(itself,"delete-if")) {
+		//----
+		execJS(itself,"delete-before");
+		//----
 		$("#"+uuid,g_portfolio_current).remove();
-		var fcts = UICom.structure.ui[uuid].js.split("|");
 		UICom.DeleteNode(uuid,callback,param1,param2,param3,param4);
-		var fcts = UICom.structure.ui[uuid].js.split("|");
-		for (var i=0;i<fcts.length;i++) {
-			var elts = fcts[i].split("/");
-			if (elts[0]=="delete-after") {
-				if (elts[1].indexOf("(")<0)
-					eval(elts[1]+"(uuid)");
-				else
-					eval(replaceVariable(elts[1],UICom.structure.ui[uuid]));
-			}
-		}
+		//----
+		execJS(itself,"delete-afterf")
+		//----
 	} else {
 		$('#delete-window').modal('hide');
 		$('#wait-window').modal('hide');

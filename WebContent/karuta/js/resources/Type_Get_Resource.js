@@ -360,24 +360,14 @@ UIFactory["Get_Resource"].prototype.getView = function(dest,type,langcode,indash
 			html = label;
 		}
 	}
-	//-------- if function js -------------
-	if (UICom.structure["ui"][this.id].js!="") {
-		var fcts = UICom.structure["ui"][this.id].js.split("|");
-		for (let i=0;i<fcts.length;i++) {
-			let elts = fcts[i].split("/");
-			if (elts[0]=="display-resource") {
-				fctjs = elts[1].split(";");
-				for (let j=0;j<fctjs.length;j++) {
-					eval(fctjs[j]+"(this.node,g_portfolioid)");
-				}
-			}
-		}
-	}
-	//-------
-	const result = execJS(this,'display-resource-after');
-	if (typeof result == 'string')
-		html += result;
-	//-------
+	//------------------if function js-----------------
+	const result1 = execJS(this,'display-resource-before');
+	if (typeof result1 == 'string')
+		html = result1 + html;
+	const result2 = execJS(this,'display-resource-after');
+	if (typeof result2 == 'string')
+		html = html + result2;
+	//------------------------------------------
 	return html;
 };
 
@@ -385,7 +375,7 @@ UIFactory["Get_Resource"].prototype.getView = function(dest,type,langcode,indash
 UIFactory["Get_Resource"].prototype.displayView = function(dest,type,langcode)
 //==================================
 {
-var html = this.getView(dest,type,langcode);
+	var html = this.getView(dest,type,langcode);
 	$("#"+dest).html(html);
 };
 

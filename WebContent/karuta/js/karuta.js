@@ -3970,7 +3970,7 @@ function goTo(semtag) {
 }
 
 function execJS(node,tag){
-	let result = true;
+	let result = true; // by default
 	if (UICom.structure["ui"][node.id].js==undefined)
 		UICom.structure["ui"][node.id].setMetadata();
 	if (UICom.structure["ui"][node.id].js!="" && UICom.structure["ui"][node.id].js.indexOf(tag)>-1) {

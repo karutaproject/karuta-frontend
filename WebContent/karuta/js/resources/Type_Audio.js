@@ -141,9 +141,14 @@ UIFactory["Audio"].prototype.getView = function(dest,type,langcode)
 		html += "<source src='"+srce+"' type='audio/mpeg'/>";
 		html += "</audio>";		
 	}
-	const result = execJS(this,'display-resource-after');
-	if (typeof result == 'string')
-		html += result;
+	//------------------execJS-----------------
+	const result1 = execJS(this,'display-resource-before');
+	if (typeof result1 == 'string')
+		html = result1 + html;
+	const result2 = execJS(this,'display-resource-after');
+	if (typeof result2 == 'string')
+		html = html + result2;
+	//------------------------------------------
 	return html;
 };
 
@@ -183,31 +188,38 @@ UIFactory["Audio"].update = function(data,uuid,langcode,filename)
 //==================================
 {
 	var itself = UICom.structure["ui"][uuid];  // context node
-	//---------------------
-	if (langcode==null)
-		langcode = LANGCODE;
-	//---------------------
-	itself.resource.lastmodified_node.text(new Date().getTime());
-	var size = data.files[0].size;
-	var type = data.files[0].type;
-	$("#fileAudio_"+uuid+"_"+langcode).html(filename);
-	var fileid = data.files[0].fileid;
-	//---------------------
-	itself.resource.multilingual = ($("metadata",itself.node).attr('multilingual-resource')=='Y') ? true : false;
-	if (itself.resource.multilingual!=undefined && !itself.resource.multilingual) {
-		for (var langcode=0; langcode<languages.length; langcode++) {
+	if (execJS(itself,"update-resource-if")) {
+		//-------- if function js -------------
+		execJS(itself,"update-resource-before");
+		//---------------------
+		if (langcode==null)
+			langcode = LANGCODE;
+		//---------------------
+		itself.resource.lastmodified_node.text(new Date().getTime());
+		var size = data.files[0].size;
+		var type = data.files[0].type;
+		$("#fileAudio_"+uuid+"_"+langcode).html(filename);
+		var fileid = data.files[0].fileid;
+		//---------------------
+		itself.resource.multilingual = ($("metadata",itself.node).attr('multilingual-resource')=='Y') ? true : false;
+		if (itself.resource.multilingual!=undefined && !itself.resource.multilingual) {
+			for (var langcode=0; langcode<languages.length; langcode++) {
+				itself.resource.fileid_node[langcode].text(fileid);
+				itself.resource.filename_node[langcode].text(filename);
+				itself.resource.size_node[langcode].text(size);
+				itself.resource.type_node[langcode].text(type);
+			}
+		} else {
 			itself.resource.fileid_node[langcode].text(fileid);
 			itself.resource.filename_node[langcode].text(filename);
 			itself.resource.size_node[langcode].text(size);
 			itself.resource.type_node[langcode].text(type);
 		}
-	} else {
-		itself.resource.fileid_node[langcode].text(fileid);
-		itself.resource.filename_node[langcode].text(filename);
-		itself.resource.size_node[langcode].text(size);
-		itself.resource.type_node[langcode].text(type);
+		itself.resource.save();
+		//-------- if function js -------------
+		execJS(itself,'update-resource-after');
+		//---------------------
 	}
-	itself.resource.save();
 };
 
 //==================================
