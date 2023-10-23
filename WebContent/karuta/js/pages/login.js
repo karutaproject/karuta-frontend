@@ -474,6 +474,7 @@ function setLoginTechnicalVariables()
 			g_configVar['tech-email'] = getText('config-tech-email','Field','text',data,LANGCODE);
 			g_configVar['tech-url'] = getText('config-technical-support','Field','text',data,LANGCODE);
 			g_configVar['technical-support'] = getText('config-technical-support','Field','text',data,LANGCODE); // for backward compatibility
+			g_configVar['navbar-display-mailto'] = getText('navbar-display-mailto','Get_Resource','value',data);
 			//---------Navigation Bar--------------
 			g_configVar['navbar-brand-logo'] = getImg('config-navbar-brand-logo',data,LANGCODE);
 			g_configVar['navbar-brand-logo-style'] = getContentStyle('config-navbar-brand-logo',data);
