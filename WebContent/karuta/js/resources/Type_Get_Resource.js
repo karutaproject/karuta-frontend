@@ -373,7 +373,11 @@ UIFactory["Get_Resource"].prototype.getView = function(dest,type,langcode,indash
 			}
 		}
 	}
-	//---------------------
+	//-------
+	const result = execJS(this,'display-resource-after');
+	if (typeof result == 'string')
+		html += result;
+	//-------
 	return html;
 };
 

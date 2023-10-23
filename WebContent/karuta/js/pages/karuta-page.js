@@ -441,11 +441,14 @@ function setConfigurationTechVariables(langcode)
 			g_configVar['send-email-url-style'] = getContentStyle('config-send-email-url',data);
 			g_configVar['send-email-message'] = getText('config-send-email-message','TextField','text',data,langcode);
 			// --------CSS Text------------------
-			var csstext = $("text[lang='"+LANG+"']",$("asmResource[xsi_type='TextField']",$("asmContext:has(metadata[semantictag='config-css'])",data))).text();
-			csstext = csstext.replace(/(<([^>]+)>)/ig, "").replace(/&nbsp;/g,"");
-			if (csstext!=undefined && csstext!=''){
-				console.log("Configuration CSS added")
-				$("<style id='configcsstext'>"+csstext+"</style>").appendTo('head');
+			const config_csss = $("asmContext:has(metadata[semantictag='config-css'])",data);
+			for (let i=0;i<config_csss.length;i++){
+				let csstext = $("text[lang='"+languages[langcode]+"']",$("asmResource[xsi_type='TextField']",config_csss[i])).text();
+				csstext = csstext.replace(/(<([^>]+)>)/ig, "").replace(/&nbsp;/g,"");
+				if (csstext!=undefined && csstext!=''){
+					console.log("Configuration CSS added")
+					$("<style id='configcsstext'>"+csstext+"</style>").appendTo('head');
+				}
 			}
 			//------------Maintenance ---------
 			g_configVar['maintenance-display'] = getText('config-maintenance-display','Get_Resource','value',data);

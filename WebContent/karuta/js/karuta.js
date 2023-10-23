@@ -3970,7 +3970,7 @@ function goTo(semtag) {
 }
 
 function execJS(node,tag){
-	var test = true;
+	let result = true;
 	if (UICom.structure["ui"][node.id].js==undefined)
 		UICom.structure["ui"][node.id].setMetadata();
 	if (UICom.structure["ui"][node.id].js!="" && UICom.structure["ui"][node.id].js.indexOf(tag)>-1) {
@@ -3980,17 +3980,22 @@ function execJS(node,tag){
 			if (elts[0]==tag) {
 				fctjs = elts[1].split(";");
 				for (let j=0;j<fctjs.length;j++) {
-					if (fctjs[j].indexOf("##")>-1)
-						test = eval(replaceVariable(fctjs[j],node));
-					else if (fctjs[j].indexOf("(")>-1)
-						test = eval(fctjs[j])
-					else
-						test = eval(fctjs[j]+"(node.node,g_portfolioid)");
+					try {
+						if (fctjs[j].indexOf("##")>-1)
+							result = eval(replaceVariable(fctjs[j],node));
+						else if (fctjs[j].indexOf("(")>-1)
+							result = eval(fctjs[j])
+						else
+							result = eval(fctjs[j]+"(node.node,g_portfolioid)");
+					}
+					catch(e){
+						alertHTML(e);
+					};
 				}
 			}
 		}
 	}
-	return test;
+	return result;
 }
 
 
@@ -4023,6 +4028,14 @@ function setPageVisited(uuid,role) {
 
 function removeContentNode(nodeid){
 	$("#content-"+nodeid).remove();
+}
+
+
+function getResourceLastModified(nodeid) {
+	const utc = $(UICom.structure.ui[nodeid].resource.lastmodified_node).text();
+	const dateModif = (utc=="")? utc:new Date(parseInt(utc)).toLocaleString();
+	const html ="<span class='lastmodified'>"+karutaStr[LANG]['last-modified']+" : "+dateModif+"</span>";
+	return html;
 }
 
 //================================================

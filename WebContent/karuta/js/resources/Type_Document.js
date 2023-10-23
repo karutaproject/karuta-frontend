@@ -154,20 +154,20 @@ UIFactory["Document"].prototype.getView = function(dest,type,langcode)
 			extension = "none";
 		var iconfile = "../../karuta/img/files-png/" + extension + ".png";
 		if (type=='standard' || type=='none'){
-				html =  "<a id='file_"+this.id+"' href='../../../"+serverBCK+"/resources/resource/file/"+nodefileid+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"'><img style='width:24px' src='"+iconfile+"'/> "+filename+"</a>";
-		}
-		if (type=='icon-url-label'){
-				html =  "<a id='file_"+this.id+"' href='../../../"+serverBCK+"/resources/resource/file/"+nodefileid+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"'>"+$(this.filename_node[langcode]).text()+" <img style='width:24px' src='"+iconfile+"'/></a>"; 
-		}
-		if (type=='icon-url'){
-				html =  "<a id='file_"+this.id+"' href='../../../"+serverBCK+"/resources/resource/file/"+nodefileid+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"'><img style='width:24px' src='"+iconfile+"'/></a>"; 
-		}
-		if (type=='icon'){
+			html =  "<a id='file_"+this.id+"' href='../../../"+serverBCK+"/resources/resource/file/"+nodefileid+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"'><img style='width:24px' src='"+iconfile+"'/> "+filename+"</a>";
+		} else if (type=='icon-url-label'){
+			html =  "<a id='file_"+this.id+"' href='../../../"+serverBCK+"/resources/resource/file/"+nodefileid+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"'>"+$(this.filename_node[langcode]).text()+" <img style='width:24px' src='"+iconfile+"'/></a>"; 
+		} else if (type=='icon-url'){
+			html =  "<a id='file_"+this.id+"' href='../../../"+serverBCK+"/resources/resource/file/"+nodefileid+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"'><img style='width:24px' src='"+iconfile+"'/></a>"; 
+		} else if (type=='icon'){
 				html =  documentIcon[extension]; 
 		}
 	} else {
 		html =  "<img src='../../karuta/img/document-icon.png' style='width:24px'>"+karutaStr[LANG]['no-document'];
 	}
+	const result = execJS(this,'display-resource-after');
+	if (typeof result == 'string')
+		html += result;
 	return html;
 };
 
@@ -175,7 +175,7 @@ UIFactory["Document"].prototype.getView = function(dest,type,langcode)
 UIFactory["Document"].prototype.displayView = function(dest,type,langcode)
 //==================================
 {
-	var html = this.getView(dest,type,langcode);
+	let html = this.getView(dest,type,langcode);
 	$("#"+dest).html(html);
 };
 /// Editor

@@ -945,7 +945,8 @@ g_report_actions['table'] = function (destid,action,no,data)
 		sortTable(destid+'-'+no);
 	if (cssclass!=undefined && cssclass.indexOf('tablesorter')>-1)
 		$("#"+destid+'-'+no).tablesorter({
-			sortList: [[0,0]],
+			dateFormat: "ddmmyyyy",
+			sortList: [[0,0]]
 		});
 
 }
@@ -1043,6 +1044,7 @@ function tableelt(type,destid,action,no,data)
 	var cssclass = replaceVariable($(action).attr("class"));
 	if (cssclass==undefined)
 		cssclass="";
+//	var html = "<"+type+" id='"+destid+'-'+no+"' style='"+style+"' data-date-format='ddmmyyyy' class='"+cssclass+"'>";
 	var html = "<"+type+" id='"+destid+'-'+no+"' style='"+style+"' class='"+cssclass+"'>";
 	if (type=='th')
 		html+= "<i class='fas fa-sort' aria-hidden='true'></i> ";

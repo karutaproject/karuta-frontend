@@ -165,6 +165,11 @@ UIFactory["URL"].prototype.getView = function(dest,type,langcode)
 	if (type=='icon'){
 		html = urlIcon["web"];
 	}
+	//-------
+	const result = execJS(this,'display-resource-after');
+	if (typeof result == 'string')
+		html += result;
+	//-------
 	return html;
 };
 

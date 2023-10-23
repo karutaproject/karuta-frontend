@@ -123,6 +123,11 @@ UIFactory["TextField"].prototype.getView = function(dest,type,langcode)
 		if (this.encrypted)
 			html = decrypt(html.substring(3),g_rc4key);
 	}
+	//-------
+	const result = execJS(this,'display-resource-after');
+	if (typeof result == 'string')
+		html += result;
+	//-------
 	return html;
 };
 
