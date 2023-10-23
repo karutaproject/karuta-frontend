@@ -103,6 +103,7 @@ UIFactory["Get_Get_Resource"].prototype.getAttributes = function(type,langcode)
 		result['code'] = this.code_node.text();
 		result['portfoliocode'] = this.portfoliocode_node.text();
 		result['label'] = this.label_node[langcode].text();
+		result['type'] = this.type;
 	}
 	return result;
 }
@@ -209,26 +210,27 @@ UIFactory["Get_Get_Resource"].update = function(selected_item,itself,langcode,ty
 //==================================
 {
 	try {
-		execJS(itself,'update-resource-before');
-		//-----------------------
-		var value = $(selected_item).attr('value');
-		var code = $(selected_item).attr('code');
-		var uuid = $(selected_item).attr('uuid');
-		var style = $(selected_item).attr('style');
-		$(itself.value_node[0]).text(value);
-		$(itself.code_node[0]).text(code);
-		$(itself.uuid_node[0]).text(uuid);
-		$(itself.style_node[0]).text(style);
-		for (var i=0; i<languages.length;i++){
-			var label = $(selected_item).attr('label_'+languages[i]);
-			$(itself.label_node[i][0]).text(label);
+		if (execJS(itself,"update-resource-if")) {
+			execJS(itself,'update-resource-before');
+			//-----------------------
+			var value = $(selected_item).attr('value');
+			var code = $(selected_item).attr('code');
+			var uuid = $(selected_item).attr('uuid');
+			var style = $(selected_item).attr('style');
+			$(itself.value_node[0]).text(value);
+			$(itself.code_node[0]).text(code);
+			$(itself.uuid_node[0]).text(uuid);
+			$(itself.style_node[0]).text(style);
+			for (var i=0; i<languages.length;i++){
+				var label = $(selected_item).attr('label_'+languages[i]);
+				$(itself.label_node[i][0]).text(label);
+			}
+			$(itself.lastmodified_node).text(new Date().getTime());
+			itself.save();
+			//-----------------------
+			execJS(itself,'update-resource');
+			execJS(itself,'update-resource-after');
 		}
-		$(itself.lastmodified_node).text(new Date().getTime());
-		itself.save();
-		//-----------------------
-		execJS(itself,'update-resource');
-		execJS(itself,'update-resource-after');
-		//-----------------------
 	}
 	catch(e) {
 		console.log(e);

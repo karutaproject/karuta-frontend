@@ -130,19 +130,21 @@ UIFactory["Field"].prototype.displayView = function(dest,type,langcode)
 UIFactory["Field"].prototype.update = function(langcode)
 //==================================
 {
-	execJS(this,"update-resource-before");
-	$(this.lastmodified_node).text(new Date().getTime());
-	//---------------------
-	if (!this.multilingual) {
-		var value = $(this.text_node[langcode]).text();
-		for (var langcode=0; langcode<languages.length; langcode++) {
-			$(this.text_node[langcode]).text(value);
+	if (execJS(itself,"update-resource-if")) {
+		execJS(this,"update-resource-before");
+		$(this.lastmodified_node).text(new Date().getTime());
+		//---------------------
+		if (!this.multilingual) {
+			var value = $(this.text_node[langcode]).text();
+			for (var langcode=0; langcode<languages.length; langcode++) {
+				$(this.text_node[langcode]).text(value);
+			}
 		}
+		//---------------------
+		if (execJS(this,"update-resource-test"))
+			this.save();
+		execJS(this,"update-resource-after");
 	}
-	//---------------------
-	if (execJS(this,"update-resource-test"))
-		this.save();
-	execJS(this,"update-resource-after");
 };
 
 //==================================

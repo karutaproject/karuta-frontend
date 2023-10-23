@@ -242,21 +242,28 @@ UIFactory["Video"].remove = function(uuid,langcode)
 //==================================
 {
 	var itself = UICom.structure["ui"][uuid];  // context node
-	//---------------------
-	if (langcode==null)
-		langcode = LANGCODE;
-	//---------------------
-	var filename = "";
-	var size = "";
-	var type = "";
-	$("#fileVideo_"+uuid+"_"+langcode).html(filename);
-	var fileid = "";
-	itself.resource.fileid_node[langcode].text(fileid);
-	itself.resource.filename_node[langcode].text(filename);
-	itself.resource.size_node[langcode].text(size);
-	itself.resource.type_node[langcode].text(type);
-	var delfile = true;
-	itself.resource.save(null,delfile);
+	if (execJS(itself,"update-resource-if")) {
+		//-------- if function js -------------
+		execJS(itself,"update-resource-before");
+		//---------------------
+		if (langcode==null)
+			langcode = LANGCODE;
+		//---------------------
+		var filename = "";
+		var size = "";
+		var type = "";
+		$("#fileVideo_"+uuid+"_"+langcode).html(filename);
+		var fileid = "";
+		itself.resource.fileid_node[langcode].text(fileid);
+		itself.resource.filename_node[langcode].text(filename);
+		itself.resource.size_node[langcode].text(size);
+		itself.resource.type_node[langcode].text(type);
+		var delfile = true;
+		itself.resource.save(null,delfile);
+		//-------- if function js -------------
+		execJS(itself,'update-resource-after');
+		//---------------------
+	}
 };
 
 //==================================

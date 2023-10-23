@@ -227,16 +227,24 @@ UIFactory["Item"].prototype.displayView = function(dest,type,langcode)
 UIFactory["Item"].update = function(itself,langcode)
 //==================================
 {
-	$(itself.lastmodified_node).text(new Date().getTime());
-	//---------------------
-	if (!itself.multilingual) {
-		var value = $(itself.label_node[langcode]).text();
-		for (var langcode=0; langcode<languages.length; langcode++) {
-			$(itself.label_node[langcode]).text(value);
+	if (execJS(itself,"update-resource-if")) {
+		//-------- if function js -------------
+		execJS(itself,"update-resource-before");
+		//---------------------
+		$(itself.lastmodified_node).text(new Date().getTime());
+		//---------------------
+		if (!itself.multilingual) {
+			var value = $(itself.label_node[langcode]).text();
+			for (var langcode=0; langcode<languages.length; langcode++) {
+				$(itself.label_node[langcode]).text(value);
+			}
 		}
+		//---------------------
+		itself.save();
+		//-------- if function js -------------
+		execJS(itself,'update-resource-after');
+		//---------------------
 	}
-	//---------------------
-	itself.save();
 };
 
 

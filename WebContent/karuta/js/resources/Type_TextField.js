@@ -147,31 +147,39 @@ UIFactory["TextField"].prototype.displayView = function(dest,type,langcode)
 UIFactory["TextField"].prototype.update = function(langcode)
 //==================================
 {
-	$(this.lastmodified_node).text(new Date().getTime());
-	//---------------------
-	if (langcode==null)
-		langcode = LANGCODE;
-	//---------------------
-	var value = $.trim($("#"+this.id+"_edit_"+langcode+(this.inline?'inline':'')).val());
-	var newValue1 = value.replace(/(<br("[^"]*"|[^\/">])*)>/g, "$1/>");
-	var newValue = newValue1.replace(/(<img("[^"]*"|[^\/">])*)>/g, "$1/>");
-	var words = $.trim(newValue).split(' ');
-	if (this.maxword>0 && countWords(newValue)>this.maxword) {
-		alertHTML(karutaStr[languages[langcode]]['maxword-alert']+"<br>"+markFirstWords(newValue,this.maxword));
-		newValue = markFirstWords(newValue,this.maxword);
-		$("#"+this.id+"_edit_"+langcode+(this.inline?'inline':'')).val(newValue);
-		$("#"+this.id+"_edit_"+langcode+(this.inline?'inline':'')).data("wysihtml5").editor.setValue(newValue);
-	}
-	if (this.encrypted)
-		newValue = "rc4"+encrypt(newValue,g_rc4key);
-	if (!this.multilingual) {
-		for (var langcode=0; langcode<languages.length; langcode++) {
-			$(this.text_node[langcode]).text(newValue);
+	if (execJS(itself,"update-resource-if")) {
+		//-------- if function js -------------
+		execJS(itself,"update-resource-before");
+		//---------------------
+		$(this.lastmodified_node).text(new Date().getTime());
+		//---------------------
+		if (langcode==null)
+			langcode = LANGCODE;
+		//---------------------
+		var value = $.trim($("#"+this.id+"_edit_"+langcode+(this.inline?'inline':'')).val());
+		var newValue1 = value.replace(/(<br("[^"]*"|[^\/">])*)>/g, "$1/>");
+		var newValue = newValue1.replace(/(<img("[^"]*"|[^\/">])*)>/g, "$1/>");
+		var words = $.trim(newValue).split(' ');
+		if (this.maxword>0 && countWords(newValue)>this.maxword) {
+			alertHTML(karutaStr[languages[langcode]]['maxword-alert']+"<br>"+markFirstWords(newValue,this.maxword));
+			newValue = markFirstWords(newValue,this.maxword);
+			$("#"+this.id+"_edit_"+langcode+(this.inline?'inline':'')).val(newValue);
+			$("#"+this.id+"_edit_"+langcode+(this.inline?'inline':'')).data("wysihtml5").editor.setValue(newValue);
 		}
-	} else
-		$(this.text_node[langcode]).text(newValue);
-	this.updateCounterWords(langcode);
-	this.save();
+		if (this.encrypted)
+			newValue = "rc4"+encrypt(newValue,g_rc4key);
+		if (!this.multilingual) {
+			for (var langcode=0; langcode<languages.length; langcode++) {
+				$(this.text_node[langcode]).text(newValue);
+			}
+		} else
+			$(this.text_node[langcode]).text(newValue);
+		this.updateCounterWords(langcode);
+		this.save();
+		//-------- if function js -------------
+		execJS(itself,'update-resource-after');
+		//---------------------
+	}
 };
 
 //==================================

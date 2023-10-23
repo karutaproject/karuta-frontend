@@ -304,30 +304,39 @@ UIFactory["Image"].update = function(data,uuid,langcode,parent,filename)
 //==================================
 {
 	var itself = UICom.structure["ui"][uuid];  // context node
-	itself.resource.lastmodified_node.text(new Date().getTime());
-	//---------------------
-	if (langcode==null)
-		langcode = LANGCODE;
-	//---------------------
-	$("#fileimage_"+uuid+"_"+langcode).html(filename);
-	var size = data.files[0].size;
-	var type = data.files[0].type;
-	var fileid = data.files[0].fileid;
-	if (!itself.resource.multilingual) {
-		for (var langcode=0; langcode<languages.length; langcode++) {
+	if (execJS(itself,"update-resource-if")) {
+		//-------- if function js -------------
+		execJS(itself,"update-resource-before");
+		//---------------------
+		itself.resource.lastmodified_node.text(new Date().getTime());
+		//---------------------
+		if (langcode==null)
+			langcode = LANGCODE;
+		//---------------------
+		$("#fileimage_"+uuid+"_"+langcode).html(filename);
+		var size = data.files[0].size;
+		var type = data.files[0].type;
+		var fileid = data.files[0].fileid;
+		if (!itself.resource.multilingual) {
+			for (var langcode=0; langcode<languages.length; langcode++) {
+				itself.resource.fileid_node[langcode].text(fileid);
+				itself.resource.filename_node[langcode].text(filename);
+				itself.resource.size_node[langcode].text(size);
+				itself.resource.type_node[langcode].text(type);
+			}
+		} else {
 			itself.resource.fileid_node[langcode].text(fileid);
 			itself.resource.filename_node[langcode].text(filename);
 			itself.resource.size_node[langcode].text(size);
 			itself.resource.type_node[langcode].text(type);
 		}
-	} else {
-		itself.resource.fileid_node[langcode].text(fileid);
-		itself.resource.filename_node[langcode].text(filename);
-		itself.resource.size_node[langcode].text(size);
-		itself.resource.type_node[langcode].text(type);
+		itself.resource.save(parent);
+		testFileSaved(uuid);
+		itself.resource.save();
+		//-------- if function js -------------
+		execJS(itself,'update-resource-after');
+		//---------------------
 	}
-	itself.resource.save(parent);
-	testFileSaved(uuid);
 };
 
 //==================================

@@ -182,21 +182,29 @@ UIFactory["Oembed"].prototype.displayView = function(dest,type,langcode)
 UIFactory["Oembed"].update = function(obj,itself,type,langcode)
 //==================================
 {
-	$(itself.lastmodified_node).text(new Date().getTime());
-	//---------------------
-	if (langcode==null)
-		langcode = LANGCODE;
-	//---------------------
-	var url = $("input[name='url']",obj).val();
-	//---------------------
-	itself.multilingual = ($("metadata",itself.node).attr('multilingual-resource')=='Y') ? true : false;
-	if (!itself.multilingual)
-		for (var langcode=0; langcode<languages.length; langcode++) {
+	if (execJS(itself,"update-resource-if")) {
+		//-------- if function js -------------
+		execJS(itself,"update-resource-before");
+		//---------------------
+		$(itself.lastmodified_node).text(new Date().getTime());
+		//---------------------
+		if (langcode==null)
+			langcode = LANGCODE;
+		//---------------------
+		var url = $("input[name='url']",obj).val();
+		//---------------------
+		itself.multilingual = ($("metadata",itself.node).attr('multilingual-resource')=='Y') ? true : false;
+		if (!itself.multilingual)
+			for (var langcode=0; langcode<languages.length; langcode++) {
+				$(itself.url_node[langcode]).text(url);
+			}
+		else
 			$(itself.url_node[langcode]).text(url);
-		}
-	else
-		$(itself.url_node[langcode]).text(url);
-	itself.save();
+		itself.save();
+		//-------- if function js -------------
+		execJS(itself,'update-resource-after');
+		//---------------------
+	}
 };
 
 //==================================

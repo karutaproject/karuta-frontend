@@ -120,7 +120,16 @@ UIFactory["Calendar"].prototype.getView = function(dest,type,langcode)
 		g_variables[variable_name] = $(this.utc).text();
 	}
 	//---------------------
-	return $(this.text_node[langcode]).text();
+	let html = $(this.text_node[langcode]).text();
+	//------------------execJS-----------------
+	const result1 = execJS(this,'display-resource-before');
+	if (typeof result1 == 'string')
+		html = result1 + html;
+	const result2 = execJS(this,'display-resource-after');
+	if (typeof result2 == 'string')
+		html = html + result2;
+	//------------------------------------------
+	return html;
 };
 
 //==================================
@@ -136,27 +145,29 @@ UIFactory["Calendar"].prototype.displayView = function(dest,langcode)
 UIFactory["Calendar"].update = function(itself,langcode)
 //==================================
 {
-	execJS(itself,"update-resource-before");
-	$(itself.lastmodified_node).text(new Date().getTime());
-	if ($(itself.text_node[langcode]).text()=="")
-		$(itself.utc).text("null");
-	//---------------------
-	if (!itself.multilingual) {
-		var text = $(itself.text_node[langcode]).text();
-		var format = $(itself.format_node[langcode]).text();
-		for (var langcode=0; langcode<languages.length; langcode++) {
-			$(itself.text_node[langcode]).text(text);
-			$(itself.format_node[langcode]).text(format);
+	if (execJS(itself,"update-resource-if")) {
+		execJS(itself,"update-resource-before");
+		$(itself.lastmodified_node).text(new Date().getTime());
+		if ($(itself.text_node[langcode]).text()=="")
+			$(itself.utc).text("null");
+		//---------------------
+		if (!itself.multilingual) {
+			var text = $(itself.text_node[langcode]).text();
+			var format = $(itself.format_node[langcode]).text();
+			for (var langcode=0; langcode<languages.length; langcode++) {
+				$(itself.text_node[langcode]).text(text);
+				$(itself.format_node[langcode]).text(format);
+			}
 		}
+		itself.save();
+		//---------------------
+		if (UICom.structure.ui[itself.id].semantictag.indexOf("g-select-variable")>-1) {
+			var variable_name = $(UICom.structure.ui[itself.id].code_node).text();
+			g_variables[variable_name] = $(itself.utc).text();
+		}
+		//---------------------
+		execJS(itself,"update-resource-after");
 	}
-	itself.save();
-	//---------------------
-	if (UICom.structure.ui[itself.id].semantictag.indexOf("g-select-variable")>-1) {
-		var variable_name = $(UICom.structure.ui[itself.id].code_node).text();
-		g_variables[variable_name] = $(itself.utc).text();
-	}
-	//---------------------
-	execJS(itself,"update-resource-after");
 };
 
 //==================================

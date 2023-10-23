@@ -156,29 +156,7 @@ UIFactory["Audio"].prototype.getView = function(dest,type,langcode)
 UIFactory["Audio"].prototype.displayView = function(dest,type,langcode)
 //==================================
 {
-	//---------------------
-	if (langcode==null)
-		langcode = LANGCODE;
-	if (this.multilingual!=undefined && !this.multilingual)
-		langcode = 0;
-	//---------------------
-	if (type==null)
-		type = "html5";
-	//---------------------
-	this.display[dest] = {"type":type,"langcode":langcode};
-	//------------------------
-	var nodefileid = this.id;
-	if (nodefileid.indexOf("_")>-1) // proxy-audio
-		nodefileid = nodefileid.substring(0,nodefileid.indexOf("_"));
-	//------------------------
-	var html ="";
-	if (type=='html5') {
-		html += "<audio controls>";
-//		var srce = serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&type=.mp3";
-		var srce = serverBCK+"/resources/resource/file/"+nodefileid+"?lang="+languages[langcode];
-		html += "<source src='"+srce+"' type='audio/mpeg'/>";
-		html += "</audio>";		
-	}
+	let html = this.getView(dest,type,langcode);
 	$("#"+dest).html(html);
 };
 

@@ -137,16 +137,24 @@ UIFactory["Get_Portfolio"].prototype.displayView = function(dest,type,langcode)
 UIFactory["Get_Portfolio"].update = function(selected_item,itself,langcode,type)
 //==================================
 {
-	$(itself.lastmodified_node).text(new Date().getTime());
-	var value = $(selected_item).attr('value');
-	var code = $(selected_item).attr('code');
-	$(itself.uuid_node).text(value);
-	$(itself.code_node).text(code);
-	for (var i=0; i<languages.length;i++){
-		var label = $(selected_item).attr('label_'+languages[i]);
-		$(itself.label_node[i]).text(label);
+	if (execJS(itself,"update-resource-if")) {
+		//-------- if function js -------------
+		execJS(itself,"update-resource-before");
+		//---------------------
+		$(itself.lastmodified_node).text(new Date().getTime());
+		var value = $(selected_item).attr('value');
+		var code = $(selected_item).attr('code');
+		$(itself.uuid_node).text(value);
+		$(itself.code_node).text(code);
+		for (var i=0; i<languages.length;i++){
+			var label = $(selected_item).attr('label_'+languages[i]);
+			$(itself.label_node[i]).text(label);
+		}
+		itself.save();
+		//-------- if function js -------------
+		execJS(itself,'update-resource-after');
+		//---------------------
 	}
-	itself.save();
 };
 
 //==================================

@@ -189,28 +189,36 @@ UIFactory["URL"].prototype.displayView = function(dest,type,langcode)
 UIFactory["URL"].update = function(obj,itself,type,langcode,parent)
 //==================================
 {
-	$(itself.lastmodified_node).text(new Date().getTime());
-	//---------------------
-	if (langcode==null)
-		langcode = LANGCODE;
-	//---------------------
-	var label = $("input[name='label']",obj).val();
-	var url = $("input[name='url']",obj).val();
-	if(type!=null && type=='same')
-		label = url;
-	//---------------------
-	itself.multilingual = ($("metadata",itself.node).attr('multilingual-resource')=='Y') ? true : false;
-	if (itself.multilingual!=undefined && !itself.multilingual) {
-		for (var langcode=0; langcode<languages.length; langcode++) {
+	if (execJS(itself,"update-resource-if")) {
+		//-------- if function js -------------
+		execJS(itself,"update-resource-before");
+		//---------------------
+		$(itself.lastmodified_node).text(new Date().getTime());
+		//---------------------
+		if (langcode==null)
+			langcode = LANGCODE;
+		//---------------------
+		var label = $("input[name='label']",obj).val();
+		var url = $("input[name='url']",obj).val();
+		if(type!=null && type=='same')
+			label = url;
+		//---------------------
+		itself.multilingual = ($("metadata",itself.node).attr('multilingual-resource')=='Y') ? true : false;
+		if (itself.multilingual!=undefined && !itself.multilingual) {
+			for (var langcode=0; langcode<languages.length; langcode++) {
+				$(itself.label_node[langcode]).text(label);
+				$(itself.url_node[langcode]).text(url);
+			}
+		} else {
 			$(itself.label_node[langcode]).text(label);
 			$(itself.url_node[langcode]).text(url);
 		}
-	} else {
-		$(itself.label_node[langcode]).text(label);
-		$(itself.url_node[langcode]).text(url);
+		//---------------------
+		itself.save(parent);
+		//-------- if function js -------------
+		execJS(itself,'update-resource-after');
+		//---------------------
 	}
-	//---------------------
-	itself.save(parent);
 };
 
 //==================================
