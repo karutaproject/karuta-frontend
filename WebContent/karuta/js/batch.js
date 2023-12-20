@@ -3128,7 +3128,6 @@ g_actions['update-url2portfolio'] = function update_url2portfolio(node,data)
 	//----------------------------------------
 	if (nodes.length>0){	
 			for (let i=0; i<nodes.length; i++){
-				ok++;
 				var targetid = $(nodes[i]).attr('id');
 				//----- get target ----------------
 				var resource = $("asmResource[xsi_type='URL2Portfolio']",nodes[i]);

@@ -418,7 +418,11 @@ UIFactory["Get_Resource"].prototype.displayEditor = function(destid,type,langcod
 			portfoliocode = selfcode.substring(0,selfcode.indexOf('.')) + "." + portfoliocode;
 		if (portfoliocode=='self') {
 			portfoliocode = selfcode;
-			cachable = false;
+			const semtag = $("metadata",$("asmRoot",g_portfolio_current)).attr('semantictag');
+			if (semtag.indexOf('batch')>-1)
+				cachable = true;
+			else
+				cachable = false;
 		}
 		//------------
 		var self = this;
