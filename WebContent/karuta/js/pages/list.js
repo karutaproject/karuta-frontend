@@ -92,7 +92,7 @@ function fill_list_page()
 	html += "		<div id='portfolio-leftside-content1' class='content1 tree'></div>";
 	html += "		<h3 class='title'>";
 	html += "			<span id='portfolios-label' class='folder-label'>"+karutaStr[LANG]['portfolios']+"</span>&nbsp<span class='badge number_of_portfolios' id='portfolios-nb'></span>";
-	html += "			<button id='list-menu' class='btn' onclick=\"UIFactory.PortfolioFolder.loadAndDisplayPortfolios('portfolio-content2-rightside','list');\">&nbsp;"+karutaStr[LANG]['see']+"</button>";
+	html += "			<button id='list-menu' class='btn' onclick=\"UIFactory.PortfolioFolder.loadAndDisplayPortfolios('portfolio-content2-rightside','list');localStorage.setItem('currentDisplayedportfolioCode','portfolios');\">&nbsp;"+karutaStr[LANG]['see']+"</button>";
 	html += "		</h3>";
 	html += "		<div id='portfolio-leftside-content2' class='content2'></div>";
 	html += "	</div>";
@@ -120,6 +120,9 @@ function fill_list_page()
 	//--------we load the folders-----------------------
 	UIFactory.PortfolioFolder.loadAndDisplayAll('portfolio');
 	UIFactory.PortfolioFolder.checkPortfolios();
+	if (localStorage.getItem('currentDisplayedportfolioCode')=='portfolios') {
+		UIFactory.PortfolioFolder.loadAndDisplayPortfolios('portfolio-content2-rightside','list');
+	}
 	if (nb_folders==0 && nb_portfolios==0 && g_execbatch!=undefined && g_execbatch){
 		$("#search-portfolio-div").hide();
 		$("#refresh").hide();

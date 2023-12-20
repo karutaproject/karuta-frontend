@@ -1016,13 +1016,25 @@ UIFactory["PortfolioFolder"].loadAndDisplayPortfolios = function(dest,type)
 		url : serverBCK_API+"/portfolios?active=1&project=false",
 		success : function(data) {
 			portfoliosnotinfolders = $("portfolio",data);
-			UIFactory["Portfolio"].parse_add(data);
+			UIFactory.Portfolio.parse_add(data);
 			var nb_visibleportfolios = 0;
 			var visibleid = "";
 			var autoload = "";
 			try {
 				specificDisplayPortfolios(type);
 			} catch(e) {
+				for (var i=0;i<portfoliosnotinfolders.length;i++){
+					let uuid = $(portfoliosnotinfolders[i]).attr('id');
+					//--------------------------
+					if (portfolios_byid[uuid].visible || portfolios_byid[uuid].ownerid==USER.id) {
+						nb_visibleportfolios++;
+						visibleid = uuid;
+					}
+					if (portfolios_byid[uuid].autoload) {
+						autoload = uuid;
+					}
+				}
+/*
 				for (var i=0;i<portfolios_list.length;i++){
 					//--------------------------
 					if (portfolios_list[i].visible || portfolios_list[i].ownerid==USER.id) {
@@ -1033,6 +1045,7 @@ UIFactory["PortfolioFolder"].loadAndDisplayPortfolios = function(dest,type)
 						autoload = portfolios_list[i].id;
 					}
 				}
+*/
 				$("#portfolios-nb").html(nb_visibleportfolios);
 				//---------------------------------------------------------------------------------------------
 				if (type!=undefined)

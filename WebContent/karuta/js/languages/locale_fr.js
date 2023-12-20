@@ -242,7 +242,7 @@ karutaStr['fr']['resource']="Ressource";
 karutaStr['fr']['metadata']="Métadonnées";
 karutaStr['fr']['css-styles']="Présentation";
 karutaStr['fr']['inparent']="Dans le parent";
-kkarutaStr['fr']['seltype']="Présentation ";
+karutaStr['fr']['seltype']="Présentation ";
 karutaStr['fr']['shareroles']="Partager<br/><span style='font-size:smaller'> rôle qui partage,rôle visiteur,rôles et/ou courriels destinataires,niveau (0-4),durée de vie du lien (en heures),";
 karutaStr['fr']['shareroles2']="libellé du bouton@fr";
 karutaStr['fr']['shareroles3']="[,condition][;autre partage]";
