@@ -42,8 +42,8 @@ UIFactory["BatchForm"] = function( node )
 UIFactory["BatchForm"].prototype.getView = function(dest,type,langcode)
 //==================================
 {
-	var execroles = UICom.structure["ui"][this.execroles_nodeid].resource.getView();
-	var model_code = UICom.structure["ui"][this.model_code_nodeid];
+	var execroles = UICom.structure.ui[this.execroles_nodeid].resource.getView();
+	var model_code = UICom.structure.ui[this.model_code_nodeid];
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
@@ -63,8 +63,8 @@ UIFactory["BatchForm"].prototype.getView = function(dest,type,langcode)
 UIFactory["BatchForm"].prototype.displayView = function(dest,type,langcode)
 //==================================
 {
-	var execroles = UICom.structure["ui"][this.execroles_nodeid].resource.getView();
-	var model_code = UICom.structure["ui"][this.model_code_nodeid];
+	var execroles = UICom.structure.ui[this.execroles_nodeid].resource.getView();
+	var model_code = UICom.structure.ui[this.model_code_nodeid];
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
@@ -84,8 +84,8 @@ UIFactory["BatchForm"].prototype.displayView = function(dest,type,langcode)
 UIFactory["BatchForm"].prototype.displayEditor = function(destid,type,langcode)
 //==================================
 {
-	var execroles = UICom.structure["ui"][this.execroles_nodeid];
-	var model_code = UICom.structure["ui"][this.model_code_nodeid];
+	var execroles = UICom.structure.ui[this.execroles_nodeid];
+	var model_code = UICom.structure.ui[this.model_code_nodeid];
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
@@ -108,7 +108,7 @@ UIFactory["BatchForm"].prototype.getButtons = function(dest,type,langcode)
 	if (langcode==null)
 		langcode = LANGCODE;
 	//---------------------
-	var execroles = UICom.structure["ui"][this.execroles_nodeid].resource.getView();
+	var execroles = UICom.structure.ui[this.execroles_nodeid].resource.getView();
 	var html = "<div class='btn-group'>";
 	if (execroles.containsArrayElt(g_userroles)|| USER.admin || g_userroles[0]=='designer'){
 		html += "<span id='exec-"+this.id+"' class='button text-button' onclick=\"javascript:UIFactory.BatchForm.execBatch('"+this.id+"')\" ";
@@ -128,7 +128,7 @@ UIFactory['BatchForm'].execBatch = function(nodeid)
 	UIFactory.BatchForm.display_execBatch();
 	//---------------------
 	var node = UICom.structure.ui[nodeid].structured_resource;
-	var model_code = UICom.structure["ui"][node.model_code_nodeid].resource.getView();
+	var model_code = UICom.structure.ui[node.model_code_nodeid].resource.getView();
 	initBatchVars();
 	g_json = UIFactory['BatchForm'].getInputsLine(node.batchform_line0_node);
 	g_json['model_code'] = model_code;
@@ -151,15 +151,15 @@ UIFactory['BatchForm'].getInputsLine = function(node)
 	let line_inputs = $("asmContext:has(metadata[semantictag='BatchFormInput'])",node);
 	for ( var j = 0; j < line_inputs.length; j++) {
 		var inputid = $(line_inputs[j]).attr('id');
-		code = UICom.structure["ui"][inputid].getCode().trim();
-		json_line[code] = replaceVariable(UICom.structure["ui"][inputid].resource.getView(null,'batchform').trim());
+		code = UICom.structure.ui[inputid].getCode().trim();
+		json_line[code] = replaceVariable(UICom.structure.ui[inputid].resource.getView(null,'batchform').trim());
 	}
 	line_inputs = $("asmContext:has(metadata[semantictag='BatchFormInputCode'])",node);
 	for ( var j = 0; j < line_inputs.length; j++) {
 		var inputid = $(line_inputs[j]).attr('id');
-		code = UICom.structure["ui"][inputid].getCode();
-		if (UICom.structure["ui"][inputid].resource.type=="Get_Resource")
-			json_line[code] = replaceVariable(UICom.structure["ui"][inputid].resource.getCode());
+		code = UICom.structure.ui[inputid].getCode();
+		if (UICom.structure.ui[inputid].resource.type=="Get_Resource")
+			json_line[code] = replaceVariable(UICom.structure.ui[inputid].resource.getCode());
 	}
 	return json_line;
 };

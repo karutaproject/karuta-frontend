@@ -159,7 +159,7 @@ UIFactory["Item"].prototype.getView = function(dest,type,langcode)
 	if (dest!=null) {
 		this.display[dest] = langcode;
 	}
-	var node = UICom.structure["ui"][this.id];
+	var node = UICom.structure.ui[this.id];
 	var editresroles = ($(node.metadatawad).attr('editresroles')==undefined)?'':$(node.metadatawad).attr('editresroles');
 	var resnopencil = ($(node.metadatawad).attr('resnopencil')==undefined)?'N':$(node.metadatawad).attr('resnopencil');
 	var displayCodeValue = (editresroles.containsArrayElt(g_userroles) || editresroles.indexOf(this.userrole)>-1 || editresroles.indexOf($(USER.username_node).text())>-1) && resnopencil=='N';

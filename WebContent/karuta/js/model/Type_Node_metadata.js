@@ -31,7 +31,7 @@ UIFactory["Node"].prototype.setMetadata = function(dest,depth,langcode,edit,inli
 	//-----------------------------
 	var data = this.node;
 	var uuid = this.id;
-	var node = UICom.structure["ui"][uuid];
+	var node = UICom.structure.ui[uuid];
 	// ---- store info to redisplay after change ---
 	//------------------metadata----------------------------
 	this.nodetype = $(data).prop("nodeName"); // name of the xml tag
@@ -196,8 +196,8 @@ UIFactory["Node"].prototype.getContentStyle = function()
 UIFactory["Node"].getContentStyle = function(uuid)
 //==================================================
 {	var style ="";
-	if (UICom.structure["ui"][uuid]!=undefined)
-		style = UICom.structure["ui"][uuid].getContentStyle();
+	if (UICom.structure.ui[uuid]!=undefined)
+		style = UICom.structure.ui[uuid].getContentStyle();
 	return style;
 }
 
@@ -219,8 +219,8 @@ UIFactory["Node"].prototype.getCommentStyle = function()
 UIFactory["Node"].getCommentStyle = function(uuid)
 //==================================================
 {	var style ="";
-	if (UICom.structure["ui"][uuid]!=undefined)
-		style = UICom.structure["ui"][uuid].getCommentStyle();
+	if (UICom.structure.ui[uuid]!=undefined)
+		style = UICom.structure.ui[uuid].getCommentStyle();
 	return style;
 }
 
@@ -1599,21 +1599,21 @@ UIFactory["Node"].prototype.displayMetadataEpmAttributesEditor = function(destid
 UIFactory["Node"].updateMetadataAttribute = function(nodeid,attribute,value,checked)
 //==================================================
 {
-	var node = UICom.structure["ui"][nodeid].node;
+	var node = UICom.structure.ui[nodeid].node;
 	if (checked!=undefined && !checked)
 		value = "N";
 	if (attribute=='multilingual-node')
-		UICom.structure["ui"][nodeid].multilingual = (value=="Y");
+		UICom.structure.ui[nodeid].multilingual = (value=="Y");
 	if (attribute=='semantictag')
-		UICom.structure["ui"][nodeid].semantictag = value;
+		UICom.structure.ui[nodeid].semantictag = value;
 	if (attribute=='multilingual-resource')
-		UICom.structure["ui"][nodeid].resource.multilingual = (value=="Y");
+		UICom.structure.ui[nodeid].resource.multilingual = (value=="Y");
 	if (attribute=='preview')
-		UICom.structure["ui"][nodeid].resource.preview = (value=="Y");
+		UICom.structure.ui[nodeid].resource.preview = (value=="Y");
 	$($("metadata",node)[0]).attr(attribute,value);
 	UICom.UpdateMetadata(nodeid);
 	if (g_userroles[0]=='designer' || USER.admin) {  
-		UICom.structure["ui"][nodeid].displayMetainfo("metainfo_"+nodeid);
+		UICom.structure.ui[nodeid].displayMetainfo("metainfo_"+nodeid);
 	}
 };
 
@@ -1621,7 +1621,7 @@ UIFactory["Node"].updateMetadataAttribute = function(nodeid,attribute,value,chec
 UIFactory["Node"].updateMetadataWadAttribute = function(nodeid,attribute,value,checked)
 //==================================================
 {
-	var node = UICom.structure["ui"][nodeid].node;
+	var node = UICom.structure.ui[nodeid].node;
 	if (checked!=undefined && !checked)
 		value = "N";
 	$($("metadata-wad",node)[0]).attr(attribute,value);
@@ -1642,7 +1642,7 @@ UIFactory["Node"].updateMetadataWadAttribute = function(nodeid,attribute,value,c
 	//-----------------------------------
 	UICom.UpdateMetaWad(nodeid);
 	if (g_userroles[0]=='designer' || USER.admin) {  
-		UICom.structure["ui"][nodeid].displayMetainfo("metainfo_"+nodeid);
+		UICom.structure.ui[nodeid].displayMetainfo("metainfo_"+nodeid);
 	}
 };
 
@@ -1650,7 +1650,7 @@ UIFactory["Node"].updateMetadataWadAttribute = function(nodeid,attribute,value,c
 UIFactory["Node"].updateMetadataEpmAttribute = function(nodeid,attribute,value,checked)
 //==================================================
 {
-	var node = UICom.structure["ui"][nodeid].node;
+	var node = UICom.structure.ui[nodeid].node;
 	if (checked!=undefined && !checked)
 		value = "N";
 	if (value=='nothing')
@@ -1662,7 +1662,7 @@ UIFactory["Node"].updateMetadataEpmAttribute = function(nodeid,attribute,value,c
 		refresh = false;
 	UICom.UpdateMetaEpm(nodeid,refresh);
 	if (g_userroles[0]=='designer' || USER.admin) {  
-		UICom.structure["ui"][nodeid].displayMetaEpmInfo("metaepm_"+nodeid);
+		UICom.structure.ui[nodeid].displayMetaEpmInfo("metaepm_"+nodeid);
 	}
 
 };
@@ -1673,11 +1673,11 @@ UIFactory["Node"].updateMetadataSelectAttribute = function(nodeid,attribute,sele
 {
 	var option = $(select).find("option:selected");
 	var value = $(option).attr('value');
-	var node = UICom.structure["ui"][nodeid].node;
+	var node = UICom.structure.ui[nodeid].node;
 	$($("metadata",node)[0]).attr(attribute,value);
 	UICom.UpdateMetadata(nodeid);
 	if (g_userroles[0]=='designer' || USER.admin) {  
-		UICom.structure["ui"][nodeid].displayMetainfo("metainfo_"+nodeid);
+		UICom.structure.ui[nodeid].displayMetainfo("metainfo_"+nodeid);
 	}
 };
 */
@@ -1687,12 +1687,12 @@ UIFactory["Node"].updateMetadataEpmSelectAttribute = function(nodeid,attribute,s
 {
 	var option = $(select).find("option:selected");
 	var value = $(option).attr('value');
-	var node = UICom.structure["ui"][nodeid].node;
+	var node = UICom.structure.ui[nodeid].node;
 	$($("metadata-epm",node)[0]).attr(attribute,value);
 	var refresh = true;
 	UICom.UpdateMetaEpm(nodeid,refresh);
 	if (g_userroles[0]=='designer' || USER.admin) {  
-		UICom.structure["ui"][nodeid].displayMetaEpmInfo("metaepm_"+nodeid);
+		UICom.structure.ui[nodeid].displayMetaEpmInfo("metaepm_"+nodeid);
 	}
 };
 
@@ -1700,9 +1700,9 @@ UIFactory["Node"].updateMetadataEpmSelectAttribute = function(nodeid,attribute,s
 UIFactory["Node"].updateMetadatawWadTextAttribute = function(nodeid,attribute)
 //==================================================
 {
-	var node = UICom.structure["ui"][nodeid].node;
+	var node = UICom.structure.ui[nodeid].node;
 	var value = $.trim($("#"+nodeid+"_"+attribute).val());
-	if (attribute=='query' && UICom.structure["ui"][nodeid].resource!=undefined && UICom.structure["ui"][nodeid].resource.type=='Proxy' && value!=undefined && value!='') {
+	if (attribute=='query' && UICom.structure.ui[nodeid].resource!=undefined && UICom.structure.ui[nodeid].resource.type=='Proxy' && value!=undefined && value!='') {
 		var semtag = $($("metadata",node)[0]).attr('semantictag');
 		if (semtag.indexOf ('proxy')<0)
 			$($("metadata",node)[0]).attr('semantictag','proxy-'+semtag);

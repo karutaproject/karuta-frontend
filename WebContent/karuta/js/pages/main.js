@@ -59,8 +59,8 @@ function fill_main_page(portfolioid,userrole)
 			if (typeof(rewriteURL) == 'function')
 				rewriteURL(portfoliocode);
 			//-------------------------
-			if (UICom.structure['ui'][g_portfolio_rootid]!=undefined)
-				UICom.structure['ui'][g_portfolio_rootid].loaded = true;
+			if (UICom.structure.ui[g_portfolio_rootid]!=undefined)
+				UICom.structure.ui[g_portfolio_rootid].loaded = true;
 			var root_semantictag = $("metadata",$("asmRoot",data)).attr('semantictag');
 			var default_role = "";
 			if ($("metadata-wad",$("asmRoot",data)).attr('defaultrole')!= undefined)
@@ -169,7 +169,7 @@ function fill_main_page(portfolioid,userrole)
 				welcomes = $("asmUnit:has(metadata[semantictag*='welcome-unit'])",data);
 			if (welcomes.length>0){
 				var welcomeid = $(welcomes[0]).attr('id');
-				var node = UICom.structure['ui'][welcomeid];
+				var node = UICom.structure.ui[welcomeid];
 				var display = ($(node.metadatawad).attr('display')==undefined)?'Y':$(node.metadatawad).attr('display');
 				if (display=='Y')
 					$("#sidebar_"+welcomeid).click();

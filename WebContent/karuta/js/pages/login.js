@@ -306,9 +306,12 @@ function constructKarutaLogin(withKarutaLogin)
 		success: function (data) {
 			karuta_backend_version = data.version;
 			karuta_backend_date = data.buildTime;
+		},
+		error: function(data) {
 		}
 	});
-	$.ajax({
+/*
+ 	$.ajax({
 		type : "GET",
 		dataType : "json",
 		url : serverBCK_API+"/fileserver-version",
@@ -316,8 +319,11 @@ function constructKarutaLogin(withKarutaLogin)
 		success: function (data) {
 			karuta_fileserver_version = data.version;
 			karuta_fileserver_date = data.buildTime;
+		},
+		error: function(data) {
 		}
 	});
+*/
 	try {
 		specificLoginFunction();
 	} catch(e) {

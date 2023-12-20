@@ -1209,7 +1209,7 @@ UIFactory["Get_Get_Resource"].parseChildren = function(dest,data,langcode,self,s
 UIFactory["Get_Get_Resource"].reloadIfInLine = function(uuid,destid,type,langcode)
 //==================================
 {
-	var node = UICom.structure["ui"][uuid];
+	var node = UICom.structure.ui[uuid];
 	var inline_metadata = ($(node.metadata).attr('inline')==undefined)? '' : $(node.metadata).attr('inline');
 	if (inline_metadata=='Y')
 		node.resource.redisplayEditor(destid,type,langcode); //(destid,type,langcode,disabled,cachable)
@@ -1709,7 +1709,7 @@ function get_get_multiple(parentid,targetid,title,query,partcode,get_get_resourc
 	$("#edit-window-type").html("");
 	$("#edit-window-body-metadata").html("");
 	$("#edit-window-body-metadata-epm").html("");
-	var getgetResource = new UIFactory["Get_Get_Resource"](UICom.structure["ui"][parentid].node,"xsi_type='nodeRes'");
+	var getgetResource = new UIFactory["Get_Get_Resource"](UICom.structure.ui[parentid].node,"xsi_type='nodeRes'");
 	getgetResource.multiple = query+"/"+partcode+","+get_get_resource_semtag;
 	getgetResource.displayEditor("get-get-resource-node");
 	$('#edit-window').modal('show');
@@ -1731,7 +1731,7 @@ function import_ggmultiple(parentid,targetid,title,query,partcode,fct)
 	$("#edit-window-type").html("");
 	$("#edit-window-body-metadata").html("");
 	$("#edit-window-body-metadata-epm").html("");
-	var getgetResource = new UIFactory["Get_Get_Resource"](UICom.structure["ui"][parentid].node,"xsi_type='nodeRes'");
+	var getgetResource = new UIFactory["Get_Get_Resource"](UICom.structure.ui[parentid].node,"xsi_type='nodeRes'");
 	getgetResource.multiple = query+"/"+partcode;
 	getgetResource.displayEditor("get-get-resource-node");
 	$('#edit-window').modal('show');
@@ -1772,7 +1772,7 @@ function functions_ggmultiple(parentid,targetid,title,query,functions)
 	$("#edit-window-type").html("");
 	$("#edit-window-body-metadata").html("");
 	$("#edit-window-body-metadata-epm").html("");
-	var getgetResource = new UIFactory["Get_Get_Resource"](UICom.structure["ui"][parentid].node,"xsi_type='nodeRes'");
+	var getgetResource = new UIFactory["Get_Get_Resource"](UICom.structure.ui[parentid].node,"xsi_type='nodeRes'");
 	getgetResource.multiple = query+"/";
 	getgetResource.displayEditor("get-get-resource-node");
 	$('#edit-window').modal('show');
@@ -1847,7 +1847,7 @@ function import_get_get_multiple(parentid,targetid,title,parent_position,parent_
 	$("#edit-window-type").html("");
 	$("#edit-window-body-metadata").html("");
 	$("#edit-window-body-metadata-epm").html("");
-	var getgetResource = new UIFactory["Get_Get_Resource"](UICom.structure["ui"][parentid].node,"xsi_type='nodeRes'");
+	var getgetResource = new UIFactory["Get_Get_Resource"](UICom.structure.ui[parentid].node,"xsi_type='nodeRes'");
 	getgetResource.get_type = "import_comp";
 	getgetResource.parent_position = parent_position;
 	getgetResource.parent_semtag = parent_semtag;

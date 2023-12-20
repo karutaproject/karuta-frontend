@@ -135,7 +135,7 @@ UIFactory["Report"].prototype.displayView = function(dest,langcode)
 	$("#"+dest).html($(this.text_node[langcode]).text());
 	//----------------------------------------
 	$("#extra_"+uuid).append($("<div class='row'><div id='exec_button_"+uuid+"' class='col-md-offset-1 col-md-2 btn-group'></div><div id='dashboard_"+uuid+"' class='createreport col-md-offset-1 col-md-11'></div><div id='csv_button_"+uuid+"' class='col-md-offset-1 col-md-2 btn-group'></div><div id='pdf_button_"+uuid+"' class='col-md-1 btn-group'></div></div>"));
-	var model_code = UICom.structure["ui"][uuid].resource.getView();
+	var model_code = UICom.structure.ui[uuid].resource.getView();
 	if (model_code!='') {
 		$.ajax({
 			type : "GET",
@@ -161,15 +161,15 @@ UIFactory["Report"].prototype.displayView = function(dest,langcode)
 			}
 		});
 		//---------- display csv or pdf -------
-		var csv_roles = $(UICom.structure["ui"][uuid].resource.csv_node).text();
+		var csv_roles = $(UICom.structure.ui[uuid].resource.csv_node).text();
 		if (csv_roles.containsArrayElt(g_userroles) || (csv_roles!='' && (g_userroles[0]=='designer' || USER.admin))) {
 			$("#csv_button_"+uuid).append($("<div class='csv-button button' onclick=\"javascript:xml2CSV('dashboard_"+uuid+"')\">CSV</div>"));				
 		}
-		var pdf_roles = $(UICom.structure["ui"][uuid].resource.pdf_node).text();
+		var pdf_roles = $(UICom.structure.ui[uuid].resource.pdf_node).text();
 		if (pdf_roles.containsArrayElt(g_userroles) || (pdf_roles!='' && (g_userroles[0]=='designer' || USER.admin))) {
 			$("#csv_button_"+uuid).append($("<div class='pdf-button button' onclick=\"javascript:xml2PDF('dashboard_"+uuid+"')\">PDF</div><div class='pdf-button button' onclick=\"javascript:xml2RTF('dashboard_"+uuid+"')\">RTF/Word</div>"));				
 		}
-		var img_roles = $(UICom.structure["ui"][uuid].resource.img_node).text();
+		var img_roles = $(UICom.structure.ui[uuid].resource.img_node).text();
 		if (img_roles.containsArrayElt(g_userroles) || (img_roles!='' && (g_userroles[0]=='designer' || USER.admin))) {
 			$("#csv_button_"+uuid).append($("<div class='pdf-button button' onclick=\"javascript:html2IMG('dashboard_"+uuid+"')\">IMG</div>"));
 		}
@@ -190,7 +190,7 @@ UIFactory["Report"].update = function(itself,langcode)
 UIFactory["Report"].updateAttribute = function(uuid,attName,val,langcode)
 //==================================
 {
-	var itself = UICom.structure["ui"][uuid];  // context node
+	var itself = UICom.structure.ui[uuid];  // context node
 	$(itself.lastmodified_node).text(new Date().getTime());
 	$($(attName,$(itself.resource.node))).text(val);
 	itself.save();
@@ -363,7 +363,7 @@ UIFactory["Report"].prototype.refresh = function()
 function register_report(uuid)
 //==================================
 {
-	var node_resource = UICom.structure["ui"][uuid].resource;
+	var node_resource = UICom.structure.ui[uuid].resource;
 	var startday = node_resource.startday_node.text();
 	var time = node_resource.time_node.text();
 	var freq = node_resource.freq_node.text();

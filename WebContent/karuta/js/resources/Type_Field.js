@@ -130,7 +130,7 @@ UIFactory["Field"].prototype.displayView = function(dest,type,langcode)
 UIFactory["Field"].prototype.update = function(langcode)
 //==================================
 {
-	if (execJS(itself,"update-resource-if")) {
+	if (execJS(this,"update-resource-if")) {
 		execJS(this,"update-resource-before");
 		$(this.lastmodified_node).text(new Date().getTime());
 		//---------------------

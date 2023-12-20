@@ -507,7 +507,7 @@ function genDashboardContent(destid,uuid,parent,root_node)
 	g_variables['NOELT'] = "";
 	dashboard_id = uuid;
 	var spinning = true;
-	var dashboard_code = UICom.structure["ui"][uuid].resource.getView();
+	var dashboard_code = UICom.structure.ui[uuid].resource.getView();
 	var folder_code = replaceVariable(dashboard_code.substring(0,dashboard_code.indexOf('.')));
 	var part_code = dashboard_code.substring(dashboard_code.indexOf('.'));
 	var model_code = "";
@@ -692,8 +692,8 @@ g_report_actions['for-each-node'] = function (destid,action,no,data)
 				url : serverBCK_API+"/portfolios/portfolio/code/" + portfoliocode +"?resources=true",
 				success : function(data_portfolio) {
 					if (report_not_in_a_portfolio){
-						UICom.structure["tree"] = {};
-						UICom.structure["ui"] = {};
+						UICom.structure.tree = {};
+						UICom.structure.ui = {};
 					}
 					UICom.parseStructure(data_portfolio,true, null, null,true);
 					data = data_portfolio;
@@ -1446,8 +1446,8 @@ g_report_actions['for-each-portfolio'] = function (destid,action,no,data)
 							url : serverBCK_API+"/portfolios/portfolio/" + portfolioid + "?resources=true",
 							success : function(data) {
 								if (report_not_in_a_portfolio){
-									UICom.structure["tree"] = {};
-									UICom.structure["ui"] = {};
+									UICom.structure.tree = {};
+									UICom.structure.ui = {};
 								}
 								UICom.parseStructure(data,true, null, null,true);
 								var actions = $(action).children();
@@ -1516,8 +1516,8 @@ g_report_actions['for-each-portfolio-js'] = function (destid,action,no,data)
 			url : serverBCK_API+"/portfolios/portfolio/" + portfolioid + "?resources=true",
 			success : function(data) {
 				if (report_not_in_a_portfolio){
-					UICom.structure["tree"] = {};
-					UICom.structure["ui"] = {};
+					UICom.structure.tree = {};
+					UICom.structure.ui = {};
 				}
 				UICom.parseStructure(data,true, null, null,true);
 				var actions = $(action).children();
@@ -1670,8 +1670,8 @@ g_report_actions['for-each-portfolios-nodes'] = function (destid,action,no,data)
 									success : function(data) {
 										//-----------------------------
 										if (report_not_in_a_portfolio){
-											UICom.structure["tree"] = {};
-											UICom.structure["ui"] = {};
+											UICom.structure.tree = {};
+											UICom.structure.ui = {};
 										}
 										UICom.parseStructure(data,true, null, null,true);
 										//-----------------------------
@@ -1733,7 +1733,7 @@ g_report_actions['node_resource'] = function (destid,action,no,data)
 			//----------------------------
 			if (UICom.structure.ui[nodeid].editresroles==undefined)
 				UICom.structure.ui[nodeid].setMetadata();
-			var node = UICom.structure["ui"][nodeid];
+			var node = UICom.structure.ui[nodeid];
 			g_variables["currentnode"] = "UICom.structure.ui['"+nodeid+"']";
 			var writenode = ($(node.node).attr('write')=='Y')? true:false;
 			if (editresroles.indexOf("user")>-1)
@@ -1764,59 +1764,59 @@ g_report_actions['node_resource'] = function (destid,action,no,data)
 			//----------------------------
 			if (selector.type=='resource') {
 				try {
-					text = UICom.structure["ui"][nodeid].resource.getView("dashboard_node_resource"+nodeid,'none',null,true);
+					text = UICom.structure.ui[nodeid].resource.getView("dashboard_node_resource"+nodeid,'none',null,true);
 				} catch(e){
-					text = UICom.structure["ui"][nodeid].structured_resource.getView("dashboard_node_resource"+nodeid,null,null,true);
+					text = UICom.structure.ui[nodeid].structured_resource.getView("dashboard_node_resource"+nodeid,null,null,true);
 				}
 				
 			}
 			if (selector.type=='resource code') {
-				text = UICom.structure["ui"][nodeid].resource.getCode();
+				text = UICom.structure.ui[nodeid].resource.getCode();
 			}
 			if (selector.type=='resource utc') {
-				text = UICom.structure["ui"][nodeid].resource.getAttributes()['utc'];
+				text = UICom.structure.ui[nodeid].resource.getAttributes()['utc'];
 			}
 			if (selector.type=='resource value') {
-				text = UICom.structure["ui"][nodeid].resource.getValue("dashboard_value_"+nodeid);
+				text = UICom.structure.ui[nodeid].resource.getValue("dashboard_value_"+nodeid);
 				prefix_id += "value_";
 			}
 			if (selector.type=='resource label') {
-				text = UICom.structure["ui"][nodeid].resource.getLabel();
+				text = UICom.structure.ui[nodeid].resource.getLabel();
 			}
 			if (selector.type=='node label') {
-				text = UICom.structure["ui"][nodeid].getLabel();
+				text = UICom.structure.ui[nodeid].getLabel();
 			}
 			if (selector.type=='node point label') {
 				text = "<a href='#' data-toggle='tooltip' title=\""+UICom.structure.ui[nodeid].getLabel('none')+"\"><i class='fas fa-circle'></i></a>";
 			}
 			if (selector.type=='node code') {
-				text = UICom.structure["ui"][nodeid].getCode();
+				text = UICom.structure.ui[nodeid].getCode();
 			}
 			if (selector.type=='loginfo') {
-				var lastmodified = UICom.structure["ui"][nodeid].resource.lastmodified_node.text().toLocaleString();
-				var user = UICom.structure["ui"][nodeid].resource.user_node.text();
+				var lastmodified = UICom.structure.ui[nodeid].resource.lastmodified_node.text().toLocaleString();
+				var user = UICom.structure.ui[nodeid].resource.user_node.text();
 				try {
 					text = lastmodified+" - user : "+user;
 					}
 				catch(error) {text="/"};
 			}
 			if (selector.type=='resourcelastmodified') {
-				text = new Date(parseInt(UICom.structure["ui"][nodeid].resource.lastmodified_node.text())).toLocaleString();
+				text = new Date(parseInt(UICom.structure.ui[nodeid].resource.lastmodified_node.text())).toLocaleString();
 			}
 			if (selector.type=='nodelastmodified') {
-				text = new Date(parseInt(UICom.structure["ui"][nodeid].lastmodified_node.text())).toLocaleString();
+				text = new Date(parseInt(UICom.structure.ui[nodeid].lastmodified_node.text())).toLocaleString();
 			}
 			else if (selector.type=='submitteddate') {
-				text = UICom.structure["ui"][nodeid].submitteddate;  //node.submitteddate
+				text = UICom.structure.ui[nodeid].submitteddate;  //node.submitteddate
 			}
 			if (selector.type=='node value') {
-				text = UICom.structure["ui"][nodeid].getValue();
+				text = UICom.structure.ui[nodeid].getValue();
 			}
 			if (selector.type=='uuid') {
 				text = nodeid;
 			}
 			if (selector.type=='node context') {
-				text = UICom.structure["ui"][nodeid].getContext("dashboard_context_"+nodeid);
+				text = UICom.structure.ui[nodeid].getContext("dashboard_context_"+nodeid);
 				prefix_id += "context_";
 			}
 			if (ref!=undefined && ref!="") {
@@ -1830,7 +1830,7 @@ g_report_actions['node_resource'] = function (destid,action,no,data)
 				text += "<span class='button fas fa-pencil-alt' data-toggle='modal' data-target='#edit-window' onclick=\"javascript:getEditBox('"+nodeid+"')\" data-title='"+karutaStr[LANG]["button-edit"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
 			}
 			if (g_report_edit && deletenode) {
-				var type = UICom.structure["ui"][nodeid].asmtype;
+				var type = UICom.structure.ui[nodeid].asmtype;
 				text += deleteButton(nodeid,type,null,null,'UIFactory.Node.reloadUnit',null,null);
 			}
 			//------------- private button -------------------
@@ -1874,9 +1874,9 @@ g_report_actions['node_resource'] = function (destid,action,no,data)
 			//----------------------------
 			if (g_report_edit && inline & writenode && nodenopencil!='Y' && !nodenopencilroles.containsArrayElt(g_userroles)) {
 				//-----------------------
-				if(UICom.structure["ui"][nodeid].resource!=null) {
+				if(UICom.structure.ui[nodeid].resource!=null) {
 					try {
-						var test = UICom.structure["ui"][nodeid].resource.getEditor();
+						var test = UICom.structure.ui[nodeid].resource.getEditor();
 						text = "<span id='report_get_editor_"+nodeid+"' style='"+style+"'></span>";
 					}
 					catch(e) {
@@ -1896,7 +1896,7 @@ g_report_actions['node_resource'] = function (destid,action,no,data)
 	$("#"+destid).append(text);
 	//--------------------set editor------------------------------------------
 	if ($("#report_display_editor_"+nodeid).length>0) {
-		UICom.structure["ui"][nodeid].resource.displayEditor("report_display_editor_"+nodeid);
+		UICom.structure.ui[nodeid].resource.displayEditor("report_display_editor_"+nodeid);
 	}
 
 	// -------- if resource changed refresh the report - editor not inline
@@ -1919,7 +1919,7 @@ g_report_actions['node_resource'] = function (destid,action,no,data)
 
 	// -------- if resource changed refresh the report - editor inline
 	if (report_refresh && $("#report_get_editor_"+nodeid).length>0) {
-		$("#report_get_editor_"+nodeid).append(UICom.structure["ui"][nodeid].resource.getEditor());
+		$("#report_get_editor_"+nodeid).append(UICom.structure.ui[nodeid].resource.getEditor());
 		var input = $('input',$("#report_get_editor_"+nodeid));
 		$(input).attr('dashboard',dashboard_current);
 		$(input).change(function (){
@@ -2042,45 +2042,45 @@ g_report_actions['variable'] = function (destid,action,no,data)
 				if (node.length>0 || select.substring(0,1)=="."){
 					var nodeid = $(node).attr("id");
 					//----------------------------
-					var node = UICom.structure["ui"][nodeid];
+					var node = UICom.structure.ui[nodeid];
 					//----------------------------
 					if (selector.type=='resource') {
-						text = UICom.structure["ui"][nodeid].resource.getView("dashboard_"+nodeid,null,null,true);
+						text = UICom.structure.ui[nodeid].resource.getView("dashboard_"+nodeid,null,null,true);
 					} else if (selector.type=='resource utc') {
-						text = UICom.structure["ui"][nodeid].resource.getAttributes()['utc'];
+						text = UICom.structure.ui[nodeid].resource.getAttributes()['utc'];
 					} else if (selector.type=='resource code') {
-						text = UICom.structure["ui"][nodeid].resource.getCode();
+						text = UICom.structure.ui[nodeid].resource.getCode();
 					}
 					else if (selector.type=='resource value') {
-						text = UICom.structure["ui"][nodeid].resource.getValue("dashboard_value_"+nodeid);
+						text = UICom.structure.ui[nodeid].resource.getValue("dashboard_value_"+nodeid);
 						prefix_id += "value_";
 					}
 					else if (selector.type=='resource label') {
-						text = UICom.structure["ui"][nodeid].resource.getLabel();
+						text = UICom.structure.ui[nodeid].resource.getLabel();
 					}
 					else if (selector.type=='node label') {
-						text = UICom.structure["ui"][nodeid].getLabel();
+						text = UICom.structure.ui[nodeid].getLabel();
 					}
 					else if (selector.type=='submitteddate') {
-						text = UICom.structure["ui"][nodeid].submitteddate;  //node.submitteddate
+						text = UICom.structure.ui[nodeid].submitteddate;  //node.submitteddate
 					}
 					else if (selector.type=='node code') {
-						text = UICom.structure["ui"][nodeid].getCode();
+						text = UICom.structure.ui[nodeid].getCode();
 					}
 					else if (selector.type=='node value') {
-						text = UICom.structure["ui"][nodeid].getValue();
+						text = UICom.structure.ui[nodeid].getValue();
 					}
 					else if (selector.type=='resourcelastmodified') {
-						text = new Date(parseInt(UICom.structure["ui"][nodeid].resource.lastmodified_node.text())).toLocaleString();
+						text = new Date(parseInt(UICom.structure.ui[nodeid].resource.lastmodified_node.text())).toLocaleString();
 					}
 					else if (selector.type=='nodelastmodified') {
-						text = new Date(parseInt(UICom.structure["ui"][nodeid].lastmodified_node.text())).toLocaleString();
+						text = new Date(parseInt(UICom.structure.ui[nodeid].lastmodified_node.text())).toLocaleString();
 					}
 					else if (selector.type=='uuid') {
 						text = nodeid;
 					}
 					else if (selector.type=='node context') {
-						text = UICom.structure["ui"][nodeid].getContext("dashboard_context_"+nodeid);
+						text = UICom.structure.ui[nodeid].getContext("dashboard_context_"+nodeid);
 						prefix_id += "context_";
 					}
 				}
@@ -2165,35 +2165,35 @@ g_report_actions['csv-value'] = function (destid,action,no,data)
 		if (node.length>0 || select.substring(0,1)=="."){
 			var nodeid = $(node).attr("id");
 			//----------------------------
-			var node = UICom.structure["ui"][nodeid];
+			var node = UICom.structure.ui[nodeid];
 			//----------------------------
 			if (selector.type=='resource') {
-				text = UICom.structure["ui"][nodeid].resource.getView("dashboard_"+nodeid,null,null,true);
+				text = UICom.structure.ui[nodeid].resource.getView("dashboard_"+nodeid,null,null,true);
 			}
 			if (selector.type=='resource code') {
-				text = UICom.structure["ui"][nodeid].resource.getCode();
+				text = UICom.structure.ui[nodeid].resource.getCode();
 			}
 			if (selector.type=='resource value') {
-				text = UICom.structure["ui"][nodeid].resource.getValue("dashboard_value_"+nodeid);
+				text = UICom.structure.ui[nodeid].resource.getValue("dashboard_value_"+nodeid);
 				prefix_id += "value_";
 			}
 			if (selector.type=='resource label') {
-				text = UICom.structure["ui"][nodeid].resource.getLabel(null,'none');
+				text = UICom.structure.ui[nodeid].resource.getLabel(null,'none');
 			}
 			if (selector.type=='node label') {
-				text = UICom.structure["ui"][nodeid].getLabel(null,'none');
+				text = UICom.structure.ui[nodeid].getLabel(null,'none');
 			}
 			if (selector.type=='node code') {
-				text = UICom.structure["ui"][nodeid].getCode();
+				text = UICom.structure.ui[nodeid].getCode();
 			}
 			if (selector.type=='node value') {
-				text = UICom.structure["ui"][nodeid].getValue();
+				text = UICom.structure.ui[nodeid].getValue();
 			}
 			if (selector.type=='uuid') {
 				text = nodeid;
 			}
 			if (selector.type=='node context') {
-				text = UICom.structure["ui"][nodeid].getContext("dashboard_context_"+nodeid);
+				text = UICom.structure.ui[nodeid].getContext("dashboard_context_"+nodeid);
 			}
 		}
 	} catch(e){
@@ -2228,7 +2228,7 @@ g_report_actions['qrcode'] = function (destid,action,no,data)
 		if (node.length>0 || select.substring(0,1)=="."){
 			var nodeid = $(node).attr("id");
 			//----------------------------
-			var url = UICom.structure["ui"][nodeid].resource.getView(null,null,null,true);
+			var url = UICom.structure.ui[nodeid].resource.getView(null,null,null,true);
 			text = "<img src=\""+url+"\">";
 		}
 	} catch(e){
@@ -2259,7 +2259,7 @@ g_report_actions['europass'] = function (destid,action,no,data)
 				var nodeid = $(nodes[enode]).attr("id");
 				var text = "<table id='"+destid+"europass' style='width:100%;'></table>";
 				$("#"+destid).append($(text));
-				var europass_node = UICom.structure["ui"][nodeid];
+				var europass_node = UICom.structure.ui[nodeid];
 				//----------------------------
 				europass_node.structured_resource.displayView(destid+"europass",null,'report',nodeid,null,false);
 			}
@@ -2350,8 +2350,8 @@ g_report_actions['preview2unit'] = function (destid,action,no,data)
 		node = data;
 	if (node.length>0 || select.substring(0,1)=="."){
 		var nodeid = $(node).attr("id");
-		targetid = UICom.structure["ui"][nodeid].getUuid();
-		label = UICom.structure["ui"][nodeid].getLabel(null,'none');
+		targetid = UICom.structure.ui[nodeid].getUuid();
+		label = UICom.structure.ui[nodeid].getLabel(null,'none');
 	}
 	//-------------------
 	text = "<span id='"+nodeid+"' style='"+style+"' class='report-preview2unit "+cssclass+"'>"+label+"</span>&nbsp;";
@@ -2387,8 +2387,8 @@ g_report_actions['url2unit'] = function (destid,action,no,data)
 		node = data;
 	if (node.length>0 || select.substring(0,1)=="."){
 		var nodeid = $(node).attr("id");
-		targetid = UICom.structure["ui"][nodeid].getUuid();
-		label = UICom.structure["ui"][nodeid].getLabel(null,'none');
+		targetid = UICom.structure.ui[nodeid].getUuid();
+		label = UICom.structure.ui[nodeid].getLabel(null,'none');
 	}
 	//-------------------
 	if (text!="")
@@ -2700,21 +2700,21 @@ function getPoints(data,select) {
 			//---------------------------
 			var nodeid = $(nodes[i]).attr("id");
 			if (selector.type=='resource') {
-				text = UICom.structure["ui"][nodeid].resource.getView("svg_"+nodeid,'none');
+				text = UICom.structure.ui[nodeid].resource.getView("svg_"+nodeid,'none');
 			} else if (selector.type=='resource code') {
-				text = UICom.structure["ui"][nodeid].resource.getCode();
+				text = UICom.structure.ui[nodeid].resource.getCode();
 			} else if (selector.type=='resource value') {
-				text = UICom.structure["ui"][nodeid].resource.getValue("svg_value_"+nodeid);
+				text = UICom.structure.ui[nodeid].resource.getValue("svg_value_"+nodeid);
 			} else if (selector.type=='resource label') {
-				text = UICom.structure["ui"][nodeid].resource.getLabel(null,'none');
+				text = UICom.structure.ui[nodeid].resource.getLabel(null,'none');
 			} else if (selector.type=='node label') {
-				text = UICom.structure["ui"][nodeid].getLabel(null,'none');
+				text = UICom.structure.ui[nodeid].getLabel(null,'none');
 			} else if (selector.type=='node value') {
-				text = UICom.structure["ui"][nodeid].getValue();
+				text = UICom.structure.ui[nodeid].getValue();
 			} else if (selector.type=='node code') {
-				text = UICom.structure["ui"][nodeid].getCode();
+				text = UICom.structure.ui[nodeid].getCode();
 			} else if (selector.type=='node context') {
-				text = UICom.structure["ui"][nodeid].getContext("svg_context_"+nodeid,'none');
+				text = UICom.structure.ui[nodeid].getContext("svg_context_"+nodeid,'none');
 			}
 			if (text.length>0)
 				points[points.length] = {'value': parseInt(text),'x':0,'y':0};
@@ -2736,21 +2736,21 @@ function getResText(data,select) {
 		//---------------------------
 		var nodeid = $(nodes[i]).attr("id");
 		if (selector.type=='resource') {
-			text = UICom.structure["ui"][nodeid].resource.getView("svg_"+nodeid,'none');
+			text = UICom.structure.ui[nodeid].resource.getView("svg_"+nodeid,'none');
 		} else if (selector.type=='resource code') {
-			text = UICom.structure["ui"][nodeid].resource.getCode();
+			text = UICom.structure.ui[nodeid].resource.getCode();
 		} else if (selector.type=='resource value') {
-			text = UICom.structure["ui"][nodeid].resource.getValue("svg_value_"+nodeid);
+			text = UICom.structure.ui[nodeid].resource.getValue("svg_value_"+nodeid);
 		} else if (selector.type=='resource label') {
-			text = UICom.structure["ui"][nodeid].resource.getLabel(null,'none');
+			text = UICom.structure.ui[nodeid].resource.getLabel(null,'none');
 		} else if (selector.type=='node label') {
-			text = UICom.structure["ui"][nodeid].getLabel(null,'none');
+			text = UICom.structure.ui[nodeid].getLabel(null,'none');
 		} else if (selector.type=='node value') {
-			text = UICom.structure["ui"][nodeid].getValue();
+			text = UICom.structure.ui[nodeid].getValue();
 		} else if (selector.type=='node code') {
-			text = UICom.structure["ui"][nodeid].getCode();
+			text = UICom.structure.ui[nodeid].getCode();
 		} else if (selector.type=='node context') {
-			text = UICom.structure["ui"][nodeid].getContext("svg_context_"+nodeid,'none');
+			text = UICom.structure.ui[nodeid].getContext("svg_context_"+nodeid,'none');
 		}
 		texts[texts.length] = text;
 	};

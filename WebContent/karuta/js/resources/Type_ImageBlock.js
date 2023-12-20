@@ -49,8 +49,8 @@ UIFactory["ImageBlock"] = function( node )
 UIFactory["ImageBlock"].prototype.getView = function(dest,type,langcode)
 //==================================
 {
-	var image = UICom.structure["ui"][this.image_nodeid];
-	var cover = UICom.structure["ui"][this.cover_nodeid];
+	var image = UICom.structure.ui[this.image_nodeid];
+	var cover = UICom.structure.ui[this.cover_nodeid];
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
@@ -81,9 +81,9 @@ UIFactory["ImageBlock"].prototype.getView = function(dest,type,langcode)
 		if (cover!=undefined && cover.resource.getValue()=='1')
 			style += "background-size:cover;";
 		html += "<div id='image_"+this.id+"' class='ImgBlock' style=\""+style+"\">";
-		style = UICom.structure["ui"][this.id].getLabelStyle(this.id);
-		if (UICom.structure["ui"][this.id].getLabel(null,'none').indexOf('ImageBlock')<0 && UICom.structure["ui"][this.id].getLabel(null,'none')!='')
-			html += "<div id='label_"+this.id+"' class='block-title' style=\""+style+"\">"+UICom.structure["ui"][this.id].getLabel('label_'+this.id,'none')+"</div>";
+		style = UICom.structure.ui[this.id].getLabelStyle(this.id);
+		if (UICom.structure.ui[this.id].getLabel(null,'none').indexOf('ImageBlock')<0 && UICom.structure.ui[this.id].getLabel(null,'none')!='')
+			html += "<div id='label_"+this.id+"' class='block-title' style=\""+style+"\">"+UICom.structure.ui[this.id].getLabel('label_'+this.id,'none')+"</div>";
 		html += "</div>";
 	}
 	return html;
@@ -120,8 +120,8 @@ UIFactory["ImageBlock"].prototype.getButtons = function(dest,type,langcode)
 UIFactory["ImageBlock"].prototype.displayEditor = function(destid,type,langcode)
 //==================================
 {
-	var image = UICom.structure["ui"][this.image_nodeid];
-	var cover = UICom.structure["ui"][this.cover_nodeid];
+	var image = UICom.structure.ui[this.image_nodeid];
+	var cover = UICom.structure.ui[this.cover_nodeid];
 	//---------------------
 	UICom.structure.ui[this.image_nodeid].resource.blockparent = UICom.structure.ui[this.id];
 	UICom.structure.ui[this.cover_nodeid].resource.blockparent = UICom.structure.ui[this.id];

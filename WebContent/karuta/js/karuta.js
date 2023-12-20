@@ -395,10 +395,10 @@ function getEditBox(uuid,js2) {
 	$("#edit-window-footer").html($(footer));
 	var html = "";
 	//--------------------------
-	if (UICom.structure["ui"][uuid].editresroles==undefined)
-		UICom.structure["ui"][uuid].setMetadata();
+	if (UICom.structure.ui[uuid].editresroles==undefined)
+		UICom.structure.ui[uuid].setMetadata();
 	//--------------------------
-	if (UICom.structure['tree'][uuid]==null || UICom.structure['tree'][uuid]==undefined) {  // if resource is in report and not loaded (report on server)
+	if (UICom.structure.tree[uuid]==null || UICom.structure.tree[uuid]==undefined) {  // if resource is in report and not loaded (report on server)
 		$.ajax({
 			async : false,
 			type : "GET",
@@ -406,7 +406,7 @@ function getEditBox(uuid,js2) {
 			url : serverBCK_API+"/nodes/node/" + uuid + "?resources=true",
 			success : function(data) {
 				UICom.parseStructure(data);
-				UICom.structure["ui"][uuid].resource.display["dashboard_node_resource"+uuid] = LANGCODE;
+				UICom.structure.ui[uuid].resource.display["dashboard_node_resource"+uuid] = LANGCODE;
 			},
 			error : function() {
 				var html = "";
@@ -416,44 +416,44 @@ function getEditBox(uuid,js2) {
 			}
 		});		
 	}
-	if(UICom.structure["ui"][uuid].resource!=null && (UICom.structure["ui"][uuid].editresroles.containsArrayElt(g_userroles) || g_userroles[0]=='designer')) {
+	if(UICom.structure.ui[uuid].resource!=null && (UICom.structure.ui[uuid].editresroles.containsArrayElt(g_userroles) || g_userroles[0]=='designer')) {
 		try {
-			html = UICom.structure["ui"][uuid].resource.getEditor();
+			html = UICom.structure.ui[uuid].resource.getEditor();
 			$("#edit-window-body-resource").html($(html));
-			html = UICom.structure["ui"][uuid].getEditor();
+			html = UICom.structure.ui[uuid].getEditor();
 			$("#edit-window-body-node").html($(html));
 		}
 		catch(e) {
-			UICom.structure["ui"][uuid].resource.displayEditor("edit-window-body-resource");
-			html = UICom.structure["ui"][uuid].getEditor();
+			UICom.structure.ui[uuid].resource.displayEditor("edit-window-body-resource");
+			html = UICom.structure.ui[uuid].getEditor();
 			$("#edit-window-body-node").html($(html));
 		}
 	} else {
-		if(UICom.structure["ui"][uuid].structured_resource!=null && g_display_type!='raw') {
+		if(UICom.structure.ui[uuid].structured_resource!=null && g_display_type!='raw') {
 			try {
-				UICom.structure["ui"][uuid].structured_resource.displayEditor("edit-window-body-resource");
-				html = UICom.structure["ui"][uuid].getEditor();
+				UICom.structure.ui[uuid].structured_resource.displayEditor("edit-window-body-resource");
+				html = UICom.structure.ui[uuid].getEditor();
 				$("#edit-window-body-node").html($(html));
 			}
 			catch(e) {
-				html = UICom.structure["ui"][uuid].getEditor();
+				html = UICom.structure.ui[uuid].getEditor();
 				$("#edit-window-body-node").html($(html));
 			}
 		} else {
-			html = UICom.structure["ui"][uuid].getEditor();
+			html = UICom.structure.ui[uuid].getEditor();
 			$("#edit-window-body-node").html($(html));
 			if ($("#get-resource-node").length && g_display_type!='raw'){
-				var getResource = new UIFactory["Get_Resource"](UICom.structure["ui"][uuid].node,"xsi_type='nodeRes'");
+				var getResource = new UIFactory["Get_Resource"](UICom.structure.ui[uuid].node,"xsi_type='nodeRes'");
 				getResource.displayEditor("get-resource-node","completion");
 			}
 			if ($("#get-get-resource-node").length && g_display_type!='raw'){
-				var getgetResource = new UIFactory["Get_Get_Resource"](UICom.structure["ui"][uuid].node,"xsi_type='nodeRes'");
+				var getgetResource = new UIFactory["Get_Get_Resource"](UICom.structure.ui[uuid].node,"xsi_type='nodeRes'");
 				getgetResource.displayEditor("get-get-resource-node");
 			}
 		}
 	}
 	// ------------ context -----------------
-	UIFactory.Node.displayCommentsEditor('edit-window-body-context',UICom.structure["ui"][uuid]);
+	UIFactory.Node.displayCommentsEditor('edit-window-body-context',UICom.structure.ui[uuid]);
 	// ------------ graphicer -----------------
 	UICom.structure.ui[uuid].displayMetadataEpmAttributesEditor('edit-window-body-metadata-epm');
 	// ------------admin and designer----------
@@ -628,7 +628,7 @@ function deleteandhidewindow(uuid,type,parentid,destid,callback,param1,param2,pa
 		if (type!=null)
 			UIFactory[type].remove(uuid,parentid,destid,callback,param1,param2); // application defined type
 	// ----------------------------------
-	UICom.structure['tree'][uuid] = null;
+	UICom.structure.tree[uuid] = null;
 	// ----------------------------------
 }
 
@@ -741,8 +741,8 @@ function displayBack() {
 					if (typeof(rewriteURL) == 'function')
 						rewriteURL(portfoliocode);
 					//-------------------------
-					if (UICom.structure['ui'][g_portfolio_rootid]!=undefined)
-						UICom.structure['ui'][g_portfolio_rootid].loaded = true;
+					if (UICom.structure.ui[g_portfolio_rootid]!=undefined)
+						UICom.structure.ui[g_portfolio_rootid].loaded = true;
 					var root_semantictag = $("metadata",$("asmRoot",data)).attr('semantictag');
 					var default_role = "";
 					if ($("metadata-wad",$("asmRoot",data)).attr('defaultrole')!= undefined)
@@ -860,25 +860,25 @@ function displayPage(uuid,depth,type,langcode) {
 			toggleSidebarPlus(nodeid);
 		}
 	}
-	var name = $(UICom.structure['ui'][uuid].node).prop("nodeName");
+	var name = $(UICom.structure.ui[uuid].node).prop("nodeName");
 	if (depth==null)
 		depth=100;
 	if ( (name=='asmRoot' || name=='asmStructure'))
 		depth = 1;
-	if (UICom.structure['tree'][uuid]!=null) {
+	if (UICom.structure.tree[uuid]!=null) {
 		if (type=='standard') {
-			var node = UICom.structure['ui'][uuid].node;
+			var node = UICom.structure.ui[uuid].node;
 			var display = ($(node.metadatawad).attr('display')==undefined)?'Y':$(node.metadatawad).attr('display');
 			$("#welcome-edit").html("");
-			if (UICom.structure["ui"][uuid].semantictag.indexOf('welcome-unit')>-1 && !g_welcome_edit && display=='Y')
-				UIFactory['Node'].displayWelcomePage(UICom.structure['tree'][uuid],'contenu',depth,langcode,g_edit);
+			if (UICom.structure.ui[uuid].semantictag.indexOf('welcome-unit')>-1 && !g_welcome_edit && display=='Y')
+				UIFactory['Node'].displayWelcomePage(UICom.structure.tree[uuid],'contenu',depth,langcode,g_edit);
 			else
-				UICom.structure["ui"][uuid].displayNode('standard',UICom.structure['tree'][uuid],'contenu',depth,langcode,g_edit);
+				UICom.structure.ui[uuid].displayNode('standard',UICom.structure.tree[uuid],'contenu',depth,langcode,g_edit);
 		}
 		if (type=='translate')
-			UICom.structure["ui"][uuid].displayTranslateNode(type,UICom.structure['tree'][uuid],'contenu',depth,langcode,g_edit);
+			UICom.structure.ui[uuid].displayTranslateNode(type,UICom.structure.tree[uuid],'contenu',depth,langcode,g_edit);
 		if (type=='raw' || type=='model') {
-			UICom.structure["ui"][uuid].displayNode(type,UICom.structure.tree[uuid],'contenu',depth,langcode,g_edit);
+			UICom.structure.ui[uuid].displayNode(type,UICom.structure.tree[uuid],'contenu',depth,langcode,g_edit);
 		}
 	}
 	var semtag = UICom.structure.ui[uuid].semantictag;
@@ -930,7 +930,7 @@ function reloadPreviewBox(node)
 					g_report_edit = false;
 				else
 					g_report_edit = edit;
-				UICom.structure["ui"][uuid].displayNode('standard',UICom.structure['tree'][uuid],"preview-window-body-"+uuid,100,LANGCODE,g_report_edit);
+				UICom.structure.ui[uuid].displayNode('standard',UICom.structure.tree[uuid],"preview-window-body-"+uuid,100,LANGCODE,g_report_edit);
 				g_report_edit = g_edit;
 				$("#preview-window-"+uuid).show();
 				$("#previewbackdrop-"+uuid).show();
@@ -1006,7 +1006,7 @@ function previewPage(uuid,depth,type,langcode,edit,reload)
 					g_report_edit = false;
 				else
 					g_report_edit = edit;
-				UICom.structure["ui"][uuid].displayNode('standard',UICom.structure['tree'][uuid],"preview-window-body-"+uuid,depth,langcode,g_report_edit);
+				UICom.structure.ui[uuid].displayNode('standard',UICom.structure.tree[uuid],"preview-window-body-"+uuid,depth,langcode,g_report_edit);
 				g_report_edit = g_edit;
 				$("#preview-"+uuid).show();
 				$("#previewbackdrop-"+uuid).show();
@@ -1159,7 +1159,7 @@ function previewPortfolio(uuid,langcode,edit,reload,type)
 					welcomes = $("asmUnit:has(metadata[semantictag*='welcome-unit'])",data);
 				if (welcomes.length>0){
 					var welcomeid = $(welcomes[0]).attr('id');
-					var node = UICom.structure['ui'][welcomeid];
+					var node = UICom.structure.ui[welcomeid];
 					var display = ($(node.metadatawad).attr('display')==undefined)?'Y':$(node.metadatawad).attr('display');
 					if (display=='Y')
 						$("#preview-window-bodysidebar_"+welcomeid).click();
@@ -1204,7 +1204,7 @@ function previewPortfolio(uuid,langcode,edit,reload,type)
 function displayControlGroup_getEditor(destid,label,controlsid,nodeid) {
 //==================================
 	$("#"+destid).append($("<div class='form-group'><label class='col-sm-3 control-label'>"+label+"</label><div id='"+controlsid+"' class='col-sm-9'></div></div>"));
-	$("#"+controlsid).append(UICom.structure["ui"][nodeid].resource.getEditor());
+	$("#"+controlsid).append(UICom.structure.ui[nodeid].resource.getEditor());
 }
 
 //==================================
@@ -1213,14 +1213,14 @@ function displayControlGroup_displayEditor(destid,label,controlsid,nodeid,type,c
 	if (classitem==null)
 		classitem="";
 	$("#"+destid).append($("<div class='control-group'><label class='control-label "+classitem+"'>"+label+"</label><div id='"+controlsid+"' class='controls'></div></div>"));
-	UICom.structure["ui"][nodeid].resource.displayEditor(controlsid,type,lang,null,null,resettable);
+	UICom.structure.ui[nodeid].resource.displayEditor(controlsid,type,lang,null,null,resettable);
 }
 
 //==================================
 function displayControlGroup_getView(destid,label,controlsid,nodeid,type,classitem,lang) {
 //==================================
 	$("#"+destid).append($("<div class='control-group'><label class='control-label "+classitem+"'>"+label+"</label><div id='"+controlsid+"' class='controls'></div></div>"));
-	$("#"+controlsid).append(UICom.structure["ui"][nodeid].resource.getView(null,type,lang));
+	$("#"+controlsid).append(UICom.structure.ui[nodeid].resource.getView(null,type,lang));
 }
 
 //==================================
@@ -1229,7 +1229,7 @@ function displayControlGroup_displayView(destid,label,controlsid,nodeid,type,cla
 	if (classitem==null)
 		classitem="";
 	$("#"+destid).append($("<div class='control-group'><label class='control-label "+classitem+"'>"+label+"</label><div id='"+controlsid+"' class='controls'></div></div>"));
-	$("#"+controlsid).append(UICom.structure["ui"][nodeid].resource.getView());
+	$("#"+controlsid).append(UICom.structure.ui[nodeid].resource.getView());
 }
 
 //=======================================================================
@@ -1285,7 +1285,7 @@ function importBranch(destid,srcecode,srcetag,databack,callback,param2,param3,pa
 	//------------
 	var urlS = serverBCK_API+"/nodes/node/import/"+destid+"?srcetag="+srcetag+"&srcecode="+srcecode;
 	if (USER.admin || g_userroles[1]=='designer') {
-		var rights = UICom.structure["ui"][destid].getRights();
+		var rights = UICom.structure.ui[destid].getRights();
 		var roles = $("role",rights);
 		if (roles.length==0) // test if model (otherwise it is an instance and we import)
 			urlS = serverBCK_API+"/nodes/node/copy/"+destid+"?srcetag="+srcetag+"&srcecode="+srcecode;
@@ -1322,7 +1322,7 @@ function edit_displayEditor(uuid,type)
 {
 	$("#edit-window-body").remove();
 	$("#edit-window-body").append($("<div id='edit-window-body'></div>"));
-	UICom.structure["ui"][uuid].resource.displayEditor("edit-window-body",type);
+	UICom.structure.ui[uuid].resource.displayEditor("edit-window-body",type);
 }
 
 //=======================================================================
@@ -2639,7 +2639,7 @@ function getText(semtag,objtype,elttype,data,langcode)
 function displayRoot(dest)
 //==============================
 {
-	UICom.structure.ui[g_portfolio_rootid].displayNode('standard',UICom.structure['tree'][g_portfolio_rootid],dest,100,LANGCODE,false);
+	UICom.structure.ui[g_portfolio_rootid].displayNode('standard',UICom.structure.tree[g_portfolio_rootid],dest,100,LANGCODE,false);
 }
 
 //==============================
@@ -2870,8 +2870,9 @@ function replaceVariable(text,node,withquote)
 {
 	if (withquote==null)
 		withquote = true;
-	if (text!=undefined && text!="") {
+	if (text!=undefined && text!="" && text.indexOf("++")>-1) // replacement in menus
 		text = text.replaceAll("++","&&");
+	if (text!=undefined && text!="" && text.indexOf("##")>-1) { // text contains variables
 		if (text.indexOf("##pagecode##")>-1){
 			const pageid = $("#page").attr('uuid');
 			const pagecode = UICom.structure.ui[pageid].getCode();
@@ -3807,7 +3808,7 @@ function testFileSaved(uuid,langcode) {
 	if (langcode==null)
 		langcode = LANGCODE;
 	//---------------------
-	var itself = UICom.structure["ui"][uuid];  // context node
+	var itself = UICom.structure.ui[uuid];  // context node
 	const url = serverBCK+"/resources/resource/file/"+uuid+"?lang="+languages[LANGCODE]+"&timestamp=" + new Date().getTime()
 	$.ajax({
 		async : true,
@@ -3971,10 +3972,10 @@ function goTo(semtag) {
 
 function execJS(node,tag){
 	let result = true; // by default
-	if (UICom.structure["ui"][node.id].js==undefined)
-		UICom.structure["ui"][node.id].setMetadata();
-	if (UICom.structure["ui"][node.id].js!="" && UICom.structure["ui"][node.id].js.indexOf(tag)>-1) {
-		var fcts = UICom.structure["ui"][node.id].js.split("|");
+	if (UICom.structure.ui[node.id].js==undefined)
+		UICom.structure.ui[node.id].setMetadata();
+	if (UICom.structure.ui[node.id].js!="" && UICom.structure.ui[node.id].js.indexOf(tag)>-1) {
+		var fcts = UICom.structure.ui[node.id].js.split("|");
 		for (let i=0;i<fcts.length;i++) {
 			let elts = fcts[i].split("/");
 			if (elts[0]==tag) {

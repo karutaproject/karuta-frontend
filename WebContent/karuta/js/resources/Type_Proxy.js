@@ -489,7 +489,7 @@ function proxy_multiple(parentid,targetid,title,query,partcode,get_resource_semt
 	$("#edit-window-type").html("");
 	$("#edit-window-body-metadata").html("");
 	$("#edit-window-body-metadata-epm").html("");
-	var getResource = new UIFactory["Proxy"](UICom.structure["ui"][parentid].node,"xsi_type='nodeRes'");
+	var getResource = new UIFactory["Proxy"](UICom.structure.ui[parentid].node,"xsi_type='nodeRes'");
 	getResource.multiple = query+"/"+partcode+","+get_resource_semtag;
 	getResource.displayEditor("get-resource-node");
 	$('#edit-window').modal('show');

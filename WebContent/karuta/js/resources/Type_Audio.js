@@ -165,7 +165,7 @@ UIFactory["Audio"].prototype.displayView = function(dest,type,langcode)
 UIFactory["Audio"].update = function(data,uuid,langcode,filename)
 //==================================
 {
-	var itself = UICom.structure["ui"][uuid];  // context node
+	var itself = UICom.structure.ui[uuid];  // context node
 	if (execJS(itself,"update-resource-if")) {
 		//-------- if function js -------------
 		execJS(itself,"update-resource-before");
@@ -204,7 +204,7 @@ UIFactory["Audio"].update = function(data,uuid,langcode,filename)
 UIFactory["Audio"].remove = function(uuid,langcode)
 //==================================
 {
-	var itself = UICom.structure["ui"][uuid];  // context node
+	var itself = UICom.structure.ui[uuid];  // context node
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
@@ -415,7 +415,7 @@ UIFactory["Audio"].prototype.save = function(delfile)
 		UICom.UpdateResource(this.id,writeSaved);
 	this.refresh();
 	if (!audiovideohtml5)
-		UICom.structure["ui"][this.id].resource.setParameter();
+		UICom.structure.ui[this.id].resource.setParameter();
 };
 
 //==================================

@@ -49,9 +49,9 @@ UIFactory["DocumentBlock"] = function( node )
 UIFactory["DocumentBlock"].prototype.getView = function(dest,type,langcode)
 //==================================
 {
-	var document = UICom.structure["ui"][this.document_nodeid];
-	var image = UICom.structure["ui"][this.image_nodeid];
-	var cover = UICom.structure["ui"][this.cover_nodeid];
+	var document = UICom.structure.ui[this.document_nodeid];
+	var image = UICom.structure.ui[this.image_nodeid];
+	var cover = UICom.structure.ui[this.cover_nodeid];
 	//---------------------
 	UICom.structure.ui[this.document_nodeid].resource.blockparent = UICom.structure.ui[this.id];
 	UICom.structure.ui[this.image_nodeid].resource.blockparent = UICom.structure.ui[this.id];
@@ -88,10 +88,10 @@ UIFactory["DocumentBlock"].prototype.getView = function(dest,type,langcode)
 		if (cover!=undefined && cover.resource.getValue()=='1')
 			style += " background-size:cover;";
 		html += "<div class='DocBlock' style=\""+style+"\">";
-		style = UICom.structure["ui"][this.id].getLabelStyle();
+		style = UICom.structure.ui[this.id].getLabelStyle();
 		if (filename!="" && filename.indexOf("Not saved or Empty")<0) {
-			if (UICom.structure["ui"][this.id].getLabel(null,'none')!='')
-				html += "<div id='label_"+this.id+"' class='block-title' style=\""+style+"\">"+UICom.structure["ui"][this.id].getLabel('label_'+this.id,'none')+"</div>";
+			if (UICom.structure.ui[this.id].getLabel(null,'none')!='')
+				html += "<div id='label_"+this.id+"' class='block-title' style=\""+style+"\">"+UICom.structure.ui[this.id].getLabel('label_'+this.id,'none')+"</div>";
 			else
 				html += "<div class='block-title' style=\""+style+"\">"+filename+"</div>";
 		} else
@@ -135,9 +135,9 @@ UIFactory["DocumentBlock"].prototype.displayEditor = function(destid,type,langco
 	if (!USER.admin && g_userroles[0]!='designer')
 		$("#edit-window").addClass("Block");
 	//---------------------
-	var document = UICom.structure["ui"][this.document_nodeid];
-	var image = UICom.structure["ui"][this.image_nodeid];
-	var cover = UICom.structure["ui"][this.cover_nodeid];
+	var document = UICom.structure.ui[this.document_nodeid];
+	var image = UICom.structure.ui[this.image_nodeid];
+	var cover = UICom.structure.ui[this.cover_nodeid];
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;

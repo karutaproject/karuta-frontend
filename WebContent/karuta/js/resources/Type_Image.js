@@ -303,7 +303,7 @@ UIFactory["Image"].prototype.displayView = function(dest,type,langcode)
 UIFactory["Image"].update = function(data,uuid,langcode,parent,filename)
 //==================================
 {
-	var itself = UICom.structure["ui"][uuid];  // context node
+	var itself = UICom.structure.ui[uuid];  // context node
 	if (execJS(itself,"update-resource-if")) {
 		//-------- if function js -------------
 		execJS(itself,"update-resource-before");
@@ -343,7 +343,7 @@ UIFactory["Image"].update = function(data,uuid,langcode,parent,filename)
 UIFactory["Image"].remove = function(uuid,langcode)
 //==================================
 {
-	var itself = UICom.structure["ui"][uuid];  // context node
+	var itself = UICom.structure.ui[uuid];  // context node
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;

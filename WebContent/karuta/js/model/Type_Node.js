@@ -162,7 +162,7 @@ UIFactory["Node"].prototype.displayNode = function(type,root,dest,depth,langcode
 	var alreadyDisplayed = false;
 	//---------------------------------------
 	if (this.visible && this.langnotvisible!=karutaStr[languages[LANGCODE]]['language'] && testIfDisplay(uuid)) {
-		var node = UICom.structure["ui"][uuid];
+		var node = UICom.structure.ui[uuid];
 		var structure_node =   node.resource==null 
 							|| node.resource.type!='Proxy' 
 							|| (node.resource.type=='Proxy' && this.writenode && this.editresroles.containsArrayElt(g_userroles)) 
@@ -266,7 +266,7 @@ UIFactory["Node"].prototype.displayNode = function(type,root,dest,depth,langcode
 					let html_tabs = "<ul class='tabs-headers nav nav-tabs' role='tablist'>";
 					let html_panels = "<div class='tabs-contents tab-content'>";
 					for( let i=0; i<root.children.length; ++i ) {
-						let childnode = UICom.structure["ui"][root.children[i]];
+						let childnode = UICom.structure.ui[root.children[i]];
 						let childlabel = childnode.getLabel();
 						var style = childnode.getLabelStyle();
 						html_tabs += "<li class='nav-item'><a class='nav-link' style='"+style+"' href='#display-"+uuid+"-"+i+"' onclick=\"localStorage.setItem('#display-"+uuid+"','-"+i+"')\" role='tab' data-toggle='tab'>"+childlabel+"</a></li>";
@@ -284,8 +284,8 @@ UIFactory["Node"].prototype.displayNode = function(type,root,dest,depth,langcode
 					}
 					for( let i=0; i<root.children.length; ++i ) {
 						// Recurse
-						let child = UICom.structure["tree"][root.children[i]];
-						let childnode = UICom.structure["ui"][root.children[i]];
+						let child = UICom.structure.tree[root.children[i]];
+						let childnode = UICom.structure.ui[root.children[i]];
 						let original_edit = edit;
 						if (this.submitted=='Y' && this.submitall=='Y')
 							edit = false;
@@ -298,8 +298,8 @@ UIFactory["Node"].prototype.displayNode = function(type,root,dest,depth,langcode
 				if (!alreadyDisplayed) {
 					for( var i=0; i<root.children.length; ++i ) {
 						// Recurse
-						let child = UICom.structure["tree"][root.children[i]];
-						let childnode = UICom.structure["ui"][root.children[i]];
+						let child = UICom.structure.tree[root.children[i]];
+						let childnode = UICom.structure.ui[root.children[i]];
 						let childsemtag = $(childnode.metadata).attr('semantictag');
 						let original_edit = edit;
 						if (this.submitted=='Y' && this.submitall=='Y')
@@ -440,9 +440,9 @@ if (execJS(this,"display-if")) {
 				|| this.commentnoderoles.indexOf(g_userroles[0])>-1 
 				|| this.commentnoderoles.indexOf($(USER.username_node).text())>-1
 				))
-			UIFactory.Node.displayCommentsEditor('comments_'+uuid,UICom.structure["ui"][uuid]);
+			UIFactory.Node.displayCommentsEditor('comments_'+uuid,UICom.structure.ui[uuid]);
 		else
-			UIFactory.Node.displayComments('comments_'+uuid,UICom.structure["ui"][uuid]);
+			UIFactory.Node.displayComments('comments_'+uuid,UICom.structure.ui[uuid]);
 		//--------------------Metadata Info------------------------------------------
 		if (g_userroles[0]=='designer' || USER.admin) {  
 			this.displayMetainfo("metainfo_"+uuid);
@@ -561,7 +561,7 @@ UIFactory["Node"].prototype.displayAsmNode = function(dest,type,langcode,edit,re
 	var gotView = false;
 	var label_html = ""
 	if (this.semantictag.indexOf("bubble_level1")>-1){
-		label_html += " "+UICom.structure["ui"][uuid].getBubbleView('std_node_'+uuid);
+		label_html += " "+UICom.structure.ui[uuid].getBubbleView('std_node_'+uuid);
 		gotView = true;
 	}
 	if (!gotView)
@@ -606,9 +606,9 @@ UIFactory["Node"].prototype.displayAsmNode = function(dest,type,langcode,edit,re
 	//----------- Comments -----------
 	if (this.depth>0) {
 		if (this.edit && this.inline && this.writenode)
-			UIFactory["Node"].displayCommentsEditor('comments_'+uuid,UICom.structure["ui"][uuid]);
+			UIFactory["Node"].displayCommentsEditor('comments_'+uuid,UICom.structure.ui[uuid]);
 		else
-			UIFactory["Node"].displayComments('comments_'+uuid,UICom.structure["ui"][uuid]);
+			UIFactory["Node"].displayComments('comments_'+uuid,UICom.structure.ui[uuid]);
 	}
 	//--------------------Metadata Info------------------------------------------
 	if (g_userroles[0]=='designer' || USER.admin) {  
@@ -684,9 +684,9 @@ UIFactory["Node"].prototype.displayTranslateNode = function(type,root,dest,depth
 		else
 			$("#label1_"+uuid).html(karutaStr[LANG]['label-not-multilingual']);
 		//---------------- comments ---------------------------------
-		UIFactory.Node.displayCommentsEditor('comments0_'+uuid,UICom.structure["ui"][uuid],null,g_translate[0]);
+		UIFactory.Node.displayCommentsEditor('comments0_'+uuid,UICom.structure.ui[uuid],null,g_translate[0]);
 		if (this.multilingual)
-			UIFactory.Node.displayCommentsEditor('comments1_'+uuid,UICom.structure["ui"][uuid],null,g_translate[1]);
+			UIFactory.Node.displayCommentsEditor('comments1_'+uuid,UICom.structure.ui[uuid],null,g_translate[1]);
 		else
 			$("#comments1_"+uuid).html(karutaStr[LANG]['resource-not-multilingual']);
 	}
@@ -720,9 +720,9 @@ UIFactory["Node"].prototype.displayTranslateNode = function(type,root,dest,depth
 				$("#label1_"+uuid).html(karutaStr[LANG]['label-not-multilingual']);
 		}
 		//---------------- comments ---------------------------------
-			UIFactory.Node.displayCommentsEditor('comments0_'+uuid,UICom.structure["ui"][uuid],null,g_translate[0]);
+			UIFactory.Node.displayCommentsEditor('comments0_'+uuid,UICom.structure.ui[uuid],null,g_translate[0]);
 		if (this.multilingual)
-			UIFactory.Node.displayCommentsEditor('comments1_'+uuid,UICom.structure["ui"][uuid],null,g_translate[1]);
+			UIFactory.Node.displayCommentsEditor('comments1_'+uuid,UICom.structure.ui[uuid],null,g_translate[1]);
 		else
 			$("#comments1_"+uuid).html(karutaStr[LANG]['resource-not-multilingual']);
 		// ===========================================================================
@@ -731,8 +731,8 @@ UIFactory["Node"].prototype.displayTranslateNode = function(type,root,dest,depth
 		if (this.structured_resource == null)
 			for( var i=0; i<root.children.length; ++i ) {
 				// Recurse
-				var child = UICom.structure["tree"][root.children[i]];
-				var childnode = UICom.structure["ui"][root.children[i]];
+				var child = UICom.structure.tree[root.children[i]];
+				var childnode = UICom.structure.ui[root.children[i]];
 				var childsemtag = $(childnode.metadata).attr('semantictag');
 				childnode.displayTranslateNode(type,child, 'content-'+uuid, depth-1,langcode,edit,inline,backgroundParent,root,menu);
 			}
@@ -1102,7 +1102,7 @@ UIFactory["Node"].prototype.remove = function()
 UIFactory["Node"].remove = function(uuid,callback,param1,param2,param3,param4)
 //==================================
 {
-	const itself = UICom.structure["ui"][uuid];  // context node
+	const itself = UICom.structure.ui[uuid];  // context node
 	if (execJS(itself,"delete-if")) {
 		//----
 		execJS(itself,"delete-before");
@@ -1147,11 +1147,11 @@ UIFactory["Node"].prototype.refresh = function()
 UIFactory["Node"].duplicate = function(uuid,callback,databack,param2,param3,param4,param5,param6,param7,param8)
 //==================================
 {
-	var destid = $($(UICom.structure["ui"][uuid].node).parent()).attr('id');
+	var destid = $($(UICom.structure.ui[uuid].node).parent()).attr('id');
 	$("#wait-window").modal('show');
 	var urlS = serverBCK_API+"/nodes/node/import/"+destid+"?uuid="+uuid;  // instance by default
 	if (USER.admin || g_userrole=='designer') {
-		var rights = UICom.structure["ui"][uuid].getRights();
+		var rights = UICom.structure.ui[uuid].getRights();
 		var roles = $("role",rights);
 		if (roles.length==0) // test if model (otherwise it is an instance and we import)
 			urlS = serverBCK_API+"/nodes/node/copy/"+destid+"?uuid="+uuid;
@@ -1258,7 +1258,7 @@ UIFactory["Node"].duplicate = function(uuid,callback,databack,param2,param3,para
 											success : function (data){
 												$("#saved-window-body").html("<img src='../../karuta/img/green.png'/> saved : "+new Date().toLocaleString());
 												$("#wait-window").modal('hide');			
-												if (UICom.structure["ui"][destid].asmtype=='asmContext')
+												if (UICom.structure.ui[destid].asmtype=='asmContext')
 													UIFactory.Node.reloadUnit();
 												else
 													UIFactory.Node.reloadStruct();
@@ -1271,14 +1271,14 @@ UIFactory["Node"].duplicate = function(uuid,callback,databack,param2,param3,para
 								}
 								$("#saved-window-body").html("<img src='../../karuta/img/green.png'/> saved : "+new Date().toLocaleString());
 								$("#wait-window").modal('hide');
-								if (UICom.structure["ui"][destid].asmtype=='asmContext')
+								if (UICom.structure.ui[destid].asmtype=='asmContext')
 									UIFactory.Node.reloadUnit();
 								else
 									UIFactory.Node.reloadStruct();
 							} else {
 								$("#saved-window-body").html("<img src='../../karuta/img/green.png'/> saved : "+new Date().toLocaleString());
 								$("#wait-window").modal('hide');
-								if (UICom.structure["ui"][destid].asmtype=='asmContext')
+								if (UICom.structure.ui[destid].asmtype=='asmContext')
 									UIFactory.Node.reloadUnit();
 								else
 									UIFactory.Node.reloadStruct();
@@ -1354,10 +1354,10 @@ UIFactory["Node"].displayPortfolioMenuItem = function(uuid,destid,type,langcode)
 			if (UICom.structure.ui[uuid].resource.getAttributes().local_label!='')
 				html += UICom.structure.ui[uuid].resource.getAttributes().local_label;
 			else
-				html += UICom.structure["ui"][rootid].getLabel('sidebar_'+rootid);
+				html += UICom.structure.ui[rootid].getLabel('sidebar_'+rootid);
 			html += "	</a>";
 		} else {
-			html += UICom.structure["ui"][uuid].resource.getView();
+			html += UICom.structure.ui[uuid].resource.getView();
 			html += "</div><!-- panel -->";
 		}
 		$("#"+destid).append($(html));
@@ -1396,8 +1396,9 @@ UIFactory["Node"].displaySidebar = function(root,destid,type,langcode,edit,paren
 					$("#portfolio_bar").hide();
 					$("#sidebar_"+UICom.rootid).show();
 				}
-			} else if (name == "asmStructure" || name == "asmRoot" || name == "asmUnit" || (resource_type!=null && resource_type == "URL2Portfolio")) {}
+			} else if (name == "asmStructure" || name == "asmRoot" || name == "asmUnit" || (resource_type!=null && resource_type == "URL2Portfolio")) {
 				UIFactory.Node.displaySidebarItem(root.children[i],destid,type,langcode,edit,parentid,open);
+			}
 			i++;
 			if ($(".sidebar-item","#portfolio_bar").length<2) {
 				$("#portfolio_bar").hide();
@@ -1412,11 +1413,11 @@ UIFactory["Node"].displaySidebar = function(root,destid,type,langcode,edit,paren
 	{
 		if (open == undefined)
 			open = false;
-		var child = UICom.structure["tree"][itemid].node;
+		var child = UICom.structure.tree[itemid].node;
 		var name = child.tagName;
 		var uuid = $(child).attr("id");
-		var text = UICom.structure["ui"][uuid].getLabel('sidebar_'+uuid,'span');
-		var node = UICom.structure["ui"][uuid];
+		var text = UICom.structure.ui[uuid].getLabel('sidebar_'+uuid,'span');
+		var node = UICom.structure.ui[uuid];
 		var seenoderoles = ($(node.metadatawad).attr('seenoderoles')==undefined)? 'all' : $(node.metadatawad).attr('seenoderoles');
 		var showtoroles = ($(node.metadatawad).attr('showtoroles')==undefined)? 'none' : $(node.metadatawad).attr('showtoroles');
 		var display = ($(node.metadatawad).attr('display')==undefined)?'Y':$(node.metadatawad).attr('display');
@@ -1459,7 +1460,7 @@ UIFactory["Node"].displaySidebar = function(root,destid,type,langcode,edit,paren
 				html += "</div><!-- panel-collapse -->";
 				html += "</div><!-- panel -->";
 				$("#"+destid).append($(html));
-				UIFactory["Node"].displaySidebar(UICom.structure["tree"][itemid],'panel-body'+uuid,type,langcode,g_edit,uuid,open);
+				UIFactory["Node"].displaySidebar(UICom.structure.tree[itemid],'panel-body'+uuid,type,langcode,g_edit,uuid,open);
 			}
 			if (name=='asmContext' && resource_type == "URL2Portfolio") {
 				var html = "";
@@ -1467,7 +1468,7 @@ UIFactory["Node"].displaySidebar = function(root,destid,type,langcode,edit,paren
 				if (privatevalue)
 					html+= "private"
 				html += "' id='parent-"+uuid+"' role='tablist' style='cursor:pointer'>";
-				html += UICom.structure["ui"][uuid].resource.getView();
+				html += UICom.structure.ui[uuid].resource.getView();
 				html += "</div><!-- panel -->";
 				$("#"+destid).append($(html));
 			}
@@ -1497,11 +1498,11 @@ UIFactory["Node"].displaySidebar = function(root,destid,type,langcode,edit,paren
 		let i = 0;
 		while (i<root.children.length)
 		{
-			let child = UICom.structure["tree"][root.children[i]].node;
+			let child = UICom.structure.tree[root.children[i]].node;
 			let uuid = $(child).attr("id");
 			let name = child.tagName;
-			let text = UICom.structure["ui"][uuid].getLabel('sidebar_'+uuid,'span');
-			let node = UICom.structure["ui"][uuid];
+			let text = UICom.structure.ui[uuid].getLabel('sidebar_'+uuid,'span');
+			let node = UICom.structure.ui[uuid];
 			let seenoderoles = ($(node.metadatawad).attr('seenoderoles')==undefined)? 'all' : $(node.metadatawad).attr('seenoderoles');
 			let showtoroles = ($(node.metadatawad).attr('showtoroles')==undefined)? 'none' : $(node.metadatawad).attr('showtoroles');
 			let display = ($(node.metadatawad).attr('display')==undefined)?'Y':$(node.metadatawad).attr('display');
@@ -1561,7 +1562,7 @@ UIFactory["Node"].displaySidebar = function(root,destid,type,langcode,edit,paren
 					html += "<div id='dropdown"+uuid+"' class='dropdown-menu dropdown-menu-right nodisplay' aria-labelledby='sidebar_"+uuid+"'></div>";
 					html += "</div>";
 					$("#"+destid).append($(html));
-					UIFactory["Node"].displayHorizontalMenu(UICom.structure["tree"][root.children[i]],'dropdown'+uuid,type,langcode,g_edit,uuid,1);
+					UIFactory["Node"].displayHorizontalMenu(UICom.structure.tree[root.children[i]],'dropdown'+uuid,type,langcode,g_edit,uuid,1);
 				}
 				if (name=='asmContext' && resource_type == "URL2Portfolio") {
 					var html = "";
@@ -1569,7 +1570,7 @@ UIFactory["Node"].displaySidebar = function(root,destid,type,langcode,edit,paren
 					if (privatevalue)
 						html+= "private"
 					html += "' id='parent-"+uuid+"' role='tablist'>";
-					html += UICom.structure["ui"][uuid].resource.getView(null,'horizontal-menu');
+					html += UICom.structure.ui[uuid].resource.getView(null,'horizontal-menu');
 					html += "</div><!-- panel -->";
 					$("#"+destid).append($(html));					
 				}
@@ -1593,11 +1594,11 @@ UIFactory["Node"].displaySidebar = function(root,destid,type,langcode,edit,paren
 		let i = 0;
 		while (i<root.children.length)
 		{
-			var child = UICom.structure["tree"][root.children[i]].node;
+			var child = UICom.structure.tree[root.children[i]].node;
 			var name = child.tagName;
 			var uuid = $(child).attr("id");
-			var text = UICom.structure["ui"][uuid].getLabel('sidebar_'+uuid,'span');
-			var node = UICom.structure["ui"][uuid];
+			var text = UICom.structure.ui[uuid].getLabel('sidebar_'+uuid,'span');
+			var node = UICom.structure.ui[uuid];
 			var seenoderoles = ($(node.metadatawad).attr('seenoderoles')==undefined)? 'all' : $(node.metadatawad).attr('seenoderoles');
 			var showtoroles = ($(node.metadatawad).attr('showtoroles')==undefined)? 'none' : $(node.metadatawad).attr('showtoroles');
 			var display = ($(node.metadatawad).attr('display')==undefined)?'Y':$(node.metadatawad).attr('display');
@@ -1652,7 +1653,7 @@ UIFactory["Node"].displaySidebar = function(root,destid,type,langcode,edit,paren
 					html += "<div id='dropdown"+uuid+"' class='subnav-content' aria-labelledby='sidebar_"+uuid+"'></div>";
 					html += "</div>";
 					$("#"+destid).append($(html));
-					UIFactory["Node"].displayHorizontalMenu2(UICom.structure["tree"][root.children[i]],'dropdown'+uuid,type,langcode,g_edit,uuid,1);
+					UIFactory["Node"].displayHorizontalMenu2(UICom.structure.tree[root.children[i]],'dropdown'+uuid,type,langcode,g_edit,uuid,1);
 				}
 				if (name=='asmContext' && resource_type == "URL2Portfolio") {
 					var html = "";
@@ -1660,7 +1661,7 @@ UIFactory["Node"].displaySidebar = function(root,destid,type,langcode,edit,paren
 					if (privatevalue)
 						html+= "private"
 					html += "' id='parent-"+uuid+"' role='tablist'>";
-					html += UICom.structure["ui"][uuid].resource.getView(null,'horizontal-menu');
+					html += UICom.structure.ui[uuid].resource.getView(null,'horizontal-menu');
 					html += "</div><!-- panel -->";
 					$("#"+destid).append($(html));					
 				}
@@ -1701,7 +1702,7 @@ UIFactory["Node"].displayComments = function(destid,node,type,langcode)
 			langcode = LANGCODE;
 		//---------------------
 		var uuid = node.id;
-		var text = $(UICom.structure['ui'][uuid].context_text_node[langcode]).text();
+		var text = $(UICom.structure.ui[uuid].context_text_node[langcode]).text();
 		var style = UIFactory.Node.getCommentStyle(uuid);
 		html += "<div style='"+style+"'>"+text+"</div>";
 		if (text.length)
@@ -1736,7 +1737,7 @@ UIFactory["Node"].displayCommentsEditor = function(destid,node,type,langcode)
 		var text = "";
 		if (type==null)
 			type = 'default';
-		text = $(UICom.structure['ui'][uuid].context_text_node[langcode]).text();
+		text = $(UICom.structure.ui[uuid].context_text_node[langcode]).text();
 		html += "<h4>"+karutaStr[languages[LANGCODE]]['comments']+"</h4>";
 		html += "<div id='div_"+uuid+langcode+"'><textarea id='"+uuid+langcode+"_edit_comment' class='form-control' style='height:200px'>"+text+"</textarea></div>";
 		$("#"+destid).append($(html));
@@ -1746,8 +1747,8 @@ UIFactory["Node"].displayCommentsEditor = function(destid,node,type,langcode)
 				"uuid":uuid,
 				"locale":LANG,
 				'events': {
-					'change': function(){UICom.structure['ui'][currentTexfieldUuid].updateComments(langcode);},
-					'focus': function(){currentTexfieldUuid=uuid;currentTexfieldInterval = setInterval(function(){UICom.structure['ui'][currentTexfieldUuid].resource.update(langcode);}, g_wysihtml5_autosave);},
+					'change': function(){UICom.structure.ui[currentTexfieldUuid].updateComments(langcode);},
+					'focus': function(){currentTexfieldUuid=uuid;currentTexfieldInterval = setInterval(function(){UICom.structure.ui[currentTexfieldUuid].resource.update(langcode);}, g_wysihtml5_autosave);},
 					'blur': function(){clearInterval(currentTexfieldInterval);}
 				}
 			}
@@ -1796,7 +1797,7 @@ UIFactory['Node'].upNode = function(nodeid,reload)
 		url : serverBCK_API+"/nodes/node/" + nodeid + "/moveup",
 		success : function(data) {
 			if (reload)
-				if (UICom.structure["ui"][this.uuid].asmtype=='asmContext')
+				if (UICom.structure.ui[this.uuid].asmtype=='asmContext')
 					UIFactory.Node.reloadUnit();
 				else
 					UIFactory.Node.reloadStruct();
@@ -1815,7 +1816,7 @@ function moveTO(nodeid,targetid,title,destsemtag,srcesemtag,fct)
 	$('#wait-window').modal('show');
 	var parentid = null;
 	// change menu
-	var node = UICom.structure["ui"][nodeid];
+	var node = UICom.structure.ui[nodeid];
 	var menusroles = $(node.metadatawad).attr('menuroles');
 	var newmenusroles = menusroles.substring(0,menusroles.indexOf(destsemtag)) + srcesemtag + '/' + destsemtag + menusroles.substring(menusroles.indexOf(srcesemtag)+srcesemtag.length);
 	UIFactory.Node.updateMetadataWadAttribute(nodeid,'menuroles',newmenusroles);
@@ -1895,7 +1896,7 @@ UIFactory["Node"].selectNode = function(nodeid,node,semtag)
 	/// Traverse tree
 	var html = "<select class='form-control'>";
 	var uuid = $(node.node).attr("id");
-	var label = UICom.structure["ui"][uuid].label_node[langcode].text();
+	var label = UICom.structure.ui[uuid].label_node[langcode].text();
 	if (semtag=='')
 		html += "<option uuid = '"+uuid+"'>"+label+"</option>";
 	html += UIFactory["Node"].getSubNodes(node, nodeid, UICom.structure.ui[nodeid].asmtype,semtag);
@@ -1918,14 +1919,14 @@ UIFactory["Node"].getSubNodes = function(root, idmoved, typemoved,semtag)
 	for( var i=0;i<root.children.length;++i )
 	{
 		var uuid = root.children[i];
-		var semantictag = UICom.structure["ui"][uuid].semantictag;
+		var semantictag = UICom.structure.ui[uuid].semantictag;
 		if (semantictag!="welcome-navbar" && semantictag!="welcome-sidebar" && semantictag!="welcome-colors") {
-			var label = UICom.structure["ui"][uuid].label_node[langcode].text();
-			var name = UICom.structure["ui"][uuid].asmtype;
+			var label = UICom.structure.ui[uuid].label_node[langcode].text();
+			var name = UICom.structure.ui[uuid].asmtype;
 			if (name!='asmContext' && (typemoved != "asmUnit" || name != "asmUnit") && (uuid !=idmoved)){
 				if (semantictag.indexOf("welcome-unit")<0 && (semtag=='' || (semtag!='' && semantictag.indexOf(semtag)>-1)))
 					html += "<option uuid = '"+uuid+"'>"+label+"</option>";
-				html += UIFactory["Node"].getSubNodes(UICom.structure["tree"][uuid], idmoved, typemoved,semtag);
+				html += UIFactory["Node"].getSubNodes(UICom.structure.tree[uuid], idmoved, typemoved,semtag);
 			}
 		}
 	}
@@ -2110,7 +2111,7 @@ UIFactory['Node'].reloadUnit = function(uuid,redisplay,nodeid)
 		if (uuid==g_portfolio_rootid)
 			parentid = g_portfolio_rootid;
 		else
-			parentid = $($(UICom.structure["ui"][uuid].node).parent()).attr('id');
+			parentid = $($(UICom.structure.ui[uuid].node).parent()).attr('id');
 		if (uuid.indexOf("_")>-1)
 			uuid = uuid.substring(0,uuid.indexOf("_"));
 		$.ajax({
@@ -2157,7 +2158,7 @@ UIFactory['Node'].reloadUnit = function(uuid,redisplay,nodeid)
 UIFactory['Node'].loadNode = function(uuid)
 //==================================================
 {
-	var parentid = $($(UICom.structure["ui"][uuid].node).parent()).attr('id');
+	var parentid = $($(UICom.structure.ui[uuid].node).parent()).attr('id');
 	$.ajax({
 		async:false,
 		type : "GET",
@@ -2189,7 +2190,7 @@ UIFactory['Node'].loadNode = function(uuid)
 UIFactory['Node'].loadStructure = function(uuid)
 //==================================================
 {
-	var parentid = $($(UICom.structure["ui"][uuid].node).parent()).attr('id');
+	var parentid = $($(UICom.structure.ui[uuid].node).parent()).attr('id');
 	$.ajax({
 		async:false,
 		type : "GET",
@@ -2338,13 +2339,13 @@ UIFactory["Node"].displayWelcomePage = function(root,dest,depth,langcode,edit,in
 		html += "<div class='welcome-box'>";
 		html += "<div class='welcome-subbox'>";
 		html += "<div class='welcome-title' id='welcome-title'>";
-		html += UICom.structure["ui"][titleid].resource.getView('welcome-title','span')
+		html += UICom.structure.ui[titleid].resource.getView('welcome-title','span')
 		html += "</div>";
 		html += "<div class='welcome-line'/>";
 		var texts = $("asmContext:has(metadata[semantictag='welcome-baseline'])",data);
 		var textid = $(texts[0]).attr("id");
 		html += "<div class='welcome-baseline' id='welcome-baseline' style='"+UIFactory["Node"].getContentStyle(textid)+"'>";
-		html += UICom.structure["ui"][textid].resource.getView('welcome-baseline');
+		html += UICom.structure.ui[textid].resource.getView('welcome-baseline');
 		html += "</div><!-- id='welcome-baseline' -->";
 		html += "</div><!--  class='welcome-subbox' -->";
 		html += "</div><!--  class='welcome-box' -->";
@@ -2361,7 +2362,7 @@ UIFactory["Node"].displayWelcomePage = function(root,dest,depth,langcode,edit,in
 		if (semtag=='welcome-block')
 			UIFactory["Node"].displayWelcomeBlock(welcome_blocks[i],'welcome-blocks',depth,langcode,edit,inline,backgroundParent,1);
 		else {
-			var child = UICom.structure["tree"][$(welcome_blocks[i]).attr("id")];
+			var child = UICom.structure.tree[$(welcome_blocks[i]).attr("id")];
 			edit = false;
 			var menu = false;
 			UIFactory["Node"].displayNode(type,child,'welcome-blocks',depth,langcode,edit,inline,backgroundParent,1,menu);
@@ -2396,7 +2397,7 @@ UIFactory["Node"].displayWelcomeBlock = function(root,dest,depth,langcode,edit,i
 	style = UIFactory["Node"].getLabelStyle(welcome_blockid);
 	html += "<div id='welcome_"+welcome_blockid+"' class='row welcome-block'>";
 	html += "  <div id='welcome-title_"+welcome_blockid+"' class='col-md-12' style='"+style+"'>";
-	html += UICom.structure["ui"][welcome_blockid].getView('welcome-title_'+welcome_blockid,'span');
+	html += UICom.structure.ui[welcome_blockid].getView('welcome-title_'+welcome_blockid,'span');
 	html += "  </div>";	
 	html += "</div><!-- class='row' -->";
 	//----------------- WELCOME RESOURCES ------------------------
@@ -2407,8 +2408,8 @@ UIFactory["Node"].displayWelcomeBlock = function(root,dest,depth,langcode,edit,i
 		var nodeid = $(resources[i]).attr("id");
 		style = UIFactory["Node"].getContentStyle(nodeid);
 		html += "<div id='welcome_resource_"+nodeid+"' class='col-md-12' style='"+style+"'>";
-		UICom.structure["ui"][nodeid].setMetadata();
-		html += UICom.structure["ui"][nodeid].resource.getView('welcome_resource_'+nodeid);
+		UICom.structure.ui[nodeid].setMetadata();
+		html += UICom.structure.ui[nodeid].resource.getView('welcome_resource_'+nodeid);
 		html += "</div><!-- class='col-md-12' -->";
 	}
 	html += "</div><!-- class='welcome-resources' -->";

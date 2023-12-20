@@ -188,7 +188,7 @@ UIFactory["Document"].prototype.displayView = function(dest,type,langcode)
 UIFactory["Document"].update = function(data,uuid,langcode,parent,filename)
 //==================================
 {
-	var itself = UICom.structure["ui"][uuid];  // context node
+	var itself = UICom.structure.ui[uuid];  // context node
 	if (execJS(itself,"update-resource-if")) {
 		//-------- if function js -------------
 		execJS(itself,"update-resource-before");
@@ -230,7 +230,7 @@ UIFactory["Document"].update = function(data,uuid,langcode,parent,filename)
 UIFactory["Document"].remove = function(uuid,langcode)
 //==================================
 {
-	var itself = UICom.structure["ui"][uuid];  // context node
+	var itself = UICom.structure.ui[uuid];  // context node
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;

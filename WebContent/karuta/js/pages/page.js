@@ -84,11 +84,11 @@ function displayOnePage()
 					success : function(data) {
 						UICom.parseStructure(data);
 						if (type=='standard')
-							UICom.structure['ui'][pageid].displayNode('standard',UICom.structure['tree'][pageid],'contenu',100,LANGCODE,g_edit);
+							UICom.structure.ui[pageid].displayNode('standard',UICom.structure.tree[pageid],'contenu',100,LANGCODE,g_edit);
 						if (type=='translate')
-							UIFactory['Node'].displayTranslate(UICom.structure['tree'][pageid],'contenu',100,LANGCODE,g_edit);
+							UIFactory['Node'].displayTranslate(UICom.structure.tree[pageid],'contenu',100,LANGCODE,g_edit);
 						if (type=='model'){
-							UIFactory['Node'].displayModel(UICom.structure['tree'][pageid],'contenu',100,LANGCODE,g_edit);
+							UIFactory['Node'].displayModel(UICom.structure.tree[pageid],'contenu',100,LANGCODE,g_edit);
 						}
 						$('[data-toggle=tooltip]').tooltip({html: true, trigger: 'hover'}); 
 

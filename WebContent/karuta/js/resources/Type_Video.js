@@ -209,7 +209,7 @@ UIFactory["Video"].prototype.setParameter = function(langcode)
 UIFactory["Video"].update = function(data,uuid,langcode)
 //==================================
 {
-	var itself = UICom.structure["ui"][uuid];  // context node
+	var itself = UICom.structure.ui[uuid];  // context node
 	itself.resource.lastmodified_node.text(new Date().getTime());
 	//---------------------
 	if (langcode==null)
@@ -241,7 +241,7 @@ UIFactory["Video"].update = function(data,uuid,langcode)
 UIFactory["Video"].remove = function(uuid,langcode)
 //==================================
 {
-	var itself = UICom.structure["ui"][uuid];  // context node
+	var itself = UICom.structure.ui[uuid];  // context node
 	if (execJS(itself,"update-resource-if")) {
 		//-------- if function js -------------
 		execJS(itself,"update-resource-before");
@@ -328,7 +328,7 @@ UIFactory["Video"].prototype.save = function(delfile)
 		UICom.UpdateResource(this.id,writeSaved);
 	this.refresh();
 	if (!audiovideohtml5)
-		UICom.structure["ui"][this.id].resource.setParameter();
+		UICom.structure.ui[this.id].resource.setParameter();
 };
 
 //==================================

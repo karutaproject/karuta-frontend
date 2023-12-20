@@ -150,7 +150,7 @@ UIFactory["Oembed"].prototype.getView = function(dest,type,langcode)
 				}
 			}
 			// display div
-			var node = UICom.structure["ui"][this.id].metadataepm;
+			var node = UICom.structure.ui[this.id].metadataepm;
 			var style = UIFactory.Node.getOtherMetadataEpm(node,'node-othercss');
 			if (style=="")
 				style = "min-height:240px";

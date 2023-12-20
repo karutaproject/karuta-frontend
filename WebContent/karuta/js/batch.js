@@ -3295,39 +3295,39 @@ g_actions['batch-variable'] = function (node)
 	if (select!=undefined && select.length>0) {
 		//---------- node-resource -----------
 		if (select=='resource') {
-			text = UICom.structure["ui"][nodeid].resource.getView("dashboard_"+nodeid,null,null,true);
+			text = UICom.structure.ui[nodeid].resource.getView("dashboard_"+nodeid,null,null,true);
 			
 		}
 		else if (select=='resource code') {
-			text = UICom.structure["ui"][nodeid].resource.getCode();
+			text = UICom.structure.ui[nodeid].resource.getCode();
 		}
 		else if (select=='resource value') {
-			text = UICom.structure["ui"][nodeid].resource.getValue("dashboard_value_"+nodeid);
+			text = UICom.structure.ui[nodeid].resource.getValue("dashboard_value_"+nodeid);
 			prefix_id += "value_";
 		}
 		else if (select=='resource label') {
-			text = UICom.structure["ui"][nodeid].resource.getLabel();
+			text = UICom.structure.ui[nodeid].resource.getLabel();
 		}
 		else if (select=='node label') {
-			text = UICom.structure["ui"][nodeid].getLabel();
+			text = UICom.structure.ui[nodeid].getLabel();
 		}
 		else if (select=='node code') {
-			text = UICom.structure["ui"][nodeid].getCode();
+			text = UICom.structure.ui[nodeid].getCode();
 		}
 		else if (select=='node value') {
-			text = UICom.structure["ui"][nodeid].getValue();
+			text = UICom.structure.ui[nodeid].getValue();
 		}
 		else if (select=='resourcelastmodified') {
-			text = new Date(parseInt(UICom.structure["ui"][nodeid].resource.lastmodified_node.text())).toLocaleString();
+			text = new Date(parseInt(UICom.structure.ui[nodeid].resource.lastmodified_node.text())).toLocaleString();
 		}
 		else if (select=='nodelastmodified') {
-			text = new Date(parseInt(UICom.structure["ui"][nodeid].lastmodified_node.text())).toLocaleString();
+			text = new Date(parseInt(UICom.structure.ui[nodeid].lastmodified_node.text())).toLocaleString();
 		}
 		else if (select=='uuid') {
 			text = nodeid;
 		}
 		else if (select=='node context') {
-			text = UICom.structure["ui"][nodeid].getContext("dashboard_context_"+nodeid);
+			text = UICom.structure.ui[nodeid].getContext("dashboard_context_"+nodeid);
 			prefix_id += "context_";
 		}
 	}
@@ -3581,7 +3581,7 @@ function execBatchForm(nodeid)
 	var lines = $("asmUnitStructure:has(metadata[semantictag*='BatchFormLines'])",batchformnode);
 	var model_code_node = $("asmContext:has(metadata[semantictag='model_code'])",batchformnode);
 	var model_code_nodeid = $(model_code_node).attr("id");
-	var model_code = UICom.structure["ui"][model_code_nodeid].resource.getView();
+	var model_code = UICom.structure.ui[model_code_nodeid].resource.getView();
 	initBatchVars();
 	g_json = getInputsLine(line0);
 	g_json['model_code'] = replaceVariable(model_code);
@@ -3602,30 +3602,30 @@ function getInputsLine(node)
 	let line_inputs = $("asmContext:has(>metadata[semantictag*='BatchFormInput'])",node);
 	for ( var j = 0; j < line_inputs.length; j++) {
 		let inputid = $(line_inputs[j]).attr('id');
-		let variable = UICom.structure["ui"][inputid].getCode().trim();
-		json_line[variable] = replaceVariable(UICom.structure["ui"][inputid].resource.getView(null,'batchform').trim());
+		let variable = UICom.structure.ui[inputid].getCode().trim();
+		json_line[variable] = replaceVariable(UICom.structure.ui[inputid].resource.getView(null,'batchform').trim());
 	}
 	line_inputs = $("asmContext:has(>metadata[semantictag*='BatchFormInputCode'])",node);
 	for ( var j = 0; j < line_inputs.length; j++) {
 		let inputid = $(line_inputs[j]).attr('id');
-		let variable = UICom.structure["ui"][inputid].getCode();
-		if (UICom.structure["ui"][inputid].resource.type=="Get_Resource")
-			json_line[variable] = replaceVariable(UICom.structure["ui"][inputid].resource.getCode(null));
+		let variable = UICom.structure.ui[inputid].getCode();
+		if (UICom.structure.ui[inputid].resource.type=="Get_Resource")
+			json_line[variable] = replaceVariable(UICom.structure.ui[inputid].resource.getCode(null));
 	}
 	line_inputs = $("asmContext:has(>metadata[semantictag*='BatchFormInputLabelCode'])",node);
 	for ( var j = 0; j < line_inputs.length; j++) {
 		var inputid = $(line_inputs[j]).attr('id');
-		let variable = UICom.structure["ui"][inputid].getCode();
-		json_line[variable+"_code"] = replaceVariable(UICom.structure["ui"][inputid].resource.getCode(null));
-		json_line[variable+"_label"] = replaceVariable(UICom.structure["ui"][inputid].resource.getView(null,'batchform').trim());
+		let variable = UICom.structure.ui[inputid].getCode();
+		json_line[variable+"_code"] = replaceVariable(UICom.structure.ui[inputid].resource.getCode(null));
+		json_line[variable+"_label"] = replaceVariable(UICom.structure.ui[inputid].resource.getView(null,'batchform').trim());
 	}
 	line_inputs = $("asmContext:has(>metadata[semantictag*='BatchFormInputLabelCodeValue'])",node);
 	for ( var j = 0; j < line_inputs.length; j++) {
 		var inputid = $(line_inputs[j]).attr('id');
-		let variable = UICom.structure["ui"][inputid].getCode();
-		json_line[variable+"_code"] = replaceVariable(UICom.structure["ui"][inputid].resource.getCode(null));
-		json_line[variable+"_label"] = replaceVariable(UICom.structure["ui"][inputid].resource.getView(null,'batchform').trim());
-		json_line[variable+"_value"] = replaceVariable(UICom.structure["ui"][inputid].resource.getValue(null,'batchform').trim());
+		let variable = UICom.structure.ui[inputid].getCode();
+		json_line[variable+"_code"] = replaceVariable(UICom.structure.ui[inputid].resource.getCode(null));
+		json_line[variable+"_label"] = replaceVariable(UICom.structure.ui[inputid].resource.getView(null,'batchform').trim());
+		json_line[variable+"_value"] = replaceVariable(UICom.structure.ui[inputid].resource.getValue(null,'batchform').trim());
 	}
 	return json_line;
 };
@@ -3658,7 +3658,7 @@ function execReport_BatchCSV(parentid,targetid,title,codeReport,display)
 	$.ajaxSetup({async: false});
 	var root_node = g_portfolio_current;
 	if (codeReport.indexOf("@local")>-1){
-		root_node = UICom.structure["ui"][parentid].node;
+		root_node = UICom.structure.ui[parentid].node;
 		codeReport = codeReport.substring(0,codeReport.indexOf("@local"))+codeReport.substring(codeReport.indexOf("@local")+6);
 	}
 	codeReport = replaceVariable(codeReport);
@@ -4058,39 +4058,39 @@ g_actions['fen-batch-variable'] = function (node,data)
 	if (select!=undefined && select.length>0) {
 		//---------- node-resource -----------
 		if (select=='resource') {
-			text = UICom.structure["ui"][nodeid].resource.getView("dashboard_"+nodeid,null,null,true);
+			text = UICom.structure.ui[nodeid].resource.getView("dashboard_"+nodeid,null,null,true);
 			
 		}
 		else if (select=='resource code') {
-			text = UICom.structure["ui"][nodeid].resource.getCode();
+			text = UICom.structure.ui[nodeid].resource.getCode();
 		}
 		else if (select=='resource value') {
-			text = UICom.structure["ui"][nodeid].resource.getValue("dashboard_value_"+nodeid);
+			text = UICom.structure.ui[nodeid].resource.getValue("dashboard_value_"+nodeid);
 			prefix_id += "value_";
 		}
 		else if (select=='resource label') {
-			text = UICom.structure["ui"][nodeid].resource.getLabel();
+			text = UICom.structure.ui[nodeid].resource.getLabel();
 		}
 		else if (select=='node label') {
-			text = UICom.structure["ui"][nodeid].getLabel();
+			text = UICom.structure.ui[nodeid].getLabel();
 		}
 		else if (select=='node code') {
-			text = UICom.structure["ui"][nodeid].getCode();
+			text = UICom.structure.ui[nodeid].getCode();
 		}
 		else if (select=='node value') {
-			text = UICom.structure["ui"][nodeid].getValue();
+			text = UICom.structure.ui[nodeid].getValue();
 		}
 		else if (select=='resourcelastmodified') {
-			text = new Date(parseInt(UICom.structure["ui"][nodeid].resource.lastmodified_node.text())).toLocaleString();
+			text = new Date(parseInt(UICom.structure.ui[nodeid].resource.lastmodified_node.text())).toLocaleString();
 		}
 		else if (select=='nodelastmodified') {
-			text = new Date(parseInt(UICom.structure["ui"][nodeid].lastmodified_node.text())).toLocaleString();
+			text = new Date(parseInt(UICom.structure.ui[nodeid].lastmodified_node.text())).toLocaleString();
 		}
 		else if (select=='uuid') {
 			text = nodeid;
 		}
 		else if (select=='node context') {
-			text = UICom.structure["ui"][nodeid].getContext("dashboard_context_"+nodeid);
+			text = UICom.structure.ui[nodeid].getContext("dashboard_context_"+nodeid);
 			prefix_id += "context_";
 		}
 	}

@@ -147,9 +147,9 @@ UIFactory["TextField"].prototype.displayView = function(dest,type,langcode)
 UIFactory["TextField"].prototype.update = function(langcode)
 //==================================
 {
-	if (execJS(itself,"update-resource-if")) {
+	if (execJS(this,"update-resource-if")) {
 		//-------- if function js -------------
-		execJS(itself,"update-resource-before");
+		execJS(this,"update-resource-before");
 		//---------------------
 		$(this.lastmodified_node).text(new Date().getTime());
 		//---------------------
@@ -177,7 +177,7 @@ UIFactory["TextField"].prototype.update = function(langcode)
 		this.updateCounterWords(langcode);
 		this.save();
 		//-------- if function js -------------
-		execJS(itself,'update-resource-after');
+		execJS(this,'update-resource-after');
 		//---------------------
 	}
 };
@@ -266,9 +266,9 @@ UIFactory["TextField"].prototype.displayEditor = function(destid,type,langcode,d
 			"uuid":uuid,
 			"locale":LANG,
 			'events': {
-				'load': function(){try{$('.wysihtml5-sandbox').contents().find('body').on("keyup", function(){UICom.structure['ui'][uuid].resource.updateCounterWords(langcode);});}catch(e){}; },
-				'change': function(){UICom.structure['ui'][uuid].resource.update(langcode);},
-//				'blur': function(){UICom.structure['ui'][uuid].resource.update(langcode);}
+				'load': function(){try{$('.wysihtml5-sandbox').contents().find('body').on("keyup", function(){UICom.structure.ui[uuid].resource.updateCounterWords(langcode);});}catch(e){}; },
+				'change': function(){UICom.structure.ui[uuid].resource.update(langcode);},
+//				'blur': function(){UICom.structure.ui[uuid].resource.update(langcode);}
 			},
 			parserRules: {
 				classes: {

@@ -88,7 +88,7 @@ function displayKarutaPublic()
 								g_portfolio_current = data;
 								UICom.parseStructure(data);
 								var depth = 99;
-								var rootnode = UICom.structure['ui'][nodeid];
+								var rootnode = UICom.structure.ui[nodeid];
 								if (rootnode.asmtype=='asmRoot' || rootnode.asmtype=='asmStructure')
 									depth = 1;
 								// --------------------------
@@ -105,16 +105,16 @@ function displayKarutaPublic()
 								setLanguage(lang,'publichtm');
 								if (rootnode.asmtype=='asmRoot' || rootnode.asmtype=='asmStructure') {
 									UIFactory.Node.displaySidebarItem(nodeid,'sidebar-parent','standard',LANGCODE,false,nodeid);
-			//						UIFactory["Node"].displaySidebar(UICom.structure['tree'][nodeid],'sidebar','standard',LANGCODE,false,nodeid);
+			//						UIFactory["Node"].displaySidebar(UICom.structure.tree[nodeid],'sidebar','standard',LANGCODE,false,nodeid);
 								}
 								$("#contenu").html("<div id='page' uuid='"+nodeid+"'></div>");
 								var semtag =  ($("metadata",rootnode.node)[0]==undefined || $($("metadata",rootnode.node)[0]).attr('semantictag')==undefined)?'': $($("metadata",rootnode.node)[0]).attr('semantictag');
 								if (semtag == 'bubble_level1') {
 									$("#main-container").html("");
-									UICom.structure["ui"][nodeid].displayNode('standard',UICom.structure['tree'][nodeid],'main-container',depth,LANGCODE,true);
+									UICom.structure.ui[nodeid].displayNode('standard',UICom.structure.tree[nodeid],'main-container',depth,LANGCODE,true);
 								}
 								else
-									UICom.structure["ui"][nodeid].displayNode('standard',UICom.structure['tree'][nodeid],'contenu',depth,LANGCODE,true);
+									UICom.structure.ui[nodeid].displayNode('standard',UICom.structure.tree[nodeid],'contenu',depth,LANGCODE,true);
 								var welcomes = $("asmUnit:has(metadata[semantictag*='WELCOME'])",data);
 								if (welcomes.length==0) // for backward compatibility
 									welcomes = $("asmUnit:has(metadata[semantictag*='welcome-unit'])",data);

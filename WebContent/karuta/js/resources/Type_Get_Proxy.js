@@ -491,7 +491,7 @@ function Get_Proxy_multiple(parentid,title,query,partcode,get_resource_semtag)
 	$("#edit-window-type").html("");
 	$("#edit-window-body-metadata").html("");
 	$("#edit-window-body-metadata-epm").html("");
-	var getResource = new UIFactory["Get_Proxy"](UICom.structure["ui"][parentid].node,"xsi_type='nodeRes'");
+	var getResource = new UIFactory["Get_Proxy"](UICom.structure.ui[parentid].node,"xsi_type='nodeRes'");
 	getResource.multiple = query+"/"+partcode+","+get_resource_semtag;
 	getResource.displayEditor("get-resource-node");
 	$('#edit-window').modal('show');

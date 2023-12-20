@@ -826,7 +826,7 @@ UIFactory["Node"].prototype.displayMetadataWadMenusEditor = function(destid,attr
 UIFactory["Node"].updateMetadataWadMenuAttribute = function(nodeid,attribute)
 //==================================================
 {
-	var node = UICom.structure["ui"][nodeid].node;
+	var node = UICom.structure.ui[nodeid].node;
 	var value = $.trim($("#"+nodeid+"_"+attribute).val());
 	$($("metadata-wad",node)[0]).attr(attribute,value);
 	UICom.UpdateMetaWad(nodeid);
@@ -844,7 +844,7 @@ UIFactory["Node"].addMenuElt = function(tag,noitem,nodeid,destmenu)
 	const elt = parser.parseFromString(menuElts[tag],"text/xml");
 	$(menueltslist[noitem])[0].append(elt.getElementsByTagName(tag)[0]);
 	var value= xml2string(xmlDoc);
-	var node = UICom.structure["ui"][nodeid].node;
+	var node = UICom.structure.ui[nodeid].node;
 	$($("metadata-wad",node)[0]).attr('menuroles',value);
 	UICom.UpdateMetaWad(nodeid);
 	UICom.structure.ui[nodeid].setMetadata();
@@ -858,7 +858,7 @@ UIFactory["Node"].duplicateMenuElt = function(tag,no,noitem,nodeid,destmenu)
 	const elt = menueltslist[no];
 	$(menueltslist[noitem])[0].append(elt.cloneNode(true));
 	var value= xml2string(xmlDoc);
-	var node = UICom.structure["ui"][nodeid].node;
+	var node = UICom.structure.ui[nodeid].node;
 	$($("metadata-wad",node)[0]).attr('menuroles',value);
 	UICom.UpdateMetaWad(nodeid);
 	UICom.structure.ui[nodeid].setMetadata();
@@ -871,7 +871,7 @@ UIFactory["Node"].removeMenuElt = function(noitem,nodeid,destmenu)
 {	
 	$(menueltslist[noitem])[0].remove();
 	var value= xml2string(xmlDoc);
-	var node = UICom.structure["ui"][nodeid].node;
+	var node = UICom.structure.ui[nodeid].node;
 	$($("metadata-wad",node)[0]).attr('menuroles',value);
 	UICom.UpdateMetaWad(nodeid);
 	UICom.structure.ui[nodeid].setMetadata();
@@ -885,7 +885,7 @@ UIFactory["Node"].updateMetadataXmlMenuAttribute = function(eltidx,destmenu,node
 //==================================================
 {
 	const element = menueltslist[eltidx];
-	var node = UICom.structure["ui"][nodeid].node;
+	var node = UICom.structure.ui[nodeid].node;
 	var attribute=$(element).prop("nodeName");
 	var eltvalue = $.trim($("#"+nodeid+"_"+eltidx+attribute).val());
 	$(element).text(eltvalue);
