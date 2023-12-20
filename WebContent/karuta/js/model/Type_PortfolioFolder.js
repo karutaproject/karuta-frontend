@@ -984,6 +984,7 @@ UIFactory["PortfolioFolder"].checkPortfolios = function()
 //==================================
 {
 	$.ajax({
+		async: false,
 		type : "GET",
 		dataType : "xml",
 		url : serverBCK_API+"/portfolios?active=1&project=false&count=true",
@@ -1009,6 +1010,7 @@ UIFactory["PortfolioFolder"].loadAndDisplayPortfolios = function(dest,type)
 {
 	$("#"+dest).html("");
 	$.ajax({
+		async: false,
 		type : "GET",
 		dataType : "xml",
 		url : serverBCK_API+"/portfolios?active=1&project=false",
