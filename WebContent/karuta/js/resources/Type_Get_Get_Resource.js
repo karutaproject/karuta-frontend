@@ -62,7 +62,6 @@ UIFactory["Get_Get_Resource"] = function( node,condition)
 			}
 		}
 	}
-	this.encrypted = ($("metadata",node).attr('encrypted')=='Y') ? true : false;
 	if (this.clause=="xsi_type='Get_Get_Resource'")
 		this.multilingual = ($("metadata",node).attr('multilingual-resource')=='Y') ? true : false;
 	else // asmUnitStructure - Get_Get_Resource
@@ -123,8 +122,6 @@ UIFactory["Get_Get_Resource"].prototype.getCode = function(dest)
 		this.displayCode[dest]=true;
 	}
 	var code = $(this.code_node).text();
-	if (this.encrypted)
-		code = decrypt(code.substring(3),g_rc4key);
 	return code;
 };
 
@@ -136,8 +133,6 @@ UIFactory["Get_Get_Resource"].prototype.getValue = function(dest)
 		this.displayValue[dest]=true;
 	}
 	var value = $(this.value_node).text();
-	if (this.encrypted)
-		value = decrypt(value.substring(3),g_rc4key);
 	return value;
 };
 
@@ -157,8 +152,6 @@ UIFactory["Get_Get_Resource"].prototype.getView = function(dest,type,langcode)
 		this.display[dest] = langcode;
 	}
 	var label = this.label_node[langcode].text();
-	if (this.encrypted)
-		label = decrypt(label.substring(3),g_rc4key);
 	var code = $(this.code_node).text();
 	var style = $(this.style_node).text();
 	var html = "";
@@ -1276,9 +1269,6 @@ UIFactory["Get_Get_Resource"].prototype.redisplayEditor = function(destid,type,l
 				}
 			}
 			//----------------------
-			if ($("asmContext:has(metadata[semantictag='"+semtag_parent+"'][encrypted='Y'])",parent).length>0)
-				code_parent = decrypt(code_parent.substring(3),g_rc4key);
-			//----------------------
 			var portfoliocode_parent = $("portfoliocode",$("asmContext:has(metadata[semantictag='"+semtag_parent+"'])",parent)).text();
 //			alertHTML('portfoliocode:'+portfoliocode+'--semtag:'+semtag+'--semtag_parent:'+semtag_parent+'--code_parent:'+code_parent+'--portfoliocode_parent:'+portfoliocode_parent);
 			var url ="";
@@ -1320,13 +1310,9 @@ UIFactory["Get_Get_Resource"].reparse = function(destid,type,langcode,data,self,
 		langcode = LANGCODE;
 	//---------------------
 	var self_code = $(self.code_node).text();
-	if (self.encrypted)
-		self_code = decrypt(self_code.substring(3),g_rc4key);
 	//---------------------
 	//---------------------
 	var self_value = $(self.value_node).text();
-	if (self.encrypted)
-		self_value = decrypt(self_value.substring(3),g_rc4key);
 	//---------------------
 	if (type==undefined || type==null)
 		type = 'select';

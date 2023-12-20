@@ -447,8 +447,6 @@ UIFactory["Image"].prototype.displayEditor = function(destid,type,langcode,disab
 			var htmlFormObj = $("<form class='form-horizontal' style='margin-top:10px'></form>");
 			//---------------------
 			var width = $(this.width_node[langcode]).text();
-			if (this.encrypted)
-				width = decrypt(width.substring(3),g_rc4key);
 			var htmlWidthGroupObj = $("<div class='form-group'></div>")
 			var htmlWidthLabelObj = $("<label for='width_"+this.id+"_"+langcode+"' class='col-sm-3 control-label'>"+karutaStr[LANG]['width']+"</label>");
 			var htmlWidthDivObj = $("<div class='col-sm-9'></div>");
@@ -464,8 +462,6 @@ UIFactory["Image"].prototype.displayEditor = function(destid,type,langcode,disab
 			$(htmlFormObj).append($(htmlWidthGroupObj));
 			//---------------------
 			var height = $(this.height_node[langcode]).text();
-			if (this.encrypted)
-				height = decrypt(height.substring(3),g_rc4key);
 			var htmlHeightGroupObj = $("<div class='form-group'></div>")
 			var htmlHeightLabelObj = $("<label for='height_"+this.id+"_"+langcode+"' class='col-sm-3 control-label'>"+karutaStr[LANG]['height']+"</label>");
 			var htmlHeightDivObj = $("<div class='col-sm-9'></div>");
@@ -480,8 +476,6 @@ UIFactory["Image"].prototype.displayEditor = function(destid,type,langcode,disab
 			$(htmlFormObj).append($(htmlHeightGroupObj));
 			//---------------------
 			var alt = $(this.alt_node[langcode]).text();
-			if (this.encrypted)
-				alt = decrypt(alt.substring(3),g_rc4key);
 			var htmlaltGroupObj = $("<div class='form-group'></div>")
 			var htmlaltLabelObj = $("<label for='alt_"+this.id+"_"+langcode+"' class='col-sm-3 control-label'>"+karutaStr[LANG]['alt']+"</label>");
 			var htmlaltDivObj = $("<div class='col-sm-9'></div>");
@@ -498,8 +492,6 @@ UIFactory["Image"].prototype.displayEditor = function(destid,type,langcode,disab
 			if (g_userroles[0]=='designer' || USER.admin) {
 				//---------------------
 				var code = $(this.code_node).text();
-				if (this.encrypted)
-					code = decrypt(code.substring(3),g_rc4key);
 				var htmlcodeGroupObj = $("<div class='form-group'></div>")
 				var htmlcodeLabelObj = $("<label for='code_"+this.id+"_"+langcode+"' class='col-sm-3 control-label'>"+karutaStr[LANG]['code']+"</label>");
 				var htmlcodeDivObj = $("<div class='col-sm-9'></div>");
@@ -514,8 +506,6 @@ UIFactory["Image"].prototype.displayEditor = function(destid,type,langcode,disab
 				$(htmlFormObj).append($(htmlcodeGroupObj));
 				//---------------------
 				var value = $(this.value_node).text();
-				if (this.encrypted)
-					value = decrypt(value.substring(3),g_rc4key);
 				var htmlvalueGroupObj = $("<div class='form-group'></div>")
 				var htmlvalueLabelObj = $("<label for='value_"+this.id+"_"+langcode+"' class='col-sm-3 control-label'>"+karutaStr[LANG]['value']+"</label>");
 				var htmlvalueDivObj = $("<div class='col-sm-9'></div>");

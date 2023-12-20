@@ -153,9 +153,6 @@ var UICom =
 				if (name=='asmContext') {
 					resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",child);
 					resource_type = $(resource).attr("xsi_type");
-					if (!g_encrypted) {
-						g_encrypted = ($("metadata",child).attr('encrypted')=='Y') ? true : false;
-					}
 					if (resource_type=='Proxy') {
 						var targetid = $("code",$("asmResource[xsi_type='Proxy']",child)).text();
 						var edittargetroles = ($("metadata-wad",child).attr('edittargetroles')==undefined)?'none':$("metadata-wad",child).attr('edittargetroles');

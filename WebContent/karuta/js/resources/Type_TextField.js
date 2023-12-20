@@ -51,7 +51,6 @@ UIFactory["TextField"] = function( node )
 			this.text_node[i] = $("text[lang='"+languages[i]+"']",$("asmResource[xsi_type='"+this.type+"']",node));
 		}
 	}
-	this.encrypted = ($("metadata",node).attr('encrypted')=='Y') ? true : false;
 	//--------------------
 	this.maxword = $("metadata-wad",node).attr('maxword');
 	if (this.maxword==undefined)
@@ -88,10 +87,6 @@ UIFactory["TextField"].prototype.getAttributes = function(type,langcode)
 	if (this.multilingual!=undefined && !this.multilingual)
 		langcode = 0;
 	//---------------------
-	if (dest!=null) {
-		this.display[dest]=langcode;
-	}
-	//---------------------
 	if (type==null)
 		type = 'default';
 	//---------------------
@@ -118,11 +113,6 @@ UIFactory["TextField"].prototype.getView = function(dest,type,langcode)
 	if (type==null)
 		type = "standard";
 	var html = $(this.text_node[langcode]).text();
-	//---------------------
-	if(type=='standard' || type=='none') {
-		if (this.encrypted)
-			html = decrypt(html.substring(3),g_rc4key);
-	}
 	//------------------if function js-----------------
 	const result1 = execJS(this,'display-resource-before');
 	if (typeof result1 == 'string')
@@ -166,8 +156,6 @@ UIFactory["TextField"].prototype.update = function(langcode)
 			$("#"+this.id+"_edit_"+langcode+(this.inline?'inline':'')).val(newValue);
 			$("#"+this.id+"_edit_"+langcode+(this.inline?'inline':'')).data("wysihtml5").editor.setValue(newValue);
 		}
-		if (this.encrypted)
-			newValue = "rc4"+encrypt(newValue,g_rc4key);
 		if (!this.multilingual) {
 			for (var langcode=0; langcode<languages.length; langcode++) {
 				$(this.text_node[langcode]).text(newValue);
@@ -227,13 +215,7 @@ UIFactory["TextField"].prototype.displayEditor = function(destid,type,langcode,d
 	if (this.inline==undefined)
 		this.inline = false;
 	//---------------------
-	var text = "";
-	if (this.encrypted){
-		var cipher = $(this.text_node[langcode]).text().substring(3);
-		text = decrypt(cipher,g_rc4key);
-	}
-	else
-		text = $(this.text_node[langcode]).text();
+	var text = $(this.text_node[langcode]).text();
 	//---------------------
 	var uuid = this.id;
 	var html = "";

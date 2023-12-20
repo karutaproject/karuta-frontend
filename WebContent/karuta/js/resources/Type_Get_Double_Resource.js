@@ -68,7 +68,6 @@ UIFactory["Get_Double_Resource"] = function(node,condition)
 		}
 	}
 	//-----------------------
-	this.encrypted = ($("metadata",node).attr('encrypted')=='Y') ? true : false;
 	this.multilingual = ($("metadata",node).attr('multilingual-resource')=='Y') ? true : false;
 	this.display = {};
 };
@@ -118,12 +117,8 @@ UIFactory["Get_Double_Resource"].prototype.getView = function(dest,type,langcode
 	}
 	//---------------------	
 	var label1 = this.label1_node[langcode].text();
-	if (this.encrypted)
-		label1 = decrypt(label1.substring(3),g_rc4key);
 	var code1 = $(this.code1_node).text();
 	var label2 = this.label2_node[langcode].text();
-	if (this.encrypted)
-		label2 = decrypt(label2.substring(3),g_rc4key);
 	var code2 = $(this.code_node).text();
 	//---------------------	
 	var html = "";
@@ -160,12 +155,8 @@ UIFactory["Get_Double_Resource"].prototype.displayView = function(dest,type,lang
 	}
 	//---------------------	
 	var label1 = this.label1_node[langcode].text();
-	if (this.encrypted)
-		label1 = decrypt(label1.substring(3),g_rc4key);
 	var code1 = $(this.code1_node).text();
 	var label2 = this.label2_node[langcode].text();
-	if (this.encrypted)
-		label2 = decrypt(label2.substring(3),g_rc4key);
 	var code2 = $(this.code2_node).text();
 	//---------------------	
 	var html = "";
@@ -195,14 +186,6 @@ UIFactory["Get_Double_Resource"].update = function(itself,langcode,type)
 //==================================
 {
 	$(itself.lastmodified_node).text(new Date().getTime());
-	if (itself.encrypted) {
-		$(itself.label1_node).text("rc4"+encrypt($(itself.label1_node).text(),g_rc4key));
-		$(itself.code1_node).text("rc4"+encrypt($(itself.code1_node).text(),g_rc4key));
-		$(itself.value1_node).text("rc4"+encrypt($(itself.value1_node).text(),g_rc4key));
-		$(itself.label2_node).text("rc4"+encrypt($(itself.label2_node).text(),g_rc4key));
-		$(itself.code2_node).text("rc4"+encrypt($(itself.code2_node).text(),g_rc4key));
-		$(itself.value2_node).text("rc4"+encrypt($(itself.value2_node).text(),g_rc4key));
-	}
 	itself.save();
 };
 
@@ -276,12 +259,8 @@ UIFactory["Get_Double_Resource"].parse = function(destid,type,langcode,data1,dat
 		disabled = false;
 	//---------------------
 	var self_code1 = $(self.code1_node).text();
-	if (self.encrypted)
-		self_code1 = decrypt(code1_node.substring(3),g_rc4key);
 	var separator = $(self.separator_node[langcode]).text();
 	var self_code2 = $(self.code2_node).text();
-	if (self.encrypted)
-		self_code2 = decrypt(code2_node.substring(3),g_rc4key);
 	//---------------------
 	if (type==undefined || type==null)
 		type = 'select';

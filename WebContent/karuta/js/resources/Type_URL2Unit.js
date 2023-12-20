@@ -66,7 +66,6 @@ UIFactory["URL2Unit"] = function(node,condition)
 		}
 	}
 	this.query = ($("metadata-wad",node).attr('query')==undefined)?'':$("metadata-wad",node).attr('query');
-	this.encrypted = ($("metadata",node).attr('encrypted')=='Y') ? true : false;
 	this.multilingual = ($("metadata",node).attr('multilingual-resource')=='Y') ? true : false;
 	this.preview = ($("metadata",node).attr('preview')=='Y') ? true : false;
 	this.display = {};
@@ -115,8 +114,6 @@ UIFactory["URL2Unit"].prototype.getView = function(dest,type,langcode)
 	var local_label = this.local_label_node[langcode].text();
 	if (local_label!="")
 		label = local_label;
-	if (this.encrypted)
-		label = decrypt(label.substring(3),g_rc4key);
 	if (label=='')
 		label = "---";
 	var html ="";
@@ -148,22 +145,14 @@ UIFactory["URL2Unit"].update = function(selected_item,itself,langcode,type)
 	$(itself.lastmodified_node).text(new Date().getTime());
 	//---------------------
 	var value = $(selected_item).attr('value');
-	if (itself.encrypted)
-		value = "rc4"+encrypt(value,g_rc4key);
 	$(itself.uuid_node).text(value);
 	//---------------------
 	var code = $(selected_item).attr('code');
-	if (itself.encrypted)
-		code = "rc4"+encrypt(value,g_rc4key);
 	$(itself.code_node).text(code);
 	//---------------------
 	$(itself.uuid_node).text(value);
 	for (var i=0; i<languages.length;i++){
 		var label = $(selected_item).attr('label_'+languages[i]);
-		//---------------------
-		if (itself.encrypted)
-			label = "rc4"+encrypt(label,g_rc4key);
-		//---------------------
 		$(itself.label_node[i]).text(label);
 	}
 	itself.save();
@@ -267,8 +256,6 @@ UIFactory["URL2Unit"].parse = function(destid,type,langcode,data,self,disabled,s
 		resettable = true;
 	//---------------------
 	var self_code = $(self.code_node).text();
-	if (self.encrypted)
-		self_code = decrypt(self_code.substring(3),g_rc4key);
 	//---------------------
 	if (type==undefined || type==null)
 		type = 'select';

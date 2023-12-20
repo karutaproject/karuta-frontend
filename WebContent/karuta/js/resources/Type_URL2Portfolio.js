@@ -61,7 +61,6 @@ UIFactory["URL2Portfolio"] = function(node,condition)
 		}
 	}
 	this.query = ($("metadata-wad",node).attr('query')==undefined)?'':$("metadata-wad",node).attr('query');
-	this.encrypted = ($("metadata",node).attr('encrypted')=='Y') ? true : false;
 	this.multilingual = ($("metadata",node).attr('multilingual-resource')=='Y') ? true : false;
 	this.display = {};
 };
@@ -133,19 +132,10 @@ UIFactory["URL2Portfolio"].update = function(selected_item,itself,langcode,type)
 	var value = $(selected_item).attr('value');
 	var code = $(selected_item).attr('code');
 	//---------------------
-	if (itself.encrypted) {
-		value = "rc4"+encrypt(value,g_rc4key);
-		code = "rc4"+encrypt(code,g_rc4key);
-	}
-	//---------------------
 	$(itself.uuid_node).text(value);
 	$(itself.code_node).text(value);
 	for (var i=0; i<languages.length;i++){
 		var label = $(selected_item).attr('label_'+languages[i]);
-		//---------------------
-		if (itself.encrypted)
-			label = "rc4"+encrypt(label,g_rc4key);
-		//---------------------
 		$(itself.label_node[i]).text(label);
 	}
 	itself.save();
@@ -237,8 +227,6 @@ UIFactory["URL2Portfolio"].parse = function(destid,type,langcode,data,self,disab
 		resettable = true;
 	//---------------------
 	var self_code = $(self.code_node).text();
-	if (self.encrypted)
-		self_code = decrypt(self_code.substring(3),g_rc4key);
 	//---------------------
 	if (type==undefined || type==null)
 		type = 'select';

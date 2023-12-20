@@ -107,8 +107,6 @@ UIFactory["Get_Portfolio"].prototype.getView = function(dest,type,langcode)
 	var local_label = this.local_label_node[langcode].text();
 	if (local_label!="")
 		label = local_label;
-	if (this.encrypted)
-		label = decrypt(label.substring(3),g_rc4key);
 	if (label=='')
 		label = "---";
 	var html ="";
@@ -235,8 +233,6 @@ UIFactory["Get_Portfolio"].parse = function(destid,type,langcode,data,self,disab
 		resettable = true;
 	//---------------------
 	var self_code = $(self.code_node).text();
-	if (self.encrypted)
-		self_code = decrypt(self_code.substring(3),g_rc4key);
 	//---------------------
 	if (type==undefined || type==null)
 		type = 'select';

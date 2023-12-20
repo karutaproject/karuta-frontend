@@ -77,7 +77,6 @@ UIFactory["Get_Resource"] = function(node,condition)
 			this.text_node[i] = $("text[lang='"+languages[i]+"']",$("asmResource["+this.clause+"]",node));
 		}
 	}
-	this.encrypted = ($("metadata",node).attr('encrypted')=='Y') ? true : false;
 	if (this.clause=="xsi_type='Get_Resource'")
 		this.multilingual = ($("metadata",node).attr('multilingual-resource')=='Y') ? true : false;
 	else // asmUnitStructure - Get_Resource
@@ -210,11 +209,7 @@ UIFactory["Get_Resource"].prototype.getView = function(dest,type,langcode,indash
 		this.display[dest] = langcode;
 	}
 	var text = this.text_node[langcode].text();
-	if (this.encrypted)
-		text = decrypt(text.substring(3),g_rc4key);
 	var label = this.label_node[langcode].text();
-	if (this.encrypted)
-		label = decrypt(label.substring(3),g_rc4key);
 	var code = $(this.code_node).text();
 	var style = $(this.style_node).text();
 	var html = "";
@@ -1568,10 +1563,6 @@ UIFactory["Get_Resource"].update = function(selected_item,itself,langcode,type)
 			$(itself.style_node[0]).text(style.trim());
 			for (var i=0; i<languages.length;i++){
 				var label = $(selected_item).attr('label_'+languages[i]);
-				//---------------------
-				if (itself.encrypted)
-					label = "rc4"+encrypt(label,g_rc4key);
-				//---------------------
 				$(itself.label_node[i][0]).text(label);
 			}
 			itself.save();
