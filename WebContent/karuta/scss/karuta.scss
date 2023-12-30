@@ -2817,6 +2817,46 @@ table.tablesorter th.restore {
 		padding-left:40px;
 	}
 
+	.selSMILEY-EXCELLENT, .SMILEY-EXCELLENT {
+		background-image: url("../../karuta/img/smiley32-excellent.png");
+		background-repeat: no-repeat;
+		background-position: 10px 3px;
+		display:inline-block;
+		min-height:38px;
+		width:90%;
+		padding-left:44px;
+	}
+
+	.selSMILEY-GOOD, .SMILEY-GOOD {
+		background-image: url("../../karuta/img/smiley32-good.png");
+		background-repeat: no-repeat;
+		background-position: 10px 3px;
+		display:inline-block;
+		min-height:38px;
+		width:90%;
+		padding-left:44px;
+	}
+
+	.selSMILEY-AVERAGE, .SMILEY-AVERAGE {
+		background-image: url("../../karuta/img/smiley32-average.png");
+		background-repeat: no-repeat;
+		background-position: 10px 3px;
+		display:inline-block;
+		min-height:38px;
+		width:90%;
+		padding-left:44px;
+	}
+
+	.selSMILEY-POOR, .SMILEY-POOR {
+		background-image: url("../../karuta/img/smiley32-poor.png");
+		background-repeat: no-repeat;
+		background-position: 10px 3px;
+		display:inline-block;
+		min-height:38px;
+		width:90%;
+		padding-left:44px;
+	}
+
 /* for submitted / not submitted alert / sahring */
 
 .hidesubmitbutton .submitbutton {display:none}

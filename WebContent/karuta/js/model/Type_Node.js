@@ -277,7 +277,7 @@ UIFactory["Node"].prototype.displayNode = function(type,root,dest,depth,langcode
 					$("#content-"+uuid).append (html_tabs);
 					$("#content-"+uuid).append (html_panels);
 					if (localStorage.getItem('#display-'+uuid)!=undefined){
-						$("a[href='#display-"+uuid+localStorage.getItem('#display-'+uuid)).click();
+						$("a[href=\"#display-"+uuid+localStorage.getItem('#display-'+uuid)+"\"]").click();
 					} else {
 						$("a[href='#display-"+uuid+"-0']").click();
 						localStorage.setItem('#display-'+uuid,'-0');
@@ -1102,7 +1102,8 @@ UIFactory["Node"].prototype.remove = function()
 UIFactory["Node"].remove = function(uuid,callback,param1,param2,param3,param4)
 //==================================
 {
-	const itself = UICom.structure.ui[uuid];  // context node
+/*	
+ 	const itself = UICom.structure.ui[uuid];  // context node
 	if (execJS(itself,"delete-if")) {
 		//----
 		execJS(itself,"delete-before");
@@ -1112,6 +1113,51 @@ UIFactory["Node"].remove = function(uuid,callback,param1,param2,param3,param4)
 		//----
 		execJS(itself,"delete-afterf")
 		//----
+	} else {
+		$('#delete-window').modal('hide');
+		$('#wait-window').modal('hide');
+		alertHTML(karutaStr[LANG]['error-delete'])
+	}
+*/
+	let remove = true;
+	//-------- if function js -------------
+	if (UICom.structure.ui[uuid].js==undefined){
+		var node = UICom.structure.ui[uuid];
+		UICom.structure.ui[uuid].js = ($(node.metadatawad).attr('js')==undefined)?"":$(node.metadatawad).attr('js');
+	}
+	if (UICom.structure.ui[uuid].js!=undefined && UICom.structure.ui[uuid].js!="") {
+		var fcts = UICom.structure.ui[uuid].js.split("|");
+		for (var i=0;i<fcts.length;i++) {
+			var elts = fcts[i].split("/");
+			if (elts[0]=="delete" || elts[0]=="delete-before") {
+				if (elts[1].indexOf("(")<0)
+					eval(elts[1]+"(uuid)");
+				else
+					eval(replaceVariable(elts[1],UICom.structure.ui[uuid]));
+			}
+			if (elts[0]=="delete-if") {
+				if (elts[1].indexOf("(")<0) 
+					remove = eval(elts[1]+"(uuid)");
+				else
+					remove = eval(replaceVariable(elts[1],UICom.structure.ui[uuid]));
+			}
+		}
+	}
+	//------------------------------------
+	if (remove) {
+		$("#"+uuid,g_portfolio_current).remove();
+		var fcts = UICom.structure.ui[uuid].js.split("|");
+		UICom.DeleteNode(uuid,callback,param1,param2,param3,param4);
+		var fcts = UICom.structure.ui[uuid].js.split("|");
+		for (var i=0;i<fcts.length;i++) {
+			var elts = fcts[i].split("/");
+			if (elts[0]=="delete-after") {
+				if (elts[1].indexOf("(")<0)
+					eval(elts[1]+"(uuid)");
+				else
+					eval(replaceVariable(elts[1],UICom.structure.ui[uuid]));
+			}
+		}
 	} else {
 		$('#delete-window').modal('hide');
 		$('#wait-window').modal('hide');
