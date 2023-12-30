@@ -277,7 +277,7 @@ UIFactory["Node"].prototype.displayNode = function(type,root,dest,depth,langcode
 					$("#content-"+uuid).append (html_tabs);
 					$("#content-"+uuid).append (html_panels);
 					if (localStorage.getItem('#display-'+uuid)!=undefined){
-						$("a[href='#display-"+uuid+localStorage.getItem('#display-'+uuid)).click();
+						$("a[href=\"#display-"+uuid+localStorage.getItem('#display-'+uuid)+"\"]").click();
 					} else {
 						$("a[href='#display-"+uuid+"-0']").click();
 						localStorage.setItem('#display-'+uuid,'-0');
