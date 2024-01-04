@@ -1932,7 +1932,7 @@ function import_get_multiple(parentid,targetid,title,query_portfolio,query_semta
 		actions.push(JSON.parse(acts[i].replaceAll("|","\"")));
 	}
 	let js1 = "$('#edit-window').modal('hide')";
-	let js2 = "this.setAttribute('disabled',true);$('#edit-window').modal('hide');";
+	let js2 = "";
 	for (let i=0;i<actions.length;i++) {
 		//-----------------
 		let fctjs = "";
@@ -1993,7 +1993,7 @@ function import_get_multiple(parentid,targetid,title,query_portfolio,query_semta
 			}
 		}
 	}
-	var footer = "<button class='btn' onclick=\""+js2+js1+"\">"+karutaStr[LANG]['Add']+"</button> <button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
+	var footer = "<button class='btn' onclick=\"$('#wait-window').modal('show');"+js1+"\">"+karutaStr[LANG]['Add']+"</button> <button class='btn' onclick=\"$('#edit-window').off('hidden');"+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
 	$("#edit-window-footer").html(footer);
 	$("#edit-window-title").html(title.replaceAll("##apos##","'"));
 	var html = "<div id='get-resource-node'></div>";
@@ -2002,7 +2002,7 @@ function import_get_multiple(parentid,targetid,title,query_portfolio,query_semta
 	$("#edit-window-type").html("");
 	$("#edit-window-body-metadata").html("");
 	$("#edit-window-body-metadata-epm").html("");
-	var getResource = new UIFactory["Get_Resource"](UICom.structure["ui"][parentid].node,"xsi_type='nodeRes'");
+	var getResource = new UIFactory["Get_Resource"](UICom.structure.ui[parentid].node,"xsi_type='nodeRes'");
 	getResource.get_type = "import_comp";
 	getResource.query_portfolio = query_portfolio;
 	getResource.query_semtag = query_semtag;
@@ -2011,6 +2011,10 @@ function import_get_multiple(parentid,targetid,title,query_portfolio,query_semta
 	getResource.unique = unique;
 	getResource.displayEditor("get-resource-node",null,null,false,false);
 	$('#edit-window').modal('show');
+	$('#edit-window').on('hidden.bs.modal', function (e) {
+		eval(js2);$('#wait-window').modal('hide');
+		$('#edit-window').off('hidden');
+	})
 }
 
 //======================================================================================

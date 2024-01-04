@@ -3122,7 +3122,7 @@ g_actions['update-url2portfolio'] = function update_url2portfolio(node,data)
 	var ok = 0;
 	//------------ Source --------------------
 	var treeref = $("source",node).text();
-	var sourceid = g_trees[treeref][0];
+	var sourceid = (treeref=="")? "":g_trees[treeref][0];
 	//------------ Target --------------------
 	const nodes = getTargetNodes(node,data,"dest-test");
 	//----------------------------------------
