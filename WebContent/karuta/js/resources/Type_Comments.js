@@ -245,9 +245,8 @@ UIFactory["Comments"].prototype.displayEditor = function(destid,type,langcode,di
 				toolbar:{"size":"xs","font-styles": false,"html":htmleditor,"blockquote": true,"image": false,"link": false},
 				"uuid":uuid,
 				"locale":LANG,
-				'events': {
-					'load': function(){try{$('.wysihtml5-sandbox').contents().find('body').on("keyup", function(){UICom.structure.ui[uuid].resource.updateCounterWords(langcode);});}catch(e){}; },
-					'change': function(){UICom.structure.ui[uuid].resource.update(langcode);},
+				"events": {
+					"change": function(){UICom.structure.ui[uuid].resource.update(langcode);}
 				},
 				parserRules: {
 					classes: {

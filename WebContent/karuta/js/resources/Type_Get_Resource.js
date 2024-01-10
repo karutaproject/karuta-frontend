@@ -1997,10 +1997,12 @@ function import_get_multiple(parentid,targetid,title,query_portfolio,query_semta
 	getResource.unique = unique;
 	getResource.displayEditor("get-resource-node",null,null,false,false);
 	$('#edit-window').modal('show');
+	//--------------------------------------
 	$('#edit-window').on('hidden.bs.modal', function (e) {
 		eval(js2);$('#wait-window').modal('hide');
 		$('#edit-window').off('hidden');
 	})
+	//--------------------------------------
 }
 
 //======================================================================================
