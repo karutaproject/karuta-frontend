@@ -488,6 +488,26 @@
 	<!-- ====================================================================================== -->
 	<!-- ====================================================================================== -->
 	
+	<xsl:template match="*[metadata/@semantictag='show-node']">
+		<xsl:variable name="destination">
+			<xsl:call-template name='get-select'>
+				<xsl:with-param name='parent'>subsection-target</xsl:with-param>
+			</xsl:call-template>
+		</xsl:variable>
+		<show-node select="{$destination}">
+		</show-node>
+	</xsl:template>
+	
+	<xsl:template match="*[metadata/@semantictag='hide-node']">
+		<xsl:variable name="destination">
+			<xsl:call-template name='get-select'>
+				<xsl:with-param name='parent'>subsection-target</xsl:with-param>
+			</xsl:call-template>
+		</xsl:variable>
+		<hide-node select="{$destination}">
+		</hide-node>
+	</xsl:template>
+
 	<xsl:template match="*[metadata/@semantictag='moveup-node']">
 		<xsl:variable name="destination">
 			<xsl:call-template name='get-select'>

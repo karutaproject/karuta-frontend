@@ -1341,7 +1341,14 @@ g_actions['select-tree'] = function selectTree(node)
 	if (code=="")
 		code = getTxtvals($("code",node));
 	//----- get tree id -----
-	var portfolioid = UIFactory["Portfolio"].getid_bycode(code,false); 
+	var portfolioid = "";
+	if (code=='self') { 
+		portfolioid = g_portfolioid;
+		code = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",g_portfolio_current)).text();
+	} else
+		portfolioid = UIFactory["Portfolio"].getid_bycode(code,false); 
+	
+	//------------------------
 	if (portfolioid!=""){
 		ok = true;
 		var portfolio = new Array();
@@ -2923,6 +2930,72 @@ g_actions['delete-node'] = function deleteNode(node,data)
 		}
 	} else {
 		$("#batch-log").append("<br>- ***NOT FOUND <span class='danger'>ERROR</span>");
+	}
+	return (ok!=0 && ok == nodes.length);
+}
+
+//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
+//------------------------ Show/Hide Node ----------------------------------
+//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
+
+//=================================================
+g_actions['show-node'] = function showNode(node,data)
+//=================================================
+{
+	var ok = 0;
+	let nodes = getTargetNodes(node,data,"test")
+	if (nodes.length>0){
+		for (i=0; i<nodes.length; i++){
+			var nodeid = $(nodes[i]).attr('id');
+			$.ajax({
+				async : false,
+				type : "POST",
+				dataType : "text",
+				url : serverBCK_API+"/nodes/node/" + nodeid + "/action/show",
+				nodeid : nodeid,
+				success : function(data) {
+					ok = true;
+					$("#batch-log").append("<br>- node showed ("+this.nodeid+")");
+				},
+				error : function(data) {
+					$("#batch-log").append("<br>- *** <span class='danger'>ERROR</span> in showing node : "+this.nodeid);
+				}
+			});
+		}
+	} else {
+		$("#batch-log").append("<br>- ***NOT FOUND <span class='danger'>ERROR</span> showing node");
+	}
+	return (ok!=0 && ok == nodes.length);
+}
+
+//=================================================
+g_actions['hide-node'] = function hideNode(node,data)
+//=================================================
+{
+	var ok = 0;
+	let nodes = getTargetNodes(node,data,"test")
+	if (nodes.length>0){
+		for (i=0; i<nodes.length; i++){
+			var nodeid = $(nodes[i]).attr('id');
+			$.ajax({
+				async : false,
+				type : "POST",
+				dataType : "text",
+				url : serverBCK_API+"/nodes/node/" + nodeid + "/action/hide",
+				nodeid : nodeid,
+				success : function(data) {
+					ok = true;
+					$("#batch-log").append("<br>- node showed ("+this.nodeid+")");
+				},
+				error : function(data) {
+					$("#batch-log").append("<br>- *** <span class='danger'>ERROR</span> in showing node : "+this.nodeid);
+				}
+			});
+		}
+	} else {
+		$("#batch-log").append("<br>- ***NOT FOUND <span class='danger'>ERROR</span> showing node");
 	}
 	return (ok!=0 && ok == nodes.length);
 }

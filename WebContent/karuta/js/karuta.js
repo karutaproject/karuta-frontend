@@ -414,7 +414,7 @@ function getEditBox(uuid,js2) {
 			}
 		});		
 	}
-	if(UICom.structure.ui[uuid].resource!=null && (UICom.structure.ui[uuid].editresroles.containsArrayElt(g_userroles) || g_userroles[0]=='designer')) {
+	if(UICom.structure.ui[uuid].resource!=null && (UICom.structure.ui[uuid].editresroles.containsArrayElt(g_userroles) || UICom.structure.ui[uuid].editresroles.indexOf($(USER.username_node).text())>-1 || g_userroles[0]=='designer')) {
 		try {
 			html = UICom.structure.ui[uuid].resource.getEditor();
 			$("#edit-window-body-resource").html($(html));

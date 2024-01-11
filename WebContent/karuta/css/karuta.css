@@ -673,6 +673,10 @@ body,
   margin-left: 0px;
   margin-right: 0px;
 }
+.preview-window .fa-arrow-up,
+.preview-window .fa-random {
+  display: none;
+}
 
 .preview-backdrop {
   position: fixed;
