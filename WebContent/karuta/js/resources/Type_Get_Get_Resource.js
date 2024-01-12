@@ -452,7 +452,8 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 				}
 			}
 			//----------------------
-		} catch(e) { alertHTML(e);
+		} catch(e) {
+			alertHTML("1-"+e);
 			// do nothing - error in the search attribute
 		}
 	}
@@ -584,26 +585,26 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 				portfoliocode = cleanCode(code_parent);
 				url = serverBCK_API+"/nodes?portfoliocode="+portfoliocode+"&semtag="+semtag.replace("!","");
 			} else if (portfoliocode.indexOf("##parentcode##")>-1) {
-				let js2 = $("#js2").attr("onclick");
+				let js2 = $("#js2").attr("js");
 				js2 = js2.replaceAll("##parentcode##",cleanCode(code_parent));
-				$("#js2").attr("onclick",js2);
+				$("#js2").attr("js",js2);
 				portfoliocode = portfoliocode.replaceAll("##parentcode##",cleanCode(code_parent));
 				url = serverBCK_API+"/nodes?portfoliocode="+portfoliocode+"&semtag="+semtag.replace("!","");
 			} else if (portfoliocode.indexOf("##parentvalue##")>-1){
 				portfoliocode = value_parent;
-				let js2 = $("#js2").attr("onclick");
+				let js2 = $("#js2").attr("js");
 				js2 = js2.replaceAll("##parentvalue##",value_parent);
-				$("#js2").attr("onclick",js2);
+				$("#js2").attr("js",js2);
 				url = serverBCK_API+"/nodes?portfoliocode="+portfoliocode+"&semtag="+semtag.replace("!","")+"&semtag_parent="+this.query_parent_semtag+ "&code_parent="+code_parent;
 			} else if (portfoliocode.indexOf("##parentportfoliocode##")>-1){
 				portfoliocode = pcode_parent;
-				let js2 = $("#js2").attr("onclick");
+				let js2 = $("#js2").attr("js");
 				js2 = js2.replaceAll("##parentportfoliocode##",pcode_parent);
-				$("#js2").attr("onclick",js2);
+				$("#js2").attr("js",js2);
 				url = serverBCK_API+"/nodes?portfoliocode="+portfoliocode+"&semtag="+semtag.replace("!","")+"&semtag_parent="+this.query_parent_semtag+ "&code_parent="+code_parent;
 			} else {
-				let js2 = $("#js2").attr("onclick");
-				$("#js2").attr("onclick",js2);
+				let js2 = $("#js2").attr("js");
+				$("#js2").attr("js",js2);
 				url = serverBCK_API+"/nodes?portfoliocode="+portfoliocode+"&semtag="+semtag.replace("!","")+"&semtag_parent="+this.query_parent_semtag+ "&code_parent="+code_parent;
 			}
 			$(this.portfoliocode_node).text(portfoliocode);
@@ -672,7 +673,8 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 				}
 			}
 			//----------------------
-		} catch(e) { alertHTML(e);
+		} catch(e) {
+			alertHTML("2-"+e);
 			// do nothing - error in the search attribute
 		}
 	}
@@ -1296,7 +1298,8 @@ UIFactory["Get_Get_Resource"].prototype.redisplayEditor = function(destid,type,l
 				}
 
 			});
-		} catch(e) { alertHTML(e);
+		} catch(e) {
+			alertHTML("3-"+e);
 			// do nothing - error in the search attribute
 		}
 	}
@@ -1773,11 +1776,10 @@ function import_get_get_multiple(parentid,targetid,title,parent_position,parent_
 		unique = '';
 	let actions = [];
 	for (let i=0;i<acts.length-1;i++) {
-		//actions.push(JSON.parse(acts[i].replaceAll("|","\"").replaceAll("<<","(").replaceAll(">>",")")));
 		actions.push(JSON.parse(acts[i].replaceAll("|","\"")));
 	}
 	let js1 = "javascript:$('#edit-window').modal('hide')";
-	let js2 = "$('#edit-window').modal('hide');this.setAttribute('disabled',true);";
+	let js2 = "";
 	for (let i=0;i<actions.length;i++) {
 		//-----------------
 		let fctjs = "";
@@ -1824,7 +1826,7 @@ function import_get_get_multiple(parentid,targetid,title,parent_position,parent_
 			}
 		}
 	}
-	var footer = "<button id='js2' class='btn' onclick=\""+js2+";\">"+karutaStr[LANG]['Add']+"</button> <button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
+	var footer = "<button id='js2' js= \""+js2+"\" class='btn' onclick=\"$('#wait-window').modal('show');"+js1+"\">"+karutaStr[LANG]['Add']+"</button> <button class='btn' onclick=\"$('#edit-window').off('hidden');"+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
 	$("#edit-window-footer").html(footer);
 	$("#edit-window-title").html(title);
 	var html = "<div id='get-get-resource-node'></div>";
@@ -1845,6 +1847,14 @@ function import_get_get_multiple(parentid,targetid,title,parent_position,parent_
 	getgetResource.unique = unique;
 	getgetResource.displayEditor("get-get-resource-node");
 	$('#edit-window').modal('show');
+	//--------------------------------------
+	$('#edit-window').on('hidden.bs.modal', function (e) {
+		js2 = $("#js2").attr('js');
+		eval(js2);$('#wait-window').modal('hide');
+		$('#edit-window').off('hidden');
+	})
+	//--------------------------------------
+
 }
 
 
