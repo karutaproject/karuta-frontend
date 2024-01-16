@@ -898,6 +898,7 @@ UIFactory["Node"].prototype.updateLabel = function(langcode)
 	}
 	//---------------------
 	this.save();
+	execJS(this,"update-node-after");
 	writeSaved(this.id);
 };
 
