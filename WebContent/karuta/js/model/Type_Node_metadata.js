@@ -589,6 +589,8 @@ UIFactory["Node"].prototype.displayMetadataAttributesEditor = function(destid)
 	//--------------------------------------
 	if (name=='asmContext' && (this.resource.type=='URL2Unit' || this.resource.type=='Get_Resource' || this.resource.type=='Get_Get_Resource'))
 		this.displayMetadataAttributeEditor('metadata-part2','preview',true);
+	if (name=='asmContext' && this.resource.type=='Get_Resource')
+		this.displayMetadataAttributeEditor('metadata-part2','previewsharing',false);
 	if (name!='asmRoot')
 		this.displayMetadataWadAttributeEditor('metadata-part2','display',true);
 	this.displayMetadataWadAttributeEditor('metadata-part2','langnotvisible');

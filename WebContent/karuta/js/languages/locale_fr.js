@@ -305,6 +305,7 @@ karutaStr['fr']['record-audio']="Enregistrer un fichier audio";
 karutaStr['fr']['upload-image']="Téléverser une image";
 karutaStr['fr']['take-image']="Prendre une photo";
 karutaStr['fr']['save-image']="Sauver la photo";
+karutaStr['fr']['previewsharing']="Aperçu - Partage";
 
 //=========================================
 //========== ADMIN ========================

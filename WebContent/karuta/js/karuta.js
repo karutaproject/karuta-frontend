@@ -3962,6 +3962,21 @@ function getCode(semtag,uuid) {
 //============== Function JS =====================
 //================================================
 //================================================
+function getPreviewSharedURL(uuid,sharerole,level,duration,role) {
+	const urlS = serverBCK+'/direct?uuid='+uuid+'&role='+role+'&showtorole='+role+'&l='+level+'&d='+duration+'&sharerole='+sharerole+'&type=showtorole';
+	let url = "";
+	$.ajax({
+		async:false,
+		type : "POST",
+		dataType : "text",
+		contentType: "application/xml",
+		url : urlS,
+		success : function (data){
+			url = data;
+		}
+	});
+	return url;
+}
 
 function goTo(semtag) {
 	const uuid =$( $("*:has(>metadata[semantictag*='"+semtag+"'])",g_portfolio_current)[0]).attr("id");
