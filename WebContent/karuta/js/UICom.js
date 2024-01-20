@@ -385,6 +385,7 @@ var UICom =
 		var data =  xml2string(metawad[0]);
 		var urlS = serverBCK_API+'/nodes/node/'+uuid+'/metadatawad';
 		$.ajax({
+			aync : false,
 			type : "PUT",
 			dataType : "text",
 			contentType: "application/xml",
