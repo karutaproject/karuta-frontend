@@ -337,6 +337,7 @@ function fillEditBoxBody()
 	else {
 		html += "\n					<div id='edit-window-body-resource'></div>";
 		html += "\n					<div id='edit-window-body-node'></div>";
+		html += "\n					<div id='edit-window-body-other'></div>";
 		html += "\n					<div id='edit-window-body-context'></div>";
 		html += "\n					<div id='edit-window-body-metadata'></div>";
 		html += "\n					<div id='edit-window-body-metadata-epm'></div>";
@@ -3947,6 +3948,8 @@ function moveup(nodeid) {
 }
 
 function getCode(semtag,uuid) {
+	if (uuid == null)
+		uuid = $("#page").attr('uuid');
 	const nodes = $("*:has(>metadata[semantictag*="+semtag+"])",UICom.structure.ui[uuid].node);
 	if ($("asmResource",nodes[0]).length==3) {
 		resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",nodes[0]); 
@@ -3955,13 +3958,6 @@ function getCode(semtag,uuid) {
 	}
 	return $("code",resource).text();
 }
-
-
-//================================================
-//================================================
-//============== Function JS =====================
-//================================================
-//================================================
 
 function changeVisibility(nodeid,path,value){
 	//-----------
@@ -3991,6 +3987,20 @@ function changeVisibility(nodeid,path,value){
 	UIFactory.Node.updateMetadataWadAttribute(targetid,'display',value);
 	UIFactory.Node.reloadUnit();
 }
+
+function confirmSubmitAndChangeVisibility(nodeid,path,value){
+	//-----------
+	const js2 = "changeVisibility('"+nodeid+"','"+path+"','"+value+"')";
+	confirmSubmit(nodeid,null,null,null,js2); 
+}
+
+
+//================================================
+//================================================
+//============== Function JS =====================
+//================================================
+//================================================
+
 
 function getPreviewSharedURL(uuid,sharerole,level,duration,role) {
 	const urlS = serverBCK+'/direct?uuid='+uuid+'&role='+role+'&showtorole='+role+'&l='+level+'&d='+duration+'&sharerole='+sharerole+'&type=showtorole';
@@ -4082,6 +4092,15 @@ function getResourceLastModified(nodeid) {
 	return html;
 }
 
+function displayIfDate(nodeid,role,begin,end) {
+	const begins = $("*:has(>metadata[semantictag*="+begin+"])",UICom.structure.ui[nodeid].node);
+	const ends = $("*:has(>metadata[semantictag*="+end+"])",UICom.structure.ui[nodeid].node);
+	const utc_begin = $("utc",begins[0]).text();
+	const utc_end = $("utc",ends[0]).text();
+	const today = new Date().getTime();
+	return utc_begin < today && today < utc_end && g_userroles[0]==role;
+
+}
 //================================================
 //================================================
 //============== Function JQuery =================

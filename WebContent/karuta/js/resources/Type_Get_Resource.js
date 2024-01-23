@@ -105,7 +105,7 @@ UIFactory["Get_Resource"] = function(node,condition)
 	this.multilingual = ($("metadata",node).attr('multilingual-resource')=='Y') ? true : false;
 	//--------------------
 	this.preview = ($("metadata",node).attr('preview')=='Y') ? true : false;
-	this.previewsharing = ($("metadata",node).attr('previewsharing')==undefined)? 'x': $("metadata",node).attr('previewsharing');
+	this.previewsharing = ($("metadata",node).attr('previewsharing')==undefined)? '': $("metadata",node).attr('previewsharing');
 
 };
 
@@ -313,9 +313,11 @@ UIFactory["Get_Resource"].prototype.getView = function(dest,type,langcode,indash
 			let js = "previewPage('"+resid+"',100,'standard')";
 			if (this.previewsharing!=""){
 				options = this.previewsharing.split(",");
-				//-------------------------------------------sharerole,level,duration,role
-				const previewURL = getPreviewSharedURL(resid,options[0],options[1],options[2],options[3])
-				js = "previewPage('"+previewURL+"',100,'previewURL',null,true)";
+				if (options[3].indexOf(g_userroles[0])>-1){
+					//-------------------------------------------sharerole,level,duration,role
+					const previewURL = getPreviewSharedURL(this.uuid_node.text(),options[0],options[1],options[2],g_userroles[0])
+					js = "previewPage('"+previewURL+"',100,'previewURL',null,true)";
+				}
 			}
 			html+= "&nbsp;<span class='button preview-button fas fa-binoculars' onclick=\" "+ js +" \" data-title='"+karutaStr[LANG]["preview"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
 		}
@@ -359,9 +361,9 @@ UIFactory["Get_Resource"].prototype.getView = function(dest,type,langcode,indash
 				let js = "previewPage('"+this.uuid_node.text()+"',100,'standard')";
 				if (this.previewsharing!=""){
 					options = this.previewsharing.split(",");
-					if (g_userroles[0]==options[3]){
+					if (options[3].indexOf(g_userroles[0])>-1){
 						//-------------------------------------------sharerole,level,duration,role
-						const previewURL = getPreviewSharedURL(this.uuid_node.text(),options[0],options[1],options[2],options[3])
+						const previewURL = getPreviewSharedURL(this.uuid_node.text(),options[0],options[1],options[2],g_userroles[0])
 						js = "previewPage('"+previewURL+"',100,'previewURL',null,true)";
 					}
 				}
@@ -537,8 +539,17 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 	let tableau1 = new Array();
 	let tableau2 = new Array();
 	for ( var i = 0; i < $(nodes).length; i++) {
+		//--------------------------
 		const langnotvisible = ($("metadata-wad",nodes[i]).attr('langnotvisible')==undefined)?'':$("metadata-wad",nodes[i]).attr('langnotvisible');
-		if (langnotvisible!=karutaStr[languages[LANGCODE]]['language']) {
+		const seestart = ($("metadata-wad",nodes[i]).attr('seestart')==undefined)?'':$("metadata-wad",nodes[i]).attr('seestart');
+		const seeend = ($("metadata-wad",nodes[i]).attr('seeend')==undefined)?'':$("metadata-wad",nodes[i]).attr('seeend');
+		const startUTC = new Date(seestart).getTime();
+		const endUTC = new Date(seeend).getTime();
+		const today = new Date().getTime();
+		const display = (seestart=="") ? true : (startUTC < today && today < endUTC);
+		//--------------------------
+
+		if (langnotvisible!=karutaStr[languages[LANGCODE]]['language'] && display) {
 			let resource = null;
 			if ($("asmResource",nodes[i]).length==3)
 				resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",nodes[i]); 
@@ -547,10 +558,10 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 			let code = $('code',resource).text();
 			let libelle = $(srce+"[lang='"+languages[langcode]+"']",resource).text();
 			if (code.indexOf("~")<0)   // si ~ on trie sur le libellé sinon sur le code
-				tableau1[i] = [code,nodes[i]];
+				tableau1[tableau1.length] = [code,nodes[i]];
 			else
-				tableau1[i] = [libelle,nodes[i]]
-			tableau2[i] = {'code':code,'libelle':libelle};
+				tableau1[tableau1.length] = [libelle,nodes[i]]
+			tableau2[tableau2.length] = {'code':code,'libelle':libelle};
 		}
 	}
 	let newTableau1 = tableau1.sort(sortOn1);

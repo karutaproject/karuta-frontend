@@ -489,6 +489,7 @@ UIFactory["Node"].prototype.displayMetadataAttributesEditor = function(destid)
 		this.displayMetadataWadAttributeEditor('metadata-part2','seenoderoles',false,true);
 	this.displayMetadataDateAttributeEditor('see-calendar','seestart');
 	this.displayMetadataDateAttributeEditor('see-calendar','seeend');
+	this.displayMetadataWadAttributeEditor('metadata-part2','seecalendarroles');
 	if (name=='asmRoot' || !model)
 		this.displayMetadataWadAttributeEditor('metadata-part2','delnoderoles',false,true);
 	else

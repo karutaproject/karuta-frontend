@@ -977,6 +977,9 @@ UIFactory["Node"].prototype.getEditor = function(type,langcode)
 	var editnoderoles = $(this.metadatawad).attr('editnoderoles');
 	if (editnoderoles==undefined)
 		editnoderoles="";
+	var seecalendarroles = $(this.metadatawad).attr('seecalendarroles');
+	if (seecalendarroles==undefined)
+		seecalendarroles="";
 	if (g_userroles[0]=='designer' || USER.admin || editnoderoles.containsArrayElt(g_userroles) || editnoderoles.indexOf(this.userrole)>-1 || editnoderoles.indexOf($(USER.username_node).text())>-1) {
 		var htmlFormObj = $("<form class='form-horizontal'></form>");
 		var query = replaceVariable($(this.metadatawad).attr('query'));
@@ -1028,6 +1031,12 @@ UIFactory["Node"].prototype.getEditor = function(type,langcode)
 		}
 
 		$(div).append($(htmlFormObj));
+		if (seecalendarroles.containsArrayElt(g_userroles) || seecalendarroles.indexOf(this.userrole)>-1 || seecalendarroles.indexOf($(USER.username_node).text())>-1) {
+			$("#edit-window-body-other").append("<form id='form-other' class='metadata'></form>")
+			this.displayMetadataDateAttributeEditor('form-other','seestart');
+			this.displayMetadataDateAttributeEditor('form-other','seeend');
+		}
+
 	}
 	//--------------- set editbox title --------------
 	var title = "&nbsp;"; // karutaStr[LANG]['edit'];

@@ -306,6 +306,7 @@ karutaStr['en']['upload-image']="Upload an Image";
 karutaStr['en']['take-image']="Take a Picture";
 karutaStr['en']['save-image']="Save Picture";
 karutaStr['en']['previewsharing']="Preview - Sharing";
+karutaStr['en']['seecalendarroles']="See - Calendar";
 
 //=========================================
 //========== ADMIN ========================
