@@ -901,10 +901,10 @@ UIFactory["Get_Get_Resource"].prototype.parse = function(destid,type,langcode,da
 			});
 			$(radio_obj).append(obj);
 			// ---------------------- children ---------
-			if (semtag2!="") {
-				var semtag_parent = semtag.replace("!","");
-				UIFactory.Get_Get_Resource.getChildren(radio_obj,langcode,self,srce,portfoliocode,semtag2,semtag_parent,original_code,cachable,tabadded);
-			}
+			if (srce2=="")
+				srce2 = srce;
+			var semtag_parent = semtag.replace("!","");
+			UIFactory.Get_Get_Resource.getChildren(radio_obj,langcode,self,srce2,portfoliocode,semtag2,semtag_parent,original_code,cachable,tabadded);
 			//------------------------------------------
 			$("#"+destid).append(radio_obj);
 		}

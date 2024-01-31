@@ -2599,7 +2599,7 @@ g_report_actions['operation'] = function (destid,action,no,data)
 var svgfontname = 'Arial';
 var svgfontsize = 16;
 var svgcenter = {'x':600,'y':600};
-var svgaxislength = 600;
+var svgaxislength = 400;
 
 function makeSVG(tag, attrs,val) {
 	var elt= document.createElementNS('http://www.w3.org/2000/svg', tag);
@@ -2634,34 +2634,43 @@ function drawAxis(destid,label,fontname,fontsize,angle,center,axislength){
 	var line = makeSVG('line',{'x1':center.x,'y1':center.y,'x2':center.x-axislength,'y2':center.y,'transform':"rotate("+angle+" "+center.x+" "+center.y+")",'stroke':'black','stroke-width': 2});
 	document.getElementById(destid).appendChild(line);
 	//-----------------
-	var x = center.x-axislength;
-	var y = center.y - (fontsize/2);
-	if (angle>90 && angle<=270) {
-		var l =  getWidthOfText(label, fontname, fontsize);
-		x=center.x+axislength-l*1.6;
-		angle = angle-180;
+	const width = "200";
+	const height = "200";
+	//-----------
+	const radians = (Math.PI / 180) * (0-angle);
+	var x = center.x - (Math.cos(radians) * axislength) - (width*Math.abs(1-angle/180));
+	var y = center.y + Math.sin(radians) * axislength;
+	var l =  getWidthOfText(label, fontname, fontsize);
+	if (angle <= 180) {
+		if (l>100)
+			y-= svgfontsize * 2;
+		if (l>200)
+			y-= 10+svgfontsize * 2;
+		if (l>300)
+			y-= svgfontsize * 2;
 	}
-	var text = makeSVG('text',{'x':x,'y':y,'transform':"rotate("+angle+" "+center.x+" "+center.y+")",'font-size':fontsize,'font-family':fontname},label);
+		
+	var text = makeSVG('foreignObject',{'x':x,'y':y,'width':width,'height':height,'font-size':fontsize,'font-family':fontname},label);	
 	document.getElementById(destid).appendChild(text);
 	//-----------------
 }
 
 function drawValue(destid,value,angle,center,cssclass){
-	var point = svgrotate(center, svgaxislength-value, center.y, angle);
+	var point = svgrotate(center, center.x-value, center.y, angle);
 	var line = makeSVG('line',{'x1':point.x,'y1':point.y,'x2':point.x,'y2':point.y,'class':cssclass});
 	document.getElementById(destid).appendChild(line);
 }
 
 function drawGraduationLine(destid,no,min,max,angle,center,cssclass){
 	var delta = Math.abs(max-min);
-	var x = svgaxislength-(svgaxislength/delta*no);
+	var x = center.x-(svgaxislength/delta*no);
 	var line = makeSVG('line',{'x1':x,'y1':center.y-5,'x2':x,'y2':center.y+5,'transform':"rotate("+angle+" "+center.x+" "+center.y+")",'stroke':'black','stroke-width': 1});
 	document.getElementById(destid).appendChild(line);
 }
 
 function drawGraduationLabel(destid,no,min,max,angle,center,cssclass){
 	var delta = Math.abs(max-min);
-	var x = svgaxislength-(svgaxislength/delta*no);
+	var x = center.x-(svgaxislength/delta*no);
 	var point = svgrotate(center, x, center.y+20, angle);
 	var text = makeSVG('text',{'x':point.x,'y':point.y,'font-size':svgfontsize,'font-family':svgfontname},(max>min)?no+min:min-no);
 	document.getElementById(destid).appendChild(text);
@@ -2669,8 +2678,8 @@ function drawGraduationLabel(destid,no,min,max,angle,center,cssclass){
 
 
 function drawLine(destid,value1,angle1,value2,angle2,center,cssclass){
-	var point1 = svgrotate(center, svgaxislength-value1, center.y, angle1);
-	var point2 = svgrotate(center, svgaxislength-value2, center.y, angle2);
+	var point1 = svgrotate(center, center.x-value1, center.y, angle1);
+	var point2 = svgrotate(center, center.x-value2, center.y, angle2);
 	var line = makeSVG('line',{'x1':point1.x,'y1':point1.y,'x2':point2.x,'y2':point2.y,'class':cssclass});
 	document.getElementById(destid).appendChild(line);
 }
@@ -2826,8 +2835,11 @@ g_report_actions['draw-web-line'] = function (destid,action,no,data)
 				}
 			if (pos==0){ // draw gaduations
 				for (let j=0;j<=Math.abs(max-min);j++) {
-					if (j>0)
+					if (j>0) {
 						drawGraduationLine(destid,j,min,max,angle*i,svgcenter,'svg-web-line'+no);
+						var delta = svgaxislength/Math.abs(max-min);
+						drawLine(destid,j*delta,angle*(i-1),j*delta,angle*i,svgcenter,'svg-web-lineLightGray');
+					}
 					if (i==0)
 						drawGraduationLabel(destid,j,min,max,angle*i,svgcenter,'svg-web-line'+no);
 				}

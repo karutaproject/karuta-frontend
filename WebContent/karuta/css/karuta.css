@@ -2970,6 +2970,11 @@ s table.tablesorter th.restore {
   stroke-linecap: round;
 }
 
+.svg-web-lineLightGray {
+  stroke: LightGray;
+  stroke-width: 1;
+}
+
 .svg-web-line0 {
   stroke: var(--svg-web0-color);
   stroke-width: 1;
