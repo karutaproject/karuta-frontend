@@ -51,7 +51,6 @@ UIFactory["TextField"] = function( node )
 			this.text_node[i] = $("text[lang='"+languages[i]+"']",$("asmResource[xsi_type='"+this.type+"']",node));
 		}
 	}
-	this.encrypted = ($("metadata",node).attr('encrypted')=='Y') ? true : false;
 	//--------------------
 	this.maxword = $("metadata-wad",node).attr('maxword');
 	if (this.maxword==undefined)
@@ -88,10 +87,6 @@ UIFactory["TextField"].prototype.getAttributes = function(type,langcode)
 	if (this.multilingual!=undefined && !this.multilingual)
 		langcode = 0;
 	//---------------------
-	if (dest!=null) {
-		this.display[dest]=langcode;
-	}
-	//---------------------
 	if (type==null)
 		type = 'default';
 	//---------------------
@@ -118,16 +113,14 @@ UIFactory["TextField"].prototype.getView = function(dest,type,langcode)
 	if (type==null)
 		type = "standard";
 	var html = $(this.text_node[langcode]).text();
-	//---------------------
-	if(type=='standard' || type=='none') {
-		if (this.encrypted)
-			html = decrypt(html.substring(3),g_rc4key);
-	}
-	//-------
-	const result = execJS(this,'display-resource-after');
-	if (typeof result == 'string')
-		html += result;
-	//-------
+	//------------------if function js-----------------
+	const result1 = execJS(this,'display-resource-before');
+	if (typeof result1 == 'string')
+		html = result1 + html;
+	const result2 = execJS(this,'display-resource-after');
+	if (typeof result2 == 'string')
+		html = html + result2;
+	//------------------------------------------
 	return html;
 };
 
@@ -144,31 +137,37 @@ UIFactory["TextField"].prototype.displayView = function(dest,type,langcode)
 UIFactory["TextField"].prototype.update = function(langcode)
 //==================================
 {
-	$(this.lastmodified_node).text(new Date().getTime());
-	//---------------------
-	if (langcode==null)
-		langcode = LANGCODE;
-	//---------------------
-	var value = $.trim($("#"+this.id+"_edit_"+langcode+(this.inline?'inline':'')).val());
-	var newValue1 = value.replace(/(<br("[^"]*"|[^\/">])*)>/g, "$1/>");
-	var newValue = newValue1.replace(/(<img("[^"]*"|[^\/">])*)>/g, "$1/>");
-	var words = $.trim(newValue).split(' ');
-	if (this.maxword>0 && countWords(newValue)>this.maxword) {
-		alertHTML(karutaStr[languages[langcode]]['maxword-alert']+"<br>"+markFirstWords(newValue,this.maxword));
-		newValue = markFirstWords(newValue,this.maxword);
-		$("#"+this.id+"_edit_"+langcode+(this.inline?'inline':'')).val(newValue);
-		$("#"+this.id+"_edit_"+langcode+(this.inline?'inline':'')).data("wysihtml5").editor.setValue(newValue);
-	}
-	if (this.encrypted)
-		newValue = "rc4"+encrypt(newValue,g_rc4key);
-	if (!this.multilingual) {
-		for (var langcode=0; langcode<languages.length; langcode++) {
-			$(this.text_node[langcode]).text(newValue);
+	if (execJS(this,"update-resource-if")) {
+		//-------- if function js -------------
+		execJS(this,"update-resource-before");
+		//---------------------
+		$(this.lastmodified_node).text(new Date().getTime());
+		//---------------------
+		if (langcode==null)
+			langcode = LANGCODE;
+		//---------------------
+		var value = $.trim($("#"+this.id+"_edit_"+langcode+(this.inline?'inline':'')).val());
+		var newValue1 = value.replace(/(<br("[^"]*"|[^\/">])*)>/g, "$1/>");
+		var newValue = newValue1.replace(/(<img("[^"]*"|[^\/">])*)>/g, "$1/>");
+		var words = $.trim(newValue).split(' ');
+		if (this.maxword>0 && countWords(newValue)>this.maxword) {
+			alertHTML(karutaStr[languages[langcode]]['maxword-alert']+"<br>"+markFirstWords(newValue,this.maxword));
+			newValue = markFirstWords(newValue,this.maxword);
+			$("#"+this.id+"_edit_"+langcode+(this.inline?'inline':'')).val(newValue);
+			$("#"+this.id+"_edit_"+langcode+(this.inline?'inline':'')).data("wysihtml5").editor.setValue(newValue);
 		}
-	} else
-		$(this.text_node[langcode]).text(newValue);
-	this.updateCounterWords(langcode);
-	this.save();
+		if (!this.multilingual) {
+			for (var langcode=0; langcode<languages.length; langcode++) {
+				$(this.text_node[langcode]).text(newValue);
+			}
+		} else
+			$(this.text_node[langcode]).text(newValue);
+		this.updateCounterWords(langcode);
+		this.save();
+		//-------- if function js -------------
+		execJS(this,'update-resource-after');
+		//---------------------
+	}
 };
 
 //==================================
@@ -216,13 +215,7 @@ UIFactory["TextField"].prototype.displayEditor = function(destid,type,langcode,d
 	if (this.inline==undefined)
 		this.inline = false;
 	//---------------------
-	var text = "";
-	if (this.encrypted){
-		var cipher = $(this.text_node[langcode]).text().substring(3);
-		text = decrypt(cipher,g_rc4key);
-	}
-	else
-		text = $(this.text_node[langcode]).text();
+	var text = $(this.text_node[langcode]).text();
 	//---------------------
 	var uuid = this.id;
 	var html = "";
@@ -255,9 +248,9 @@ UIFactory["TextField"].prototype.displayEditor = function(destid,type,langcode,d
 			"uuid":uuid,
 			"locale":LANG,
 			'events': {
-				'load': function(){try{$('.wysihtml5-sandbox').contents().find('body').on("keyup", function(){UICom.structure['ui'][uuid].resource.updateCounterWords(langcode);});}catch(e){}; },
-				'change': function(){UICom.structure['ui'][uuid].resource.update(langcode);},
-//				'blur': function(){UICom.structure['ui'][uuid].resource.update(langcode);}
+				'load': function(){try{$('.wysihtml5-sandbox').contents().find('body').on("keyup", function(){UICom.structure.ui[uuid].resource.updateCounterWords(langcode);});}catch(e){}; },
+				'change': function(){UICom.structure.ui[uuid].resource.update(langcode);},
+//				'blur': function(){UICom.structure.ui[uuid].resource.update(langcode);}
 			},
 			parserRules: {
 				classes: {

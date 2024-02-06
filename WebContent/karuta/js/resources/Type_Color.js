@@ -49,7 +49,6 @@ UIFactory["Color"] = function( node )
 			}
 		}
 	}
-	this.encrypted = ($("metadata",node).attr('encrypted')=='Y') ? true : false;
 	//--------------------
 	if ($("version",$("asmResource[xsi_type='"+this.type+"']",node)).length==0){  // for backward compatibility
 		var newelement = createXmlElement("version");
@@ -106,9 +105,6 @@ UIFactory["Color"].prototype.getValue = function(dest,type,langcode)
 		this.display[dest] = langcode;
 	}
 	var value = $(this.text_node[langcode]).text();
-	if (this.encrypted)
-		value = decrypt(html.substring(3),g_rc4key);
-//	if (value.charAt(0) != "#") value = "#"+value;
 	return value;
 };
 
@@ -124,8 +120,6 @@ UIFactory["Color"].prototype.getView = function(dest,type,langcode)
 		this.display[dest] = langcode;
 	}
 	var value = $(this.text_node[langcode]).text();
-	if (this.encrypted)
-		value = decrypt(html.substring(3),g_rc4key);
 	var html = "<span style='display:inline-block;width:1.5em;background-color:"+value+"'>&nbsp;&nbsp;&nbsp;</span>&nbsp;"+value; 
 	return html;
 };
@@ -142,8 +136,6 @@ UIFactory["Color"].prototype.displayView = function(dest,type,langcode)
 		this.display[dest] = langcode;
 	}
 	var value = $(this.text_node[langcode]).text();
-	if (this.encrypted)
-		value = decrypt(html.substring(3),g_rc4key);
 	var html = "<span style='display:inline-block;width:1.5em;background-color:"+value+"'>&nbsp;&nbsp;&nbsp;</span>&nbsp;"+value; 
 	$("#"+dest).html(html);
 };
@@ -175,8 +167,6 @@ UIFactory["Color"].prototype.getEditor = function(type,langcode,disabled)
 		disabled = false;
 	//---------------------
 	var value = $(this.text_node[langcode]).text();
-	if (this.encrypted)
-		value = decrypt(value.substring(3),g_rc4key);
 	var obj = $("<div></div>");
 	var obj1 = $("<div style='margin-bottom:30px'></div>");
 	var input = "<input type='text' class='pickcolor' style='width:150px;' ";

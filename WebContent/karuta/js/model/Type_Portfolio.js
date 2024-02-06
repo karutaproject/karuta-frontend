@@ -45,9 +45,9 @@ UIFactory["Portfolio"] = function( node )
 	this.rootid = $("asmRoot",node).attr("id");
 	var asmroot = node.querySelector("asmRoot");
 	this.root = new UIFactory["Node"]( asmroot );
-	if( UICom.structure["ui"] == null )
-		UICom.structure["ui"] = {};
-	UICom.structure["ui"][this.rootid] = this.root;
+	if( UICom.structure.ui == null )
+		UICom.structure.ui = {};
+	UICom.structure.ui[this.rootid] = this.root;
 	this.code_node = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",node));
 	this.date_modified = $(node).attr('modified');
 	this.semantictag = $("metadata",node).attr('semantictag');
@@ -364,7 +364,7 @@ UIFactory["Portfolio"].displayPortfolio = function(destid,type,langcode,edit)
 	//---------------------------------------
 	var rootid = UICom.rootid;
 	html += "	<a class='navbar-brand' id='sidebar_"+rootid+"' onclick=\"displayPage('"+rootid+"',1,'"+type+"','"+langcode+"',"+g_edit+")\">";
-	html += 		UICom.structure["ui"][rootid].getLabel('sidebar_'+rootid);
+	html += 		UICom.structure.ui[rootid].getLabel('sidebar_'+rootid);
 	html += "	</a>";
 	$("#sidebar_"+rootid).replaceWith($(html));
 	//---------------------------------------
@@ -495,7 +495,7 @@ UIFactory["Portfolio"].displayMenu = function(destid,type,langcode,edit,tree)
 		html += "<ul class='nav nav-tabs header-menu' style='float:none'>";
 		for (var i=0; i<nodes.length; i++){
 			uuid = $(nodes[i]).attr('id');
-			html += "<li><a  id='sidebar_"+uuid+"' class='sidebar'  data-toggle='tab' onclick=\"displayPage('"+uuid+"',99,'standard','"+langcode+"',"+edit+")\">"+UICom.structure["ui"][uuid].getLabel()+"</a></li>";
+			html += "<li><a  id='sidebar_"+uuid+"' class='sidebar'  data-toggle='tab' onclick=\"displayPage('"+uuid+"',99,'standard','"+langcode+"',"+edit+")\">"+UICom.structure.ui[uuid].getLabel()+"</a></li>";
 		}
 		html += "</ul>";
 		$("#"+destid).html(html);
@@ -512,7 +512,7 @@ UIFactory["Portfolio"].getNavBar = function (type,langcode,edit,portfolioid)
 	html += "	<a  id='backbutton' onclick='displayBack()' class='nav-item button icon' style='font-size:150%' data-title='"+karutaStr[LANG]["back"]+"' data-toggle='tooltip' data-placement='bottom'><i class='fas fa-arrow-circle-left'></i></a>";
 	html += "	<a  id='toggleSideBar' onclick='toggleSideBar()' class='nav-item button icon' data-title='"+karutaStr[LANG]["toogle-sidebar"]+"' data-toggle='tooltip' data-placement='bottom'><i class='fa fa-bars'></i></a>";
 	html += "	<a class='navbar-brand' id='sidebar_"+rootid+"' onclick=\"displayPage('"+rootid+"',1,'"+type+"','"+langcode+"',"+g_edit+")\">";
-	html += 		UICom.structure["ui"][rootid].getLabel('sidebar_'+rootid);
+	html += 		UICom.structure.ui[rootid].getLabel('sidebar_'+rootid);
 	html += "	</a>";
 	html += "	</div>";
 	html += "	<button class='navbar-toggler' type='button' data-toggle='collapse' data-target='.navbars' aria-controls='portfolio-navbars' aria-expanded='false' aria-label='Toggle navigation'>";
@@ -2927,88 +2927,88 @@ function setCSSportfolioOLD(data)
 	//-----------NAVBAR------------------------------------
 	if ($("asmContext:has(metadata[semantictag='portfolio-navbar'])",data).length>0) {
 		var portfolio_navbar_id = $("asmContext:has(metadata[semantictag='portfolio-navbar'])",data).attr("id");
-		var color = UICom.structure["ui"][portfolio_navbar_id].resource.getValue();
+		var color = UICom.structure.ui[portfolio_navbar_id].resource.getValue();
 		root.style.setProperty("--portfolio-navbar-background-color",color);
 	}
 	//--------------
 	if ($("asmContext:has(metadata[semantictag='portfolio-navbar-link'])",data).length>0) {
 		var portfolio_navbar_link_id = $("asmContext:has(metadata[semantictag='portfolio-navbar-link'])",data).attr("id");
-		var color = UICom.structure["ui"][portfolio_navbar_link_id].resource.getValue();
+		var color = UICom.structure.ui[portfolio_navbar_link_id].resource.getValue();
 		root.style.setProperty("--portfolio-navbar-text-color",color);
 	}
 	//-----------SIDEBAR------------------------------------
 	if ($("asmContext:has(metadata[semantictag='portfolio-sidebar'])",data).length>0) {
 		var portfolio_sidebar_id = $("asmContext:has(metadata[semantictag='portfolio-sidebar'])",data).attr("id");
-		var color = UICom.structure["ui"][portfolio_sidebar_id].resource.getValue();
+		var color = UICom.structure.ui[portfolio_sidebar_id].resource.getValue();
 		root.style.setProperty("--portfolio-sidebar-background-color",color);
 	}
 	//--------------------------------
 	if ($("asmContext:has(metadata[semantictag='portfolio-sidebar-link'])",data).length>0) {
 		var portfolio_sidebar_link_id = $("asmContext:has(metadata[semantictag='portfolio-sidebar-link'])",data).attr("id");
-		var color = UICom.structure["ui"][portfolio_sidebar_link_id].resource.getValue();
+		var color = UICom.structure.ui[portfolio_sidebar_link_id].resource.getValue();
 		root.style.setProperty("--portfolio-sidebar-text-color",color);
 	}
 	//--------------------------------
 	if ($("asmContext:has(metadata[semantictag='portfolio-sidebar-link-selected'])",data).length>0) {
 		var portfolio_sidebar_link_selected_id = $("asmContext:has(metadata[semantictag='portfolio-sidebar-link-selected'])",data).attr("id");
-		var color = UICom.structure["ui"][portfolio_sidebar_link_selected_id].resource.getValue();								
+		var color = UICom.structure.ui[portfolio_sidebar_link_selected_id].resource.getValue();								
 		root.style.setProperty("--portfolio-sidebar-selected-text-color",color);
 	}
 	//--------------------------------
 	if ($("asmContext:has(metadata[semantictag='portfolio-sidebar-selected-border'])",data).length>0) {
 		var portfolio_sidebar_selected_border_id = $("asmContext:has(metadata[semantictag='portfolio-sidebar-selected-border'])",data).attr("id");
-		color = UICom.structure["ui"][portfolio_sidebar_selected_border_id].resource.getValue();
+		color = UICom.structure.ui[portfolio_sidebar_selected_border_id].resource.getValue();
 		root.style.setProperty("--portfolio-sidebar-selected-border-color",color);
 	}
 	//--------------------------------
 	if ($("asmContext:has(metadata[semantictag='portfolio-sidebar-separator'])",data).length>0) {
 		var portfolio_sidebar_separator_id = $("asmContext:has(metadata[semantictag='portfolio-sidebar-separator'])",data).attr("id");
-		var color = UICom.structure["ui"][portfolio_sidebar_separator_id].resource.getValue();								
+		var color = UICom.structure.ui[portfolio_sidebar_separator_id].resource.getValue();								
 		root.style.setProperty("--portfolio-sidebar-separator-color",color);
 	}
 	//-----------PORTFOLIO COLORS------------------------------------
 	if ($("asmContext:has(metadata[semantictag='welcome-title-color'])",data).length>0) {
 		var welcome_title_color_id = $("asmContext:has(metadata[semantictag='welcome-title-color'])",data).attr("id");
-		var color = UICom.structure["ui"][welcome_title_color_id].resource.getValue();
+		var color = UICom.structure.ui[welcome_title_color_id].resource.getValue();
 		changeCss(".page-welcome .welcome-title", "color:"+color+";");
 	}
 	//--------------------------------
 	if ($("asmContext:has(metadata[semantictag='welcome-line-color'])",data).length>0) {
 		var welcome_line_color_id = $("asmContext:has(metadata[semantictag='welcome-line-color'])",data).attr("id");
-		var color = UICom.structure["ui"][welcome_line_color_id].resource.getValue();
+		var color = UICom.structure.ui[welcome_line_color_id].resource.getValue();
 		root.style.setProperty("--list-welcome-subline-color",color);
 	}
 	//--------------------------------
 	if ($("asmContext:has(metadata[semantictag='page-title-background-color'])",data).length>0) {
 		var page_title_background_color_id = $("asmContext:has(metadata[semantictag='page-title-background-color'])",data).attr("id");
-		var color = UICom.structure["ui"][page_title_background_color_id].resource.getValue();
+		var color = UICom.structure.ui[page_title_background_color_id].resource.getValue();
 		changeCss(".welcome-line,.row-node-asmRoot,.row-node-asmStructure,.row-node-asmUnit", "background-color:"+color+";");
 		changeCss(".row-node", "border-top:1px solid "+color+";");
 	}
 	//--------------------------------
 	if ($("asmContext:has(metadata[semantictag='page-title-subline-color'])",data).length>0) {
 		var page_title_subline_color_id = $("asmContext:has(metadata[semantictag='page-title-subline-color'])",data).attr("id");
-		var color = UICom.structure["ui"][page_title_subline_color_id].resource.getValue();
+		var color = UICom.structure.ui[page_title_subline_color_id].resource.getValue();
 		root.style.setProperty("--page-title-subline-color",color);
 		changeCss(".row-node-asmRoot .title-subline,.row-node-asmStructure .title-subline,.row-node-asmUnit .title-subline", "border-bottom:1px solid "+color+";");
 	}
 	//--------------------------------
 	if ($("asmContext:has(metadata[semantictag='portfolio-buttons-color'])",data).length>0) {
 		var portfolio_buttons_color_id = $("asmContext:has(metadata[semantictag='portfolio-buttons-color'])",data).attr("id");
-		var color = UICom.structure["ui"][portfolio_buttons_color_id].resource.getValue();
+		var color = UICom.structure.ui[portfolio_buttons_color_id].resource.getValue();
 		changeCss(".collapsible .glyphicon, .createreport .button,.btn-group .button", "color:"+color+";");
 	}
 	//--------------------------------
 	if ($("asmContext:has(metadata[semantictag='portfolio-buttons-background-color'])",data).length>0) {
 		var portfolio_buttons_background_color_id = $("asmContext:has(metadata[semantictag='portfolio-buttons-background-color'])",data).attr("id");
-		var color = UICom.structure["ui"][portfolio_buttons_background_color_id].resource.getValue();
+		var color = UICom.structure.ui[portfolio_buttons_background_color_id].resource.getValue();
 		changeCss(".row-resource td.buttons,.csv-button,.pdf-button", "border:1px solid "+color+";");
 		changeCss(".row-resource td.buttons,.csv-button,.pdf-button", "background:"+color+";");
 	}
 	//--------------------------------
 	if ($("asmContext:has(metadata[semantictag='portfolio-link-color'])",data).length>0) {
 		var portfolio_link_color_id = $("asmContext:has(metadata[semantictag='portfolio-link-color'])",data).attr("id");
-		var color = UICom.structure["ui"][portfolio_link_color_id].resource.getValue();
+		var color = UICom.structure.ui[portfolio_link_color_id].resource.getValue();
 		changeCss("a", "color:"+color+";");
 	}
 	// ========================================================================

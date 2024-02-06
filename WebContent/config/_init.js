@@ -4,6 +4,7 @@ var bckname = '';
 var serverBCK = "../../../karuta-backend"+bckname; // backend
 var serverBCK_API = "../../../karuta-backend"+bckname+"/rest/api";
 var cas_url = "";
+var openid_url = "";
 // to hide local auth imputs part set localLogin to false
  var localLogin = true;
 //-------- LANGUAGES------------

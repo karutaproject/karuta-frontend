@@ -242,9 +242,6 @@ karutaStr['en']['resource']="Resource";
 karutaStr['en']['metadata']="Metadata";
 karutaStr['en']['css-styles']="Display";
 karutaStr['en']['inparent']="In Parent";
-karutaStr['en']['encrypted']="Encrypt Ressource";
-karutaStr['en']['get_rc4key']="Parts of this document are encrypted.\nFist Visit: Choose a key sentence.\nReturning Visits: Type your key sentence. ";
-karutaStr['en']['error_rc4key']="Error in key sentence.";
 karutaStr['en']['seltype']="Display";
 karutaStr['en']['shareroles']="Share<br/><span style='font-size:smaller'> role that shares,visitor role,recipient roles and/or emails,level (0-4),link lifespan (in hours),";
 karutaStr['en']['shareroles2']="button label@en";
@@ -308,6 +305,8 @@ karutaStr['en']['record-audio']="Record an Audio File";
 karutaStr['en']['upload-image']="Upload an Image";
 karutaStr['en']['take-image']="Take a Picture";
 karutaStr['en']['save-image']="Save Picture";
+karutaStr['en']['previewsharing']="Preview - Sharing";
+karutaStr['en']['seecalendarroles']="See - Calendar";
 
 //=========================================
 //========== ADMIN ========================

@@ -159,7 +159,7 @@ UIFactory["Item"].prototype.getView = function(dest,type,langcode)
 	if (dest!=null) {
 		this.display[dest] = langcode;
 	}
-	var node = UICom.structure["ui"][this.id];
+	var node = UICom.structure.ui[this.id];
 	var editresroles = ($(node.metadatawad).attr('editresroles')==undefined)?'':$(node.metadatawad).attr('editresroles');
 	var resnopencil = ($(node.metadatawad).attr('resnopencil')==undefined)?'N':$(node.metadatawad).attr('resnopencil');
 	var displayCodeValue = (editresroles.containsArrayElt(g_userroles) || editresroles.indexOf(this.userrole)>-1 || editresroles.indexOf($(USER.username_node).text())>-1) && resnopencil=='N';
@@ -203,6 +203,14 @@ UIFactory["Item"].prototype.getView = function(dest,type,langcode)
 			html += " ["+ value + "]";
 		html += "</span>";
 	}
+	//------------------if function js-----------------
+	const result1 = execJS(this,'display-resource-before');
+	if (typeof result1 == 'string')
+		html = result1 + html;
+	const result2 = execJS(this,'display-resource-after');
+	if (typeof result2 == 'string')
+		html = html + result2;
+	//------------------------------------------
 	return html;
 };
 
@@ -219,16 +227,24 @@ UIFactory["Item"].prototype.displayView = function(dest,type,langcode)
 UIFactory["Item"].update = function(itself,langcode)
 //==================================
 {
-	$(itself.lastmodified_node).text(new Date().getTime());
-	//---------------------
-	if (!itself.multilingual) {
-		var value = $(itself.label_node[langcode]).text();
-		for (var langcode=0; langcode<languages.length; langcode++) {
-			$(itself.label_node[langcode]).text(value);
+	if (execJS(itself,"update-resource-if")) {
+		//-------- if function js -------------
+		execJS(itself,"update-resource-before");
+		//---------------------
+		$(itself.lastmodified_node).text(new Date().getTime());
+		//---------------------
+		if (!itself.multilingual) {
+			var value = $(itself.label_node[langcode]).text();
+			for (var langcode=0; langcode<languages.length; langcode++) {
+				$(itself.label_node[langcode]).text(value);
+			}
 		}
+		//---------------------
+		itself.save();
+		//-------- if function js -------------
+		execJS(itself,'update-resource-after');
+		//---------------------
 	}
-	//---------------------
-	itself.save();
 };
 
 

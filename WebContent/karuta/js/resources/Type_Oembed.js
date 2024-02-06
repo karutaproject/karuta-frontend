@@ -150,7 +150,7 @@ UIFactory["Oembed"].prototype.getView = function(dest,type,langcode)
 				}
 			}
 			// display div
-			var node = UICom.structure["ui"][this.id].metadataepm;
+			var node = UICom.structure.ui[this.id].metadataepm;
 			var style = UIFactory.Node.getOtherMetadataEpm(node,'node-othercss');
 			if (style=="")
 				style = "min-height:240px";
@@ -159,11 +159,14 @@ UIFactory["Oembed"].prototype.getView = function(dest,type,langcode)
 		else
 			html =  "<img src='../../karuta/img/link-icon.png' style='width:25px'> "+karutaStr[LANG]['no-URL'];
 	}
-	//-------
-	const result = execJS(this,'display-resource-after');
-	if (typeof result == 'string')
-		html += result;
-	//-------
+	//------------------if function js-----------------
+	const result1 = execJS(this,'display-resource-before');
+	if (typeof result1 == 'string')
+		html = result1 + html;
+	const result2 = execJS(this,'display-resource-after');
+	if (typeof result2 == 'string')
+		html = html + result2;
+	//------------------------------------------
 	return html;
 };
 
@@ -179,21 +182,29 @@ UIFactory["Oembed"].prototype.displayView = function(dest,type,langcode)
 UIFactory["Oembed"].update = function(obj,itself,type,langcode)
 //==================================
 {
-	$(itself.lastmodified_node).text(new Date().getTime());
-	//---------------------
-	if (langcode==null)
-		langcode = LANGCODE;
-	//---------------------
-	var url = $("input[name='url']",obj).val();
-	//---------------------
-	itself.multilingual = ($("metadata",itself.node).attr('multilingual-resource')=='Y') ? true : false;
-	if (!itself.multilingual)
-		for (var langcode=0; langcode<languages.length; langcode++) {
+	if (execJS(itself,"update-resource-if")) {
+		//-------- if function js -------------
+		execJS(itself,"update-resource-before");
+		//---------------------
+		$(itself.lastmodified_node).text(new Date().getTime());
+		//---------------------
+		if (langcode==null)
+			langcode = LANGCODE;
+		//---------------------
+		var url = $("input[name='url']",obj).val();
+		//---------------------
+		itself.multilingual = ($("metadata",itself.node).attr('multilingual-resource')=='Y') ? true : false;
+		if (!itself.multilingual)
+			for (var langcode=0; langcode<languages.length; langcode++) {
+				$(itself.url_node[langcode]).text(url);
+			}
+		else
 			$(itself.url_node[langcode]).text(url);
-		}
-	else
-		$(itself.url_node[langcode]).text(url);
-	itself.save();
+		itself.save();
+		//-------- if function js -------------
+		execJS(itself,'update-resource-after');
+		//---------------------
+	}
 };
 
 //==================================

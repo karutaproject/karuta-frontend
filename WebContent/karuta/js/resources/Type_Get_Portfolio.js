@@ -107,12 +107,18 @@ UIFactory["Get_Portfolio"].prototype.getView = function(dest,type,langcode)
 	var local_label = this.local_label_node[langcode].text();
 	if (local_label!="")
 		label = local_label;
-	if (this.encrypted)
-		label = decrypt(label.substring(3),g_rc4key);
 	if (label=='')
 		label = "---";
 	var html ="";
 		html = "<div  class='Get_Portfolio-link'>"+label+"</div>";
+	//------------------if function js-----------------
+	const result1 = execJS(this,'display-resource-before');
+	if (typeof result1 == 'string')
+		html = result1 + html;
+	const result2 = execJS(this,'display-resource-after');
+	if (typeof result2 == 'string')
+		html = html + result2;
+	//------------------------------------------
 	return html;
 };
 
@@ -129,16 +135,24 @@ UIFactory["Get_Portfolio"].prototype.displayView = function(dest,type,langcode)
 UIFactory["Get_Portfolio"].update = function(selected_item,itself,langcode,type)
 //==================================
 {
-	$(itself.lastmodified_node).text(new Date().getTime());
-	var value = $(selected_item).attr('value');
-	var code = $(selected_item).attr('code');
-	$(itself.uuid_node).text(value);
-	$(itself.code_node).text(code);
-	for (var i=0; i<languages.length;i++){
-		var label = $(selected_item).attr('label_'+languages[i]);
-		$(itself.label_node[i]).text(label);
+	if (execJS(itself,"update-resource-if")) {
+		//-------- if function js -------------
+		execJS(itself,"update-resource-before");
+		//---------------------
+		$(itself.lastmodified_node).text(new Date().getTime());
+		var value = $(selected_item).attr('value');
+		var code = $(selected_item).attr('code');
+		$(itself.uuid_node).text(value);
+		$(itself.code_node).text(code);
+		for (var i=0; i<languages.length;i++){
+			var label = $(selected_item).attr('label_'+languages[i]);
+			$(itself.label_node[i]).text(label);
+		}
+		itself.save();
+		//-------- if function js -------------
+		execJS(itself,'update-resource-after');
+		//---------------------
 	}
-	itself.save();
 };
 
 //==================================
@@ -219,8 +233,6 @@ UIFactory["Get_Portfolio"].parse = function(destid,type,langcode,data,self,disab
 		resettable = true;
 	//---------------------
 	var self_code = $(self.code_node).text();
-	if (self.encrypted)
-		self_code = decrypt(self_code.substring(3),g_rc4key);
 	//---------------------
 	if (type==undefined || type==null)
 		type = 'select';

@@ -157,6 +157,14 @@ UIFactory["Video"].prototype.getView = function(dest,type,langcode)
 		html += "<source src='"+srce+"' type=\"video/mp4\"></source>";
 		html += "</video>";
 	}
+	//------------------if function js-----------------
+	const result1 = execJS(this,'display-resource-before');
+	if (typeof result1 == 'string')
+		html = result1 + html;
+	const result2 = execJS(this,'display-resource-after');
+	if (typeof result2 == 'string')
+		html = html + result2;
+	//------------------------------------------
 	return html;
 };
 
@@ -164,28 +172,7 @@ UIFactory["Video"].prototype.getView = function(dest,type,langcode)
 UIFactory["Video"].prototype.displayView = function(dest,type,langcode)
 //==================================
 {
-	//---------------------
-	if (langcode==null)
-		langcode = LANGCODE;
-	//---------------------
-	if (dest!=null) {
-		this.display[dest] = langcode;
-	}
-	//---------------------
-	if (type==null)
-		type = "html5";
-	//------------------------
-	var nodefileid = this.id;
-	if (nodefileid.indexOf("_")>-1) // proxy-audio
-		nodefileid = nodefileid.substring(0,nodefileid.indexOf("_"));
-	//------------------------
-	var html ="";
-	if (type=='html5') {
-		html += "<video width='100%' controls>";
-		var srce = serverBCK+"/resources/resource/file/"+nodefileid+"?lang="+languages[langcode]+"&type=.mp4";
-		html += "<source src='"+srce+"' type=\"video/mp4\"></source>";
-		html += "</video>";
-	}
+	var html = this.getView(dest,type,langcode);
 	$("#"+dest).html(html);
 };
 
@@ -222,7 +209,7 @@ UIFactory["Video"].prototype.setParameter = function(langcode)
 UIFactory["Video"].update = function(data,uuid,langcode)
 //==================================
 {
-	var itself = UICom.structure["ui"][uuid];  // context node
+	var itself = UICom.structure.ui[uuid];  // context node
 	itself.resource.lastmodified_node.text(new Date().getTime());
 	//---------------------
 	if (langcode==null)
@@ -254,22 +241,29 @@ UIFactory["Video"].update = function(data,uuid,langcode)
 UIFactory["Video"].remove = function(uuid,langcode)
 //==================================
 {
-	var itself = UICom.structure["ui"][uuid];  // context node
-	//---------------------
-	if (langcode==null)
-		langcode = LANGCODE;
-	//---------------------
-	var filename = "";
-	var size = "";
-	var type = "";
-	$("#fileVideo_"+uuid+"_"+langcode).html(filename);
-	var fileid = "";
-	itself.resource.fileid_node[langcode].text(fileid);
-	itself.resource.filename_node[langcode].text(filename);
-	itself.resource.size_node[langcode].text(size);
-	itself.resource.type_node[langcode].text(type);
-	var delfile = true;
-	itself.resource.save(null,delfile);
+	var itself = UICom.structure.ui[uuid];  // context node
+	if (execJS(itself,"update-resource-if")) {
+		//-------- if function js -------------
+		execJS(itself,"update-resource-before");
+		//---------------------
+		if (langcode==null)
+			langcode = LANGCODE;
+		//---------------------
+		var filename = "";
+		var size = "";
+		var type = "";
+		$("#fileVideo_"+uuid+"_"+langcode).html(filename);
+		var fileid = "";
+		itself.resource.fileid_node[langcode].text(fileid);
+		itself.resource.filename_node[langcode].text(filename);
+		itself.resource.size_node[langcode].text(size);
+		itself.resource.type_node[langcode].text(type);
+		var delfile = true;
+		itself.resource.save(null,delfile);
+		//-------- if function js -------------
+		execJS(itself,'update-resource-after');
+		//---------------------
+	}
 };
 
 //==================================
@@ -334,7 +328,7 @@ UIFactory["Video"].prototype.save = function(delfile)
 		UICom.UpdateResource(this.id,writeSaved);
 	this.refresh();
 	if (!audiovideohtml5)
-		UICom.structure["ui"][this.id].resource.setParameter();
+		UICom.structure.ui[this.id].resource.setParameter();
 };
 
 //==================================

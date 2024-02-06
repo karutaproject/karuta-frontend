@@ -227,7 +227,7 @@ function import_rome(parentid,title,partcode,semtagToUpdate)
 	$("#edit-window-title").html(title);
 	var html = "<div id='edit-window-body-resource'></div>";
 	$("#edit-window-body").html(html);
-	var getRome = new UIFactory["ROME"](UICom.structure["ui"][parentid].node,"xsi_type='nodeRes'");
+	var getRome = new UIFactory["ROME"](UICom.structure.ui[parentid].node,"xsi_type='nodeRes'");
 	getRome.displayEditor("edit-window-body-resource",parentid);
 	$('#edit-window').modal('show');
 

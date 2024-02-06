@@ -240,7 +240,7 @@ function displayBubbleTreeMap(uuid)
 		$(".bubbletree").html("");
 		map = null;
 		if (parent.g_bubble_put) {
-			parent.UIFactory["Bubble"].parse(parent.UICom.structure["ui"][uuid].node);
+			parent.UIFactory["Bubble"].parse(parent.UICom.structure.ui[uuid].node);
 		} else {
 			parent.UIFactory["Bubble"].reloadparse();
 		}

@@ -50,9 +50,9 @@ UIFactory["URL2PortfolioBlock"] = function( node )
 UIFactory["URL2PortfolioBlock"].prototype.getView = function(dest,type,langcode)
 //==================================
 {
-	var url2portfolio = UICom.structure["ui"][this.url2portfolio_nodeid];
-	var image = UICom.structure["ui"][this.image_nodeid];
-	var cover = UICom.structure["ui"][this.cover_nodeid];
+	var url2portfolio = UICom.structure.ui[this.url2portfolio_nodeid];
+	var image = UICom.structure.ui[this.image_nodeid];
+	var cover = UICom.structure.ui[this.cover_nodeid];
 	//---------------------
 	UICom.structure.ui[this.url2portfolio_nodeid].resource.blockparent = UICom.structure.ui[this.id];
 	UICom.structure.ui[this.image_nodeid].resource.blockparent = UICom.structure.ui[this.id];
@@ -91,7 +91,7 @@ UIFactory["URL2PortfolioBlock"].prototype.getView = function(dest,type,langcode)
 		if (cover!=undefined && cover.resource.getValue()=='1')
 			style += "background-size:cover;";
 		html += "<div class='Url2Block' style=\""+style+"\">";
-		style = UICom.structure["ui"][this.id].getLabelStyle();
+		style = UICom.structure.ui[this.id].getLabelStyle();
 		if (url2portfolio.resource.uuid_node.text()!="")
 			html += "<div class='block-title' style=\""+style+"\">"+label+"</div>";
 		else
@@ -135,9 +135,9 @@ UIFactory["URL2PortfolioBlock"].prototype.displayEditor = function(destid,type,l
 {
 	if (!USER.admin && g_userroles[0]!='designer')
 		$("#edit-window").addClass("Block");
-	var url2portfolio = UICom.structure["ui"][this.url2portfolio_nodeid];
-	var image = UICom.structure["ui"][this.image_nodeid];
-	var cover = UICom.structure["ui"][this.cover_nodeid];
+	var url2portfolio = UICom.structure.ui[this.url2portfolio_nodeid];
+	var image = UICom.structure.ui[this.image_nodeid];
+	var cover = UICom.structure.ui[this.cover_nodeid];
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;

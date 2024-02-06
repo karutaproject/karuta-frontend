@@ -156,24 +156,24 @@ UIFactory["Dashboard"].prototype.displayView = function(dest,langcode)
 	var parent_node = UICom.structure.ui[$(this.parent).attr("id")];
 	genDashboardContent("dashboard_"+uuid,uuid,parent_node,root_node);
 	//---------- display csv or pdf -------
-	var print_roles = $(UICom.structure["ui"][uuid].resource.print_node).text();
+	var print_roles = $(UICom.structure.ui[uuid].resource.print_node).text();
 	if (print_roles.indexOf('all')>-1 || print_roles.containsArrayElt(g_userroles) || (print_roles!='' && (g_userroles[0]=='designer' || USER.admin))) {
 		const button = "<span class='button fas fa-print' onclick=\"printSection('#node_"+this.id+"',"+g_report_edit+")\" data-title='"+karutaStr[LANG]["button-print"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
 		$("#extra_button_"+uuid).append(button);
 	}
-	var csv_roles = $(UICom.structure["ui"][uuid].resource.csv_node).text();
+	var csv_roles = $(UICom.structure.ui[uuid].resource.csv_node).text();
 	if (csv_roles.indexOf('all')>-1 || csv_roles.containsArrayElt(g_userroles) || (csv_roles!='' && (g_userroles[0]=='designer' || USER.admin))) {
 		$("#extra_button_"+uuid).append($("<div class='csv-button button' onclick=\"javascript:xml2CSV('dashboard_"+uuid+"')\">CSV</div>"));				
 	}
-	var pdf_roles = $(UICom.structure["ui"][uuid].resource.pdf_node).text();
+	var pdf_roles = $(UICom.structure.ui[uuid].resource.pdf_node).text();
 	if (pdf_roles.indexOf('all')>-1 || pdf_roles.containsArrayElt(g_userroles) || (pdf_roles!='' && (g_userroles[0]=='designer' || USER.admin))) {
 		$("#extra_button_"+uuid).append($("<div class='pdf-button button' onclick=\"javascript:xml2PDF('dashboard_"+uuid+"')\">PDF</div>"));				
 	}
-	var rtf_roles = $(UICom.structure["ui"][uuid].resource.rtf_node).text();
+	var rtf_roles = $(UICom.structure.ui[uuid].resource.rtf_node).text();
 	if (rtf_roles.indexOf('all')>-1 || rtf_roles.containsArrayElt(g_userroles) || (rtf_roles!='' && (g_userroles[0]=='designer' || USER.admin))) {
 		$("#extra_button_"+uuid).append($("<div class='rtf-button button' onclick=\"javascript:xml2RTF('dashboard_"+uuid+"')\">RTF/Word</div>"));				
 	}
-	var img_roles = $(UICom.structure["ui"][uuid].resource.img_node).text();
+	var img_roles = $(UICom.structure.ui[uuid].resource.img_node).text();
 	if (img_roles.indexOf('all')>-1 || img_roles.containsArrayElt(g_userroles) || (img_roles!='' && (g_userroles[0]=='designer' || USER.admin))) {
 		$("#extra_button_"+uuid).append($("<div class='img-button button' onclick=\"javascript:html2IMG('dashboard_"+uuid+"')\">PNG</div>"));
 	}

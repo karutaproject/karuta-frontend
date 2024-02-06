@@ -242,9 +242,6 @@ karutaStr['fr']['resource']="Ressource";
 karutaStr['fr']['metadata']="Métadonnées";
 karutaStr['fr']['css-styles']="Présentation";
 karutaStr['fr']['inparent']="Dans le parent";
-karutaStr['fr']['encrypted']="Encrypter la ressource";
-karutaStr['fr']['get_rc4key']="Des parties de ce document sont encryptées.\nPremière visite : Choisissez une phrase clé.\nVisites suivantes : Tapez votre phrase clé.";
-karutaStr['fr']['error_rc4key']="Erreur de phrase clé.";
 karutaStr['fr']['seltype']="Présentation ";
 karutaStr['fr']['shareroles']="Partager<br/><span style='font-size:smaller'> rôle qui partage,rôle visiteur,rôles et/ou courriels destinataires,niveau (0-4),durée de vie du lien (en heures),";
 karutaStr['fr']['shareroles2']="libellé du bouton@fr";
@@ -308,6 +305,8 @@ karutaStr['fr']['record-audio']="Enregistrer un fichier audio";
 karutaStr['fr']['upload-image']="Téléverser une image";
 karutaStr['fr']['take-image']="Prendre une photo";
 karutaStr['fr']['save-image']="Sauver la photo";
+karutaStr['fr']['previewsharing']="Aperçu - Partage";
+karutaStr['fr']['seecalendarroles']="Voir - Calendrier";
 
 //=========================================
 //========== ADMIN ========================

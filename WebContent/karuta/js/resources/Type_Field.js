@@ -106,11 +106,14 @@ UIFactory["Field"].prototype.getView = function(dest,type,langcode)
 		this.display[dest] = langcode;
 	}
 	var html = $(this.text_node[langcode]).text();
-	//-------
-	const result = execJS(this,'display-resource-after');
-	if (typeof result == 'string')
-		html += result;
-	//-------
+	//------------------if function js-----------------
+	const result1 = execJS(this,'display-resource-before');
+	if (typeof result1 == 'string')
+		html = result1 + html;
+	const result2 = execJS(this,'display-resource-after');
+	if (typeof result2 == 'string')
+		html = html + result2;
+	//------------------------------------------
 	return html;
 };
 
@@ -127,19 +130,21 @@ UIFactory["Field"].prototype.displayView = function(dest,type,langcode)
 UIFactory["Field"].prototype.update = function(langcode)
 //==================================
 {
-	execJS(this,"update-resource-before");
-	$(this.lastmodified_node).text(new Date().getTime());
-	//---------------------
-	if (!this.multilingual) {
-		var value = $(this.text_node[langcode]).text();
-		for (var langcode=0; langcode<languages.length; langcode++) {
-			$(this.text_node[langcode]).text(value);
+	if (execJS(this,"update-resource-if")) {
+		execJS(this,"update-resource-before");
+		$(this.lastmodified_node).text(new Date().getTime());
+		//---------------------
+		if (!this.multilingual) {
+			var value = $(this.text_node[langcode]).text();
+			for (var langcode=0; langcode<languages.length; langcode++) {
+				$(this.text_node[langcode]).text(value);
+			}
 		}
+		//---------------------
+		if (execJS(this,"update-resource-test"))
+			this.save();
+		execJS(this,"update-resource-after");
 	}
-	//---------------------
-	if (execJS(this,"update-resource-test"))
-		this.save();
-	execJS(this,"update-resource-after");
 };
 
 //==================================

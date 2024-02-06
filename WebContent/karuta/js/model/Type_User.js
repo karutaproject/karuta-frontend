@@ -1123,6 +1123,8 @@ UIFactory["User"].create = function()
 		url : url,
 		data : xml,
 		success : function(data) {
+			if ($("user",data).length==0)
+				alert("USER CREATION ERROR");
 			$("#user-refresh").click();
 			//--------------------------
 			$('#edit-window').modal('hide');

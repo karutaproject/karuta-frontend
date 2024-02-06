@@ -54,7 +54,6 @@ UIFactory["Proxy"] = function( node,condition)
 			this.text_node[i] = $("text[lang='"+languages[i]+"']",$("asmResource["+this.clause+"]",node));
 		}
 	}
-	this.encrypted = ($("metadata",node).attr('encrypted')=='Y') ? true : false;
 	if (this.clause=="xsi_type='Proxy'")
 		this.multilingual = ($("metadata",node).attr('multilingual-resource')=='Y') ? true : false;
 	else // asmUnitStructure - Proxy
@@ -489,7 +488,7 @@ function proxy_multiple(parentid,targetid,title,query,partcode,get_resource_semt
 	$("#edit-window-type").html("");
 	$("#edit-window-body-metadata").html("");
 	$("#edit-window-body-metadata-epm").html("");
-	var getResource = new UIFactory["Proxy"](UICom.structure["ui"][parentid].node,"xsi_type='nodeRes'");
+	var getResource = new UIFactory["Proxy"](UICom.structure.ui[parentid].node,"xsi_type='nodeRes'");
 	getResource.multiple = query+"/"+partcode+","+get_resource_semtag;
 	getResource.displayEditor("get-resource-node");
 	$('#edit-window').modal('show');

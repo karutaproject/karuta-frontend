@@ -70,14 +70,14 @@ UIFactory["Bubble"].bubble = function(node,level)
 	this.data.id = this.id;
 	this.data.token = this.id;
 	if (this.bubble_label_nodeid!=undefined)
-		this.data.label = UICom.structure["ui"][this.bubble_label_nodeid].resource.getView();
+		this.data.label = UICom.structure.ui[this.bubble_label_nodeid].resource.getView();
 	else
-		this.data.label = UICom.structure["ui"][this.id].getLabel(null,"none");
-	if (UICom.structure["ui"][this.bubble_color_nodeid].resource.type=="Color")
-		this.data.color = UICom.structure["ui"][this.bubble_color_nodeid].resource.getValue();
+		this.data.label = UICom.structure.ui[this.id].getLabel(null,"none");
+	if (UICom.structure.ui[this.bubble_color_nodeid].resource.type=="Color")
+		this.data.color = UICom.structure.ui[this.bubble_color_nodeid].resource.getValue();
 	else
-		this.data.color = UICom.structure["ui"][this.bubble_color_nodeid].resource.getView();
-	this.data.amount = UICom.structure["ui"][this.bubble_amount_nodeid].resource.getView();
+		this.data.color = UICom.structure.ui[this.bubble_color_nodeid].resource.getView();
+	this.data.amount = UICom.structure.ui[this.bubble_amount_nodeid].resource.getView();
 	this.data.children = new Array();
 };
 
@@ -87,7 +87,7 @@ UIFactory["Bubble"].bubble.prototype.displayView = function(destid,type,lang)
 {
 	g_bubble_id = this.id;
 	g_bubble_destid = destid;
-	var node = UICom.structure["ui"][this.bubble_label_nodeid];
+	var node = UICom.structure.ui[this.bubble_label_nodeid];
 	var editresroles = ($(node.metadatawad).attr('editresroles')==undefined)?'':$(node.metadatawad).attr('editresroles');
 	var html = "";
 	$("#"+destid).html(html);  // on vide html
@@ -97,14 +97,14 @@ UIFactory["Bubble"].bubble.prototype.displayView = function(destid,type,lang)
 		if (editresroles.containsArrayElt(g_userroles) || g_userroles[0]=='designer') {
 			html += "<div class='btn-group bubble-button'>&nbsp;<span class='button fas fa-pencil-alt' onclick=\"javascript:Bubble_bubbles_byid['"+this.id+"'].displayEditor('"+destid+"');\"></span></div>";
 		}
-		html += "<div class='bubble_label'>"+UICom.structure["ui"][this.bubble_label_nodeid].resource.getView()+"</div>";
-		html += "<div class='bubble_decription'>"+UICom.structure["ui"][this.bubble_description_nodeid].resource.getView()+"</div>";
+		html += "<div class='bubble_label'>"+UICom.structure.ui[this.bubble_label_nodeid].resource.getView()+"</div>";
+		html += "<div class='bubble_decription'>"+UICom.structure.ui[this.bubble_description_nodeid].resource.getView()+"</div>";
 		var urls = $("asmContext:has(metadata[semantictag*='level"+this.level+"_url'])",this.node);
 		for (var i=0;i<urls.length;i++){
 			if (i==0)  // first one
 				html += "<h4 class='title'>Liens</h4>" 
 			var uuid = $(urls[i]).attr("id");
-			html += "<div class='bubble_url'>"+UICom.structure["ui"][uuid].resource.getView()+"</div>";
+			html += "<div class='bubble_url'>"+UICom.structure.ui[uuid].resource.getView()+"</div>";
 			html += "</div>";
 		}
 	}
@@ -129,7 +129,7 @@ UIFactory["Bubble"].bubble.prototype.displayEditor = function(destid,type,lang) 
 		displayControlGroup_getEditor('editform_'+this.id,karutaStr[LANG]["bubble-weight"],"amount_"+this.id,this.bubble_amount_nodeid);
 		displayControlGroup_getEditor('editform_'+this.id,karutaStr[LANG]["bubble-color"],"color_"+this.id,this.bubble_color_nodeid);
 		$("#"+'editform_'+this.id).append($("<label class='inline'>"+karutaStr[LANG]["bubble-information"]+"</label>"));
-		UICom.structure["ui"][this.bubble_description_nodeid].resource.displayEditor('editform_'+this.id,'x100');
+		UICom.structure.ui[this.bubble_description_nodeid].resource.displayEditor('editform_'+this.id,'x100');
 		$(".pickcolor").colorpicker();
 		//----------------- children ----------------------
 		if (this.level<3) {
@@ -148,7 +148,7 @@ UIFactory["Bubble"].bubble.prototype.displayEditor = function(destid,type,lang) 
 			for (var i=0;i<children.length;i++){
 				var uuid = $(children[i]).attr("id");
 				var label_uuid = Bubble_bubbles_byid[uuid].bubble_label_nodeid;
-				html += "<div class='child-bubble_label'><span>"+UICom.structure["ui"][label_uuid].resource.getView()+"</span>";
+				html += "<div class='child-bubble_label'><span>"+UICom.structure.ui[label_uuid].resource.getView()+"</span>";
 				if (children.length>3 && i>2) {
 					var callback2 = "UIFactory.Bubble.reloadparse";
 					var param2_2 = "'"+destid+"'";

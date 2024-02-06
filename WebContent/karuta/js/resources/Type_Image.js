@@ -268,11 +268,14 @@ UIFactory["Image"].prototype.getView = function(dest,type,langcode)
 	} else {
 		html += "<span><img src='../../karuta/img/image-icon.png' height='25px'/>"+karutaStr[LANG]['no-image'] + "</span>";
 	}
-	//-------
-	const result = execJS(this,'display-resource-after');
-	if (typeof result == 'string')
-		html += result;
-	//-------
+	//------------------if function js-----------------
+	const result1 = execJS(this,'display-resource-before');
+	if (typeof result1 == 'string')
+		html = result1 + html;
+	const result2 = execJS(this,'display-resource-after');
+	if (typeof result2 == 'string')
+		html = html + result2;
+	//------------------------------------------
 	return html;
 };
 
@@ -300,38 +303,47 @@ UIFactory["Image"].prototype.displayView = function(dest,type,langcode)
 UIFactory["Image"].update = function(data,uuid,langcode,parent,filename)
 //==================================
 {
-	var itself = UICom.structure["ui"][uuid];  // context node
-	itself.resource.lastmodified_node.text(new Date().getTime());
-	//---------------------
-	if (langcode==null)
-		langcode = LANGCODE;
-	//---------------------
-	$("#fileimage_"+uuid+"_"+langcode).html(filename);
-	var size = data.files[0].size;
-	var type = data.files[0].type;
-	var fileid = data.files[0].fileid;
-	if (!itself.resource.multilingual) {
-		for (var langcode=0; langcode<languages.length; langcode++) {
+	var itself = UICom.structure.ui[uuid];  // context node
+	if (execJS(itself,"update-resource-if")) {
+		//-------- if function js -------------
+		execJS(itself,"update-resource-before");
+		//---------------------
+		itself.resource.lastmodified_node.text(new Date().getTime());
+		//---------------------
+		if (langcode==null)
+			langcode = LANGCODE;
+		//---------------------
+		$("#fileimage_"+uuid+"_"+langcode).html(filename);
+		var size = data.files[0].size;
+		var type = data.files[0].type;
+		var fileid = data.files[0].fileid;
+		if (!itself.resource.multilingual) {
+			for (var langcode=0; langcode<languages.length; langcode++) {
+				itself.resource.fileid_node[langcode].text(fileid);
+				itself.resource.filename_node[langcode].text(filename);
+				itself.resource.size_node[langcode].text(size);
+				itself.resource.type_node[langcode].text(type);
+			}
+		} else {
 			itself.resource.fileid_node[langcode].text(fileid);
 			itself.resource.filename_node[langcode].text(filename);
 			itself.resource.size_node[langcode].text(size);
 			itself.resource.type_node[langcode].text(type);
 		}
-	} else {
-		itself.resource.fileid_node[langcode].text(fileid);
-		itself.resource.filename_node[langcode].text(filename);
-		itself.resource.size_node[langcode].text(size);
-		itself.resource.type_node[langcode].text(type);
+		itself.resource.save(parent);
+		testFileSaved(uuid);
+		itself.resource.save();
+		//-------- if function js -------------
+		execJS(itself,'update-resource-after');
+		//---------------------
 	}
-	itself.resource.save(parent);
-	testFileSaved(uuid);
 };
 
 //==================================
 UIFactory["Image"].remove = function(uuid,langcode)
 //==================================
 {
-	var itself = UICom.structure["ui"][uuid];  // context node
+	var itself = UICom.structure.ui[uuid];  // context node
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
@@ -435,8 +447,6 @@ UIFactory["Image"].prototype.displayEditor = function(destid,type,langcode,disab
 			var htmlFormObj = $("<form class='form-horizontal' style='margin-top:10px'></form>");
 			//---------------------
 			var width = $(this.width_node[langcode]).text();
-			if (this.encrypted)
-				width = decrypt(width.substring(3),g_rc4key);
 			var htmlWidthGroupObj = $("<div class='form-group'></div>")
 			var htmlWidthLabelObj = $("<label for='width_"+this.id+"_"+langcode+"' class='col-sm-3 control-label'>"+karutaStr[LANG]['width']+"</label>");
 			var htmlWidthDivObj = $("<div class='col-sm-9'></div>");
@@ -452,8 +462,6 @@ UIFactory["Image"].prototype.displayEditor = function(destid,type,langcode,disab
 			$(htmlFormObj).append($(htmlWidthGroupObj));
 			//---------------------
 			var height = $(this.height_node[langcode]).text();
-			if (this.encrypted)
-				height = decrypt(height.substring(3),g_rc4key);
 			var htmlHeightGroupObj = $("<div class='form-group'></div>")
 			var htmlHeightLabelObj = $("<label for='height_"+this.id+"_"+langcode+"' class='col-sm-3 control-label'>"+karutaStr[LANG]['height']+"</label>");
 			var htmlHeightDivObj = $("<div class='col-sm-9'></div>");
@@ -468,8 +476,6 @@ UIFactory["Image"].prototype.displayEditor = function(destid,type,langcode,disab
 			$(htmlFormObj).append($(htmlHeightGroupObj));
 			//---------------------
 			var alt = $(this.alt_node[langcode]).text();
-			if (this.encrypted)
-				alt = decrypt(alt.substring(3),g_rc4key);
 			var htmlaltGroupObj = $("<div class='form-group'></div>")
 			var htmlaltLabelObj = $("<label for='alt_"+this.id+"_"+langcode+"' class='col-sm-3 control-label'>"+karutaStr[LANG]['alt']+"</label>");
 			var htmlaltDivObj = $("<div class='col-sm-9'></div>");
@@ -486,8 +492,6 @@ UIFactory["Image"].prototype.displayEditor = function(destid,type,langcode,disab
 			if (g_userroles[0]=='designer' || USER.admin) {
 				//---------------------
 				var code = $(this.code_node).text();
-				if (this.encrypted)
-					code = decrypt(code.substring(3),g_rc4key);
 				var htmlcodeGroupObj = $("<div class='form-group'></div>")
 				var htmlcodeLabelObj = $("<label for='code_"+this.id+"_"+langcode+"' class='col-sm-3 control-label'>"+karutaStr[LANG]['code']+"</label>");
 				var htmlcodeDivObj = $("<div class='col-sm-9'></div>");
@@ -502,8 +506,6 @@ UIFactory["Image"].prototype.displayEditor = function(destid,type,langcode,disab
 				$(htmlFormObj).append($(htmlcodeGroupObj));
 				//---------------------
 				var value = $(this.value_node).text();
-				if (this.encrypted)
-					value = decrypt(value.substring(3),g_rc4key);
 				var htmlvalueGroupObj = $("<div class='form-group'></div>")
 				var htmlvalueLabelObj = $("<label for='value_"+this.id+"_"+langcode+"' class='col-sm-3 control-label'>"+karutaStr[LANG]['value']+"</label>");
 				var htmlvalueDivObj = $("<div class='col-sm-9'></div>");
