@@ -430,6 +430,9 @@ if (execJS(this,"display-if")) {
 		if ((this.printroles.containsArrayElt(g_userroles) || this.printroles.indexOf($(USER.username_node).text())>-1 || this.printroles.indexOf("all")>-1 || USER.admin || g_userroles[0]=='designer') && this.printroles!='none' && this.printroles!='') {
 				html += "<span class='button fas fa-print' style='"+menus_color+"' onclick=\"javascript:printSection('#node_"+this.id+"')\" data-title='"+karutaStr[LANG]["button-print"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
 		}
+		//----------------------- if compact view -----------------------------
+		if (displayview=='standard-resource-compact')
+			showHideCompactEditElts(uuid);
 		//----------------- hide lbl-div if empty ------------------------------------
 		if (this.getLabel(null,'none',langcode)=="" && this.getButtons(langcode)=="" && this.getMenus(langcode)=="")
 			if (this.displayview=='xwide' || this.displayview.indexOf("/12")>-1)
