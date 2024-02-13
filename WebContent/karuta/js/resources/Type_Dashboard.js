@@ -239,7 +239,7 @@ UIFactory["Dashboard"].prototype.getEditor = function(type,langcode,disabled)
 		$(htmlCsvGroupObj).append($(htmlCsvDivObj));
 		$(htmlFormObj).append($(htmlCsvGroupObj));
 		//-----------------------------------------------------
-/*		var htmlCsvGroupObj = $("<div class='form-group'></div>")
+		var htmlCsvGroupObj = $("<div class='form-group'></div>")
 		var htmlCsvLabelObj = $("<label for='csv_"+this.id+"' class='col-sm-3 control-label'>"+karutaStr[LANG]['csv']+"</label>");
 		var htmlCsvDivObj = $("<div class='col-sm-9'></div>");
 		var htmlCsvInputObj = $("<input id='csv_"+this.id+"' type='text' class='form-control' value=\""+this.csv_node.text()+"\">");
@@ -252,7 +252,7 @@ UIFactory["Dashboard"].prototype.getEditor = function(type,langcode,disabled)
 		$(htmlCsvGroupObj).append($(htmlCsvDivObj));
 		$(htmlFormObj).append($(htmlCsvGroupObj));
 		//-----------------------------------------------------
-		var htmlpdfGroupObj = $("<div class='form-group'></div>")
+/*		var htmlpdfGroupObj = $("<div class='form-group'></div>")
 		var htmlpdfLabelObj = $("<label for='pdf_"+this.id+"' class='col-sm-3 control-label'>"+karutaStr[LANG]['pdf']+"</label>");
 		var htmlpdfDivObj = $("<div class='col-sm-9'></div>");
 		var htmlpdfInputObj = $("<input id='pdf_"+this.id+"' type='text' class='form-control' value=\""+this.pdf_node.text()+"\">");
