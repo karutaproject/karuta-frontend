@@ -227,7 +227,7 @@ UIFactory["Dashboard"].prototype.getEditor = function(type,langcode,disabled)
 		$(htmlFormObj).append($(htmlTextGroupObj));
 		//-----------------------------------------------------
 		var htmlCsvGroupObj = $("<div class='form-group'></div>")
-		var htmlCsvLabelObj = $("<label for='print_"+this.id+"' class='col-sm-3 control-label'>"+karutaStr[LANG]['print']+"</label>");
+		var htmlCsvLabelObj = $("<label for='print_"+this.id+"' class='col-sm-3 control-label'>"+karutaStr[LANG]['button-print']+"</label>");
 		var htmlCsvDivObj = $("<div class='col-sm-9'></div>");
 		var htmlCsvInputObj = $("<input id='print_"+this.id+"' type='text' class='form-control' value=\""+this.print_node.text()+"\">");
 		$(htmlCsvInputObj).change(function (){
