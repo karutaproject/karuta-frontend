@@ -226,47 +226,33 @@ UIFactory["Get_Proxy"].prototype.displayEditor = function(destid,type,langcode)
 		} else {  // code==all
 			// retrieve active portfolios
 			$("#wait-window").modal('show');
-//			$.ajaxSetup({async: false});
-//			$.ajax({
-//				type : "GET",
-//				dataType : "xml",
-//				url : serverBCK_API+"/portfolios?active=1",
-//				success : function(data) {
-//					UIFactory["Portfolio"].parse(data);
-					for ( var i = 0; i < portfolios_list.length; i++) {
-						code = portfolios_list[i].code_node.text();
-						label = portfolios_list[i].label_node[langcode].text();
-						$.ajax({
-							async:false,
-							type : "GET",
-							dataType : "xml",
-							url : serverBCK_API+"/nodes?portfoliocode=" + code + "&semtag="+semtag,
-							success : function(data) {
-								var nodes = $("node",data);
-								var display = false;
-								for ( var i = 0; i < $(nodes).length; ++i) {
-									var semtag = $("metadata",nodes[i]).attr('semantictag');
-									if (semtag.indexOf("Get_Proxy-")<0)
-										display = true;
-								}
-								if (nodes.length>0 && display) {
-									var html = "";
-									html += "<div class='portfolio-Get_Proxy' style='margin-top:20px'>"+label+"</div>";
-									var placeid = code.replace(/\./g, '_'); 
-									html += "<div id='"+placeid+"'></div>";
-									$("#"+destid).append($(html));
-									UIFactory["Get_Proxy"].parse(placeid,type,langcode,data,self,label,srce);
-								}
-							}
-						});
+			for ( var i = 0; i < portfolios_list.length; i++) {
+				code = portfolios_list[i].code_node.text();
+				label = portfolios_list[i].label_node[langcode].text();
+				$.ajax({
+					async:false,
+					type : "GET",
+					dataType : "xml",
+					url : serverBCK_API+"/nodes?portfoliocode=" + code + "&semtag="+semtag,
+					success : function(data) {
+						var nodes = $("node",data);
+						var display = false;
+						for ( var i = 0; i < $(nodes).length; ++i) {
+							var semtag = $("metadata",nodes[i]).attr('semantictag');
+							if (semtag.indexOf("Get_Proxy-")<0)
+								display = true;
+						}
+						if (nodes.length>0 && display) {
+							var html = "";
+							html += "<div class='portfolio-Get_Proxy' style='margin-top:20px'>"+label+"</div>";
+							var placeid = code.replace(/\./g, '_'); 
+							html += "<div id='"+placeid+"'></div>";
+							$("#"+destid).append($(html));
+							UIFactory["Get_Proxy"].parse(placeid,type,langcode,data,self,label,srce);
+						}
 					}
-//				},
-//				error : function(jqxhr,textStatus) {
-//					alertHTML("Server Error UIFactory.Get_Proxy.prototype.displayEditor: "+textStatus);
-//					$("#wait-window").modal('hide');
-//				}
-//			});
-//			$.ajaxSetup({async: true});
+				});
+			}
 			$("#wait-window").modal('hide');
 		}
 	}
@@ -288,18 +274,36 @@ UIFactory["Get_Proxy"].parse = function(destid,type,langcode,data,self,srce,rese
 	var formobj = $("<div class='form-horizontal'></div>");
 	$("#"+destid).append($(formobj));
 	//-----Node ordering-------------------------------------------------------
-	var nodes = $("node",data);
-	var tableau1 = new Array();
+	let nodes = $("node",data);
+	let tableau1 = new Array();
+	let tableau2 = new Array();
 	for ( var i = 0; i < $(nodes).length; i++) {
-		var resource = null;
-		if ($("asmResource",nodes[i]).length==3)
-			resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",nodes[i]); 
-		else
-			resource = $("asmResource[xsi_type='nodeRes']",nodes[i]);
-		var code = $('code',resource).text();
-		tableau1[i] = [code,nodes[i]];
+		//--------------------------
+		const langnotvisible = ($("metadata-wad",nodes[i]).attr('langnotvisible')==undefined)?'':$("metadata-wad",nodes[i]).attr('langnotvisible');
+		const seestart = ($("metadata-wad",nodes[i]).attr('seestart')==undefined)?'':$("metadata-wad",nodes[i]).attr('seestart');
+		const seeend = ($("metadata-wad",nodes[i]).attr('seeend')==undefined)?'':$("metadata-wad",nodes[i]).attr('seeend');
+		const startUTC = new Date(seestart).getTime();
+		const endUTC = new Date(seeend).getTime();
+		const today = new Date().getTime();
+		const display = (seestart=="") ? true : (startUTC < today && today < endUTC);
+		//--------------------------
+
+		if (langnotvisible!=karutaStr[languages[LANGCODE]]['language'] && display) {
+			let resource = null;
+			if ($("asmResource",nodes[i]).length==3)
+				resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",nodes[i]); 
+			else
+				resource = $("asmResource[xsi_type='nodeRes']",nodes[i]);
+			let code = $('code',resource).text();
+			let libelle = $(srce+"[lang='"+languages[langcode]+"']",resource).text();
+			if (code.indexOf("~")<0)   // si ~ on trie sur le libellé sinon sur le code
+				tableau1[tableau1.length] = [code,nodes[i]];
+			else
+				tableau1[tableau1.length] = [libelle,nodes[i]]
+			tableau2[tableau2.length] = {'code':code,'libelle':libelle};
+		}
 	}
-	var newTableau1 = tableau1.sort(sortOn1);
+	let newTableau1 = tableau1.sort(sortOn1);
 	//--------------------------------------------------------------
 	if (type=='select') {
 		//-----------------------------------
@@ -447,6 +451,111 @@ UIFactory["Get_Proxy"].parse = function(destid,type,langcode,data,self,srce,rese
 			$(inputs_obj).append(input_obj);
 		}
 		$("#"+destid).append(inputs_obj);
+	}
+	//------------------------------------------------------------
+	if (type=='completion') {
+	//------------------------------------------------------------
+	//------------------------------------------------------------
+		var html ="";
+		html += "<form autocomplete='off'>";
+		html += "</form>";
+		var form = $(html);
+		html = "";
+		html += "<div class='auto-complete btn-group roles-choice select-"+semtag+"'>";
+		html += "<input id='button_"+langcode+self.id+"' type='text' class='btn btn-default select' code= '' value=''/>";
+		html += "<button type='button' class='btn btn-default dropdown-toggle select' data-toggle='dropdown' aria-expanded='false'><span class='caret'></span><span class='sr-only'>&nbsp;</span></button>";
+		html += "</div>";
+		var btn_group = $(html);
+		$(form).append($(btn_group));
+		$("#"+destid).append(form);
+		//---------------------------------------------------
+		
+		html = "<div class='dropdown-menu dropdown-menu-right'></div>";
+		var select  = $(html);
+		//----------------- null value to erase
+		if (resettable) {
+			html = "<a class='dropdown-item' value='' code='' uuid='' style='' ";
+			for (var j=0; j<languages.length;j++) {
+				html += "label_"+languages[j]+"='&nbsp;' ";
+			}
+			html += ">";
+			html += "&nbsp;</a>";
+			var select_item = $(html);
+			$(select_item).click(function (ev){
+				document.getElementById("button_"+langcode+self.id).defaultValue = "";
+				document.getElementById("button_"+langcode+self.id).className = "btn btn-default select selected-label";
+				UIFactory["Get_Resource"].update(this,self,langcode);
+			});
+			$(select).append($(select_item));
+		}
+		//--------------------
+		for ( var i = 0; i < newTableau1.length; ++i) {
+			var semtag = $("metadata",newTableau1[i]).attr('semantictag');
+			if (semtag.indexOf("Get_Proxy-")<0){
+				if ($("asmResource",newTableau1[i]).length==3)
+					resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i]); 
+				else
+					resource = $("asmResource[xsi_type='nodeRes']",newTableau1[i]);
+				var value = $(newTableau1[i][1]).attr('id');
+				var code = $('code',resource).text();
+//				var value = $('value',resource).text();
+				var display_code = false;
+				var display_label = true;
+				if (code.indexOf("$")>-1) 
+					display_label = false;
+				if (code.indexOf("@")<0) {
+					display_code = true;
+				}
+				code = replaceVariable(code);
+				code = cleanCode(code);
+				html = "<a  semtag='"+proxy_semtag+"' value='"+value+"' code='"+code+"' class='sel"+code+"' ";
+				html = "<a class='dropdown-item 'sel"+code+"' semtag='"+proxy_semtag+"' value='"+value+"' code='"+code+"' ";
+				for (var j=0; j<languages.length;j++){
+					html += "label_"+languages[j]+"=\""+$(srce+"[lang='"+languages[j]+"']",resource).text()+"\" ";
+				}
+				html += ">";
+				html += $(srce+"[lang='"+languages[langcode]+"']",resource).text()+"</a>";
+				var select_item_a = $(html);
+				$(select_item_a).click(function (ev){
+					//--------------------------------
+					var code = $(this).attr('code');
+					var display_code = false;
+					var display_label = true;
+					if (code.indexOf("$")>-1) 
+						display_label = false;
+					if (code.indexOf("@")<0) {
+						display_code = true;
+					}
+					code = cleanCode(code);
+					//--------------------------------
+					var html = "";
+					if (display_code)
+						html += code+" ";
+					if (display_label)
+						html += $(this).attr("label_"+languages[langcode]);
+					$("#button_"+self.id).html(html);
+					$("#button_"+self.id).attr('class', 'btn btn-default select select-label').addClass("sel"+code);
+					UIFactory["Get_Proxy"].update(this,self,langcode);
+					//--------------------------------
+				});
+				$(select).append($(select_item_a));
+				//-------------- update button -----
+				if (code!="" && self_code==$('code',resource).text()) {
+					var html = "";
+					if (display_code)
+						html += code+" ";
+					if (display_label)
+						html += $(srce+"[lang='"+languages[langcode]+"']",resource).text();
+					$("#button_"+self.id).html(html);
+					$("#button_"+self.id).attr('class', 'btn btn-default select select-label').addClass("sel"+code);
+				}
+				//--------------------------------
+			}
+		}
+		$(btn_group).append($(select));
+		var onupdate = "UIFactory.Get_Resource.update(input,self)";
+		autocomplete(document.getElementById("button_"+langcode+self.id), tableau2,onupdate,self,langcode);
+		//--------------------
 	}
 };
 

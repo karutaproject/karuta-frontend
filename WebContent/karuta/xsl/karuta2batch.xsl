@@ -1035,48 +1035,6 @@
 		</fen-batch-variable>
 	</xsl:template>
 	
-	<!-- ================ for-each-node-update-field ============================ -->
-	<xsl:template match="*[metadata/@semantictag='fen-update-field']">
-		<xsl:variable name="semtag">
-			<xsl:value-of select=".//asmContext[metadata/@semantictag='node-semtag']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
-		</xsl:variable>
-		<xsl:variable name="test">
-			<xsl:value-of select=".//asmContext[metadata/@semantictag='test']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
-		</xsl:variable>
-		<fen-update-resource type='Field' semtag="{$semtag}" test="{$test}" >
-			<attribute name='text' language-dependent='Y' replace-variable='Y'>
-				<xsl:call-template name="txtval">
-					<xsl:with-param name="semtag">text</xsl:with-param>
-				</xsl:call-template>
-			</attribute>
-		</fen-update-resource>
-	</xsl:template>
-	
-		<!-- ================ fen-move-node ============================ -->
-	<xsl:template match="*[metadata/@semantictag='fen-move-node']">
-		<xsl:variable name="source">
-			<xsl:call-template name='get-semtag'>
-				<xsl:with-param name='parent'>subsection-source</xsl:with-param>
-			</xsl:call-template>
-		</xsl:variable>
-		<xsl:variable name="source-test">
-			<xsl:call-template name='get-test'>
-				<xsl:with-param name='parent'>subsection-source</xsl:with-param>
-			</xsl:call-template>
-		</xsl:variable>
-		<xsl:variable name="target">
-			<xsl:call-template name='get-semtag'>
-				<xsl:with-param name='parent'>subsection-target</xsl:with-param>
-			</xsl:call-template>
-		</xsl:variable>
-		<xsl:variable name="target-test">
-			<xsl:call-template name='get-test'>
-				<xsl:with-param name='parent'>subsection-target</xsl:with-param>
-			</xsl:call-template>
-		</xsl:variable>
-		<fen-move-node source="{$source}"  source-test="{$source-test}" target="{$target}"  target-test="{$target-test}">
-		</fen-move-node>
-	</xsl:template>
 	
 	<!-- ====================================================================================== -->
 	<!-- ====================================================================================== -->
@@ -1589,6 +1547,32 @@
 	<!-- old for compatibility 2018/10/29 -->
 	<!-- ====================================================================================== -->
 	<!-- ====================================================================================== -->
+	
+	<!-- ================ fen-move-node ============================ -->
+	<xsl:template match="*[metadata/@semantictag='fen-move-node']">
+		<xsl:variable name="source">
+			<xsl:call-template name='get-semtag'>
+				<xsl:with-param name='parent'>subsection-source</xsl:with-param>
+			</xsl:call-template>
+		</xsl:variable>
+		<xsl:variable name="source-test">
+			<xsl:call-template name='get-test'>
+				<xsl:with-param name='parent'>subsection-source</xsl:with-param>
+			</xsl:call-template>
+		</xsl:variable>
+		<xsl:variable name="target">
+			<xsl:call-template name='get-semtag'>
+				<xsl:with-param name='parent'>subsection-target</xsl:with-param>
+			</xsl:call-template>
+		</xsl:variable>
+		<xsl:variable name="target-test">
+			<xsl:call-template name='get-test'>
+				<xsl:with-param name='parent'>subsection-target</xsl:with-param>
+			</xsl:call-template>
+		</xsl:variable>
+		<fen-move-node source="{$source}"  source-test="{$source-test}" target="{$target}"  target-test="{$target-test}">
+		</fen-move-node>
+	</xsl:template>
 
 	<xsl:template match="*[metadata/@semantictag='update-metadata-query']">
 		<xsl:variable name="select">

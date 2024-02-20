@@ -82,13 +82,13 @@ displayOrg["asmContext"]["row-cols-6"] = ["col"];
 displayOrg["asmContext"]["strrow-cols-6"] = ["col"];
 
 //           viewtype   node type               pre
-displayView["standard"]["asmContext"] = ["default","xwide","card","simple"];
+displayView["standard"]["asmContext"] = ["default","xwide","card","simple","compact"];
 displayView["standard"]["asmUnitStructure"] = ["default","xwide","card"];
 displayView["standard"]["asmUnit"] = [];
 displayView["standard"]["asmStructure"] = [];
 displayView["standard"]["asmRoot"] = [];
 
-displayView["raw"]["asmContext"] = ["default","xwide","card","simple"];
+displayView["raw"]["asmContext"] = ["default","xwide","card","simple","compact"];
 displayView["raw"]["asmUnitStructure"] = ["default","xwide","card"];
 
 
@@ -209,7 +209,49 @@ displayHTML["standard-resource-simple"] =	"<div id='node_#uuid#' class='#display
 											"	<div id='content-#uuid#' name='cnt-div' class='content' ></div>" +
 											"	<div id='extra_#uuid#' class='extra'></div>" +
 											"</div>";
+//====================================================================
+//========================== COMPACT ===================================
+//====================================================================
+displayHTML["standard-resource-compact"] =	""+
+	"<div id='node_#uuid#' class='#displayview# #displaytype# #nodetype# #semtag# #cssclass#  #resourcetype# #priv# #node-orgclass#'>" +
+	"	<div id='sub_node_#uuid#' class='resource-node' >" +
+	"		<table width='100%'><tr>" +
+	"			<td class='td2' name='res-div'>" +
+	"				<span id='resource_#uuid#'  class='resource'></span><span id='help_#uuid#' class='ihelp'/>" +
+	"				<div id='comments_#uuid#' class='comments'></div>" +
+	"			</td>" +
+	"			<td id='td3-#uuid#' class='td3'>" + 
+	"				<span class='compact dropdown'>" +
+	"					<button class='btn dropdown-toggle add-button' style='' type='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'></button>" + 
+	"					<div class='dropdown-menu dropdown-menu-right' aria-labelledby=''>"+
+	"						<div class='dropdown-item' >" +
+	"							<div id='menus-buttons-#uuid#' class='menus-buttons'><span id='buttons-#uuid#' class='buttons edit-bar'/><span id='menus-#uuid#' class='menus  edit-bar'/></div>" +
+	"						</div>"+
+	"					</div>"+
+	"				<span>"+
+	"			</td>" +
+	"		</tr></table>" +
+	"		<div id='menus-buttons-#uuid#' class='compact-menus-buttons'><span id='menus-#uuid#' class='menus  edit-bar'/><span id='buttons-#uuid#' class='buttons edit-bar'/></div>" +
+	"	</div>" +
+	"	<div id='metainfo_#uuid#' class='metainfo'></div>" +
+	"	<div id='cssinfo_#uuid#' class='cssinfo'></div>" +
+	"	<div id='content-#uuid#' name='cnt-div' class='content' ></div>" +
+	"	<div id='extra_#uuid#' class='extra'></div>" +
+	"</div>";
 
+function showHideCompactEditElts(nodeid) { // if only one button, we display the button
+	const buttons_children = $(".btn-group >*","#buttons-"+nodeid);
+	const menus_children = $(">*","#menus-"+nodeid);
+	if (buttons_children.length + menus_children.length == 0) {
+		$("#td3-"+nodeid). html("");
+	}
+	if (buttons_children.length + menus_children.length == 1) {
+		if (buttons_children.length==1) {
+			const html = $("#menus-buttons-"+nodeid).html();
+			$("#td3-"+nodeid). html(html);
+		}
+	}
+}
 //====================================================================
 //========================== TRANSLATE ===============================
 //====================================================================
@@ -528,4 +570,5 @@ displayHTML["standard-node-card-carddeck"]  =	"<div id='node_#uuid#' class='card
 "	<div id='metainfo_#uuid#' class='metainfo'></div>" +
 "</div>";
 
+//=================================================================
 
