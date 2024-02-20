@@ -1,0 +1,54 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<title>Karuta - SOS</title>
+		<script src="../../other/js/jquery-3.3.1.min.js"></script>
+		<script>
+			var pathname = window.location.pathname;
+			var appliname = pathname.substring(0,pathname.substring(1).indexOf('/')+1);
+			var url = "../../.." + appliname + "-config/_init.js"
+			$.ajax({
+				async:false,
+				url: url,
+				dataType: "script",
+				error : function(jqxhr,textStatus) {
+					alert(appliname + "-config/_init.js not found");
+				}
+			});
+			function exportPortfolio() {
+				const uuid = document.getElementById("uuid").value;
+				const href = "../../../../../../"+serverBCK+"/rest/api/portfolios/portfolio/"+uuid+"?resources=true&amp;export=true";
+				document.getElementById("export").setAttribute("href",href);
+				document.getElementById("export").setHTML("Export Link");
+			}
+			function deletePortfolio() {
+				const uuid = document.getElementById("uuid").value;
+				if (confirm (" Delete "+uuid+" ?")) {
+					var url = serverBCK_API+"/portfolios/portfolio/" + uuid;
+					$.ajax({
+						async : false,
+						type : "DELETE",
+						contentType: "application/xml",
+						dataType : "xml",
+						url : url,
+						data : "",
+						success : function(data) {
+							document.getElementById("delete").setHTML("Portfolio deleted");
+						},
+						error : function(jqxhr,textStatus) {
+							document.getElementById("delete").setHTML("Error"+textStatus);
+						}
+					});
+				}
+			}
+		</script>
+	</head>
+	<body>
+	<hr>
+	<br>
+	Portfolio uuid
+	<input type="text" id="uuid">
+	<br><br>
+	<button onclick='exportPortfolio()'>Export</button> <a id='export' href=""></a> 
+	<br><br><button onclick='deletePortfolio()'>Delete</button> <span id='delete'></span>
+	</body>
+</html>
