@@ -1228,6 +1228,7 @@ UIFactory["Node"].duplicate = function(uuid,callback,databack,param2,param3,para
 				success : function(node_data) {
 					//------------------------------------------
 					var code = $($("code",node_data)[0]).text();
+					var value = $($("value",node_data)[0]).text();
 					var label = [];
 					for (var i=0; i<languages.length;i++){
 						label[i] = $("label[lang='"+languages[i]+"']",$("asmResource[xsi_type='nodeRes']",node_data)[0]).text();
@@ -1246,8 +1247,18 @@ UIFactory["Node"].duplicate = function(uuid,callback,databack,param2,param3,para
 						nbcode++;
 						code = code.replace(/\d+$/,nbcode);
 					}
+					var nbvalue = value.match(/\d+$/);
+					if (nbvalue!=null)
+						nbvalue = nbvalue[0];
+					if ($.isNumeric(nbvalue)) {
+						nbvalue++;
+						value = value.replace(/\d+$/,nbvalue);
+						$("value",resource).text(value);
+						tobesaved = true;
+					}
 					var xml = "<asmResource xsi_type='nodeRes'>";
 					xml += "<code>"+code+"</code>";
+					xml += "<value>"+value+"</value>";
 					for (var i=0; i<languages.length;i++)
 						xml += "<label lang='"+languages[i]+"'>"+label[i]+"</label>";
 					xml += "</asmResource>";
