@@ -555,6 +555,9 @@
 		<xsl:variable name="varlabel">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='varlabel']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
+		<xsl:variable name="txtval">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='txtval']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
 		<xsl:variable name="ref">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='ref']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
@@ -589,6 +592,9 @@
 			</xsl:if>
 			<xsl:if test="not($varlabel='')">
 				<xsl:attribute name="varlabel"><xsl:value-of select="$varlabel"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not($txtval='')">
+				<xsl:attribute name="txtval"><xsl:value-of select="$txtval"/></xsl:attribute>
 			</xsl:if>
 			<xsl:if test="not($select='..')">
 				<xsl:attribute name="select"><xsl:value-of select="$select"/></xsl:attribute>
@@ -1436,29 +1442,43 @@
 		<xsl:variable name="legend-todisplay">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='legend-todisplay']/asmResource[@xsi_type='Get_Resource']/value"></xsl:value-of>
 		</xsl:variable>
-		<xsl:variable name="grad-variable">
-			<xsl:value-of select=".//asmContext[metadata/@semantictag='grad-variable']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		<xsl:variable name="xgrad-variable">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='xgrad-variable']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
-		<xsl:variable name="grad-nodetype">
-			<xsl:value-of select=".//asmContext[metadata/@semantictag='grad-nodetype']/asmResource[@xsi_type='Get_Resource']/value"></xsl:value-of>
+		<xsl:variable name="ygrad-variable">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='ygrad-variable']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
-		<xsl:variable name="grad-semtag">
-			<xsl:value-of select=".//asmContext[metadata/@semantictag='grad-semtag']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		<xsl:variable name="xgrad-nodetype">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='xgrad-nodetype']/asmResource[@xsi_type='Get_Resource']/value"></xsl:value-of>
 		</xsl:variable>
-		<xsl:variable name="grad-todisplay">
-			<xsl:value-of select=".//asmContext[metadata/@semantictag='grad-todisplay']/asmResource[@xsi_type='Get_Resource']/value"></xsl:value-of>
+		<xsl:variable name="ygrad-nodetype">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='ygrad-nodetype']/asmResource[@xsi_type='Get_Resource']/value"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="xgrad-semtag">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='xgrad-semtag']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="xgrad-todisplay">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='xgrad-todisplay']/asmResource[@xsi_type='Get_Resource']/value"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="ygrad-semtag">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='ygrad-semtag']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="ygrad-todisplay">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='ygrad-todisplay']/asmResource[@xsi_type='Get_Resource']/value"></xsl:value-of>
 		</xsl:variable>
 		<xsl:variable name="ref">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='graphref']/asmResource[@xsi_type='Get_Resource']/label[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
 		<xsl:variable name="point-select"><xsl:value-of select="$point-nodetype"/>.<xsl:value-of select="$point-semtag"/>.<xsl:value-of select="$point-todisplay"/></xsl:variable>
 		<xsl:variable name="legend-select"><xsl:value-of select="$legend-nodetype"/>.<xsl:value-of select="$legend-semtag"/>.<xsl:value-of select="$legend-todisplay"/></xsl:variable>
-		<xsl:variable name="grad-select"><xsl:value-of select="$grad-nodetype"/>.<xsl:value-of select="$grad-semtag"/>.<xsl:value-of select="$grad-todisplay"/></xsl:variable>
+		<xsl:variable name="xgrad-select"><xsl:value-of select="$xgrad-nodetype"/>.<xsl:value-of select="$xgrad-semtag"/>.<xsl:value-of select="$xgrad-todisplay"/></xsl:variable>
+		<xsl:variable name="ygrad-select"><xsl:value-of select="$ygrad-nodetype"/>.<xsl:value-of select="$ygrad-semtag"/>.<xsl:value-of select="$ygrad-todisplay"/></xsl:variable>
 		<draw-data>
 			<xsl:attribute name="ref"><xsl:value-of select="$ref"/></xsl:attribute>
 			<xsl:attribute name="graphtype"><xsl:value-of select="$graphtype"/></xsl:attribute>
 			<xsl:attribute name="point-variable"><xsl:value-of select="$point-variable"/></xsl:attribute>
-			<xsl:attribute name="grad-variable"><xsl:value-of select="$grad-variable"/></xsl:attribute>
+			<xsl:attribute name="xgrad-variable"><xsl:value-of select="$xgrad-variable"/></xsl:attribute>
+			<xsl:attribute name="ygrad-variable"><xsl:value-of select="$ygrad-variable"/></xsl:attribute>
 			<xsl:attribute name="legend-variable"><xsl:value-of select="$legend-variable"/></xsl:attribute>
 			<xsl:if test="not($point-select='..')">
 				<xsl:attribute name="point-select"><xsl:value-of select="$point-select"/></xsl:attribute>
@@ -1466,8 +1486,11 @@
 			<xsl:if test="not($legend-select='..')">
 				<xsl:attribute name="legend-select"><xsl:value-of select="$legend-select"/></xsl:attribute>
 			</xsl:if>
-			<xsl:if test="not($grad-select='..')">
-				<xsl:attribute name="grad-select"><xsl:value-of select="$grad-select"/></xsl:attribute>
+			<xsl:if test="not($xgrad-select='..')">
+				<xsl:attribute name="xgrad-select"><xsl:value-of select="$xgrad-select"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not($ygrad-select='..')">
+				<xsl:attribute name="ygrad-select"><xsl:value-of select="$ygrad-select"/></xsl:attribute>
 			</xsl:if>
 		</draw-data>
 	</xsl:template>

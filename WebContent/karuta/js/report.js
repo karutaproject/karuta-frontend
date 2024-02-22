@@ -1545,6 +1545,15 @@ g_report_actions['for-each-portfolios-nodes'] = function (destid,action,no,data)
 	var countvar = $(action).attr("countvar");
 	var userid = USER.id;
 	var items_list = [];
+	//----------------------------------
+	var ref_init = $(action).attr("ref-init");
+	if (ref_init!=undefined) {
+		ref_init = replaceVariable(ref_init);
+		var ref_inits = ref_init.split("/"); // ref1/ref2/...
+		for (var k=0;k<ref_inits.length;k++)
+			g_variables[ref_inits[k]] = new Array();
+	}
+	//----------------------------------
 	$.ajax({
 		async:false,
 		type : "GET",
@@ -1566,8 +1575,8 @@ g_report_actions['for-each-portfolios-nodes'] = function (destid,action,no,data)
 			var sortvalue = "";
 			if (sortag!=undefined && sortag!="") {
 				for ( let j = 0; j < items.length; j++) {
-					portfolioid = $(items[i]).attr('id');
-					var code = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",items[i])).text();
+					portfolioid = $(items[j]).attr('id');
+					var code = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",items[j])).text();
 					if (select.indexOf("code*=")>-1) {
 						if (select.indexOf("'")>-1)
 							value = select.substring(7,select.length-1);  // inside quote
@@ -1580,7 +1589,7 @@ g_report_actions['for-each-portfolios-nodes'] = function (destid,action,no,data)
 							value = select.substring(6,select.length-1);  // inside quote
 						else
 							value = eval("json.lines["+line+"]."+select.substring(5));
-						condition = code==value;
+						condition = (code==value);
 					}
 					//------------------------------------
 					if (condition && sortag!=""){
@@ -1650,14 +1659,6 @@ g_report_actions['for-each-portfolios-nodes'] = function (destid,action,no,data)
 								//----------------------------------
 								if (countvar!=undefined) {
 									g_variables[countvar] = j;
-								}
-								//----------------------------------
-								var ref_init = $(action).attr("ref-init");
-								if (ref_init!=undefined) {
-									ref_init = replaceVariable(ref_init);
-									var ref_inits = ref_init.split("/"); // ref1/ref2/...
-									for (var k=0;k<ref_inits.length;k++)
-										g_variables[ref_inits[k]] = new Array();
 								}
 								//----------------------------------
 								var nodeid = $(nodes[l]).attr('id');
@@ -1993,6 +1994,7 @@ g_report_actions['variable'] = function (destid,action,no,data)
 	var prefix_id = "";
 	try {
 		var varlabel = replaceVariable($(action).attr("varlabel"));
+		var txtval = replaceVariable($(action).attr("txtval"));
 		var ref = $(action).attr("ref");
 		var aggregatetype = $(action).attr("aggregatetype");
 		var fct = $(action).attr("function");
@@ -2028,6 +2030,8 @@ g_report_actions['variable'] = function (destid,action,no,data)
 				text="";
 		} else if (fct!=undefined && fct!=""){
 			text = eval(replaceVariable(fct));
+		} else if (txtval!=undefined && txtval!=""){
+			text = txtval;
 		} else {
 			var select = $(action).attr("select");
 			if (select!=undefined && select.length>0) {
@@ -2891,12 +2895,6 @@ g_report_actions['draw-xy-axis'] = function (destid,action,no,data)
 	if (graphid!="")
 		g_graphs [graphid] = {'xaxis':xaxis,'yaxis':yaxis,'xmin':xmin,'xmax':xmax,'ymin':ymin,'ymax':ymax,'xnbgraduation':xnbgraduation,'ynbgraduation':ynbgraduation,'xdisplaygraduation':xdisplaygraduation,'ydisplaygraduation':ydisplaygraduation,'nbdata':0}
 	//--------------------------
-//	document.getElementById(destid).appendChild(makeSVG('line',{'x1':0,'y1':0,'x2':1200,'y2':0,'stroke':'red','stroke-width': 2}));
-//	document.getElementById(destid).appendChild(makeSVG('line',{'x1':0,'y1':0,'x2':0,'y2':1200,'stroke':'red','stroke-width': 2}));
-//	document.getElementById(destid).appendChild(makeSVG('line',{'x1':0,'y1':1200,'x2':1200,'y2':1200,'stroke':'red','stroke-width': 2}));
-//	document.getElementById(destid).appendChild(makeSVG('line',{'x1':1200,'y1':1200,'x2':1200,'y2':0,'stroke':'red','stroke-width': 2}));
-//	document.getElementById(destid).appendChild(makeSVG('line',{'x1':0,'y1':0,'x2':1200,'y2':1200,'stroke':'red','stroke-width': 2}));
-//	document.getElementById(destid).appendChild(makeSVG('line',{'x1':0,'y1':1200,'x2':1200,'y2':0,'stroke':'red','stroke-width': 2}));
 	// x axis
 	var yline = makeSVG('line',{'x1':100+xaxis,'y1':100,'x2':100+xaxis,'y2':1100,'stroke':'black','stroke-width': 2});
 	document.getElementById(destid).appendChild(yline);
@@ -2954,12 +2952,15 @@ g_report_actions['draw-data'] = function (destid,action,no,data)
 	var pointselect = $(action).attr("point-select");
 	var legendvariable = $(action).attr("legend-variable");
 	var legendselect = $(action).attr("legend-select");
-	var gradvariable = $(action).attr("grad-variable");
-	var gradselect = $(action).attr("grad-select");
+	var xgradvariable = $(action).attr("xgrad-variable");
+	var xgradselect = $(action).attr("xgrad-select");
+	var ygradvariable = $(action).attr("ygrad-variable");
+	var ygradselect = $(action).attr("ygrad-select");
 	//-----------------
 	var xaxis = g_graphs[graphid].xaxis;
 	var yaxis = g_graphs[graphid].yaxis;
 	var xnbgraduation = g_graphs[graphid].xnbgraduation;
+	var ynbgraduation = g_graphs[graphid].ynbgraduation;
 	var ymin = g_graphs[graphid].ymin;
 	var ymax = g_graphs[graphid].ymax;
 	var nbdata = g_graphs[graphid].nbdata++;
@@ -2978,13 +2979,13 @@ g_report_actions['draw-data'] = function (destid,action,no,data)
 		}
 		if (graphtype=='point' || graphtype=='line') {
 			for (let i=0; i<points.length;i++){
-				if (points[i].value!=null){
+				if (!isNaN(points[i].value)){
 					points[i].x = 100+xaxis + (1000-xaxis) / xnbgraduation * (i+1) ;
 					points[i].y = 1100-yaxis - (1000-yaxis) / (ymax-ymin) * points[i].value ;
 					var line = makeSVG('line',{'x1':points[i].x,'y1':points[i].y,'x2':points[i].x,'y2':points[i].y,'class':'svg-web-value'+nbdata});
 					document.getElementById(destid).appendChild(line);
 				}
-				if (i>0 && points[i-1].value!=null && points[i].value!=null && graphtype=='line') {
+				if (i>0 && !isNaN(points[i-1].value) && !isNaN(points[i].value) && graphtype=='line') {
 					var line = makeSVG('line',{'x1':points[i-1].x,'y1':points[i-1].y,'x2':points[i].x,'y2':points[i].y,'class':'svg-web-line'+nbdata});
 					document.getElementById(destid).appendChild(line);
 				}
@@ -2992,7 +2993,7 @@ g_report_actions['draw-data'] = function (destid,action,no,data)
 		}
 		if (graphtype=='bar') {
 			for (let i=0; i<points.length;i++){
-				if (points[i].value!=null){
+				if (!isNaN(points[i].value)){
 					points[i].x = 90+xaxis+ (20*nbdata) + (1000-xaxis) / xnbgraduation * (i+1) ;
 					points[i].y = 1100-yaxis - (1000-yaxis) / (ymax-ymin) * points[i].value ;
 					var rect = makeSVG('rect',{'x':points[i].x,'y':points[i].y,'width':20,'height':(1000-yaxis) / (ymax-ymin) * points[i].value,'class':'svg-web-rect'+nbdata});
@@ -3020,21 +3021,40 @@ g_report_actions['draw-data'] = function (destid,action,no,data)
 			}
 		}
 		// draw x graduation
-		if (gradselect!=undefined || gradvariable!="") {
+		if (xgradselect!=undefined || xgradvariable!="") {
 			var texts = [];
-			if (gradselect!=undefined){
-				gradselect = replaceVariable(gradselect);
-				texts = getResText(data,gradselect);
+			if (xgradselect!=undefined){
+				xgradselect = replaceVariable(xgradselect);
+				texts = getResText(data,xgradselect);
 			}
-			if (gradvariable!="") {
-				for (let i=0; i<g_variables[gradvariable].length;i++){
-					texts[texts.length] = g_variables[gradvariable][i];
+			if (xgradvariable!="") {
+				for (let i=0; i<g_variables[xgradvariable].length;i++){
+					texts[texts.length] = g_variables[xgradvariable][i];
 				}
 			}
 			for (let i=0; i<texts.length;i++){
 				var x = 100+xaxis + (20*nbdata) + (1000-xaxis) / xnbgraduation * (i+1) ;
 				var y = 1120 ;
 				var svgtext = makeSVG('text',{'x':x,'y':y,'transform':"rotate(45 "+x+" "+y+")",'font-size':svgfontsize,'font-family':svgfontname},texts[i]);
+				document.getElementById(destid).appendChild(svgtext);
+			}
+		}
+		// draw y graduation with text
+		if (ygradselect!=undefined || ygradvariable!="") {
+			var texts = [];
+			if (ygradselect!=undefined){
+				ygradselect = replaceVariable(ygradselect);
+				texts = getResText(data,ygradselect);
+			}
+			if (ygradvariable!="") {
+				for (let i=0; i<g_variables[ygradvariable].length;i++){
+					texts[texts.length] = g_variables[ygradvariable][i];
+				}
+			}
+			for (let i=0; i<texts.length;i++){
+				var x = 20;
+				var y = 1105 - yaxis - (1000-yaxis) / ynbgraduation * (i+1) ;
+				var svgtext = makeSVG('text',{'x':x,'y':y,'font-size':svgfontsize,'font-family':svgfontname},texts[i]);
 				document.getElementById(destid).appendChild(svgtext);
 			}
 		}
