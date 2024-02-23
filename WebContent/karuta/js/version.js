@@ -12,3 +12,4 @@ var karuta_fileserver_version = "?";
 var karuta_fileserver_date = "?";
 
 // 3.26.0 new functionnality for svg report - 2024/02/22
+
