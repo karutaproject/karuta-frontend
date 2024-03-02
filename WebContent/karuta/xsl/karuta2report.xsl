@@ -796,7 +796,10 @@
 		<xsl:variable name="width">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='min-width']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
-		<svg min-width='{$width}'>
+		<xsl:variable name="fontsize">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='fontsize']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<svg min-width='{$width}' fontsize='{$fontsize}'>
 			<xsl:apply-templates select='asmUnitStructure'/>
 		</svg>
 	</xsl:template>
@@ -1184,6 +1187,9 @@
 		<xsl:variable name="text">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='text-value']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
+		<xsl:variable name="fontsize">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='fontsize']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
 		
 		<draw-web-title>
 			<xsl:if test="not($class='')">
@@ -1203,6 +1209,9 @@
 			</xsl:if>
 			<xsl:if test="not($text='..')">
 				<xsl:attribute name="text"><xsl:value-of select="$text"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not($fontsize='..')">
+				<xsl:attribute name="fontsize"><xsl:value-of select="$fontsize"/></xsl:attribute>
 			</xsl:if>
 		</draw-web-title>
 	</xsl:template>

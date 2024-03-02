@@ -2776,6 +2776,9 @@ g_report_actions['svg'] = function (destid,action,no,data)
 //==================================
 {
 	var width = $(action).attr("min-width");
+	var fontsize = $(action).attr("fontsize");
+	if (fontsize!="" && fontsize!=0)
+		svgfontsize = parseInt(fontsize);
 	var html = "<svg id='"+destid+'-'+no+"' width='"+width+"' viewbox='0 0 1200 1200'></svg>";
 	var svg = $(html);
 	$("#"+destid).append(svg);
@@ -2793,11 +2796,14 @@ g_report_actions['draw-web-title'] = function (destid,action,no,data)
 {
 	var select = $(action).attr("select");
 	var txt = $(action).attr("text");
+	var fontsize = $(action).attr("fontsize");
+	if (fontsize=="" || fontsize==0)
+		fontsize = svgfontsize;
 	if (select!=undefined) {
 		select = replaceVariable(select);
 		var text = getResText(data,select)[0];
-		var size = getTextSize(destid,text+txt,svgfontsize*2,svgfontname)
-		var svgtext = makeSVG('text',{'x':1100-size,'y':40,'font-size':svgfontsize*2,'font-family':svgfontname},text+txt);
+		var size = getTextSize(destid,text+txt,fontsize,svgfontname)
+		var svgtext = makeSVG('text',{'x':1100-size,'y':40,'font-size':fontsize,'font-family':svgfontname},text+txt);
 		document.getElementById(destid).appendChild(svgtext);
 	}
 }
@@ -3013,12 +3019,12 @@ g_report_actions['draw-data'] = function (destid,action,no,data)
 					texts[texts.length] = g_variables[legendvariable][i];
 				}
 			}
-			for (let i=0; i<texts.length;i++){
-				var line = makeSVG('line',{'x1':100,'y1':1140+20*nbdata,'x2':100,'y2':1140+20*nbdata,'class':'svg-web-value'+nbdata});
+//			for (let i=0; i<texts.length;i++){
+				var line = makeSVG('line',{'x1':100,'y1':1140+25*nbdata,'x2':100,'y2':1140+25*nbdata,'class':'svg-web-value'+nbdata});
 				document.getElementById(destid).appendChild(line);
-				var svgtext = makeSVG('text',{'x':120,'y':1145+20*nbdata,'font-size':svgfontsize,'font-family':svgfontname},texts[i]);
+				var svgtext = makeSVG('text',{'x':120,'y':1145+25*nbdata,'font-size':svgfontsize,'font-family':svgfontname},texts[0]);
 				document.getElementById(destid).appendChild(svgtext);
-			}
+//			}
 		}
 		// draw x graduation
 		if (xgradselect!=undefined || xgradvariable!="") {
