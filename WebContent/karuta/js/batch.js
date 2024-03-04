@@ -24,12 +24,12 @@ var g_users = {};
 //-----------------------
 
 var jqueryBatchSpecificFunctions = {};
-jqueryBatchSpecificFunctions['.resourceTextContains('] = "asmResource[xsi_type!='context'][xsi_type!='nodeRes']>text[lang='#lang#']:contains(";
-jqueryBatchSpecificFunctions['.resourceCodeContains('] = "asmResource[xsi_type!='context'][xsi_type!='nodeRes']>code:contains(";
-jqueryBatchSpecificFunctions['.resourceValueContains('] = "asmResource[xsi_type!='context'][xsi_type!='nodeRes']>value:contains(";
-jqueryBatchSpecificFunctions['.nodeLabelContains('] = "asmResource[xsi_type='nodeRes']>label[lang='#lang#']:contains(";
-jqueryBatchSpecificFunctions['.nodeCodeContains('] = "asmResource[xsi_type='nodeRes']>code:contains(";
-jqueryBatchSpecificFunctions['.resourceFilenameContains('] = "asmResource[xsi_type!='context'][xsi_type!='nodeRes']>filename[lang='#lang#']:contains(";
+//jqueryBatchSpecificFunctions['.resourceTextContains('] = "asmResource[xsi_type!='context'][xsi_type!='nodeRes']>text[lang='#lang#']:contains(";
+//jqueryBatchSpecificFunctions['.resourceCodeContains('] = "asmResource[xsi_type!='context'][xsi_type!='nodeRes']>code:contains(";
+//jqueryBatchSpecificFunctions['.resourceValueContains('] = "asmResource[xsi_type!='context'][xsi_type!='nodeRes']>value:contains(";
+//jqueryBatchSpecificFunctions['.nodeLabelContains('] = "asmResource[xsi_type='nodeRes']>label[lang='#lang#']:contains(";
+//jqueryBatchSpecificFunctions['.nodeCodeContains('] = "asmResource[xsi_type='nodeRes']>code:contains(";
+//jqueryBatchSpecificFunctions['.resourceFilenameContains('] = "asmResource[xsi_type!='context'][xsi_type!='nodeRes']>filename[lang='#lang#']:contains(";
 
 
 //==================================
@@ -47,52 +47,57 @@ function initBatchVars()
 function replaceBatchVariable(text,node,withquote)
 //==================================
 {
-	if (withquote==null)
-		withquote = true;
-	if (text!=undefined && text.indexOf('lastimported')>-1) {
-		text = text.replaceAll('###lastimported-1###',"g_importednodestack[g_importednodestack.length-2]");
-		text = text.replaceAll('###lastimported-2###',"g_importednodestack[g_importednodestack.length-3]");
-		text = text.replaceAll('###lastimported###',"g_importednodestack[g_importednodestack.length-1]");
-	}
-	if (node!=null && node!=undefined && withquote && text.indexOf('###parentnode###')>-1)
-		text = text.replaceAll('###parentnode###',"'"+$(node).parent().attr('id')+"'");
-	if (node!=null && node!=undefined && withquote && text.indexOf('###currentnode###')>-1)
-		text = text.replaceAll('###currentnode###',"'"+node.id+"'");
-	if (node!=null && node!=undefined && withquote && text.indexOf('###currentcode###')>-1)
-		text = text.replaceAll('###currentcode###',node.getCode());
-	if (node!=null && node!=undefined && !withquote && text.indexOf('###currentnode###')>-1)
-		text = text.replaceAll('###currentnode###',node.id);
-	if (node!=null && node!=undefined && !withquote && text.indexOf('###currentcode###')>-1)
-		text = text.replaceAll('###currentcode###',node.getCode());
-	var n=0;
-	while (text!=undefined && text.indexOf("{###")>-1 && n<100) {
-		var test_string = text.substring(text.indexOf("{###")+4); // test_string = abcd{###variable###}efgh.....
-		var variable_name = test_string.substring(0,test_string.indexOf("###}"));
-		if (g_variables[variable_name]!=undefined)
-			text = text.replace("###"+variable_name+"###", g_variables[variable_name]);
-		else if (eval("g_json."+variable_name)!=undefined)
-			text = text.replace("###"+variable_name+"###", eval("g_json."+variable_name));
-		else if (eval("g_json.lines["+g_noline+"]."+variable_name)!=undefined)
-			text = text.replace("###"+variable_name+"###", eval("g_json.lines["+g_noline+"]."+variable_name));
-		n++; // to avoid infinite loop
-	}
-	while (text!=undefined && text.indexOf("###")>-1 && n<100) {
-		var test_string = text.substring(text.indexOf("###")+3); // test_string = abcd###variable###efgh.....
-		var variable_name = test_string.substring(0,test_string.indexOf("###"));
-		if (g_variables[variable_name]!=undefined)
-			text = text.replace("###"+variable_name+"###", g_variables[variable_name]);
-		else if (eval("g_json."+variable_name)!=undefined)
-			text = text.replace("###"+variable_name+"###", eval("g_json."+variable_name));
-		else if (eval("g_json.lines["+g_noline+"]."+variable_name)!=undefined)
-			text = text.replace("###"+variable_name+"###", eval("g_json.lines["+g_noline+"]."+variable_name));
-		if (text.indexOf("[")>-1) {
-			var variable_value = variable_name.substring(0,variable_name.indexOf("["))
-			var i = text.substring(text.indexOf("[")+1,text.indexOf("]"));
-			i = replaceVariable(i);
-			if (g_variables[variable_value]!=undefined && g_variables[variable_value].length>=i)
-				text = g_variables[variable_value][i];
+	if (test.indexOf("#lang#")>-1)
+		test = test.replace(/#lang#/g,languages[LANGCODE]);
+	if (text!=undefined && text.indexOf("###")>-1) {
+		if (withquote==null)
+			withquote = true;
+		if (text!=undefined && text.indexOf('lastimported')>-1) {
+			text = text.replaceAll('###lastimported-1###',"g_importednodestack[g_importednodestack.length-2]");
+			text = text.replaceAll('###lastimported-2###',"g_importednodestack[g_importednodestack.length-3]");
+			text = text.replaceAll('###lastimported###',"g_importednodestack[g_importednodestack.length-1]");
 		}
-		n++; // to avoid infinite loop
+		if (node!=null && node!=undefined && withquote && text.indexOf('###parentnode###')>-1)
+			text = text.replaceAll('###parentnode###',"'"+$(node).parent().attr('id')+"'");
+		if (node!=null && node!=undefined && withquote && text.indexOf('###currentnode###')>-1)
+			text = text.replaceAll('###currentnode###',"'"+node.id+"'");
+		if (node!=null && node!=undefined && withquote && text.indexOf('###currentcode###')>-1)
+			text = text.replaceAll('###currentcode###',node.getCode());
+		if (node!=null && node!=undefined && !withquote && text.indexOf('###currentnode###')>-1)
+			text = text.replaceAll('###currentnode###',node.id);
+		if (node!=null && node!=undefined && !withquote && text.indexOf('###currentcode###')>-1)
+			text = text.replaceAll('###currentcode###',node.getCode());
+		var n = 0;
+		while (text!=undefined && text.indexOf("{###")>-1 && n<100) {
+			var test_string = text.substring(text.indexOf("{###")+4); // test_string = abcd{###variable###}efgh.....
+			var variable_name = test_string.substring(0,test_string.indexOf("###}"));
+			if (g_variables[variable_name]!=undefined)
+				text = text.replace("###"+variable_name+"###", g_variables[variable_name]);
+			else if (eval("g_json."+variable_name)!=undefined)
+				text = text.replace("###"+variable_name+"###", eval("g_json."+variable_name));
+			else if (eval("g_json.lines["+g_noline+"]."+variable_name)!=undefined)
+				text = text.replace("###"+variable_name+"###", eval("g_json.lines["+g_noline+"]."+variable_name));
+			n++; // to avoid infinite loop
+		}
+		n = 0
+		while (text!=undefined && text.indexOf("###")>-1 && n<100) {
+			var test_string = text.substring(text.indexOf("###")+3); // test_string = abcd###variable###efgh.....
+			var variable_name = test_string.substring(0,test_string.indexOf("###"));
+			if (g_variables[variable_name]!=undefined)
+				text = text.replace("###"+variable_name+"###", g_variables[variable_name]);
+			else if (eval("g_json."+variable_name)!=undefined)
+				text = text.replace("###"+variable_name+"###", eval("g_json."+variable_name));
+			else if (eval("g_json.lines["+g_noline+"]."+variable_name)!=undefined)
+				text = text.replace("###"+variable_name+"###", eval("g_json.lines["+g_noline+"]."+variable_name));
+			if (text.indexOf("[")>-1) {
+				var variable_value = variable_name.substring(0,variable_name.indexOf("["))
+				var i = text.substring(text.indexOf("[")+1,text.indexOf("]"));
+				i = replaceVariable(i);
+				if (g_variables[variable_value]!=undefined && g_variables[variable_value].length>=i)
+					text = g_variables[variable_value][i];
+			}
+			n++; // to avoid infinite loop
+		}
 	}
 	return text;
 }
@@ -363,7 +368,7 @@ function getTargetNodes(node,data,teststr)
 	let test = $(node).attr(teststr);
 	if (test!=undefined && test!="" && nodes.length>0) {
 		test = replaceBatchVariable(test);
-		test=getTest(test);
+//		test=getTest(test);
 		for (let i=0;i<nodes.length;i++){
 			let nodeid = $(nodes[i]).attr("id");
 			$.ajax({
@@ -414,7 +419,7 @@ function getSourceNodes(node,data,teststr)
 	let test = $(node).attr(teststr);
 	if (test!=undefined) {
 		test = replaceBatchVariable(test);
-		test=getTest(test);
+//		test=getTest(test);
 		for (let i=0;i<nodes.length;i++){
 			let nodeid = $(nodes[i]).attr("id");
 			$.ajax({
@@ -3318,7 +3323,8 @@ g_actions['batch-variable'] = function (node)
 	var test = $(node).attr("test");
 	if (test!=undefined) {
 		test = replaceVariable(test);
-		test = replaceBatchVariable(getTest(test),node);
+//		test = getTest(test);
+		test = replaceBatchVariable(test,node);
 	}
 	//------------------------------------
 	var source = $("source",node).text();
@@ -3456,7 +3462,8 @@ g_actions['for-each-node'] = function (node)
 	var test = $(node).attr("test");
 	if (test!=undefined) {
 		test = replaceVariable(test);
-		test = replaceBatchVariable(getTest(test),node);
+//		test = getTest(test);
+		test = replaceBatchVariable(test,node);
 	}
 	//------------------------------------
 	var source = $(node).attr("source");
@@ -4109,7 +4116,6 @@ function updateNodeResource(nodes,node)
 	}
 }
 
-
 //==================================
 g_actions['fen-batch-variable'] = function (node,data)
 //==================================
@@ -4122,7 +4128,8 @@ g_actions['fen-batch-variable'] = function (node,data)
 	var test = $(node).attr("test");
 	if (test!=undefined) {
 		test = replaceVariable(test);
-		test = replaceBatchVariable(getTest(test),node);
+//		test = getTest(test);
+		test = replaceBatchVariable(test,node);
 	}
 	//------------------------------------
 	var semtag = $(node).attr("semtag");
@@ -4176,80 +4183,6 @@ g_actions['fen-batch-variable'] = function (node,data)
 }
 
 //=================================================
-g_actions['fen-update-resource'] = function updateResource(node,data)
-//=================================================
-{
-	var ok = 0;
-	var type = $(node).attr("type");
-	var attributes = $("attribute",node)
-	var semtag = $(node).attr("semtag");
-	//----------Test --------
-	var test = $(node).attr("test");
-	if (test!=undefined) {
-		test = replaceBatchVariable(test);
-		test=getTest(test);
-	}
-	var filter_semtag = $(node).attr("filter-semtag");
-	var filter_test = $(node).attr("filter-test");
-	if (filter_test!=undefined) {
-		filter_test = replaceBatchVariable(filter_test);
-		filter_test=getTest(filter_test);
-	}
-	//--------------------------------
-	let nodes = $("*:has(>metadata[semantictag*='"+semtag+"'])",data).addBack("*:has(>metadata[semantictag*='"+semtag+"'])");
-	//-------------------
-	if (nodes.length>0){
-		for (var i=0; i<nodes.length; i++){
-			//-------------------
-			var nodeid = $(nodes[i]).attr('id');
-			var resource = $("asmResource[xsi_type='"+type+"']",nodes[i]);
-			for (var j=0; j<attributes.length; j++){
-				var attribute_name = $(attributes[j]).attr("name");
-				var language_dependent = $(attributes[j]).attr("language-dependent");
-				var replace_variable = $(attributes[j]).attr("replace-variable");
-				var attribute_value = "";
-				if (replace_variable=='Y')
-					attribute_value = getTxtvals($("attribute[name='"+attribute_name+"']",node));
-				else
-					attribute_value = getTxtvalsWithoutReplacement($("attribute[name='"+attribute_name+"']",node));
-				if (language_dependent=='Y')
-					if ($("metadata",nodes[i]).attr("multilingual-resource")=="Y") {
-						$(attribute_name+"[lang='"+LANG+"']",resource).text(attribute_value);
-					} else {
-						for (var langcode=0; langcode<languages.length; langcode++) {
-							$(attribute_name+"[lang='"+languages[langcode]+"']",resource).text(attribute_value);
-						}
-					}
-				else
-					$(attribute_name,resource).text(attribute_value);
-			}
-			var data = "<asmResource xsi_type='"+type+"'>" + $(resource).html() + "</asmResource>";
-			var strippeddata = data.replace(/xmlns=\"http:\/\/www.w3.org\/1999\/xhtml\"/g,"");  // remove xmlns attribute
-			//-------------------
-			$.ajax({
-				async : false,
-				type : "PUT",
-				contentType: "application/xml",
-				dataType : "text",
-				data : strippeddata,
-				url : serverBCK_API+"/resources/resource/" + nodeid,
-				success : function(data) {
-					ok++;
-					$("#batch-log").append("<br>- resource updated "+type+" - "+semtag+" - "+attribute_value);
-				},
-				error : function(data) {
-					$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in update resource "+type+" - "+semtag+":"+attribute_value);
-				}
-			});
-			//-------------------
-		}
-	} else {
-		$("#batch-log").append("<br>- ***NOT FOUND <span class='danger'>ERROR - fen-update-resource "+type+"</span>");
-	}
-	return (ok!=0 && ok == nodes.length);
-}
-
-//=================================================
 g_actions['fen-move-node'] = function (node,data)
 //=================================================
 {
@@ -4258,7 +4191,8 @@ g_actions['fen-move-node'] = function (node,data)
 	var source_test = $(node).attr("source-test");
 	if (source_test!=undefined) {
 		source_test = replaceVariable(source_test);
-		source_test = replaceBatchVariable(getTest(source_test),node);
+//		source_test = getTest(source_test);
+		source_test = replaceBatchVariable(test,node);
 	}
 	//------------------------------------
 	var source = $(node).attr("source");
@@ -4266,7 +4200,8 @@ g_actions['fen-move-node'] = function (node,data)
 	var target_test = $(node).attr("target-test");
 	if (target_test!=undefined) {
 		target_test = replaceVariable(target_test);
-		target_test = replaceBatchVariable(getTest(target_test),node);
+//		target_test = getTest(target_test);
+		target_test = replaceBatchVariable(test,node);
 	}
 	//------------------------------------
 	var target = $(node).attr("target");

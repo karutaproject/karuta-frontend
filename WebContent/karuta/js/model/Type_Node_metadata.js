@@ -604,6 +604,9 @@ UIFactory["Node"].prototype.displayMetadataAttributesEditor = function(destid)
 		this.displayMetadataAttributeEditor('metadata-part2','reloadpage',true);
 		this.displayMetadataWadAttributeEditor('metadata-part2','seltype');
 	}
+	if (resource_type=='Get_Proxy') {
+		this.displayMetadataWadAttributeEditor('metadata-part2','seltype2');
+	}
 	//----------------------Edit Box Title----------------------------
 		html  = "<label>"+karutaStr[languages[langcode]]['editboxtitle']+"</label>";
 		$("#metadata_texts").append($(html));
@@ -1086,9 +1089,12 @@ UIFactory["Node"].prototype.displayMetadataWadAttributeEditor = function(destid,
 		if (value=='Y')
 			html+= " checked ";
 		html+= "></div>";
-	}
-	else if (attribute.indexOf('seltype')>-1){
+	} else if (attribute.indexOf('seltype')>-1){		
 		var choices = [{code:'select',label:'Select'},{code:'radio',label:'Radio'},{code:'click',label:'Click'},{code:'completion',label:'Auto-complete'}];
+		if (attribute.indexOf('seltype2')>-1) {
+			attribute = "seltype";
+			choices = [{code:'select',label:'Select'},{code:'completion',label:'Auto-complete'}];
+	}	
 		html += "<div class='input-group '>";
 		html += "	<div class='input-group-prepend' style='margin-right:5px'>";
 		html += "		<span class='input-group-text' id='"+attribute+this.id+"'>"+karutaStr[languages[langcode]][attribute]+"</span>";

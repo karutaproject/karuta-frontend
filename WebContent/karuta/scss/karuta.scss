@@ -1915,6 +1915,25 @@
 	.td3 {
 		width:30%;
 	}
+
+/* ========================= */
+/*     VUE  COMPACT           */
+/* ========================= */
+	
+	.standard-resource-compact {
+		.td2 {
+			width:90%;
+		}
+		.td3 {
+			width:10%;
+			cursor:pointer;
+		}
+		.dropdown-item:hover {
+			background-color:var(--portfolio-menu-background-color) !important;
+		}
+	}
+
+
 /* ====================== */
 /*         MODEL          */
 /* ====================== */	

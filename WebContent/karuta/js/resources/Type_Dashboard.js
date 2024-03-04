@@ -163,7 +163,8 @@ UIFactory["Dashboard"].prototype.displayView = function(dest,langcode)
 	}
 	var csv_roles = $(UICom.structure.ui[uuid].resource.csv_node).text();
 	if (csv_roles.indexOf('all')>-1 || csv_roles.containsArrayElt(g_userroles) || (csv_roles!='' && (g_userroles[0]=='designer' || USER.admin))) {
-		$("#extra_button_"+uuid).append($("<div class='csv-button button' onclick=\"javascript:xml2CSV('dashboard_"+uuid+"')\">CSV</div>"));				
+		const button = "<span class='button fas fa-file-csv' onclick=\"javascript:xml2CSV('dashboard_"+uuid+"')\")\" data-title='CSV' data-toggle='tooltip' data-placement='bottom'></span>";
+		$("#extra_button_"+uuid).append(button);
 	}
 	var pdf_roles = $(UICom.structure.ui[uuid].resource.pdf_node).text();
 	if (pdf_roles.indexOf('all')>-1 || pdf_roles.containsArrayElt(g_userroles) || (pdf_roles!='' && (g_userroles[0]=='designer' || USER.admin))) {

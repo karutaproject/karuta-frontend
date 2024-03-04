@@ -1783,6 +1783,20 @@ table[name=res-div] {
   width: 30%;
 }
 
+/* ========================= */
+/*     VUE  COMPACT           */
+/* ========================= */
+.standard-resource-compact .td2 {
+  width: 90%;
+}
+.standard-resource-compact .td3 {
+  width: 10%;
+  cursor: pointer;
+}
+.standard-resource-compact .dropdown-item:hover {
+  background-color: var(--portfolio-menu-background-color) !important;
+}
+
 /* ====================== */
 /*         MODEL          */
 /* ====================== */
