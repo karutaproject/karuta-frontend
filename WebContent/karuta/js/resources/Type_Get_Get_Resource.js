@@ -294,7 +294,7 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 				semtag_parent = elts[removestar];
 			}
 			// ------- search for parent ----
-			if (query.indexOf('itselfcode')>-1) {
+			if (query.indexOf('itselfcode')>-1 || query.indexOf('itself')>-1) {
 				code_parent = $($("code",$(this.node)[0])[0]).text();
 				value_parent = $($("value",$(this.node)[0])[0]).text();
 			} else if (query.indexOf('parent.parent.parent.parent.parent.parentcode')>-1) {

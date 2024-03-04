@@ -1467,7 +1467,7 @@ g_report_actions['for-each-portfolio'] = function (destid,action,no,data)
 				}
 				//------------------------------------
 			}
-			if (NBELT!="" && NOELT!="")
+			if (NBELT!=undefined && NBELT!="" && NOELT!=undefined && NOELT!="")
 				prevnextbuttons(dashboard_current,first,last,portfolioids.length,NOELT,NBELT);
 		}
 	});
@@ -1487,7 +1487,7 @@ g_report_actions['for-each-portfolio-js'] = function (destid,action,no,data)
 	//----------------------------------
 	var first = 0;
 	var last = portfolioids.length;
-	if (NBELT!="" && NOELT!="") {
+	if (NBELT!=undefined && NBELT!="" && NOELT!=undefined && NOELT!="") {
 		first = parseInt(NOELT);
 		last = (parseInt(NOELT)+parseInt(NBELT)<portfolioids.length)? parseInt(NOELT)+parseInt(NBELT):portfolioids.length;
 	}
@@ -1528,7 +1528,7 @@ g_report_actions['for-each-portfolio-js'] = function (destid,action,no,data)
 			}
 		});
 	}
-	if (NBELT!="" && NOELT!="")
+	if(NBELT!=undefined && NBELT!="" && NOELT!=undefined && NOELT!="")
 		prevnextbuttons(dashboard_current,first,last,portfolioids.length,NOELT,NBELT);
 }
 
@@ -3089,7 +3089,7 @@ g_report_actions['for-each-vector'] = function (destid,action,no,data)
 	//----------------------------------
 	var first = 0;
 	var last = vectors.length;
-	if (NBELT!="" && NOELT!="") {
+	if (NBELT!=undefined && NBELT!="" && NOELT!=undefined && NOELT!="") {
 		first = parseInt(NOELT);
 		last = (parseInt(NOELT)+parseInt(NBELT)<vectors.length)? parseInt(NOELT)+parseInt(NBELT):vectors.length;
 	}
@@ -3118,6 +3118,6 @@ g_report_actions['for-each-vector'] = function (destid,action,no,data)
 		let a10 = $("a10",vectors[j]).text();
 		eval(display);
 	}
-	if (NBELT!="" && NOELT!="")
+	if (NBELT!=undefined && NBELT!="" && NOELT!=undefined && NOELT!="")
 		prevnextbuttons(dashboard_current,first,last,portfolioids.length,NOELT,NBELT);
 }
