@@ -2654,7 +2654,7 @@ function drawAxis(destid,label,fontname,fontsize,angle,center,axislength){
 			y-= svgfontsize * 2;
 	}
 		
-	var text = makeSVG('foreignObject',{'x':x,'y':y,'width':width,'height':height,'font-size':fontsize,'font-family':fontname},label);	
+	var text = makeSVG('foreignObject',{'x':x,'y':y,'width':width,'height':height,'font-size':fontsize,'font-family':fontname,'class':'axis-label'},label);	
 	document.getElementById(destid).appendChild(text);
 	//-----------------
 }
@@ -2676,7 +2676,7 @@ function drawGraduationLabel(destid,no,min,max,angle,center,cssclass){
 	var delta = Math.abs(max-min);
 	var x = center.x-(svgaxislength/delta*no);
 	var point = svgrotate(center, x, center.y+20, angle);
-	var text = makeSVG('text',{'x':point.x,'y':point.y,'font-size':svgfontsize,'font-family':svgfontname},(max>min)?no+min:min-no);
+	var text = makeSVG('text',{'x':point.x,'y':point.y,'font-size':svgfontsize,'font-family':svgfontname,'class':'graduation-label'},(max>min)?no+min:min-no);
 	document.getElementById(destid).appendChild(text);
 }
 
@@ -2803,7 +2803,7 @@ g_report_actions['draw-web-title'] = function (destid,action,no,data)
 		select = replaceVariable(select);
 		var text = getResText(data,select)[0];
 		var size = getTextSize(destid,text+txt,fontsize,svgfontname)
-		var svgtext = makeSVG('text',{'x':1100-size,'y':40,'font-size':fontsize,'font-family':svgfontname},text+txt);
+		var svgtext = makeSVG('text',{'x':1100-size,'y':40,'font-size':fontsize,'font-family':svgfontname,'class':'web-title'},text+txt);
 		document.getElementById(destid).appendChild(svgtext);
 	}
 }
@@ -2864,7 +2864,7 @@ g_report_actions['draw-web-line'] = function (destid,action,no,data)
 			var text = getResText(data,legendselect)[0];
 			var line = makeSVG('line',{'x1':10,'y1':975-20*pos,'x2':10,'y2':975-20*pos,'class':'svg-web-value'+pos});
 			document.getElementById(destid).appendChild(line);
-			var svgtext = makeSVG('text',{'x':20,'y':980-20*pos,'font-size':svgfontsize,'font-family':svgfontname},text);
+			var svgtext = makeSVG('text',{'x':20,'y':980-20*pos,'font-size':svgfontsize,'font-family':svgfontname,'class':'points-legend'},text);
 			document.getElementById(destid).appendChild(svgtext);
 		}
 
@@ -2913,7 +2913,7 @@ g_report_actions['draw-xy-axis'] = function (destid,action,no,data)
 			// x graduation label
 			if (xdisplaygraduation=='1') {
 				var label = (xmax - xmin) / xnbgraduation * j ;
-				var text = makeSVG('text',{'x':x,'y':1100-yaxis+25,'font-size':svgfontsize,'font-family':svgfontname},label);
+				var text = makeSVG('text',{'x':x,'y':1100-yaxis+25,'font-size':svgfontsize,'font-family':svgfontname,'class':'x-graduation-label'},label);
 				document.getElementById(destid).appendChild(text);
 			}
 		}
@@ -2921,7 +2921,7 @@ g_report_actions['draw-xy-axis'] = function (destid,action,no,data)
 	// x legend
 	if (xlegendtext!=""){
 		var size = getTextSize(destid,xlegendtext,svgfontsize,svgfontname);
-		var text = makeSVG('text',{'x':1100-size,'y':1100-yaxis+75,'font-size':svgfontsize+4,'font-family':svgfontname},xlegendtext);
+		var text = makeSVG('text',{'x':1100-size,'y':1100-yaxis+75,'font-size':svgfontsize+4,'font-family':svgfontname,'class':'x-legend'},xlegendtext);
 		document.getElementById(destid).appendChild(text);
 	}
 	// y axis
@@ -2936,13 +2936,13 @@ g_report_actions['draw-xy-axis'] = function (destid,action,no,data)
 			// y graduation label
 			if (ydisplaygraduation=='1') {
 				var label = (ymax - ymin) / ynbgraduation * j ;
-				var text = makeSVG('text',{'x':100+xaxis-25,'y':y,'font-size':svgfontsize,'font-family':svgfontname},label);
+				var text = makeSVG('text',{'x':100+xaxis-25,'y':y,'font-size':svgfontsize,'font-family':svgfontname,'class':'y-graduation-label'},label);
 				document.getElementById(destid).appendChild(text);
 			}
 		}
 	}
 	if (ylegendtext!=""){
-		var text = makeSVG('text',{'x':50+xaxis,'y':75,'font-size':svgfontsize+4,'font-family':svgfontname},ylegendtext);
+		var text = makeSVG('text',{'x':50+xaxis,'y':75,'font-size':svgfontsize+4,'font-family':svgfontname,'class':'y-legend'},ylegendtext);
 		document.getElementById(destid).appendChild(text);
 	}
 
@@ -3020,9 +3020,10 @@ g_report_actions['draw-data'] = function (destid,action,no,data)
 				}
 			}
 //			for (let i=0; i<texts.length;i++){
-				var line = makeSVG('line',{'x1':100,'y1':1140+25*nbdata,'x2':100,'y2':1140+25*nbdata,'class':'svg-web-value'+nbdata});
+				
+				var line = makeSVG('line',{'x1':100,'y1':1150+(svgfontsize+10)*nbdata,'x2':100,'y2':1140+(svgfontsize+10)*nbdata,'class':'svg-web-value'+nbdata});
 				document.getElementById(destid).appendChild(line);
-				var svgtext = makeSVG('text',{'x':120,'y':1145+25*nbdata,'font-size':svgfontsize,'font-family':svgfontname},texts[0]);
+				var svgtext = makeSVG('text',{'x':120,'y':1155+(svgfontsize+10)*nbdata,'font-size':svgfontsize,'font-family':svgfontname,'class':'data-legend'},texts[0]);
 				document.getElementById(destid).appendChild(svgtext);
 //			}
 		}
@@ -3041,7 +3042,7 @@ g_report_actions['draw-data'] = function (destid,action,no,data)
 			for (let i=0; i<texts.length;i++){
 				var x = 100+xaxis + (20*nbdata) + (1000-xaxis) / xnbgraduation * (i+1) ;
 				var y = 1120 ;
-				var svgtext = makeSVG('text',{'x':x,'y':y,'transform':"rotate(45 "+x+" "+y+")",'font-size':svgfontsize,'font-family':svgfontname},texts[i]);
+				var svgtext = makeSVG('text',{'x':x,'y':y,'transform':"rotate(45 "+x+" "+y+")",'font-size':svgfontsize,'font-family':svgfontname,'class':'x-graduation-label'},texts[i]);
 				document.getElementById(destid).appendChild(svgtext);
 			}
 		}
@@ -3060,7 +3061,7 @@ g_report_actions['draw-data'] = function (destid,action,no,data)
 			for (let i=0; i<texts.length;i++){
 				var x = 20;
 				var y = 1105 - yaxis - (1000-yaxis) / ynbgraduation * (i+1) ;
-				var svgtext = makeSVG('text',{'x':x,'y':y,'font-size':svgfontsize,'font-family':svgfontname},texts[i]);
+				var svgtext = makeSVG('text',{'x':x,'y':y,'font-size':svgfontsize,'font-family':svgfontname,'class':'y-graduation-label'},texts[i]);
 				document.getElementById(destid).appendChild(svgtext);
 			}
 		}
