@@ -233,12 +233,20 @@ UIFactory["URL2Portfolio"].parse = function(destid,type,langcode,data,self,disab
 
 	//------------------------------------------------------------
 	if (type=='select') {
-		var html = "<div class='btn-group'>";
-		html += "	<button type='button' class='btn select selected-label' id='button_"+self.id+"'>&nbsp;</button>";
-		html += "	<button type='button' class='btn dropdown-toggle dropdown-toggle-split ' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'></button>";
+		var html ="";
+		html += "<form autocomplete='off'>";
+		html += "</form>";
+		var form = $(html);
+		html = "";
+		html += "<div class='auto-complete btn-group'>";
+		html += "<input id='button_"+langcode+self.id+"' type='text' class='btn btn-default select' code= '' value=''/>";
+		html += "<button type='button' class='btn btn-default dropdown-toggle select' data-toggle='dropdown' aria-expanded='false'><span class='caret'></span><span class='sr-only'>&nbsp;</span></button>";
 		html += "</div>";
 		var btn_group = $(html);
-		$("#"+destid).append($(btn_group));
+		$(form).append($(btn_group));
+		$("#"+destid).append(form);
+		//---------------------------------------------------
+		//----------------------
 		html = "<div class='dropdown-menu dropdown-menu-right'></div>";
 		var select  = $(html);
 		if (resettable) { //----------------- null value to erase
@@ -251,12 +259,16 @@ UIFactory["URL2Portfolio"].parse = function(destid,type,langcode,data,self,disab
 		}
 		var select_item_a = $(html);
 		$(select_item_a).click(function (ev){
-			$("#button_"+self.id).html($(this).attr("label_"+languages[langcode]));
+//			$("#button_"+self.id).html($(this).attr("label_"+languages[langcode]));
+			$("#button_"+langcode+self.id).html($(this).attr("label_"+languages[langcode]));
+			$("#button_"+langcode+self.id).attr("value",$(this).attr("label_"+languages[langcode]));
+			$("#button_"+langcode+self.id).attr("code",$(this).attr("code"));
 			$("#button_"+self.id).attr('class', 'btn btn-default select select-label');
 			UIFactory["URL2Portfolio"].update(this,self,langcode);
 		});
 		$(select).append($(select_item_a));
 		//---------------------
+		let tableau2 = new Array();
 		if (target=='label') {
 			var items = $("portfolio",data);
 			for ( var i = 0; i < items.length; i++) {
@@ -266,6 +278,7 @@ UIFactory["URL2Portfolio"].parse = function(destid,type,langcode,data,self,disab
 				for (var j=0; j<languages.length;j++){
 					label[j] = $("label[lang="+languages[j]+"]",$("asmRoot>asmResource[xsi_type='nodeRes']",items[i])).text();
 				}
+				tableau2[tableau2.length] = {'code':code,'libelle':label[langcode]};
 				html = "<a class='dropdown-item' value='"+uuid+"' code='"+code+"' ";
 				for (var j=0; j<languages.length;j++){
 					html += "label_"+languages[j]+"=\""+label[j]+"\" ";
@@ -274,20 +287,23 @@ UIFactory["URL2Portfolio"].parse = function(destid,type,langcode,data,self,disab
 				html += "<div class='li-code'>"+code+"</div> <span class='li-label'>"+label[langcode]+"</span></a>";
 				var select_item_a = $(html);
 				$(select_item_a).click(function (ev){
-					$("#button_"+self.id).html($(this).attr("label_"+languages[langcode]));
+					$("#button_"+langcode+self.id).html($(this).attr("label_"+languages[langcode]));
+					$("#button_"+langcode+self.id).attr("value",$(this).attr("label_"+languages[langcode]));
 					UIFactory["URL2Portfolio"].update(this,self,langcode);
 				});
 				$(select).append($(select_item_a));
 				//-------------- update button -----
 				if (code!="" && self_code==uuid) {
-					$("#button_"+self.id).html(label[langcode]);
-					$("#button_"+self.id).attr('class', 'btn btn-default select select-label').addClass("sel"+code);
+					$("#button_"+langcode+self.id).html(label[langcode]);
+					$("#button_"+langcode+self.id).attr("value",label[langcode]);
+					$("#button_"+langcode+self.id).attr('class', 'btn btn-default select select-label');
 				}
 			}
 		}
 		//---------------------
 		$(btn_group).append($(select));
-		
+		var onupdate = "UIFactory.URL2Portfolio.update(input,self)";
+		autocomplete(document.getElementById("button_"+langcode+self.id), tableau2,onupdate,self,langcode);
 	}
 };
 
@@ -391,6 +407,7 @@ UIFactory["URL2Portfolio"].bringUpToDate = function(portfolioid)
 	});
 	$("#wait-window").modal("hide");
 }
+
 //==================================
 UIFactory["URL2Portfolio"].testIfURL2Portfolio = function(data)
 //==================================
