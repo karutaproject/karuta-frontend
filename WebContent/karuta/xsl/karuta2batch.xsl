@@ -1331,7 +1331,7 @@
 	<!-- ====================================================================================== -->
 	<!-- ====================================================================================== -->
 
-	<xsl:template name="get-select">
+	<xsl:template name="get-select-OLD">
 		<xsl:param name="parent"/>
 		<xsl:variable name="select"><xsl:value-of select=".//*[metadata/@semantictag=$parent]//asmContext[metadata/@semantictag='select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of></xsl:variable>
 		<xsl:variable name="ref-id"><xsl:value-of select=".//*[metadata/@semantictag=$parent]//asmContext[metadata/@semantictag='tree-select']/asmResource[@xsi_type='Get_Resource']/label[@lang=$lang]"></xsl:value-of></xsl:variable>
@@ -1376,6 +1376,65 @@
 			</xsl:when>
 			<xsl:otherwise>
 				<xsl:value-of select='$select'/>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+
+	<!-- ====================================================================================== -->
+	<!-- ====================================================================================== -->
+	<!-- ================================ get-select2 ========================================== -->
+	<!-- ====================================================================================== -->
+	<!-- ====================================================================================== -->
+
+	<xsl:template name="get-select">
+		<xsl:param name="parent"/>
+		<xsl:variable name="select"><xsl:value-of select="./*[metadata/@semantictag=$parent]//asmContext[metadata/@semantictag='select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of></xsl:variable>
+		<xsl:variable name="ref-id"><xsl:value-of select="./*[metadata/@semantictag=$parent]//asmContext[metadata/@semantictag='tree-select']/asmResource[@xsi_type='Get_Resource']/label[@lang=$lang]"></xsl:value-of></xsl:variable>
+		<xsl:variable name="portfoliocode">#<xsl:value-of select="./*[metadata/@semantictag=$parent]//asmContext[metadata/@semantictag='portfoliocode']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of></xsl:variable>
+		<xsl:variable name="semtag"><xsl:value-of select="./*[metadata/@semantictag=$parent]//asmContext[metadata/@semantictag='node-semtag']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of></xsl:variable>
+		<xsl:variable name="varname"><xsl:value-of select="./*[metadata/@semantictag=$parent]//asmContext[metadata/@semantictag='variable-name']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of></xsl:variable>
+		<xsl:variable name="uuid"><xsl:value-of select="./*[metadata/@semantictag=$parent]//asmContext[metadata/@semantictag='uuid']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of></xsl:variable>
+		<!-- for backward compatibility -->
+		<xsl:variable name="old-select"><!--xsl:value-of select=".//asmContext[metadata/@semantictag='select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of--></xsl:variable>
+		<xsl:variable name="old-tree-select"><!--xsl:value-of select=".//asmContext[metadata/@semantictag='tree-select']/asmResource[@xsi_type='Get_Resource']/label[@lang=$lang]"></xsl:value-of--></xsl:variable>
+		<!-- ==================================== -->
+		 <!--===parent:<xsl:value-of select='$parent'/>===old-tree-select:<xsl:value-of select='$old-tree-select'/>===old-select:<xsl:value-of select='$old-select'/>===uuid:<xsl:value-of select='$uuid'/>===select:<xsl:value-of select='$select'/>===ref-id:<xsl:value-of select='$ref-id'/>===portfoliocode:<xsl:value-of select='$portfoliocode'/>===semtag:<xsl:value-of select='$semtag'/>=== -->
+		<xsl:choose>
+			<xsl:when test="$select=''">
+				<xsl:choose>
+					<xsl:when test="$ref-id=''">
+						<xsl:choose>
+							<xsl:when test="$uuid=''">
+								<xsl:choose>
+									<xsl:when test="$portfoliocode!='#'">
+										<xsl:choose>
+											<xsl:when test="$semtag=''"><xsl:value-of select='$portfoliocode'/></xsl:when>
+											<xsl:when test="$semtag!=''"><xsl:value-of select='$portfoliocode'/>.<xsl:value-of select='$semtag'/></xsl:when>
+										</xsl:choose>
+									</xsl:when>
+									<xsl:when test="$old-select!=''"><xsl:value-of select='$old-select'/></xsl:when>
+									<xsl:when test="$old-tree-select!=''"><xsl:value-of select='$old-tree-select'/></xsl:when>
+									<xsl:when test="$semtag!=''"><xsl:value-of select='$semtag'/></xsl:when>
+									<xsl:otherwise></xsl:otherwise>
+								</xsl:choose>
+							</xsl:when>
+							<xsl:otherwise><xsl:value-of select='$uuid'/>.#uuid</xsl:otherwise>
+						</xsl:choose>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:choose>
+							<xsl:when test="$semtag=''"><xsl:value-of select='$ref-id'/>.<xsl:value-of select='$varname'/></xsl:when>
+							<xsl:otherwise><xsl:value-of select='$ref-id'/>.<xsl:value-of select='$semtag'/></xsl:otherwise>
+						</xsl:choose>
+					</xsl:otherwise>
+				</xsl:choose>
+			</xsl:when>
+			<xsl:otherwise>
+						<xsl:choose>
+							<xsl:when test="$semtag=''"><xsl:value-of select='$select'/></xsl:when>
+							<xsl:otherwise><xsl:value-of select='$select'/>.<xsl:value-of select='$semtag'/></xsl:otherwise>
+						</xsl:choose>
+				
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>

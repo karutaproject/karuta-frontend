@@ -47,8 +47,8 @@ function initBatchVars()
 function replaceBatchVariable(text,node,withquote)
 //==================================
 {
-	if (test.indexOf("#lang#")>-1)
-		test = test.replace(/#lang#/g,languages[LANGCODE]);
+	if (text!=undefined && text.indexOf("#lang#")>-1)
+		text = text.replace(/#lang#/g,languages[LANGCODE]);
 	if (text!=undefined && text.indexOf("###")>-1) {
 		if (withquote==null)
 			withquote = true;
@@ -3477,6 +3477,48 @@ g_actions['for-each-node'] = function (node)
 			nodeid = g_current_node_uuid;
 		else
 			nodeid = replaceVariable(b_replaceVariable(treeref)); // select = porfolio_uuid.#uuid
+		$.ajax({
+			async : false,
+			type : "GET",
+			dataType : "xml",
+			url : serverBCK_API+"/nodes/node/"+nodeid,
+			success : function(data) {
+				let nodes = [];
+				if (srce_semtag!=undefined) {
+					nodes = $("*:has(>metadata[semantictag='"+srce_semtag+"'])",data);
+				} else {
+					nodes.push(UICom.structure.ui[nodeid].nodeid);
+				}
+				let actions = $(node).children();
+				$("#batch-log").append("<br>Actions : ");
+				for (let j=0; j<actions.length;j++){
+					$("#batch-log").append($(actions[j])[0].tagName+" / ");
+				}
+				for (let i=0; i<nodes.length; i++){
+					const nodeid = $(nodes[i]).attr('id');
+					g_current_node_uuid = nodeid;
+					$.ajax({
+						async : false,
+						type : "GET",
+						dataType : "xml",
+						url : serverBCK_API+"/nodes/node/"+nodeid,
+						success : function(data) {
+							UICom.parseStructure(data,false);
+							for (let j=0; j<actions.length;j++){
+								var tagname = $(actions[j])[0].tagName;
+								g_actions[tagname](actions[j],data);
+							}
+						},
+						error : function(data) {
+							$("#batch-log").append("<br>- ***NOT FOUND <span class='danger'>ERROR - for-each-node "+srce_semtag+"</span>");
+						}
+					});
+				}
+			},
+			error : function(data) {
+				$("#batch-log").append("<br>- ***NOT FOUND <span class='danger'>ERROR - for-each-node "+srce_semtag+"</span>");
+			}
+		});
 	} else {
 		//------------  --------------------
 		var url = "";
@@ -3520,7 +3562,6 @@ g_actions['for-each-node'] = function (node)
 							$("#batch-log").append("<br>- ***NOT FOUND <span class='danger'>ERROR - for-each-node "+srce_semtag+"</span>");
 						}
 					});
-					
 				}
 			},
 			error : function() {
@@ -3692,7 +3733,7 @@ function getInputsLine(node)
 	for ( var j = 0; j < line_inputs.length; j++) {
 		let inputid = $(line_inputs[j]).attr('id');
 		let variable = UICom.structure.ui[inputid].getCode();
-		if (UICom.structure.ui[inputid].resource.type=="Get_Resource")
+		if (UICom.structure.ui[inputid].resource.type=="Get_Resource" || UICom.structure.ui[inputid].resource.type=="Get_Get_Resource")
 			json_line[variable] = replaceVariable(UICom.structure.ui[inputid].resource.getCode(null));
 	}
 	line_inputs = $("asmContext:has(>metadata[semantictag*='BatchFormInputLabelCode'])",node);

@@ -2,8 +2,8 @@
 var karuta_version = "@project.version@";
 var karuta_date = "@build.timestamp@";
 
-const karuta_version_eportfolium = "eportfolium-3.29.0";
-const karuta_date_eportfolium = "2024/03/02";
+const karuta_version_eportfolium = "eportfolium-3.30.0";
+const karuta_date_eportfolium = "2024/03/15";
 
 
 var karuta_backend_version = "?";
@@ -15,4 +15,5 @@ var karuta_fileserver_date = "?";
 // 3.27.0 new functionnality sharing with qrcode - 2024/03/02
 // 3.28.0 new functionnality fontsizes added in svg report - 2024/03/02
 // 3.29.0 new functionnality URL2Portfolio autocompletion - 2024/03/09
+// 3.30.0 Batch for-each-node enhancement  - 2024/03/15
 
