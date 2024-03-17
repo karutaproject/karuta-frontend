@@ -24,12 +24,12 @@ var g_users = {};
 //-----------------------
 
 var jqueryBatchSpecificFunctions = {};
-//jqueryBatchSpecificFunctions['.resourceTextContains('] = "asmResource[xsi_type!='context'][xsi_type!='nodeRes']>text[lang='#lang#']:contains(";
-//jqueryBatchSpecificFunctions['.resourceCodeContains('] = "asmResource[xsi_type!='context'][xsi_type!='nodeRes']>code:contains(";
-//jqueryBatchSpecificFunctions['.resourceValueContains('] = "asmResource[xsi_type!='context'][xsi_type!='nodeRes']>value:contains(";
-//jqueryBatchSpecificFunctions['.nodeLabelContains('] = "asmResource[xsi_type='nodeRes']>label[lang='#lang#']:contains(";
-//jqueryBatchSpecificFunctions['.nodeCodeContains('] = "asmResource[xsi_type='nodeRes']>code:contains(";
-//jqueryBatchSpecificFunctions['.resourceFilenameContains('] = "asmResource[xsi_type!='context'][xsi_type!='nodeRes']>filename[lang='#lang#']:contains(";
+jqueryBatchSpecificFunctions['.resourceTextContains('] = "asmResource[xsi_type!='context'][xsi_type!='nodeRes']>text[lang='#lang#']:contains(";
+jqueryBatchSpecificFunctions['.resourceCodeContains('] = "asmResource[xsi_type!='context'][xsi_type!='nodeRes']>code:contains(";
+jqueryBatchSpecificFunctions['.resourceValueContains('] = "asmResource[xsi_type!='context'][xsi_type!='nodeRes']>value:contains(";
+jqueryBatchSpecificFunctions['.nodeLabelContains('] = "asmResource[xsi_type='nodeRes']>label[lang='#lang#']:contains(";
+jqueryBatchSpecificFunctions['.nodeCodeContains('] = "asmResource[xsi_type='nodeRes']>code:contains(";
+jqueryBatchSpecificFunctions['.resourceFilenameContains('] = "asmResource[xsi_type!='context'][xsi_type!='nodeRes']>filename[lang='#lang#']:contains(";
 
 
 //==================================
@@ -142,9 +142,9 @@ function getTxtvalsWithoutReplacement(node)
 			//---------- text ------
 			if (select.indexOf("//")>-1) {
 				if (select=="//today")
-					text = new Date().toLocaleString();
+					text = "@" + new Date().toLocaleString();
 				else if (select=="//today_milli")
-					text = Date.now();
+					text = "@" + Date.now();
 				else
 					text = eval("g_json."+select.substring(2));
 			} else if (select.indexOf("/")>-1) {
@@ -260,7 +260,7 @@ function getTargetUrl(node)
 	let url = "";
 	const select = $(node).attr("select");
 	const idx = select.lastIndexOf(".");
-	const treeref = select.substring(0,idx);
+	var treeref = select.substring(0,idx);
 	const semtag = replaceBatchVariable(replaceVariable(select.substring(idx+1)));
 	if (semtag=='#current_node')
 		url = serverBCK_API+"/nodes/node/"+g_current_node_uuid;
@@ -368,7 +368,8 @@ function getTargetNodes(node,data,teststr)
 	let test = $(node).attr(teststr);
 	if (test!=undefined && test!="" && nodes.length>0) {
 		test = replaceBatchVariable(test);
-//		test=getTest(test);
+		if (test.indexOf("'value':")<0)
+			test = getTest(test);
 		for (let i=0;i<nodes.length;i++){
 			let nodeid = $(nodes[i]).attr("id");
 			$.ajax({
@@ -390,11 +391,12 @@ function getTargetNodes(node,data,teststr)
 function getSourceNodes(node,data,teststr)
 //==================================
 {
+	let nodes = new Array();
 	var semtag = getSource(node);
 	semtag = replaceBatchVariable(replaceVariable(semtag));
 	//--------------------------
 	if (semtag=="#current_node" || data==undefined || data==null) {
-		let url = getSourceUrl(node);
+		let url = replaceBatchVariable(getSourceUrl(node));
 		$.ajax({
 			async : false,
 			type : "GET",
@@ -419,7 +421,8 @@ function getSourceNodes(node,data,teststr)
 	let test = $(node).attr(teststr);
 	if (test!=undefined) {
 		test = replaceBatchVariable(test);
-//		test=getTest(test);
+		if (test.indexOf("'value':")<0)
+			test = getTest(test);
 		for (let i=0;i<nodes.length;i++){
 			let nodeid = $(nodes[i]).attr("id");
 			$.ajax({
@@ -2810,12 +2813,19 @@ g_actions['import-node'] = function importNode(node,data)
 	else
 		srcecode = g_trees[srcecode][1];
 	let srcetag = replaceBatchVariable(replaceVariable(b_replaceVariable(source.substring(idx_source+1))));
+	//------------- Source -----------------------
+	const srce_nodes = getSourceNodes(node,data,"srce-test");
+	var srceid = $(srce_nodes[0]).attr('id');;
 	//-------------------- TARGET --------------------------------------
-	let nodes = getTargetNodes(node,data,"test")
+	let nodes = getTargetNodes(node,data,"dest-test")
 	if (nodes.length>0){
 		for (let i=0; i<nodes.length; i++){
 			destid = $(nodes[i]).attr('id');
-			let urlS = serverBCK_API+"/nodes/node/import/"+destid+"?srcetag="+srcetag+"&srcecode="+srcecode;
+			let urlS ="";
+			if (srceid!="")
+				urlS = serverBCK_API+"/nodes/node/import/"+destid+"?uuid="+srceid;
+			else
+				urlS = serverBCK_API+"/nodes/node/import/"+destid+"?srcetag="+srcetag+"&srcecode="+srcecode;
 			$.ajax({
 				async:false,
 				type : "POST",
@@ -3043,6 +3053,91 @@ g_actions['moveup-node'] = function moveupNode(node,data)
 		$("#batch-log").append("<br>- ***NOT FOUND <span class='danger'>ERROR</span>");
 	}
 	return (ok!=0 && ok == nodes.length);
+}
+
+//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
+//------------------------- Reload Node ---------------------------------
+//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
+
+//=================================================
+g_actions['reload-node'] = function (node,data)
+//=================================================
+{
+	var ok = 0;
+	let nodes = getTargetNodes(node,data,"test")
+	if (nodes.length>0){
+		for (i=0; i<nodes.length; i++){
+			const nodeid = $(nodes[i]).attr('id');
+			const parentid = $($(UICom.structure.ui[nodeid].node).parent()).attr('id');
+			$.ajax({
+				async: false,
+				type : "GET",
+				dataType : "xml",
+				url : serverBCK_API+"/nodes/node/" + nodeid,
+				parentid : parentid,
+				success : function(data) {
+					UICom.parseStructure(data,false,this.parentid);
+					$("#"+nodeid,g_portfolio_current).replaceWith($(":root",data));
+					ok++;
+					$("#batch-log").append("<br>- node reloaded - nodeid("+this.semtag+")");
+				},
+				error : function() {
+					$("#batch-log").append("<br>- <span class='danger'>ERROR</span> in reload-node - "+nodeid);
+				}
+			});
+		}
+	} else {
+		$("#batch-log").append("<br>- ***NOT FOUND reload-node <span class='danger'>ERROR</span>");
+	}
+	return (ok!=0 && ok == nodes.length);
+}
+
+//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
+//------------------------- Reload Unit ---------------------------------
+//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
+
+//=================================================
+g_actions['reload-unit'] = function (node,data)
+//=================================================
+{
+	var ok = 1;
+	UIFactory.Node.reloadUnit();
+	return (ok!=0);
+}
+
+//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
+//------------------------- Clear Batch Log -----------------------------
+//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
+
+//=================================================
+g_actions['clear-log'] = function (node,data)
+//=================================================
+{
+	var ok = 1;
+	$("#batch-log").html("");
+	return (ok!=0);
+}
+
+//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
+//------------------------- Write Batch Log -----------------------------
+//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
+
+//=================================================
+g_actions['write-log'] = function (node,data)
+//=================================================
+{
+	var ok = 1;
+	let text = getTxtvals($("text",node));
+	$("#batch-log").append(text);
+	return (ok!=0);
 }
 
 //-----------------------------------------------------------------------
@@ -3323,7 +3418,8 @@ g_actions['batch-variable'] = function (node)
 	var test = $(node).attr("test");
 	if (test!=undefined) {
 		test = replaceVariable(test);
-//		test = getTest(test);
+		if (test.indexOf("'value':")<0)
+			test = getTest(test);
 		test = replaceBatchVariable(test,node);
 	}
 	//------------------------------------
@@ -3462,7 +3558,8 @@ g_actions['for-each-node'] = function (node)
 	var test = $(node).attr("test");
 	if (test!=undefined) {
 		test = replaceVariable(test);
-//		test = getTest(test);
+		if (test.indexOf("'value':")<0)
+			test = getTest(test);
 		test = replaceBatchVariable(test,node);
 	}
 	//------------------------------------
@@ -3485,10 +3582,13 @@ g_actions['for-each-node'] = function (node)
 			success : function(data) {
 				let nodes = [];
 				if (srce_semtag!=undefined) {
-					nodes = $("*:has(>metadata[semantictag='"+srce_semtag+"'])",data);
+					nodes = $("*:has(>metadata[semantictag*='"+srce_semtag+"'])",data);
 				} else {
 					nodes.push(UICom.structure.ui[nodeid].nodeid);
 				}
+				if (test!=undefined)
+					nodes = eval("$(nodes)"+test);
+				$("#batch-log").append("<br>" + nodes.length + " node(s)");
 				let actions = $(node).children();
 				$("#batch-log").append("<br>Actions : ");
 				for (let j=0; j<actions.length;j++){
@@ -3496,6 +3596,7 @@ g_actions['for-each-node'] = function (node)
 				}
 				for (let i=0; i<nodes.length; i++){
 					const nodeid = $(nodes[i]).attr('id');
+					let previous_node_uuid = g_current_node_uuid;
 					g_current_node_uuid = nodeid;
 					$.ajax({
 						async : false,
@@ -3506,6 +3607,7 @@ g_actions['for-each-node'] = function (node)
 							UICom.parseStructure(data,false);
 							for (let j=0; j<actions.length;j++){
 								var tagname = $(actions[j])[0].tagName;
+								$("#batch-log").append("<br>------------- "+tagname+" -----------------");
 								g_actions[tagname](actions[j],data);
 							}
 						},
@@ -3513,6 +3615,7 @@ g_actions['for-each-node'] = function (node)
 							$("#batch-log").append("<br>- ***NOT FOUND <span class='danger'>ERROR - for-each-node "+srce_semtag+"</span>");
 						}
 					});
+					g_current_node_uuid = previous_node_uuid;
 				}
 			},
 			error : function(data) {
@@ -3555,6 +3658,7 @@ g_actions['for-each-node'] = function (node)
 							UICom.parseStructure(data,false);
 							for (let j=0; j<actions.length;j++){
 								var tagname = $(actions[j])[0].tagName;
+								$("#batch-log").append("<br>------------- "+tagname+" -----------------");
 								g_actions[tagname](actions[j],data);
 							}
 						},
@@ -4169,7 +4273,8 @@ g_actions['fen-batch-variable'] = function (node,data)
 	var test = $(node).attr("test");
 	if (test!=undefined) {
 		test = replaceVariable(test);
-//		test = getTest(test);
+		if (test.indexOf("'value':")<0)
+			test = getTest(test);
 		test = replaceBatchVariable(test,node);
 	}
 	//------------------------------------
@@ -4232,7 +4337,8 @@ g_actions['fen-move-node'] = function (node,data)
 	var source_test = $(node).attr("source-test");
 	if (source_test!=undefined) {
 		source_test = replaceVariable(source_test);
-//		source_test = getTest(source_test);
+		if (test.indexOf("'value':")<0)
+			test = getTest(test);
 		source_test = replaceBatchVariable(test,node);
 	}
 	//------------------------------------
@@ -4241,7 +4347,8 @@ g_actions['fen-move-node'] = function (node,data)
 	var target_test = $(node).attr("target-test");
 	if (target_test!=undefined) {
 		target_test = replaceVariable(target_test);
-//		target_test = getTest(target_test);
+		if (test.indexOf("'value':")<0)
+			test = getTest(test);
 		target_test = replaceBatchVariable(test,node);
 	}
 	//------------------------------------

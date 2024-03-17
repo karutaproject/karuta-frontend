@@ -1436,7 +1436,7 @@ g_report_actions['for-each-portfolio'] = function (destid,action,no,data)
 				//------------------------------------
 				if (condition){
 					portfolioid = items_list[j].id;
-					portfolioid_current = portfolioid;					portfoliocode_current = portfolioid;
+					portfolioid_current = portfolioid;
 					if (load) {
 						$.ajax({
 							async:false,

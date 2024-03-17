@@ -508,6 +508,20 @@
 		</hide-node>
 	</xsl:template>
 
+	<xsl:template match="*[metadata/@semantictag='reload-node']">
+		<xsl:variable name="destination">
+			<xsl:call-template name='get-select'>
+				<xsl:with-param name='parent'>subsection-target</xsl:with-param>
+			</xsl:call-template>
+		</xsl:variable>
+		<reload-node select="{$destination}">
+		</reload-node>
+	</xsl:template>
+
+	<xsl:template match="*[metadata/@semantictag='reload-unit']">
+		<reload-unit/>
+	</xsl:template>
+
 	<xsl:template match="*[metadata/@semantictag='moveup-node']">
 		<xsl:variable name="destination">
 			<xsl:call-template name='get-select'>
@@ -567,7 +581,7 @@
 		</update-node-resource>
 	</xsl:template>
 	
-	<xsl:template match="*[metadata/@semantictag='import-node']">
+	<!--xsl:template match="*[metadata/@semantictag='import-node']">
 		<xsl:variable name="destination">
 			<xsl:call-template name='get-select'>
 				<xsl:with-param name='parent'>subsection-target</xsl:with-param>
@@ -585,6 +599,35 @@
 		<xsl:variable name="dest"><xsl:value-of select=".//asmContext[metadata/@semantictag='destination-select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of></xsl:variable>
 		<xsl:variable name="srce"><xsl:value-of select=".//asmContext[metadata/@semantictag='source-select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of></xsl:variable>
 		<import-node select="{$destination}{$dest}" source="{$srce}{$old-source}" test="{$test}" >
+			<source>
+				<xsl:value-of select='$source'/>
+			</source>
+		</import-node>
+	</xsl:template-->
+	
+		<xsl:template match="*[metadata/@semantictag='import-node']">
+		<xsl:variable name="destination">
+			<xsl:call-template name='get-select'>
+				<xsl:with-param name='parent'>subsection-target</xsl:with-param>
+			</xsl:call-template>
+		</xsl:variable>
+		<xsl:variable name="dest-test">
+			<xsl:value-of select=".//*[metadata/@semantictag='subsection-target']//asmContext[metadata/@semantictag='test']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="source">
+			<xsl:call-template name='get-select'>
+				<xsl:with-param name='parent'>subsection-source</xsl:with-param>
+			</xsl:call-template>
+		</xsl:variable>
+		<xsl:variable name="srce-test">
+			<xsl:value-of select=".//*[metadata/@semantictag='subsection-source']//asmContext[metadata/@semantictag='test']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<!-- old -->
+			<xsl:variable name="old-source">#<xsl:call-template name="txtval"><xsl:with-param name="semtag">import-source</xsl:with-param></xsl:call-template></xsl:variable>
+			<xsl:variable name="dest"><xsl:value-of select=".//asmContext[metadata/@semantictag='destination-select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of></xsl:variable>
+			<xsl:variable name="srce"><xsl:value-of select=".//asmContext[metadata/@semantictag='source-select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of></xsl:variable>
+		<!-- end old -->
+		<import-node select="{$destination}{$dest}" source="{$srce}{$old-source}" srce-test="{$srce-test}" dest-test="{$dest-test}" >
 			<source>
 				<xsl:value-of select='$source'/>
 			</source>
@@ -978,6 +1021,29 @@
 				</xsl:call-template>
 			</message>
 		</send-email>
+	</xsl:template>
+
+
+	<!-- ====================================================================================== -->
+	<!-- ====================================================================================== -->
+	<!-- ================================ BATCH LOG =========================================== -->
+	<!-- ====================================================================================== -->
+	<!-- ====================================================================================== -->
+
+	<!-- ================ clear-log ============================ -->
+	<xsl:template match="*[metadata/@semantictag='clear-log']">
+		<clear-log/>
+	</xsl:template>
+
+	<!-- ================ write-log ============================ -->
+	<xsl:template match="*[metadata/@semantictag='write-log']">
+		<write-log>
+			<text>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">text</xsl:with-param>
+				</xsl:call-template>
+			</text>
+		</write-log>
 	</xsl:template>
 
 	<!-- ====================================================================================== -->
