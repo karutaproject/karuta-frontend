@@ -1035,6 +1035,11 @@
 		<clear-log/>
 	</xsl:template>
 
+	<!-- ================ hide-log ============================ -->
+	<xsl:template match="*[metadata/@semantictag='hide-log']">
+		<hide-log/>
+	</xsl:template>
+
 	<!-- ================ write-log ============================ -->
 	<xsl:template match="*[metadata/@semantictag='write-log']">
 		<write-log>

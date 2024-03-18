@@ -3111,7 +3111,7 @@ g_actions['reload-unit'] = function (node,data)
 
 //-----------------------------------------------------------------------
 //-----------------------------------------------------------------------
-//------------------------- Clear Batch Log -----------------------------
+//------------------------- Batch Log -----------------------------------
 //-----------------------------------------------------------------------
 //-----------------------------------------------------------------------
 
@@ -3120,15 +3120,19 @@ g_actions['clear-log'] = function (node,data)
 //=================================================
 {
 	var ok = 1;
-	$("#batch-log").html("");
+	$("#batch-info").html("");
 	return (ok!=0);
 }
 
-//-----------------------------------------------------------------------
-//-----------------------------------------------------------------------
-//------------------------- Write Batch Log -----------------------------
-//-----------------------------------------------------------------------
-//-----------------------------------------------------------------------
+//=================================================
+g_actions['hide-log'] = function (node,data)
+//=================================================
+{
+	var ok = 1;
+	$("#batch-log").hide();
+	$("#show-log-check-button").show();
+	return (ok!=0);
+}
 
 //=================================================
 g_actions['write-log'] = function (node,data)
@@ -3136,7 +3140,7 @@ g_actions['write-log'] = function (node,data)
 {
 	var ok = 1;
 	let text = getTxtvals($("text",node));
-	$("#batch-log").append(text);
+	$("#batch-info").append(text);
 	return (ok!=0);
 }
 
@@ -3870,7 +3874,9 @@ function display_execBatch()
 	$("#edit-window-title").html("KARUTA - "+karutaStr[LANG]['batch']);
 	$("#edit-window-type").html("");
 	var html = "";
+	html += "<input id='show-log-check-button' style='float:right;display:none' type='checkbox' onclick=\"$('#batch-log').toggle()\">";
 	html += "<div id='batch-log' style='margin-left:20px;margin-top:20px'></div>";
+	html += "<div id='batch-info' style='margin-left:20px;margin-top:20px'></div>";
 	$("#edit-window-body").html(html);
 	//---------------------
 	$('#edit-window').modal('show');
