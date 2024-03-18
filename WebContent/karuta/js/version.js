@@ -2,7 +2,7 @@
 var karuta_version = "@project.version@";
 var karuta_date = "@build.timestamp@";
 
-const karuta_version_eportfolium = "eportfolium-3.25.1";
+const karuta_version_eportfolium = "eportfolium-3.25.2";
 const karuta_date_eportfolium = "2024/02/18";
 
 
