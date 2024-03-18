@@ -47,7 +47,7 @@ function initBatchVars()
 function replaceBatchVariable(text,node,withquote)
 //==================================
 {
-	if (text.indexOf("#lang#")>-1)
+	if (text!=undefined && text.indexOf("#lang#")>-1)
 		text = text.replace(/#lang#/g,languages[LANGCODE]);
 	if (text!=undefined && text.indexOf("###")>-1) {
 		if (withquote==null)
