@@ -461,7 +461,7 @@ function setConfigurationTechVariables(langcode)
 			for (var i=0; i<jsfile_nodes.length; i++){
 				var fileid = $(jsfile_nodes[i]).attr("id");
 				var filename = $("filename[lang='"+languages[langcode]+"']",$("asmResource[xsi_type='Document']",jsfile_nodes[i])).text();
-				var url = "../../../"+serverBCK+"/resources/resource/file/"+fileid;
+				var url = "../../../"+serverBCK+"/resources/resource/file/"+fileid+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime();
 				$.ajax({
 					async:false,
 					url: url,
@@ -478,7 +478,7 @@ function setConfigurationTechVariables(langcode)
 			for (var i=0; i<jsfile_nodes.length; i++){
 				var fileid = $(jsfile_nodes[i]).attr("id");
 				var filename = $("filename[lang='"+languages[langcode]+"']",$("asmResource[xsi_type='Document']",jsfile_nodes[i])).text();
-				var url = "../../../"+serverBCK+"/resources/resource/file/"+fileid;
+				var url = "../../../"+serverBCK+"/resources/resource/file/"+fileid+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime();
 				$.ajax({
 					async:false,
 					url: url,

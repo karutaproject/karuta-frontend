@@ -127,6 +127,7 @@ karutaStr['fr']['error-notfound']="ERREUR - non trouvé";
 karutaStr['fr']['error-filenotfound']="*** Fichier non sauvegardé ou manquant";
 karutaStr['fr']['error-login']="Erreur à la connexion : votre login ou votre mot de passe est incorrect.";
 karutaStr['fr']['error-delete']="Vous ne pouvez pas supprimer cet élément.";
+karutaStr['fr']['error-script']="ERREUR - Une erreur s'est produite pendant l'exécution du script.";
 
 //=========================================
 //========== NODE =========================
@@ -460,6 +461,7 @@ karutaStr['fr']['batch']="Exécuter un script de batch";
 karutaStr['fr']['upload_csv']="Téléverser un fichier CSV";
 karutaStr['fr']['process_csv']="Exécuter";
 karutaStr['fr']['create_user_portfolios']="Créer un usager et ses portfolios";
+karutaStr['fr']['show-hide-log']="Montrer/Cacher le journal";
 
 //=========================================
 //========== REPORT ========================
