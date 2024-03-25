@@ -260,6 +260,9 @@
 			<code>
 				<xsl:call-template name="txtval-first-level"><xsl:with-param name="semtag">code</xsl:with-param></xsl:call-template>
 			</code>
+			<label>
+				<xsl:call-template name="txtval-first-level"><xsl:with-param name="semtag">label</xsl:with-param></xsl:call-template>
+			</label>
 			<actions>
 				<xsl:apply-templates select='asmUnitStructure'/>
 			</actions>

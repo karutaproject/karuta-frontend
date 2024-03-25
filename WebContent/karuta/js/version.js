@@ -2,8 +2,8 @@
 var karuta_version = "@project.version@";
 var karuta_date = "@build.timestamp@";
 
-const karuta_version_eportfolium = "eportfolium-3.33.0";
-const karuta_date_eportfolium = "2024/03/16";
+const karuta_version_eportfolium = "eportfolium-3.34.0";
+const karuta_date_eportfolium = "2024/03/25";
 
 
 var karuta_backend_version = "?";
@@ -19,4 +19,4 @@ var karuta_fileserver_date = "?";
 // 3.31.0 configuration files loading  - 2024/03/16
 // 3.32.0 Batch - new commands : clear-log, write-log, hide-log, reload-node, reload-unit - 2024/03/17
 // 3.33.0 Change ownership search if more 200 users - 2024/03/20
-
+// 3.34.0 Batch - Label filter on for-each-tree

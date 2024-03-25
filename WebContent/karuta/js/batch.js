@@ -24,12 +24,12 @@ var g_users = {};
 //-----------------------
 
 var jqueryBatchSpecificFunctions = {};
-jqueryBatchSpecificFunctions['.resourceTextContains('] = "asmResource[xsi_type!='context'][xsi_type!='nodeRes']>text[lang='#lang#']:contains(";
-jqueryBatchSpecificFunctions['.resourceCodeContains('] = "asmResource[xsi_type!='context'][xsi_type!='nodeRes']>code:contains(";
-jqueryBatchSpecificFunctions['.resourceValueContains('] = "asmResource[xsi_type!='context'][xsi_type!='nodeRes']>value:contains(";
-jqueryBatchSpecificFunctions['.nodeLabelContains('] = "asmResource[xsi_type='nodeRes']>label[lang='#lang#']:contains(";
-jqueryBatchSpecificFunctions['.nodeCodeContains('] = "asmResource[xsi_type='nodeRes']>code:contains(";
-jqueryBatchSpecificFunctions['.resourceFilenameContains('] = "asmResource[xsi_type!='context'][xsi_type!='nodeRes']>filename[lang='#lang#']:contains(";
+jqueryBatchSpecificFunctions['.resourceTextContains('] = ">asmResource[xsi_type!='context'][xsi_type!='nodeRes']>text[lang='#lang#']:contains(";
+jqueryBatchSpecificFunctions['.resourceCodeContains('] = ">asmResource[xsi_type!='context'][xsi_type!='nodeRes']>code:contains(";
+jqueryBatchSpecificFunctions['.resourceValueContains('] = ">asmResource[xsi_type!='context'][xsi_type!='nodeRes']>value:contains(";
+jqueryBatchSpecificFunctions['.nodeLabelContains('] = ">asmResource[xsi_type='nodeRes']>label[lang='#lang#']:contains(";
+jqueryBatchSpecificFunctions['.nodeCodeContains('] = ">asmResource[xsi_type='nodeRes']>code:contains(";
+jqueryBatchSpecificFunctions['.resourceFilenameContains('] = ">asmResource[xsi_type!='context'][xsi_type!='nodeRes']>filename[lang='#lang#']:contains(";
 
 
 //==================================
@@ -509,10 +509,12 @@ function processListActions(list)
 //-----------------------------------------------------------------------
 
 //=================================================
-g_actions['for-each-tree'] = function forEachTree(node)
+g_actions['for-each-tree'] = function (node)
 //=================================================
 {
-	var code = getTxtvals($("code",node));
+	const code = getTxtvals($("code",node));
+	const label = getTxtvals($("label",node));
+	//------------------------------------
 	var url1 = serverBCK_API+"/portfolios?active=1&search="+code;
 	$.ajax({
 		async: false,
@@ -521,19 +523,33 @@ g_actions['for-each-tree'] = function forEachTree(node)
 		url : url1,
 		code : code,
 		success : function(data) {
-			var nb = parseInt($('portfolios',data).attr('count'));
-			$("#batch-log").append("<br> Number of trees :"+nb);
-			var trees = $("portfolio",data);
+			const nb = parseInt($('portfolios',data).attr('count'));
+//			$("#batch-log").append("<br> Number of trees :"+nb);
+			const trees = $("portfolio",data);
 			for (var i=0; i<trees.length; i++){
+				let selected = false;
 				var portfolio = new Array();
-				portfolio [0] = $(trees[i]).attr("id");
-				portfolio [1] = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",trees[i])).text();
-				var treeref = $(node).attr('id');
-				g_trees[treeref] = portfolio;
-			$("#batch-log").append("<br>------------- current-tree -----------------");
-				$("#batch-log").append("<br>- tree selected - code:"+portfolio [1]+" - portfolioid:"+portfolio [0]);
-				processListActions($("actions",node).children());
+				portfolio[0] = $(trees[i]).attr("id");
+				portfolio[1] = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",trees[i])).text();
+				portfolio[2] = $("label[lang='"+LANG+"']",$("asmRoot>asmResource[xsi_type='nodeRes']",trees[i])).text();
+				const treeref = $(node).attr('id');
+				if (label!="") {
+					if (portfolio[2].indexOf(label)>-1) {
+						g_trees[treeref] = portfolio;
+						selected = true;
+					}
+				
+				} else {
+					g_trees[treeref] = portfolio;
+					selected = true;
+				}
+				if (selected) {
+					$("#batch-log").append("<br>------------- current-tree -----------------");
+					$("#batch-log").append("<br>- tree selected - code:"+portfolio [1]+" - portfolioid:"+portfolio [0]+" Label:"+portfolio [2]);
+					processListActions($("actions",node).children());
+				}
 			}
+			$("#batch-log").append("<br> Number of trees :"+selected);
 		}
 	});
 }
@@ -622,7 +638,6 @@ g_actions['create-user'] = function createUser(node)
 		url : url,
 		success : function(data) {
 			userid = data;
-			ok = true;
 			$("#batch-log").append("<br>- user already defined("+userid+") - identifier:"+identifier+" lastname:"+lastname+" firstname:"+firstname);
 			var xml = "";
 			xml +="<?xml version='1.0' encoding='UTF-8'?>";
@@ -1265,6 +1280,7 @@ g_actions['create-tree'] = function createTree(node)
 			url : url,
 			code : code,
 			success : function(data) {
+				ok = true;
 				$("#batch-log").append("<br>- tree already created - code:"+code);
 				var result = $("portfolio", data);
 				portfolioid = $(result).attr('id');
@@ -1289,6 +1305,7 @@ g_actions['create-tree'] = function createTree(node)
 					url : url,
 					data : "",
 					success : function(data) {
+						ok = true;
 						portfolioid = data;
 						var portfolio = new Array();
 						portfolio [0] = portfolioid;
@@ -1318,7 +1335,6 @@ g_actions['create-tree'] = function createTree(node)
 										success : function(data) {
 											ok = true;
 											$("#batch-log").append("<br>- tree created ("+portfolioid+") - code:"+code);
-											ok = true;
 										},
 										error : function(data) {
 											$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in  create tree - code:"+code);
@@ -1500,6 +1516,7 @@ g_actions['update-tree-root'] = function updateTreeRoot(node)
 						dataType : "xml",
 						url : serverBCK_API+"/portfolios?active=1&project="+oldcode,
 						success : function(data) {
+							ok =true;
 							var items = $("portfolio",data);
 							for ( var i = 0; i < items.length; i++) {
 								var portfolio_rootid = $("asmRoot",items[i]).attr("id");
@@ -2526,6 +2543,7 @@ g_actions['update-resource'] = function updateResource(node,data)
 	} else {
 		$("#batch-log").append("<br>- ***NOT FOUND <span class='danger'>ERROR - update-resource "+type+" -"+getSemtag(node)+"</span>");
 	}
+	if (!(ok!=0 && ok == nodes.length)) g_batch_error = true;
 	return (ok!=0 && ok == nodes.length);
 }
 
@@ -2597,6 +2615,7 @@ g_actions['update-node-resource'] = function updateResource(node,data)
 	} else {
 		$("#batch-log").append("<br>- ***NOT FOUND <span class='danger'>ERROR - update-node-resource - type: "+type+"</span>");
 	}
+	if (!(ok!=0 && ok == nodes.length)) g_batch_error = true;
 	return (ok!=0 && ok == nodes.length);
 }
 
@@ -2817,6 +2836,7 @@ g_actions['update-rights'] = function updateRights(node,data)
 	} else {
 		$("#batch-log").append("<br>- ***NOT FOUND <span class='danger'>ERROR</span> in update rights("+nodeid+") - semtag="+ getSemtag(node));
 	}
+	if (!(ok!=0 && ok == nodes.length)) g_batch_error = true;
 	return (ok!=0 && ok == nodes.length);
 }
 
@@ -2997,7 +3017,7 @@ g_actions['delete-node'] = function deleteNode(node,data)
 g_actions['show-node'] = function showNode(node,data)
 //=================================================
 {
-	var ok = 0;
+	var ok = false;
 	let nodes = getTargetNodes(node,data,"test")
 	if (nodes.length>0){
 		for (i=0; i<nodes.length; i++){
