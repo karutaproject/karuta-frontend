@@ -668,6 +668,8 @@ g_report_actions['for-each-node'] = function (destid,action,no,data)
 	var select = $(action).attr("select");
 	var test = $(action).attr("test");
 	var countvar = $(action).attr("countvar");
+	if (countvar!=undefined)
+		g_variables[countvar] = 0;
 	var portfoliocode = $(action).attr("portfolio");
 	//----------------------------------
  	var ref_init = $(action).attr("ref-init");
@@ -723,7 +725,7 @@ g_report_actions['for-each-node'] = function (destid,action,no,data)
 			for (let j=0; j<nodes.length;j++){
 				//----------------------------------
 				if (countvar!=undefined) {
-					g_variables[countvar] = j;
+					g_variables[countvar] = j+1;
 				}
 				g_variables["currentnode"] = "UICom.structure.ui['"+$(nodes[j]).attr("id")+"']";
 				for (let i=0; i<actions.length;i++){
@@ -1994,10 +1996,15 @@ g_report_actions['variable'] = function (destid,action,no,data)
 	var prefix_id = "";
 	try {
 		var varlabel = replaceVariable($(action).attr("varlabel"));
-		var txtval = replaceVariable($(action).attr("txtval"));
+		var txtval = $(action).attr("txtval");
+		var txtvar = $(action).attr("txtvar");
 		var ref = $(action).attr("ref");
+		var select = $(action).attr("select");
 		var aggregatetype = $(action).attr("aggregatetype");
 		var fct = $(action).attr("function");
+		var operationtype = $(action).attr("operationtype");
+		var select1 = $(action).attr("select1");
+		var select2 = $(action).attr("select2");
 		//------------ aggregate ------------------
 		if (aggregatetype!=undefined && aggregatetype!="") {
 			var select = $(action).attr("aggregationselect");
@@ -2028,14 +2035,53 @@ g_report_actions['variable'] = function (destid,action,no,data)
 			}
 			if (!$.isNumeric(text))
 				text="";
+		//------------function--------------------------------
 		} else if (fct!=undefined && fct!=""){
 			text = eval(replaceVariable(fct));
+		//------------operation--------------------------------
+		} else if (operationtype!=undefined && operationtype!="" && select1!=undefined && select1!="" && select2!=undefined && select2!=""){
+			select1 = replaceVariable(select1);
+			select2 = replaceVariable(select2);
+			let result = "";
+			if ( operationtype=="addition" && $.isNumeric(select1) && $.isNumeric(select1) ){
+				result = Number(select1) + Number(select2);
+			}
+			if ( operationtype=="subtraction" && $.isNumeric(select1) && $.isNumeric(select2) ){
+				result = Number(select1) - Number(select2);
+			}
+			if ( operationtype=="multiplication" && $.isNumeric(select1) && $.isNumeric(select2) ){
+				result = Number(select1) * Number(select2);
+			}
+			if ( operationtype=="division" && $.isNumeric(select1) && $.isNumeric(select2) && select2!=0){
+				result = Number(select1) / Number(select2);
+				if (result.toString().indexOf(".")>-1)
+					result = result.toFixed(2);
+			}
+			if ( operationtype=="percentage" && $.isNumeric(select1) && $.isNumeric(select2) && select2!=0){
+				result = Number(select1) / Number(select2) * 100;
+				if (result.toString().indexOf(".")>-1)
+					result = result.toFixed(2);
+			}
+			if (ref!=undefined && ref!="") {
+				if (g_variables[ref]==undefined)
+					g_variables[ref] = new Array();
+				g_variables[ref][g_variables[ref].length] = result;
+			}
+			if (!$.isNumeric(result))
+				result="";
+			if ( operationtype=="percentage")
+				result = result.toString() + "%";
+			text = result;
+		//-------------value--------------------------
 		} else if (txtval!=undefined && txtval!=""){
+			txtval = replaceVariable(txtval);
 			text = txtval;
-		} else {
-			var select = $(action).attr("select");
-			if (select!=undefined && select.length>0) {
-				//---------- node-resource -----------
+		//-------------variable--------------------------
+		} else if (txtvar!=undefined && txtvar!=""){
+			txtvar = replaceVariable(txtvar);
+			text = txtvar;
+		//------------------ node-resource -----------
+		} else if (select!=undefined && select.length>0) {
 				select = replaceVariable(select);
 				var selector = r_getSelector(select);
 				var node = $(selector.jquery,data);
@@ -2088,11 +2134,10 @@ g_report_actions['variable'] = function (destid,action,no,data)
 						prefix_id += "context_";
 					}
 				}
-			} else {
-				//------------ text ------------------
-				text = $(action).text();
-				text = replaceVariable(text);
-			}
+		} else {
+			//------------ error ------------------
+			text = $(action).text();
+			text = replaceVariable(text);
 		}
 	} catch(e){
 		text = "";

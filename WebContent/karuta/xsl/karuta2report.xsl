@@ -558,6 +558,9 @@
 		<xsl:variable name="txtval">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='txtval']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
+		<xsl:variable name="txtvar">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='txtvar']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
 		<xsl:variable name="ref">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='ref']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
@@ -580,6 +583,15 @@
 		<xsl:variable name="aggregatetype">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='aggregatetype']/asmResource[@xsi_type='Get_Resource']/value"></xsl:value-of>
 		</xsl:variable>
+		<xsl:variable name="select1">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='operationselect1']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="select2">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='operationselect2']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="operationtype">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='operationtype']/asmResource[@xsi_type='Get_Resource']/value"></xsl:value-of>
+		</xsl:variable>
 		<xsl:variable name="class">
 			<xsl:call-template name="class"/>
 		</xsl:variable>
@@ -596,6 +608,9 @@
 			<xsl:if test="not($txtval='')">
 				<xsl:attribute name="txtval"><xsl:value-of select="$txtval"/></xsl:attribute>
 			</xsl:if>
+			<xsl:if test="not($txtvar='')">
+				<xsl:attribute name="txtvar"><xsl:value-of select="$txtvar"/></xsl:attribute>
+			</xsl:if>
 			<xsl:if test="not($select='..')">
 				<xsl:attribute name="select"><xsl:value-of select="$select"/></xsl:attribute>
 			</xsl:if>
@@ -610,6 +625,15 @@
 			</xsl:if>
 			<xsl:if test="not($function='')">
 				<xsl:attribute name="function"><xsl:value-of select="$function"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not($select1='')">
+				<xsl:attribute name="select1"><xsl:value-of select="$select1"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not($select2='')">
+				<xsl:attribute name="select2"><xsl:value-of select="$select2"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not($operationtype='')">
+				<xsl:attribute name="operationtype"><xsl:value-of select="$operationtype"/></xsl:attribute>
 			</xsl:if>
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='text-value']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</variable>
