@@ -234,81 +234,72 @@ UIFactory["Node"].prototype.displayNode = function(type,root,dest,depth,langcode
 			// ================================= For each child ==========================
 			// ===========================================================================
 			var backgroundParent = UIFactory.Node.getMetadataEpm(this.metadataepm,'node-background-color',false);
-			
-//			if (this.semantictag.indexOf('asmColumns')>-1 && type!='raw') {
-//				//-------------- for backward compatibility -----------
-//				UIFactory["Node"].displayColumns(type,root,dest,depth,langcode,edit,this.inline,this.backgroundParent,this.parent,this.menu);
-//			} else if (this.semantictag.indexOf('asm-block')>-1 && type!='raw') {
-				//-------------- for backward compatibility -----------
-//				UIFactory["Node"].displayBlocks(root,dest,depth,langcode,edit,this.inline,this.backgroundParent,this.parent,this.menu);
-//			} else {
-				//------------ EuropassL -----------------
-				if (this.semantictag=="EuropassL"){
-					alreadyDisplayed = true;
-					if( node.structured_resource != null )
-					{
-						node.structured_resource.displayView('content-'+uuid,langcode,'detail',uuid,this.menu);
-					}
+			//------------ EuropassL -----------------
+			if (this.semantictag=="EuropassL"){
+				alreadyDisplayed = true;
+				if( node.structured_resource != null )
+				{
+					node.structured_resource.displayView('content-'+uuid,langcode,'detail',uuid,this.menu);
 				}
-				//------------ Bubble Map -----------------
-				if (this.semantictag.indexOf('bubble_level1')>-1) {
-					alreadyDisplayed = true;
-					if  (this.seeqrcoderoles.containsArrayElt(g_userroles) || USER.admin || g_userroles[0]=='designer') {
-						var map_info = UIFactory.Bubble.getLinkQRcode(uuid);
-						$('#map-info_'+uuid).html(map_info);
-						$('body').append(qrCodeBox());
-						UIFactory.Bubble.getPublicURL(uuid,g_userroles[0]);
-					}
+			}
+			//------------ Bubble Map -----------------
+			if (this.semantictag.indexOf('bubble_level1')>-1) {
+				alreadyDisplayed = true;
+				if  (this.seeqrcoderoles.containsArrayElt(g_userroles) || USER.admin || g_userroles[0]=='designer') {
+					var map_info = UIFactory.Bubble.getLinkQRcode(uuid);
+					$('#map-info_'+uuid).html(map_info);
+					$('body').append(qrCodeBox());
+					UIFactory.Bubble.getPublicURL(uuid,g_userroles[0]);
 				}
-				//------------ Tabs SubSection -----------------
-				if (this.semantictag.indexOf("tabs-section")>-1){
-					alreadyDisplayed = true;
-					let html_tabs = "<ul class='tabs-headers nav nav-tabs' role='tablist'>";
-					let html_panels = "<div class='tabs-contents tab-content'>";
-					for( let i=0; i<root.children.length; ++i ) {
-						let childnode = UICom.structure.ui[root.children[i]];
-						let childlabel = childnode.getLabel();
-						var style = childnode.getLabelStyle();
-						html_tabs += "<li class='nav-item'><a class='nav-link' style='"+style+"' href='#display-"+uuid+"-"+i+"' onclick=\"localStorage.setItem('#display-"+uuid+"','-"+i+"')\" role='tab' data-toggle='tab'>"+childlabel+"</a></li>";
-						html_panels += "<div role='tabpanel' class='tab-pane' id='display-"+uuid+"-"+i+"'></div>";
-					}
-					html_tabs += "</ul>";
-					html_panels +="</div>";
-					$("#content-"+uuid).append (html_tabs);
-					$("#content-"+uuid).append (html_panels);
-					if (localStorage.getItem('#display-'+uuid)!=undefined){
-						$("a[href=\"#display-"+uuid+localStorage.getItem('#display-'+uuid)+"\"]").click();
-					} else {
-						$("a[href='#display-"+uuid+"-0']").click();
-						localStorage.setItem('#display-'+uuid,'-0');
-					}
-					for( let i=0; i<root.children.length; ++i ) {
-						// Recurse
-						let child = UICom.structure.tree[root.children[i]];
-						let childnode = UICom.structure.ui[root.children[i]];
-						let original_edit = edit;
-						if (this.submitted=='Y' && this.submitall=='Y')
-							edit = false;
-						childnode.displayNode(type,child, 'display-'+uuid+'-'+i, this.depth-1,langcode,edit,inline,backgroundParent,root,menu);
-						edit = original_edit;
-					}
+			}
+			//------------ Tabs SubSection -----------------
+			if (this.semantictag.indexOf("tabs-section")>-1){
+				alreadyDisplayed = true;
+				let html_tabs = "<ul class='tabs-headers nav nav-tabs' role='tablist'>";
+				let html_panels = "<div class='tabs-contents tab-content'>";
+				for( let i=0; i<root.children.length; ++i ) {
+					let childnode = UICom.structure.ui[root.children[i]];
+					let childlabel = childnode.getLabel();
+					var style = childnode.getLabelStyle();
+					html_tabs += "<li class='nav-item'><a class='nav-link' style='"+style+"' href='#display-"+uuid+"-"+i+"' onclick=\"localStorage.setItem('#display-"+uuid+"','-"+i+"')\" role='tab' data-toggle='tab'>"+childlabel+"</a></li>";
+					html_panels += "<div role='tabpanel' class='tab-pane' id='display-"+uuid+"-"+i+"'></div>";
+				}
+				html_tabs += "</ul>";
+				html_panels +="</div>";
+				$("#content-"+uuid).append (html_tabs);
+				$("#content-"+uuid).append (html_panels);
+				if (localStorage.getItem('#display-'+uuid)!=undefined){
+					$("a[href=\"#display-"+uuid+localStorage.getItem('#display-'+uuid)+"\"]").click();
+				} else {
+					$("a[href='#display-"+uuid+"-0']").click();
+					localStorage.setItem('#display-'+uuid,'-0');
+				}
+				for( let i=0; i<root.children.length; ++i ) {
+					// Recurse
+					let child = UICom.structure.tree[root.children[i]];
+					let childnode = UICom.structure.ui[root.children[i]];
+					let original_edit = edit;
+					if (this.submitted=='Y' && this.submitall=='Y')
+						edit = false;
+					childnode.displayNode(type,child, 'display-'+uuid+'-'+i, this.depth-1,langcode,edit,inline,backgroundParent,root,menu);
+					edit = original_edit;
+				}
 
+			}
+			//------------ Default  -----------------
+			if (!alreadyDisplayed) {
+				for( var i=0; i<root.children.length; ++i ) {
+					// Recurse
+					let child = UICom.structure.tree[root.children[i]];
+					let childnode = UICom.structure.ui[root.children[i]];
+					let childsemtag = $(childnode.metadata).attr('semantictag');
+					let original_edit = edit;
+					if (this.submitted=='Y' && this.submitall=='Y')
+						edit = false;
+					childnode.displayNode(type,child, 'content-'+uuid, this.depth-1,langcode,edit,inline,backgroundParent,root,menu);
+					edit = original_edit;
 				}
-				//------------ Default  -----------------
-				if (!alreadyDisplayed) {
-					for( var i=0; i<root.children.length; ++i ) {
-						// Recurse
-						let child = UICom.structure.tree[root.children[i]];
-						let childnode = UICom.structure.ui[root.children[i]];
-						let childsemtag = $(childnode.metadata).attr('semantictag');
-						let original_edit = edit;
-						if (this.submitted=='Y' && this.submitall=='Y')
-							edit = false;
-						childnode.displayNode(type,child, 'content-'+uuid, this.depth-1,langcode,edit,inline,backgroundParent,root,menu);
-						edit = original_edit;
-					}
-				}
-//			}
+			}
 			//-------------------------------------------------------
 			$('[data-toggle=tooltip]').tooltip({html: true, trigger: 'hover'}); 
 			$(".pickcolor").colorpicker();

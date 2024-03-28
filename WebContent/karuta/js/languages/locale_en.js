@@ -127,6 +127,7 @@ karutaStr['en']['error-notfound']="ERROR - not found";
 karutaStr['en']['error-filenotfound']="*** File not saved or missing";
 karutaStr['en']['error-login']="Connection Error : your login or your password is incorrect.";
 karutaStr['en']['error-delete']="You cannot delete this item.";
+karutaStr['en']['error-script']="ERROR - An error occurred while executing the script.";
 
 //=========================================
 //========== NODE =====================
@@ -460,6 +461,7 @@ karutaStr['en']['batch']="Execute Batch Script";
 karutaStr['en']['upload_csv']="Upload a CSV File";
 karutaStr['en']['process_csv']="Process";
 karutaStr['en']['create_user_portfolios']="Create an user and his portfolios";
+karutaStr['en']['show-hide-log']="Show/Hide Log";
 
 //=========================================
 //========== REPORT ========================
@@ -642,4 +644,6 @@ karutaStr['en']['coverage']="Coverage";
 
 karutaStr['en']['connection-cas1']="Connection with University Account";
 karutaStr['en']['connection-cas2']="Connection without University Account";
+
+//-----------
 

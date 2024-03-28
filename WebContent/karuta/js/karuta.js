@@ -2886,6 +2886,10 @@ function replaceVariable(text,node,withquote)
 			text = text.replaceAll('##currentportfolio##',portfolios_byid[portfolioid_current].code_node.text());
 			text = text.replaceAll('##currentportfoliocode##',portfolios_byid[portfolioid_current].code_node.text());
 		}
+		if (text.indexOf('##portfolioitself')>-1) {
+			text = text.replaceAll('##portfolioitselfid##',g_portfolioid);
+			text = text.replaceAll('##portfolioitselfcode##',portfolios_byid[g_portfolioid].code_node.text());
+		}
 		//-------------
 		if (node!=null && node!=undefined) {
 			//--------- currentnode--------------

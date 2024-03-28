@@ -54,6 +54,7 @@
 	.for-each-node .dropdown-item[onclick*=sem-tag] {display:block}
 	span.chkbox-comments.xcreate-person,
 	span.chkbox-comments.xdelete-person,
+	span.chkbox-comments.xupdate-person,
 	span.chkbox-comments.xinactivate-person,
 	span.chkbox-comments.xactivate-person,
 	span.chkbox-comments.xcreate-tree,
@@ -79,6 +80,10 @@
 	span.chkbox-comments.xupdate-node-resource,
 	span.chkbox-comments.ximport-node,
 	span.chkbox-comments.xdelete-node,
+	span.chkbox-comments.xshow-node,
+	span.chkbox-comments.xhide-node,
+	span.chkbox-comments.xreload-node,
+	span.chkbox-comments.xreload-unit,
 	span.chkbox-comments.xsubmitall-node,
 	span.chkbox-comments.xmoveup-node,
 	span.chkbox-comments.xmove-node,
@@ -92,6 +97,7 @@
 	span.chkbox-comments.xupdate-field-byid,
 	span.chkbox-comments.xdelete-node-byid,
 	span.chkbox-comments.xreset-document-byid,
+	span.chkbox-comments.xdelete-tree-byid,
 	span.chkbox-comments.xupdate-field,
 	span.chkbox-comments.xupdate-textfield,
 	span.chkbox-comments.xupdate-dashboard,
@@ -102,16 +108,25 @@
 	span.chkbox-comments.xupdate-proxy,
 	span.chkbox-comments.xupdate-url2portfolio,
 	span.chkbox-comments.xupdate-url2unit,
+	span.chkbox-comments.xupdate-color,
+	span.chkbox-comments.xupdate-get-resource,
 	span.chkbox-comments.xupdate-item,
-//	span.chkbox-comments.xfor-each-line,
-//	span.chkbox-comments.xfor-each-tree,
-//	span.chkbox-comments.xfor-each-person,
+	span.chkbox-comments.xrefresh-tree-url2unit,
+	span.chkbox-comments.xrefresh-tree-url2portfolio,
+	span.chkbox-comments.xfor-each-line,
+	span.chkbox-comments.xfor-each-tree,
+	span.chkbox-comments.xfor-each-person,
 	span.chkbox-comments.xfor-each-node,
 	span.chkbox-comments.xactions,
+	span.chkbox-comments.xjsfunction,
 	span.chkbox-comments.xsubmitall,
 	span.chkbox-comments.xsend-email,
 	span.chkbox-comments.xvariable,
 	span.chkbox-comments.xbatch-variable,
+	span.chkbox-comments.xbatch-value-variable,
+	span.chkbox-comments.xclear-log,
+	span.chkbox-comments.xhide-log,
+	span.chkbox-comments.xwrite-log,
 	span.chkbox-comments.xif-then-else,
 	span.chkbox-comments.xif-action,
 	span.chkbox-comments.xthen-part,
@@ -152,112 +167,48 @@
 	--batch-uuid-color : #ff66ff;
 	--batch-instruction-color : #990000;
 	--batch-utilities-color : #CACACA;
+	--batch-log-color : #196F3D;
+	
 
 	//----- PERSON ---
-	.create-person {
-		margin-top:7px;
-		border:1px solid var(--batch-person-color) ;
-	}
+	.inactivate-person,
+	.create-person,
+	.activate-person,
+	.update-person,
 	.delete-person {
 		margin-top:7px;
-		border:1px solid var(--batch-person-color);
-	}
-	.inactivate-person {
-		margin-top:7px;
-		border:1px solid var(--batch-person-color);
-	}
-	.activate-person {
-		margin-top:7px;
-		border:1px solid var(--batch-person-color);
+		border:1px solid var(--batch-person-color) ;
 	}
 
 	//----- TREE ---
 	.create-tree,
+	.share-tree,
+	.unshare-tree,
+	.select-tree,
+	.delete-tree,
+	.re-instantiate-tree,
+	.set-owner,
 	.create-project {
-		margin-top:7px;
-		border:1px solid var(--batch-tree-color);
-	}
-	
-	.share-tree{
-		margin-top:7px;
-		border:1px solid var(--batch-tree-color);
-	}
-	
-	.unshare-tree{
-		margin-top:7px;
-		border:1px solid var(--batch-tree-color);
-	}
-	
-	.select-tree{
-		margin-top:7px;
-		border:1px solid var(--batch-tree-color);
-	}
-	
-	.delete-tree{
-		margin-top:7px;
-		border:1px solid var(--batch-tree-color);
-	}
-	.re-instantiate-tree{
-		margin-top:7px;
-		border:1px solid var(--batch-tree-color);
-	}
-	.set-owner {
-		margin-top:7px;
-		border:1px solid var(--batch-tree-color);
-	}
-	.update-tree-root {
 		margin-top:7px;
 		border:1px solid var(--batch-tree-color);
 	}
 
 	//----- PORTFOLIOGROUP ---
-	.create-portfoliogroup{
-		margin-top:7px;
-		border:1px solid var(--batch-portfoliogroup-color);
-	}
-	
-	.join-portfoliogroup{
-		margin-top:7px;
-		border:1px solid var(--batch-portfoliogroup-color);
-	}
-	
-	.leave-portfoliogroup{
-		margin-top:7px;
-		border:1px solid var(--batch-portfoliogroup-color);
-	}
-	
-	.share-portfoliogroup{
-		margin-top:7px;
-		border:1px solid var(--batch-portfoliogroup-color);
-	}
-	
+	.create-portfoliogroup,
+	.join-portfoliogroup,
+	.leave-portfoliogroup,
+	.share-portfoliogroup,
 	.unshare-portfoliogroup{
 		margin-top:7px;
 		border:1px solid var(--batch-portfoliogroup-color);
 	}
 
 	//----- USERGROUP ---	
-	.create-usergroup{
-		margin-top:7px;
-		border:1px solid var(--batch-usergroup-color);
-	}
-	.share-usergroup{
-		margin-top:7px;
-		border:1px solid var(--batch-usergroup-color);
-	}
-	.unshare-usergroup{
-		margin-top:7px;
-		border:1px solid var(--batch-usergroup-color);
-	}
-	.join-usergroup {
-		margin-top:7px;
-		border:1px solid var(--batch-usergroup-color);
-	}
-	
-	.leave-usergroup {
-		margin-top:7px;
-		border:1px solid var(--batch-usergroup-color);
-	}
+	.create-usergroup,
+	.share-usergroup,
+	.unshare-usergroup,
+	.join-usergroup,
+	.leave-usergroup,
 	.share-groups{
 		margin-top:7px;
 		border:1px solid var(--batch-usergroup-color);
@@ -270,36 +221,22 @@
 	.update-node-resource,
 	.moveup-node,
 	.move-node,
+	.show-node,
+	.hide-node,
+	.reload-node,
+	.reload-unit,
 	.submitall {
 		margin-top:7px;
 		border:1px solid var(--batch-node-color);
 	}
 
 	//----- METADATA ---
-	.update-metadata {
-		margin-top:7px;
-		border:1px solid var(--batch-metadata-color);
-	}
-	.update-metadata-wad {
-		margin-top:7px;
-		border:1px solid var(--batch-metadata-color);
-	}
-	.update-metadata-epm {
-		margin-top:7px;
-		border:1px solid var(--batch-metadata-color);
-	}
-	.update-metadata-inline {
-		margin-top:7px;
-		border:1px solid var(--batch-metadata-color);
-	}
-	.update-metadata-query {
-		margin-top:7px;
-		border:1px solid var(--batch-metadata-color);
-	}
-	.update-metadata-menu {
-		margin-top:7px;
-		border:1px solid var(--batch-metadata-color);
-	}
+	.update-metadata,
+	.update-metadata-wad,
+	.update-metadata-epm,
+	.update-metadata-inline,
+	.update-metadata-query,
+	.update-metadata-menu,
 	.update-rights {
 		margin-top:7px;
 		border:1px solid var(--batch-metadata-color);
@@ -310,6 +247,7 @@
 		margin-top:7px;
 		border:1px dashed  var(--batch-uuid-color);
 	}
+	.delete-tree-byid,
 	.update-field-byid,
 	.delete-node-byid,
 	.reset-document-byid {
@@ -318,52 +256,21 @@
 	}
 
 	//----- RESOURCE ---
-	.update-resource {
-		margin-top:7px;
-		border:1px dashed var(--batch-resource-color);
-	}
-	.update-field {
-		margin-top:7px;
-		border:1px solid var(--batch-resource-color);
-	}
-	.update-textfield {
-		margin-top:7px;
-		border:1px solid var(--batch-resource-color);
-	}
-	.update-dashboard {
-		margin-top:7px;
-		border:1px solid var(--batch-resource-color);
-	}
-	.update-proxy{
-		margin-top:7px;
-		border:1px solid var(--batch-resource-color);
-	}
-	.update-calendar{
-		margin-top:7px;
-		border:1px solid var(--batch-resource-color);
-	}
-	.update-document{
-		margin-top:7px;
-		border:1px solid var(--batch-resource-color);
-	}
-	.update-variable{
-		margin-top:7px;
-		border:1px solid var(--batch-resource-color);
-	}
-	.update-proxy{
-		margin-top:7px;
-		border:1px solid var(--batch-resource-color);
-	}
+	.update-resource,
+	.update-field,
+	.update-textfield,
+	.update-dashboard,
+	.update-proxy,
+	.update-calendar,
+	.update-color,
+	.update-document,
+	.update-variable,
+	.update-proxy,
 	.update-url2unit,
-	.update-url2portfolio{
-		margin-top:7px;
-		border:1px solid var(--batch-resource-color);
-	}
-	.update-item{
-		margin-top:7px;
-		border:1px solid var(--batch-resource-color);
-	}
+	.update-url2portfolio,
+	.update-item,
 	.refresh-tree-url2unit,
+	.refresh-tree-url2portfolio,
 	.update-get-resource {
 		margin-top:7px;
 		border:1px solid var(--batch-resource-color);
@@ -391,10 +298,19 @@
 }
 
 	//----- UTILITIES ---
+	.jsfunction,
 	.send-email,
+	.batch-value-variable,
 	.batch-variable {
 		margin-top:7px;
 		border:1px solid var(--batch-utilities-color);
 	}
 
+	//----- LOG ---
+	.clear-log,
+	.write-log,
+	.hide-log {
+		margin-top:7px;
+		border:1px solid var(--batch-log-color);
+	}
 

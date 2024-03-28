@@ -2329,7 +2329,8 @@ UIFactory["Portfolio"].callChangeOwner = function(portfolioid,langcode)
 	html += karutaStr[LANG]['select_user'];
 	html += "</div>";
 	html += "<div class='col-md-9'>";
-	html += "<div id='select_user'></div>";
+	html += "<div id='select-owner-search'></div>";
+	html += "<div id='select-owner-rightside-users-content1'></div>";
 	html += "</div>";
 	html += "</div><!--row-->";
 	$("#edit-window-body").html(html);
@@ -2338,21 +2339,14 @@ UIFactory["Portfolio"].callChangeOwner = function(portfolioid,langcode)
 	$("#edit-window-body-metadata").html("");
 	$("#edit-window-body-metadata-epm").html("");
 	//----------------------------------------------------------------
-	if (Users_byid.length>0) { // users loaded
-		UIFactory["User"].displaySelectActive('select_user');
-	} else {
-		$.ajax({
-			type : "GET",
-			dataType : "xml",
-			url : serverBCK_API+"/users",
-			success : function(data) {
-				UIFactory["User"].parse(data);
-				UIFactory["User"].displaySelectActive('select_user');
-			},
-			error : function(jqxhr,textStatus) {
-				alertHTML("Error in callChangeOwner : "+jqxhr.responseText);
-			}
-		});
+	UIFactory.User.displaySearch("select-owner-search",false,'select-owner');
+	//----------------------------------------------------------------
+	if (!UsersLoaded)
+		UIFactory.User.loadAll();
+	if (UsersActive_list.length<200)
+		UIFactory.User.displaySelectActive('select-owner-rightside-users-content1');
+	else {
+		$("#select-owner-rightside-users-content1").html(karutaStr[LANG]['too-much-users']);
 	}
 	//----------------------------------------------------------------
 	$('#edit-window').modal('show');
@@ -2366,7 +2360,7 @@ UIFactory["Portfolio"].changeOwner = function(portfolioid,langcode)
 	if (langcode==null)
 		langcode = LANGCODE;
 	//---------------------
-	var user = $("input[name='select_user']").filter(':checked');
+	var user = $("input[name='select_users']").filter(':checked');
 	var userid = $(user).val();
 	$.ajax({
 		type : "PUT",
