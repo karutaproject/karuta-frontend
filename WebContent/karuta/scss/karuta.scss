@@ -3469,8 +3469,9 @@ table.tablesorter th.restore {
 		.menus,
 		.buttons,
 		.buttons-menus,
+		.button
 		.btn-group {
-			block:none !important;
+			display:none !important;
 		}
 	
 		a:after {
