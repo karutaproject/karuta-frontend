@@ -2,8 +2,8 @@
 var karuta_version = "@project.version@";
 var karuta_date = "@build.timestamp@";
 
-const karuta_version_eportfolium = "eportfolium-3.36.0";
-const karuta_date_eportfolium = "2024/03/28";
+const karuta_version_eportfolium = "eportfolium-3.37.0";
+const karuta_date_eportfolium = "2024/04/03";
 
 
 var karuta_backend_version = "?";
@@ -21,4 +21,5 @@ var karuta_fileserver_date = "?";
 // 3.33.0 Change ownership search if more 200 users - 2024/03/20
 // 3.34.0 Batch - Label filter on for-each-tree
 // 3.35.0 Fix - CSS for media print
-// 3.36.0 Report - Variable Enhancement 
+// 3.36.0 Report - Variable Enhancement
+// 3.37.0 Feat - CSS for media print Enhancement 

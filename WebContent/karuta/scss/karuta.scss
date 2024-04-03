@@ -3468,9 +3468,14 @@ table.tablesorter th.restore {
 		.tooltip,
 		.menus,
 		.buttons,
-		.buttons-menus,
-		.btn-group {
-			block:none !important;
+		.buttons-menus {
+			display:none !important;
+		}
+		
+		#contenu.col-sm-9,
+		#contenu.col-md-9 {
+			flex: 0 0 100% !important;
+			max-width: 100% !important;
 		}
 	
 		a:after {
@@ -3493,6 +3498,12 @@ table.tablesorter th.restore {
 		td {
 			page-break-inside:auto !important;
 			page-break-after:auto !important;
+		}
+		.select-label .btn {
+			border: none;
+		}
+		.select-label .dropdown-toggle {
+			display: none !important;
 		}
 		.section2hide {
 			display:none !important;
