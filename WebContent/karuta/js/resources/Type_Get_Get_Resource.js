@@ -1620,9 +1620,12 @@ UIFactory["Get_Get_Resource"].updateaddedpart = function(data,get_resource_semta
 		url : serverBCK_API+"/nodes/node/"+partid,
 		last : last,
 		success : function(data) {
-			var nodeid = $("*:has(>metadata[semantictag='"+get_resource_semtag+"'])",data).attr('id');
+			var nodes = $("*:has(>metadata[semantictag*='"+get_resource_semtag+"'])",data);
+			if (nodes.length==0)
+				nodes = $( ":root",data ); //node itself
+			var nodeid = $(nodes[0]).attr('id'); 
 			var url_resource = serverBCK_API+"/resources/resource/" + nodeid;
-			var tagname = $( ":root",data )[ 0 ].nodeName;
+			var tagname = $(nodes[0])[0].nodeName;
 			if( "asmRoot" == tagname || "asmStructure" == tagname || "asmUnit" == tagname || "asmUnitStructure" == tagname) {
 				xml = xml.replace("Get_Get_Resource","nodeRes");
 				url_resource = serverBCK_API+"/nodes/node/" + nodeid + "/noderesource";
