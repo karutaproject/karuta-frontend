@@ -1626,9 +1626,14 @@ UIFactory["Get_Get_Resource"].updateaddedpart = function(data,get_resource_semta
 			var nodeid = $(nodes[0]).attr('id'); 
 			var url_resource = serverBCK_API+"/resources/resource/" + nodeid;
 			var tagname = $(nodes[0])[0].nodeName;
-			if( "asmRoot" == tagname || "asmStructure" == tagname || "asmUnit" == tagname || "asmUnitStructure" == tagname) {
+			if( "asmContext" == tagname) {
+				const resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']", $(nodes[0])[0]);
+				const xsi_type = $(resource).attr("xsi_type");
+				xml = xml.replace("Get_Get_Resource",xsi_type);
+			} else {
 				xml = xml.replace("Get_Get_Resource","nodeRes");
 				url_resource = serverBCK_API+"/nodes/node/" + nodeid + "/noderesource";
+				
 			}
 			$.ajax({
 				async : false,

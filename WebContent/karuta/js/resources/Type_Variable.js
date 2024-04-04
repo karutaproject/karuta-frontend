@@ -100,9 +100,9 @@ UIFactory["Variable"].prototype.displayEditor = function(dest,type,langcode,disa
 	var htmlNameInputObj = $("<input id='name_"+this.id+"' type='text' class='form-control' value=\""+name+"\">");
 	var self = this;
 	$(htmlNameInputObj).change(function (){
-		$($("metadata",self.node)[0]).attr('semantictag','g-variable '+$(this).val());
+		$($("metadata",self.node)[0]).attr('semantictag','g-variable '+sanitizeText($(this).val()));
 		UICom.UpdateMetadata(self.id);
-		$(self.name_node).text($(this).val());
+		$(self.name_node).text(sanitizeText($(this).val()));
 		self.save();
 	});
 	$(htmlNameDivObj).append($(htmlNameInputObj));
@@ -118,7 +118,7 @@ UIFactory["Variable"].prototype.displayEditor = function(dest,type,langcode,disa
 	var htmlValueDivObj = $("<div class='col-sm-9'></div>");
 	var htmlValueInputObj = $("<input id='Value_"+this.id+"' type='text' class='form-control' value=\""+value+"\">");
 	$(htmlValueInputObj).change(function (){
-		$(self.value_node).text($(this).val());
+		$(self.value_node).text(sanitizeText($(this).val()));
 		self.save();
 	});
 	$(htmlValueDivObj).append($(htmlValueInputObj));

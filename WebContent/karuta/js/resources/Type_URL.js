@@ -198,8 +198,8 @@ UIFactory["URL"].update = function(obj,itself,type,langcode,parent)
 		if (langcode==null)
 			langcode = LANGCODE;
 		//---------------------
-		var label = $("input[name='label']",obj).val();
-		var url = $("input[name='url']",obj).val();
+		var label = sanitizeText($("input[name='label']",obj).val());
+		var url = sanitizeText($("input[name='url']",obj).val());
 		if(type!=null && type=='same')
 			label = url;
 		//---------------------

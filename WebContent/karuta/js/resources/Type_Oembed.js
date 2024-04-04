@@ -191,7 +191,7 @@ UIFactory["Oembed"].update = function(obj,itself,type,langcode)
 		if (langcode==null)
 			langcode = LANGCODE;
 		//---------------------
-		var url = $("input[name='url']",obj).val();
+		var url = sanitizeText($("input[name='url']",obj).val());
 		//---------------------
 		itself.multilingual = ($("metadata",itself.node).attr('multilingual-resource')=='Y') ? true : false;
 		if (!itself.multilingual)

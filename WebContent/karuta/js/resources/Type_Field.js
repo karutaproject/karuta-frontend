@@ -168,7 +168,7 @@ UIFactory["Field"].prototype.getEditor = function(type,langcode,disabled)
 	$(obj).attr('value',value);
 	var self = this;
 	$(obj).change(function (){
-		$(self.text_node[langcode]).text($(this).val());
+		$(self.text_node[langcode]).text(sanitizeText($(this).val()));
 		self.update(langcode);
 	});
 	return obj;

@@ -142,11 +142,11 @@ UIFactory["SendEmail"].update = function(obj,itself,langcode)
 	if (langcode==null)
 		langcode = LANGCODE;
 	//---------------------
-	var firstname = $("input[name='firstname_SendEmail']",obj).val();
+	var firstname = sanitizeText($("input[name='firstname_SendEmail']",obj).val());
 	$(itself.firstname_node[langcode]).text(firstname);
-	var lastname = $("input[name='lastname_SendEmail']",obj).val();
+	var lastname = sanitizeText($("input[name='lastname_SendEmail']",obj).val());
 	$(itself.lastname_node[langcode]).text(lastname);
-	var email = $("input[name='email_SendEmail']",obj).val();
+	var email = sanitizeText($("input[name='email_SendEmail']",obj).val());
 	$(itself.email_node[langcode]).text(email);
 	itself.save();
 };
@@ -173,7 +173,7 @@ UIFactory["SendEmail"].prototype.getEditor = function(type,langcode)
 			var htmlFirstDivObj = $("<div class='col-sm-9'></div>");
 			var htmlFirstInputObj = $("<input id='firstname"+this.id+"' type='text' class='form-control' name='firstname_SendEmail' value=\""+this.firstname_node[langcode].text()+"\">");
 			$(htmlFirstInputObj).change(function (){
-				$(self.firstname_node[langcode]).text($(this).val());
+				$(self.firstname_node[langcode]).text(sanitizeText($(this).val()));
 				self.save();
 			});
 			$(htmlFirstDivObj).append($(htmlFirstInputObj));
@@ -186,7 +186,7 @@ UIFactory["SendEmail"].prototype.getEditor = function(type,langcode)
 			var htmlLastDivObj = $("<div class='col-sm-9'></div>");
 			var htmlLastInputObj = $("<input id='lastname"+this.id+"' type='text' class='form-control' name='lastname_SendEmail' value=\""+this.lastname_node[langcode].text()+"\">");
 			$(htmlLastInputObj).change(function (){
-				$(self.lastname_node[langcode]).text($(this).val());
+				$(self.lastname_node[langcode]).text(sanitizeText($(this).val()));
 				self.save();
 			});
 			$(htmlLastDivObj).append($(htmlLastInputObj));
@@ -199,7 +199,7 @@ UIFactory["SendEmail"].prototype.getEditor = function(type,langcode)
 			var htmlEmailDivObj = $("<div class='col-sm-9'></div>");
 			var htmlEmailInputObj = $("<input id='email"+this.id+"' type='text' class='form-control' name='email_SendEmail' value=\""+this.email_node[langcode].text()+"\">");
 			$(htmlEmailInputObj).change(function (){
-				$(self.email_node[langcode]).text($(this).val());
+				$(self.email_node[langcode]).text(sanitizeText($(this).val()));
 				self.save();
 			});
 			$(htmlEmailDivObj).append($(htmlEmailInputObj));
