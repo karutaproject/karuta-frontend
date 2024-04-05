@@ -2,8 +2,8 @@
 var karuta_version = "@project.version@";
 var karuta_date = "@build.timestamp@";
 
-const karuta_version_eportfolium = "eportfolium-3.39.0";
-const karuta_date_eportfolium = "2024/04/04";
+const karuta_version_eportfolium = "eportfolium-3.41.0";
+const karuta_date_eportfolium = "2024/04/05";
 
 
 var karuta_backend_version = "?";
@@ -25,3 +25,5 @@ var karuta_fileserver_date = "?";
 // 3.37.0 Feat - CSS for media print Enhancement 
 // 3.38.0 Bug fixed - get_get_resource updated part of importmultiple
 // 3.39.0 Bug fixed - all input texts are sanitized - script tag and javascript word are deleted
+// 3.40.0 Feat - get_resource and get_get_resource import multiple can use semtag+semtag2
+// 3.41.0 Feat - New attribute Sharer for user
