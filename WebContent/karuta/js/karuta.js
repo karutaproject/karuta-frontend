@@ -3984,8 +3984,9 @@ function confirmSubmitAndChangeVisibility(nodeid,path,value){
 //================================================
 
 function sanitizeText(text) {
-	text= text.replace(/<script.*?>[\s\S]*?<\/.*?script>/gi,"");
-	text= text.replace(/javascript.*:[^"]*/gi,"");
+	text = text.replace(/<script.*?>[\s\S]*?<\/.*?script>/gi,"");
+	text = text.replace(/javascript.*:[^"]*/gi,"");
+	text = text.replace(/onclick.*=[^"]*/gi,"");
 	return text;
 }
 

@@ -444,7 +444,7 @@ karutaStr['fr']['select_user']="Selectionner un usager";
 karutaStr['fr']['other']="Autre";
 karutaStr['fr']['delete-temporary-users']="Supprimer tous";
 karutaStr['fr']['delete-empty-users']="Supprimer la sélection";
-karutaStr['fr']['c-a-s']="C/A/S";
+karutaStr['fr']['c-a-s']="C/A/S/P";
 karutaStr['fr']['too-much-users']="Il y a plus de 200 usagers actifs. Cliquez sur le bouton 'Voir' pour les afficher ou faites une recherche ci-dessus."
 karutaStr['fr']['new-code']="Envoyez votre login. Vous recevrez une code pour vous connecter."
 

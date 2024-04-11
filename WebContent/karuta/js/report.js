@@ -2530,7 +2530,7 @@ g_report_actions['url2portfolio'] = function (destid,action,no,data)
 		label = portfolios_byid[portfolioid_current].getLabel();
 	}
 	//------------------------
-	text = "<span id='"+nodeid+"' style='"+style+"' class='URL2Portfolio-link "+cssclass+"' onclick=\"display_main_page('"+uuid+"')\">"+label+"</span>";
+	text = "<span id='"+nodeid+"' style='"+style+"' class='URL2Portfolio-link "+cssclass+"' onclick=\"display_main_page('"+uuid+"','"+g_userrole+"')\">"+label+"</span>";
 	//------------------------
 	$("#"+destid).append($(text));
 	$("#"+nodeid).attr("style",style);
