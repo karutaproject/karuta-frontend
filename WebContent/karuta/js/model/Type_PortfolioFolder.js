@@ -1051,7 +1051,7 @@ UIFactory["PortfolioFolder"].loadAndDisplayPortfolios = function(dest,type)
 				if (type!=undefined)
 						UIFactory.PortfolioFolder.displayPortfolios('project-portfolios','false',type,portfoliosnotinfolders);
 				else if (nb_visibleportfolios>0 || autoload!="" )
-					if (nb_visibleportfolios>9 && portfoliosnotinfolders.length>9)
+					if (nb_visibleportfolios>9 && portfoliosnotinfolders.length>9  && autoload=="")
 						UIFactory.PortfolioFolder.displayPortfolios('project-portfolios','false','list',portfoliosnotinfolders);
 					else if (nb_visibleportfolios>1 && autoload=="")
 						UIFactory.PortfolioFolder.displayPortfolios('card-deck-portfolios','false','card',portfoliosnotinfolders);

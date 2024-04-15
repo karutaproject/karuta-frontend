@@ -2,7 +2,7 @@
 var karuta_version = "@project.version@";
 var karuta_date = "@build.timestamp@";
 
-const karuta_version_eportfolium = "eportfolium-3.42.0";
+const karuta_version_eportfolium = "eportfolium-3.42.1";
 const karuta_date_eportfolium = "2024/04/11";
 
 
@@ -28,3 +28,4 @@ var karuta_fileserver_date = "?";
 // 3.40.0 Feat - get_resource and get_get_resource import multiple can use semtag+semtag2
 // 3.41.0 Feat - New attribute Sharer for user
 // 3.42.0 Feat - Batch Error Management
+// 3.42.1 Fix - Autoload when more than one portfolios are visible
