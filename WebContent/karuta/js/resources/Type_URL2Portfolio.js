@@ -111,7 +111,7 @@ UIFactory["URL2Portfolio"].prototype.getView = function(dest,type,langcode)
 	if (type=='horizontal-menu')
 		html+= "dropdown-item ";
 	html += "' "
-	html += "onclick=\"display_main_page('"+this.uuid_node.text()+"')\">"+label+"</div>";
+	html += "onclick=\"display_main_page('"+this.uuid_node.text()+"','"+g_userrole+"')\">"+label+"</div>";
 	return html;
 };
 

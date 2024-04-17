@@ -432,6 +432,7 @@ karutaStr['en']['change_name']="Change Name";
 karutaStr['en']['password']="Password";
 karutaStr['en']['new_password']="New Password";
 karutaStr['en']['admin']="Admin";
+karutaStr['en']['sharer']="Sharer";
 karutaStr['en']['designer']="Creator";
 karutaStr['en']['active']="Active";
 karutaStr['en']['select_users']="Select Users";
@@ -443,7 +444,7 @@ karutaStr['en']['select_user']="Select a User";
 karutaStr['en']['other']="Other";
 karutaStr['en']['delete-temporary-users']="Delete All";
 karutaStr['en']['delete-empty-users']="Delete Selection";
-karutaStr['en']['c-a-s']="C/A/S";
+karutaStr['en']['c-a-s']="D/A/Su/Sh";
 karutaStr['en']['too-much-users']="There are more than 200 users. Click 'See' button to display them or search using the input above."
 karutaStr['en']['new-code']="Send your login.You will receive a code to connect."
 

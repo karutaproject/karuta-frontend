@@ -49,6 +49,7 @@ UIFactory["User"] = function( node )
 	this.password_node = $("password",node);
 	this.designer_node = $("designer",node);
 	this.admin_node = $("admin",node);
+	this.sharer_node = $("sharer",node);
 	this.active_node = $("active",node);
 	this.substitute_node = $("substitute",node);
 	this.other_node = $("other",node);
@@ -66,6 +67,7 @@ UIFactory["User"] = function( node )
 	this.attributes["email"] = this.email_node;
 	this.attributes["password"] = this.email_node;
 	this.attributes["admin"] = this.admin_node;
+	this.attributes["sharer"] = this.sharer_node;
 	this.attributes["designer"] = this.designer_node;
 	this.attributes["active"] = this.active_node;
 	this.attributes["substitute"] = this.substitute_node;
@@ -73,6 +75,7 @@ UIFactory["User"] = function( node )
 	//-----------------------------------
 	// setting flags
 	this.admin = this.admin_node.text()=='1';
+	this.sharer = this.sharer_node.text()=='1';
 	this.admin_original = this.admin_node.text()=='1';
 	this.creator = this.designer_node.text()=='1' || this.admin_node.text()=='1';
 	this.other = this.other_node.text();
@@ -537,7 +540,7 @@ UIFactory["User"].prototype.getView = function(dest,type,lang,gid)
 		html += "<tr class='user-row sort-tr'>"
 		html += "<td class='firstname'>"+this.firstname_node.text()+"</td>";
 		html += "<td class='lastname'>"+this.lastname_node.text()+"</td>";
-		html += "<td class='creator'>"+this.designer_node.text()+"/"+this.admin_node.text()+"/"+this.substitute_node.text()+"</td>";
+		html += "<td class='creator'>"+this.designer_node.text()+"/"+this.admin_node.text()+"/"+this.substitute_node.text()+"/"+this.sharer_node.text()+"</td>";
 		html += "<td class='username'>("+this.username_node.text()+")</td>";
 		//------------ buttons ---------------
 		html += "<td class='user-buttons'>";
@@ -553,7 +556,7 @@ UIFactory["User"].prototype.getView = function(dest,type,lang,gid)
 		html = "<div class='row user-row'>"
 		html = "<div class='col-2 firstname'>"+this.firstname_node.text()+"</div>";
 		html += "<div class='col-2 lastname'>"+this.lastname_node.text()+"</div>";
-		html += "<div class='col-2 creator'>"+this.designer_node.text()+"/"+this.admin_node.text()+"/"+this.substitute_node.text()+"</div>";
+		html += "<div class='col-2 creator'>"+this.designer_node.text()+"/"+this.admin_node.text()+"/"+this.substitute_node.text()+"/"+this.sharer_node.text()+"</div>";
 		html += "<div class='col-2 username'>("+this.username_node.text()+")</div>";
 		//------------ buttons ---------------
 		html += "<div class='col-2 user-buttons'>";
@@ -664,7 +667,7 @@ UIFactory["User"].prototype.getView = function(dest,type,lang,gid)
 	if (type=='empty' && USER.admin) {
 		html += "<td class='firstname'><input type='checkbox' name='empty-user' id='empty"+this.id+"'>&nbsp;"+this.firstname_node.text()+"</td>";
 		html += "<td class='lastname'>"+this.lastname_node.text()+"</td>";
-		html += "<td class='creator'>"+this.designer_node.text()+"/"+this.admin_node.text()+"/"+this.substitute_node.text()+"</td>";
+		html += "<td class='creator'>"+this.designer_node.text()+"/"+this.admin_node.text()+"/"+this.substitute_node.text()+"/"+this.sharer_node.text()+"</td>";
 		html += "<td class='username'>("+this.username_node.text()+")</td>";
 		html += "<td><div class='btn-group'>";
 		html += "<button class='btn btn-xs' onclick=\"UIFactory['User'].confirmRemove('"+this.id+"')\" data-title='"+karutaStr[LANG]["button-delete"]+"' relx='tooltip'>";
@@ -905,6 +908,7 @@ UIFactory["User"].prototype.getEditor = function(type,lang)
 	if (this.id>3){
 		html += UIFactory["User"].getAttributeRadioEditor(this.id,"designer",this.designer_node.text());
 		html += UIFactory["User"].getAttributeRadioEditor(this.id,"admin",this.admin_node.text());
+		html += UIFactory["User"].getAttributeRadioEditor(this.id,"sharer",this.admin_node.text());
 		html += UIFactory["User"].getAttributeEditor(this.id,"other",this.other_node.text());
 	}
 	if (this.id<2 || this.id>3){
@@ -976,6 +980,7 @@ UIFactory["User"].callCreate = function()
 	html +="<hr/>";
 	html += UIFactory["User"].getAttributeRadioCreator("designer","0");
 	html += UIFactory["User"].getAttributeRadioCreator("admin","0");
+	html += UIFactory["User"].getAttributeRadioCreator("sharer","0");
 	html += UIFactory["User"].getAttributeCreator("other","");
 	html += UIFactory["User"].getAttributeRadioCreator("substitute","0");
 	html += UIFactory["User"].getAttributeRadioCreator("active","1");
@@ -1117,6 +1122,7 @@ UIFactory["User"].create = function()
 	xml +="	<password>"+$("#user_password").val()+"</password>";
 	xml +="	<active>"+$("input[name=user_active]:checked").val()+"</active>";
 	xml +="	<admin>"+$("input[name=user_admin]:checked").val()+"</admin>";
+	xml +="	<sharer>"+$("input[name=user_sharer]:checked").val()+"</sharer>";
 	xml +="	<designer>"+$("input[name=user_designer]:checked").val()+"</designer>";
 	xml +="	<substitute>"+$("input[name=user_substitute]:checked").val()+"</substitute>";
 	xml +="</user>";
@@ -1336,8 +1342,8 @@ UIFactory["User"].deleteTemporaryUsers = function()
 	for (var i=first; i<last;i++){
 		var user = UsersActive_list[i];
 		try {
-		if (user.username.split('-').length>4 || user.username.indexOf('#')>10)
-			UIFactory.User.remove(user.id); 
+			if (user.username.split('-').length>4 || user.username.indexOf('#')>10)
+				UIFactory.User.remove(user.id); 
 		} 
 		catch {}
 	}

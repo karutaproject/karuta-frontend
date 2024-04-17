@@ -21,6 +21,7 @@ var g_actions = [];
 var g_actions_list = [];
 var g_current_node_uuid = null;
 var g_users = {};
+var g_batch_error = [];
 //-----------------------
 
 var jqueryBatchSpecificFunctions = {};
@@ -709,7 +710,7 @@ g_actions['create-user'] = function createUser(node)
 			});
 		}
 	});
-	if (!ok) g_batch_error = true;
+	if (!ok) g_batch_error.push("create-user");
 	return ok;
 };
 
@@ -787,7 +788,7 @@ g_actions['update-user'] = function updateUser(node)
 			$("#batch-log").append("<br>- ***<span class='danger'>ERROR 3</span> in update-user ("+userid+") - identifier:"+identifier);
 		}
 	});
-	if (!ok) g_batch_error = true;
+	if (!ok) g_batch_error.push("update-user");
 	return ok;
 };
 
@@ -828,7 +829,7 @@ g_actions['delete-user'] = function deleteUser(node)
 			$("#batch-log").append("<br>- <span class='danger'>ERROR</span> user does not exist - identifier:"+identifier);
 		}
 	});
-	if (!ok) g_batch_error = true;
+	if (!ok) g_batch_error.push("delete-user");
 	return ok;
 }
 
@@ -887,7 +888,7 @@ g_actions['inactivate-user'] = function inactivateUser(node)
 			$("#batch-log").append("<br>- NOT FOUND <span class='danger'>ERROR</span> user does not exist - identifier:"+identifier);
 		}
 	});
-	if (!ok) g_batch_error = true;
+	if (!ok) g_batch_error.push("inactivate-user");
 	return ok;
 }
 
@@ -946,7 +947,7 @@ g_actions['activate-user'] = function activateUser(node)
 			$("#batch-log").append("<br>- NOT FOUND <span class='danger'>ERROR</span> user does not exist - identifier:"+identifier);
 		}
 	});
-	if (!ok) g_batch_error = true;
+	if (!ok) g_batch_error.push("activate-user");
 	return ok;
 }
 
@@ -976,10 +977,11 @@ g_actions['create-usergroup'] = function CreateUserGroup(node)
 			$("#batch-log").append("<br>- usergroup created - label:"+usergroup);
 		},
 		error : function(data) {
+			ok = true;
 			$("#batch-log").append("<br>- *** already defined - label:"+usergroup);
 		}
 	});
-	if (!ok) g_batch_error = true;
+	if (!ok) g_batch_error.push('create-usergroup');
 	return ok;
 }
 
@@ -1049,7 +1051,7 @@ g_actions['join-usergroup'] = function JoinUserGroup(node)
 			$("#batch-log").append("<br>- <span class='danger'>ERROR 4</span> in JoinUserGroup - usergroup:"+usergroup+" - user:"+user+" NOT FOUND");
 		}
 	});
-	if (!ok) g_batch_error = true;
+	if (!ok) g_batch_error.push('join-usergroup');
 	return ok;
 }
 
@@ -1119,7 +1121,7 @@ g_actions['leave-usergroup'] = function LeaveUserGroup(node)
 			$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in LeaveUserGroup - usergroup:"+usergroup+" - user:"+user+" NOT FOUND");
 		}
 	});
-	if (!ok) g_batch_error = true;
+	if (!ok) g_batch_error.push("leave-usergroup");
 	return ok;
 }
 
@@ -1152,7 +1154,7 @@ g_actions['create-usergroup-by-id'] = function DeleteUserGroupById(node)
 			$("#batch-log").append("<br>- *** not exist - id:"+usergroup);
 		}
 	});
-	if (!ok) g_batch_error = true;
+	if (!ok) g_batch_error.push("create-usergroup-by-id");
 	return ok;
 }
 
@@ -1194,7 +1196,7 @@ g_actions['delete-tree'] = function deleteTree(node)
 	catch(err) {
 		$("#batch-log").append("<br>- ***<span class='danger'>ERROR 3</span> delete tree - portfolioid:"+portfolioid+" ---- NOT FOUND ----");
 	}
-	if (!ok) g_batch_error = true;
+	if (!ok) g_batch_error.push("delete-tree");
 	return ok;
 }
 
@@ -1223,7 +1225,7 @@ g_actions['refresh-tree-url2unit'] = function refreshTreeURL2Unit(node)
 	catch(err) {
 		$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> tree-url2unit refreshed -portfolioid:"+portfolioid+" ---- NOT FOUND ----");
 	}
-	if (!ok) g_batch_error = true;
+	if (!ok) g_batch_error.push("refresh-tree-url2unit");
 	return ok;
 }
 
@@ -1252,7 +1254,7 @@ g_actions['refresh-tree-url2portfolio'] = function refreshTreeURL2Portfolio(node
 	catch(err) {
 		$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> tree-url2portfolio refreshed -portfolioid:"+portfolioid+" ---- NOT FOUND ----");
 	}
-	if (!ok) g_batch_error = true;
+	if (!ok) g_batch_error.push("refresh-tree-url2portfolio");
 	return ok;
 }
 
@@ -1358,7 +1360,7 @@ g_actions['create-tree'] = function createTree(node)
 	} else {
 		$("#batch-log").append("<br>-***<span class='danger'>ERROR</span> in  create tree - code is empty");
 	}
-	if (!ok) g_batch_error = true;
+	if (!ok) g_batch_error.push("create-tree");
 	return ok;
 }
 
@@ -1397,7 +1399,7 @@ g_actions['select-tree'] = function selectTree(node)
 	else {
 		$("#batch-log").append("<br> **** tree does not exist  - code:"+code);
 	}
-	if (!ok) g_batch_error = true;
+	if (!ok) g_batch_error.push("select-tree");
 	return ok;
 }
 
@@ -1454,7 +1456,7 @@ g_actions['copy-tree'] = function copyTree(node)
 				$("#batch-log").append("<br>- <span class='danger'>ERROR</span> in  copy-tree - code:"+code);
 			}
 		});
-	if (!ok) g_batch_error = true;
+	if (!ok) g_batch_error.push("copy-tree");
 	return ok;
 }
 
@@ -1550,7 +1552,7 @@ g_actions['update-tree-root'] = function updateTreeRoot(node)
 	} else {
 		$("#batch-log").append("<br>-***<span class='danger'>ERROR</span> in updateTreeRoot - newcode is empty");
 	}
-	if (!ok) g_batch_error = true;
+	if (!ok) g_batch_error.push("update-tree-root");
 	return ok;
 }
 
@@ -1617,7 +1619,7 @@ g_actions['share-tree'] = function shareTree(node)
 			$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in share tree ("+g_trees[treeref][1]+") - role:"+role);
 		}
 	});
-	if (!ok) g_batch_error = true;
+	if (!ok) g_batch_error.push("share-tree");
 	return ok;
 }
 
@@ -1664,7 +1666,7 @@ g_actions['share-tree-byemail'] = function (node)
 			});
 		}
 	});
-	if (!ok) g_batch_error = true;
+	if (!ok) g_batch_error.push("share-tree-byemail");
 	return ok;
 }
 
@@ -1712,7 +1714,7 @@ g_actions['set-owner'] = function setOwner(node)
 			$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> tree owner changed ("+g_trees[treeref][1]+") - user:"+user);
 		}
 	});
-	if (!ok) g_batch_error = true;
+	if (!ok) g_batch_error.push("set-owner");
 	return ok;
 }
 
@@ -1742,7 +1744,7 @@ g_actions['re-instantiate-tree'] = function reInstantiateTree(node)
 			$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in tree re-instantiated ("+g_trees[treeref][1]+")");
 		}
 	});
-	if (!ok) g_batch_error = true;
+	if (!ok) g_batch_error.push("re-instantiate-tree");
 	return ok;
 }
 
@@ -1807,7 +1809,7 @@ g_actions['unshare-tree'] = function unshareTree(node)
 			$("#batch-log").append("<br>- <span class='danger'>ERROR</span> in unshare tree ("+g_trees[treeref][1]+") - role:"+role);
 		}
 	});
-	if (!ok) g_batch_error = true;
+	if (!ok) g_batch_error.push("unshare-tree");
 	return ok;
 }
 
@@ -1842,7 +1844,7 @@ g_actions['update-field-byid'] = function updateFieldById(node)
 			$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in update resource("+nodeid+")");
 		}
 	});
-	if (!ok) g_batch_error = true;
+	if (!ok) g_batch_error.push("update-field-byid");
 	return ok;
 }
 
@@ -1877,7 +1879,7 @@ g_actions['reset-document-byid'] = function resetDocumentById(node)
 			$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in reset document("+nodeid+")");
 		}
 	});
-	if (!ok) g_batch_error = true;
+	if (!ok) g_batch_error.push("reset-document-byid");
 	return ok;
 }
 
@@ -1901,7 +1903,7 @@ g_actions['delete-node-byid'] = function deleteNodeById(node)
 			$("#batch-log").append("<br>- *** <span class='danger'>ERROR</span> in deleting node : "+nodeid);
 		}
 	});
-	if (!ok) g_batch_error = true;
+	if (!ok) g_batch_error.push("delete-node-byid");
 	return ok;
 }
 
@@ -1925,7 +1927,7 @@ g_actions['delete-tree-byid'] = function (node)
 			$("#batch-log").append("<br>- *** <span class='danger'>ERROR</span> in deleting tree : "+portfolioid);
 		}
 	});
-	if (!ok) g_batch_error = true;
+	if (!ok) g_batch_error.push("delete-tree-byid");
 	return ok;
 }
 
@@ -1956,10 +1958,11 @@ g_actions['create-portfoliogroup'] = function CreatePortfolioGroup(node)
 			$("#batch-log").append("<br>- portfoliogroup created - label:"+portfoliogroup);
 		},
 		error : function(data) {
+			ok = true;
 			$("#batch-log").append("<br>- *** already defined - label:"+portfoliogroup);
 		}
 	});
-	if (!ok) g_batch_error = true;
+	if (!ok) g_batch_error.push("create-portfoliogroup");
 	return ok;
 }
 
@@ -2041,7 +2044,7 @@ g_actions['join-portfoliogroup'] = function JoinPortfolioGroup(node)
 			$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in JoinPortfolioGroup - portfoliogroup:"+portfoliogroup);
 		}
 	});
-	if (!ok) g_batch_error = true;
+	if (!ok) g_batch_error.push("join-portfoliogroup");
 	return ok;
 }
 
@@ -2091,7 +2094,7 @@ g_actions['leave-portfoliogroup'] = function LeavePortfolioGroup(node)
 			$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in JoinPortfolioGroup - portfoliogroup:"+portfoliogroup+" - portfolio:"+g_trees[treeref][1]);
 		}
 	});
-	if (!ok) g_batch_error = true;
+	if (!ok) g_batch_error.push("leave-portfoliogroup");
 	return ok;
 }
 
@@ -2171,7 +2174,7 @@ g_actions['share-portfoliogroup'] = function sharePortfolioGroup(node)
 			$("#batch-log").append("<br>- <span class='danger'>ERROR</span> user : "+user+" NOT FOUND");
 		}
 	});
-	if (!ok) g_batch_error = true;
+	if (!ok) g_batch_error.push("share-portfoliogroup");
 	return ok;
 }
 
@@ -2249,7 +2252,7 @@ g_actions['unshare-portfoliogroup'] = function unsharePortfolioGroup(node)
 			$("#batch-log").append("<br>- <span class='danger'>ERROR</span> user : "+user+" NOT FOUND");
 		}
 	});
-	if (!ok) g_batch_error = true;
+	if (!ok) g_batch_error.push("unshare-portfoliogroup");
 	return ok;
 }
 
@@ -2320,7 +2323,7 @@ g_actions['share-usergroup'] = function shareUserGroup(node)
 			$("#batch-log").append("<br>- <span class='danger'>ERROR</span> tree shared with usergroup  ("+g_trees[treeref][1]+") - usergroup:"+usergroupname+" - role:"+role);
 		}
 	});
-	if (!ok) g_batch_error = true;
+	if (!ok) g_batch_error.push("share-usergroup");
 	return ok;
 }
 
@@ -2387,7 +2390,7 @@ g_actions['unshare-usergroup'] = function unshareUserGroup(node)
 			$("#batch-log").append("<br>- <span class='danger'>ERROR</span> in usergroup unshared ("+g_trees[treeref][1]+") - usergroup:"+usergroupname+" - userid:"+userid+" - role:"+role);
 		}
 	});
-	if (!ok) g_batch_error = true;
+	if (!ok) g_batch_error.push("unshare-usergroup");
 	return ok;
 }
 
@@ -2476,7 +2479,7 @@ g_actions['share-groups'] = function shareGroups(node)
 			$("#batch-log").append("<br>- <span class='danger'>ERROR</span> Portfoliogroup does not exist - portfoliogroup:"+portfoliogroup);
 		}
 	});
-	if (!ok) g_batch_error = true;
+	if (!ok) g_batch_error.push("share-groups");
 	return ok;
 }
 
@@ -2543,7 +2546,7 @@ g_actions['update-resource'] = function updateResource(node,data)
 	} else {
 		$("#batch-log").append("<br>- ***NOT FOUND <span class='danger'>ERROR - update-resource "+type+" -"+getSemtag(node)+"</span>");
 	}
-	if (!(ok!=0 && ok == nodes.length)) g_batch_error = true;
+	if (!(ok!=0 && ok == nodes.length)) g_batch_error.push("update-resource");
 	return (ok!=0 && ok == nodes.length);
 }
 
@@ -2615,7 +2618,7 @@ g_actions['update-node-resource'] = function updateResource(node,data)
 	} else {
 		$("#batch-log").append("<br>- ***NOT FOUND <span class='danger'>ERROR - update-node-resource - type: "+type+"</span>");
 	}
-	if (!(ok!=0 && ok == nodes.length)) g_batch_error = true;
+	if (!(ok!=0 && ok == nodes.length)) g_batch_error.push("update-node-resource");
 	return (ok!=0 && ok == nodes.length);
 }
 
@@ -2698,7 +2701,7 @@ g_actions['update-node'] = function updateNode(node,data)
 	} else {
 		$("#batch-log").append("<br>- ***NOT FOUND <span class='danger'>ERROR</span> in update-resource - tree="+getTreef(node)[1]+" semtag="+getSemtag(node)+" type="+type+" value="+text);
 	}
-	if (!ok) g_batch_error = true;
+	if (!ok) g_batch_error.push("update-node");
 	return ok;
 
 }
@@ -2836,7 +2839,7 @@ g_actions['update-rights'] = function updateRights(node,data)
 	} else {
 		$("#batch-log").append("<br>- ***NOT FOUND <span class='danger'>ERROR</span> in update rights("+nodeid+") - semtag="+ getSemtag(node));
 	}
-	if (!(ok!=0 && ok == nodes.length)) g_batch_error = true;
+	if (!(ok!=0 && ok == nodes.length)) g_batch_error.push("update-rights");
 	return (ok!=0 && ok == nodes.length);
 }
 
@@ -2926,7 +2929,7 @@ g_actions['import-node'] = function importNode(node,data)
 	}else {
 		$("#batch-log").append("<br>- <span class='danger'>ERROR</span> NOT FOUND - semtag="+getSemtag(node)+ " source="+srcetag);
 	}
-	if (!ok) g_batch_error = true;
+	if (!ok) g_batch_error.push("import-node");
 	return ok;
 
 }
@@ -2966,7 +2969,7 @@ g_actions['move-node'] = function moveNode(node,data)
 	} else {
 		$("#batch-log").append("<br>- <span class='danger'>ERROR NOT FOUND</span> in move from -"+getSource(node)+ " to "+getSemtag(node));
 	}
-	if (!ok) g_batch_error = true;
+	if (!ok) g_batch_error.push("move-node");
 	return ok;
 
 }
@@ -3004,6 +3007,7 @@ g_actions['delete-node'] = function deleteNode(node,data)
 	} else {
 		$("#batch-log").append("<br>- ***NOT FOUND <span class='danger'>ERROR</span>");
 	}
+	if (!(ok!=0 && ok == nodes.length)) g_batch_error.push("delete-node");
 	return (ok!=0 && ok == nodes.length);
 }
 
@@ -3040,6 +3044,7 @@ g_actions['show-node'] = function showNode(node,data)
 	} else {
 		$("#batch-log").append("<br>- ***NOT FOUND <span class='danger'>ERROR</span> showing node");
 	}
+	if (!(ok!=0 && ok == nodes.length)) g_batch_error.push("show-node");
 	return (ok!=0 && ok == nodes.length);
 }
 
@@ -3070,6 +3075,7 @@ g_actions['hide-node'] = function hideNode(node,data)
 	} else {
 		$("#batch-log").append("<br>- ***NOT FOUND <span class='danger'>ERROR</span> showing node");
 	}
+	if (!(ok!=0 && ok == nodes.length)) g_batch_error.push("hide-node");
 	return (ok!=0 && ok == nodes.length);
 }
 
@@ -3106,6 +3112,7 @@ g_actions['moveup-node'] = function moveupNode(node,data)
 	} else {
 		$("#batch-log").append("<br>- ***NOT FOUND <span class='danger'>ERROR</span>");
 	}
+	if (!(ok!=0 && ok == nodes.length)) g_batch_error.push("moveup-node");
 	return (ok!=0 && ok == nodes.length);
 }
 
@@ -3145,6 +3152,7 @@ g_actions['reload-node'] = function (node,data)
 	} else {
 		$("#batch-log").append("<br>- ***NOT FOUND reload-node <span class='danger'>ERROR</span>");
 	}
+	if (!(ok!=0 && ok == nodes.length)) g_batch_error.push("reload-node");
 	return (ok!=0 && ok == nodes.length);
 }
 
@@ -3234,6 +3242,7 @@ g_actions['submitall'] = function submitall(node,data)
 	} else {
 		$("#batch-log").append("<br>- ***NOT FOUND <span class='danger'>ERROR - submitall</span>");
 	}
+	if (!(ok!=0 && ok == nodes.length)) g_batch_error.push("submitall");
 	return (ok!=0 && ok == nodes.length);
 }
 
@@ -3287,6 +3296,7 @@ g_actions['update-proxy'] = function update_proxy(node,data)
 	} else {
 		$("#batch-log").append("<br>- ***NOT FOUND <span class='danger'>ERROR - update-proxy</span>");
 	}
+	if (!(ok!=0 && ok == nodes.length)) g_batch_error.push("update-proxy");
 	return (ok!=0 && ok == nodes.length);
 }
 
@@ -3339,6 +3349,7 @@ g_actions['update-url2unit'] = function update_url2unit(node,data)
 	} else {
 		$("#batch-log").append("<br>- ***NOT FOUND <span class='danger'>ERROR - update-proxy</span>");
 	}
+	if (!(ok!=0 && ok == nodes.length)) g_batch_error.push("update-url2unit");
 	return (ok!=0 && ok == nodes.length);
 
 
@@ -3392,6 +3403,7 @@ g_actions['update-url2portfolio'] = function update_url2portfolio(node,data)
 	} else {
 		$("#batch-log").append("<br>- ***NOT FOUND <span class='danger'>ERROR - update-url2portfolio</span>");
 	}
+	if (!(ok!=0 && ok == nodes.length)) g_batch_error.push("update-url2portfolio");
 	return (ok!=0 && ok == nodes.length);
 }
 
@@ -3415,7 +3427,7 @@ g_actions['test'] = function (node)
 	catch(err) {
 		ok = false;
 	}
-	if (!ok) g_batch_error = true;
+	if (!ok) g_batch_error.push("test");
 	return ok;
 
 }
@@ -3441,7 +3453,7 @@ g_actions['jsfunction'] = function (node)
 	catch(err) {
 		ok = false;
 	}
-	if (!ok) g_batch_error = true;
+	if (!ok) g_batch_error.push("jsfunction");
 	return ok;
 
 }
@@ -3472,7 +3484,6 @@ g_actions['variable-value'] = function (node)
 g_actions['batch-variable'] = function (node)
 //==================================
 {
-	var ok = false
 	//-----------------------------------
 	var text = "";
 	var varlabel = $(node).attr("varlabel");
@@ -3602,7 +3613,7 @@ g_actions['send-email'] = function (node)
 	else
 		$("#batch-log").append("<span class='danger'>ERROR <span> - send-email: "+email+ " error");
 	//-----------------------------------
-	if (!ok) g_batch_error = true;
+	if (!ok) g_batch_error.push("send-email");
 	return ok;
 
 }
@@ -3617,7 +3628,6 @@ g_actions['send-email'] = function (node)
 g_actions['for-each-node'] = function (node)
 //==================================
 {
-	var ok = false
 	//-----------------------------------
 	var test = $(node).attr("test");
 	if (test!=undefined) {
@@ -3765,7 +3775,7 @@ function getModelAndProcess(model_code)
 //=================================================
 {
 	model_code = replaceVariable(model_code)
-	g_batch_error = false;
+	g_batch_error = [];
 	$.ajax({
 		async : false,
 		type : "GET",
@@ -3791,8 +3801,12 @@ function getModelAndProcess(model_code)
 			 });
 		}
 	});
-	if (g_batch_error) {
+	if (g_batch_error.length>0) {
 		$("#batch-info").append ("<br>=== "+karutaStr[languages[LANGCODE]]['error-script']+" ===");
+		for (let i=0;i<g_batch_error.length;i++) {
+			$("#batch-info").append ("<br> - " + g_batch_error[i]);
+		}
+
 	}
 }
 
@@ -4447,6 +4461,6 @@ g_actions['fen-move-node'] = function (node,data)
 			$("#batch-log").append("<br>- <span class='danger'>ERROR</span> in move from -"+source+ " to "+target);
 		}
 	});
-	if (!ok) g_batch_error = true;
+	if (!ok) g_batch_error.push("");
 	return ok;
 }

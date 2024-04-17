@@ -334,7 +334,7 @@ UIFactory["Report"].prototype.getEditor = function(type,langcode,disabled)
 	//------------------------
 	var js1 = "register_report('"+this.id+"')";
 	var footer = " <button class='btn btn-success' onclick=\""+js1+";\">"+karutaStr[LANG]['register']+"</button>";
-//	$("#edit-window-footer").append($(footer));
+	$("#edit-window-footer").append($(footer));
 	//------------------------
 	return htmlFormObj;
 

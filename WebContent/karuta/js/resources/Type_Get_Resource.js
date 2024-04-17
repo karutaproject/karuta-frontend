@@ -1085,10 +1085,9 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 			var targetid = this.targetid;
 			if (targetid=="")
 				targetid = this.parentid;
-			var query_semtag = this.query_semtag;
 			var data = UICom.structure.ui[targetid].node;
-			var searchsemtag = (this.unique=='true')?query_semtag:this.unique;
-			var allreadyadded = allreadyadded = $("*:has(>metadata[semantictag*="+searchsemtag+"])",data);
+			var searchsemtag = (this.unique=='true')?semtag.replace("!",""):this.unique;
+			var allreadyadded = $("*:has(>metadata[semantictag*="+searchsemtag+"])",data);
 			var tabadded = [];
 			for ( var i = 0; i < allreadyadded.length; i++) {
 				let resource = null;
