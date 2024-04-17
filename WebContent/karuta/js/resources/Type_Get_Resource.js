@@ -661,7 +661,7 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 						if (display_code)
 							html += code+" ";
 						if (display_value)
-							html += value+" ";
+							html += $(this).attr("value")+" ";
 						if (display_label)
 							html += $(this).attr("label_"+languages[langcode]);
 						$("#button_"+langcode+self.id).attr("style",style);
