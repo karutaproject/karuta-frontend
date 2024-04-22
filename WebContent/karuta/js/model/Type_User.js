@@ -908,7 +908,7 @@ UIFactory["User"].prototype.getEditor = function(type,lang)
 	if (this.id>3){
 		html += UIFactory["User"].getAttributeRadioEditor(this.id,"designer",this.designer_node.text());
 		html += UIFactory["User"].getAttributeRadioEditor(this.id,"admin",this.admin_node.text());
-		html += UIFactory["User"].getAttributeRadioEditor(this.id,"sharer",this.admin_node.text());
+		html += UIFactory["User"].getAttributeRadioEditor(this.id,"sharer",this.sharer_node.text());
 		html += UIFactory["User"].getAttributeEditor(this.id,"other",this.other_node.text());
 	}
 	if (this.id<2 || this.id>3){
