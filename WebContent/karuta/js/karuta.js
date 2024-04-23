@@ -3990,6 +3990,12 @@ function sanitizeText(text) {
 	return text;
 }
 
+function setNodeCodeWithDate(nodeid) {
+	const code = new Date().getTime()+"@";
+	$(UICom.structure.ui[nodeid].code_node).text(code);
+	UICom.structure.ui[nodeid].save();
+}
+
 function getPreviewSharedURL(uuid,sharerole,level,duration,role) {
 	const urlS = serverBCK+'/direct?uuid='+uuid+'&role='+role+'&showtorole='+role+'&l='+level+'&d='+duration+'&sharerole='+sharerole+'&type=showtorole';
 	let url = "";

@@ -2,7 +2,7 @@
 var karuta_version = "@project.version@";
 var karuta_date = "@build.timestamp@";
 
-const karuta_version_eportfolium = "eportfolium-3.43.0";
+const karuta_version_eportfolium = "eportfolium-3.44.0";
 const karuta_date_eportfolium = "2024/04/04";
 
 var karuta_backend_version = "?";
@@ -30,3 +30,4 @@ var karuta_fileserver_date = "?";
 // 3.42.0 Feat - Batch Error Management
 // 3.42.1 Fix - Autoload when more than one portfolios are visible
 // 3.43.0 Feat - Get_Resource - checkbox display
+// 3.44.0 Feat - new fucntion for designer : setNoceCodeWithDate(nodeid)
