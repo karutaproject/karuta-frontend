@@ -2,8 +2,8 @@
 var karuta_version = "@project.version@";
 var karuta_date = "@build.timestamp@";
 
-const karuta_version_eportfolium = "eportfolium-3.44.0";
-const karuta_date_eportfolium = "2024/04/04";
+const karuta_version_eportfolium = "eportfolium-3.44.1";
+const karuta_date_eportfolium = "2024-04-24";
 
 var karuta_backend_version = "?";
 var karuta_backend_date = "?";
@@ -30,4 +30,5 @@ var karuta_fileserver_date = "?";
 // 3.42.0 Feat - Batch Error Management
 // 3.42.1 Fix - Autoload when more than one portfolios are visible
 // 3.43.0 Feat - Get_Resource - checkbox display
-// 3.44.0 Feat - new fucntion for designer : setNoceCodeWithDate(nodeid)
+// 3.44.0 Feat - new function for designer : setNoceCodeWithDate(nodeid) - 2024-04-04
+// 3.44.1 Fix  - error due to the JS function resourceCodecontains which had two definitions. test if value': is present or not - 2024-04-24

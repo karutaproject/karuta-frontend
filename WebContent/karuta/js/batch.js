@@ -245,7 +245,7 @@ function getTest(test)
 //==================================
 {
 	for (fct in jqueryBatchSpecificFunctions) {
-		if (test.indexOf(fct)>-1) {
+		if (test.indexOf(fct)>-1 && test.indexOf("value':'")<0) {
 			test = ".has(\"" + test.replace(fct,jqueryBatchSpecificFunctions[fct]) + "\")";
 			if (test.indexOf("#lang#")>-1)
 				test = test.replace(/#lang#/g,languages[LANGCODE]);
