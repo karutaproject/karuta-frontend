@@ -524,8 +524,7 @@ g_actions['for-each-tree'] = function (node)
 		url : url1,
 		code : code,
 		success : function(data) {
-			const nb = parseInt($('portfolios',data).attr('count'));
-//			$("#batch-log").append("<br> Number of trees :"+nb);
+			let nb = 0;
 			const trees = $("portfolio",data);
 			for (var i=0; i<trees.length; i++){
 				let selected = false;
@@ -545,12 +544,13 @@ g_actions['for-each-tree'] = function (node)
 					selected = true;
 				}
 				if (selected) {
+					nb++;
 					$("#batch-log").append("<br>------------- current-tree -----------------");
 					$("#batch-log").append("<br>- tree selected - code:"+portfolio [1]+" - portfolioid:"+portfolio [0]+" Label:"+portfolio [2]);
 					processListActions($("actions",node).children());
 				}
 			}
-			$("#batch-log").append("<br> Number of trees :"+selected);
+			$("#batch-log").append("<br> Number of trees :"+nb);
 		}
 	});
 }

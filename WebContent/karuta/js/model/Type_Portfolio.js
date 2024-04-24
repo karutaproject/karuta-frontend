@@ -954,7 +954,7 @@ UIFactory["Portfolio"].getRootid_bycode = function(code)
 	});
 	return result;
 };
-
+/* ===not used
 //==================================
 UIFactory["Portfolio"].instantiate_bycode = function(sourcecode,targetcode,callback)
 //==================================
@@ -1008,7 +1008,7 @@ UIFactory["Portfolio"].instantiate = function(templateid,targetcode,reload)
 	$.ajaxSetup({async: true});
 	return uuid;
 };
-
+*/
 //==================================
 UIFactory["Portfolio"].callRenameInstantiate = function(portfolioid,langcode,project)
 //==================================
@@ -1061,56 +1061,66 @@ UIFactory["Portfolio"].instantiate_rename = function(templateid,targetcode,reloa
 {
 	var uuid = null;
 	var url = serverBCK_API+"/portfolios/instanciate/"+templateid+"?targetcode="+targetcode+"&owner=true";
-	$.ajaxSetup({async: false});
-	$.ajax({
-		type : "POST",
-		contentType: "application/xml",
-		dataType : "text",
-		url : url,
-		data : "",
-		success : function(data) {
-			uuid = data;
-			$.ajax({
-				async:false,
-				type : "GET",
-				dataType : "xml",
-				url : serverBCK_API+"/nodes?portfoliocode=" + targetcode + "&semtag="+rootsemtag,
-				success : function(data) {
-					var nodeid = $("asmRoot",data).attr('id');
-					var xml = "<asmResource xsi_type='nodeRes'>";
-					xml += "<code>"+targetcode+"</code>";
-					for (var lan=0; lan<languages.length;lan++)
-						xml += "<label lang='"+languages[lan]+"'>"+targetlabel+"</label>";
-					xml += "</asmResource>";
-					$.ajax({
-						async:false,
-						type : "PUT",
-						contentType: "application/xml",
-						dataType : "text",
-						data : xml,
-						url : serverBCK_API+"/nodes/node/" + nodeid + "/noderesource",
-						success : function(data) {
-							$("#wait-window").modal('hide');
-							if (reload!=null && reload)
-								window.location.reload();
-						},
-						error : function(jqxhr,textStatus) {
-							$("#wait-window").modal('hide');
-							alertHTML("Error in instantiate_rename : "+jqxhr.responseText);
-						}
-					});
-				}
-			});
-		},
-		error : function(jqxhr,textStatus) {
-			$("#wait-window").modal('hide');
-			if (jqxhr.responseText.indexOf('code exist')>-1)
-				alertHTML(karutaStr[LANG]['error-existing-code']);
-			else
-				alertHTML("Error : "+jqxhr.responseText);
-		}
-	});
-	$.ajaxSetup({async: true});
+	//---------- test if targetcode already exists
+	var exist = false;
+	for (var i=0;i<portfolios_list.length;i++) {
+		if (portfolios_list[i]!=null && targetcode==portfolios_list[i].code_node.text())
+		exist = true;
+		$("#wait-window").hide();
+		alertHTML(karutaStr[LANG]['error-existing-code']);
+	}
+	//-----------------------
+	if (!exist) {
+		$.ajax({
+			async: false,
+			type : "POST",
+			contentType: "application/xml",
+			dataType : "text",
+			url : url,
+			data : "",
+			success : function(data) {
+				uuid = data;
+				$.ajax({
+					async:false,
+					type : "GET",
+					dataType : "xml",
+					url : serverBCK_API+"/nodes?portfoliocode=" + targetcode + "&semtag="+rootsemtag,
+					success : function(data) {
+						var nodeid = $("asmRoot",data).attr('id');
+						var xml = "<asmResource xsi_type='nodeRes'>";
+						xml += "<code>"+targetcode+"</code>";
+						for (var lan=0; lan<languages.length;lan++)
+							xml += "<label lang='"+languages[lan]+"'>"+targetlabel+"</label>";
+						xml += "</asmResource>";
+						$.ajax({
+							async:false,
+							type : "PUT",
+							contentType: "application/xml",
+							dataType : "text",
+							data : xml,
+							url : serverBCK_API+"/nodes/node/" + nodeid + "/noderesource",
+							success : function(data) {
+								$("#wait-window").modal('hide');
+								if (reload!=null && reload)
+									window.location.reload();
+							},
+							error : function(jqxhr,textStatus) {
+								$("#wait-window").modal('hide');
+								alertHTML("Error in instantiate_rename : "+jqxhr.responseText);
+							}
+						});
+					}
+				});
+			},
+			error : function(jqxhr,textStatus) {
+				$("#wait-window").modal('hide');
+				if (jqxhr.responseText.indexOf('code exist')>-1)
+					alertHTML(karutaStr[LANG]['error-existing-code']);
+				else
+					alertHTML("Error : "+jqxhr.responseText);
+			}
+		});
+	}
 	return uuid;
 };
 
@@ -1140,7 +1150,7 @@ UIFactory["Portfolio"].copy_bycode = function(sourcecode,targetcode,reload)
 	$.ajaxSetup({async: true});
 	return uuid;
 };
-
+/*
 //==================================
 UIFactory["Portfolio"].copy = function(templateid,targetcode,reload)
 //==================================
@@ -1167,7 +1177,7 @@ UIFactory["Portfolio"].copy = function(templateid,targetcode,reload)
 	$.ajaxSetup({async: true});
 	return uuid;
 };
-
+*/
 //==================================
 UIFactory["Portfolio"].callRenameCopy = function(portfolioid,langcode,project)
 //==================================
@@ -1221,61 +1231,71 @@ UIFactory["Portfolio"].copy_rename = function(templateid,targetcode,reload,targe
 {
 	var uuid = null;
 	var url = serverBCK_API+"/portfolios/copy/"+templateid+"?targetcode="+targetcode+"&owner=true";
-	$.ajaxSetup({async: false});
-	$.ajax({
-		type : "POST",
-		contentType: "application/xml",
-		dataType : "text",
-		url : url,
-		data : "",
-		success : function(data) {
-			uuid = data;
-			$.ajax({
-				async:false,
-				type : "GET",
-				dataType : "xml",
-				url : serverBCK_API+"/nodes?portfoliocode=" + targetcode + "&semtag="+rootsemtag,
-				success : function(data) {
-					var nodeid = $("asmRoot",data).attr('id');
-					var xml = "<asmResource xsi_type='nodeRes'>";
-					xml += "<code>"+targetcode+"</code>";
-					for (var lan=0; lan<languages.length;lan++)
-						xml += "<label lang='"+languages[lan]+"'>"+targetlabel+"</label>";
-					xml += "</asmResource>";
-					$.ajax({
-						async:false,
-						type : "PUT",
-						contentType: "application/xml",
-						dataType : "text",
-						data : xml,
-						url : serverBCK_API+"/nodes/node/" + nodeid + "/noderesource",
-						success : function(data) {
-							$("#wait-window").modal('hide');
-							$('#edit-window').modal('hide');
-							if (rootsemtag=="karuta-project") // folder creation - we open the new folder
-								localStorage.setItem('currentDisplayedportfolioCode',targetcode);
-							fill_list_page();
-						},
-						error : function(jqxhr,textStatus) {
-							$("#wait-window").modal('hide');
-							alertHTML("Error : "+jqxhr.responseText);
-						}
-					});
-				},
-				error : function(jqxhr,textStatus) {
+	//---------- test if targetcode already exists
+	var exist = false;
+	for (var i=0;i<portfolios_list.length;i++) {
+		if (portfolios_list[i]!=null && targetcode==portfolios_list[i].code_node.text())
+		exist = true;
+		$("#wait-window").hide();
+		alertHTML(karutaStr[LANG]['error-existing-code']);
+	}
+	//-----------------------
+	if (!exist) {
+		$.ajax({
+			async : false,
+			type : "POST",
+			contentType: "application/xml",
+			dataType : "text",
+			url : url,
+			data : "",
+			success : function(data) {
+				uuid = data;
+				$.ajax({
+					async:false,
+					type : "GET",
+					dataType : "xml",
+					url : serverBCK_API+"/nodes?portfoliocode=" + targetcode + "&semtag="+rootsemtag,
+					success : function(data) {
+						var nodeid = $("asmRoot",data).attr('id');
+						var xml = "<asmResource xsi_type='nodeRes'>";
+						xml += "<code>"+targetcode+"</code>";
+						for (var lan=0; lan<languages.length;lan++)
+							xml += "<label lang='"+languages[lan]+"'>"+targetlabel+"</label>";
+						xml += "</asmResource>";
+						$.ajax({
+							async:false,
+							type : "PUT",
+							contentType: "application/xml",
+							dataType : "text",
+							data : xml,
+							url : serverBCK_API+"/nodes/node/" + nodeid + "/noderesource",
+							success : function(data) {
+								$("#wait-window").modal('hide');
+								$('#edit-window').modal('hide');
+								if (rootsemtag=="karuta-project") // folder creation - we open the new folder
+									localStorage.setItem('currentDisplayedportfolioCode',targetcode);
+								fill_list_page();
+							},
+							error : function(jqxhr,textStatus) {
+								$("#wait-window").modal('hide');
+								alertHTML("Error : "+jqxhr.responseText);
+							}
+						});
+					},
+					error : function(jqxhr,textStatus) {
+						alertHTML("Error : "+jqxhr.responseText);
+					}
+				});
+			},
+			error : function(jqxhr,textStatus) {
+				$("#wait-window").modal('hide');
+				if (jqxhr.responseText.indexOf('code exist')>-1)
+					alertHTML(karutaStr[LANG]['error-existing-code']);
+				else
 					alertHTML("Error : "+jqxhr.responseText);
-				}
-			});
-		},
-		error : function(jqxhr,textStatus) {
-			$("#wait-window").modal('hide');
-			if (jqxhr.responseText.indexOf('code exist')>-1)
-				alertHTML(karutaStr[LANG]['error-existing-code']);
-			else
-				alertHTML("Error : "+jqxhr.responseText);
-		}
-	});
-	$.ajaxSetup({async: true});
+			}
+		});
+	}
 	return uuid;
 };
 
