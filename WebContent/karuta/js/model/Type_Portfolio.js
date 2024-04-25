@@ -1061,17 +1061,7 @@ UIFactory["Portfolio"].instantiate_rename = function(templateid,targetcode,reloa
 {
 	var uuid = null;
 	var url = serverBCK_API+"/portfolios/instanciate/"+templateid+"?targetcode="+targetcode+"&owner=true";
-	//---------- test if targetcode already exists
-	var exist = false;
-	for (var i=0;i<portfolios_list.length;i++) {
-		if (portfolios_list[i]!=null && targetcode==portfolios_list[i].code_node.text()) {
-			exist = true;
-			$("#wait-window").hide();
-			alertHTML(karutaStr[LANG]['error-existing-code']);
-			break;
-		}
-	}
-	//-----------------------
+	const exist = UIFactory.Portfolio.existPortfolio(targetcode);
 	if (!exist) {
 		$.ajax({
 			async: false,
@@ -1122,6 +1112,10 @@ UIFactory["Portfolio"].instantiate_rename = function(templateid,targetcode,reloa
 					alertHTML("Error : "+jqxhr.responseText);
 			}
 		});
+	} else {
+		$("#wait-window").hide();
+		alertHTML(karutaStr[LANG]['error-existing-code']);
+
 	}
 	return uuid;
 };
@@ -1233,16 +1227,7 @@ UIFactory["Portfolio"].copy_rename = function(templateid,targetcode,reload,targe
 {
 	var uuid = null;
 	var url = serverBCK_API+"/portfolios/copy/"+templateid+"?targetcode="+targetcode+"&owner=true";
-	//---------- test if targetcode already exists
-	var exist = false;
-	for (var i=0;i<portfolios_list.length;i++) {
-		if (portfolios_list[i]!=null && targetcode==portfolios_list[i].code_node.text()) {
-			exist = true;
-			$("#wait-window").hide();
-			alertHTML(karutaStr[LANG]['error-existing-code']);
-			break;
-		}
-	}
+	const exist = UIFactory.Portfolio.existPortfolio(targetcode);
 	//-----------------------
 	if (!exist) {
 		$.ajax({
@@ -1299,6 +1284,10 @@ UIFactory["Portfolio"].copy_rename = function(templateid,targetcode,reload,targe
 					alertHTML("Error : "+jqxhr.responseText);
 			}
 		});
+	} else {
+		$("#wait-window").hide();
+		alertHTML(karutaStr[LANG]['error-existing-code']);
+
 	}
 	return uuid;
 };
@@ -2817,8 +2806,27 @@ UIFactory["Portfolio"].prototype.refresh = function()
 	for (dest2 in this.display) {
 		$("#"+dest2).html(this.getPortfolioView(null,this.display[dest2],null));
 	};
-
 };
+
+//=======================================================================
+UIFactory["Portfolio"].existPortfolio = function (code) 
+// =======================================================================
+{
+	let found = false;
+	$.ajax({
+		async:false,
+		type : "GET",
+		dataType : "xml",
+		url : serverBCK_API+"/portfolios?active=1&search="+code,
+		success : function(data) {
+			const portfolios = $("portfolio",data);
+			if (portfolios.length>0)
+				found = true;
+		}
+	});
+	return found;
+}
+
 //--------------------------------------------------------------
 //--------------------------------------------------------------
 //--------------- SEARCH IN PORTFOLIO --------------------------
