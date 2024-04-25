@@ -1064,10 +1064,12 @@ UIFactory["Portfolio"].instantiate_rename = function(templateid,targetcode,reloa
 	//---------- test if targetcode already exists
 	var exist = false;
 	for (var i=0;i<portfolios_list.length;i++) {
-		if (portfolios_list[i]!=null && targetcode==portfolios_list[i].code_node.text())
-		exist = true;
-		$("#wait-window").hide();
-		alertHTML(karutaStr[LANG]['error-existing-code']);
+		if (portfolios_list[i]!=null && targetcode==portfolios_list[i].code_node.text()) {
+			exist = true;
+			$("#wait-window").hide();
+			alertHTML(karutaStr[LANG]['error-existing-code']);
+			break;
+		}
 	}
 	//-----------------------
 	if (!exist) {
@@ -1234,10 +1236,12 @@ UIFactory["Portfolio"].copy_rename = function(templateid,targetcode,reload,targe
 	//---------- test if targetcode already exists
 	var exist = false;
 	for (var i=0;i<portfolios_list.length;i++) {
-		if (portfolios_list[i]!=null && targetcode==portfolios_list[i].code_node.text())
-		exist = true;
-		$("#wait-window").hide();
-		alertHTML(karutaStr[LANG]['error-existing-code']);
+		if (portfolios_list[i]!=null && targetcode==portfolios_list[i].code_node.text()) {
+			exist = true;
+			$("#wait-window").hide();
+			alertHTML(karutaStr[LANG]['error-existing-code']);
+			break;
+		}
 	}
 	//-----------------------
 	if (!exist) {
@@ -1277,7 +1281,7 @@ UIFactory["Portfolio"].copy_rename = function(templateid,targetcode,reload,targe
 								fill_list_page();
 							},
 							error : function(jqxhr,textStatus) {
-								$("#wait-window").modal('hide');
+								$("#wait-window").hide();
 								alertHTML("Error : "+jqxhr.responseText);
 							}
 						});
