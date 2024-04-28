@@ -472,12 +472,9 @@ body,
 
 .closeSign {
   cursor: pointer;
-  -webkit-user-select: none;
-  /* Safari 3.1+ */
-  -moz-user-select: none;
-  /* Firefox 2+ */
-  -ms-user-select: none;
-  /* IE 10+ */
+  -webkit-user-select: none; /* Safari 3.1+ */
+  -moz-user-select: none; /* Firefox 2+ */
+  -ms-user-select: none; /* IE 10+ */
   user-select: none;
 }
 
@@ -1659,40 +1656,40 @@ table[name=res-div] {
   margin-top: 15px;
 }
 .row .card.col-md-1 {
-  flex: 0 0 calc(((100% - 15px) * 1 / 12) - 15px);
+  flex: 0 0 calc((100% - 15px) * 1 / 12 - 15px);
 }
 .row .card.col-md-2 {
-  flex: 0 0 calc(((100% - 15px) * 2 / 12) - 15px);
+  flex: 0 0 calc((100% - 15px) * 2 / 12 - 15px);
 }
 .row .card.col-md-3 {
-  flex: 0 0 calc(((100% - 15px) * 3 / 12) - 15px);
+  flex: 0 0 calc((100% - 15px) * 3 / 12 - 15px);
 }
 .row .card.col-md-4 {
-  flex: 0 0 calc(((100% - 15px) * 4 / 12) - 15px);
+  flex: 0 0 calc((100% - 15px) * 4 / 12 - 15px);
 }
 .row .card.col-md-5 {
-  flex: 0 0 calc(((100% - 15px) * 5 / 12) - 15px);
+  flex: 0 0 calc((100% - 15px) * 5 / 12 - 15px);
 }
 .row .card.col-md-6 {
-  flex: 0 0 calc(((100% - 15px) * 6 / 12) - 15px);
+  flex: 0 0 calc((100% - 15px) * 6 / 12 - 15px);
 }
 .row .card.col-md-7 {
-  flex: 0 0 calc(((100% - 15px) * 7 / 12) - 15px);
+  flex: 0 0 calc((100% - 15px) * 7 / 12 - 15px);
 }
 .row .card.col-md-8 {
-  flex: 0 0 calc(((100% - 15px) * 8 / 12) - 15px);
+  flex: 0 0 calc((100% - 15px) * 8 / 12 - 15px);
 }
 .row .card.col-md-9 {
-  flex: 0 0 calc(((100% - 15px) * 9 / 12) - 15px);
+  flex: 0 0 calc((100% - 15px) * 9 / 12 - 15px);
 }
 .row .card.col-md-10 {
-  flex: 0 0 calc(((100% - 15px) * 10 / 12) - 15px);
+  flex: 0 0 calc((100% - 15px) * 10 / 12 - 15px);
 }
 .row .card.col-md-11 {
-  flex: 0 0 calc(((100% - 15px) * 11 / 12) - 15px);
+  flex: 0 0 calc((100% - 15px) * 11 / 12 - 15px);
 }
 .row .card.col-md-12 {
-  flex: 0 0 calc(((100% - 15px) * 12 / 12) - 5px);
+  flex: 0 0 calc((100% - 15px) * 12 / 12 - 5px);
 }
 .row .card .card.col-md-2:first-child,
 .row .card .card.col-md-3:first-child,
@@ -1736,23 +1733,23 @@ table[name=res-div] {
 }
 
 .row-cols-2 > * {
-  flex: 0 0 calc((100% - (3 * 15px))/2);
+  flex: 0 0 calc((100% - 45px) / 2);
 }
 
 .row-cols-3 > * {
-  flex: 0 0 calc((100% - (4 * 15px))/3);
+  flex: 0 0 calc((100% - 60px) / 3);
 }
 
 .row-cols-4 > * {
-  flex: 0 0 calc((100% - (5 * 15px))/4);
+  flex: 0 0 calc((100% - 75px) / 4);
 }
 
 .row-cols-5 > * {
-  flex: 0 0 calc((100% - (6 * 15px))/5);
+  flex: 0 0 calc((100% - 90px) / 5);
 }
 
 .row-cols-6 > * {
-  flex: 0 0 calc((100% - (7 * 15px))/6);
+  flex: 0 0 calc((100% - 105px) / 6);
 }
 
 .row-cols-2 .asmContext.standard-resource-xwide,
@@ -2391,6 +2388,11 @@ input[type=radio].radio-div {
 }
 
 .subget_ressource {
+  margin-left: 25px;
+  font-size: 90%;
+}
+
+.subget_ressource .subget_ressource {
   margin-left: 25px;
   font-size: 90%;
 }
@@ -3294,11 +3296,9 @@ s table.tablesorter th.restore {
     overflow: visible !important;
     overflow-y: visible !important;
   }
-
   #main-container {
     font-size: 130% !important;
   }
-
   #saved-window,
 #navigation-bar,
 #sub-bar,
@@ -3309,49 +3309,39 @@ s table.tablesorter th.restore {
 .buttons-menus {
     display: none !important;
   }
-
   #contenu.col-sm-9,
 #contenu.col-md-9 {
     flex: 0 0 100% !important;
     max-width: 100% !important;
   }
-
   a:after {
     content: none !important;
     color: var(--portfolio-link-color);
   }
-
   img {
     page-break-inside: avoid !important;
     page-break-after: avoid !important;
   }
-
   .title {
     page-break-inside: avoid !important;
   }
-
   table {
     page-break-after: auto !important;
   }
-
   tr,
 td {
     page-break-inside: auto !important;
     page-break-after: auto !important;
   }
-
   .select-label .btn {
     border: none;
   }
-
   .select-label .dropdown-toggle {
     display: none !important;
   }
-
   .section2hide {
     display: none !important;
   }
-
   .section2print {
     display: block !important;
   }

@@ -3131,23 +3131,27 @@ g_actions['reload-node'] = function (node,data)
 	if (nodes.length>0){
 		for (i=0; i<nodes.length; i++){
 			const nodeid = $(nodes[i]).attr('id');
-			const parentid = $($(UICom.structure.ui[nodeid].node).parent()).attr('id');
-			$.ajax({
-				async: false,
-				type : "GET",
-				dataType : "xml",
-				url : serverBCK_API+"/nodes/node/" + nodeid,
-				parentid : parentid,
-				success : function(data) {
-					UICom.parseStructure(data,false,this.parentid);
-					$("#"+nodeid,g_portfolio_current).replaceWith($(":root",data));
-					ok++;
-					$("#batch-log").append("<br>- node reloaded - nodeid("+nodeid+")");
-				},
-				error : function() {
-					$("#batch-log").append("<br>- <span class='danger'>ERROR</span> in reload-node - "+nodeid);
-				}
-			});
+//			const parentid = $($(UICom.structure.ui[nodeid].node).parent()).attr('id');
+			if (UICom.structure.ui[nodeid]!=undefined) { // node loaded
+				$.ajax({
+					async: false,
+					type : "GET",
+					dataType : "xml",
+					url : serverBCK_API+"/nodes/node/" + nodeid,
+	//				parentid : parentid,
+					success : function(data) {
+						UICom.parseStructure(data,false,this.parentid);
+						$("#"+nodeid,g_portfolio_current).replaceWith($(":root",data));
+						ok++;
+						$("#batch-log").append("<br>- node reloaded - nodeid("+nodeid+")");
+					},
+					error : function() {
+						$("#batch-log").append("<br>- <span class='danger'>ERROR</span> in reload-node - "+nodeid);
+					}
+				});
+			} else {
+				ok++; // node not loaded - no rights to access the node
+			}
 		}
 	} else {
 		$("#batch-log").append("<br>- ***NOT FOUND reload-node <span class='danger'>ERROR</span>");
