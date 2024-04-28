@@ -2,8 +2,8 @@
 var karuta_version = "@project.version@";
 var karuta_date = "@build.timestamp@";
 
-const karuta_version_eportfolium = "eportfolium-3.45.0";
-const karuta_date_eportfolium = "2024-04-24";
+const karuta_version_eportfolium = "eportfolium-3.47.0";
+const karuta_date_eportfolium = "2024-04-28";
 
 var karuta_backend_version = "?";
 var karuta_backend_date = "?";
@@ -33,4 +33,5 @@ var karuta_fileserver_date = "?";
 // 3.44.0 Feat - new function for designer : setNoceCodeWithDate(nodeid) - 2024-04-04
 // 3.44.1 Fix  - error due to the JS function resourceCodecontains which had two definitions. test if value': is present or not - 2024-04-24
 // 3.45.0 Feat - verification of not existing code when duplicatte or instantiate - 2024-04-24
-// 3.46.0 Feat - Ajout userrole sur PUT pour les portfolios multi-rôles - 2024-04-24
+// 3.46.0 Feat - userrole add4d on PUT for porfolios with multi-roles - 2024-04-24
+// 3.47.0 Feat - new jquery function for report and batch : hasChildSemtagAndResourceTextContains, hasChildSemtagAndResourceTextNotEmpty - 2024-04-28
