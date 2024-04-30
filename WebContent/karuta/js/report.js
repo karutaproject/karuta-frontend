@@ -571,13 +571,22 @@ g_report_actions['collapsable-section'] = function (destid,action,no,data)
 	//---------------------------
 	var titre = $(">titre",action).text();
 	titre = replaceVariable(titre);
+	const open_value = $(">open",action).text();
+	const open = (open_value=='1')? true:false;
+
 	var style = replaceVariable($(action).attr("style"));
 	var cssclass = replaceVariable($(action).attr("class"));
 	//-----------------
 	var html = "<div id='collapsable"+destid+'-'+no+"' style='margin-bottom:5px;"+style+"' class='"+cssclass+"'>";
-	html += "<span id='toggleContent_"+destid+'-'+no+"' style='float:left' class='button fas fa-minus' onclick=\"toggleContentInReport('"+destid+'-'+no+"')\"></span>";
+	if (open)
+		html += "<span id='toggleContent_"+destid+'-'+no+"' style='float:left' class='button fas fa-minus' onclick=\"toggleContentInReport('"+destid+'-'+no+"')\"></span>";
+	else
+		html += "<span id='toggleContent_"+destid+'-'+no+"' style='float:left' class='button fas fa-plus' onclick=\"toggleContentInReport('"+destid+'-'+no+"')\"></span>";	
 	html += "<span name='titre'>"+titre+"</span>";
-	html += "<div id='content-"+destid+'-'+no+"'></div>";
+	if (open)
+		html += "<div id='content-"+destid+'-'+no+"'></div>";
+	else
+		html += "<div id='content-"+destid+'-'+no+"' style='display:none'></div>";
 	html += "</div>";
 	$("#"+destid).append($(html));
 	//---------------------------
@@ -1486,6 +1495,12 @@ g_report_actions['for-each-portfolio-js'] = function (destid,action,no,data)
 	var select = $(action).attr("select");
 	select = replaceVariable(select);
 	var portfolioids = eval(select); // return array of portfolioids
+	//--------------------
+	let load = true; //  by default we load each porfolio to have access to its content
+	if (select.indexOf('@noload@')>-1){
+		load = false;
+		select = select.replaceAll('@noload@','');
+	}
 	//----------------------------------
 	var first = 0;
 	var last = portfolioids.length;
@@ -1510,25 +1525,33 @@ g_report_actions['for-each-portfolio-js'] = function (destid,action,no,data)
 			g_variables[portfoliovar] = portfolioid;
 		}
 		portfolioid_current = portfolioid;
-		$.ajax({
-			async:false,
-			type : "GET",
-			dataType : "xml",
-			j : j,
-			url : serverBCK_API+"/portfolios/portfolio/" + portfolioid + "?resources=true",
-			success : function(data) {
-				if (report_not_in_a_portfolio){
-					UICom.structure.tree = {};
-					UICom.structure.ui = {};
+		if (load) {
+			$.ajax({
+				async:false,
+				type : "GET",
+				dataType : "xml",
+				j : j,
+				url : serverBCK_API+"/portfolios/portfolio/" + portfolioid + "?resources=true",
+				success : function(data) {
+					if (report_not_in_a_portfolio){
+						UICom.structure.tree = {};
+						UICom.structure.ui = {};
+					}
+					UICom.parseStructure(data,true, null, null,true);
+					var actions = $(action).children();
+					for (let i=0; i<actions.length;i++){
+						var tagname = $(actions[i])[0].tagName;
+						g_report_actions[tagname](destid,actions[i],no+'-'+j.toString()+i.toString(),data);
+					};
 				}
-				UICom.parseStructure(data,true, null, null,true);
-				var actions = $(action).children();
-				for (let i=0; i<actions.length;i++){
-					var tagname = $(actions[i])[0].tagName;
-					g_report_actions[tagname](destid,actions[i],no+'-'+j.toString()+i.toString(),data);
-				};
-			}
-		});
+			});
+		} else {
+			var actions = $(action).children();
+			for (let i=0; i<actions.length;i++){
+				var tagname = $(actions[i])[0].tagName;
+				g_report_actions[tagname](destid,actions[i],no+'-'+j.toString()+i.toString(),data);
+			};
+		}
 	}
 	if(NBELT!=undefined && NBELT!="" && NOELT!=undefined && NOELT!="")
 		prevnextbuttons(dashboard_current,first,last,portfolioids.length,NOELT,NBELT);

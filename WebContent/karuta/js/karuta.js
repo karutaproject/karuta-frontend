@@ -4250,15 +4250,15 @@ $.fn.test_hasNotChildSemtagAndResourceTextContains = function (options) { return
 $.fn.hasChildSemtagAndResourceTextNotEmpty = function (options)
 //=====================================
 {
-	var defaults= {"semtag":"s","value":"v","function":""};
+	var defaults= {"semtag":"s","function":""};
 	var parameters = $.extend(defaults, options);
 	var result = $(this).has("*:has('>metadata[semantictag*=" + parameters.semtag + "]'):has(\">asmResource[xsi_type!='context'][xsi_type!='nodeRes']>text[lang='"+languages[LANGCODE]+"']:not(:empty)\")");
 	if (parameters.function!="")
 		result = eval("$(result)."+parameters.function);
 	return $(result);
 };
-$.fn.test_hasChildSemtagAndResourceTextNotContains = function (options) { return result = ($(this).hasChildSemtagAndResourceTextContains(options).length>0) ? true : false;};
-$.fn.test_hasNotChildSemtagAndResourceTextNotContains = function (options) { return result = ($(this).hasChildSemtagAndResourceTextContains(options).length>0) ? false : true;};
+$.fn.test_hasChildSemtagAndResourceTextNotEmpty = function (options) { return result = ($(this).hasChildSemtagAndResourceTextContains(options).length>0) ? true : false;};
+$.fn.test_hasNotChildSemtagAndResourceTextNotEmpty = function (options) { return result = ($(this).hasChildSemtagAndResourceTextContains(options).length>0) ? false : true;};
 //=====================================
 
 //=====================================

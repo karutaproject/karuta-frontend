@@ -1135,7 +1135,7 @@ UIFactory["Get_Get_Resource"].getChildren = function(dest,langcode,self,srce,por
 	//------------
 }
 //==================================
-UIFactory["Get_Get_Resource"].parseChildren = function(dest,data,langcode,self,srce,portfoliocode,semtag,semtag_parent,code,semtag2,cachable,tabadded)
+UIFactory["Get_Get_Resource"].parseChildren = function(dest,data,langcode,self,srce,portfoliocode,semtag,semtag_parent,code_parent,semtag2,cachable,tabadded)
 //==================================
 {
 	//-----Node ordering-------------------------------------------------------
@@ -1162,6 +1162,11 @@ UIFactory["Get_Get_Resource"].parseChildren = function(dest,data,langcode,self,s
 	} else {
 		newTableau2 = newTableau1;
 	}
+	//--------------------------------------------------------------------
+	const subdiv = "<div code_parent='"+code_parent+"' class='subget_ressource'>";
+	var subdiv_obj = $(subdiv);
+	$(dest).append(subdiv_obj);
+
 	//--------------------------------------------------------------------
 	for ( var i = 0; i < newTableau2.length; ++i) {
 		var uuid = $(newTableau2[i][1]).attr('id');
@@ -1196,9 +1201,9 @@ UIFactory["Get_Get_Resource"].parseChildren = function(dest,data,langcode,self,s
 		if (code.indexOf("!")>-1 || semtag.indexOf("!")>-1 ) {
 			selectable = false;
 		}
-		code = cleanCode(code);
+//		code = cleanCode(code);
 		//------------------------------
-		input += "<div id='"+code+"' style=\""+style+"\">";
+		input += "<div id='"+cleanCode(code)+"' code_parent='"+code_parent+"' style=\""+style+"\">";
 		if (selectable) {
 			input += "	<input type='checkbox' name='multiple_"+self.id+"' value='"+$('value',resource).text()+"' code='"+$('code',resource).text()+"' class='multiple-item";
 			input += "' ";
@@ -1213,10 +1218,11 @@ UIFactory["Get_Get_Resource"].parseChildren = function(dest,data,langcode,self,s
 			input += code + " ";
 		input +="<span  class='"+code+"'>"+$(srce+"[lang='"+languages[langcode]+"']",resource).text()+"</span></div>";
 		var input_obj = $(input);
-		$(dest).append(input_obj);
+		$(subdiv_obj).append(input_obj);
 		if (semtag2!="") {
 			var semtag_parent = semtag.replace("!","");
-			UIFactory.Get_Get_Resource.getChildren(dest,langcode,srce,portfoliocode,semtag2,semtag_parent,code,cachable);
+			UIFactory.Get_Get_Resource.getChildren(subdiv_obj,langcode,self,srce,portfoliocode,semtag2,semtag_parent,code,cachable,tabadded);
+			// (dest,langcode,self,srce,portfoliocode,semtag,semtag_parent,code,cachable,tabadded)
 		}
 	}
 }

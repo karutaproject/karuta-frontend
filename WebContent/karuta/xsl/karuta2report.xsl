@@ -466,6 +466,9 @@
 			<titre>
 				<xsl:value-of select="./asmContext[metadata/@semantictag='text-value']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 			</titre>
+			<open>
+				<xsl:value-of select=".//asmContext[metadata/@semantictag='open']/asmResource[@xsi_type='Get_Resource']/value"></xsl:value-of>
+			</open>
 			<xsl:apply-templates select='asmUnitStructure'/>
 		</collapsable-section>
 	</xsl:template>

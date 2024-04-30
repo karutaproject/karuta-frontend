@@ -158,7 +158,7 @@ UIFactory['BatchForm'].getInputsLine = function(node)
 	for ( var j = 0; j < line_inputs.length; j++) {
 		var inputid = $(line_inputs[j]).attr('id');
 		code = UICom.structure.ui[inputid].getCode();
-		if (UICom.structure.ui[inputid].resource.type=="Get_Resource")
+		if (UICom.structure.ui[inputid].resource.type=="Get_Resource" || UICom.structure.ui[inputid].resource.type=="Get_Get_Resource")
 			json_line[code] = replaceVariable(UICom.structure.ui[inputid].resource.getCode());
 	}
 	return json_line;
