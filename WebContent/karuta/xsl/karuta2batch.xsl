@@ -93,6 +93,9 @@
 		<xsl:variable name="designer">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='designer']/asmResource[@xsi_type='Get_Resource']/code"></xsl:value-of>
 		</xsl:variable>
+		<xsl:variable name="sharer">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='sharer']/asmResource[@xsi_type='Get_Resource']/code"></xsl:value-of>
+		</xsl:variable>
 		<xsl:variable name="admin">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='admin']/asmResource[@xsi_type='Get_Resource']/code"></xsl:value-of>
 		</xsl:variable>
@@ -133,6 +136,9 @@
 			<designer>
 				<txtval><xsl:value-of select="$designer"/></txtval>
 			</designer>
+			<sharer>
+				<txtval><xsl:value-of select="$sharer"/></txtval>
+			</sharer>
 			<admin>
 				<txtval><xsl:value-of select="$admin"/></txtval>
 			</admin>
@@ -160,6 +166,9 @@
 		</xsl:variable>
 		<xsl:variable name="designer">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='designer']/asmResource[@xsi_type='Get_Resource']/code"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="sharer">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='sharer']/asmResource[@xsi_type='Get_Resource']/code"></xsl:value-of>
 		</xsl:variable>
 		<xsl:variable name="admin">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='admin']/asmResource[@xsi_type='Get_Resource']/code"></xsl:value-of>
@@ -201,6 +210,9 @@
 			<designer>
 				<txtval><xsl:value-of select="$designer"/></txtval>
 			</designer>
+			<sharer>
+				<txtval><xsl:value-of select="$sharer"/></txtval>
+			</sharer>
 			<admin>
 				<txtval><xsl:value-of select="$admin"/></txtval>
 			</admin>
@@ -244,6 +256,22 @@
 				</xsl:call-template>
 			</identifier>
 		</inactivate-user>
+	</xsl:template>
+
+	<xsl:template match="*[metadata/@semantictag='for-each-group-person']">
+		<xsl:variable name="id">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='groupid']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<for-each-group-person id="{$id}">
+			<usergroup>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">usergroup</xsl:with-param>
+				</xsl:call-template>
+			</usergroup>
+			<actions>
+				<xsl:apply-templates select='asmUnitStructure'/>
+			</actions>
+		</for-each-group-person>
 	</xsl:template>
 
 	<!-- ====================================================================================== -->

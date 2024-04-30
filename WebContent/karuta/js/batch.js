@@ -624,6 +624,7 @@ g_actions['create-user'] = function createUser(node)
 	var firstname = getTxtvals($("firstname",node));
 	var email = getTxtvals($("email",node));
 	var designer = getTxtvals($("designer",node));
+	var sharer = getTxtvals($("sharer",node));
 	var password = getTxtvals($("password",node));
 	var other = getTxtvals($("other",node));
 	if (designer==undefined || designer=='')
@@ -652,6 +653,7 @@ g_actions['create-user'] = function createUser(node)
 			xml +="	<other>"+other+"</other>";
 			xml +="	<admin>0</admin>";
 			xml +="	<designer>"+designer+"</designer>";
+			xml +="	<sharer>"+sharer+"</sharer>";
 			xml +="</user>";
 			var url = serverBCK_API+"/users/user/"+userid;
 			$.ajax({
@@ -685,6 +687,7 @@ g_actions['create-user'] = function createUser(node)
 			xml +="	<other>"+other+"</other>";
 			xml +="	<admin>0</admin>";
 			xml +="	<designer>"+designer+"</designer>";
+			xml +="	<sharer>"+sharer+"</sharer>";
 			xml +="</user>";
 			xml +="</users>";
 			var url = serverBCK_API+"/users";
@@ -719,8 +722,9 @@ function updateUserAttribute(data,attribute,value) {
 		$(attribute,data).text(value);
 	}
 }
+
 //=================================================
-g_actions['update-user'] = function updateUser(node)
+g_actions['update-userX'] = function updateUser(node)
 //=================================================
 {
 	var ok = false;
@@ -729,6 +733,7 @@ g_actions['update-user'] = function updateUser(node)
 	var newfirstname = getTxtvals($("firstname",node));
 	var newemail = getTxtvals($("email",node));
 	var newdesigner = getTxtvals($("designer",node));
+	var newsharer = getTxtvals($("sharer",node));
 	var newadmin = getTxtvals($("admin",node));
 	var newpassword = getTxtvals($("password",node));
 	var newother = getTxtvals($("other",node));
@@ -752,13 +757,14 @@ g_actions['update-user'] = function updateUser(node)
 				url : url,
 				success : function(data) {
 					ok = true;
-					updateUserAttribute(data,"lastname",newlastname)
-					updateUserAttribute(data,"firstname",newfirstname)
-					updateUserAttribute(data,"email",newemail)
-					updateUserAttribute(data,"designer",newdesigner)
-					updateUserAttribute(data,"admin",newadmin)
-					updateUserAttribute(data,"password",newpassword)
-					updateUserAttribute(data,"other",newother)
+					updateUserAttribute(data,"lastname",newlastname);
+					updateUserAttribute(data,"firstname",newfirstname);
+					updateUserAttribute(data,"email",newemail);
+					updateUserAttribute(data,"designer",newdesigner);
+					updateUserAttribute(data,"sharer",newsharer);
+					updateUserAttribute(data,"admin",newadmin);
+					updateUserAttribute(data,"password",newpassword);
+					updateUserAttribute(data,"other",newother);
 					var newdata = "<user>" + $(":root",data).html() + "</user>";
 					var strippeddata = newdata.replace(/xmlns=\"http:\/\/www.w3.org\/1999\/xhtml\"/g,"");  // remove xmlns attribute
 					var url = serverBCK_API+"/users/user/"+userid;
@@ -786,6 +792,67 @@ g_actions['update-user'] = function updateUser(node)
 		},
 		error : function(data) {
 			$("#batch-log").append("<br>- ***<span class='danger'>ERROR 3</span> in update-user ("+userid+") - identifier:"+identifier);
+		}
+	});
+	if (!ok) g_batch_error.push("update-user");
+	return ok;
+};
+
+//=================================================
+g_actions['update-user'] = function updateUser(node)
+//=================================================
+{
+	var ok = false;
+	var identifier = getTxtvals($("identifier",node));
+	var newlastname = getTxtvals($("lastname",node));
+	var newfirstname = getTxtvals($("firstname",node));
+	var newemail = getTxtvals($("email",node));
+	var newdesigner = getTxtvals($("designer",node));
+	var newsharer = getTxtvals($("sharer",node));
+	var newadmin = getTxtvals($("admin",node));
+	var newpassword = getTxtvals($("password",node));
+	var newother = getTxtvals($("other",node));
+	//---- get userid ----------
+	var url = serverBCK_API+"/users?username="+identifier;
+	$.ajax({
+		async : false,
+		type : "GET",
+		contentType: "application/xml",
+		dataType : "xml",
+		url : url,
+		success : function(data) {
+			const userid = $($("user",data)[0]).attr("id");
+			ok = true;
+			updateUserAttribute(data,"lastname",newlastname);
+			updateUserAttribute(data,"firstname",newfirstname);
+			updateUserAttribute(data,"email",newemail);
+			updateUserAttribute(data,"designer",newdesigner);
+			updateUserAttribute(data,"sharer",newsharer);
+			updateUserAttribute(data,"admin",newadmin);
+			updateUserAttribute(data,"password",newpassword);
+			updateUserAttribute(data,"other",newother);
+			var newdata = "<user id='"+userid+"'>" + $("user",data).html() + "</user>";
+			var strippeddata = newdata.replace(/xmlns=\"http:\/\/www.w3.org\/1999\/xhtml\"/g,"");  // remove xmlns attribute
+			var url = serverBCK_API+"/users/user/"+userid;
+			$.ajax({
+				async : false,
+				type : "PUT",
+				contentType: "application/xml; charset=UTF-8",
+				dataType : "text",
+				url : url,
+				data : strippeddata,
+				success : function(data) {
+					userid = data;
+					ok = true;
+					$("#batch-log").append("<br>- user updated("+userid+") - identifier:"+identifier);
+				},
+				error : function(data) {
+					$("#batch-log").append("<br>- ***<span class='danger'>ERROR 1</span> in update-user ("+userid+") - identifier:"+identifier);
+				}
+			});
+		},
+		error : function(data) {
+			$("#batch-log").append("<br>- ***<span class='danger'>ERROR 2</span> in update-user ("+userid+") - identifier:"+identifier);
 		}
 	});
 	if (!ok) g_batch_error.push("update-user");
@@ -1158,6 +1225,77 @@ g_actions['create-usergroup-by-id'] = function DeleteUserGroupById(node)
 	return ok;
 }
 
+//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
+//---------------------------FOR EACH GROUP USER ------------------------
+//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
+
+
+//==================================
+g_actions['for-each-group-person'] = function (node)
+//==================================
+{
+	var usergroup = getTxtvals($("usergroup",node));
+	if (usergroup!="")
+			//---- get usergroupid ----------
+			var groupid = "";
+			var url = serverBCK_API+"/usersgroups";
+			$.ajax({
+				async : false,
+				type : "GET",
+				contentType: "text/html",
+				dataType : "text",
+				url : url,
+				success : function(data) {
+					var groups = $("group",data);
+					for (var k=0;k<groups.length;k++){
+						if ($('label',groups[k]).text()==usergroup) {
+							groupid = $(groups[k]).attr("id");
+							break;
+						}
+					}
+					if (groupid=="")
+						$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in for-each-group-person - usergroup:"+usergroup+" NOT FOUND");
+					else {
+						$.ajax({
+							async: false,
+							type : "GET",
+							dataType : "xml",
+							url : serverBCK_API+"/usersgroups?group="+groupid,
+							success : function(data) {
+								var items = $("user",data);
+								for ( var i = 0; i < items.length; i++) {
+									uuid = $(items[i]).attr('id');
+									if (Users_byid[uuid]==undefined){
+										$.ajax({
+											async: false,
+											type : "GET",
+											dataType : "xml",
+											url : serverBCK_API+"/users/user/"+uuid,
+											userid : uuid,
+											success : function(data) {
+												UIFactory.User.parse_add(data);
+											}
+										});
+									}
+									if (Users_byid[uuid]!=undefined){
+										var username = Users_byid[uuid].username;
+										g_variables['currentuser'] = username;
+										$("#batch-log").append("<br>------------- current-user -----------------");
+										$("#batch-log").append("<br>- user selected - username:"+username);
+										processListActions($("actions",node).children());
+									}
+								}
+							}
+						});
+					}
+				},
+				error : function(data) {
+					$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in For-EACH-GROUP-PERSON - usergroup:"+usergroup);
+				}
+			});
+}
 //-----------------------------------------------------------------------
 //-----------------------------------------------------------------------
 //------------------------ Delete Tree ----------------------------------
