@@ -661,7 +661,7 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 						if (display_code)
 							html += code+" ";
 						if (display_value)
-							html += value+" ";
+							html += $(this).attr("value")+" ";
 						if (display_label)
 							html += $(this).attr("label_"+languages[langcode]);
 						$("#button_"+langcode+self.id).attr("style",style);
@@ -1085,10 +1085,9 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 			var targetid = this.targetid;
 			if (targetid=="")
 				targetid = this.parentid;
-			var query_semtag = this.query_semtag;
 			var data = UICom.structure.ui[targetid].node;
-			var searchsemtag = (this.unique=='true')?query_semtag:this.unique;
-			var allreadyadded = allreadyadded = $("*:has(>metadata[semantictag*="+searchsemtag+"])",data);
+			var searchsemtag = (this.unique=='true')?semtag.replace("!",""):this.unique;
+			var allreadyadded = $("*:has(>metadata[semantictag*="+searchsemtag+"])",data);
 			var tabadded = [];
 			for ( var i = 0; i < allreadyadded.length; i++) {
 				let resource = null;
@@ -1455,6 +1454,72 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 		$(btn_group).append($(select));
 		autocomplete(document.getElementById("button_"+langcode+self.id), tableau2,onupdate,self,langcode);
 	}
+	//------------------------------------------------------------
+	//------------------------------------------------------------
+	if (type.indexOf('checkbox')>-1) {
+	//------------------------------------------------------------
+	//------------------------------------------------------------
+		var checkboxs = [];
+		for ( var i = 0; i < 2; i++) {
+			var resource = null;
+			//------------------------------
+			if ($("asmResource",newTableau1[i][1]).length==3) {
+				resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i][1]); 
+			} else {
+				resource = $("asmResource[xsi_type='nodeRes']",newTableau1[i][1]);
+			}
+			const code = $('code',resource).text();
+			let label = [];
+			for (var j=0; j<languages.length;j++){
+				label[j] = $(srce+"[lang='"+languages[j]+"']",resource).text();
+			}
+			checkboxs.push({'code':code,'label':label});
+		}
+		//-----------------------------
+		var checkbox_obj = $("<div class='get-checkbox'></div>");
+		var input = "";
+		input += "<input id='input_"+self.id+"' class='checkbox-div' type='checkbox' name='checkbox_"+self.id+"' style='' ";
+		for (var j=0; j<languages.length;j++){		
+		if (self_code==checkboxs[1].code)
+			input += " label_"+languages[j]+"='"+checkboxs[0].label[j]+"'";
+		else
+			input += " label_"+languages[j]+"='"+checkboxs[1].label[j]+"'";
+		}
+		if (self_code==checkboxs[1].code)
+			input += " code='"+checkboxs[0].code+"'";
+		else
+			input += " code='"+checkboxs[1].code+"'";
+		if (disabled)
+			input +=" disabled='disabled' ";
+		if (self_code==checkboxs[1].code)
+			input += " checked ";
+		input += "><span id='label_"+self.id+"'>";
+		if (self_code==checkboxs[1].code)
+			input += "&nbsp;"+checkboxs[1].label;
+		else
+			input += "&nbsp;"+checkboxs[0].label;
+		input += "</span></input>";
+		var obj = $(input);
+		$(obj).click(function (){
+			UIFactory["Get_Resource"].update(this,self,langcode,type);
+			if (this.checked) {
+				$("#label_"+self.id).html("&nbsp;"+checkboxs[1].label);
+				$("#input_"+self.id).attr("code",checkboxs[0].code);
+				for (var j=0; j<languages.length;j++){		
+					$("#input_"+self.id).attr("label_"+languages[j],checkboxs[0].label[j]);
+				}
+			} else {
+				$("#label_"+self.id).html("&nbsp;"+checkboxs[0].label);
+				$("#input_"+self.id).attr("code",checkboxs[1].code);
+				for (var j=0; j<languages.length;j++){		
+					$("#input_"+self.id).attr("label_"+languages[j],checkboxs[1].label[j]);
+				}
+			}
+		});
+		$(checkbox_obj).append(obj);
+		$("#"+destid).append(checkbox_obj);
+		//-----------------------------
+	}
 };
 
 //==================================
@@ -1767,9 +1832,14 @@ UIFactory["Get_Resource"].updateaddedpart = function(data,get_resource_semtag,se
 			var nodeid = $(nodes[0]).attr('id'); 
 			var url_resource = serverBCK_API+"/resources/resource/" + nodeid;
 			var tagname = $(nodes[0])[0].nodeName;
-			if( "asmRoot" == tagname || "asmStructure" == tagname || "asmUnit" == tagname || "asmUnitStructure" == tagname) {
-				xml = xml.replace("Get_Resource","nodeRes");
+			if( "asmContext" == tagname) {
+				const resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']", $(nodes[0])[0]);
+				const xsi_type = $(resource).attr("xsi_type");
+				xml = xml.replace("Get_Get_Resource",xsi_type);
+			} else {
+				xml = xml.replace("Get_Get_Resource","nodeRes");
 				url_resource = serverBCK_API+"/nodes/node/" + nodeid + "/noderesource";
+				
 			}
 			$.ajax({
 				type : "PUT",

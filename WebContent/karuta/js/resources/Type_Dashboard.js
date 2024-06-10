@@ -163,7 +163,8 @@ UIFactory["Dashboard"].prototype.displayView = function(dest,langcode)
 	}
 	var csv_roles = $(UICom.structure.ui[uuid].resource.csv_node).text();
 	if (csv_roles.indexOf('all')>-1 || csv_roles.containsArrayElt(g_userroles) || (csv_roles!='' && (g_userroles[0]=='designer' || USER.admin))) {
-		$("#extra_button_"+uuid).append($("<div class='csv-button button' onclick=\"javascript:xml2CSV('dashboard_"+uuid+"')\">CSV</div>"));				
+		const button = "<span class='button fas fa-file-csv' onclick=\"javascript:xml2CSV('dashboard_"+uuid+"')\")\" data-title='CSV' data-toggle='tooltip' data-placement='bottom'></span>";
+		$("#extra_button_"+uuid).append(button);
 	}
 	var pdf_roles = $(UICom.structure.ui[uuid].resource.pdf_node).text();
 	if (pdf_roles.indexOf('all')>-1 || pdf_roles.containsArrayElt(g_userroles) || (pdf_roles!='' && (g_userroles[0]=='designer' || USER.admin))) {
@@ -227,7 +228,7 @@ UIFactory["Dashboard"].prototype.getEditor = function(type,langcode,disabled)
 		$(htmlFormObj).append($(htmlTextGroupObj));
 		//-----------------------------------------------------
 		var htmlCsvGroupObj = $("<div class='form-group'></div>")
-		var htmlCsvLabelObj = $("<label for='print_"+this.id+"' class='col-sm-3 control-label'>"+karutaStr[LANG]['print']+"</label>");
+		var htmlCsvLabelObj = $("<label for='print_"+this.id+"' class='col-sm-3 control-label'>"+karutaStr[LANG]['button-print']+"</label>");
 		var htmlCsvDivObj = $("<div class='col-sm-9'></div>");
 		var htmlCsvInputObj = $("<input id='print_"+this.id+"' type='text' class='form-control' value=\""+this.print_node.text()+"\">");
 		$(htmlCsvInputObj).change(function (){
@@ -239,7 +240,7 @@ UIFactory["Dashboard"].prototype.getEditor = function(type,langcode,disabled)
 		$(htmlCsvGroupObj).append($(htmlCsvDivObj));
 		$(htmlFormObj).append($(htmlCsvGroupObj));
 		//-----------------------------------------------------
-/*		var htmlCsvGroupObj = $("<div class='form-group'></div>")
+		var htmlCsvGroupObj = $("<div class='form-group'></div>")
 		var htmlCsvLabelObj = $("<label for='csv_"+this.id+"' class='col-sm-3 control-label'>"+karutaStr[LANG]['csv']+"</label>");
 		var htmlCsvDivObj = $("<div class='col-sm-9'></div>");
 		var htmlCsvInputObj = $("<input id='csv_"+this.id+"' type='text' class='form-control' value=\""+this.csv_node.text()+"\">");
@@ -252,7 +253,7 @@ UIFactory["Dashboard"].prototype.getEditor = function(type,langcode,disabled)
 		$(htmlCsvGroupObj).append($(htmlCsvDivObj));
 		$(htmlFormObj).append($(htmlCsvGroupObj));
 		//-----------------------------------------------------
-		var htmlpdfGroupObj = $("<div class='form-group'></div>")
+/*		var htmlpdfGroupObj = $("<div class='form-group'></div>")
 		var htmlpdfLabelObj = $("<label for='pdf_"+this.id+"' class='col-sm-3 control-label'>"+karutaStr[LANG]['pdf']+"</label>");
 		var htmlpdfDivObj = $("<div class='col-sm-9'></div>");
 		var htmlpdfInputObj = $("<input id='pdf_"+this.id+"' type='text' class='form-control' value=\""+this.pdf_node.text()+"\">");

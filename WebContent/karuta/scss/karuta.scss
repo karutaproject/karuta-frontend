@@ -1915,6 +1915,25 @@
 	.td3 {
 		width:30%;
 	}
+
+/* ========================= */
+/*     VUE  COMPACT           */
+/* ========================= */
+	
+	.standard-resource-compact {
+		.td2 {
+			width:90%;
+		}
+		.td3 {
+			width:10%;
+			cursor:pointer;
+		}
+		.dropdown-item:hover {
+			background-color:var(--portfolio-menu-background-color) !important;
+		}
+	}
+
+
 /* ====================== */
 /*         MODEL          */
 /* ====================== */	
@@ -2438,7 +2457,7 @@ hr {
 			margin-top:3px;
 			border: 1px solid #ced4da;
 			border-radius: .2rem;
-			max-width:80%;
+			max-width:90%;
 			.form-control {
 				border: 0px solid var(--edit-window-border-color);
 			}
@@ -2556,6 +2575,11 @@ hr {
 	}
 
 	.subget_ressource{
+		margin-left:25px;
+		font-size:90%;
+	}
+
+	.subget_ressource .subget_ressource{
 		margin-left:25px;
 		font-size:90%;
 	}
@@ -3449,9 +3473,14 @@ table.tablesorter th.restore {
 		.tooltip,
 		.menus,
 		.buttons,
-		.buttons-menus,
-		.btn-group {
-			block:none !important;
+		.buttons-menus {
+			display:none !important;
+		}
+		
+		#contenu.col-sm-9,
+		#contenu.col-md-9 {
+			flex: 0 0 100% !important;
+			max-width: 100% !important;
 		}
 	
 		a:after {
@@ -3474,6 +3503,12 @@ table.tablesorter th.restore {
 		td {
 			page-break-inside:auto !important;
 			page-break-after:auto !important;
+		}
+		.select-label .btn {
+			border: none;
+		}
+		.select-label .dropdown-toggle {
+			display: none !important;
 		}
 		.section2hide {
 			display:none !important;

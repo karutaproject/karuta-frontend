@@ -186,7 +186,7 @@ UIFactory["Comments"].prototype.update = function(langcode)
 	var author = USER.getView(null,'firstname-lastname');
 	this.date_node.text(new Date().toLocaleString());
 	this.author_node.text(author);
-	var value = $.trim($("#"+this.id+"_edit_"+langcode).val());
+	var value = sanitizeText($.trim($("#"+this.id+"_edit_"+langcode).val()));
 	if (value==''){ // we erase date and author if comments are deleted
 		this.date_node.text('');
 		this.author_node.text('');

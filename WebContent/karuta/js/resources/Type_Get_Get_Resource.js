@@ -294,7 +294,7 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 				semtag_parent = elts[removestar];
 			}
 			// ------- search for parent ----
-			if (query.indexOf('itselfcode')>-1) {
+			if (query.indexOf('itselfcode')>-1 || query.indexOf('itself')>-1) {
 				code_parent = $($("code",$(this.node)[0])[0]).text();
 				value_parent = $($("value",$(this.node)[0])[0]).text();
 			} else if (query.indexOf('parent.parent.parent.parent.parent.parentcode')>-1) {
@@ -1000,9 +1000,8 @@ UIFactory["Get_Get_Resource"].prototype.parse = function(destid,type,langcode,da
 			if (this.targetid==undefined || this.targetid=="")
 				this.targetid = this.parentid;
 			var targetid = this.targetid;
-			var searchsemtag = (this.query_semtag!=undefined)?this.query_semtag:semtag;
-			searchsemtag = (this.unique=='true')?searchsemtag:this.unique;
 			var data = UICom.structure.ui[targetid].node;
+			var searchsemtag = (this.unique=='true')?semtag.replace("!",""):this.unique;
 			var allreadyadded = $("*:has(>metadata[semantictag*="+searchsemtag+"])",data);
 			var tabadded = [];
 			for ( var i = 0; i < allreadyadded.length; i++) {
@@ -1136,7 +1135,7 @@ UIFactory["Get_Get_Resource"].getChildren = function(dest,langcode,self,srce,por
 	//------------
 }
 //==================================
-UIFactory["Get_Get_Resource"].parseChildren = function(dest,data,langcode,self,srce,portfoliocode,semtag,semtag_parent,code,semtag2,cachable,tabadded)
+UIFactory["Get_Get_Resource"].parseChildren = function(dest,data,langcode,self,srce,portfoliocode,semtag,semtag_parent,code_parent,semtag2,cachable,tabadded)
 //==================================
 {
 	//-----Node ordering-------------------------------------------------------
@@ -1163,6 +1162,11 @@ UIFactory["Get_Get_Resource"].parseChildren = function(dest,data,langcode,self,s
 	} else {
 		newTableau2 = newTableau1;
 	}
+	//--------------------------------------------------------------------
+	const subdiv = "<div code_parent='"+code_parent+"' class='subget_ressource'>";
+	var subdiv_obj = $(subdiv);
+	$(dest).append(subdiv_obj);
+
 	//--------------------------------------------------------------------
 	for ( var i = 0; i < newTableau2.length; ++i) {
 		var uuid = $(newTableau2[i][1]).attr('id');
@@ -1197,9 +1201,9 @@ UIFactory["Get_Get_Resource"].parseChildren = function(dest,data,langcode,self,s
 		if (code.indexOf("!")>-1 || semtag.indexOf("!")>-1 ) {
 			selectable = false;
 		}
-		code = cleanCode(code);
+//		code = cleanCode(code);
 		//------------------------------
-		input += "<div id='"+code+"' style=\""+style+"\">";
+		input += "<div id='"+cleanCode(code)+"' code_parent='"+code_parent+"' style=\""+style+"\">";
 		if (selectable) {
 			input += "	<input type='checkbox' name='multiple_"+self.id+"' value='"+$('value',resource).text()+"' code='"+$('code',resource).text()+"' class='multiple-item";
 			input += "' ";
@@ -1214,10 +1218,11 @@ UIFactory["Get_Get_Resource"].parseChildren = function(dest,data,langcode,self,s
 			input += code + " ";
 		input +="<span  class='"+code+"'>"+$(srce+"[lang='"+languages[langcode]+"']",resource).text()+"</span></div>";
 		var input_obj = $(input);
-		$(dest).append(input_obj);
+		$(subdiv_obj).append(input_obj);
 		if (semtag2!="") {
 			var semtag_parent = semtag.replace("!","");
-			UIFactory.Get_Get_Resource.getChildren(dest,langcode,srce,portfoliocode,semtag2,semtag_parent,code,cachable);
+			UIFactory.Get_Get_Resource.getChildren(subdiv_obj,langcode,self,srce,portfoliocode,semtag2,semtag_parent,code,cachable,tabadded);
+			// (dest,langcode,self,srce,portfoliocode,semtag,semtag_parent,code,cachable,tabadded)
 		}
 	}
 }
@@ -1620,12 +1625,20 @@ UIFactory["Get_Get_Resource"].updateaddedpart = function(data,get_resource_semta
 		url : serverBCK_API+"/nodes/node/"+partid,
 		last : last,
 		success : function(data) {
-			var nodeid = $("*:has(>metadata[semantictag='"+get_resource_semtag+"'])",data).attr('id');
+			var nodes = $("*:has(>metadata[semantictag*='"+get_resource_semtag+"'])",data);
+			if (nodes.length==0)
+				nodes = $( ":root",data ); //node itself
+			var nodeid = $(nodes[0]).attr('id'); 
 			var url_resource = serverBCK_API+"/resources/resource/" + nodeid;
-			var tagname = $( ":root",data )[ 0 ].nodeName;
-			if( "asmRoot" == tagname || "asmStructure" == tagname || "asmUnit" == tagname || "asmUnitStructure" == tagname) {
+			var tagname = $(nodes[0])[0].nodeName;
+			if( "asmContext" == tagname) {
+				const resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']", $(nodes[0])[0]);
+				const xsi_type = $(resource).attr("xsi_type");
+				xml = xml.replace("Get_Get_Resource",xsi_type);
+			} else {
 				xml = xml.replace("Get_Get_Resource","nodeRes");
 				url_resource = serverBCK_API+"/nodes/node/" + nodeid + "/noderesource";
+				
 			}
 			$.ajax({
 				async : false,

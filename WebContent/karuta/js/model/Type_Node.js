@@ -234,81 +234,72 @@ UIFactory["Node"].prototype.displayNode = function(type,root,dest,depth,langcode
 			// ================================= For each child ==========================
 			// ===========================================================================
 			var backgroundParent = UIFactory.Node.getMetadataEpm(this.metadataepm,'node-background-color',false);
-			
-//			if (this.semantictag.indexOf('asmColumns')>-1 && type!='raw') {
-//				//-------------- for backward compatibility -----------
-//				UIFactory["Node"].displayColumns(type,root,dest,depth,langcode,edit,this.inline,this.backgroundParent,this.parent,this.menu);
-//			} else if (this.semantictag.indexOf('asm-block')>-1 && type!='raw') {
-				//-------------- for backward compatibility -----------
-//				UIFactory["Node"].displayBlocks(root,dest,depth,langcode,edit,this.inline,this.backgroundParent,this.parent,this.menu);
-//			} else {
-				//------------ EuropassL -----------------
-				if (this.semantictag=="EuropassL"){
-					alreadyDisplayed = true;
-					if( node.structured_resource != null )
-					{
-						node.structured_resource.displayView('content-'+uuid,langcode,'detail',uuid,this.menu);
-					}
+			//------------ EuropassL -----------------
+			if (this.semantictag=="EuropassL"){
+				alreadyDisplayed = true;
+				if( node.structured_resource != null )
+				{
+					node.structured_resource.displayView('content-'+uuid,langcode,'detail',uuid,this.menu);
 				}
-				//------------ Bubble Map -----------------
-				if (this.semantictag.indexOf('bubble_level1')>-1) {
-					alreadyDisplayed = true;
-					if  (this.seeqrcoderoles.containsArrayElt(g_userroles) || USER.admin || g_userroles[0]=='designer') {
-						var map_info = UIFactory.Bubble.getLinkQRcode(uuid);
-						$('#map-info_'+uuid).html(map_info);
-						$('body').append(qrCodeBox());
-						UIFactory.Bubble.getPublicURL(uuid,g_userroles[0]);
-					}
+			}
+			//------------ Bubble Map -----------------
+			if (this.semantictag.indexOf('bubble_level1')>-1) {
+				alreadyDisplayed = true;
+				if  (this.seeqrcoderoles.containsArrayElt(g_userroles) || USER.admin || g_userroles[0]=='designer') {
+					var map_info = UIFactory.Bubble.getLinkQRcode(uuid);
+					$('#map-info_'+uuid).html(map_info);
+					$('body').append(qrCodeBox());
+					UIFactory.Bubble.getPublicURL(uuid,g_userroles[0]);
 				}
-				//------------ Tabs SubSection -----------------
-				if (this.semantictag.indexOf("tabs-section")>-1){
-					alreadyDisplayed = true;
-					let html_tabs = "<ul class='tabs-headers nav nav-tabs' role='tablist'>";
-					let html_panels = "<div class='tabs-contents tab-content'>";
-					for( let i=0; i<root.children.length; ++i ) {
-						let childnode = UICom.structure.ui[root.children[i]];
-						let childlabel = childnode.getLabel();
-						var style = childnode.getLabelStyle();
-						html_tabs += "<li class='nav-item'><a class='nav-link' style='"+style+"' href='#display-"+uuid+"-"+i+"' onclick=\"localStorage.setItem('#display-"+uuid+"','-"+i+"')\" role='tab' data-toggle='tab'>"+childlabel+"</a></li>";
-						html_panels += "<div role='tabpanel' class='tab-pane' id='display-"+uuid+"-"+i+"'></div>";
-					}
-					html_tabs += "</ul>";
-					html_panels +="</div>";
-					$("#content-"+uuid).append (html_tabs);
-					$("#content-"+uuid).append (html_panels);
-					if (localStorage.getItem('#display-'+uuid)!=undefined){
-						$("a[href=\"#display-"+uuid+localStorage.getItem('#display-'+uuid)+"\"]").click();
-					} else {
-						$("a[href='#display-"+uuid+"-0']").click();
-						localStorage.setItem('#display-'+uuid,'-0');
-					}
-					for( let i=0; i<root.children.length; ++i ) {
-						// Recurse
-						let child = UICom.structure.tree[root.children[i]];
-						let childnode = UICom.structure.ui[root.children[i]];
-						let original_edit = edit;
-						if (this.submitted=='Y' && this.submitall=='Y')
-							edit = false;
-						childnode.displayNode(type,child, 'display-'+uuid+'-'+i, this.depth-1,langcode,edit,inline,backgroundParent,root,menu);
-						edit = original_edit;
-					}
+			}
+			//------------ Tabs SubSection -----------------
+			if (this.semantictag.indexOf("tabs-section")>-1){
+				alreadyDisplayed = true;
+				let html_tabs = "<ul class='tabs-headers nav nav-tabs' role='tablist'>";
+				let html_panels = "<div class='tabs-contents tab-content'>";
+				for( let i=0; i<root.children.length; ++i ) {
+					let childnode = UICom.structure.ui[root.children[i]];
+					let childlabel = childnode.getLabel();
+					var style = childnode.getLabelStyle();
+					html_tabs += "<li class='nav-item'><a class='nav-link' style='"+style+"' href='#display-"+uuid+"-"+i+"' onclick=\"localStorage.setItem('#display-"+uuid+"','-"+i+"')\" role='tab' data-toggle='tab'>"+childlabel+"</a></li>";
+					html_panels += "<div role='tabpanel' class='tab-pane' id='display-"+uuid+"-"+i+"'></div>";
+				}
+				html_tabs += "</ul>";
+				html_panels +="</div>";
+				$("#content-"+uuid).append (html_tabs);
+				$("#content-"+uuid).append (html_panels);
+				if (localStorage.getItem('#display-'+uuid)!=undefined){
+					$("a[href=\"#display-"+uuid+localStorage.getItem('#display-'+uuid)+"\"]").click();
+				} else {
+					$("a[href='#display-"+uuid+"-0']").click();
+					localStorage.setItem('#display-'+uuid,'-0');
+				}
+				for( let i=0; i<root.children.length; ++i ) {
+					// Recurse
+					let child = UICom.structure.tree[root.children[i]];
+					let childnode = UICom.structure.ui[root.children[i]];
+					let original_edit = edit;
+					if (this.submitted=='Y' && this.submitall=='Y')
+						edit = false;
+					childnode.displayNode(type,child, 'display-'+uuid+'-'+i, this.depth-1,langcode,edit,inline,backgroundParent,root,menu);
+					edit = original_edit;
+				}
 
+			}
+			//------------ Default  -----------------
+			if (!alreadyDisplayed) {
+				for( var i=0; i<root.children.length; ++i ) {
+					// Recurse
+					let child = UICom.structure.tree[root.children[i]];
+					let childnode = UICom.structure.ui[root.children[i]];
+					let childsemtag = $(childnode.metadata).attr('semantictag');
+					let original_edit = edit;
+					if (this.submitted=='Y' && this.submitall=='Y')
+						edit = false;
+					childnode.displayNode(type,child, 'content-'+uuid, this.depth-1,langcode,edit,inline,backgroundParent,root,menu);
+					edit = original_edit;
 				}
-				//------------ Default  -----------------
-				if (!alreadyDisplayed) {
-					for( var i=0; i<root.children.length; ++i ) {
-						// Recurse
-						let child = UICom.structure.tree[root.children[i]];
-						let childnode = UICom.structure.ui[root.children[i]];
-						let childsemtag = $(childnode.metadata).attr('semantictag');
-						let original_edit = edit;
-						if (this.submitted=='Y' && this.submitall=='Y')
-							edit = false;
-						childnode.displayNode(type,child, 'content-'+uuid, this.depth-1,langcode,edit,inline,backgroundParent,root,menu);
-						edit = original_edit;
-					}
-				}
-//			}
+			}
 			//-------------------------------------------------------
 			$('[data-toggle=tooltip]').tooltip({html: true, trigger: 'hover'}); 
 			$(".pickcolor").colorpicker();
@@ -430,6 +421,9 @@ if (execJS(this,"display-if")) {
 		if ((this.printroles.containsArrayElt(g_userroles) || this.printroles.indexOf($(USER.username_node).text())>-1 || this.printroles.indexOf("all")>-1 || USER.admin || g_userroles[0]=='designer') && this.printroles!='none' && this.printroles!='') {
 				html += "<span class='button fas fa-print' style='"+menus_color+"' onclick=\"javascript:printSection('#node_"+this.id+"')\" data-title='"+karutaStr[LANG]["button-print"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
 		}
+		//----------------------- if compact view -----------------------------
+		if (displayview=='standard-resource-compact')
+			showHideCompactEditElts(uuid);
 		//----------------- hide lbl-div if empty ------------------------------------
 		if (this.getLabel(null,'none',langcode)=="" && this.getButtons(langcode)=="" && this.getMenus(langcode)=="")
 			if (this.displayview=='xwide' || this.displayview.indexOf("/12")>-1)
@@ -886,7 +880,7 @@ UIFactory["Node"].prototype.updateLabel = function(langcode)
 {
 	if (langcode==null)
 		langcode = LANGCODE;
-	var label = $.trim($("#label_"+this.id+"_"+langcode).val());
+	var label = sanitizeText($.trim($("#label_"+this.id+"_"+langcode).val()));
 	$(this.label_node[langcode]).text(label);
 	$(UICom.structure.ui[this.id].label_node[LANGCODE]).text(label);
 	//---------------------
@@ -913,18 +907,18 @@ UIFactory["Node"].prototype.update = function(langcode)
 			langcode = LANGCODE;
 		//---------------------
 		if ($("#code_"+this.id).length){
-			var code = $.trim($("#code_"+this.id).val());
+			var code = sanitizeText($.trim($("#code_"+this.id).val()));
 			$(this.code_node).text(code);
 			$(UICom.structure.ui[this.id].code_node).text(code);
 		}
 		//---------------------
 		if ($("#value_"+this.id).length){
-			var value = $.trim($("#value_"+this.id).val());
+			var value = sanitizeText($.trim($("#value_"+this.id).val()));
 			$(this.value_node).text(value);
 			$(UICom.structure.ui[this.id].value_node).text(value);
 		}
 		//---------------------
-		var label = $.trim($("#label_"+this.id+"_"+langcode).val());
+		var label = sanitizeText($.trim($("#label_"+this.id+"_"+langcode).val()));
 		$(this.label_node[langcode]).text(label);
 		$(UICom.structure.ui[this.id].label_node[langcode]).text(label);
 		//---------------------
@@ -1228,6 +1222,7 @@ UIFactory["Node"].duplicate = function(uuid,callback,databack,param2,param3,para
 				success : function(node_data) {
 					//------------------------------------------
 					var code = $($("code",node_data)[0]).text();
+					var value = $($("value",node_data)[0]).text();
 					var label = [];
 					for (var i=0; i<languages.length;i++){
 						label[i] = $("label[lang='"+languages[i]+"']",$("asmResource[xsi_type='nodeRes']",node_data)[0]).text();
@@ -1246,8 +1241,18 @@ UIFactory["Node"].duplicate = function(uuid,callback,databack,param2,param3,para
 						nbcode++;
 						code = code.replace(/\d+$/,nbcode);
 					}
+					var nbvalue = value.match(/\d+$/);
+					if (nbvalue!=null)
+						nbvalue = nbvalue[0];
+					if ($.isNumeric(nbvalue)) {
+						nbvalue++;
+						value = value.replace(/\d+$/,nbvalue);
+						$("value",resource).text(value);
+						tobesaved = true;
+					}
 					var xml = "<asmResource xsi_type='nodeRes'>";
 					xml += "<code>"+code+"</code>";
+					xml += "<value>"+value+"</value>";
 					for (var i=0; i<languages.length;i++)
 						xml += "<label lang='"+languages[i]+"'>"+label[i]+"</label>";
 					xml += "</asmResource>";

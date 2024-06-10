@@ -127,6 +127,7 @@ karutaStr['fr']['error-notfound']="ERREUR - non trouvé";
 karutaStr['fr']['error-filenotfound']="*** Fichier non sauvegardé ou manquant";
 karutaStr['fr']['error-login']="Erreur à la connexion : votre login ou votre mot de passe est incorrect.";
 karutaStr['fr']['error-delete']="Vous ne pouvez pas supprimer cet élément.";
+karutaStr['fr']['error-script']="ERREUR - Une erreur s'est produite pendant l'exécution du script.";
 
 //=========================================
 //========== NODE =========================
@@ -431,6 +432,7 @@ karutaStr['fr']['change_name']="Changer vos prénom et nom";
 karutaStr['fr']['password']="Mot de passe";
 karutaStr['fr']['new_password']="Nouveau mot de passe";
 karutaStr['fr']['admin']="Admin";
+karutaStr['fr']['sharer']="Partageur";
 karutaStr['fr']['designer']="Créateur";
 karutaStr['fr']['active']="Actif";
 karutaStr['fr']['select_users']="Sélectionner des usagers";
@@ -442,7 +444,7 @@ karutaStr['fr']['select_user']="Selectionner un usager";
 karutaStr['fr']['other']="Autre";
 karutaStr['fr']['delete-temporary-users']="Supprimer tous";
 karutaStr['fr']['delete-empty-users']="Supprimer la sélection";
-karutaStr['fr']['c-a-s']="C/A/S";
+karutaStr['fr']['c-a-s']="C/A/S/P";
 karutaStr['fr']['too-much-users']="Il y a plus de 200 usagers actifs. Cliquez sur le bouton 'Voir' pour les afficher ou faites une recherche ci-dessus."
 karutaStr['fr']['new-code']="Envoyez votre login. Vous recevrez une code pour vous connecter."
 
@@ -460,6 +462,7 @@ karutaStr['fr']['batch']="Exécuter un script de batch";
 karutaStr['fr']['upload_csv']="Téléverser un fichier CSV";
 karutaStr['fr']['process_csv']="Exécuter";
 karutaStr['fr']['create_user_portfolios']="Créer un usager et ses portfolios";
+karutaStr['fr']['show-hide-log']="Montrer/Cacher le journal";
 
 //=========================================
 //========== REPORT ========================

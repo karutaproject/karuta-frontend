@@ -267,7 +267,7 @@ UIFactory["Item"].prototype.getEditor = function(type,langcode,disabled)
 		var htmlCodeDivObj = $("<div class='col-sm-9'></div>");
 		var htmlCodeInputObj = $("<input id='item_code_"+this.id+"' type='text' class='form-control' name='code_Item' value=\""+this.code_node.text()+"\">");
 		$(htmlCodeInputObj).change(function (){
-			$(self.code_node).text($(this).val());
+			$(self.code_node).text(sanitizeText($(this).val()));
 			UIFactory["Item"].update(self,langcode);
 		});
 		$(htmlCodeDivObj).append($(htmlCodeInputObj));
@@ -280,7 +280,7 @@ UIFactory["Item"].prototype.getEditor = function(type,langcode,disabled)
 		var htmlValueDivObj = $("<div class='col-sm-9'></div>");
 		var htmlValueInputObj = $("<input id='item_value_"+this.id+"_"+langcode+"' type='text' class='form-control' name='value_Item' value=\""+this.value_node.text()+"\">");
 		$(htmlValueInputObj).change(function (){
-			$(self.value_node).text($(this).val());
+			$(self.value_node).text(sanitizeText($(this).val()));
 			UIFactory["Item"].update(self,langcode);
 		});
 		$(htmlValueDivObj).append($(htmlValueInputObj));
@@ -293,7 +293,7 @@ UIFactory["Item"].prototype.getEditor = function(type,langcode,disabled)
 		var htmlLabelDivObj = $("<div class='col-sm-9'></div>");
 		var htmlLabelInputObj = $("<input id='item_label_"+this.id+"_"+langcode+"' type='text' class='form-control' name='label_Item' value=\""+this.label_node[langcode].text()+"\">");
 		$(htmlLabelInputObj).change(function (){
-			$(self.label_node[langcode]).text($(this).val());
+			$(self.label_node[langcode]).text(sanitizeText($(this).val()));
 			UIFactory["Item"].update(self,langcode);
 		});
 		$(htmlLabelDivObj).append($(htmlLabelInputObj));

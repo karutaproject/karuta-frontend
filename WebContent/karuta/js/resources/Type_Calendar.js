@@ -152,8 +152,8 @@ UIFactory["Calendar"].update = function(itself,langcode)
 			$(itself.utc).text("null");
 		//---------------------
 		if (!itself.multilingual) {
-			var text = $(itself.text_node[langcode]).text();
-			var format = $(itself.format_node[langcode]).text();
+			var text = sanitizeText($(itself.text_node[langcode]).text());
+			var format = sanitizeText($(itself.format_node[langcode]).text());
 			for (var langcode=0; langcode<languages.length; langcode++) {
 				$(itself.text_node[langcode]).text(text);
 				$(itself.format_node[langcode]).text(format);
@@ -218,7 +218,7 @@ UIFactory["Calendar"].prototype.displayEditor = function(dest,type,langcode,disa
 		var input2 = $(html);
 		var self = this;
 		$(input2).change(function (){
-			$(self.format_node[langcode]).text($(this).val());
+			$(self.format_node[langcode]).text(sanitizeText($(this).val()));
 			UIFactory["Calendar"].update(self,langcode);
 		});
 		$(div2).append(input2);
@@ -235,7 +235,7 @@ UIFactory["Calendar"].prototype.displayEditor = function(dest,type,langcode,disa
 		html += "value='days'  > Days </input>";
 		var input3_1 = $(html);
 		$(input3_1).click(function (){
-			$(self.minViewMode_node).text($(this).val());
+			$(self.minViewMode_node).text(sanitizeText($(this).val()));
 			UIFactory["Calendar"].update(self,langcode);
 		});
 		$(div3).append(input3_1);
@@ -247,7 +247,7 @@ UIFactory["Calendar"].prototype.displayEditor = function(dest,type,langcode,disa
 		html += "value='months' > Months </input>";
 		var input3_2 = $(html);
 		$(input3_2).click(function (){
-			$(self.minViewMode_node).text($(this).val());
+			$(self.minViewMode_node).text(sanitizeText($(this).val()));
 			UIFactory["Calendar"].update(self,langcode);
 		});
 		$(div3).append(input3_2);
@@ -259,7 +259,7 @@ UIFactory["Calendar"].prototype.displayEditor = function(dest,type,langcode,disa
 		html += "value='years' > Years </input>";
 		var input3_3 = $(html);
 		$(input3_3).click(function (){
-			$(self.minViewMode_node).text($(this).val());
+			$(self.minViewMode_node).text(sanitizeText($(this).val()));
 			UIFactory["Calendar"].update(self,langcode);
 		});
 		$(div3).append(input3_3);

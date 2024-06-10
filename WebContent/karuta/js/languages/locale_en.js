@@ -127,6 +127,7 @@ karutaStr['en']['error-notfound']="ERROR - not found";
 karutaStr['en']['error-filenotfound']="*** File not saved or missing";
 karutaStr['en']['error-login']="Connection Error : your login or your password is incorrect.";
 karutaStr['en']['error-delete']="You cannot delete this item.";
+karutaStr['en']['error-script']="ERROR - An error occurred while executing the script.";
 
 //=========================================
 //========== NODE =====================
@@ -431,6 +432,7 @@ karutaStr['en']['change_name']="Change Name";
 karutaStr['en']['password']="Password";
 karutaStr['en']['new_password']="New Password";
 karutaStr['en']['admin']="Admin";
+karutaStr['en']['sharer']="Sharer";
 karutaStr['en']['designer']="Creator";
 karutaStr['en']['active']="Active";
 karutaStr['en']['select_users']="Select Users";
@@ -442,7 +444,7 @@ karutaStr['en']['select_user']="Select a User";
 karutaStr['en']['other']="Other";
 karutaStr['en']['delete-temporary-users']="Delete All";
 karutaStr['en']['delete-empty-users']="Delete Selection";
-karutaStr['en']['c-a-s']="C/A/S";
+karutaStr['en']['c-a-s']="D/A/Su/Sh";
 karutaStr['en']['too-much-users']="There are more than 200 users. Click 'See' button to display them or search using the input above."
 karutaStr['en']['new-code']="Send your login.You will receive a code to connect."
 
@@ -460,6 +462,7 @@ karutaStr['en']['batch']="Execute Batch Script";
 karutaStr['en']['upload_csv']="Upload a CSV File";
 karutaStr['en']['process_csv']="Process";
 karutaStr['en']['create_user_portfolios']="Create an user and his portfolios";
+karutaStr['en']['show-hide-log']="Show/Hide Log";
 
 //=========================================
 //========== REPORT ========================
@@ -642,4 +645,6 @@ karutaStr['en']['coverage']="Coverage";
 
 karutaStr['en']['connection-cas1']="Connection with University Account";
 karutaStr['en']['connection-cas2']="Connection without University Account";
+
+//-----------
 

@@ -453,7 +453,7 @@ UIFactory["Image"].prototype.displayEditor = function(destid,type,langcode,disab
 			var htmlWidthInputObj = $("<input id='width_"+this.id+"_"+langcode+"' type='text' class='form-control' value=\""+width+"\">");
 			var self = this;
 			$(htmlWidthInputObj).change(function (){
-				$(self.width_node[langcode]).text($(this).val());
+				$(self.width_node[langcode]).text(sanitizeText($(this).val()));
 				self.save();
 			});
 			$(htmlWidthDivObj).append($(htmlWidthInputObj));
@@ -467,7 +467,7 @@ UIFactory["Image"].prototype.displayEditor = function(destid,type,langcode,disab
 			var htmlHeightDivObj = $("<div class='col-sm-9'></div>");
 			var htmlHeightInputObj = $("<input id='height_"+this.id+"_"+langcode+"' type='text' class='form-control' value=\""+height+"\">");
 			$(htmlHeightInputObj).change(function (){
-				$(self.height_node[langcode]).text($(this).val());
+				$(self.height_node[langcode]).text(sanitizeText($(this).val()));
 				self.save();
 			});
 			$(htmlHeightDivObj).append($(htmlHeightInputObj));
@@ -481,7 +481,7 @@ UIFactory["Image"].prototype.displayEditor = function(destid,type,langcode,disab
 			var htmlaltDivObj = $("<div class='col-sm-9'></div>");
 			var htmlaltInputObj = $("<input id='alt_"+this.id+"_"+langcode+"' type='text' class='form-control' value=\""+alt+"\">");
 			$(htmlaltInputObj).change(function (){
-				$(self.alt_node[langcode]).text($(this).val());
+				$(self.alt_node[langcode]).text(sanitizeText($(this).val()));
 				self.save();
 			});
 			$(htmlaltDivObj).append($(htmlaltInputObj));
@@ -497,7 +497,7 @@ UIFactory["Image"].prototype.displayEditor = function(destid,type,langcode,disab
 				var htmlcodeDivObj = $("<div class='col-sm-9'></div>");
 				var htmlcodeInputObj = $("<input id='code_"+this.id+"_"+langcode+"' type='text' class='form-control' value=\""+code+"\">");
 				$(htmlcodeInputObj).change(function (){
-					$(self.code_node).text($(this).val());
+					$(self.code_node).text(sanitizeText($(this).val()));
 					self.save();
 				});
 				$(htmlcodeDivObj).append($(htmlcodeInputObj));
@@ -511,7 +511,7 @@ UIFactory["Image"].prototype.displayEditor = function(destid,type,langcode,disab
 				var htmlvalueDivObj = $("<div class='col-sm-9'></div>");
 				var htmlvalueInputObj = $("<input id='value_"+this.id+"_"+langcode+"' type='text' class='form-control' value=\""+value+"\">");
 				$(htmlvalueInputObj).change(function (){
-					$(self.value_node).text($(this).val());
+					$(self.value_node).text(sanitizeText($(this).val()));
 					self.save();
 				});
 				$(htmlvalueDivObj).append($(htmlvalueInputObj));

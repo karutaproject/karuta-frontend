@@ -146,7 +146,7 @@ UIFactory["TextField"].prototype.update = function(langcode)
 		if (langcode==null)
 			langcode = LANGCODE;
 		//---------------------
-		var value = $.trim($("#"+this.id+"_edit_"+langcode+(this.inline?'inline':'')).val());
+		var value = sanitizeText($.trim($("#"+this.id+"_edit_"+langcode+(this.inline?'inline':'')).val()));
 		var newValue1 = value.replace(/(<br("[^"]*"|[^\/">])*)>/g, "$1/>");
 		var newValue = newValue1.replace(/(<img("[^"]*"|[^\/">])*)>/g, "$1/>");
 		var words = $.trim(newValue).split(' ');

@@ -147,7 +147,7 @@ UIFactory["Color"].update = function(itself,langcode)
 {
 	$(itself.lastmodified_node).text(new Date().getTime());
 	if (!itself.multilingual) {
-		var text = $(itself.text_node[langcode]).text();
+		var text = sanitizeText($(itself.text_node[langcode]).text());
 		for (var langcode=0; langcode<languages.length; langcode++) {
 			$(itself.text_node[langcode]).text(text);
 		}
@@ -176,7 +176,7 @@ UIFactory["Color"].prototype.getEditor = function(type,langcode,disabled)
 	var input_obj = $(input);
 	var self = this;
 	$(input_obj).on("change.color", function(event, color){
-		$(self.text_node[langcode]).text($(this).val());
+		$(self.text_node[langcode]).text(sanitizeText($(this).val()));
 		UIFactory["Color"].update(self,langcode);
 	});
 	$(obj1).append($(input_obj));

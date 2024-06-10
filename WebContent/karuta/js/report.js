@@ -571,13 +571,22 @@ g_report_actions['collapsable-section'] = function (destid,action,no,data)
 	//---------------------------
 	var titre = $(">titre",action).text();
 	titre = replaceVariable(titre);
+	const open_value = $(">open",action).text();
+	const open = (open_value=='1')? true:false;
+
 	var style = replaceVariable($(action).attr("style"));
 	var cssclass = replaceVariable($(action).attr("class"));
 	//-----------------
 	var html = "<div id='collapsable"+destid+'-'+no+"' style='margin-bottom:5px;"+style+"' class='"+cssclass+"'>";
-	html += "<span id='toggleContent_"+destid+'-'+no+"' style='float:left' class='button fas fa-minus' onclick=\"toggleContentInReport('"+destid+'-'+no+"')\"></span>";
+	if (open)
+		html += "<span id='toggleContent_"+destid+'-'+no+"' style='float:left' class='button fas fa-minus' onclick=\"toggleContentInReport('"+destid+'-'+no+"')\"></span>";
+	else
+		html += "<span id='toggleContent_"+destid+'-'+no+"' style='float:left' class='button fas fa-plus' onclick=\"toggleContentInReport('"+destid+'-'+no+"')\"></span>";	
 	html += "<span name='titre'>"+titre+"</span>";
-	html += "<div id='content-"+destid+'-'+no+"'></div>";
+	if (open)
+		html += "<div id='content-"+destid+'-'+no+"'></div>";
+	else
+		html += "<div id='content-"+destid+'-'+no+"' style='display:none'></div>";
 	html += "</div>";
 	$("#"+destid).append($(html));
 	//---------------------------
@@ -668,6 +677,8 @@ g_report_actions['for-each-node'] = function (destid,action,no,data)
 	var select = $(action).attr("select");
 	var test = $(action).attr("test");
 	var countvar = $(action).attr("countvar");
+	if (countvar!=undefined)
+		g_variables[countvar] = 0;
 	var portfoliocode = $(action).attr("portfolio");
 	//----------------------------------
  	var ref_init = $(action).attr("ref-init");
@@ -723,7 +734,7 @@ g_report_actions['for-each-node'] = function (destid,action,no,data)
 			for (let j=0; j<nodes.length;j++){
 				//----------------------------------
 				if (countvar!=undefined) {
-					g_variables[countvar] = j;
+					g_variables[countvar] = j+1;
 				}
 				g_variables["currentnode"] = "UICom.structure.ui['"+$(nodes[j]).attr("id")+"']";
 				for (let i=0; i<actions.length;i++){
@@ -1436,7 +1447,7 @@ g_report_actions['for-each-portfolio'] = function (destid,action,no,data)
 				//------------------------------------
 				if (condition){
 					portfolioid = items_list[j].id;
-					portfolioid_current = portfolioid;					portfoliocode_current = portfolioid;
+					portfolioid_current = portfolioid;
 					if (load) {
 						$.ajax({
 							async:false,
@@ -1467,7 +1478,7 @@ g_report_actions['for-each-portfolio'] = function (destid,action,no,data)
 				}
 				//------------------------------------
 			}
-			if (NBELT!="" && NOELT!="")
+			if (NBELT!=undefined && NBELT!="" && NOELT!=undefined && NOELT!="")
 				prevnextbuttons(dashboard_current,first,last,portfolioids.length,NOELT,NBELT);
 		}
 	});
@@ -1484,10 +1495,16 @@ g_report_actions['for-each-portfolio-js'] = function (destid,action,no,data)
 	var select = $(action).attr("select");
 	select = replaceVariable(select);
 	var portfolioids = eval(select); // return array of portfolioids
+	//--------------------
+	let load = true; //  by default we load each porfolio to have access to its content
+	if (select.indexOf('@noload@')>-1){
+		load = false;
+		select = select.replaceAll('@noload@','');
+	}
 	//----------------------------------
 	var first = 0;
 	var last = portfolioids.length;
-	if (NBELT!="" && NOELT!="") {
+	if (NBELT!=undefined && NBELT!="" && NOELT!=undefined && NOELT!="") {
 		first = parseInt(NOELT);
 		last = (parseInt(NOELT)+parseInt(NBELT)<portfolioids.length)? parseInt(NOELT)+parseInt(NBELT):portfolioids.length;
 	}
@@ -1508,27 +1525,35 @@ g_report_actions['for-each-portfolio-js'] = function (destid,action,no,data)
 			g_variables[portfoliovar] = portfolioid;
 		}
 		portfolioid_current = portfolioid;
-		$.ajax({
-			async:false,
-			type : "GET",
-			dataType : "xml",
-			j : j,
-			url : serverBCK_API+"/portfolios/portfolio/" + portfolioid + "?resources=true",
-			success : function(data) {
-				if (report_not_in_a_portfolio){
-					UICom.structure.tree = {};
-					UICom.structure.ui = {};
+		if (load) {
+			$.ajax({
+				async:false,
+				type : "GET",
+				dataType : "xml",
+				j : j,
+				url : serverBCK_API+"/portfolios/portfolio/" + portfolioid + "?resources=true",
+				success : function(data) {
+					if (report_not_in_a_portfolio){
+						UICom.structure.tree = {};
+						UICom.structure.ui = {};
+					}
+					UICom.parseStructure(data,true, null, null,true);
+					var actions = $(action).children();
+					for (let i=0; i<actions.length;i++){
+						var tagname = $(actions[i])[0].tagName;
+						g_report_actions[tagname](destid,actions[i],no+'-'+j.toString()+i.toString(),data);
+					};
 				}
-				UICom.parseStructure(data,true, null, null,true);
-				var actions = $(action).children();
-				for (let i=0; i<actions.length;i++){
-					var tagname = $(actions[i])[0].tagName;
-					g_report_actions[tagname](destid,actions[i],no+'-'+j.toString()+i.toString(),data);
-				};
-			}
-		});
+			});
+		} else {
+			var actions = $(action).children();
+			for (let i=0; i<actions.length;i++){
+				var tagname = $(actions[i])[0].tagName;
+				g_report_actions[tagname](destid,actions[i],no+'-'+j.toString()+i.toString(),data);
+			};
+		}
 	}
-	if (NBELT!="" && NOELT!="")
+	if(NBELT!=undefined && NBELT!="" && NOELT!=undefined && NOELT!="")
 		prevnextbuttons(dashboard_current,first,last,portfolioids.length,NOELT,NBELT);
 }
 
@@ -1545,6 +1570,15 @@ g_report_actions['for-each-portfolios-nodes'] = function (destid,action,no,data)
 	var countvar = $(action).attr("countvar");
 	var userid = USER.id;
 	var items_list = [];
+	//----------------------------------
+	var ref_init = $(action).attr("ref-init");
+	if (ref_init!=undefined) {
+		ref_init = replaceVariable(ref_init);
+		var ref_inits = ref_init.split("/"); // ref1/ref2/...
+		for (var k=0;k<ref_inits.length;k++)
+			g_variables[ref_inits[k]] = new Array();
+	}
+	//----------------------------------
 	$.ajax({
 		async:false,
 		type : "GET",
@@ -1566,8 +1600,8 @@ g_report_actions['for-each-portfolios-nodes'] = function (destid,action,no,data)
 			var sortvalue = "";
 			if (sortag!=undefined && sortag!="") {
 				for ( let j = 0; j < items.length; j++) {
-					portfolioid = $(items[i]).attr('id');
-					var code = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",items[i])).text();
+					portfolioid = $(items[j]).attr('id');
+					var code = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",items[j])).text();
 					if (select.indexOf("code*=")>-1) {
 						if (select.indexOf("'")>-1)
 							value = select.substring(7,select.length-1);  // inside quote
@@ -1580,7 +1614,7 @@ g_report_actions['for-each-portfolios-nodes'] = function (destid,action,no,data)
 							value = select.substring(6,select.length-1);  // inside quote
 						else
 							value = eval("json.lines["+line+"]."+select.substring(5));
-						condition = code==value;
+						condition = (code==value);
 					}
 					//------------------------------------
 					if (condition && sortag!=""){
@@ -1650,14 +1684,6 @@ g_report_actions['for-each-portfolios-nodes'] = function (destid,action,no,data)
 								//----------------------------------
 								if (countvar!=undefined) {
 									g_variables[countvar] = j;
-								}
-								//----------------------------------
-								var ref_init = $(action).attr("ref-init");
-								if (ref_init!=undefined) {
-									ref_init = replaceVariable(ref_init);
-									var ref_inits = ref_init.split("/"); // ref1/ref2/...
-									for (var k=0;k<ref_inits.length;k++)
-										g_variables[ref_inits[k]] = new Array();
 								}
 								//----------------------------------
 								var nodeid = $(nodes[l]).attr('id');
@@ -1993,9 +2019,15 @@ g_report_actions['variable'] = function (destid,action,no,data)
 	var prefix_id = "";
 	try {
 		var varlabel = replaceVariable($(action).attr("varlabel"));
+		var txtval = $(action).attr("txtval");
+		var txtvar = $(action).attr("txtvar");
 		var ref = $(action).attr("ref");
+		var select = $(action).attr("select");
 		var aggregatetype = $(action).attr("aggregatetype");
 		var fct = $(action).attr("function");
+		var operationtype = $(action).attr("operationtype");
+		var select1 = $(action).attr("select1");
+		var select2 = $(action).attr("select2");
 		//------------ aggregate ------------------
 		if (aggregatetype!=undefined && aggregatetype!="") {
 			var select = $(action).attr("aggregationselect");
@@ -2026,12 +2058,53 @@ g_report_actions['variable'] = function (destid,action,no,data)
 			}
 			if (!$.isNumeric(text))
 				text="";
+		//------------function--------------------------------
 		} else if (fct!=undefined && fct!=""){
 			text = eval(replaceVariable(fct));
-		} else {
-			var select = $(action).attr("select");
-			if (select!=undefined && select.length>0) {
-				//---------- node-resource -----------
+		//------------operation--------------------------------
+		} else if (operationtype!=undefined && operationtype!="" && select1!=undefined && select1!="" && select2!=undefined && select2!=""){
+			select1 = replaceVariable(select1);
+			select2 = replaceVariable(select2);
+			let result = "";
+			if ( operationtype=="addition" && $.isNumeric(select1) && $.isNumeric(select1) ){
+				result = Number(select1) + Number(select2);
+			}
+			if ( operationtype=="subtraction" && $.isNumeric(select1) && $.isNumeric(select2) ){
+				result = Number(select1) - Number(select2);
+			}
+			if ( operationtype=="multiplication" && $.isNumeric(select1) && $.isNumeric(select2) ){
+				result = Number(select1) * Number(select2);
+			}
+			if ( operationtype=="division" && $.isNumeric(select1) && $.isNumeric(select2) && select2!=0){
+				result = Number(select1) / Number(select2);
+				if (result.toString().indexOf(".")>-1)
+					result = result.toFixed(2);
+			}
+			if ( operationtype=="percentage" && $.isNumeric(select1) && $.isNumeric(select2) && select2!=0){
+				result = Number(select1) / Number(select2) * 100;
+				if (result.toString().indexOf(".")>-1)
+					result = result.toFixed(2);
+			}
+			if (ref!=undefined && ref!="") {
+				if (g_variables[ref]==undefined)
+					g_variables[ref] = new Array();
+				g_variables[ref][g_variables[ref].length] = result;
+			}
+			if (!$.isNumeric(result))
+				result="";
+			if ( operationtype=="percentage")
+				result = result.toString() + "%";
+			text = result;
+		//-------------value--------------------------
+		} else if (txtval!=undefined && txtval!=""){
+			txtval = replaceVariable(txtval);
+			text = txtval;
+		//-------------variable--------------------------
+		} else if (txtvar!=undefined && txtvar!=""){
+			txtvar = replaceVariable(txtvar);
+			text = txtvar;
+		//------------------ node-resource -----------
+		} else if (select!=undefined && select.length>0) {
 				select = replaceVariable(select);
 				var selector = r_getSelector(select);
 				var node = $(selector.jquery,data);
@@ -2084,11 +2157,10 @@ g_report_actions['variable'] = function (destid,action,no,data)
 						prefix_id += "context_";
 					}
 				}
-			} else {
-				//------------ text ------------------
-				text = $(action).text();
-				text = replaceVariable(text);
-			}
+		} else {
+			//------------ error ------------------
+			text = $(action).text();
+			text = replaceVariable(text);
 		}
 	} catch(e){
 		text = "";
@@ -2481,7 +2553,7 @@ g_report_actions['url2portfolio'] = function (destid,action,no,data)
 		label = portfolios_byid[portfolioid_current].getLabel();
 	}
 	//------------------------
-	text = "<span id='"+nodeid+"' style='"+style+"' class='URL2Portfolio-link "+cssclass+"' onclick=\"display_main_page('"+uuid+"')\">"+label+"</span>";
+	text = "<span id='"+nodeid+"' style='"+style+"' class='URL2Portfolio-link "+cssclass+"' onclick=\"display_main_page('"+uuid+"','"+g_userrole+"')\">"+label+"</span>";
 	//------------------------
 	$("#"+destid).append($(text));
 	$("#"+nodeid).attr("style",style);
@@ -2650,7 +2722,7 @@ function drawAxis(destid,label,fontname,fontsize,angle,center,axislength){
 			y-= svgfontsize * 2;
 	}
 		
-	var text = makeSVG('foreignObject',{'x':x,'y':y,'width':width,'height':height,'font-size':fontsize,'font-family':fontname},label);	
+	var text = makeSVG('foreignObject',{'x':x,'y':y,'width':width,'height':height,'font-size':fontsize,'font-family':fontname,'class':'axis-label'},label);	
 	document.getElementById(destid).appendChild(text);
 	//-----------------
 }
@@ -2672,7 +2744,7 @@ function drawGraduationLabel(destid,no,min,max,angle,center,cssclass){
 	var delta = Math.abs(max-min);
 	var x = center.x-(svgaxislength/delta*no);
 	var point = svgrotate(center, x, center.y+20, angle);
-	var text = makeSVG('text',{'x':point.x,'y':point.y,'font-size':svgfontsize,'font-family':svgfontname},(max>min)?no+min:min-no);
+	var text = makeSVG('text',{'x':point.x,'y':point.y,'font-size':svgfontsize,'font-family':svgfontname,'class':'graduation-label'},(max>min)?no+min:min-no);
 	document.getElementById(destid).appendChild(text);
 }
 
@@ -2772,6 +2844,9 @@ g_report_actions['svg'] = function (destid,action,no,data)
 //==================================
 {
 	var width = $(action).attr("min-width");
+	var fontsize = $(action).attr("fontsize");
+	if (fontsize!="" && fontsize!=0)
+		svgfontsize = parseInt(fontsize);
 	var html = "<svg id='"+destid+'-'+no+"' width='"+width+"' viewbox='0 0 1200 1200'></svg>";
 	var svg = $(html);
 	$("#"+destid).append(svg);
@@ -2789,11 +2864,14 @@ g_report_actions['draw-web-title'] = function (destid,action,no,data)
 {
 	var select = $(action).attr("select");
 	var txt = $(action).attr("text");
+	var fontsize = $(action).attr("fontsize");
+	if (fontsize=="" || fontsize==0)
+		fontsize = svgfontsize;
 	if (select!=undefined) {
 		select = replaceVariable(select);
 		var text = getResText(data,select)[0];
-		var size = getTextSize(destid,text+txt,svgfontsize*2,svgfontname)
-		var svgtext = makeSVG('text',{'x':1100-size,'y':40,'font-size':svgfontsize*2,'font-family':svgfontname},text+txt);
+		var size = getTextSize(destid,text+txt,fontsize,svgfontname)
+		var svgtext = makeSVG('text',{'x':1100-size,'y':40,'font-size':fontsize,'font-family':svgfontname,'class':'web-title'},text+txt);
 		document.getElementById(destid).appendChild(svgtext);
 	}
 }
@@ -2854,7 +2932,7 @@ g_report_actions['draw-web-line'] = function (destid,action,no,data)
 			var text = getResText(data,legendselect)[0];
 			var line = makeSVG('line',{'x1':10,'y1':975-20*pos,'x2':10,'y2':975-20*pos,'class':'svg-web-value'+pos});
 			document.getElementById(destid).appendChild(line);
-			var svgtext = makeSVG('text',{'x':20,'y':980-20*pos,'font-size':svgfontsize,'font-family':svgfontname},text);
+			var svgtext = makeSVG('text',{'x':20,'y':980-20*pos,'font-size':svgfontsize,'font-family':svgfontname,'class':'points-legend'},text);
 			document.getElementById(destid).appendChild(svgtext);
 		}
 
@@ -2891,12 +2969,6 @@ g_report_actions['draw-xy-axis'] = function (destid,action,no,data)
 	if (graphid!="")
 		g_graphs [graphid] = {'xaxis':xaxis,'yaxis':yaxis,'xmin':xmin,'xmax':xmax,'ymin':ymin,'ymax':ymax,'xnbgraduation':xnbgraduation,'ynbgraduation':ynbgraduation,'xdisplaygraduation':xdisplaygraduation,'ydisplaygraduation':ydisplaygraduation,'nbdata':0}
 	//--------------------------
-//	document.getElementById(destid).appendChild(makeSVG('line',{'x1':0,'y1':0,'x2':1200,'y2':0,'stroke':'red','stroke-width': 2}));
-//	document.getElementById(destid).appendChild(makeSVG('line',{'x1':0,'y1':0,'x2':0,'y2':1200,'stroke':'red','stroke-width': 2}));
-//	document.getElementById(destid).appendChild(makeSVG('line',{'x1':0,'y1':1200,'x2':1200,'y2':1200,'stroke':'red','stroke-width': 2}));
-//	document.getElementById(destid).appendChild(makeSVG('line',{'x1':1200,'y1':1200,'x2':1200,'y2':0,'stroke':'red','stroke-width': 2}));
-//	document.getElementById(destid).appendChild(makeSVG('line',{'x1':0,'y1':0,'x2':1200,'y2':1200,'stroke':'red','stroke-width': 2}));
-//	document.getElementById(destid).appendChild(makeSVG('line',{'x1':0,'y1':1200,'x2':1200,'y2':0,'stroke':'red','stroke-width': 2}));
 	// x axis
 	var yline = makeSVG('line',{'x1':100+xaxis,'y1':100,'x2':100+xaxis,'y2':1100,'stroke':'black','stroke-width': 2});
 	document.getElementById(destid).appendChild(yline);
@@ -2909,7 +2981,7 @@ g_report_actions['draw-xy-axis'] = function (destid,action,no,data)
 			// x graduation label
 			if (xdisplaygraduation=='1') {
 				var label = (xmax - xmin) / xnbgraduation * j ;
-				var text = makeSVG('text',{'x':x,'y':1100-yaxis+25,'font-size':svgfontsize,'font-family':svgfontname},label);
+				var text = makeSVG('text',{'x':x,'y':1100-yaxis+25,'font-size':svgfontsize,'font-family':svgfontname,'class':'x-graduation-label'},label);
 				document.getElementById(destid).appendChild(text);
 			}
 		}
@@ -2917,7 +2989,7 @@ g_report_actions['draw-xy-axis'] = function (destid,action,no,data)
 	// x legend
 	if (xlegendtext!=""){
 		var size = getTextSize(destid,xlegendtext,svgfontsize,svgfontname);
-		var text = makeSVG('text',{'x':1100-size,'y':1100-yaxis+75,'font-size':svgfontsize+4,'font-family':svgfontname},xlegendtext);
+		var text = makeSVG('text',{'x':1100-size,'y':1100-yaxis+75,'font-size':svgfontsize+4,'font-family':svgfontname,'class':'x-legend'},xlegendtext);
 		document.getElementById(destid).appendChild(text);
 	}
 	// y axis
@@ -2932,13 +3004,13 @@ g_report_actions['draw-xy-axis'] = function (destid,action,no,data)
 			// y graduation label
 			if (ydisplaygraduation=='1') {
 				var label = (ymax - ymin) / ynbgraduation * j ;
-				var text = makeSVG('text',{'x':100+xaxis-25,'y':y,'font-size':svgfontsize,'font-family':svgfontname},label);
+				var text = makeSVG('text',{'x':100+xaxis-25,'y':y,'font-size':svgfontsize,'font-family':svgfontname,'class':'y-graduation-label'},label);
 				document.getElementById(destid).appendChild(text);
 			}
 		}
 	}
 	if (ylegendtext!=""){
-		var text = makeSVG('text',{'x':50+xaxis,'y':75,'font-size':svgfontsize+4,'font-family':svgfontname},ylegendtext);
+		var text = makeSVG('text',{'x':50+xaxis,'y':75,'font-size':svgfontsize+4,'font-family':svgfontname,'class':'y-legend'},ylegendtext);
 		document.getElementById(destid).appendChild(text);
 	}
 
@@ -2954,12 +3026,15 @@ g_report_actions['draw-data'] = function (destid,action,no,data)
 	var pointselect = $(action).attr("point-select");
 	var legendvariable = $(action).attr("legend-variable");
 	var legendselect = $(action).attr("legend-select");
-	var gradvariable = $(action).attr("grad-variable");
-	var gradselect = $(action).attr("grad-select");
+	var xgradvariable = $(action).attr("xgrad-variable");
+	var xgradselect = $(action).attr("xgrad-select");
+	var ygradvariable = $(action).attr("ygrad-variable");
+	var ygradselect = $(action).attr("ygrad-select");
 	//-----------------
 	var xaxis = g_graphs[graphid].xaxis;
 	var yaxis = g_graphs[graphid].yaxis;
 	var xnbgraduation = g_graphs[graphid].xnbgraduation;
+	var ynbgraduation = g_graphs[graphid].ynbgraduation;
 	var ymin = g_graphs[graphid].ymin;
 	var ymax = g_graphs[graphid].ymax;
 	var nbdata = g_graphs[graphid].nbdata++;
@@ -2978,13 +3053,13 @@ g_report_actions['draw-data'] = function (destid,action,no,data)
 		}
 		if (graphtype=='point' || graphtype=='line') {
 			for (let i=0; i<points.length;i++){
-				if (points[i].value!=null){
+				if (!isNaN(points[i].value)){
 					points[i].x = 100+xaxis + (1000-xaxis) / xnbgraduation * (i+1) ;
 					points[i].y = 1100-yaxis - (1000-yaxis) / (ymax-ymin) * points[i].value ;
 					var line = makeSVG('line',{'x1':points[i].x,'y1':points[i].y,'x2':points[i].x,'y2':points[i].y,'class':'svg-web-value'+nbdata});
 					document.getElementById(destid).appendChild(line);
 				}
-				if (i>0 && points[i-1].value!=null && points[i].value!=null && graphtype=='line') {
+				if (i>0 && !isNaN(points[i-1].value) && !isNaN(points[i].value) && graphtype=='line') {
 					var line = makeSVG('line',{'x1':points[i-1].x,'y1':points[i-1].y,'x2':points[i].x,'y2':points[i].y,'class':'svg-web-line'+nbdata});
 					document.getElementById(destid).appendChild(line);
 				}
@@ -2992,7 +3067,7 @@ g_report_actions['draw-data'] = function (destid,action,no,data)
 		}
 		if (graphtype=='bar') {
 			for (let i=0; i<points.length;i++){
-				if (points[i].value!=null){
+				if (!isNaN(points[i].value)){
 					points[i].x = 90+xaxis+ (20*nbdata) + (1000-xaxis) / xnbgraduation * (i+1) ;
 					points[i].y = 1100-yaxis - (1000-yaxis) / (ymax-ymin) * points[i].value ;
 					var rect = makeSVG('rect',{'x':points[i].x,'y':points[i].y,'width':20,'height':(1000-yaxis) / (ymax-ymin) * points[i].value,'class':'svg-web-rect'+nbdata});
@@ -3012,29 +3087,49 @@ g_report_actions['draw-data'] = function (destid,action,no,data)
 					texts[texts.length] = g_variables[legendvariable][i];
 				}
 			}
-			for (let i=0; i<texts.length;i++){
-				var line = makeSVG('line',{'x1':100,'y1':1140+20*nbdata,'x2':100,'y2':1140+20*nbdata,'class':'svg-web-value'+nbdata});
+//			for (let i=0; i<texts.length;i++){
+				
+				var line = makeSVG('line',{'x1':100,'y1':1150+(svgfontsize+10)*nbdata,'x2':100,'y2':1140+(svgfontsize+10)*nbdata,'class':'svg-web-value'+nbdata});
 				document.getElementById(destid).appendChild(line);
-				var svgtext = makeSVG('text',{'x':120,'y':1145+20*nbdata,'font-size':svgfontsize,'font-family':svgfontname},texts[i]);
+				var svgtext = makeSVG('text',{'x':120,'y':1155+(svgfontsize+10)*nbdata,'font-size':svgfontsize,'font-family':svgfontname,'class':'data-legend'},texts[0]);
 				document.getElementById(destid).appendChild(svgtext);
-			}
+//			}
 		}
 		// draw x graduation
-		if (gradselect!=undefined || gradvariable!="") {
+		if (xgradselect!=undefined || xgradvariable!="") {
 			var texts = [];
-			if (gradselect!=undefined){
-				gradselect = replaceVariable(gradselect);
-				texts = getResText(data,gradselect);
+			if (xgradselect!=undefined){
+				xgradselect = replaceVariable(xgradselect);
+				texts = getResText(data,xgradselect);
 			}
-			if (gradvariable!="") {
-				for (let i=0; i<g_variables[gradvariable].length;i++){
-					texts[texts.length] = g_variables[gradvariable][i];
+			if (xgradvariable!="") {
+				for (let i=0; i<g_variables[xgradvariable].length;i++){
+					texts[texts.length] = g_variables[xgradvariable][i];
 				}
 			}
 			for (let i=0; i<texts.length;i++){
 				var x = 100+xaxis + (20*nbdata) + (1000-xaxis) / xnbgraduation * (i+1) ;
 				var y = 1120 ;
-				var svgtext = makeSVG('text',{'x':x,'y':y,'transform':"rotate(45 "+x+" "+y+")",'font-size':svgfontsize,'font-family':svgfontname},texts[i]);
+				var svgtext = makeSVG('text',{'x':x,'y':y,'transform':"rotate(45 "+x+" "+y+")",'font-size':svgfontsize,'font-family':svgfontname,'class':'x-graduation-label'},texts[i]);
+				document.getElementById(destid).appendChild(svgtext);
+			}
+		}
+		// draw y graduation with text
+		if (ygradselect!=undefined || ygradvariable!="") {
+			var texts = [];
+			if (ygradselect!=undefined){
+				ygradselect = replaceVariable(ygradselect);
+				texts = getResText(data,ygradselect);
+			}
+			if (ygradvariable!="") {
+				for (let i=0; i<g_variables[ygradvariable].length;i++){
+					texts[texts.length] = g_variables[ygradvariable][i];
+				}
+			}
+			for (let i=0; i<texts.length;i++){
+				var x = 20;
+				var y = 1105 - yaxis - (1000-yaxis) / ynbgraduation * (i+1) ;
+				var svgtext = makeSVG('text',{'x':x,'y':y,'font-size':svgfontsize,'font-family':svgfontname,'class':'y-graduation-label'},texts[i]);
 				document.getElementById(destid).appendChild(svgtext);
 			}
 		}
@@ -3063,7 +3158,7 @@ g_report_actions['for-each-vector'] = function (destid,action,no,data)
 	//----------------------------------
 	var first = 0;
 	var last = vectors.length;
-	if (NBELT!="" && NOELT!="") {
+	if (NBELT!=undefined && NBELT!="" && NOELT!=undefined && NOELT!="") {
 		first = parseInt(NOELT);
 		last = (parseInt(NOELT)+parseInt(NBELT)<vectors.length)? parseInt(NOELT)+parseInt(NBELT):vectors.length;
 	}
@@ -3092,6 +3187,6 @@ g_report_actions['for-each-vector'] = function (destid,action,no,data)
 		let a10 = $("a10",vectors[j]).text();
 		eval(display);
 	}
-	if (NBELT!="" && NOELT!="")
+	if (NBELT!=undefined && NBELT!="" && NOELT!=undefined && NOELT!="")
 		prevnextbuttons(dashboard_current,first,last,portfolioids.length,NOELT,NBELT);
 }

@@ -1109,20 +1109,6 @@ function previewPortfolio(uuid,langcode,edit,reload,type)
 						cssfile += ".css";
 					$('<link/>', { rel: 'stylesheet', type: 'text/css', href: '../../application/css/'+cssfile}).appendTo('head');
 				}
-				//-------------------------------------------------
-				/*
-				 * var config_unit = $("asmUnit:has(metadata[semantictag*='configuration-unit'])",data);
-				if (config_unit.length==0) { // for backward compatibility and portfolios without config
-//					if (g_configDefaultVar.length>0)
-						resetConfigurationPortfolioVariable();
-//					setCSSportfolio("");
-					setCSSportfolioOLD(data);
-				} else {
-					setConfigurationPortfolioVariable(config_unit,true);
-					setCSSportfolio(config_unit);
-				}
-				setVariables(data);
-				*/
 				// --------------------------
 				if (g_display_type=="standard" || g_display_type=="raw") {
 					if (USER.creator)
@@ -1137,9 +1123,6 @@ function previewPortfolio(uuid,langcode,edit,reload,type)
 				} else if (g_display_type=="model" || g_display_type=="translate") {
 					g_edit = true;
 				}
-				//$("#preview-window-body-sub-bar-"+uuid).html(UIFactory.Portfolio.getNavBar(g_display_type,LANGCODE,g_edit,uuid));
-				//-------------- DEFAULT_ROLE -------------
-				//$("#preview-window-body-portfolio-container").attr('role',g_userroles[0]);
 				//-------------------------------------------------
 				UIFactory.Portfolio.displayPortfolio('preview-window-body-portfolio-container-'+uuid,g_display_type,LANGCODE,g_edit);
 				// --------------------------
@@ -1172,8 +1155,6 @@ function previewPortfolio(uuid,langcode,edit,reload,type)
 					var rootid = $(root[0]).attr('id');
 					$("#sidebar_"+rootid).click();
 				}
-				//---------------------------
-				//fillEditBoxBody();
 				//=====================================================
 				$('[data-toggle=tooltip]').tooltip({html: true, trigger: 'hover'}); 
 				$(document).click(function(e) {
@@ -2867,27 +2848,32 @@ function addautocomplete(input,arrayOfValues,onupdate,self,langcode)
 function replaceVariable(text,node,withquote)
 //==================================
 {
+	let quote = "'";
 	if (withquote==null)
 		withquote = true;
+	if (!withquote)
+		quote = "";
+	//-------------------------
 	if (text!=undefined && text!="" && text.indexOf("++")>-1) // replacement in menus
 		text = text.replaceAll("++","&&");
+	//-----------------------------------------------------------------------------------------
 	if (text!=undefined && text!="" && text.indexOf("##")>-1) { // text contains variables
 		if (text.indexOf("##pagecode##")>-1){
 			const pageid = $("#page").attr('uuid');
 			const pagecode = UICom.structure.ui[pageid].getCode();
 			text = text.replaceAll('##pagecode##',cleanCode(pagecode));
 		}
+		//-----------
 		if (text.indexOf("##pageid##")>-1){
 			const pageid = $("#page").attr('uuid');
-			if (withquote && text.indexOf('##current')>-1)
-				text = text.replaceAll('##pageid##',"'"+pageid+"'");
-			else
-				text = text.replaceAll('##pageid##',pageid);
+			text = text.replaceAll('##pageid##',quote+pageid+quote);
 		}
+		//-------------
 		if (text.indexOf("##today-utc##")>-1)
 			text = text.replaceAll('##today-utc##',new Date().getTime());
 		if (text.indexOf("##today##")>-1)
 			text = text.replaceAll('##today##',new Date().toLocaleString());
+		//-------------
 		if (text!=undefined && text.indexOf('lastimported')>-1) {
 			text = text.replaceAll('##lastimported-1##',"g_importednodestack[g_importednodestack.length-2]");
 			text = text.replaceAll('##lastimported-2##',"g_importednodestack[g_importednodestack.length-3]");
@@ -2895,54 +2881,47 @@ function replaceVariable(text,node,withquote)
 			text = text.replaceAll('##lastimported-4##',"g_importednodestack[g_importednodestack.length-5]");
 			text = text.replaceAll('##lastimported##',"g_importednodestack[g_importednodestack.length-1]");
 		}
-		else if (text!=undefined && text.indexOf('##currentportfolio##')>-1) {
+		//-------------
+		if (text.indexOf('##currentportfolio')>-1) {
 			text = text.replaceAll('##currentportfolio##',portfolios_byid[portfolioid_current].code_node.text());
+			text = text.replaceAll('##currentportfoliocode##',portfolios_byid[portfolioid_current].code_node.text());
 		}
-		if (node!=null && node!=undefined && text!=undefined) {
+		if (text.indexOf('##portfolioitself')>-1) {
+			text = text.replaceAll('##portfolioitselfid##',g_portfolioid);
+			text = text.replaceAll('##portfolioitselfcode##',portfolios_byid[g_portfolioid].code_node.text());
+		}
+		//-------------
+		if (node!=null && node!=undefined) {
 			//--------- currentnode--------------
-			if (withquote && text.indexOf('##current')>-1) {
+			if (text.indexOf('##current')>-1) {
 				text = text.replaceAll('##currentnode##',"'"+node.id+"'");
-				text = text.replaceAll('##currentcode##',"'"+$($("code",$("asmResource[xsi_type!='context'][xsi_type!='nodeRes']",node.node))).text()+"'");
-			}
-			if (!withquote && text.indexOf('##current')>-1) {
-				text = text.replaceAll('##currentnode##',node.id);
 				if (node.asmtype=='asmContext')
-					text = text.replaceAll('##currentcode##',$($("code",$("asmResource[xsi_type!='context'][xsi_type!='nodeRes']",node.node))[0]).text());
+					text = text.replaceAll('##currentcode##',quote+$($("code",$("asmResource[xsi_type!='context'][xsi_type!='nodeRes']",node.node))[0]).text()+quote);
 				else
-					text = text.replaceAll('##currentcode##',$($("code",$("asmResource[xsi_type='nodeRes']",node.node))[0]).text());
+					text = text.replaceAll('##currentcode##',quote+$($("code",$("asmResource[xsi_type='nodeRes']",node.node))[0]).text()+quote);
 			}
 			//--------- parentcode--------------
-			if (withquote && text.indexOf('##parentnode##')>-1)
+			if (text.indexOf('##parentnode##')>-1)
 				if (node.node!=undefined)
-					text = text.replaceAll('##parentnode##',"'"+$(node.node).parent().attr('id')+"'");
+					text = text.replaceAll('##parentnode##',quote+$(node.node).parent().attr('id')+quote);
 				else
-					text = text.replaceAll('##parentnode##',"'"+$(node).parent().attr('id')+"'");
-			if (!withquote && text.indexOf('##parentnode##')>-1)
+					text = text.replaceAll('##parentnode##',quote+$(node).parent().attr('id')+quote);
+			if (text.indexOf('##parentparentnode##')>-1)
 				if (node.node!=undefined)
-					text = text.replaceAll('##parentnode##',$(node.node).parent().attr('id'));
+					text = text.replaceAll('##parentparentnode##',quote+$(node.node).parent().parent().attr('id')+quote);
 				else
-					text = text.replaceAll('##parentnode##',$(node).parent().attr('id'));
-			//--------- parentcode--------------
-			if (withquote && text.indexOf('##parentparentnode##')>-1)
-				if (node.node!=undefined)
-					text = text.replaceAll('##parentparentnode##',"'"+$(node.node).parent().parent().attr('id')+"'");
-				else
-					text = text.replaceAll('##parentparentnode##',"'"+$(node).parent().parent().attr('id')+"'");
-			if (!withquote && text.indexOf('##parentparentnode##')>-1)
-				if (node.node!=undefined)
-					text = text.replaceAll('##parentparentnode##',$(node.node).parent().parent().attr('id'));
-				else
-					text = text.replaceAll('##parentparentnode##',$(node).parent().parent().attr('id'));
+					text = text.replaceAll('##parentparentnode##',quote+$(node).parent().parent().attr('id')+quote);
 			//--------- itselfrescode--------------
-			if (withquote && text.indexOf('##itselfrescode##')>-1)
-				text = text.replaceAll('##itselfrescode##',"'"+$($("code",$("asmResource[xsi_type!='context'][xsi_type!='nodeRes']",node.node))).text()+"'");
-	
+			if (text.indexOf('##itselfrescode##')>-1)
+				text = text.replaceAll('##itselfrescode##',quote+$($("code",$("asmResource[xsi_type!='context'][xsi_type!='nodeRes']",node.node))).text()+quote);
 		}
-		if (text!=undefined && (text.indexOf('##userlogin##')>-1 || text.indexOf('##accountlogin##')>-1)) {
+		//-------------
+		if (text.indexOf('##userlogin##')>-1 || text.indexOf('##accountlogin##')>-1) {
 			text = text.replaceAll('##userlogin##',USER.username);
 			text = text.replaceAll('##accountlogin##',USER.username);
 		}
-		var n=0;
+		//-------------
+		var n = 0;
 		while (text!=undefined && text.indexOf("{##")>-1 && n<100) {
 			var test_string = text.substring(text.indexOf("{##")+3); // test_string = abcd{##variable##}efgh.....
 			var variable_name = test_string.substring(0,test_string.indexOf("##}"));
@@ -2950,6 +2929,8 @@ function replaceVariable(text,node,withquote)
 				text = text.replace("{##"+variable_name+"##}", g_variables[variable_name]);
 			n++; // to avoid infinite loop
 		}
+		//-------------
+		n = 0;
 		while (text!=undefined && text.indexOf("##")>-1 && n<100) {
 			var test_string = text.substring(text.indexOf("##")+2); // test_string = abcd##variable##efgh.....
 			var variable_name = test_string.substring(0,test_string.indexOf("##"));
@@ -2965,6 +2946,7 @@ function replaceVariable(text,node,withquote)
 			n++; // to avoid infinite loop
 		}
 	}
+	//-----------------------------------------------------------------------------------------
 	return text;
 }
 
@@ -4001,6 +3983,18 @@ function confirmSubmitAndChangeVisibility(nodeid,path,value){
 //================================================
 //================================================
 
+function sanitizeText(text) {
+	text = text.replace(/<script.*?>[\s\S]*?<\/.*?script>/gi,"");
+	text = text.replace(/javascript.*:[^"]*/gi,"");
+	text = text.replace(/onclick.*=[^"]*/gi,"");
+	return text;
+}
+
+function setNodeCodeWithDate(nodeid) {
+	const code = new Date().getTime()+"@";
+	$(UICom.structure.ui[nodeid].code_node).text(code);
+	UICom.structure.ui[nodeid].save();
+}
 
 function getPreviewSharedURL(uuid,sharerole,level,duration,role) {
 	const urlS = serverBCK+'/direct?uuid='+uuid+'&role='+role+'&showtorole='+role+'&l='+level+'&d='+duration+'&sharerole='+sharerole+'&type=showtorole';
@@ -4235,6 +4229,36 @@ $.fn.resourceTextContains = function (options)
 	return $(result);
 };
 $.fn.test_resourceTextContains = function (options) { return result = ($(this).resourceTextContains(options).length>0) ? true : false;};
+//=====================================
+
+//=====================================
+$.fn.hasChildSemtagAndResourceTextContains = function (options)
+//=====================================
+{
+	var defaults= {"semtag":"s","value":"v","function":""};
+	var parameters = $.extend(defaults, options);
+	var result = $(this).has("*:has('>metadata[semantictag*=" + parameters.semtag + "]'):has(\">asmResource[xsi_type!='context'][xsi_type!='nodeRes']>text[lang='"+languages[LANGCODE]+"']:contains('"+parameters.value+"')\")");
+	if (parameters.function!="")
+		result = eval("$(result)."+parameters.function);
+	return $(result);
+};
+$.fn.test_hasChildSemtagAndResourceTextContains = function (options) { return result = ($(this).hasChildSemtagAndResourceTextContains(options).length>0) ? true : false;};
+$.fn.test_hasNotChildSemtagAndResourceTextContains = function (options) { return result = ($(this).hasChildSemtagAndResourceTextContains(options).length>0) ? false : true;};
+//=====================================
+
+//=====================================
+$.fn.hasChildSemtagAndResourceTextNotEmpty = function (options)
+//=====================================
+{
+	var defaults= {"semtag":"s","function":""};
+	var parameters = $.extend(defaults, options);
+	var result = $(this).has("*:has('>metadata[semantictag*=" + parameters.semtag + "]'):has(\">asmResource[xsi_type!='context'][xsi_type!='nodeRes']>text[lang='"+languages[LANGCODE]+"']:not(:empty)\")");
+	if (parameters.function!="")
+		result = eval("$(result)."+parameters.function);
+	return $(result);
+};
+$.fn.test_hasChildSemtagAndResourceTextNotEmpty = function (options) { return result = ($(this).hasChildSemtagAndResourceTextContains(options).length>0) ? true : false;};
+$.fn.test_hasNotChildSemtagAndResourceTextNotEmpty = function (options) { return result = ($(this).hasChildSemtagAndResourceTextContains(options).length>0) ? false : true;};
 //=====================================
 
 //=====================================

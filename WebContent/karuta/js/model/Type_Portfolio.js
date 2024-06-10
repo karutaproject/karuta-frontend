@@ -954,7 +954,7 @@ UIFactory["Portfolio"].getRootid_bycode = function(code)
 	});
 	return result;
 };
-
+/* ===not used
 //==================================
 UIFactory["Portfolio"].instantiate_bycode = function(sourcecode,targetcode,callback)
 //==================================
@@ -1008,7 +1008,7 @@ UIFactory["Portfolio"].instantiate = function(templateid,targetcode,reload)
 	$.ajaxSetup({async: true});
 	return uuid;
 };
-
+*/
 //==================================
 UIFactory["Portfolio"].callRenameInstantiate = function(portfolioid,langcode,project)
 //==================================
@@ -1061,56 +1061,62 @@ UIFactory["Portfolio"].instantiate_rename = function(templateid,targetcode,reloa
 {
 	var uuid = null;
 	var url = serverBCK_API+"/portfolios/instanciate/"+templateid+"?targetcode="+targetcode+"&owner=true";
-	$.ajaxSetup({async: false});
-	$.ajax({
-		type : "POST",
-		contentType: "application/xml",
-		dataType : "text",
-		url : url,
-		data : "",
-		success : function(data) {
-			uuid = data;
-			$.ajax({
-				async:false,
-				type : "GET",
-				dataType : "xml",
-				url : serverBCK_API+"/nodes?portfoliocode=" + targetcode + "&semtag="+rootsemtag,
-				success : function(data) {
-					var nodeid = $("asmRoot",data).attr('id');
-					var xml = "<asmResource xsi_type='nodeRes'>";
-					xml += "<code>"+targetcode+"</code>";
-					for (var lan=0; lan<languages.length;lan++)
-						xml += "<label lang='"+languages[lan]+"'>"+targetlabel+"</label>";
-					xml += "</asmResource>";
-					$.ajax({
-						async:false,
-						type : "PUT",
-						contentType: "application/xml",
-						dataType : "text",
-						data : xml,
-						url : serverBCK_API+"/nodes/node/" + nodeid + "/noderesource",
-						success : function(data) {
-							$("#wait-window").modal('hide');
-							if (reload!=null && reload)
-								window.location.reload();
-						},
-						error : function(jqxhr,textStatus) {
-							$("#wait-window").modal('hide');
-							alertHTML("Error in instantiate_rename : "+jqxhr.responseText);
-						}
-					});
-				}
-			});
-		},
-		error : function(jqxhr,textStatus) {
-			$("#wait-window").modal('hide');
-			if (jqxhr.responseText.indexOf('code exist')>-1)
-				alertHTML(karutaStr[LANG]['error-existing-code']);
-			else
-				alertHTML("Error : "+jqxhr.responseText);
-		}
-	});
-	$.ajaxSetup({async: true});
+	const exist = UIFactory.Portfolio.existPortfolio(targetcode);
+	if (!exist) {
+		$.ajax({
+			async: false,
+			type : "POST",
+			contentType: "application/xml",
+			dataType : "text",
+			url : url,
+			data : "",
+			success : function(data) {
+				uuid = data;
+				$.ajax({
+					async:false,
+					type : "GET",
+					dataType : "xml",
+					url : serverBCK_API+"/nodes?portfoliocode=" + targetcode + "&semtag="+rootsemtag,
+					success : function(data) {
+						var nodeid = $("asmRoot",data).attr('id');
+						var xml = "<asmResource xsi_type='nodeRes'>";
+						xml += "<code>"+targetcode+"</code>";
+						for (var lan=0; lan<languages.length;lan++)
+							xml += "<label lang='"+languages[lan]+"'>"+targetlabel+"</label>";
+						xml += "</asmResource>";
+						$.ajax({
+							async:false,
+							type : "PUT",
+							contentType: "application/xml",
+							dataType : "text",
+							data : xml,
+							url : serverBCK_API+"/nodes/node/" + nodeid + "/noderesource",
+							success : function(data) {
+								$("#wait-window").modal('hide');
+								if (reload!=null && reload)
+									window.location.reload();
+							},
+							error : function(jqxhr,textStatus) {
+								$("#wait-window").modal('hide');
+								alertHTML("Error in instantiate_rename : "+jqxhr.responseText);
+							}
+						});
+					}
+				});
+			},
+			error : function(jqxhr,textStatus) {
+				$("#wait-window").modal('hide');
+				if (jqxhr.responseText.indexOf('code exist')>-1)
+					alertHTML(karutaStr[LANG]['error-existing-code']);
+				else
+					alertHTML("Error : "+jqxhr.responseText);
+			}
+		});
+	} else {
+		$("#wait-window").hide();
+		alertHTML(karutaStr[LANG]['error-existing-code']);
+
+	}
 	return uuid;
 };
 
@@ -1140,7 +1146,7 @@ UIFactory["Portfolio"].copy_bycode = function(sourcecode,targetcode,reload)
 	$.ajaxSetup({async: true});
 	return uuid;
 };
-
+/*
 //==================================
 UIFactory["Portfolio"].copy = function(templateid,targetcode,reload)
 //==================================
@@ -1167,7 +1173,7 @@ UIFactory["Portfolio"].copy = function(templateid,targetcode,reload)
 	$.ajaxSetup({async: true});
 	return uuid;
 };
-
+*/
 //==================================
 UIFactory["Portfolio"].callRenameCopy = function(portfolioid,langcode,project)
 //==================================
@@ -1221,61 +1227,68 @@ UIFactory["Portfolio"].copy_rename = function(templateid,targetcode,reload,targe
 {
 	var uuid = null;
 	var url = serverBCK_API+"/portfolios/copy/"+templateid+"?targetcode="+targetcode+"&owner=true";
-	$.ajaxSetup({async: false});
-	$.ajax({
-		type : "POST",
-		contentType: "application/xml",
-		dataType : "text",
-		url : url,
-		data : "",
-		success : function(data) {
-			uuid = data;
-			$.ajax({
-				async:false,
-				type : "GET",
-				dataType : "xml",
-				url : serverBCK_API+"/nodes?portfoliocode=" + targetcode + "&semtag="+rootsemtag,
-				success : function(data) {
-					var nodeid = $("asmRoot",data).attr('id');
-					var xml = "<asmResource xsi_type='nodeRes'>";
-					xml += "<code>"+targetcode+"</code>";
-					for (var lan=0; lan<languages.length;lan++)
-						xml += "<label lang='"+languages[lan]+"'>"+targetlabel+"</label>";
-					xml += "</asmResource>";
-					$.ajax({
-						async:false,
-						type : "PUT",
-						contentType: "application/xml",
-						dataType : "text",
-						data : xml,
-						url : serverBCK_API+"/nodes/node/" + nodeid + "/noderesource",
-						success : function(data) {
-							$("#wait-window").modal('hide');
-							$('#edit-window').modal('hide');
-							if (rootsemtag=="karuta-project") // folder creation - we open the new folder
-								localStorage.setItem('currentDisplayedportfolioCode',targetcode);
-							fill_list_page();
-						},
-						error : function(jqxhr,textStatus) {
-							$("#wait-window").modal('hide');
-							alertHTML("Error : "+jqxhr.responseText);
-						}
-					});
-				},
-				error : function(jqxhr,textStatus) {
+	const exist = UIFactory.Portfolio.existPortfolio(targetcode);
+	//-----------------------
+	if (!exist) {
+		$.ajax({
+			async : false,
+			type : "POST",
+			contentType: "application/xml",
+			dataType : "text",
+			url : url,
+			data : "",
+			success : function(data) {
+				uuid = data;
+				$.ajax({
+					async:false,
+					type : "GET",
+					dataType : "xml",
+					url : serverBCK_API+"/nodes?portfoliocode=" + targetcode + "&semtag="+rootsemtag,
+					success : function(data) {
+						var nodeid = $("asmRoot",data).attr('id');
+						var xml = "<asmResource xsi_type='nodeRes'>";
+						xml += "<code>"+targetcode+"</code>";
+						for (var lan=0; lan<languages.length;lan++)
+							xml += "<label lang='"+languages[lan]+"'>"+targetlabel+"</label>";
+						xml += "</asmResource>";
+						$.ajax({
+							async:false,
+							type : "PUT",
+							contentType: "application/xml",
+							dataType : "text",
+							data : xml,
+							url : serverBCK_API+"/nodes/node/" + nodeid + "/noderesource",
+							success : function(data) {
+								$("#wait-window").modal('hide');
+								$('#edit-window').modal('hide');
+								if (rootsemtag=="karuta-project") // folder creation - we open the new folder
+									localStorage.setItem('currentDisplayedportfolioCode',targetcode);
+								fill_list_page();
+							},
+							error : function(jqxhr,textStatus) {
+								$("#wait-window").hide();
+								alertHTML("Error : "+jqxhr.responseText);
+							}
+						});
+					},
+					error : function(jqxhr,textStatus) {
+						alertHTML("Error : "+jqxhr.responseText);
+					}
+				});
+			},
+			error : function(jqxhr,textStatus) {
+				$("#wait-window").modal('hide');
+				if (jqxhr.responseText.indexOf('code exist')>-1)
+					alertHTML(karutaStr[LANG]['error-existing-code']);
+				else
 					alertHTML("Error : "+jqxhr.responseText);
-				}
-			});
-		},
-		error : function(jqxhr,textStatus) {
-			$("#wait-window").modal('hide');
-			if (jqxhr.responseText.indexOf('code exist')>-1)
-				alertHTML(karutaStr[LANG]['error-existing-code']);
-			else
-				alertHTML("Error : "+jqxhr.responseText);
-		}
-	});
-	$.ajaxSetup({async: true});
+			}
+		});
+	} else {
+		$("#wait-window").hide();
+		alertHTML(karutaStr[LANG]['error-existing-code']);
+
+	}
 	return uuid;
 };
 
@@ -2329,7 +2342,8 @@ UIFactory["Portfolio"].callChangeOwner = function(portfolioid,langcode)
 	html += karutaStr[LANG]['select_user'];
 	html += "</div>";
 	html += "<div class='col-md-9'>";
-	html += "<div id='select_user'></div>";
+	html += "<div id='select-owner-search'></div>";
+	html += "<div id='select-owner-rightside-users-content1'></div>";
 	html += "</div>";
 	html += "</div><!--row-->";
 	$("#edit-window-body").html(html);
@@ -2338,21 +2352,14 @@ UIFactory["Portfolio"].callChangeOwner = function(portfolioid,langcode)
 	$("#edit-window-body-metadata").html("");
 	$("#edit-window-body-metadata-epm").html("");
 	//----------------------------------------------------------------
-	if (Users_byid.length>0) { // users loaded
-		UIFactory["User"].displaySelectActive('select_user');
-	} else {
-		$.ajax({
-			type : "GET",
-			dataType : "xml",
-			url : serverBCK_API+"/users",
-			success : function(data) {
-				UIFactory["User"].parse(data);
-				UIFactory["User"].displaySelectActive('select_user');
-			},
-			error : function(jqxhr,textStatus) {
-				alertHTML("Error in callChangeOwner : "+jqxhr.responseText);
-			}
-		});
+	UIFactory.User.displaySearch("select-owner-search",false,'select-owner');
+	//----------------------------------------------------------------
+	if (!UsersLoaded)
+		UIFactory.User.loadAll();
+	if (UsersActive_list.length<200)
+		UIFactory.User.displaySelectActive('select-owner-rightside-users-content1');
+	else {
+		$("#select-owner-rightside-users-content1").html(karutaStr[LANG]['too-much-users']);
 	}
 	//----------------------------------------------------------------
 	$('#edit-window').modal('show');
@@ -2366,7 +2373,7 @@ UIFactory["Portfolio"].changeOwner = function(portfolioid,langcode)
 	if (langcode==null)
 		langcode = LANGCODE;
 	//---------------------
-	var user = $("input[name='select_user']").filter(':checked');
+	var user = $("input[name='select_users']").filter(':checked');
 	var userid = $(user).val();
 	$.ajax({
 		type : "PUT",
@@ -2799,8 +2806,27 @@ UIFactory["Portfolio"].prototype.refresh = function()
 	for (dest2 in this.display) {
 		$("#"+dest2).html(this.getPortfolioView(null,this.display[dest2],null));
 	};
-
 };
+
+//=======================================================================
+UIFactory["Portfolio"].existPortfolio = function (code) 
+// =======================================================================
+{
+	let found = false;
+	$.ajax({
+		async:false,
+		type : "GET",
+		dataType : "xml",
+		url : serverBCK_API+"/portfolios?active=1&search="+code,
+		success : function(data) {
+			const portfolios = $("portfolio",data);
+			if (portfolios.length>0)
+				found = true;
+		}
+	});
+	return found;
+}
+
 //--------------------------------------------------------------
 //--------------------------------------------------------------
 //--------------- SEARCH IN PORTFOLIO --------------------------

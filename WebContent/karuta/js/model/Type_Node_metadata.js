@@ -881,7 +881,7 @@ UIFactory["Node"].prototype.displayMetainfo = function(dest)
 //	html += UIFactory.Node.getMetadataInfo(metadatawad,'incrementroles');
 	html += UIFactory.Node.getMetadataInfo(metadatawad,'query');
 	html += UIFactory.Node.getMetadataInfo(metadatawad,'display');
-	html += UIFactory.Node.getMetadataInfo(metadatawad,'menuroles');
+//	html += UIFactory.Node.getMetadataInfo(metadatawad,'menuroles');
 	html += UIFactory.Node.getMetadataInfo(metadatawad,'notifyroles');
 	html += UIFactory.Node.getMetadataInfo(metadatawad,'graphicerroles');
 	html += UIFactory.Node.getMetadataInfo(metadatawad,'resizeroles');
@@ -1090,7 +1090,7 @@ UIFactory["Node"].prototype.displayMetadataWadAttributeEditor = function(destid,
 			html+= " checked ";
 		html+= "></div>";
 	} else if (attribute.indexOf('seltype')>-1){		
-		var choices = [{code:'select',label:'Select'},{code:'radio',label:'Radio'},{code:'click',label:'Click'},{code:'completion',label:'Auto-complete'}];
+		var choices = [{code:'select',label:'Select'},{code:'radio',label:'Radio'},{code:'click',label:'Click'},{code:'checkbox',label:'Checkbox'},{code:'completion',label:'Auto-complete'}];
 		if (attribute.indexOf('seltype2')>-1) {
 			attribute = "seltype";
 			choices = [{code:'select',label:'Select'},{code:'completion',label:'Auto-complete'}];

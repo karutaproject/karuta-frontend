@@ -157,9 +157,8 @@ UIFactory["Node"].prototype.displayMenus = function(dest,langcode)
 //==================================================
 {
 	var html = this.getMenus(langcode);
-//	$(dest).append(html);
 	$(dest).html(html);
-//------------ Public URL -----------------
+	//------------ Public URL -----------------
 	if ($("#2world-"+this.id).length){
 		var shares = [];
 		var displayShare = [];
@@ -215,6 +214,70 @@ UIFactory["Node"].prototype.displayMenus = function(dest,langcode)
 						var serverURL = url.substring(0,url.lastIndexOf(appliname+"/")+appliname.length);
 						url = serverURL+"/karuta/htm/public.htm?i="+data+"&amp;lang="+languages[langcode];
 						$("#2world-"+this.id).html("<a  class='fas fa-globe button' target='_blank' href='"+url+"' data-title='"+karutaStr[LANG]["button-2world"]+"' data-toggle='tooltip' data-placement='bottom'></a> ");
+					}
+				});
+			}
+		}
+	}
+	//------------ QR Code --------------------
+	if ($("#qrcode-"+this.id).length){
+		var shares = [];
+		var displayShare = [];
+		var items = this.shareroles.split(";");
+		for (var i=0; i<items.length; i++){
+			var subitems = items[i].split(",");
+				//----------------------
+			shares[i] = [];
+			shares[i][0] = subitems[0]; // sharing role
+			if (subitems.length>1) {
+				shares[i][1] = subitems[1]; // recepient role
+				shares[i][2] = subitems[2]; // roles or emails
+				shares[i][3] = subitems[3]; // level
+				shares[i][4] = subitems[4]; // duration
+				shares[i][5] = subitems[5]; // labels
+			} else {
+				shares[i][1] = ""; // recepient role
+				shares[i][2] = ""; // roles or emails
+				shares[i][3] = ""; // level
+				shares[i][4] = ""; // duration
+				shares[i][5] = ""; // labels
+			}
+			if (subitems.length>6)
+				shares[i][6] = subitems[6]; // target
+			if (subitems.length>7)
+				shares[i][7] = subitems[7]; // keywords : obj and/or mess
+			if (subitems.length>8)
+				shares[i][8] = subitems[8]; // condition
+			//----------------------
+			if (shares[i][0].indexOf(this.userrole)>-1 || (shares[i][0].containsArrayElt(g_userroles) && g_userroles[0]!='designer') || USER.admin || g_userroles[0]=='designer')
+				displayShare[i] = true;
+			else
+				displayShare[i] = false;
+			if (displayShare[i] && subitems.length>8){
+				displayShare[i] = eval(replaceVariable(shares[i][8]));
+			}
+			//----------------------
+			var targetid = this.id; //by default the node itself
+			if (shares[i].length>6 && shares[i][6]!=""){
+				target = getTarget (node,menus[i][6]);
+				if (target.length>0)
+					targetid = $(target[0]).attr("id");
+			}
+		}
+		for (var i=0; i<items.length; i++){
+			if (shares[i][2]=='qrcode' && displayShare[i]) {
+				var urlS = serverBCK+"/direct?uuid="+targetid+"&role="+shares[i][1]+"&lang="+languages[langcode]+"&l="+shares[i][3]+"&d="+shares[i][4]+"&type=showtorole&showtorole="+shares[i][2]+"&sharerole="+shares[i][0];
+				$.ajax({
+					id : this.id,
+					type : "POST",
+					dataType : "text",
+					contentType: "application/xml",
+					url : urlS,
+					success : function (data){
+						var url = window.location.href;
+						var serverURL = url.substring(0,url.indexOf(appliname+"/")+appliname.length);
+						url = serverURL+"/karuta/htm/public.htm?i="+data+"&amp;lang="+languages[langcode];
+						$("#qrcode-"+this.id).qrcode({text:url,size:100,background: 'white'});
 					}
 				});
 			}
@@ -723,7 +786,7 @@ UIFactory["Node"].getMenus = function(node,langcode)
 							targetid = $(target[0]).attr("id");
 					}
 					var shareoptions = (shares[i].length>7) ? shares[i][7] : "";
-					if (shareto!='' && shareto.indexOf('2world')<0) {
+					if (shareto!='' && shareto.indexOf('2world')<0 && shareto.indexOf('qrcode')<0) {
 						if (shareto!='?' && shareduration!='?') {
 							var sharetoemail = "";
 							var sharetoroles = "";
@@ -776,6 +839,9 @@ UIFactory["Node"].getMenus = function(node,langcode)
 					} else {
 						if (shareto.indexOf('2world')>-1) {
 							html_toadd = "<span id='2world-"+node.id+"'></span>";
+						}
+						if (shareto.indexOf('qrcode')>-1) {
+							html_toadd = "<span id='qrcode-"+node.id+"'></span>";
 						}
 						if (shareto.indexOf('?')>-1) {
 							html_toadd = "<span class='button sharing-button fas fa-share' style='"+menus_style+"' data-toggle='modal' data-target='#edit-window' onclick=\"getSendPublicURL('"+targetid+"','"+node.shareroles+"')\" data-title='"+karutaStr[LANG]["button-share"]+"' data-toggle='tooltip' data-placement='bottom'></span>";

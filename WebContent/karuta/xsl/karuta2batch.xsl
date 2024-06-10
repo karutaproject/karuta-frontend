@@ -93,6 +93,9 @@
 		<xsl:variable name="designer">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='designer']/asmResource[@xsi_type='Get_Resource']/code"></xsl:value-of>
 		</xsl:variable>
+		<xsl:variable name="sharer">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='sharer']/asmResource[@xsi_type='Get_Resource']/code"></xsl:value-of>
+		</xsl:variable>
 		<xsl:variable name="admin">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='admin']/asmResource[@xsi_type='Get_Resource']/code"></xsl:value-of>
 		</xsl:variable>
@@ -133,6 +136,9 @@
 			<designer>
 				<txtval><xsl:value-of select="$designer"/></txtval>
 			</designer>
+			<sharer>
+				<txtval><xsl:value-of select="$sharer"/></txtval>
+			</sharer>
 			<admin>
 				<txtval><xsl:value-of select="$admin"/></txtval>
 			</admin>
@@ -160,6 +166,9 @@
 		</xsl:variable>
 		<xsl:variable name="designer">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='designer']/asmResource[@xsi_type='Get_Resource']/code"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="sharer">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='sharer']/asmResource[@xsi_type='Get_Resource']/code"></xsl:value-of>
 		</xsl:variable>
 		<xsl:variable name="admin">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='admin']/asmResource[@xsi_type='Get_Resource']/code"></xsl:value-of>
@@ -201,6 +210,9 @@
 			<designer>
 				<txtval><xsl:value-of select="$designer"/></txtval>
 			</designer>
+			<sharer>
+				<txtval><xsl:value-of select="$sharer"/></txtval>
+			</sharer>
 			<admin>
 				<txtval><xsl:value-of select="$admin"/></txtval>
 			</admin>
@@ -246,6 +258,22 @@
 		</inactivate-user>
 	</xsl:template>
 
+	<xsl:template match="*[metadata/@semantictag='for-each-group-person']">
+		<xsl:variable name="id">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='groupid']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<for-each-group-person id="{$id}">
+			<usergroup>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">usergroup</xsl:with-param>
+				</xsl:call-template>
+			</usergroup>
+			<actions>
+				<xsl:apply-templates select='asmUnitStructure'/>
+			</actions>
+		</for-each-group-person>
+	</xsl:template>
+
 	<!-- ====================================================================================== -->
 	<!-- ====================================================================================== -->
 	<!-- ================================ TREE ================================================ -->
@@ -260,6 +288,9 @@
 			<code>
 				<xsl:call-template name="txtval-first-level"><xsl:with-param name="semtag">code</xsl:with-param></xsl:call-template>
 			</code>
+			<label>
+				<xsl:call-template name="txtval-first-level"><xsl:with-param name="semtag">label</xsl:with-param></xsl:call-template>
+			</label>
 			<actions>
 				<xsl:apply-templates select='asmUnitStructure'/>
 			</actions>
@@ -508,6 +539,20 @@
 		</hide-node>
 	</xsl:template>
 
+	<xsl:template match="*[metadata/@semantictag='reload-node']">
+		<xsl:variable name="destination">
+			<xsl:call-template name='get-select'>
+				<xsl:with-param name='parent'>subsection-target</xsl:with-param>
+			</xsl:call-template>
+		</xsl:variable>
+		<reload-node select="{$destination}">
+		</reload-node>
+	</xsl:template>
+
+	<xsl:template match="*[metadata/@semantictag='reload-unit']">
+		<reload-unit/>
+	</xsl:template>
+
 	<xsl:template match="*[metadata/@semantictag='moveup-node']">
 		<xsl:variable name="destination">
 			<xsl:call-template name='get-select'>
@@ -567,7 +612,7 @@
 		</update-node-resource>
 	</xsl:template>
 	
-	<xsl:template match="*[metadata/@semantictag='import-node']">
+	<!--xsl:template match="*[metadata/@semantictag='import-node']">
 		<xsl:variable name="destination">
 			<xsl:call-template name='get-select'>
 				<xsl:with-param name='parent'>subsection-target</xsl:with-param>
@@ -585,6 +630,35 @@
 		<xsl:variable name="dest"><xsl:value-of select=".//asmContext[metadata/@semantictag='destination-select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of></xsl:variable>
 		<xsl:variable name="srce"><xsl:value-of select=".//asmContext[metadata/@semantictag='source-select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of></xsl:variable>
 		<import-node select="{$destination}{$dest}" source="{$srce}{$old-source}" test="{$test}" >
+			<source>
+				<xsl:value-of select='$source'/>
+			</source>
+		</import-node>
+	</xsl:template-->
+	
+		<xsl:template match="*[metadata/@semantictag='import-node']">
+		<xsl:variable name="destination">
+			<xsl:call-template name='get-select'>
+				<xsl:with-param name='parent'>subsection-target</xsl:with-param>
+			</xsl:call-template>
+		</xsl:variable>
+		<xsl:variable name="dest-test">
+			<xsl:value-of select=".//*[metadata/@semantictag='subsection-target']//asmContext[metadata/@semantictag='test']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="source">
+			<xsl:call-template name='get-select'>
+				<xsl:with-param name='parent'>subsection-source</xsl:with-param>
+			</xsl:call-template>
+		</xsl:variable>
+		<xsl:variable name="srce-test">
+			<xsl:value-of select=".//*[metadata/@semantictag='subsection-source']//asmContext[metadata/@semantictag='test']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<!-- old -->
+			<xsl:variable name="old-source">#<xsl:call-template name="txtval"><xsl:with-param name="semtag">import-source</xsl:with-param></xsl:call-template></xsl:variable>
+			<xsl:variable name="dest"><xsl:value-of select=".//asmContext[metadata/@semantictag='destination-select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of></xsl:variable>
+			<xsl:variable name="srce"><xsl:value-of select=".//asmContext[metadata/@semantictag='source-select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of></xsl:variable>
+		<!-- end old -->
+		<import-node select="{$destination}{$dest}" source="{$srce}{$old-source}" srce-test="{$srce-test}" dest-test="{$dest-test}" >
 			<source>
 				<xsl:value-of select='$source'/>
 			</source>
@@ -980,6 +1054,34 @@
 		</send-email>
 	</xsl:template>
 
+
+	<!-- ====================================================================================== -->
+	<!-- ====================================================================================== -->
+	<!-- ================================ BATCH LOG =========================================== -->
+	<!-- ====================================================================================== -->
+	<!-- ====================================================================================== -->
+
+	<!-- ================ clear-log ============================ -->
+	<xsl:template match="*[metadata/@semantictag='clear-log']">
+		<clear-log/>
+	</xsl:template>
+
+	<!-- ================ hide-log ============================ -->
+	<xsl:template match="*[metadata/@semantictag='hide-log']">
+		<hide-log/>
+	</xsl:template>
+
+	<!-- ================ write-log ============================ -->
+	<xsl:template match="*[metadata/@semantictag='write-log']">
+		<write-log>
+			<text>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">text</xsl:with-param>
+				</xsl:call-template>
+			</text>
+		</write-log>
+	</xsl:template>
+
 	<!-- ====================================================================================== -->
 	<!-- ====================================================================================== -->
 	<!-- ================================ FOR-EACH-NODE ======================================= -->
@@ -1035,48 +1137,6 @@
 		</fen-batch-variable>
 	</xsl:template>
 	
-	<!-- ================ for-each-node-update-field ============================ -->
-	<xsl:template match="*[metadata/@semantictag='fen-update-field']">
-		<xsl:variable name="semtag">
-			<xsl:value-of select=".//asmContext[metadata/@semantictag='node-semtag']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
-		</xsl:variable>
-		<xsl:variable name="test">
-			<xsl:value-of select=".//asmContext[metadata/@semantictag='test']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
-		</xsl:variable>
-		<fen-update-resource type='Field' semtag="{$semtag}" test="{$test}" >
-			<attribute name='text' language-dependent='Y' replace-variable='Y'>
-				<xsl:call-template name="txtval">
-					<xsl:with-param name="semtag">text</xsl:with-param>
-				</xsl:call-template>
-			</attribute>
-		</fen-update-resource>
-	</xsl:template>
-	
-		<!-- ================ fen-move-node ============================ -->
-	<xsl:template match="*[metadata/@semantictag='fen-move-node']">
-		<xsl:variable name="source">
-			<xsl:call-template name='get-semtag'>
-				<xsl:with-param name='parent'>subsection-source</xsl:with-param>
-			</xsl:call-template>
-		</xsl:variable>
-		<xsl:variable name="source-test">
-			<xsl:call-template name='get-test'>
-				<xsl:with-param name='parent'>subsection-source</xsl:with-param>
-			</xsl:call-template>
-		</xsl:variable>
-		<xsl:variable name="target">
-			<xsl:call-template name='get-semtag'>
-				<xsl:with-param name='parent'>subsection-target</xsl:with-param>
-			</xsl:call-template>
-		</xsl:variable>
-		<xsl:variable name="target-test">
-			<xsl:call-template name='get-test'>
-				<xsl:with-param name='parent'>subsection-target</xsl:with-param>
-			</xsl:call-template>
-		</xsl:variable>
-		<fen-move-node source="{$source}"  source-test="{$source-test}" target="{$target}"  target-test="{$target-test}">
-		</fen-move-node>
-	</xsl:template>
 	
 	<!-- ====================================================================================== -->
 	<!-- ====================================================================================== -->
@@ -1373,7 +1433,7 @@
 	<!-- ====================================================================================== -->
 	<!-- ====================================================================================== -->
 
-	<xsl:template name="get-select">
+	<xsl:template name="get-select-OLD">
 		<xsl:param name="parent"/>
 		<xsl:variable name="select"><xsl:value-of select=".//*[metadata/@semantictag=$parent]//asmContext[metadata/@semantictag='select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of></xsl:variable>
 		<xsl:variable name="ref-id"><xsl:value-of select=".//*[metadata/@semantictag=$parent]//asmContext[metadata/@semantictag='tree-select']/asmResource[@xsi_type='Get_Resource']/label[@lang=$lang]"></xsl:value-of></xsl:variable>
@@ -1418,6 +1478,65 @@
 			</xsl:when>
 			<xsl:otherwise>
 				<xsl:value-of select='$select'/>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+
+	<!-- ====================================================================================== -->
+	<!-- ====================================================================================== -->
+	<!-- ================================ get-select2 ========================================== -->
+	<!-- ====================================================================================== -->
+	<!-- ====================================================================================== -->
+
+	<xsl:template name="get-select">
+		<xsl:param name="parent"/>
+		<xsl:variable name="select"><xsl:value-of select="./*[metadata/@semantictag=$parent]//asmContext[metadata/@semantictag='select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of></xsl:variable>
+		<xsl:variable name="ref-id"><xsl:value-of select="./*[metadata/@semantictag=$parent]//asmContext[metadata/@semantictag='tree-select']/asmResource[@xsi_type='Get_Resource']/label[@lang=$lang]"></xsl:value-of></xsl:variable>
+		<xsl:variable name="portfoliocode">#<xsl:value-of select="./*[metadata/@semantictag=$parent]//asmContext[metadata/@semantictag='portfoliocode']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of></xsl:variable>
+		<xsl:variable name="semtag"><xsl:value-of select="./*[metadata/@semantictag=$parent]//asmContext[metadata/@semantictag='node-semtag']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of></xsl:variable>
+		<xsl:variable name="varname"><xsl:value-of select="./*[metadata/@semantictag=$parent]//asmContext[metadata/@semantictag='variable-name']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of></xsl:variable>
+		<xsl:variable name="uuid"><xsl:value-of select="./*[metadata/@semantictag=$parent]//asmContext[metadata/@semantictag='uuid']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of></xsl:variable>
+		<!-- for backward compatibility -->
+		<xsl:variable name="old-select"><!--xsl:value-of select=".//asmContext[metadata/@semantictag='select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of--></xsl:variable>
+		<xsl:variable name="old-tree-select"><!--xsl:value-of select=".//asmContext[metadata/@semantictag='tree-select']/asmResource[@xsi_type='Get_Resource']/label[@lang=$lang]"></xsl:value-of--></xsl:variable>
+		<!-- ==================================== -->
+		 <!--===parent:<xsl:value-of select='$parent'/>===old-tree-select:<xsl:value-of select='$old-tree-select'/>===old-select:<xsl:value-of select='$old-select'/>===uuid:<xsl:value-of select='$uuid'/>===select:<xsl:value-of select='$select'/>===ref-id:<xsl:value-of select='$ref-id'/>===portfoliocode:<xsl:value-of select='$portfoliocode'/>===semtag:<xsl:value-of select='$semtag'/>=== -->
+		<xsl:choose>
+			<xsl:when test="$select=''">
+				<xsl:choose>
+					<xsl:when test="$ref-id=''">
+						<xsl:choose>
+							<xsl:when test="$uuid=''">
+								<xsl:choose>
+									<xsl:when test="$portfoliocode!='#'">
+										<xsl:choose>
+											<xsl:when test="$semtag=''"><xsl:value-of select='$portfoliocode'/></xsl:when>
+											<xsl:when test="$semtag!=''"><xsl:value-of select='$portfoliocode'/>.<xsl:value-of select='$semtag'/></xsl:when>
+										</xsl:choose>
+									</xsl:when>
+									<xsl:when test="$old-select!=''"><xsl:value-of select='$old-select'/></xsl:when>
+									<xsl:when test="$old-tree-select!=''"><xsl:value-of select='$old-tree-select'/></xsl:when>
+									<xsl:when test="$semtag!=''"><xsl:value-of select='$semtag'/></xsl:when>
+									<xsl:otherwise></xsl:otherwise>
+								</xsl:choose>
+							</xsl:when>
+							<xsl:otherwise><xsl:value-of select='$uuid'/>.#uuid</xsl:otherwise>
+						</xsl:choose>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:choose>
+							<xsl:when test="$semtag=''"><xsl:value-of select='$ref-id'/>.<xsl:value-of select='$varname'/></xsl:when>
+							<xsl:otherwise><xsl:value-of select='$ref-id'/>.<xsl:value-of select='$semtag'/></xsl:otherwise>
+						</xsl:choose>
+					</xsl:otherwise>
+				</xsl:choose>
+			</xsl:when>
+			<xsl:otherwise>
+						<xsl:choose>
+							<xsl:when test="$semtag=''"><xsl:value-of select='$select'/></xsl:when>
+							<xsl:otherwise><xsl:value-of select='$select'/>.<xsl:value-of select='$semtag'/></xsl:otherwise>
+						</xsl:choose>
+				
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
@@ -1589,6 +1708,32 @@
 	<!-- old for compatibility 2018/10/29 -->
 	<!-- ====================================================================================== -->
 	<!-- ====================================================================================== -->
+	
+	<!-- ================ fen-move-node ============================ -->
+	<xsl:template match="*[metadata/@semantictag='fen-move-node']">
+		<xsl:variable name="source">
+			<xsl:call-template name='get-semtag'>
+				<xsl:with-param name='parent'>subsection-source</xsl:with-param>
+			</xsl:call-template>
+		</xsl:variable>
+		<xsl:variable name="source-test">
+			<xsl:call-template name='get-test'>
+				<xsl:with-param name='parent'>subsection-source</xsl:with-param>
+			</xsl:call-template>
+		</xsl:variable>
+		<xsl:variable name="target">
+			<xsl:call-template name='get-semtag'>
+				<xsl:with-param name='parent'>subsection-target</xsl:with-param>
+			</xsl:call-template>
+		</xsl:variable>
+		<xsl:variable name="target-test">
+			<xsl:call-template name='get-test'>
+				<xsl:with-param name='parent'>subsection-target</xsl:with-param>
+			</xsl:call-template>
+		</xsl:variable>
+		<fen-move-node source="{$source}"  source-test="{$source-test}" target="{$target}"  target-test="{$target-test}">
+		</fen-move-node>
+	</xsl:template>
 
 	<xsl:template match="*[metadata/@semantictag='update-metadata-query']">
 		<xsl:variable name="select">

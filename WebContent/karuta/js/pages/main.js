@@ -220,7 +220,7 @@ function chooseRole(portfolioid)
 }
 
 //==============================
-function display_main_page(portfolioid)
+function display_main_page(portfolioid,playedrole)
 //==============================
 {
 	g_userroles = [];
@@ -242,22 +242,27 @@ function display_main_page(portfolioid)
 		}
 	});
 	if (g_userroles.length>1){
-		let html = "";
-		for (let i=0; i<g_userroles.length; i++){
-			html += "<br><input type='radio' name='radio_group' value='"+g_userroles[i]+"'> "+g_userroles[i];
+		if (playedrole==undefined) {
+			let html = "";
+			for (let i=0; i<g_userroles.length; i++){
+				html += "<br><input type='radio' name='radio_group' value='"+g_userroles[i]+"'> "+g_userroles[i];
+			}
+			const js1 = "javascript:$('#edit-window').modal('hide')";
+			const js2 = "chooseRole('"+portfolioid+"')";
+			const footer = "<button class='btn' onclick=\""+js2+";\">"+karutaStr[LANG]['Enter']+"</button><button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
+			$("#edit-window-footer").html(footer);
+			$("#edit-window-footer").html(footer);
+			$("#edit-window-title").html(karutaStr[LANG]['select_role']);
+			$("#edit-window-body").html(html);
+			$("#edit-window-body-node").html("");
+			$("#edit-window-type").html("");
+			$("#edit-window-body-metadata").html("");
+			$("#edit-window-body-metadata-epm").html("");
+			$('#edit-window').modal('show');
+		} else {
+			fill_main_page(portfolioid,playedrole);
+			show_main_page();
 		}
-		const js1 = "javascript:$('#edit-window').modal('hide')";
-		const js2 = "chooseRole('"+portfolioid+"')";
-		const footer = "<button class='btn' onclick=\""+js2+";\">"+karutaStr[LANG]['Enter']+"</button><button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
-		$("#edit-window-footer").html(footer);
-		$("#edit-window-footer").html(footer);
-		$("#edit-window-title").html(karutaStr[LANG]['select_role']);
-		$("#edit-window-body").html(html);
-		$("#edit-window-body-node").html("");
-		$("#edit-window-type").html("");
-		$("#edit-window-body-metadata").html("");
-		$("#edit-window-body-metadata-epm").html("");
-		$('#edit-window').modal('show');
 	} else {
 		userrole = g_userroles[0];
 		fill_main_page(portfolioid,userrole);
