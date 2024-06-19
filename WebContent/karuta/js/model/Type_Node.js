@@ -2149,7 +2149,7 @@ UIFactory['Node'].reloadStruct = function(uuid,redisplay,redisplay_uuid)
 };
 
 //==================================================
-UIFactory['Node'].reloadUnit = function(uuid,redisplay,nodeid)
+UIFactory['Node'].reloadUnit = function(uuid,redisplay,nodeid,userrole)
 //==================================================
 {
 	let previewuuid =null;
@@ -2175,11 +2175,19 @@ UIFactory['Node'].reloadUnit = function(uuid,redisplay,nodeid)
 			parentid = $($(UICom.structure.ui[uuid].node).parent()).attr('id');
 		if (uuid.indexOf("_")>-1)
 			uuid = uuid.substring(0,uuid.indexOf("_"));
+		//-------------------------------------------
+		if (userrole==undefined)
+			userrole = g_userrole;
+		if (userrole==undefined)
+			userrole = g_userroles[0];
+		if (userrole==undefined)
+			userrole = "";
+		//-------------------------------------------
 		$.ajax({
 			async: false,
 			type : "GET",
 			dataType : "xml",
-			url : serverBCK_API+"/nodes/node/" + uuid,
+			url : serverBCK_API+"/nodes/node/" + uuid + "?userrole="+userrole,
 			parentid : parentid,
 			success : function(data) {
 				UICom.parseStructure(data,false,this.parentid);

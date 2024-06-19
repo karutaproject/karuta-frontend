@@ -228,19 +228,6 @@ UIFactory["Dashboard"].prototype.getEditor = function(type,langcode,disabled)
 		$(htmlFormObj).append($(htmlTextGroupObj));
 		//-----------------------------------------------------
 		var htmlCsvGroupObj = $("<div class='form-group'></div>")
-		var htmlCsvLabelObj = $("<label for='print_"+this.id+"' class='col-sm-3 control-label'>"+karutaStr[LANG]['button-print']+"</label>");
-		var htmlCsvDivObj = $("<div class='col-sm-9'></div>");
-		var htmlCsvInputObj = $("<input id='print_"+this.id+"' type='text' class='form-control' value=\""+this.print_node.text()+"\">");
-		$(htmlCsvInputObj).change(function (){
-			$(self.print_node).text($(this).val());
-			UIFactory["Dashboard"].update(self,langcode);
-		});
-		$(htmlCsvDivObj).append($(htmlCsvInputObj));
-		$(htmlCsvGroupObj).append($(htmlCsvLabelObj));
-		$(htmlCsvGroupObj).append($(htmlCsvDivObj));
-		$(htmlFormObj).append($(htmlCsvGroupObj));
-		//-----------------------------------------------------
-		var htmlCsvGroupObj = $("<div class='form-group'></div>")
 		var htmlCsvLabelObj = $("<label for='csv_"+this.id+"' class='col-sm-3 control-label'>"+karutaStr[LANG]['csv']+"</label>");
 		var htmlCsvDivObj = $("<div class='col-sm-9'></div>");
 		var htmlCsvInputObj = $("<input id='csv_"+this.id+"' type='text' class='form-control' value=\""+this.csv_node.text()+"\">");
