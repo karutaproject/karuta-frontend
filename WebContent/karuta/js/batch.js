@@ -513,8 +513,8 @@ function processListActions(list)
 g_actions['for-each-tree'] = function (node)
 //=================================================
 {
-	const code = getTxtvals($("code",node));
-	const label = getTxtvals($("label",node));
+	const code = getTxtvals($(">code",node));
+	const label = getTxtvals($(">label",node));
 	//------------------------------------
 	var url1 = serverBCK_API+"/portfolios?active=1&search="+code;
 	$.ajax({

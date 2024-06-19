@@ -2,8 +2,8 @@
 var karuta_version = "@project.version@";
 var karuta_date = "@build.timestamp@";
 
-const karuta_version_eportfolium = "eportfolium-3.48.0";
-const karuta_date_eportfolium = "2024-04-29";
+const karuta_version_eportfolium = "eportfolium-3.50.1";
+const karuta_date_eportfolium = "2024-06-17";
 
 var karuta_backend_version = "?";
 var karuta_backend_date = "?";
@@ -37,3 +37,6 @@ var karuta_fileserver_date = "?";
 // 3.47.0 Feat - new jquery function for report and batch : hasChildSemtagAndResourceTextContains, hasChildSemtagAndResourceTextNotEmpty - 2024-04-29
 // 3.48.0 Feat - Report - Collapsable Section can be open or closed - 2024-04-28
 // 3.49.0 Feat - Batch - new component : for-each-group-user - 2024-04-30
+// 3.49.1 Fix - Type Dashboard Editor - CSV rôle was missing - 2024-06-17
+// 3.50.0 Feat - Multi-role - userrole in GET Node - 2024-06-17
+// 3.50.1 Fix - Batch - for-each-tree search code and label of direct child - 2024-06-19
