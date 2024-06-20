@@ -2,8 +2,8 @@
 var karuta_version = "@project.version@";
 var karuta_date = "@build.timestamp@";
 
-const karuta_version_eportfolium = "eportfolium-3.50.1";
-const karuta_date_eportfolium = "2024-06-17";
+const karuta_version_eportfolium = "eportfolium-3.50.2";
+const karuta_date_eportfolium = "2024-06-20";
 
 var karuta_backend_version = "?";
 var karuta_backend_date = "?";
@@ -40,3 +40,4 @@ var karuta_fileserver_date = "?";
 // 3.49.1 Fix - Type Dashboard Editor - CSV rôle was missing - 2024-06-17
 // 3.50.0 Feat - Multi-role - userrole in GET Node - 2024-06-17
 // 3.50.1 Fix - Batch - for-each-tree search code and label of direct child - 2024-06-19
+// 3.50.2 Fix - Get_Get_Resource - click : no pointer if not selectable - 2024-06-20

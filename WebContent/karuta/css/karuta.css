@@ -2421,7 +2421,7 @@ button.selected-label {
 	margin-top:20px;
 }
 */
-.click div {
+.click .click-item {
   margin-top: 5px;
   cursor: pointer;
 }
