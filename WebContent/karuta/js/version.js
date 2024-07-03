@@ -2,8 +2,8 @@
 var karuta_version = "@project.version@";
 var karuta_date = "@build.timestamp@";
 
-const karuta_version_eportfolium = "eportfolium-3.50.2";
-const karuta_date_eportfolium = "2024-06-20";
+const karuta_version_eportfolium = "eportfolium-3.52.0";
+const karuta_date_eportfolium = "2024-06-30";
 
 var karuta_backend_version = "?";
 var karuta_backend_date = "?";
@@ -41,3 +41,6 @@ var karuta_fileserver_date = "?";
 // 3.50.0 Feat - Multi-role - userrole in GET Node - 2024-06-17
 // 3.50.1 Fix - Batch - for-each-tree search code and label of direct child - 2024-06-19
 // 3.50.2 Fix - Get_Get_Resource - click : no pointer if not selectable - 2024-06-20
+// 3.51.0 Feat - Multi-role - userrole management in direct  - 2024-06-26
+// 3.51.1 Fix - Mistyping  in user creation - 2024-06-30
+// 3.52.0 Feat - Multi-role - userrole management - 2024-06-30

@@ -59,9 +59,10 @@ function displayKarutaPublic()
 	$.ajax({
 		async:false,
 		type : "GET",
-		url : serverBCK+"/direct?i=" + iid,
+		url : serverBCK+"/direct?i=" + iid + "&getuserrole",
 		success : function(data) {
-			g_uuid = data;
+			g_uuid = data.substring(0,data.indexOf('&'));
+			const userrole = data.substring(data.indexOf('&')+10);
 			//----------------
 			$.ajax({
 				async:false,
@@ -81,7 +82,7 @@ function displayKarutaPublic()
 							async:false,
 							type : "GET",
 							dataType : "xml",
-							url : serverBCK_API+"/nodes/node/" + g_uuid,
+							url : serverBCK_API+"/nodes/node/" + g_uuid + '?userrole='+userrole,
 							success : function(data) {
 								let nodeid = (nid!=undefined)? nid : g_uuid;
 								g_edit = true; //no edit button
