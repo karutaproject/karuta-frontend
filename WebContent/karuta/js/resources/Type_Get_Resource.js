@@ -1657,13 +1657,13 @@ UIFactory["Get_Resource"].update = function(selected_item,itself,langcode,type)
 				g_variables[UICom.structure.ui[itself.id].getCode()] = cleanCode(variable_value,true);
 			}
 			//---------------------
-			$(itself.value_node[0]).text(value);
-			$(itself.code_node[0]).text(code);
-			$(itself.uuid_node[0]).text(uuid);
-			$(itself.style_node[0]).text(style.trim());
+			$(UICom.structure.ui[itself.id].resource.value_node[0]).text(value);
+			$(UICom.structure.ui[itself.id].resource.code_node[0]).text(code);
+			$(UICom.structure.ui[itself.id].resource.uuid_node[0]).text(uuid);
+			$(UICom.structure.ui[itself.id].resource.style_node[0]).text(style.trim());
 			for (var i=0; i<languages.length;i++){
 				var label = $(selected_item).attr('label_'+languages[i]);
-				$(itself.label_node[i][0]).text(label);
+				$(UICom.structure.ui[itself.id].resource.label_node[i][0]).text(label);
 			}
 			itself.save();
 			//-------- if function js -------------
