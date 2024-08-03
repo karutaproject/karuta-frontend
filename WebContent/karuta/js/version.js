@@ -2,8 +2,8 @@
 var karuta_version = "@project.version@";
 var karuta_date = "@build.timestamp@";
 
-const karuta_version_eportfolium = "eportfolium-3.53.2";
-const karuta_date_eportfolium = "2024-07-17";
+const karuta_version_eportfolium = "eportfolium-3.54.0";
+const karuta_date_eportfolium = "2024-08-03";
 
 var karuta_backend_version = "?";
 var karuta_backend_date = "?";
@@ -47,3 +47,4 @@ var karuta_fileserver_date = "?";
 // 3.53.0 Feat - class with role added when select role to be able to hide some role - 2024-07-03
 // 3.53.1 Fix - if user was designer and another role in a portfolio, designer was the default role - 2024-07-09
 // 3.53.2 Fix - sometimes get-get-resource not updated - references has been changed - 2024-07-17
+// 3.54.0 Feat - Batch - new function to update node comments 2024-08-03

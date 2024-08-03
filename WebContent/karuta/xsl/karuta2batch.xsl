@@ -612,6 +612,24 @@
 		</update-node-resource>
 	</xsl:template>
 	
+	<xsl:template match="*[metadata/@semantictag='update-node-context']">
+		<xsl:variable name="select">
+			<xsl:call-template name='get-select'>
+				<xsl:with-param name='parent'>subsection-target</xsl:with-param>
+			</xsl:call-template>
+		</xsl:variable>
+		<xsl:variable name="test">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='test']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<update-node-context type='NodeContext' select="{$select}" test="{$test}">
+			<text>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">node-text</xsl:with-param>
+				</xsl:call-template>
+			</text>
+		</update-node-context>
+	</xsl:template>
+
 	<!--xsl:template match="*[metadata/@semantictag='import-node']">
 		<xsl:variable name="destination">
 			<xsl:call-template name='get-select'>
