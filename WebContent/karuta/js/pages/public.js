@@ -61,8 +61,13 @@ function displayKarutaPublic()
 		type : "GET",
 		url : serverBCK+"/direct?i=" + iid + "&getuserrole",
 		success : function(data) {
-			g_uuid = data.substring(0,data.indexOf('&'));
-			const userrole = data.substring(data.indexOf('&')+10);
+			let userrole = "";
+			if (data.indexOf('&')>-1){
+				g_uuid = data.substring(0,data.indexOf('&'));
+				userrole = data.substring(data.indexOf('&')+10);
+			} else {
+				g_uuid = data;
+			}
 			//----------------
 			$.ajax({
 				async:false,
