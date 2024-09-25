@@ -2189,7 +2189,7 @@ UIFactory["Get_Resource"].parseCNAM = function(destid,type,langcode,data,self,di
 		html = "<ul class='dropdown-menu' role='menu'></ul>";
 		var select  = $(html);
 		//---------------------
-		html = "<li></li>";
+		html = "<li style=''></li>";
 		var select_item = $(html);
 		html = "<a  value='' code='' label_fr='&nbsp;' >&nbsp;</a>";
 		var select_item_a = $(html);
@@ -2222,7 +2222,7 @@ UIFactory["Get_Resource"].parseCNAM = function(destid,type,langcode,data,self,di
 			newTableau2.push({'code':code,'libelle':code+" - "+label});
 			html = "<li></li>";
 			var select_item = $(html);
-			html = "<a  value='' code='"+code+"' class='sel"+code+"' label_fr=\""+label+"\" >";
+			html = "<a style='' value='' code='"+code+"' class='sel"+code+"' label_fr=\""+label+"\" >";
 			if (display_code)
 				html += "<span class='li-code'>"+code+"</span>";
 			if (display_label)
@@ -2284,9 +2284,9 @@ UIFactory["Get_Resource"].parseCNAM = function(destid,type,langcode,data,self,di
 			var code = newTableau1[i].code;
 			var label = newTableau1[i].intitule;
 			newTableau2.push({'code':code,'libelle':label});
-			html = "<li></li>";
+			html = "<li style=''></li>";
 			var select_item = $(html);
-			html = "<a  value='' code='"+code+"' class='sel"+code+"' label_fr=\""+label+"\" >";
+			html = "<a style='' value='' code='"+code+"' class='sel"+code+"' label_fr=\""+label+"\" >";
 			if (display_code)
 				html += "<span class='li-code'>"+code+"</span>";
 			if (display_label)
