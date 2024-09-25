@@ -1550,6 +1550,24 @@ function sortOn1_2_3(a,b)
 	return a == b ? 0 : (a > b ? 1 : -1);
 }
 
+//==================================
+function sortJsonOnCode(a,b)
+//==================================
+{
+	a = a.code.toLowerCase();
+	b = b.code.toLowerCase();
+	return (a < b) ? -1 : (a > b) ? 1 : 0;
+}
+
+//==================================
+function sortJsonOnCodeInterne(a,b)
+//==================================
+{
+	a = a.code_interne.toLowerCase();
+	b = b.code_interne.toLowerCase();
+	return (a < b) ? -1 : (a > b) ? 1 : 0;
+}
+
 
 //==================================
 function getSendPublicURL(uuid,shareroles)
