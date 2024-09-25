@@ -436,35 +436,71 @@ UIFactory["Get_Resource"].prototype.displayEditor = function(destid,type,langcod
 		//------------
 //		var portfoliocode = cleanCode(replaceVariable(queryattr_value.substring(0,semtag_indx)));
 		var portfoliocode = replaceVariable(queryattr_value.substring(0,semtag_indx));
-		var selfcode = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",g_portfolio_current)).text();
-		if (portfoliocode.indexOf('.')<0 && selfcode.indexOf('.')>0 && portfoliocode!='self')  // There is no project, we add the project of the current portfolio
-			portfoliocode = selfcode.substring(0,selfcode.indexOf('.')) + "." + portfoliocode;
-		if (portfoliocode=='self') {
-			portfoliocode = selfcode;
-			const semtag = $("metadata",$("asmRoot",g_portfolio_current)).attr('semantictag');
-			if (semtag.indexOf('batch')>-1)
-				cachable = true;
-			else
-				cachable = false;
+		// ==============================================================================
+			if (portfoliocode.indexOf("ROME")>-1){  // ==== ROME =====
+			var self = this;
+			if (cachable && g_Get_Resource_caches[queryattr_value]!=undefined && g_Get_Resource_caches[queryattr_value]!="")
+				UIFactory["Get_Resource"].parseROME(destid,type,langcode,g_Get_Resource_caches[queryattr_value],self,disabled,srce,resettable,target,semtag,multiple_tags);
+			else {
+				$.ajax({
+					type : "GET",
+					dataType : "json",
+					url : serverBCK+"/rome/"+semtag,
+					success : function(data) {
+						if (cachable)
+							g_Get_Resource_caches[queryattr_value] = data;
+						UIFactory["Get_Resource"].parseROME(destid,type,langcode,data,self,disabled,srce,resettable,target,semtag,multiple_tags);
+					}
+				});
+			}
+		} else if  (portfoliocode.indexOf("CNAM")>-1){  // ==== CNAM =====
+			var self = this;
+			if (cachable && g_Get_Resource_caches[queryattr_value]!=undefined && g_Get_Resource_caches[queryattr_value]!="")
+				UIFactory["Get_Resource"].parseCNAM(destid,type,langcode,g_Get_Resource_caches[queryattr_value],self,disabled,srce,resettable,target,semtag,multiple_tags);
+			else {
+				$.ajax({
+					type : "GET",
+					dataType : "json",
+					url : serverBCK+"/cnam/"+semtag,
+					success : function(data) {
+						if (cachable)
+							g_Get_Resource_caches[queryattr_value] = data;
+						UIFactory["Get_Resource"].parseCNAM(destid,type,langcode,data,self,disabled,srce,resettable,target,semtag,multiple_tags);
+					}
+				});
+			}
+		// ==============================================================================
+		} else {	// ==== KARUTA =====
+			var selfcode = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",g_portfolio_current)).text();
+			if (portfoliocode.indexOf('.')<0 && selfcode.indexOf('.')>0 && portfoliocode!='self')  // There is no project, we add the project of the current portfolio
+				portfoliocode = selfcode.substring(0,selfcode.indexOf('.')) + "." + portfoliocode;
+			if (portfoliocode=='self') {
+				portfoliocode = selfcode;
+				const semtag = $("metadata",$("asmRoot",g_portfolio_current)).attr('semantictag');
+				if (semtag.indexOf('batch')>-1)
+					cachable = true;
+				else
+					cachable = false;
+			}
+			//------------
+			var self = this;
+			if (cachable && g_Get_Resource_caches[portfoliocode+semtag]!=undefined && g_Get_Resource_caches[portfoliocode+semtag]!="")
+				self.parse(destid,type,langcode,g_Get_Resource_caches[portfoliocode+semtag],disabled,srce,resettable,target,semtag,multiple_tags,portfoliocode,semtag2,cachable);
+			else {
+				$.ajax({
+					async:false,
+					type : "GET",
+					dataType : "xml",
+					url : serverBCK_API+"/nodes?portfoliocode=" + portfoliocode + "&semtag="+semtag.replace("!",""),
+					success : function(data) {
+						if (cachable)
+							g_Get_Resource_caches[portfoliocode+semtag] = data;
+						self.parse(destid,type,langcode,data,disabled,srce,resettable,target,semtag,multiple_tags,portfoliocode,semtag2,cachable);
+					}
+				});
+			}
+			//------------
 		}
-		//------------
-		var self = this;
-		if (cachable && g_Get_Resource_caches[portfoliocode+semtag]!=undefined && g_Get_Resource_caches[portfoliocode+semtag]!="")
-			self.parse(destid,type,langcode,g_Get_Resource_caches[portfoliocode+semtag],disabled,srce,resettable,target,semtag,multiple_tags,portfoliocode,semtag2,cachable);
-		else {
-			$.ajax({
-				async:false,
-				type : "GET",
-				dataType : "xml",
-				url : serverBCK_API+"/nodes?portfoliocode=" + portfoliocode + "&semtag="+semtag.replace("!",""),
-				success : function(data) {
-					if (cachable)
-						g_Get_Resource_caches[portfoliocode+semtag] = data;
-					self.parse(destid,type,langcode,data,disabled,srce,resettable,target,semtag,multiple_tags,portfoliocode,semtag2,cachable);
-				}
-			});
-		}
-		//------------
 	}
 	if (this.get_type=="import_comp"){
 //		let portfoliocode = cleanCode(replaceVariable(this.query_portfolio));
