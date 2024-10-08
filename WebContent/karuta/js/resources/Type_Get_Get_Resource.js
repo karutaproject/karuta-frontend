@@ -366,78 +366,80 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 				portfoliocode_parent = selfcode.substring(0,selfcode.indexOf('.')) + "." + portfoliocode_parent;
 //			alertHTML('portfoliocode:'+portfoliocode+'--semtag:'+semtag+'--semtag_parent:'+semtag_parent+'--code_parent:'+code_parent+'--portfoliocode_parent:'+portfoliocode_parent);
 			//----------------------
-			var url ="";
-			if (portfoliocode.indexOf('value?')>-1) {
-				code_parent = replaceVariable(code_parent);
-				value_parent = replaceVariable(value_parent);
-				portfoliocode = portfoliocode_parent = value_parent;
-				$(this.portfoliocode_node).text(portfoliocode_parent);
-				$(this.value_node).text(portfoliocode_parent);
-				url = serverBCK_API+"/nodes?portfoliocode="+portfoliocode_parent+"&semtag="+semtag.replace("!","")+"&semtag_parent="+semtag_parent+ "&code_parent="+code_parent;			
-			} else if (portfoliocode.indexOf('parent?')>-1){
-				if (portfoliocode_parent.indexOf("@")>-1) {
-					display_portfoliocode_parent = false;
-					portfoliocode_parent =portfoliocode_parent.substring(0,portfoliocode_parent.indexOf("@"))+portfoliocode_parent.substring(portfoliocode_parent.indexOf("@")+1);
-				}
-				if (portfoliocode_parent.indexOf("#")>-1) {
-					portfoliocode_parent = portfoliocode_parent.substring(0,portfoliocode_parent.indexOf("#"))+portfoliocode_parent.substring(portfoliocode_parent.indexOf("#")+1);
-				}
-				$(this.portfoliocode_node).text(portfoliocode_parent);
-				portfoliocode = portfoliocode_parent;
-				url = serverBCK_API+"/nodes?portfoliocode="+portfoliocode_parent+"&semtag="+semtag.replace("!","")+"&semtag_parent="+semtag_parent+ "&code_parent="+code_parent;			
-			} else if (portfoliocode.indexOf('?')>-1 || portfoliocode.indexOf('code?')>-1){
-				code_parent = replaceVariable(code_parent);
-				code_parent = cleanCode(code_parent);
-				$(this.portfoliocode_node).text(code_parent);
-				portfoliocode = code_parent;
-				url = serverBCK_API+"/nodes?portfoliocode="+portfoliocode+"&semtag="+semtag.replace("!","");
-			} else {
-				$(this.portfoliocode_node).text(portfoliocode);
-				url = serverBCK_API+"/nodes?portfoliocode="+portfoliocode+"&semtag="+semtag.replace("!","")+"&semtag_parent="+semtag_parent+ "&code_parent="+code_parent;
-			}
-			//----------------------
-			if (code_parent!="") {
+			if (portfoliocode.indexOf("ROME")>-1){ // ==== ROME =====
 				var self = this;
-				$.ajax({
-					async:false,
-					type : "GET",
-					dataType : "xml",
-					url : url,
-					portfoliocode:portfoliocode,
-					semtag2:semtag2,
-					success : function(data) {
-						self.parse(destid,type,langcode,data,disabled,srce,srce2,this.portfoliocode,semtag,semtag2,cachable);
-					},
-					error : function(jqxhr,textStatus) {
-						$("#"+destid).html("No result");
-						self.parse(destid,type,langcode,null,disabled,srce,srce2,this.portfoliocode,semtag,semtag2,cachable);
+				if (cachable && g_Get_Resource_caches[queryattr_value]!=undefined && g_Get_Resource_caches[queryattr_value]!="")
+					UIFactory["Get_Get_Resource"].parseROME(destid,type,langcode,g_Get_Resource_caches[queryattr_value],self,disabled,srce,portfoliocode);
+				else {
+					var url = serverBCK+"/rome/";
+					if (code_parent!='')
+							url+= semtag_parent+"/"+code_parent+"/"+semtag;
+					else
+						url+= semtag;
+					$.ajax({
+						type : "GET",
+						dataType : "json",
+						url : url,
+						success : function(data) {
+							if (cachable)
+								g_Get_Resource_caches[queryattr_value] = data;
+							UIFactory["Get_Get_Resource"].parseROME(destid,type,langcode,data,self,disabled,srce,portfoliocode);
+						}
+					});
+				}
+			} else if (portfoliocode.indexOf("CNAM")>-1){ // ==== CNAM =====
+				var self = this;
+				if (cachable && g_Get_Resource_caches[queryattr_value]!=undefined && g_Get_Resource_caches[queryattr_value]!="")
+					UIFactory["Get_Get_Resource"].parseCNAM(destid,type,langcode,g_Get_Resource_caches[queryattr_value],self,disabled,srce,portfoliocode,semtag);
+				else {
+					var url = serverBCK+"/cnam/";
+					if (code_parent!='')
+							url+= semtag_parent+"/"+code_parent;
+					else
+						url+= semtag;
+					$.ajax({
+						type : "GET",
+						dataType : "json",
+						url : url,
+						success : function(data) {
+							if (cachable)
+								g_Get_Resource_caches[queryattr_value] = data;
+							UIFactory["Get_Get_Resource"].parseCNAM(destid,type,langcode,data,self,disabled,srce,portfoliocode,semtag);
+						}
+					});
+				}
+			} else { // ==== KARUTA ====
+				var url ="";
+				if (portfoliocode.indexOf('value?')>-1) {
+					code_parent = replaceVariable(code_parent);
+					value_parent = replaceVariable(value_parent);
+					portfoliocode = portfoliocode_parent = value_parent;
+					$(this.portfoliocode_node).text(portfoliocode_parent);
+					$(this.value_node).text(portfoliocode_parent);
+					url = serverBCK_API+"/nodes?portfoliocode="+portfoliocode_parent+"&semtag="+semtag.replace("!","")+"&semtag_parent="+semtag_parent+ "&code_parent="+code_parent;			
+				} else if (portfoliocode.indexOf('parent?')>-1){
+					if (portfoliocode_parent.indexOf("@")>-1) {
+						display_portfoliocode_parent = false;
+						portfoliocode_parent =portfoliocode_parent.substring(0,portfoliocode_parent.indexOf("@"))+portfoliocode_parent.substring(portfoliocode_parent.indexOf("@")+1);
 					}
-				});
-			} else {
-				//----------- ERROR Parent not selected ---------------------------------------------
-				var data = this.node;
-				if ($("metadata-wad",data)[0]!=undefined && $($("metadata-wad",data)[0]).attr('error')!=undefined && $($("metadata-wad",data)[0]).attr('error')!=""){
-					var error_text = "";
-					var errorlang = 0;
-					var display_error = false;
-					var attr_error = $($("metadata-wad",data)[0]).attr('error');
-					var errors = attr_error.split("/"); // lang1/lang2/...
-					for (var j=0; j<errors.length; j++){
-						if (errors[j].indexOf("@"+languages[langcode])>-1)
-							errorlang =j;
+					if (portfoliocode_parent.indexOf("#")>-1) {
+						portfoliocode_parent = portfoliocode_parent.substring(0,portfoliocode_parent.indexOf("#"))+portfoliocode_parent.substring(portfoliocode_parent.indexOf("#")+1);
 					}
-					error_text = errors[errorlang].substring(0,errors[errorlang].indexOf("@"));
-					if (errors[errorlang].indexOf(",")>-1) {
-						var roles = errors[errorlang].substring(errors[errorlang].indexOf(","));
-						if (roles.indexOf(this.userrole)>-1 || (roles.containsArrayElt(g_userroles) && g_userroles[0]!='designer') || USER.admin || g_userroles[0]=='designer')
-						display_error = true;
-					} else {
-						display_error = true;
-					}
-					if (display_error){
-						alertHTML(error_text);
-					}
-				} else { // we execute anyway
+					$(this.portfoliocode_node).text(portfoliocode_parent);
+					portfoliocode = portfoliocode_parent;
+					url = serverBCK_API+"/nodes?portfoliocode="+portfoliocode_parent+"&semtag="+semtag.replace("!","")+"&semtag_parent="+semtag_parent+ "&code_parent="+code_parent;			
+				} else if (portfoliocode.indexOf('?')>-1 || portfoliocode.indexOf('code?')>-1){
+					code_parent = replaceVariable(code_parent);
+					code_parent = cleanCode(code_parent);
+					$(this.portfoliocode_node).text(code_parent);
+					portfoliocode = code_parent;
+					url = serverBCK_API+"/nodes?portfoliocode="+portfoliocode+"&semtag="+semtag.replace("!","");
+				} else {
+					$(this.portfoliocode_node).text(portfoliocode);
+					url = serverBCK_API+"/nodes?portfoliocode="+portfoliocode+"&semtag="+semtag.replace("!","")+"&semtag_parent="+semtag_parent+ "&code_parent="+code_parent;
+				}
+				//----------------------
+				if (code_parent!="") {
 					var self = this;
 					$.ajax({
 						async:false,
@@ -447,13 +449,55 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 						portfoliocode:portfoliocode,
 						semtag2:semtag2,
 						success : function(data) {
-							self.parse(destid,type,langcode,data,disabled,srce,this.portfoliocode,semtag,semtag2,cachable);
+							self.parse(destid,type,langcode,data,disabled,srce,srce2,this.portfoliocode,semtag,semtag2,cachable);
 						},
 						error : function(jqxhr,textStatus) {
 							$("#"+destid).html("No result");
 							self.parse(destid,type,langcode,null,disabled,srce,srce2,this.portfoliocode,semtag,semtag2,cachable);
 						}
 					});
+				} else {
+					//----------- ERROR Parent not selected ---------------------------------------------
+					var data = this.node;
+					if ($("metadata-wad",data)[0]!=undefined && $($("metadata-wad",data)[0]).attr('error')!=undefined && $($("metadata-wad",data)[0]).attr('error')!=""){
+						var error_text = "";
+						var errorlang = 0;
+						var display_error = false;
+						var attr_error = $($("metadata-wad",data)[0]).attr('error');
+						var errors = attr_error.split("/"); // lang1/lang2/...
+						for (var j=0; j<errors.length; j++){
+							if (errors[j].indexOf("@"+languages[langcode])>-1)
+								errorlang =j;
+						}
+						error_text = errors[errorlang].substring(0,errors[errorlang].indexOf("@"));
+						if (errors[errorlang].indexOf(",")>-1) {
+							var roles = errors[errorlang].substring(errors[errorlang].indexOf(","));
+							if (roles.indexOf(this.userrole)>-1 || (roles.containsArrayElt(g_userroles) && g_userroles[0]!='designer') || USER.admin || g_userroles[0]=='designer')
+							display_error = true;
+						} else {
+							display_error = true;
+						}
+						if (display_error){
+							alertHTML(error_text);
+						}
+					} else { // we execute anyway
+						var self = this;
+						$.ajax({
+							async:false,
+							type : "GET",
+							dataType : "xml",
+							url : url,
+							portfoliocode:portfoliocode,
+							semtag2:semtag2,
+							success : function(data) {
+								self.parse(destid,type,langcode,data,disabled,srce,this.portfoliocode,semtag,semtag2,cachable);
+							},
+							error : function(jqxhr,textStatus) {
+								$("#"+destid).html("No result");
+								self.parse(destid,type,langcode,null,disabled,srce,srce2,this.portfoliocode,semtag,semtag2,cachable);
+							}
+						});
+					}
 				}
 			}
 			//----------------------
