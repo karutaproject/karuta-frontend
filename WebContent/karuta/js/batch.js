@@ -3063,7 +3063,9 @@ g_actions['import-node'] = function importNode(node,data)
 	let srcetag = replaceBatchVariable(replaceVariable(b_replaceVariable(source.substring(idx_source+1))));
 	//------------- Source -----------------------
 	const srce_nodes = getSourceNodes(node,data,"srce-test");
-	var srceid = $(srce_nodes[0]).attr('id');;
+	let srceid = "";
+	if (srce_nodes.length>0)
+		srceid = $(srce_nodes[0]).attr('id');;
 	//-------------------- TARGET --------------------------------------
 	let nodes = getTargetNodes(node,data,"dest-test")
 	if (nodes.length>0){
