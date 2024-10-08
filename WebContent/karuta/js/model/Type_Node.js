@@ -170,7 +170,8 @@ UIFactory["Node"].prototype.displayNode = function(type,root,dest,depth,langcode
 		if (structure_node) {
 			var readnode = true; // if we got the node the node is readable
 			if (g_designerrole)  // in designer mode depending the role played the node may be not readable
-				readnode = (g_userroles[0]=='designer' || this.seenoderoles.indexOf(USER.username_node.text())>-1 || this.seenoderoles.containsArrayElt(g_userroles) || (this.showtoroles.containsArrayElt(g_userroles) && !this.privatevalue) || this.seenoderoles.indexOf('all')>-1)? true : false;
+				readnode = (g_userroles[0]=='designer' 
+							|| this.seenoderoles.indexOf(USER.username_node.text())>-1 || this.seenoderoles.containsArrayElt(g_userroles) || (this.showtoroles.containsArrayElt(g_userroles) && !this.privatevalue) || (this.showtoroles.indexOf(USER.username_node.text())>-1) && !this.privatevalue) || this.seenoderoles.indexOf('all')>-1)? true : false;
 			//----------------------------------------------
 			if( this.depth < 0 || !readnode) return;
 			//----------------edit control on proxy target ------------
