@@ -49,6 +49,7 @@ function fill_main_page(portfolioid,userrole)
 		type : "GET",
 		dataType : "xml",
 		url : url,
+		userrole : userrole,
 		success : function(data) {
 			UICom.roles = {};
 			g_userroles = [];
@@ -68,8 +69,11 @@ function fill_main_page(portfolioid,userrole)
 			$("body").addClass(root_semantictag);
 			// -----------ROLE---------------
 			var role = $("asmRoot",data).attr("role");
-			if (role!="") {
-				g_userroles[0] = g_userroles[1] = role;
+			if (role!="" || (userrole!=undefined && userrole!="") ) {
+				if (role!="")
+					g_userroles[0] = g_userroles[1] = role;
+				else
+					g_userroles[0] = g_userroles[1] = userrole;
 			} else {
 				g_userroles[0] = g_userroles[1] ='designer';
 				g_designerrole = true;
@@ -245,7 +249,7 @@ function display_main_page(portfolioid,playedrole)
 		if (playedrole==undefined) {
 			let html = "";
 			for (let i=0; i<g_userroles.length; i++){
-				html += "<br><input type='radio' name='radio_group' value='"+g_userroles[i]+"'> "+g_userroles[i];
+				html += "<div class='"+g_userroles[i]+"'><input type='radio' name='radio_group' value='"+g_userroles[i]+"'> "+g_userroles[i]+"</div>";
 			}
 			const js1 = "javascript:$('#edit-window').modal('hide')";
 			const js2 = "chooseRole('"+portfolioid+"')";

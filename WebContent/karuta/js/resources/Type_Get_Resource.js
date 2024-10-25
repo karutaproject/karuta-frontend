@@ -434,7 +434,8 @@ UIFactory["Get_Resource"].prototype.displayEditor = function(destid,type,langcod
 		}
 		var target = queryattr_value.substring(srce_indx+1); // label or text
 		//------------
-		var portfoliocode = cleanCode(replaceVariable(queryattr_value.substring(0,semtag_indx)));
+//		var portfoliocode = cleanCode(replaceVariable(queryattr_value.substring(0,semtag_indx)));
+		var portfoliocode = replaceVariable(queryattr_value.substring(0,semtag_indx));
 		var selfcode = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",g_portfolio_current)).text();
 		if (portfoliocode.indexOf('.')<0 && selfcode.indexOf('.')>0 && portfoliocode!='self')  // There is no project, we add the project of the current portfolio
 			portfoliocode = selfcode.substring(0,selfcode.indexOf('.')) + "." + portfoliocode;
@@ -466,7 +467,8 @@ UIFactory["Get_Resource"].prototype.displayEditor = function(destid,type,langcod
 		//------------
 	}
 	if (this.get_type=="import_comp"){
-		let portfoliocode = cleanCode(replaceVariable(this.query_portfolio));
+//		let portfoliocode = cleanCode(replaceVariable(this.query_portfolio));
+		let portfoliocode = replaceVariable(this.query_portfolio);
 		let selfcode = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",g_portfolio_current)).text();
 		if (portfoliocode=='self') {
 			portfoliocode = selfcode;
@@ -1657,13 +1659,13 @@ UIFactory["Get_Resource"].update = function(selected_item,itself,langcode,type)
 				g_variables[UICom.structure.ui[itself.id].getCode()] = cleanCode(variable_value,true);
 			}
 			//---------------------
-			$(itself.value_node[0]).text(value);
-			$(itself.code_node[0]).text(code);
-			$(itself.uuid_node[0]).text(uuid);
-			$(itself.style_node[0]).text(style.trim());
+			$(UICom.structure.ui[itself.id].resource.value_node[0]).text(value);
+			$(UICom.structure.ui[itself.id].resource.code_node[0]).text(code);
+			$(UICom.structure.ui[itself.id].resource.uuid_node[0]).text(uuid);
+			$(UICom.structure.ui[itself.id].resource.style_node[0]).text(style.trim());
 			for (var i=0; i<languages.length;i++){
 				var label = $(selected_item).attr('label_'+languages[i]);
-				$(itself.label_node[i][0]).text(label);
+				$(UICom.structure.ui[itself.id].resource.label_node[i][0]).text(label);
 			}
 			itself.save();
 			//-------- if function js -------------

@@ -70,7 +70,7 @@ function fill_list_users(type)
 	//------------------------------------------
 	html += "	<div id='user-leftside'  class='leftside'>";
 	if (USER.admin || (USER.creator && !USER.xlimited)){
-		html += "			<span class='folder-label btn' title='"+karutaStr[LANG]['create_user']+"'><i class='fas fa-user-plus' id='folder-create' onclick=\"UIFactory.User.callCreate()();\"></i></span>";
+		html += "			<span class='folder-label btn' title='"+karutaStr[LANG]['create_user']+"'><i class='fas fa-user-plus' id='folder-create' onclick=\"UIFactory.User.callCreate();\"></i></span>";
 	}
 	html += "		<h3>"+karutaStr[LANG]['active_users'];
 	html += "			<button class='btn' onclick=\"UIFactory.User.displayActive('user-rightside-users-content1','user');\">&nbsp;"+karutaStr[LANG]['see']+"</button>";

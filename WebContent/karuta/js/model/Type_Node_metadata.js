@@ -83,6 +83,7 @@ UIFactory["Node"].prototype.setMetadata = function(dest,depth,langcode,edit,inli
 									|| this.seenoderoles.containsArrayElt(g_userroles) 
 									|| (this.showtoroles.indexOf("all")>-1 && !this.privatevalue) 
 									|| (this.showtoroles.containsArrayElt(g_userroles) && !this.privatevalue) 
+									|| (this.showtoroles.indexOf(USER.username)>-1 && !this.privatevalue) 
 									|| g_userroles[0]=='designer')
 					)
 				);

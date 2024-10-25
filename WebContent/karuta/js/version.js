@@ -2,8 +2,8 @@
 var karuta_version = "@project.version@";
 var karuta_date = "@build.timestamp@";
 
-const karuta_version_eportfolium = "eportfolium-3.50.1";
-const karuta_date_eportfolium = "2024-06-17";
+const karuta_version_eportfolium = "eportfolium-3.55.1";
+const karuta_date_eportfolium = "2024-09-03";
 
 var karuta_backend_version = "?";
 var karuta_backend_date = "?";
@@ -28,7 +28,7 @@ var karuta_fileserver_date = "?";
 // 3.40.0 Feat - get_resource and get_get_resource import multiple can use semtag+semtag2
 // 3.41.0 Feat - New attribute Sharer for user
 // 3.42.0 Feat - Batch Error Management
-// 3.42.1 Fix - Autoload when more than one portfolios are visible
+// 3.42.1 Fix  - Autoload when more than one portfolios are visible
 // 3.43.0 Feat - Get_Resource - checkbox display
 // 3.44.0 Feat - new function for designer : setNoceCodeWithDate(nodeid) - 2024-04-04
 // 3.44.1 Fix  - error due to the JS function resourceCodecontains which had two definitions. test if value': is present or not - 2024-04-24
@@ -37,6 +37,17 @@ var karuta_fileserver_date = "?";
 // 3.47.0 Feat - new jquery function for report and batch : hasChildSemtagAndResourceTextContains, hasChildSemtagAndResourceTextNotEmpty - 2024-04-29
 // 3.48.0 Feat - Report - Collapsable Section can be open or closed - 2024-04-28
 // 3.49.0 Feat - Batch - new component : for-each-group-user - 2024-04-30
-// 3.49.1 Fix - Type Dashboard Editor - CSV rôle was missing - 2024-06-17
+// 3.49.1 Fix  - Type Dashboard Editor - CSV rôle was missing - 2024-06-17
 // 3.50.0 Feat - Multi-role - userrole in GET Node - 2024-06-17
-// 3.50.1 Fix - Batch - for-each-tree search code and label of direct child - 2024-06-19
+// 3.50.1 Fix  - Batch - for-each-tree search code and label of direct child - 2024-06-19
+// 3.50.2 Fix  - Get_Get_Resource - click : no pointer if not selectable - 2024-06-20
+// 3.51.0 Feat - Multi-role - userrole management in direct  - 2024-06-26
+// 3.51.1 Fix  - Mistyping  in user creation - 2024-06-30
+// 3.52.0 Feat - Multi-role - userrole management - 2024-06-30
+// 3.53.0 Feat - class with role added when select role to be able to hide some role - 2024-07-03
+// 3.53.1 Fix  - if user was designer and another role in a portfolio, designer was the default role - 2024-07-09
+// 3.53.2 Fix  - sometimes get-get-resource not updated - references has been changed - 2024-07-17
+// 3.54.0 Feat - Batch - new function to update node comments 2024-08-03
+// 3.54.1 Fix  - Public.js for multi-role management 2024-08-20
+// 3.55.0 Feat - Adding Technical Support Email Subject  2024-08-26
+// 3.55.1 Fix -  Get_Resource - portfolio cleancode deleted (@ in portfoliocode was deleted) 2024-09-03

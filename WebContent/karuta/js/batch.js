@@ -2760,6 +2760,63 @@ g_actions['update-node-resource'] = function updateResource(node,data)
 	return (ok!=0 && ok == nodes.length);
 }
 
+//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
+//------------------------ Update Node Context -------------------------
+//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
+
+//=================================================
+g_actions['update-node-context'] = function updateContext(node,data)
+//=================================================
+{
+	let ok = 0;
+	let type = $(node).attr("type");
+	//-------------------
+	let nodes = getTargetNodes(node,data,"test")
+	if (nodes.length>0){
+		for (let i=0; i<nodes.length; i++){
+			//-------------------
+			let nodeid = $(nodes[i]).attr('id');
+			let resource = $("asmResource[xsi_type='context']",nodes[i]);
+			let oldtext =$("text[lang='"+LANG+"']",resource).text();
+			let newtext = getTxtvals($("text",node));
+			if (newtext!="") {
+				
+				if ($("metadata",nodes[i]).attr("multilingual-node")=="Y") {
+					$("text[lang='"+LANG+"']",resource).text(newtext);
+				} else {
+					for (let langcode=0; langcode<languages.length; langcode++) {
+						$("text[lang='"+languages[langcode]+"']",resource).text(newtext);
+					}
+				}
+			}
+			let data = "<asmResource xsi_type='context'>" + $(resource).html() + "</asmResource>";
+			let strippeddata = data.replace(/xmlns=\"http:\/\/www.w3.org\/1999\/xhtml\"/g,"");  // remove xmlns attribute
+			//-------------------
+			$.ajax({
+				async : false,
+				type : "PUT",
+				contentType: "application/xml",
+				dataType : "text",
+				data : strippeddata,
+				url : serverBCK_API+"/nodes/node/" + nodeid + "/nodecontext",
+				success : function(data) {
+					ok++;
+					$("#batch-log").append("<br>- context updated ("+nodeid+") type : "+type);
+				},
+				error : function(data) {
+					$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in update context("+nodeid+" type : "+type);
+				}
+			});
+			//-------------------
+		}
+	} else {
+		$("#batch-log").append("<br>- ***NOT FOUND <span class='danger'>ERROR - update-node-context - type: "+type+"</span>");
+	}
+	if (!(ok!=0 && ok == nodes.length)) g_batch_error.push("update-node-context");
+	return (ok!=0 && ok == nodes.length);
+}
 
 //-----------------------------------------------------------------------
 //-----------------------------------------------------------------------
@@ -3006,7 +3063,9 @@ g_actions['import-node'] = function importNode(node,data)
 	let srcetag = replaceBatchVariable(replaceVariable(b_replaceVariable(source.substring(idx_source+1))));
 	//------------- Source -----------------------
 	const srce_nodes = getSourceNodes(node,data,"srce-test");
-	var srceid = $(srce_nodes[0]).attr('id');;
+	let srceid = "";
+	if (srce_nodes.length>0)
+		srceid = $(srce_nodes[0]).attr('id');;
 	//-------------------- TARGET --------------------------------------
 	let nodes = getTargetNodes(node,data,"dest-test")
 	if (nodes.length>0){
