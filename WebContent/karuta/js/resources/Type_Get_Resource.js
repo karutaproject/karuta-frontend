@@ -348,9 +348,12 @@ UIFactory["Get_Resource"].prototype.getView = function(dest,type,langcode,indash
 							url : serverBCK_API+"/nodes/node/" + label.substring(7),
 							success : function(data) {
 								UICom.parseStructure(data,false);
+								html += UICom.structure.ui[label.substring(7)].resource.getView();
+							},
+							error : function() {
+								html += "Error file not found:" + label.substring(7);
 							}
 						});
-					html += UICom.structure.ui[label.substring(7)].resource.getView();
 				} else {
 					html += "<span name='label'>" + label + "</span> ";
 				}
