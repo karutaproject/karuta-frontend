@@ -2,8 +2,8 @@
 var karuta_version = "@project.version@";
 var karuta_date = "@build.timestamp@";
 
-const karuta_version_eportfolium = "eportfolium-3.55.1";
-const karuta_date_eportfolium = "2024-09-03";
+const karuta_version_eportfolium = "eportfolium-3.56.0";
+const karuta_date_eportfolium = "2024-11-01";
 
 var karuta_backend_version = "?";
 var karuta_backend_date = "?";
@@ -51,3 +51,4 @@ var karuta_fileserver_date = "?";
 // 3.54.1 Fix  - Public.js for multi-role management 2024-08-20
 // 3.55.0 Feat - Adding Technical Support Email Subject  2024-08-26
 // 3.55.1 Fix -  Get_Resource - portfolio cleancode deleted (@ in portfoliocode was deleted) 2024-09-03
+// 3.56.0 Fix-Feat -  Fix type_node (username test) - Fix Get_resource (when image file is missing) - Feat - js when eltDisplayed  2024-11-01
