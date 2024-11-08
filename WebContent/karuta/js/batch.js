@@ -343,7 +343,7 @@ function getTargetNodes(node,data,teststr)
 	let semtag = getSemtag(node);
 	semtag = replaceBatchVariable(replaceVariable(semtag));
 	//--------------------------
-	if (semtag=="#current_node" || data==undefined || data==null) {
+	if (semtag=="#current_node" || data==undefined || data==null || getTreef(node)!="") {
 		let url = getTargetUrl(node);
 		$.ajax({
 			async : false,
@@ -3923,6 +3923,7 @@ g_actions['for-each-node'] = function (node)
 				}
 				for (let i=0; i<nodes.length; i++){
 					const nodeid = $(nodes[i]).attr('id');
+					let previous_node_uuid = g_current_node_uuid;
 					g_current_node_uuid = nodeid;
 					$.ajax({
 						async : false,
@@ -3941,6 +3942,7 @@ g_actions['for-each-node'] = function (node)
 							$("#batch-log").append("<br>- ***NOT FOUND <span class='danger'>ERROR - for-each-node "+srce_semtag+"</span>");
 						}
 					});
+					g_current_node_uuid = previous_node_uuid;
 				}
 			},
 			error : function() {
