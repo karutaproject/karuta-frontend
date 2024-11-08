@@ -630,31 +630,13 @@
 		</update-node-context>
 	</xsl:template>
 
-	<!--xsl:template match="*[metadata/@semantictag='import-node']">
-		<xsl:variable name="destination">
-			<xsl:call-template name='get-select'>
-				<xsl:with-param name='parent'>subsection-target</xsl:with-param>
-			</xsl:call-template>
-		</xsl:variable>
-		<xsl:variable name="test">
-			<xsl:value-of select=".//asmContext[metadata/@semantictag='test']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
-		</xsl:variable>
-		<xsl:variable name="source">
-			<xsl:call-template name='get-select'>
-				<xsl:with-param name='parent'>subsection-source</xsl:with-param>
-			</xsl:call-template>
-		</xsl:variable>
-		<xsl:variable name="old-source">#<xsl:call-template name="txtval"><xsl:with-param name="semtag">import-source</xsl:with-param></xsl:call-template></xsl:variable>
-		<xsl:variable name="dest"><xsl:value-of select=".//asmContext[metadata/@semantictag='destination-select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of></xsl:variable>
-		<xsl:variable name="srce"><xsl:value-of select=".//asmContext[metadata/@semantictag='source-select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of></xsl:variable>
-		<import-node select="{$destination}{$dest}" source="{$srce}{$old-source}" test="{$test}" >
-			<source>
-				<xsl:value-of select='$source'/>
-			</source>
-		</import-node>
-	</xsl:template-->
 	
-		<xsl:template match="*[metadata/@semantictag='import-node']">
+	<xsl:template match="*[metadata/@semantictag='previous-imported-node']">
+		<xsl:variable name="ref-id"><xsl:value-of select=".//asmContext[metadata/@semantictag='tree-select']/asmResource[@xsi_type='Get_Resource']/label[@lang=$lang]"></xsl:value-of></xsl:variable>
+		<previous-imported-node select="{$ref-id}"/>
+	</xsl:template>
+	
+	<xsl:template match="*[metadata/@semantictag='import-node']">
 		<xsl:variable name="destination">
 			<xsl:call-template name='get-select'>
 				<xsl:with-param name='parent'>subsection-target</xsl:with-param>
@@ -1544,7 +1526,12 @@
 					<xsl:otherwise>
 						<xsl:choose>
 							<xsl:when test="$semtag=''"><xsl:value-of select='$ref-id'/>.<xsl:value-of select='$varname'/></xsl:when>
-							<xsl:otherwise><xsl:value-of select='$ref-id'/>.<xsl:value-of select='$semtag'/></xsl:otherwise>
+							<xsl:otherwise>
+								<xsl:choose>
+									<xsl:when test="$select!=''"><xsl:value-of select='$select'/>.<xsl:value-of select='$ref-id'/>.<xsl:value-of select='$semtag'/></xsl:when>
+									<xsl:otherwise><xsl:value-of select='$ref-id'/>.<xsl:value-of select='$semtag'/></xsl:otherwise>
+								</xsl:choose>
+							</xsl:otherwise>
 						</xsl:choose>
 					</xsl:otherwise>
 				</xsl:choose>
@@ -1552,7 +1539,12 @@
 			<xsl:otherwise>
 						<xsl:choose>
 							<xsl:when test="$semtag=''"><xsl:value-of select='$select'/></xsl:when>
-							<xsl:otherwise><xsl:value-of select='$select'/>.<xsl:value-of select='$semtag'/></xsl:otherwise>
+							<xsl:otherwise>
+								<xsl:choose>
+									<xsl:when test="$ref-id!=''"><xsl:value-of select='$ref-id'/>.<xsl:value-of select='$select'/>.<xsl:value-of select='$semtag'/></xsl:when>
+									<xsl:otherwise><xsl:value-of select='$select'/>.<xsl:value-of select='$semtag'/></xsl:otherwise>
+								</xsl:choose>
+							</xsl:otherwise>
 						</xsl:choose>
 				
 			</xsl:otherwise>
