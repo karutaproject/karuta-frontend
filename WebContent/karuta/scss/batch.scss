@@ -130,6 +130,7 @@
 	span.chkbox-comments.xif-then-else,
 	span.chkbox-comments.xif-action,
 	span.chkbox-comments.xthen-part,
+	span.chkbox-comments.xprevious-imported-node,
 	span.chkbox-comments.xelse-part {
 			display: inline;
 			float: right;
@@ -218,6 +219,7 @@
 
 	.delete-node,
 	.import-node,
+	.previous-imported-node,
 	.update-node-resource,
 	.moveup-node,
 	.move-node,

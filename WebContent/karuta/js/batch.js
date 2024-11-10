@@ -3746,7 +3746,6 @@ g_actions['batch-variable'] = function (node)
 		if (source.indexOf('#current_node')>-1) {
 			if (srce_treeref!="")
 				nodeid = g_trees[srce_treeref].currentnode[g_trees[srce_treeref].currentnode.length-1];
-			nodeid = g_current_node_uuid;
 		} else
 			nodeid = replaceVariable(b_replaceVariable(treeref)); // select = porfolio_uuid.#uuid
 	} else if (source.indexOf('#current_portfolio')>-1){
@@ -3888,9 +3887,9 @@ g_actions['for-each-node'] = function (node)
 	//------------- source -----------------------
 	if (source.indexOf('#current_node')+source.indexOf('#uuid')>-2){
 		if (source.indexOf('#current_node')>-1) {
-			if (srce_treeref!="") {
+			if (srce_treeref!="")
 				nodeid = g_trees[srce_treeref].currentnode[g_trees[srce_treeref].currentnode.length-1];
-				nodeid = g_current_node_uuid;
+//				nodeid = g_current_node_uuid;
 		} else
 			nodeid = replaceVariable(b_replaceVariable(srce_treeref)); // select = porfolio_uuid.#uuid
 		$.ajax({
