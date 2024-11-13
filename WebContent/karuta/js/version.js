@@ -2,8 +2,8 @@
 var karuta_version = "@project.version@";
 var karuta_date = "@build.timestamp@";
 
-const karuta_version_eportfolium = "eportfolium-3.57.0";
-const karuta_date_eportfolium = "2024-11-07";
+const karuta_version_eportfolium = "eportfolium-3.57.1";
+const karuta_date_eportfolium = "2024-11-13";
 
 var karuta_backend_version = "?";
 var karuta_backend_date = "?";
@@ -54,3 +54,4 @@ var karuta_fileserver_date = "?";
 // 3.56.0 Fix-Feat -  Fix type_node (username test) - Fix Get_resource (when image file is missing) - Feat - js when eltDisplayed  2024-11-01
 // 3.56.1 Fix - importnode did not work with tree reference - 2024-11-05
 // 3.57.0 Feat - Stack for current node and imported node in batch
+// 3.57.1 Fix - Error with designer playing role and node editable in line
