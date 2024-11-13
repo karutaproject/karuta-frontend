@@ -55,3 +55,4 @@ var karuta_fileserver_date = "?";
 // 3.56.1 Fix - importnode did not work with tree reference - 2024-11-05
 // 3.57.0 Feat - Stack for current node and imported node in batch
 // 3.57.1 Fix - Error with designer playing role and node editable in line
+// 3.57.2 Fix - Error with designer playing role and node visible by designer only
