@@ -74,6 +74,8 @@ function fill_main_page(portfolioid,userrole)
 					g_userroles[0] = g_userroles[1] = role;
 				else
 					g_userroles[0] = g_userroles[1] = userrole;
+				if (g_userroles[0] == 'designer')
+					g_designerrole = true;
 			} else {
 				g_userroles[0] = g_userroles[1] ='designer';
 				g_designerrole = true;

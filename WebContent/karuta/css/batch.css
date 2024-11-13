@@ -127,6 +127,7 @@
 .batch span.chkbox-comments.xif-then-else,
 .batch span.chkbox-comments.xif-action,
 .batch span.chkbox-comments.xthen-part,
+.batch span.chkbox-comments.xprevious-imported-node,
 .batch span.chkbox-comments.xelse-part {
   display: inline;
   float: right;
@@ -201,6 +202,7 @@
 }
 .batch .delete-node,
 .batch .import-node,
+.batch .previous-imported-node,
 .batch .update-node-resource,
 .batch .moveup-node,
 .batch .move-node,
