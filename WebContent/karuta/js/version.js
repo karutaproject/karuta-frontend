@@ -2,8 +2,8 @@
 var karuta_version = "@project.version@";
 var karuta_date = "@build.timestamp@";
 
-const karuta_version_eportfolium = "eportfolium-3.57.1";
-const karuta_date_eportfolium = "2024-11-13";
+const karuta_version_eportfolium = "eportfolium-3.57.3";
+const karuta_date_eportfolium = "2024-11-14";
 
 var karuta_backend_version = "?";
 var karuta_backend_date = "?";
@@ -56,3 +56,4 @@ var karuta_fileserver_date = "?";
 // 3.57.0 Feat - Stack for current node and imported node in batch
 // 3.57.1 Fix - Error with designer playing role and node editable in line
 // 3.57.2 Fix - Error with designer playing role and node visible by designer only
+// 3.57.3 Fix - QRCode was sometimes displayed twice

@@ -277,7 +277,8 @@ UIFactory["Node"].prototype.displayMenus = function(dest,langcode)
 						var url = window.location.href;
 						var serverURL = url.substring(0,url.indexOf(appliname+"/")+appliname.length);
 						url = serverURL+"/karuta/htm/public.htm?i="+data+"&amp;lang="+languages[langcode];
-						$("#qrcode-"+this.id).qrcode({text:url,size:100,background: 'white'});
+						if ( $("canvas","#qrcode-"+this.id).length==0 ) //not already displayed
+							$("#qrcode-"+this.id).qrcode({text:url,size:100,background: 'white'});
 					}
 				});
 			}
