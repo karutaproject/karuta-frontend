@@ -1930,6 +1930,7 @@ UIFactory["Get_Resource"].importMultiple = function(parentid,targetid,srce,fctjs
 			}
 			code = newcode;
 		}
+		srce = srce.replaceAll('##selectedcode##',code);
 		importBranch(parentid,srce,encodeURIComponent(code),databack,callback,param2,param3);
 		if (fctjs!="")
 			eval(fctjs);

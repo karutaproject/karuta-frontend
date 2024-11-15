@@ -206,7 +206,7 @@ UIFactory["Node"].prototype.displayNode = function(type,root,dest,depth,langcode
 						let helps = help_items[i];
 						if (help_items[i].lastIndexOf(",")>help_items[i].lastIndexOf("@")) {
 							let roles = help_items[i].substring(help_items[i].lastIndexOf(",")+1);
-							if (roles.indexOf(this.userrole)>-1 || (roles.containsArrayElt(g_userroles) && g_userroles[0]!='designer') || USER.admin || g_userroles[0]=='designer')
+							if (roles.indexOf(this.userrole)>-1 || roles.indexOf(g_userroles[0])>-1 || USER.admin || g_userroles[0]=='designer')
 							display_help = true;
 							helps = help_items[i].substring(0,help_items[i].lastIndexOf(","));
 						} else {

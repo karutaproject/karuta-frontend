@@ -2,7 +2,7 @@
 var karuta_version = "@project.version@";
 var karuta_date = "@build.timestamp@";
 
-const karuta_version_eportfolium = "eportfolium-3.57.3";
+const karuta_version_eportfolium = "eportfolium-3.58.0";
 const karuta_date_eportfolium = "2024-11-14";
 
 var karuta_backend_version = "?";
@@ -57,3 +57,5 @@ var karuta_fileserver_date = "?";
 // 3.57.1 Fix - Error with designer playing role and node editable in line
 // 3.57.2 Fix - Error with designer playing role and node visible by designer only
 // 3.57.3 Fix - QRCode was sometimes displayed twice
+// 3.57.4 Fix - Help was displayed for role played by designer when help role is designer
+// 3.58.0 Feat - Management of plugins

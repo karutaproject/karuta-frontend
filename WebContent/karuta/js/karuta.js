@@ -3842,6 +3842,15 @@ function testFileSaved(uuid,langcode) {
 //=========================================================
 // Functions for Menus
 //=========================================================
+function addPlugin(uuid) {
+	const nodes = $("*:has(>metadata[semantictag*="+plugin-record+"])",UICom.structure.ui[uuid].node);
+	
+	for (let i=0;i<nodes.length;i++) {
+		const plugintext = $(UICom.structure.ui[$(nodes[i]).attr("id")].resource.text_node[LANGCODE]).text();
+		const srcecode = 'karuta-plugins.plugin-' + plugintext;
+	//	importBranch(uuid,srcecode,'plugin-js');
+	}
+}
 
 function testSubmitted(uuid,semtag) {
 	if (uuid == null)
