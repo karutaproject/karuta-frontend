@@ -1481,6 +1481,10 @@ UIFactory["Node"].getXmlItemMenu = function(node,parentid,item,title,databack,ca
 			onclick += "import_get_get_multiple('"+parentid+"','','"+boxlabel.replaceAll("'","&rsquo;")+"','"+parent_position+"','"+parent_semtag+"','"+search_foliocode+"','"+search_parent_semtag+"','"+search_semtag+"','"+search_object+"','"+actions+"','"+unique+"');";
 			//------------------------------------
 		}
+		else {  //maybe a plugin menu
+			if (plugin_menus[type]!=undefined)
+				onclick = plugin_menus[type](node,parentid,itemelts[i],title,databack,callback,param2,param3,param4);
+		}
 	}
 	return onclick;
 }
