@@ -1793,9 +1793,6 @@ table[name=res-div] {
   width: 10%;
   cursor: pointer;
 }
-.standard-resource-compact .dropdown-item:hover {
-  background-color: var(--portfolio-menu-background-color) !important;
-}
 
 /* ====================== */
 /*         MODEL          */

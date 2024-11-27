@@ -280,7 +280,7 @@ var UICom =
 				//----------------------------
 				var roles = null;
 				var attribute_value = replaceVariable($("metadata-wad",node).attr(attribute) != undefined ? $("metadata-wad",node).attr(attribute):"");
-				if (attribute == 'menuroles' && attribute_value.length>10) {
+				if (attribute == 'menuroles' && (attribute_value.length>10 || attribute_value.charAt(0)=="<") ) {
 					if (attribute_value.charAt(0)!="<") {
 						var items = attribute_value.split(";");
 						for (var i=0; i<items.length; i++){
