@@ -2,8 +2,8 @@
 var karuta_version = "@project.version@";
 var karuta_date = "@build.timestamp@";
 
-const karuta_version_eportfolium = "eportfolium-3.58.0";
-const karuta_date_eportfolium = "2024-11-14";
+const karuta_version_eportfolium = "eportfolium-3.58.1";
+const karuta_date_eportfolium = "2024-12-03";
 
 var karuta_backend_version = "?";
 var karuta_backend_date = "?";
@@ -59,3 +59,4 @@ var karuta_fileserver_date = "?";
 // 3.57.3 Fix - QRCode was sometimes displayed twice
 // 3.57.4 Fix - Help was displayed for role played by designer when help role is designer
 // 3.58.0 Feat - Management of plugins
+// 3.58.1 Fix - Batch - error when reexecute create-tree - 2024-12-03

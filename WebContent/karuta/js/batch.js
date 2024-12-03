@@ -1432,10 +1432,13 @@ g_actions['create-tree'] = function createTree(node)
 				ok = true;
 				$("#batch-log").append("<br>- tree already created - code:"+code);
 				var result = $("portfolio", data);
-				portfolioid = $(result).attr('id');
-				var portfolio = new Array();
-				portfolio [0] = portfolioid;
-				portfolio [1] = code;
+				const portfolio = {
+					id : $(result).attr('id'),
+					code: code,
+					label: "",
+					currentnode: [], // current node stack
+					lastimported: [], // imported node stack
+				}
 				g_trees[treeref] = portfolio;
 			},
 			error : function(data) {
