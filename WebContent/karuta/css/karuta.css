@@ -1314,6 +1314,11 @@ div.get-portfolio button.select {
 .asmUnit > div[name=lbl-div] .title {
   margin-bottom: 0.5rem;
 }
+.asmRoot > div[name=lbl-div] .title .nlabel,
+.asmStructure > div[name=lbl-div] .title .nlabel,
+.asmUnit > div[name=lbl-div] .title .nlabel {
+  color: var(--page-title-text-color);
+}
 .asmRoot > div[name=lbl-div] .title-subline,
 .asmStructure > div[name=lbl-div] .title-subline,
 .asmUnit > div[name=lbl-div] .title-subline {
@@ -3360,6 +3365,18 @@ td {
 
   .section2print {
     display: block !important;
+  }
+
+  .tab-content > .tab-pane {
+    display: block !important;
+  }
+
+  .asmUnit {
+    page-break-before: always;
+  }
+
+  .asmUnit:first-child {
+    page-break-before: avoid;
   }
 }
 /* =================================================================================================

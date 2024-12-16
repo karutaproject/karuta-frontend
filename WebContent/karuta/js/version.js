@@ -61,3 +61,4 @@ var karuta_fileserver_date = "?";
 // 3.58.0 Feat - Management of plugins
 // 3.58.1 Fix - Management of plugins : Menu elts - Roles : Error when menuroles equals <menus/>
 // 3.58.2 Fix - Batch - error when reexecute create-tree - 2024-12-03
+// 3.59.0 Feat - Configuration CSS - var page-title-text-color added - Print porfolio functionality - 2024-12-16

@@ -2890,6 +2890,7 @@ function setCSSportfolio(data,langcode)
 	//-----------PORTFOLIO COLORS------------------------------------
 	setConfigColor(root,'page-title-background-color');
 	setConfigColor(root,'page-title-subline-color');
+	setConfigColor(root,'page-title-text-color');
 	setConfigColor(root,'portfolio-background-color');
 	setConfigColor(root,'portfolio-text-color');
 	setConfigColor(root,'portfolio-buttons-background-color');
@@ -3017,6 +3018,13 @@ function setCSSportfolioOLD(data)
 		var color = UICom.structure.ui[page_title_subline_color_id].resource.getValue();
 		root.style.setProperty("--page-title-subline-color",color);
 		changeCss(".row-node-asmRoot .title-subline,.row-node-asmStructure .title-subline,.row-node-asmUnit .title-subline", "border-bottom:1px solid "+color+";");
+	}
+	//--------------------------------
+	if ($("asmContext:has(metadata[semantictag='page-title-text-color'])",data).length>0) {
+		var page_title_text_color_id = $("asmContext:has(metadata[semantictag='page-title-text-color'])",data).attr("id");
+		var color = UICom.structure.ui[page_title_text_color_id].resource.getValue();
+		root.style.setProperty("--page-title-text-color",color);
+		changeCss(".first-node . title. nlabel", "color:"+color+";");
 	}
 	//--------------------------------
 	if ($("asmContext:has(metadata[semantictag='portfolio-buttons-color'])",data).length>0) {

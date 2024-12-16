@@ -1,9 +1,10 @@
 var getObjs = ['label', 'text']
 
 if( menuElts === undefined )
-{
 	var menuElts = {};
-}
+if( plugin_menus === undefined )
+	var plugin_menus = {};
+
 
 menuElts ["menu"]= "<menu del='y'><menulabel/></menu>";
 menuElts ["item"]= "<item del='y'><itemlabel/><roles/><condition/></item>";

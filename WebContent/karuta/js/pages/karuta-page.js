@@ -284,6 +284,7 @@ function setDefaultConfigurationPortfolioVariable(data,local,langcode)
 	//----------
 	g_configDefaultVar['page-title-background-color'] = getText('config-page-title-background-color','Color','text',data,langcode);
 	g_configDefaultVar['page-title-subline-color'] = getText('config-page-title-subline-color','Color','text',data,langcode);
+	g_configDefaultVar['page-title-text-color'] = getText('config-page-title-text-color','Color','text',data,langcode);
 	g_configDefaultVar['portfolio-background-color'] = getText('config-portfolio-background-color','Color','text',data,langcode);
 	g_configDefaultVar['portfolio-text-color'] = getText('config-portfolio-text-color','Color','text',data,langcode);
 	g_configDefaultVar['portfolio-buttons-color'] = getText('config-portfolio-buttons-color','Color','text',data,langcode);
@@ -327,6 +328,7 @@ function setConfigurationPortfolioVariable(data,local,langcode)
 	//----------
 	g_configVar['page-title-background-color'] = getText('page-title-background-color','Color','text',data,langcode);
 	g_configVar['page-title-subline-color'] = getText('page-title-subline-color','Color','text',data,langcode);
+	g_configVar['page-title-text-color'] = getText('page-title-text-color','Color','text',data,langcode);
 	g_configVar['portfolio-background-color'] = getText('portfolio-background-color','Color','text',data,langcode);
 	g_configVar['portfolio-text-color'] = getText('portfolio-text-color','Color','text',data,langcode);
 	g_configVar['portfolio-buttons-color'] = getText('portfolio-buttons-color','Color','text',data,langcode);
