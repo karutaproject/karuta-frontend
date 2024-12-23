@@ -1423,14 +1423,9 @@
 	.asmStructure>div[name=lbl-div],
 	.asmUnit>div[name=lbl-div] {
 		background-color:var(--page-title-background-color);
+		color:  var(--page-title-text-color);
 		font-size:calc(var(--font-size-coeff) * 1.5rem);
 		min-height:6.25rem;
-		.title {
-			margin-bottom:0.5rem;
-			.nlabel {
-				color:  var(--page-title-text-color);
-			}
-		}
 		.title-subline {
 			border-bottom:1px solid var(--page-title-subline-color);
 			width:50px;

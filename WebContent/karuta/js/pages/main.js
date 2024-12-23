@@ -247,6 +247,16 @@ function display_main_page(portfolioid,playedrole)
 			}
 		}
 	});
+	$.ajax({
+		async:false,
+		type : "GET",
+		dataType : "xml",
+		url :  serverBCK_API+"/portfolios/portfolio/" + portfolioid,
+		success : function(data) {
+			if ($("metadata-wad",$("asmRoot",data)).attr('defaultrole')!= undefined)
+				playedrole = $("metadata-wad",$("asmRoot",data)).attr('defaultrole').trim();
+		}
+	});
 	if (g_userroles.length>1){
 		if (playedrole==undefined) {
 			let html = "";

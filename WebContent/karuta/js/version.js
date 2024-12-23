@@ -2,8 +2,8 @@
 var karuta_version = "@project.version@";
 var karuta_date = "@build.timestamp@";
 
-const karuta_version_eportfolium = "eportfolium-3.58.2";
-const karuta_date_eportfolium = "2024-12-03";
+const karuta_version_eportfolium = "eportfolium-3.60.0";
+const karuta_date_eportfolium = "2024-12-23";
 
 var karuta_backend_version = "?";
 var karuta_backend_date = "?";
@@ -62,3 +62,9 @@ var karuta_fileserver_date = "?";
 // 3.58.1 Fix - Management of plugins : Menu elts - Roles : Error when menuroles equals <menus/>
 // 3.58.2 Fix - Batch - error when reexecute create-tree - 2024-12-03
 // 3.59.0 Feat - Configuration CSS - var page-title-text-color added - Print porfolio functionality - 2024-12-16
+// 3.60.0 Feat - Configuration CSS - var page-title-text-color added - played role management - 2024-12-23
+
+
+
+
+

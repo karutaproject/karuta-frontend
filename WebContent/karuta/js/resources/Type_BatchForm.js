@@ -148,13 +148,13 @@ UIFactory['BatchForm'].getInputsLine = function(node)
 //==================================================
 {
 	let json_line = {};
-	let line_inputs = $("asmContext:has(metadata[semantictag='BatchFormInput'])",node);
+	let line_inputs = $("asmContext:has(metadata[semantictag*='BatchFormInput'])",node);
 	for ( var j = 0; j < line_inputs.length; j++) {
 		var inputid = $(line_inputs[j]).attr('id');
 		code = UICom.structure.ui[inputid].getCode().trim();
 		json_line[code] = replaceVariable(UICom.structure.ui[inputid].resource.getView(null,'batchform').trim());
 	}
-	line_inputs = $("asmContext:has(metadata[semantictag='BatchFormInputCode'])",node);
+	line_inputs = $("asmContext:has(metadata[semantictag*='BatchFormInputCode'])",node);
 	for ( var j = 0; j < line_inputs.length; j++) {
 		var inputid = $(line_inputs[j]).attr('id');
 		code = UICom.structure.ui[inputid].getCode();
