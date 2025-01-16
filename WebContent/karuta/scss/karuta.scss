@@ -740,7 +740,6 @@
 	}
 
 
-
 /* ====================== */
 /*     EDIT WINDOW        */
 /* ====================== */
@@ -1424,11 +1423,9 @@
 	.asmStructure>div[name=lbl-div],
 	.asmUnit>div[name=lbl-div] {
 		background-color:var(--page-title-background-color);
+		color:  var(--page-title-text-color);
 		font-size:calc(var(--font-size-coeff) * 1.5rem);
 		min-height:6.25rem;
-		.title {
-			margin-bottom:0.5rem;
-		}
 		.title-subline {
 			border-bottom:1px solid var(--page-title-subline-color);
 			width:50px;
@@ -1927,9 +1924,6 @@
 		.td3 {
 			width:10%;
 			cursor:pointer;
-		}
-		.dropdown-item:hover {
-			background-color:var(--portfolio-menu-background-color) !important;
 		}
 	}
 
@@ -3517,6 +3511,15 @@ table.tablesorter th.restore {
 		}
 		.section2print {
 			display:block !important;
+		}
+		.tab-content>.tab-pane {
+			display:block!important
+		}
+		.asmUnit {
+			page-break-before: always;
+		}
+		.asmUnit:first-child {
+			page-break-before: avoid;
 		}
 	}
 

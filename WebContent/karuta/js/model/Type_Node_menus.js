@@ -1,6 +1,11 @@
-let getObjs = ['label', 'text']
+var getObjs = ['label', 'text']
 
-let menuElts = {};
+if( menuElts === undefined )
+	var menuElts = {};
+if( plugin_menus === undefined )
+	var plugin_menus = {};
+
+
 menuElts ["menu"]= "<menu del='y'><menulabel/></menu>";
 menuElts ["item"]= "<item del='y'><itemlabel/><roles/><condition/></item>";
 menuElts ["function"]= "<function del='y'><js/></function>";
@@ -28,7 +33,7 @@ menuElts ["search-in-parent"]= "<search-in-parent del='y'><foliocode disabled='y
 menuElts ["search-w-parent"]= "<search-w-parent del='y'><foliocode>##parentcode##</foliocode><semtag/><object/></search-w-parent>";
 
 
-let menuItems = {};
+var menuItems = {};
 menuItems['menus']= ["menu"];
 menuItems['import']= ["trgt","function"];
 menuItems['import-component']= ["trgt","function"];
@@ -44,7 +49,7 @@ menuItems['g_actions']= ["import-component","import-elts-from","import-proxy"];
 menuItems['gg_search']= ["search-source","#or","search-in-parent","#or","search-w-parent"];
 menuItems['gg_actions']= ["import-component","import-elts-from","#line","import","import-component-w-today-date","import-today-date"];
 
-let menueltslist =[];
+var menueltslist =[];
 
 //----------------------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------------
@@ -62,7 +67,7 @@ UIFactory["Node"].getEltMenu = function(parentid,menus,targetid,title,databack,c
 	if (srce=="self")
 		srce = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",UICom.root.node)).text();
 	if (srce=='multiple'){
-		var menuelts = tag.split("//");
+		let menuelts = tag.split("//");
 		for (var j=1;j<menuelts.length;j++){
 			if (menuelts[j].indexOf("/")>-1) {
 				var items = tag.split("/");
@@ -277,7 +282,8 @@ UIFactory["Node"].prototype.displayMenus = function(dest,langcode)
 						var url = window.location.href;
 						var serverURL = url.substring(0,url.indexOf(appliname+"/")+appliname.length);
 						url = serverURL+"/karuta/htm/public.htm?i="+data+"&amp;lang="+languages[langcode];
-						$("#qrcode-"+this.id).qrcode({text:url,size:100,background: 'white'});
+						if ( $("canvas","#qrcode-"+this.id).length==0 ) //not already displayed
+							$("#qrcode-"+this.id).qrcode({text:url,size:100,background: 'white'});
 					}
 				});
 			}
@@ -1479,6 +1485,10 @@ UIFactory["Node"].getXmlItemMenu = function(node,parentid,item,title,databack,ca
 			// -----------------------------
 			onclick += "import_get_get_multiple('"+parentid+"','','"+boxlabel.replaceAll("'","&rsquo;")+"','"+parent_position+"','"+parent_semtag+"','"+search_foliocode+"','"+search_parent_semtag+"','"+search_semtag+"','"+search_object+"','"+actions+"','"+unique+"');";
 			//------------------------------------
+		}
+		else {  //maybe a plugin menu
+			if (plugin_menus[type]!=undefined)
+				onclick = plugin_menus[type](node,parentid,itemelts[i],title,databack,callback,param2,param3,param4);
 		}
 	}
 	return onclick;

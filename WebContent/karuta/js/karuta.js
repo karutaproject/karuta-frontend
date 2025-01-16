@@ -811,8 +811,11 @@ function displayBack() {
 	}
 }
 //==================================
-function displayPage(uuid,depth,type,langcode) {
+function displayPage(uuid,depth,type,langcode,edit,print) {
 //==================================
+	let original_edit = g_edit;
+	g_edit = edit;
+	//---------------------
 	if (g_backstack.length>0 && g_backstack[g_backstack.length-1].uuid!=uuid)
 		g_backstack.push({'uuid':uuid,'portfolioid': g_portfolioid});
 	else if (g_backstack.length==0)
@@ -828,6 +831,8 @@ function displayPage(uuid,depth,type,langcode) {
 		type = "standard";
 	if (langcode==null)
 		langcode = LANGCODE;
+	if (print==null)
+		print = false;
 	//---------------------
 	var scrollTop = window.pageYOffset || document.documentElement.scrollTop; 
 	var scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
@@ -868,7 +873,7 @@ function displayPage(uuid,depth,type,langcode) {
 	var name = $(UICom.structure.ui[uuid].node).prop("nodeName");
 	if (depth==null)
 		depth=100;
-	if ( (name=='asmRoot' || name=='asmStructure'))
+	if ( !print && (name=='asmRoot' || name=='asmStructure'))
 		depth = 1;
 	if (UICom.structure.tree[uuid]!=null) {
 		if (type=='standard') {
@@ -879,6 +884,8 @@ function displayPage(uuid,depth,type,langcode) {
 				UIFactory['Node'].displayWelcomePage(UICom.structure.tree[uuid],'contenu',depth,langcode,g_edit);
 			else
 				UICom.structure.ui[uuid].displayNode('standard',UICom.structure.tree[uuid],'contenu',depth,langcode,g_edit);
+			if (print && name=='asmRoot')
+				$("#node_"+uuid).removeClass("asmRoot");
 		}
 		if (type=='translate')
 			UICom.structure.ui[uuid].displayTranslateNode(type,UICom.structure.tree[uuid],'contenu',depth,langcode,g_edit);
@@ -1027,6 +1034,7 @@ function previewPage(uuid,depth,type,langcode,edit,reload)
 			}
 		});
 	}
+		g_edit = original_edit;
 }
 
 //==================================
@@ -3842,6 +3850,15 @@ function testFileSaved(uuid,langcode) {
 //=========================================================
 // Functions for Menus
 //=========================================================
+function addPlugin(uuid) {
+	const nodes = $("*:has(>metadata[semantictag*="+plugin-record+"])",UICom.structure.ui[uuid].node);
+	
+	for (let i=0;i<nodes.length;i++) {
+		const plugintext = $(UICom.structure.ui[$(nodes[i]).attr("id")].resource.text_node[LANGCODE]).text();
+		const srcecode = 'karuta-plugins.plugin-' + plugintext;
+	//	importBranch(uuid,srcecode,'plugin-js');
+	}
+}
 
 function testSubmitted(uuid,semtag) {
 	if (uuid == null)

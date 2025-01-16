@@ -2,8 +2,8 @@
 var karuta_version = "@project.version@";
 var karuta_date = "@build.timestamp@";
 
-const karuta_version_eportfolium = "eportfolium-3.56.1";
-const karuta_date_eportfolium = "2024-11-05";
+const karuta_version_eportfolium = "eportfolium-3.61.0";
+const karuta_date_eportfolium = "2024-12-31";
 
 var karuta_backend_version = "?";
 var karuta_backend_date = "?";
@@ -53,3 +53,19 @@ var karuta_fileserver_date = "?";
 // 3.55.1 Fix -  Get_Resource - portfolio cleancode deleted (@ in portfoliocode was deleted) 2024-09-03
 // 3.56.0 Fix-Feat -  Fix type_node (username test) - Fix Get_resource (when image file is missing) - Feat - js when eltDisplayed  2024-11-01
 // 3.56.1 Fix - importnode did not work with tree reference - 2024-11-05
+// 3.57.0 Feat - Stack for current node and imported node in batch
+// 3.57.1 Fix - Error with designer playing role and node editable in line
+// 3.57.2 Fix - Error with designer playing role and node visible by designer only
+// 3.57.3 Fix - QRCode was sometimes displayed twice
+// 3.57.4 Fix - Help was displayed for role played by designer when help role is designer
+// 3.58.0 Feat - Management of plugins
+// 3.58.1 Fix - Management of plugins : Menu elts - Roles : Error when menuroles equals <menus/>
+// 3.58.2 Fix - Batch - error when reexecute create-tree - 2024-12-03
+// 3.59.0 Feat - Configuration CSS - var page-title-text-color added - Print porfolio functionality - 2024-12-16
+// 3.60.0 Feat - Configuration CSS - var page-title-text-color added - played role management - 2024-12-23
+// 3.61.0 Feat - Get_Resource checkbox in view mode - 2024-12-31
+
+
+
+
+

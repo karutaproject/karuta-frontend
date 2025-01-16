@@ -171,7 +171,7 @@ UIFactory["Node"].prototype.displayNode = function(type,root,dest,depth,langcode
 			var readnode = true; // if we got the node the node is readable
 			if (g_designerrole)  // in designer mode depending the role played the node may be not readable
 				readnode = (g_userroles[0]=='designer' 
-							|| this.seenoderoles.indexOf(USER.username_node.text())>-1 || this.seenoderoles.containsArrayElt(g_userroles) || (this.showtoroles.containsArrayElt(g_userroles) && !this.privatevalue) || (this.showtoroles.indexOf(USER.username_node.text())>-1 && !this.privatevalue) || this.seenoderoles.indexOf('all')>-1)? true : false;
+							|| this.seenoderoles.indexOf(USER.username_node.text())>-1 || this.seenoderoles.indexOf(g_userroles[0])>-1 || (this.showtoroles.indexOf(g_userroles[0])>-1 && !this.privatevalue) || (this.showtoroles.indexOf(USER.username_node.text())>-1 && !this.privatevalue) || this.seenoderoles.indexOf('all')>-1)? true : false;
 			//----------------------------------------------
 			if( this.depth < 0 || !readnode) return;
 			//----------------edit control on proxy target ------------
@@ -206,7 +206,7 @@ UIFactory["Node"].prototype.displayNode = function(type,root,dest,depth,langcode
 						let helps = help_items[i];
 						if (help_items[i].lastIndexOf(",")>help_items[i].lastIndexOf("@")) {
 							let roles = help_items[i].substring(help_items[i].lastIndexOf(",")+1);
-							if (roles.indexOf(this.userrole)>-1 || (roles.containsArrayElt(g_userroles) && g_userroles[0]!='designer') || USER.admin || g_userroles[0]=='designer')
+							if (roles.indexOf(this.userrole)>-1 || roles.indexOf(g_userroles[0])>-1 || USER.admin || g_userroles[0]=='designer')
 							display_help = true;
 							helps = help_items[i].substring(0,help_items[i].lastIndexOf(","));
 						} else {

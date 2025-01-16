@@ -1,5 +1,6 @@
-
-karutaStr['fr'] = new Array();
+if(karutaStr['fr'] === undefined ) {
+		karutaStr['fr'] = new Array();
+	}
 
 //----------------------------------------------------
 karutaStr['fr']['language']="Français";
