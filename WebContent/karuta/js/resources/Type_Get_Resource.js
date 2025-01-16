@@ -204,6 +204,8 @@ UIFactory["Get_Resource"].prototype.getView = function(dest,type,langcode,indash
 	if (langcode==null)
 		langcode = LANGCODE;
 	//---------------------
+	if (type==undefined || type==null)
+		type = $("metadata-wad",this.node).attr('seltype');
 	if (type==null)
 		type = "default";
 	//---------------------
@@ -328,54 +330,63 @@ UIFactory["Get_Resource"].prototype.getView = function(dest,type,langcode,indash
 	//--------------------------------------------------
 	} else {
 		if (type!="batchform") {
-			if (indashboard)
-				html += "<span class='"+cleanCode(code)+"' style='";
-			else
-				html += "<div class='"+cleanCode(code)+" view-div' style='";
-			html += style;
-			html += "'>";
-			if (code.indexOf("#")>-1 && code.indexOf("##")<0) 
-				html += "<span name='code'>" + cleanCode(code) + "</span> ";
-			if (code.indexOf("*")>-1)
-				html += "<span name='code'>" + cleanCode(code) + "</span> ";
-			if (code.indexOf("%")<0) {
-				if (label.indexOf("fileid-")>-1) {
-					if (UICom.structure.ui[label.substring(7)]==undefined)
-						$.ajax({
-							async: false,
-							type : "GET",
-							dataType : "xml",
-							url : serverBCK_API+"/nodes/node/" + label.substring(7),
-							success : function(data) {
-								UICom.parseStructure(data,false);
-								html += UICom.structure.ui[label.substring(7)].resource.getView();
-							},
-							error : function() {
-								html += "Error file not found:" + label.substring(7);
-							}
-						});
-				} else {
-					html += "<span name='label'>" + label + "</span> ";
-				}
-			}
-			if (code.indexOf("&")>-1)
-				html += " ["+$(this.value_node).text()+ "] ";
-			if (this.preview){
-				let js = "previewPage('"+this.uuid_node.text()+"',100,'standard')";
-				if (this.previewsharing!=""){
-					options = this.previewsharing.split(",");
-					if (options[3].indexOf(g_userroles[0])>-1){
-						//-------------------------------------------sharerole,level,duration,role
-						const previewURL = getPreviewSharedURL(this.uuid_node.text(),options[0],options[1],options[2],g_userroles[0])
-						js = "previewPage('"+previewURL+"',100,'previewURL',null,true)";
+			if (type=="checkbox") {
+				html += "<input id='html_"+self.id+"' class='checkbox-div' type='checkbox' name='checkbox_"+self.id+"' style='' ";
+				if (code.indexOf('1')>-1)
+					html += " checked ";
+				html +=" disabled='disabled' ";
+					html += "&nbsp;"+label;
+				html += "</span></input>";
+			} else {
+				if (indashboard)
+					html += "<span class='"+cleanCode(code)+"' style='";
+				else
+					html += "<div class='"+cleanCode(code)+" view-div' style='";
+				html += style;
+				html += "'>";
+				if (code.indexOf("#")>-1 && code.indexOf("##")<0) 
+					html += "<span name='code'>" + cleanCode(code) + "</span> ";
+				if (code.indexOf("*")>-1)
+					html += "<span name='code'>" + cleanCode(code) + "</span> ";
+				if (code.indexOf("%")<0) {
+					if (label.indexOf("fileid-")>-1) {
+						if (UICom.structure.ui[label.substring(7)]==undefined)
+							$.ajax({
+								async: false,
+								type : "GET",
+								dataType : "xml",
+								url : serverBCK_API+"/nodes/node/" + label.substring(7),
+								success : function(data) {
+									UICom.parseStructure(data,false);
+									html += UICom.structure.ui[label.substring(7)].resource.getView();
+								},
+								error : function() {
+									html += "Error file not found:" + label.substring(7);
+								}
+							});
+					} else {
+						html += "<span name='label'>" + label + "</span> ";
 					}
 				}
-				html+= "&nbsp;<span class='button preview-button fas fa-binoculars' onclick=\" "+ js +" \" data-title='"+karutaStr[LANG]["preview"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
+				if (code.indexOf("&")>-1)
+					html += " ["+$(this.value_node).text()+ "] ";
+				if (this.preview){
+					let js = "previewPage('"+this.uuid_node.text()+"',100,'standard')";
+					if (this.previewsharing!=""){
+						options = this.previewsharing.split(",");
+						if (options[3].indexOf(g_userroles[0])>-1){
+							//-------------------------------------------sharerole,level,duration,role
+							const previewURL = getPreviewSharedURL(this.uuid_node.text(),options[0],options[1],options[2],g_userroles[0])
+							js = "previewPage('"+previewURL+"',100,'previewURL',null,true)";
+						}
+					}
+					html+= "&nbsp;<span class='button preview-button fas fa-binoculars' onclick=\" "+ js +" \" data-title='"+karutaStr[LANG]["preview"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
+				}
+				if (indashboard)
+					html += "</span>";
+				else
+					html += "</div>";
 			}
-			if (indashboard)
-				html += "</span>";
-			else
-				html += "</div>";
 		} else {	// type=='batchform'
 			html = label;
 		}
@@ -1500,21 +1511,21 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 			input += " checked ";
 		input += "><span id='label_"+self.id+"'>";
 		if (self_code==checkboxs[1].code)
-			input += "&nbsp;"+checkboxs[1].label;
+			input += "&nbsp;"+checkboxs[1].label[langcode];
 		else
-			input += "&nbsp;"+checkboxs[0].label;
+			input += "&nbsp;"+checkboxs[0].label[langcode];
 		input += "</span></input>";
 		var obj = $(input);
 		$(obj).click(function (){
 			UIFactory["Get_Resource"].update(this,self,langcode,type);
 			if (this.checked) {
-				$("#label_"+self.id).html("&nbsp;"+checkboxs[1].label);
+				$("#label_"+self.id).html("&nbsp;"+checkboxs[1].label[langcode]);
 				$("#input_"+self.id).attr("code",checkboxs[0].code);
 				for (var j=0; j<languages.length;j++){		
 					$("#input_"+self.id).attr("label_"+languages[j],checkboxs[0].label[j]);
 				}
 			} else {
-				$("#label_"+self.id).html("&nbsp;"+checkboxs[0].label);
+				$("#label_"+self.id).html("&nbsp;"+checkboxs[0].label[langcode]);
 				$("#input_"+self.id).attr("code",checkboxs[1].code);
 				for (var j=0; j<languages.length;j++){		
 					$("#input_"+self.id).attr("label_"+languages[j],checkboxs[1].label[j]);
