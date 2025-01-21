@@ -1573,6 +1573,8 @@ UIFactory["Node"].displaySidebar = function(root,destid,type,langcode,edit,paren
 			let langnotvisible = ($(node.metadatawad).attr('langnotvisible')==undefined)?'':$(node.metadatawad).attr('langnotvisible');
 			let privatevalue = ($(node.metadatawad).attr('private')==undefined)?false:$(node.metadatawad).attr('private')=='Y';
 			let resource_type = UICom.structure.ui[uuid].resource_type;
+			let semantictag = UICom.structure.ui[uuid].semantictag;
+
 			//--------------------------------------------------
 			if (i==0 && resource_type!=null && resource_type == "URL2Portfolio") {
 				$("#portfolio_bar").show();
@@ -1598,7 +1600,7 @@ UIFactory["Node"].displaySidebar = function(root,destid,type,langcode,edit,paren
 					html += "<div class='dropdown-submenu";
 					if (privatevalue)
 						html+= "private"
-					html += "' id='parent-"+uuid+"' role='tabdivst'>";
+					html += "' id='parent-"+uuid+"' role='tabdivst' name='"+semantictag+"'>";
 					html += "<div class='dropdown-item' style='cursor:pointer ";
 					if (g_configVar['portfolio-hmenu-logo']!="" && uuid==welcomeid)
 						html += ";display:none";
@@ -1621,7 +1623,7 @@ UIFactory["Node"].displaySidebar = function(root,destid,type,langcode,edit,paren
 					html += "<div class='dropdown-submenu";
 					if (privatevalue)
 						html+= "private"
-					html += "' id='parent-"+uuid+"' role='tabdivst'>";
+					html += "' id='parent-"+uuid+"' role='tabdivst' name='"+semantictag+"'>";
 					html += "<div class='dropdown-item' style='cursor:pointer' onclick=\"displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+")\" id='sidebar_"+uuid+"'>"+text+"</div>";
 					html += "<div id='dropdown"+uuid+"' class='dropdown-menu dropdown-menu-right nodisplay' aria-labelledby='sidebar_"+uuid+"'></div>";
 					html += "</div>";

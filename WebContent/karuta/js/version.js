@@ -2,8 +2,8 @@
 var karuta_version = "@project.version@";
 var karuta_date = "@build.timestamp@";
 
-const karuta_version_eportfolium = "eportfolium-3.61.0";
-const karuta_date_eportfolium = "2024-12-31";
+const karuta_version_eportfolium = "eportfolium-3.62.0";
+const karuta_date_eportfolium = "2025-01-19";
 
 var karuta_backend_version = "?";
 var karuta_backend_date = "?";
@@ -64,6 +64,7 @@ var karuta_fileserver_date = "?";
 // 3.59.0 Feat - Configuration CSS - var page-title-text-color added - Print porfolio functionality - 2024-12-16
 // 3.60.0 Feat - Configuration CSS - var page-title-text-color added - played role management - 2024-12-23
 // 3.61.0 Feat - Get_Resource checkbox in view mode - 2024-12-31
+// 3.62.0 Feat - New:  semanictag not-visible-in-menu - 2025-01-19
 
 
 

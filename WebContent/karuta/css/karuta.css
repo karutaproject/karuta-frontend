@@ -1,5 +1,5 @@
 @charset "UTF-8";
-/* copyright eportfolium 2021 */
+/* copyright eportfolium 2025 */
 /* ====================== */
 /*     DEFAULT VALUES     */
 /* ====================== */
@@ -765,6 +765,14 @@ body,
 /* ====================== */
 /*    BUTTONS - MENUS     */
 /* ====================== */
+div.dropdown-submenu[name=not-visible-in-menu] {
+  display: none;
+}
+
+body[userrole=designer] div.dropdown-submenu[name=not-visible-in-menu] {
+  display: block;
+}
+
 .dropdown.menu .btn {
   height: 25px;
   padding-left: 9px;
