@@ -96,6 +96,27 @@ Selector = function(jquery,type,filter1,filter2,unique)
 	this.unique = unique
 };
 
+//==================================
+function initVariables(action)
+//==================================
+{
+	var ref_init = $(action).attr("ref-init");
+	if (ref_init!=undefined) {
+		ref_init = replaceVariable(ref_init);
+		var ref_inits = ref_init.split("/"); // ref1/ref2/...
+		for (let k=0;k<ref_inits.length;k++)
+		if (ref_inits[k].indexOf(ref_inits[k])>-1) {
+			for (v in g_variables) {
+				if (v.indexOf('$')>-1)
+					delete g_variables[v];
+			}
+		}
+			else {
+			g_variables[ref_inits[k]] = new Array();
+		}
+	}
+}
+
 
 //==================================
 function r_getTest(test)
@@ -676,18 +697,12 @@ g_report_actions['for-each-node'] = function (destid,action,no,data)
 {
 	var select = $(action).attr("select");
 	var test = $(action).attr("test");
-	var countvar = $(action).attr("countvar");
+	var countvar = replaceVariable($(action).attr("countvar"));
 	if (countvar!=undefined)
 		g_variables[countvar] = 0;
 	var portfoliocode = $(action).attr("portfolio");
 	//----------------------------------
- 	var ref_init = $(action).attr("ref-init");
- 	if (ref_init!=undefined) {
- 		ref_init = replaceVariable(ref_init);
- 		var ref_inits = ref_init.split("/"); // ref1/ref2/...
- 		for (let k=0;k<ref_inits.length;k++)
- 			g_variables[ref_inits[k]] = new Array();
- 	}
+	initVariables(action)
 	//----------------------------------
  	if (test!=undefined) 
 		test = replaceVariable(test);
@@ -782,13 +797,7 @@ g_report_actions['for-each-node-js'] = function (destid,action,no,data)
 		if (countvar!=undefined) {
 			g_variables[countvar] = j;
 		}
-		var ref_init = $(action).attr("ref-init");
-		if (ref_init!=undefined) {
-			ref_init = replaceVariable(ref_init);
-			var ref_inits = ref_init.split("/"); // ref1/ref2/...
-			for (let i=0;i<ref_inits.length;i++)
-				g_variables[ref_inits[i]] = new Array();
-		}
+		initVariables(action);
 		nodeid = nodeids[j];
 		if (nodevar!=undefined) {
 			g_variables[nodevar] = nodeid;
@@ -843,13 +852,7 @@ g_report_actions['loop'] = function (destid,action,no,data)
 				g_variables[variable] = j;
 		}
 		//---------------------------
-		var ref_init = $(action).attr("ref-init");
-		if (ref_init!=undefined) {
-			ref_init = replaceVariable(ref_init);
-			var ref_inits = ref_init.split("/"); // ref1/ref2/...
-			for (var k=0;k<ref_inits.length;k++)
-				g_variables[ref_inits[k]] = new Array();
-		}
+		initVariables(action);
 		//---------------------------
 		var actions = $(action).children();
 		for (let i=0; i<actions.length;i++){
@@ -931,13 +934,7 @@ g_report_actions['table'] = function (destid,action,no,data)
 //==================================
 {
 	//---------------------------
-	var ref_init = $(action).attr("ref-init");
-	if (ref_init!=undefined) {
-		ref_init = replaceVariable(ref_init);
-		var ref_inits = ref_init.split("/"); // ref1/ref2/...
-		for (var k=0;k<ref_inits.length;k++)
-			g_variables[ref_inits[k]] = new Array();
-	}
+	initVariables(action);
 	//---------------------------
 	var style = replaceVariable($(action).attr("style"));
 	var cssclass = replaceVariable($(action).attr("class"));
@@ -967,13 +964,7 @@ g_report_actions['row'] = function (destid,action,no,data)
 //==================================
 {
 	//---------------------------
-	var ref_init = $(action).attr("ref-init");
-	if (ref_init!=undefined) {
-		ref_init = replaceVariable(ref_init);
-		var ref_inits = ref_init.split("/"); // ref1/ref2/...
-		for (var k=0;k<ref_inits.length;k++)
-			g_variables[ref_inits[k]] = new Array();
-	}
+	initVariables(action);
 	//---------------------------
 	var style = replaceVariable($(action).attr("style"));
 	var cssclass = replaceVariable($(action).attr("class"));
@@ -1043,13 +1034,7 @@ function tableelt(type,destid,action,no,data)
 //==================================
 {
 	//---------------------------
-	var ref_init = $(action).attr("ref-init");
-	if (ref_init!=undefined) {
-		ref_init = replaceVariable(ref_init);
-		var ref_inits = ref_init.split("/"); // ref1/ref2/...
-		for (var k=0;k<ref_inits.length;k++)
-			g_variables[ref_inits[k]] = new Array();
-	}
+	initVariables(action);
 	//---------------------------
 	var style = replaceVariable($(action).attr("style"));
 	var cssclass = replaceVariable($(action).attr("class"));
@@ -1138,13 +1123,7 @@ g_report_actions['for-each-person'] = function (destid,action,no,data)
 						g_variables[countvar] = j;
 					}
 					//------------------------------------
-					var ref_init = $(action).attr("ref-init");
-					if (ref_init!=undefined) {
-						ref_init = replaceVariable(ref_init);
-						var ref_inits = ref_init.split("/"); // ref1/ref2/...
-						for (let i=0;i<ref_inits.length;i++)
-							g_variables[ref_inits[i]] = new Array();
-					}
+					initVariables(action);
 					//------------------------------------
 					if (comparator=="=")
 						condition = $(UsersActive_list[j].attributes[attribute]).text() == value;
@@ -1410,13 +1389,7 @@ g_report_actions['for-each-portfolio'] = function (destid,action,no,data)
 				if (countvar!=undefined) {
 					g_variables[countvar] = j;
 				}
-				var ref_init = $(action).attr("ref-init");
-				if (ref_init!=undefined) {
-					ref_init = replaceVariable(ref_init);
-					var ref_inits = ref_init.split("/"); // ref1/ref2/...
-					for (let i=0;i<ref_inits.length;i++)
-						g_variables[ref_inits[i]] = new Array();
-				}
+				initVariables(action);
 				var code = items_list[j].code_node.text();
 				//------------------------------------
 				if (select.indexOf("code*=")>-1) {
@@ -1513,13 +1486,7 @@ g_report_actions['for-each-portfolio-js'] = function (destid,action,no,data)
 		if (countvar!=undefined) {
 			g_variables[countvar] = j;
 		}
-		var ref_init = $(action).attr("ref-init");
-		if (ref_init!=undefined) {
-			ref_init = replaceVariable(ref_init);
-			var ref_inits = ref_init.split("/"); // ref1/ref2/...
-			for (let i=0;i<ref_inits.length;i++)
-				g_variables[ref_inits[i]] = new Array();
-		}
+		initVariables(action);
 		portfolioid = portfolioids[j];
 		if (portfoliovar!=undefined) {
 			g_variables[portfoliovar] = portfolioid;
@@ -1571,13 +1538,7 @@ g_report_actions['for-each-portfolios-nodes'] = function (destid,action,no,data)
 	var userid = USER.id;
 	var items_list = [];
 	//----------------------------------
-	var ref_init = $(action).attr("ref-init");
-	if (ref_init!=undefined) {
-		ref_init = replaceVariable(ref_init);
-		var ref_inits = ref_init.split("/"); // ref1/ref2/...
-		for (var k=0;k<ref_inits.length;k++)
-			g_variables[ref_inits[k]] = new Array();
-	}
+	initVariables(action);
 	//----------------------------------
 	$.ajax({
 		async:false,
@@ -2168,6 +2129,7 @@ g_report_actions['variable'] = function (destid,action,no,data)
 	//------------------------------
 	g_variables[varlabel] = text;
 	if (ref!=undefined && ref!="") {
+		ref = replaceVariable(ref);
 		if (g_variables[ref]==undefined)
 			g_variables[ref] = new Array();
 		g_variables[ref][g_variables[ref].length] = text;
@@ -3167,13 +3129,7 @@ g_report_actions['for-each-vector'] = function (destid,action,no,data)
 		if (countvar!=undefined) {
 			g_variables[countvar] = j;
 		}
-		var ref_init = $(action).attr("ref-init");
-		if (ref_init!=undefined) {
-			ref_init = replaceVariable(ref_init);
-			var ref_inits = ref_init.split("/"); // ref1/ref2/...
-			for (let i=0;i<ref_inits.length;i++)
-				g_variables[ref_inits[i]] = new Array();
-		}
+		initVariables(action);
 		let date = $(vectors[j]).attr('date');
 		let a1 = $("a1",vectors[j]).text();
 		let a2 = $("a2",vectors[j]).text();
