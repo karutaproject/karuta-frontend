@@ -88,6 +88,19 @@ body,
   font-style: italic;
 }
 
+.ellipsis {
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ellipsis:hover {
+  white-space: normal;
+  height: auto;
+  overflow: visible;
+  background-color: #f0efef;
+}
+
 /* ====================== */
 /*    @DRAFT@       */
 /* ====================== */
