@@ -954,7 +954,10 @@ g_report_actions['table'] = function (destid,action,no,data)
 	if (cssclass!=undefined && cssclass.indexOf('tablesorter')>-1)
 		$("#"+destid+'-'+no).tablesorter({
 			dateFormat: "ddmmyyyy",
-			sortList: [[0,0]]
+			sortList: [[0,0]],	
+			headers: {
+				1: { sorter: "shortDate"}
+				}
 		});
 
 }

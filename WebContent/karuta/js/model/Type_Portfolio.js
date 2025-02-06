@@ -461,7 +461,7 @@ UIFactory["Portfolio"].displayHorizontalMenu = function(root,destid,type,langcod
 	html += "		<ul id='parent-"+rootid+"' class='navbar-nav topbarmenu'></ul>";
 	html += "	</div>";
 	$("#"+destid).html($(html));
-	UIFactory.Node.displayHorizontalMenu(root,'parent-'+UICom.rootid,type,langcode,edit,rootid);
+	UIFactory.Node.displayHorizontalMenu(root,'parent-'+rootid,type,langcode,edit,rootid);
 };
 
 //======================

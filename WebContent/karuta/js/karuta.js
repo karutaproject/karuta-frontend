@@ -59,6 +59,7 @@ var g_roles = []; // list of portfolio roles for designer
 var g_variables = {}; // variables for substitution in Get_resource and menus
 var g_importednodestack = [];
 var g_backstack = [];
+var g_menubarstack = [];
 
 //-------------- used for designer-----
 var redisplays = {};
@@ -833,6 +834,9 @@ function displayPage(uuid,depth,type,langcode,edit,print) {
 		langcode = LANGCODE;
 	if (print==null)
 		print = false;
+	if (print)
+		$('#wait-window').modal('show');
+
 	//---------------------
 	var scrollTop = window.pageYOffset || document.documentElement.scrollTop; 
 	var scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
@@ -884,8 +888,10 @@ function displayPage(uuid,depth,type,langcode,edit,print) {
 				UIFactory['Node'].displayWelcomePage(UICom.structure.tree[uuid],'contenu',depth,langcode,g_edit);
 			else
 				UICom.structure.ui[uuid].displayNode('standard',UICom.structure.tree[uuid],'contenu',depth,langcode,g_edit);
-			if (print && name=='asmRoot')
+			if (print && name=='asmRoot') {
 				$("#node_"+uuid).removeClass("asmRoot");
+				$("#node_"+uuid).addClass("printView");
+			}
 		}
 		if (type=='translate')
 			UICom.structure.ui[uuid].displayTranslateNode(type,UICom.structure.tree[uuid],'contenu',depth,langcode,g_edit);

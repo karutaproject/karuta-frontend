@@ -141,8 +141,6 @@
 		cursor : pointer;
 	}
 
-
-
 /* ====================== */
 /*    LIST- WELCOME       */
 /* ====================== */
@@ -937,7 +935,21 @@
 		}
 	}
 
-	#menu_bar {
+	.hide-structure {
+		.asmUnit, .asmStructure {
+			display:none;
+		}
+	}
+	
+	.menu_bar {
+		padding-top:0px;
+	}
+	
+	#menu_bar + .menu_bar {
+		margin-top:-1.3em;
+	}
+
+	#menu_bar, .menu_bar {
 		background-color: var(--portfolio-sidebar-background-color);
 		color: var(--portfolio-sidebar-text-color);
 		.dropdown-menu {
@@ -3464,6 +3476,17 @@ table.tablesorter th.restore {
 		margin-top: -45px;
 		margin-left: 20px;
 	}
+
+/* ====================== */
+/*    PORTFOLIO PRINT VIEW       */
+/* ====================== */
+	.asmRoot .fa-print {
+		display:none;
+	}
+	.root .printView .section2hide{
+		display:none;
+	}
+
 
 /* ===========================
 	PRINT STYLESHEET
