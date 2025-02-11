@@ -956,7 +956,7 @@ g_report_actions['table'] = function (destid,action,no,data)
 			dateFormat: "ddmmyyyy",
 			sortList: [[0,0]],	
 			headers: {
-				1: { sorter: "shortDate"}
+				1: { sorter: "shortDate", dateFormat: "ddmmyyyy" }
 				}
 		});
 

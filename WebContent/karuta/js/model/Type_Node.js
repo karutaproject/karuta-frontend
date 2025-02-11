@@ -1586,8 +1586,11 @@ UIFactory["Node"].displaySidebar = function(root,destid,type,langcode,edit,paren
 			let langnotvisible = ($(node.metadatawad).attr('langnotvisible')==undefined)?'':$(node.metadatawad).attr('langnotvisible');
 			let privatevalue = ($(node.metadatawad).attr('private')==undefined)?false:$(node.metadatawad).attr('private')=='Y';
 			let resource_type = UICom.structure.ui[uuid].resource_type;
-			let semantictag = UICom.structure.ui[uuid].semantictag;
-			let hm = (semantictag.indexOf('sub-menu')>-1)
+			const semantictag = UICom.structure.ui[uuid].semantictag;
+			const hm = (semantictag.indexOf('sub-menu')>-1);
+			const onelevel = (semantictag.indexOf('one-level-menu')>-1);
+			
+
 
 
 			//--------------------------------------------------
@@ -1647,11 +1650,11 @@ UIFactory["Node"].displaySidebar = function(root,destid,type,langcode,edit,paren
 						js += "displaySubMenu('"+uuid+"');";
 					}
 					html += "<div class='dropdown-item' style='cursor:pointer' onclick=\""+js+"displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+")\" id='sidebar_"+uuid+"'>"+text+"</div>";
-					if (!hm)
+					if (!hm && !onelevel)
 						html += "<div id='dropdown"+uuid+"' class='dropdown-menu dropdown-menu-right nodisplay' aria-labelledby='sidebar_"+uuid+"'></div>";
 					html += "</div>";
 					$("#"+destid).append($(html));
-					if (!hm)
+					if (!hm && !onelevel)
 						UIFactory["Node"].displayHorizontalMenu(UICom.structure.tree[root.children[i]],'dropdown'+uuid,type,langcode,g_edit,uuid,1);
 				}
 				if (name=='asmContext' && resource_type == "URL2Portfolio") {

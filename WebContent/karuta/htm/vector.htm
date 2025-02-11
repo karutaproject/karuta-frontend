@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"> 
 <head>
-<script src="../../other/js/jquery-3.3.1.min.js?v=3.68.0"></script>
-<script src="../js/karuta.js?v=3.68.0"></script>
+<script src="../../other/js/jquery-3.3.1.min.js?v=3.69.0"></script>
+<script src="../js/karuta.js?v=3.69.0"></script>
 <style>
 	input {width:100px}
 </style>
@@ -141,6 +141,12 @@ $.ajax({
 </head>
 <body>
 <h2>KARUTA Vector Management</h2>
+<button style='background-color:green;color:white' onclick='displayvectors()'>Search</button>
+<button class='danger' onclick="if (confirm('Delete?'))deletevectors()">Delete</button>
+<button onclick='$("#report").html("")'>Clear</button>
+<button onclick='location.reload()'>Clear All</button>
+<br><br>
+
 <table>
 <tr>
 	<th>userid/date</th><th>a1</th><th>a2</th><th>a3</th><th>a4</th><th>a5</th><th>a6</th><th>a7</th><th>a8</th><th>a9</th><th>a10</th>
@@ -158,10 +164,5 @@ $.ajax({
 <tbody id="report">
 </tbody>
 </table>
-<br>
-<button style='background-color:green;color:white' onclick='displayvectors()'>Search</button>
-<button class='danger' onclick="if (confirm('Delete?'))deletevectors()">Delete</button>
-<button onclick='$("#report").html("")'>Clear</button>
-<button onclick='location.reload()'>Clear All</button>
 </body>
 </html>
