@@ -886,7 +886,7 @@ UIFactory["Node"].prototype.updateLabel = function(langcode)
 	var label = sanitizeText($.trim($("#label_"+this.id+"_"+langcode).val()));
 	$(this.label_node[langcode]).text(label);
 	$(UICom.structure.ui[this.id].label_node[LANGCODE]).text(label);
-	$("label[lang='"+languages[langcode]+"']",$("asmResource[xsi_type='nodeRes']",$("#"+this.id,g_portfolio_current))).text(label);// new
+	$("label[lang='"+languages[langcode]+"']",$("asmResource[xsi_type='nodeRes']",$("#"+this.id,g_portfolio_current))[0]).text(label);// new
 	//---------------------
 	if (!this.multilingual) {
 		for (var i=0; i<languages.length; i++) {
@@ -923,17 +923,18 @@ UIFactory["Node"].prototype.update = function(langcode)
 			$(this.value_node).text(value);
 			$(UICom.structure.ui[this.id].value_node).text(value);
 			$("value",$("asmResource[xsi_type='nodeRes']",$("#"+this.id,g_portfolio_current))[0]).text(value); // new
+		}
 		//---------------------
 		var label = sanitizeText($.trim($("#label_"+this.id+"_"+langcode).val()));
 		$(this.label_node[langcode]).text(label);
 		$(UICom.structure.ui[this.id].label_node[langcode]).text(label);
-		$("label[lang='"+languages[langcode]+"']",$("asmResource[xsi_type='nodeRes']",$("#"+this.id,g_portfolio_current))).text(label);// new
+		$("label[lang='"+languages[langcode]+"']",$("asmResource[xsi_type='nodeRes']",$("#"+this.id,g_portfolio_current))[0]).text(label);// new
 		//---------------------
 		if (!this.multilingual) {
 			for (var i=0; i<languages.length; langcode++) {
 				$(this.label_node[i]).text(label);
 				$(UICom.structure.ui[this.id].label_node[i]).text(label);
-				$("label[lang='"+languages[i]+"']",$("asmResource[xsi_type='nodeRes']",$("#"+this.id,g_portfolio_current))).text(label);// new
+				$("label[lang='"+languages[i]+"']",$("asmResource[xsi_type='nodeRes']",$("#"+this.id,g_portfolio_current))[0]).text(label);// new
 			}
 		}
 		//---------------------
