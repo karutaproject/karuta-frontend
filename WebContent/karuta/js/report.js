@@ -104,15 +104,15 @@ function initVariables(action)
 	if (ref_init!=undefined) {
 		ref_init = replaceVariable(ref_init);
 		var ref_inits = ref_init.split("/"); // ref1/ref2/...
-		for (let k=0;k<ref_inits.length;k++)
-		if (ref_inits[k].indexOf(ref_inits[k])>-1) {
-			for (v in g_variables) {
-				if (v.indexOf('$')>-1)
-					delete g_variables[v];
+		for (let k=0;k<ref_inits.length;k++) {
+			if (ref_inits[k].indexOf('$')>-1) {
+				for (v in g_variables) {
+					if (v.indexOf(ref_inits[k])>-1)
+						delete g_variables[v];
+				}
+			} else {
+				g_variables[ref_inits[k]] = new Array();
 			}
-		}
-			else {
-			g_variables[ref_inits[k]] = new Array();
 		}
 	}
 }
