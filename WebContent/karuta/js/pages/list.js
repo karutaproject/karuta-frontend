@@ -75,7 +75,7 @@ function fill_list_page()
 	html += "		<div id='portfolio-search' class='search'></div>";
 	html += "		<div id='portfolio-rightside-title' class='title'></div>";
 	html += "		<div id='portfolio-rightside-header' class='header'></div>";
-	html += "		<div id='portfolio-rightside-content1' class='content1'><img src='../img/Spinner-3.gif'/></div>";
+	html += "		<div id='portfolio-rightside-content1' class='content1'><img id='spinner-4' style='display: block;margin-left:auto;margin-right:auto' src='../img/Spinner-3.gif'/></div>";
 	html += "		<div id='portfolio-rightside-navbar-pages-top' class='navbar-pages' style='display:none'></div>";
 	html += "		<div id='portfolio-rightside-content2' class='content2'></div>";
 	html += "		<div id='portfolio-rightside-navbar-pages-bottom' class='navbar-pages' style='display:none'></div>";

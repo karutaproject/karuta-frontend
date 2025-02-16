@@ -200,6 +200,7 @@ UIFactory["PortfolioFolder"].loadAndDisplayAll = function (type)
 				displayExecBatchButton();
 			}
 			$("#wait-window").modal('hide');
+			$("#spinner-4").hide();
 		},
 		error : function(jqxhr,textStatus) {			
 			alertHTML("Server Error GET UIFactory.PortfolioFolder.loadAndDisplayAll: "+textStatus);
