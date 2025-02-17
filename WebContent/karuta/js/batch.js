@@ -541,6 +541,8 @@ g_actions['for-each-tree'] = function (node)
 					currentnode: [], // current node stack
 					lastimported: [], // imported node stack
 				}
+				g_variables['treecode'] = portfolio.code;
+				g_variables['treelabel'] = portfolio.label;
 				const treeref = $(node).attr('id');
 				if (label!="") {
 					if (portfolio.label.indexOf(label)>-1) {
@@ -3669,7 +3671,7 @@ g_actions['test'] = function (node)
 	catch(err) {
 		ok = false;
 	}
-	if (!ok) g_batch_error.push("test");
+//	if (!ok) g_batch_error.push("test");
 	return ok;
 
 }
