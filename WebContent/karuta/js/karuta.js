@@ -977,6 +977,7 @@ function reloadPage() {
 function previewPage(uuid,depth,type,langcode,edit,reload) 
 //==================================
 {
+	let original_edit = g_edit;
 	if (uuid!=null) {
 		//---------------------
 		if (langcode==null)
@@ -1040,7 +1041,7 @@ function previewPage(uuid,depth,type,langcode,edit,reload)
 			}
 		});
 	}
-		g_edit = original_edit;
+	g_edit = original_edit;
 }
 
 //==================================

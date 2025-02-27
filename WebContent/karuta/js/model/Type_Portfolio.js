@@ -1227,9 +1227,9 @@ UIFactory["Portfolio"].copy_rename = function(templateid,targetcode,reload,targe
 {
 	var uuid = null;
 	var url = serverBCK_API+"/portfolios/copy/"+templateid+"?targetcode="+targetcode+"&owner=true";
-	const exist = UIFactory.Portfolio.existPortfolio(targetcode);
+//	const exist = UIFactory.Portfolio.existPortfolio(targetcode);
 	//-----------------------
-	if (!exist) {
+//	if (!exist) {
 		$.ajax({
 			async : false,
 			type : "POST",
@@ -1284,11 +1284,11 @@ UIFactory["Portfolio"].copy_rename = function(templateid,targetcode,reload,targe
 					alertHTML("Error : "+jqxhr.responseText);
 			}
 		});
-	} else {
-		$("#wait-window").hide();
-		alertHTML(karutaStr[LANG]['error-existing-code']);
+//	} else {
+//		$("#wait-window").hide();
+//		alertHTML(karutaStr[LANG]['error-existing-code']);
 
-	}
+//	}
 	return uuid;
 };
 
