@@ -128,6 +128,7 @@
 .batch span.chkbox-comments.xif-action,
 .batch span.chkbox-comments.xthen-part,
 .batch span.chkbox-comments.xprevious-imported-node,
+.batch span.chkbox-comments.xupdate-node-context,
 .batch span.chkbox-comments.xelse-part {
   display: inline;
   float: right;

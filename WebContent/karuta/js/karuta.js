@@ -4371,7 +4371,19 @@ $.fn.nodeLabelContains = function (options)
 	return $(result);
 };
 $.fn.test_nodeLabelContains = function (options) { return result = ($(this).nodeLabelContains(options).length>0) ? true : false;};
+
 //=====================================
+$.fn.nodeLabelNotContains = function (options)
+//=====================================
+{
+	var defaults= { "value":"v","function":""};
+	var parameters = $.extend(defaults, options);
+	var result = $(this).has(">asmResource[xsi_type='nodeRes']>label[lang='"+languages[LANGCODE]+"']:not(:contains('"+parameters.value+"'))");
+	if (parameters.function!="")
+		result = eval("$(result)."+parameters.function);
+	return $(result);
+};
+$.fn.test_nodeLabelNotContains = function (options) { return result = ($(this).nodeLabelNotContains(options).length>0) ? true : false;};
 
 //=====================================
 $.fn.nodeValueContains = function (options)  

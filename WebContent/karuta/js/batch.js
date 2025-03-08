@@ -1,5 +1,5 @@
 /* =======================================================
-	Copyright 2018 - ePortfolium - Licensed under the
+	Copyright 2025 - ePortfolium - Licensed under the
 	Educational Community License, Version 2.0 (the "License"); you may
 	not use this file except in compliance with the License. You may
 	obtain a copy of the License at
@@ -261,8 +261,12 @@ function getTargetUrl(node)
 	let url = "";
 	const select = $(node).attr("select");
 	const idx = select.lastIndexOf(".");
-	var treeref = select.substring(0,idx);
-	const semtag = replaceBatchVariable(replaceVariable(select.substring(idx+1)));
+	let semtag = replaceBatchVariable(replaceVariable(select.substring(idx+1)));
+	let treeref = select.substring(0,idx);
+	if (treeref.indexOf('#current_node')>-1) {
+		treeref = treeref.substring(0,treeref.indexOf("#)"));
+		semtag = '#current_node';
+	}
 	if (semtag=='#current_node')
 		if (treeref!="")
 			url = serverBCK_API+"/nodes/node/"+g_trees[treeref].currentnode[g_trees[treeref].currentnode.length-1];
@@ -278,7 +282,7 @@ function getTargetUrl(node)
 		else if (treeref.indexOf("##")>-1)
 			treeref = replaceBatchVariable(replaceVariable(treeref));
 		url = serverBCK_API+"/nodes/node/"+treeref;
-	} else if (treeref.indexOf("#")>-1)
+	} else if (treeref.indexOf("#")>-1 && treeref.indexOf("#currentnode")<0)
 		url = serverBCK_API+"/nodes?portfoliocode=" + treeref.substring(1) + "&semtag="+semtag;	
 	else
 		url = serverBCK_API+"/nodes?portfoliocode=" + g_trees[treeref].code + "&semtag="+semtag;
@@ -356,10 +360,15 @@ function getTargetNodes(node,data,teststr)
 			type : "GET",
 			dataType : "xml",
 			url : url,
+			semtag : semtag,
 			success : function(data) {
 				if (this.url.indexOf('/node/')>-1) {  // get by uuid
-					let results = $('*',data);
-					nodes[0] = results[0];
+					if (getTreef(node).indexOf('#current_node')>-1) {
+						nodes = $("*:has(>metadata[semantictag*='"+this.semtag+"'])",data)
+					} else {
+						let results = $('*',data);
+						nodes[0] = results[0];
+					}
 				} else {							// get by code and semtag
 					nodes = $("node",data);
 				}
@@ -473,7 +482,7 @@ function processAll(model_code,portfoliologcode)
 function processListActions(list)
 //=================================================
 {
-	for (var i=0; i<list.length; i++){
+	for (let i=0; i<list.length; i++){
 		var actiontype = $(list[i]).prop("nodeName");
 		var actionnode = list[i];
 		if (actiontype!='for-each-line' && actiontype!='if-then-else') {
@@ -558,7 +567,7 @@ g_actions['for-each-tree'] = function (node)
 					nb++;
 					$("#batch-log").append("<br>------------- current-tree -----------------");
 					$("#batch-log").append("<br>- tree selected - code:"+portfolio.id+" - portfolioid:"+portfolio.code+" Label:"+portfolio.label);
-					processListActions($("actions",node).children());
+					processListActions($(">actions",node).children());
 				}
 			}
 			$("#batch-log").append("<br> Number of trees :"+nb);
@@ -593,7 +602,7 @@ g_actions['for-each-user'] = function (node)
 					g_users[userref] = username;
 			$("#batch-log").append("<br>------------- current-user -----------------");
 					$("#batch-log").append("<br>- user selected - username:"+username);
-					processListActions($("actions",node).children());
+					processListActions($(">actions",node).children());
 						//------------------------------------
 				}
 			}
@@ -611,7 +620,7 @@ g_actions['for-each-user'] = function (node)
 					var userref = $(node).attr('id');
 					g_users[userref] = username;
 					$("#batch-log").append("<br>- user selected - username:"+username);
-					processListActions($("actions",node).children());
+					processListActions($(">actions",node).children());
 						//------------------------------------
 				}
 			}
@@ -1236,11 +1245,11 @@ g_actions['create-usergroup-by-id'] = function DeleteUserGroupById(node)
 	return ok;
 }
 
-//-----------------------------------------------------------------------
-//-----------------------------------------------------------------------
-//---------------------------FOR EACH GROUP USER ------------------------
-//-----------------------------------------------------------------------
-//-----------------------------------------------------------------------
+//===============================================
+//===============================================
+//=======FOR EACH GROUP USER================
+//===============================================
+//===============================================
 
 
 //==================================
@@ -1275,8 +1284,8 @@ g_actions['for-each-group-person'] = function (node)
 							dataType : "xml",
 							url : serverBCK_API+"/usersgroups?group="+groupid,
 							success : function(data) {
-								var items = $("user",data);
-								for ( var i = 0; i < items.length; i++) {
+								let items = $("user",data);
+								for ( let i = 0; i < items.length; i++) {
 									uuid = $(items[i]).attr('id');
 									if (Users_byid[uuid]==undefined){
 										$.ajax({
@@ -1291,11 +1300,11 @@ g_actions['for-each-group-person'] = function (node)
 										});
 									}
 									if (Users_byid[uuid]!=undefined){
-										var username = Users_byid[uuid].username;
+										const username = Users_byid[uuid].username;
 										g_variables['currentuser'] = username;
 										$("#batch-log").append("<br>------------- current-user -----------------");
 										$("#batch-log").append("<br>- user selected - username:"+username);
-										processListActions($("actions",node).children());
+										processListActions($(">actions",node).children());
 									}
 								}
 							}
@@ -1307,6 +1316,82 @@ g_actions['for-each-group-person'] = function (node)
 				}
 			});
 }
+
+//===============================================
+//===============================================
+//=======FOR EACH GROUP PORTFOLIO===========
+//===============================================
+//===============================================
+
+
+//==================================
+g_actions['for-each-group-portfolio'] = function (node)
+//==================================
+{
+	let group = getTxtvals($("group",node));
+	let treeref = $(node).attr("id");
+	if (group!="")
+			//---- get groupid ----------
+			var groupid = "";
+			var url = serverBCK_API+"/portfoliogroups";
+			$.ajax({
+				async : false,
+				type : "GET",
+				contentType: "text/html",
+				dataType : "text",
+				url : url,
+				success : function(data) {
+					var groups = $("group",data);
+					for (var k=0;k<groups.length;k++){
+						if ($('label',groups[k]).text()==group) {
+							groupid = $(groups[k]).attr("id");
+							break;
+						}
+					}
+					if (groupid=="")
+						$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in for-each-group-portfolio - group:"+group+" NOT FOUND");
+					else {
+						$.ajax({
+							async: false,
+							type : "GET",
+							dataType : "xml",
+							url : serverBCK_API+"/portfoliogroups?group="+groupid,
+							success : function(data) {
+								var items = $("portfolio",data);
+								for ( let i = 0; i < items.length; i++) {
+									uuid = $(items[i]).attr('id');
+									if (portfolios_byid[uuid]==undefined){
+										$.ajax({
+											async: false,
+											type : "GET",
+											dataType : "xml",
+											url : serverBCK_API+"/portfolios/portfolio/"+uuid,
+											success : function(data) {
+												UIFactory.Portfolio.parse_add(data);
+											}
+										});
+									}
+									const portfolio = {
+										id : portfolios_byid[uuid].id,
+										code: portfolios_byid[uuid].code_node.text(),
+										label: portfolios_byid[uuid].label_node[LANGCODE].text(),
+										currentnode: [], // current node stack
+										lastimported: [] // imported node stack
+									}
+									g_trees[treeref] = portfolio;
+									$("#batch-log").append("<br>------------- current-portfolio ---------<br>- - code:"+portfolio.code);
+									processListActions($(">actions",node).children());
+								}
+							}
+						});
+					}
+				},
+				error : function(data) {
+					$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in for-each-group-portfolio:"+group);
+				}
+			});
+}
+
 //-----------------------------------------------------------------------
 //-----------------------------------------------------------------------
 //------------------------ Delete Tree ----------------------------------

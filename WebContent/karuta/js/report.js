@@ -1,5 +1,5 @@
 /* =======================================================
-	Copyright 2018 - ePortfolium - Licensed under the
+	Copyright 2025 - ePortfolium - Licensed under the
 	Educational Community License, Version 2.0 (the "License"); you may
 	not use this file except in compliance with the License. You may
 	obtain a copy of the License at
@@ -1078,7 +1078,131 @@ g_report_actions['tbody'] = function (destid,action,no,data)
 	tableelt('tbody',destid,action,no,data);
 }
 
+//=============================================================================
+//=============================================================================
+//======================= FOR-EACH-USERGROUP =================================
+//=============================================================================
+//=============================================================================
 
+//==================================
+g_report_actions['for-each-usergroup'] = function (destid,action,no,data)
+//==================================
+{
+	const countvar = $(action).attr("countvar");
+	let select = $(action).attr("select");
+	$.ajax({
+		async:false,
+		type : "GET",
+		dataType : "xml",
+		url : serverBCK_API+"/usersgroups",
+		success : function(data) {
+			UIFactory.UsersGroup.parse(data);
+			select = replaceVariable(select);
+			let attribute = "";
+			let value = "";
+			let comparator = "";
+			if (select.indexOf("=")>-1){
+				attribute = select.substring(0,select.indexOf("="));
+				value = select.substring(select.indexOf("=")+1);
+				comparator = "=";
+			}
+			if (select.indexOf("*=")>-1) {
+				attribute = select.substring(0,select.indexOf("*="));
+				value = select.substring(select.indexOf("*=")+2);
+				comparator = "*=";
+			}
+			let condition = false;
+			let j = 0;
+			for ( let i = 0; i < usergroups_list.length; i++) {
+				//------------------------------------
+				initVariables(action);
+				//------------------------------------
+				if (comparator=="=")
+					condition = $(usergroups_list[i].attributes[attribute]).text() == value;
+				if (comparator=="*=")
+					condition = $(usergroups_list[i].attributes[attribute]).text().indexOf(value)>-1;
+				//------------------------------------
+				if (condition || comparator==""){
+					if (countvar!=undefined) {
+						g_variables[countvar] = j++;
+					}
+					const groupid = usergroups_list[i].id;
+					g_variables['current_usergroup_id'] = groupid;
+					g_variables['current_usergroup_label'] = $(usergroups_list[i].attributes['label']).text();
+					let actions = $(action).children();
+					for (let i=0; i<actions.length;i++){
+						let tagname = $(actions[i])[0].tagName;
+						g_report_actions[tagname](destid,actions[i],no+j.toString()+'-'+i.toString(),groupid);
+					};
+				}
+					//------------------------------------
+			}
+		}
+	});
+}
+
+//=============================================================================
+//=============================================================================
+//======================= FOR-EACH-PORTFOLIOGROUP =================================
+//=============================================================================
+//=============================================================================
+
+//==================================
+g_report_actions['for-each-portfoliogroup'] = function (destid,action,no,data)
+//==================================
+{
+	const countvar = $(action).attr("countvar");
+	let select = $(action).attr("select");
+	$.ajax({
+		async:false,
+		type : "GET",
+		dataType : "xml",
+		url : serverBCK_API+"/portfoliogroups",
+		success : function(data) {
+			UIFactory.PortfoliosGroup.parse(data);
+			select = replaceVariable(select);
+			let attribute = "";
+			let value = "";
+			let comparator = "";
+			if (select.indexOf("=")>-1){
+				attribute = select.substring(0,select.indexOf("="));
+				value = select.substring(select.indexOf("=")+1);
+				comparator = "=";
+			}
+			if (select.indexOf("*=")>-1) {
+				attribute = select.substring(0,select.indexOf("*="));
+				value = select.substring(select.indexOf("*=")+2);
+				comparator = "*=";
+			}
+			let condition = false;
+			let j = 0;
+			for ( let i = 0; i < portfoliogroups_list.length; i++) {
+				//------------------------------------
+				initVariables(action);
+				//------------------------------------
+				if (comparator=="=")
+					condition = $(portfoliogroups_list[i].attributes[attribute]).text() == value;
+				if (comparator=="*=")
+					condition = $(portfoliogroups_list[i].attributes[attribute]).text().indexOf(value)>-1;
+				//------------------------------------
+				if (condition || comparator==""){
+					if (countvar!=undefined) {
+						g_variables[countvar] = j++;
+					}
+					const groupid = portfoliogroups_list[i].id;
+					g_variables['current_portfoliogroup_id'] = groupid;
+					g_variables['current_portfoliogroup_label'] = $(portfoliogroups_list[i].attributes['label']).text();
+					let actions = $(action).children();
+					for (let i=0; i<actions.length;i++){
+						let tagname = $(actions[i])[0].tagName;
+						g_report_actions[tagname](destid,actions[i],no+j.toString()+'-'+i.toString(),groupid);
+					};
+				}
+					//------------------------------------
+			}
+		}
+	});
+}
 //=============================================================================
 //=============================================================================
 //======================= FOR-EACH-PERSON =====================================
@@ -1098,6 +1222,24 @@ g_report_actions['for-each-person'] = function (destid,action,no,data)
 			var tagname = $(actions[i])[0].tagName;
 			g_report_actions[tagname](destid,actions[i],no+'-'+i.toString(),userid);
 		};
+	} else if (select=="##current_usergroup##"){
+		const groupid = data;
+		usergroups_byid[groupid].loadContent();
+		let j = 0;
+		for (uuid in usergroups_byid[groupid].children){
+			let userid = Users_byid[uuid].id;
+			//------------------------------------
+			if (countvar!=undefined)
+				g_variables[countvar] = j;
+			initVariables(action);
+			//------------------------------------
+			var actions = $(action).children();
+			for (let i=0; i<actions.length;i++){
+				var tagname = $(actions[i])[0].tagName;
+				g_report_actions[tagname](destid,actions[i],no+j.toString()+'-'+i.toString(),userid);
+			};
+			j++;
+		}
 	} else {
 		$.ajax({
 			async:false,
@@ -1153,6 +1295,27 @@ g_report_actions['for-each-person'] = function (destid,action,no,data)
 //======================  username firstname lastname =========================
 //=============================firstname-lastname==============================
 //=============================================================================
+
+//==================================
+g_report_actions['user-attribute'] = function (destid,action,no,data,is_out_csv)
+//==================================
+{
+	let select = $(action).attr("select");
+	let text = "";
+	if (select=='userid')
+		text = data;
+	else
+		text = eval("Users_byid[data].attributes['"+select+"'].text()");
+	//----------------
+	if (is_out_csv!=null && is_out_csv) {
+		if (typeof csvseparator == 'undefined') // for backward compatibility
+			csvseparator = ";";
+		csvline += text + csvseparator;		
+	} else {
+		text = "<span id='"+destid+'-'+no+"'>"+text+"</span>";
+		$("#"+destid).append($(text));		
+	}
+}
 
 //==================================
 g_report_actions['userid'] = function (destid,action,no,data,is_out_csv)
@@ -1279,7 +1442,7 @@ g_report_actions['for-each-portfolio'] = function (destid,action,no,data)
 	var select = $(action).attr("select");
 	select = replaceVariable(select);
 	var test = $(action).attr("test");
- 	if (test!=undefined) 
+ 	if (test!=undefined)
  		test = replaceVariable(test);
 	else
 		test = "";
@@ -1290,37 +1453,145 @@ g_report_actions['for-each-portfolio'] = function (destid,action,no,data)
 		select = select.replaceAll('@noload@','');
 	}
 	//---------------
-	if (select.indexOf("code*=")>-1) {
-		if (select.indexOf("'")>-1)
-			searchvalue = select.substring(7,select.length-1);  // inside quote
-		else if (select.indexOf("//")>-1)
-			searchvalue = eval("json."+select.substring(8));
-		else
-			searchvalue = eval("json.lines["+line+"]."+select.substring(6));
-	}
-	var items_list = [];
-	$.ajax({
-		async:false,
-		type : "GET",
-		dataType : "xml",
-		url : serverBCK_API+"/portfolios?active=1&search="+searchvalue,
-		success : function(data) {
-			UIFactory["Portfolio"].parse_add(data);
-			var items = $("portfolio",data);
-			if (test!="")
- 				items = eval("items"+test);
-			var value = "";
-			var condition = "";
-			var portfolioid = "";
-			//----------- optional sort -----------------------
-			var sortag = $(action).attr("sortag");
-			var sortelt = $(action).attr("sortelt");
-			var tableau = new Array();
-			var sortvalue = "";
-			if (sortag!=undefined && sortag!="") {
-				for ( let i = 0; i < items.length; i++) {
-					portfolioid = $(items[i]).attr('id');
-					var code = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",items[i])).text();
+	if (select=="##current_portfoliogroup##"){
+		const groupid = data;
+		portfoliogroups_byid[groupid].loadContent();
+		let j = 0;
+		for (uuid in portfoliogroups_byid[groupid].children){
+			let portfolioid = portfolios_byid[uuid].id;
+			//------------------------------------
+			if (countvar!=undefined)
+				g_variables[countvar] = j;
+			initVariables(action);
+			//------------------------------------
+			portfolioid_current = portfolioid;
+			$.ajax({
+				async:false,
+				type : "GET",
+				dataType : "xml",
+				j : j,
+				url : serverBCK_API+"/portfolios/portfolio/" + portfolioid + "?resources=true",
+				success : function(data) {
+					if (report_not_in_a_portfolio){
+						UICom.structure.tree = {};
+						UICom.structure.ui = {};
+					}
+					UICom.parseStructure(data,true, null, null,true);
+					var actions = $(action).children();
+					for (let i=0; i<actions.length;i++){
+						var tagname = $(actions[i])[0].tagName;
+						g_report_actions[tagname](destid,actions[i],no+'-'+this.j.toString()+i.toString(),data);
+					};
+				}
+			});
+			j++;
+		}
+	} else {
+		//----------------
+		if (select.indexOf("code*=")>-1) {
+			if (select.indexOf("'")>-1)
+				searchvalue = select.substring(7,select.length-1);  // inside quote
+			else if (select.indexOf("//")>-1)
+				searchvalue = eval("json."+select.substring(8));
+			else
+				searchvalue = eval("json.lines["+line+"]."+select.substring(6));
+		}
+		var items_list = [];
+		$.ajax({
+			async:false,
+			type : "GET",
+			dataType : "xml",
+			url : serverBCK_API+"/portfolios?active=1&search="+searchvalue,
+			success : function(data) {
+				UIFactory["Portfolio"].parse_add(data);
+				var items = $("portfolio",data);
+				if (test!="")
+	 				items = eval("items"+test);
+				var value = "";
+				var condition = "";
+				var portfolioid = "";
+				//----------- optional sort -----------------------
+				var sortag = $(action).attr("sortag");
+				var sortelt = $(action).attr("sortelt");
+				var tableau = new Array();
+				var sortvalue = "";
+				if (sortag!=undefined && sortag!="") {
+					for ( let i = 0; i < items.length; i++) {
+						portfolioid = $(items[i]).attr('id');
+						var code = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",items[i])).text();
+						//------------------------------------
+						if (select.indexOf("code*=")>-1) {
+							if (select.indexOf("'")>-1)
+								value = select.substring(7,select.length-1);  // inside quote
+							else if (select.indexOf("//")>-1)
+								value = eval("json."+select.substring(8));
+							else
+								value = eval("json.lines["+line+"]."+select.substring(6));
+							condition = code.indexOf(value)>-1;
+						}
+						if (select.indexOf("code=")>-1) {
+							if (select.indexOf("'")>-1)
+								value = select.substring(6,select.length-1);  // inside quote
+							else if (select.indexOf("//")>-1)
+								value = eval("json."+select.substring(7));
+							else
+								value = eval("json.lines["+line+"]."+select.substring(5));
+							condition = code==value;
+						}
+						if (select.length==0) {
+							condition = true;;
+						}
+						//------------------------------------
+						if (condition && sortag!=""){
+							$.ajax({
+								async:false,
+								type : "GET",
+								dataType : "xml",
+								url : serverBCK_API+"/nodes?portfoliocode=" + code + "&semtag="+sortag,
+								success : function(data) {
+									var text = ";"
+									if (sortelt=='resource code') {
+										sortvalue = $("code",data)[0].text();
+									}
+									if (sortelt=='value') {
+										sortvalue = $("value",data)[0].text();
+									}
+									if (sortelt=='node label') {
+										sortvalue = $("label[lang='"+languages[LANGCODE]+"']",data)[0].text();
+									}
+									if (sortelt=='resource') {
+										sortvalue = $("text[lang='"+languages[LANGCODE]+"']",$("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",data)).text();
+									}
+									tableau[tableau.length] = [sortvalue,portfolioid];
+								}
+							});
+						}
+						//------------------------------------
+					}
+					var newTableau = tableau.sort(sortOn1);
+					for ( let i = 0; i < newTableau.length; i++) {
+						items_list[i] = portfolios_byid[newTableau[i][1]]
+					}
+					items_list.length = newTableau.length;
+				} else {
+					for ( let i = 0; i < items.length; i++) {
+						items_list[i] = portfolios_byid[$(items[i]).attr('id')]
+					}
+				}
+				//======================================================
+				var first = 0;
+				var last = items_list.length;
+				if (NBELT!=undefined && NBELT!="" && NOELT!=undefined && NOELT!="") {
+					first = parseInt(NOELT);
+					last = (parseInt(NOELT)+parseInt(NBELT)<items_list.length)? parseInt(NOELT)+parseInt(NBELT):items_list.length;
+				}
+				//----------------------------------
+				for ( let j = first; j < last; j++) {
+					if (countvar!=undefined) {
+						g_variables[countvar] = j;
+					}
+					initVariables(action);
+					var code = items_list[j].code_node.text();
 					//------------------------------------
 					if (select.indexOf("code*=")>-1) {
 						if (select.indexOf("'")>-1)
@@ -1343,121 +1614,49 @@ g_report_actions['for-each-portfolio'] = function (destid,action,no,data)
 					if (select.length==0) {
 						condition = true;;
 					}
+					if (select.substring(0,1) == "{") {
+						var toeval = select.substring(1,select.length-1);
+						condition = eval(toeval);
+					}
 					//------------------------------------
-					if (condition && sortag!=""){
-						$.ajax({
-							async:false,
-							type : "GET",
-							dataType : "xml",
-							url : serverBCK_API+"/nodes?portfoliocode=" + code + "&semtag="+sortag,
-							success : function(data) {
-								var text = ";"
-								if (sortelt=='resource code') {
-									sortvalue = $("code",data)[0].text();
+					if (condition){
+						portfolioid = items_list[j].id;
+						portfolioid_current = portfolioid;
+						if (load) {
+							$.ajax({
+								async:false,
+								type : "GET",
+								dataType : "xml",
+								j : j,
+								url : serverBCK_API+"/portfolios/portfolio/" + portfolioid + "?resources=true",
+								success : function(data) {
+									if (report_not_in_a_portfolio){
+										UICom.structure.tree = {};
+										UICom.structure.ui = {};
+									}
+									UICom.parseStructure(data,true, null, null,true);
+									var actions = $(action).children();
+									for (let i=0; i<actions.length;i++){
+										var tagname = $(actions[i])[0].tagName;
+										g_report_actions[tagname](destid,actions[i],no+'-'+this.j.toString()+i.toString(),data);
+									};
 								}
-								if (sortelt=='value') {
-									sortvalue = $("value",data)[0].text();
-								}
-								if (sortelt=='node label') {
-									sortvalue = $("label[lang='"+languages[LANGCODE]+"']",data)[0].text();
-								}
-								if (sortelt=='resource') {
-									sortvalue = $("text[lang='"+languages[LANGCODE]+"']",$("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",data)).text();
-								}
-								tableau[tableau.length] = [sortvalue,portfolioid];
-							}
-						});
+							});
+						} else {
+							var actions = $(action).children();
+							for (let i=0; i<actions.length;i++){
+								var tagname = $(actions[i])[0].tagName;
+								g_report_actions[tagname](destid,actions[i],no+'-'+j.toString()+i.toString(),data);
+							};
+						}
 					}
 					//------------------------------------
 				}
-				var newTableau = tableau.sort(sortOn1);
-				for ( let i = 0; i < newTableau.length; i++) {
-					items_list[i] = portfolios_byid[newTableau[i][1]]
-				}
-				items_list.length = newTableau.length;
-			} else {
-				for ( let i = 0; i < items.length; i++) {
-					items_list[i] = portfolios_byid[$(items[i]).attr('id')]
-				}
+				if (NBELT!=undefined && NBELT!="" && NOELT!=undefined && NOELT!="")
+					prevnextbuttons(dashboard_current,first,last,portfolioids.length,NOELT,NBELT);
 			}
-			//======================================================
-			var first = 0;
-			var last = items_list.length;
-			if (NBELT!=undefined && NBELT!="" && NOELT!=undefined && NOELT!="") {
-				first = parseInt(NOELT);
-				last = (parseInt(NOELT)+parseInt(NBELT)<items_list.length)? parseInt(NOELT)+parseInt(NBELT):items_list.length;
-			}
-			//----------------------------------
-			for ( let j = first; j < last; j++) {
-				if (countvar!=undefined) {
-					g_variables[countvar] = j;
-				}
-				initVariables(action);
-				var code = items_list[j].code_node.text();
-				//------------------------------------
-				if (select.indexOf("code*=")>-1) {
-					if (select.indexOf("'")>-1)
-						value = select.substring(7,select.length-1);  // inside quote
-					else if (select.indexOf("//")>-1)
-						value = eval("json."+select.substring(8));
-					else
-						value = eval("json.lines["+line+"]."+select.substring(6));
-					condition = code.indexOf(value)>-1;
-				}
-				if (select.indexOf("code=")>-1) {
-					if (select.indexOf("'")>-1)
-						value = select.substring(6,select.length-1);  // inside quote
-					else if (select.indexOf("//")>-1)
-						value = eval("json."+select.substring(7));
-					else
-						value = eval("json.lines["+line+"]."+select.substring(5));
-					condition = code==value;
-				}
-				if (select.length==0) {
-					condition = true;;
-				}
-				if (select.substring(0,1) == "{") {
-					var toeval = select.substring(1,select.length-1);
-					condition = eval(toeval);
-				}
-				//------------------------------------
-				if (condition){
-					portfolioid = items_list[j].id;
-					portfolioid_current = portfolioid;
-					if (load) {
-						$.ajax({
-							async:false,
-							type : "GET",
-							dataType : "xml",
-							j : j,
-							url : serverBCK_API+"/portfolios/portfolio/" + portfolioid + "?resources=true",
-							success : function(data) {
-								if (report_not_in_a_portfolio){
-									UICom.structure.tree = {};
-									UICom.structure.ui = {};
-								}
-								UICom.parseStructure(data,true, null, null,true);
-								var actions = $(action).children();
-								for (let i=0; i<actions.length;i++){
-									var tagname = $(actions[i])[0].tagName;
-									g_report_actions[tagname](destid,actions[i],no+'-'+this.j.toString()+i.toString(),data);
-								};
-							}
-						});
-					} else {
-						var actions = $(action).children();
-						for (let i=0; i<actions.length;i++){
-							var tagname = $(actions[i])[0].tagName;
-							g_report_actions[tagname](destid,actions[i],no+'-'+j.toString()+i.toString(),data);
-						};
-					}
-				}
-				//------------------------------------
-			}
-			if (NBELT!=undefined && NBELT!="" && NOELT!=undefined && NOELT!="")
-				prevnextbuttons(dashboard_current,first,last,portfolioids.length,NOELT,NBELT);
-		}
-	});
+		});
+	}
 }
 
 //==================================

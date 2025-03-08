@@ -69,13 +69,11 @@ function fill_main_page(portfolioid,userrole)
 			$("body").addClass(root_semantictag);
 			// -----------ROLE---------------
 			var role = $("asmRoot",data).attr("role");
-			if (role!="" || (userrole!=undefined && userrole!="") ) {
+			if (role!="" || (userrole!=undefined && userrole!="" && userrole!="designer") ) {
 				if (role!="")
 					g_userroles[0] = g_userroles[1] = role;
 				else
 					g_userroles[0] = g_userroles[1] = userrole;
-				if (g_userroles[0] == 'designer')
-					g_designerrole = true;
 			} else {
 				g_userroles[0] = g_userroles[1] ='designer';
 				g_designerrole = true;
