@@ -237,14 +237,14 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 {
 	if (type==undefined || type==null)
 		type = $("metadata-wad",this.node).attr('seltype');
-	var queryattr_value = $("metadata-wad",this.node).attr('query');
+	var queryattr_value = replaceVariable($("metadata-wad",this.node).attr('query'));
 	if (this.multiple!=""){
 		multiple_tags = this.multiple.substring(this.multiple.indexOf('/')+1);
 		queryattr_value = this.multiple.substring(0,this.multiple.indexOf('/'));
 		type = 'multiple';
 	}
 	if (this.get_type!="import_comp" && queryattr_value!=undefined && queryattr_value!='') {
-		queryattr_value = replaceVariable(queryattr_value);
+//		queryattr_value = replaceVariable(queryattr_value);
 //		if (type=='multiple')
 //			queryattr_value = cleanCode(queryattr_value);  // portfoliocode may be from a get_ressource with spécial characters
 		try {
@@ -1242,7 +1242,7 @@ UIFactory["Get_Get_Resource"].prototype.redisplayEditor = function(destid,type,l
 {
 	if (type==undefined || type==null)
 		type = $("metadata-wad",this.node).attr('seltype');
-	var queryattr_value = $("metadata-wad",this.node).attr('query');
+	var queryattr_value = replaceVariable($("metadata-wad",this.node).attr('query'));
 	if (queryattr_value!=undefined && queryattr_value!='') {
 		try {
 			//------------------------------
@@ -1254,9 +1254,7 @@ UIFactory["Get_Get_Resource"].prototype.redisplayEditor = function(destid,type,l
 			var semtag_parent = queryattr_value.substring(semtag_parent_indx+1,semtag_indx);
 			if (semtag_parent.indexOf('#')==0)
 				semtag_parent = semtag_parent.substring(1);
-			var portfoliocode_end_indx = queryattr_value.indexOf('sibling')+queryattr_value.indexOf('parent')+queryattr_value.indexOf('#')+1;
-			var portfoliocode = queryattr_value.substring(0,portfoliocode_end_indx);
-			//------------
+			var portfoliocode_end_indx = queryattr_value.indexOf('child')+queryattr_value.indexOf('sibling')+queryattr_value.indexOf('parent')+queryattr_value.indexOf('#')+queryattr_value.indexOf('itself')+3; //  if not present give -1
 			var portfoliocode = queryattr_value.substring(0,portfoliocode_end_indx);
 			var selfcode = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",UICom.root.node)).text();
 			if (portfoliocode.indexOf('.')<0 && portfoliocode!='self')  // There is no project, we add the project of the current portfolio
