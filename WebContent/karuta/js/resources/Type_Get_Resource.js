@@ -452,11 +452,11 @@ UIFactory["Get_Resource"].prototype.displayEditor = function(destid,type,langcod
 		var target = queryattr_value.substring(srce_indx+1); // label or text
 		//------------
 		var portfoliocode = replaceVariable(queryattr_value.substring(0,semtag_indx));
-		if (queryattr_value.indexOf("group.user.group")>-1  || queryattr_value.indexOf("group.portfolio.group")>-1){
+		if (queryattr_value.indexOf("#group.user.group")>-1  || queryattr_value.indexOf("#group.portfolio.group")>-1){
 			if (cachable && g_Get_Resource_caches[queryattr_value]!=undefined && g_Get_Resource_caches[queryattr_value]!="")
 				self.parse(destid,type,langcode,g_Get_Resource_caches[queryattr_value],disabled,srce,resettable,target,semtag,multiple_tags,portfoliocode,semtag2,cachable);
 			else {
-				const url =  queryattr_value.indexOf("group.user.group")>-1 ?  serverBCK_API+"/usersgroups" : serverBCK_API+"/portfoliogroups";
+				const url =  queryattr_value.indexOf("#group.user.group")>-1 ?  serverBCK_API+"/usersgroups" : serverBCK_API+"/portfoliogroups";
 				$.ajax({
 					async:false,
 					type : "GET",
@@ -471,9 +471,9 @@ UIFactory["Get_Resource"].prototype.displayEditor = function(destid,type,langcod
 			}
 		} else{
 			var selfcode = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",g_portfolio_current)).text();
-			if (portfoliocode.indexOf('.')<0 && selfcode.indexOf('.')>0 && portfoliocode!='self')  // There is no project, we add the project of the current portfolio
+			if (portfoliocode.indexOf('.')<0 && selfcode.indexOf('.')>0 && portfoliocode!='self'  && portfoliocode!='#self')  // There is no project, we add the project of the current portfolio
 				portfoliocode = selfcode.substring(0,selfcode.indexOf('.')) + "." + portfoliocode;
-			if (portfoliocode=='self') {
+			if (portfoliocode=='self' || portfoliocode=='#self') {
 				portfoliocode = selfcode;
 				const semtag = $("metadata",$("asmRoot",g_portfolio_current)).attr('semantictag');
 				if (semtag.indexOf('batch')>-1)
@@ -503,7 +503,7 @@ UIFactory["Get_Resource"].prototype.displayEditor = function(destid,type,langcod
 //		let portfoliocode = cleanCode(replaceVariable(this.query_portfolio));
 		let portfoliocode = replaceVariable(this.query_portfolio);
 		let selfcode = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",g_portfolio_current)).text();
-		if (portfoliocode=='self') {
+		if (portfoliocode=='self' || portfoliocode=='#self') {
 			portfoliocode = selfcode;
 			cachable = false;
 		}
@@ -597,7 +597,7 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 			if (resource.length>0) {
 				code = $('code',resource).text();
 				libelle = $(srce+"[lang='"+languages[langcode]+"']",resource).text();
-			} else {
+			} else { // usergroup or portfoliogroup
 				code = $(nodes[i]).attr("id");
 				libelle = $('label',nodes[i]).text();
 			}
@@ -678,20 +678,19 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 				if (code.indexOf("?")>-1) {
 					display_value = true;
 				}
-				code = cleanCode(code);
 				//------------------------------
 				var select_item = null;
 				if ($('code',resource).text().indexOf('----')>-1) {
 					html = "<div class='dropdown-divider'></div>";
 					select_item = $(html);
 				} else {
-					html = "<a class='dropdown-item "+code+"' uuid='"+uuid+"' value='"+value+"' code='"+value+"' ";
+					html = "<a class='dropdown-item "+code+"' uuid='"+uuid+"' value='"+value+"' code='"+code+"' ";
 					for (var j=0; j<languages.length;j++){
 						html += "label_"+languages[j]+"=\""+label+"\" ";
 					}
 					html += " style=\""+style+"\">";
 					if (display_code)
-						html += "<span class='li-code'>"+code+"</span>";
+						html += "<span class='li-code'>"+cleanCode(code)+"</span>";
 					if (display_value)
 						html += "<span class='li-value'>"+value+"</span>";
 					if (display_label)
@@ -1389,7 +1388,7 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 				var select_item_a = $(html);
 				$(select_item_a).click(function (ev){
 					$("#button_"+langcode+self.id).attr("style",style);
-					$("#button_"+langcode+self.id).html($(this).attr("label_"+languages[langcode]));
+					$("#button_"+langcode+self.id).attr('value',$(this).attr("label_"+languages[langcode]));
 					$("#button_"+langcode+self.id).attr('class', 'btn btn-default select select-label').addClass("sel"+code);
 					UIFactory["Get_Resource"].update(this,self,langcode);
 				});

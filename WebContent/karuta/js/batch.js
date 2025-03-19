@@ -1621,7 +1621,7 @@ g_actions['select-tree'] = function selectTree(node)
 		code = getTxtvals($("code",node));
 	//----- get tree id -----
 	var portfolioid = "";
-	if (code=='self') { 
+	if (code=='self' || code=='#self') { 
 		portfolioid = g_portfolioid;
 		code = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",g_portfolio_current)).text();
 	} else
@@ -3195,8 +3195,10 @@ g_actions['import-node'] = function importNode(node,data)
 				success : function(data) {
 					if (data.indexOf("llegal operation")<0) {
 						ok = true;
-						if (this.treeref!="")
+						if (this.treeref!="") {
 							g_trees[treeref].lastimported.push(data);
+							g_trees[treeref].currentnode.push(data);
+						}
 						g_current_node_uuid = data;
 						$("#batch-log").append("<br>- node ("+g_current_node_uuid+") added at ("+this.destid+") - semtag="+getSemtag(node)+ " source="+srcetag);
 					} else{
@@ -3225,8 +3227,10 @@ g_actions['import-node'] = function importNode(node,data)
 			success : function(data) {
 				if (data.indexOf("llegal operation")<0) {
 					ok = true;
-					if (this.treeref!="")
+					if (this.treeref!="") {
 						g_trees[treeref].lastimported.push(data);
+						g_trees[treeref].currentnode.push(data);
+					}
 					g_current_node_uuid = data;
 					$("#batch-log").append("<br>- node ("+g_current_node_uuid+") added at ("+this.destid+") - semtag="+getSemtag(node)+ " source="+srcetag);
 				} else{

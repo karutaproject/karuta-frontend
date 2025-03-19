@@ -60,12 +60,12 @@ karutaStr['fr']['password-new']="Nouveau mot de passe";
 karutaStr['fr']['import']="Importer";
 karutaStr['fr']['instance']="Instancier";
 karutaStr['fr']['reload']="Reload";
-karutaStr['fr']['user']="Usager";
+karutaStr['fr']['user']="Utilisateur";
 karutaStr['fr']['role']="Rôle";
 karutaStr['fr']['model']="Gabarit";
-karutaStr['fr']['users']="Usagers";
+karutaStr['fr']['users']="Utilisateurs";
 karutaStr['fr']['roles']="Rôles";
-karutaStr['fr']['userofgroup']="Usagers dans le groupe";
+karutaStr['fr']['userofgroup']="Utilisateurs dans le groupe";
 karutaStr['fr']['group']="Groupe";
 karutaStr['fr']['move']="Déplacer vers";
 karutaStr['fr']['enter-text']="Tapez votre texte ...";
@@ -315,7 +315,7 @@ karutaStr['fr']['seecalendarroles']="Voir - Calendrier";
 //=========================================
 
 karutaStr['fr']['list_portfolios']="Portfolios";
-karutaStr['fr']['list_users']="Usagers";
+karutaStr['fr']['list_users']="Utilisateurs";
 karutaStr['fr']['list_user_portfolio']="Portfolios de ";
 karutaStr['fr']['list_roles']="Rôles";
 karutaStr['fr']['list_groups']="Groupes";
@@ -323,7 +323,7 @@ karutaStr['fr']['create-test-user']="Créer un utilisateur test";
 karutaStr['fr']['help_text_rename']="Pour déplacer un portfolio dans un autre dossier, changez le code de dossier (partie avant le point)";
 karutaStr['fr']['users-folders']="Dossiers";
 karutaStr['fr']['users-groups']="Groupes";
-karutaStr['fr']['users-in-rootfolder']="Usagers hors dossier";
+karutaStr['fr']['users-in-rootfolder']="Utilisateurs hors dossier";
 karutaStr['fr']['and-content']="et son contenu.";
 
 //=========================================
@@ -417,12 +417,12 @@ karutaStr['fr']['setrights']="Distinguer modèle <i class='far fa-file-alt'></i>
 //=========================================
 
 karutaStr['fr']['create_account']="Créer un compte";
-karutaStr['fr']['create_user']="Ajouter un usager";
-karutaStr['fr']['active_users']="Usagers actifs";
-karutaStr['fr']['inactive_users']="Usagers inactifs";
-karutaStr['fr']['temporary_users']="Usagers temporaires";
-karutaStr['fr']['empty_users']="Usagers sans portfolio";
-karutaStr['fr']['warning-empty-users']="ATTENTION : Le temps de traitement pour les usagers sans portfolios peut-être très long";
+karutaStr['fr']['create_user']="Ajouter un utilisateur";
+karutaStr['fr']['active_users']="Utilisateurs actifs";
+karutaStr['fr']['inactive_users']="Utilisateurs inactifs";
+karutaStr['fr']['temporary_users']="Utilisateurs temporaires";
+karutaStr['fr']['empty_users']="Utilisateurs sans portfolio";
+karutaStr['fr']['warning-empty-users']="ATTENTION : Le temps de traitement pour les utilisateurs sans portfolios peut-être très long";
 karutaStr['fr']['username']="Login";
 karutaStr['fr']['lastname']="Nom";
 karutaStr['fr']['firstname']="Prénom";
@@ -436,17 +436,17 @@ karutaStr['fr']['admin']="Admin";
 karutaStr['fr']['sharer']="Partageur";
 karutaStr['fr']['designer']="Créateur";
 karutaStr['fr']['active']="Actif";
-karutaStr['fr']['select_users']="Sélectionner des usagers";
+karutaStr['fr']['select_users']="Sélectionner des utilisateurs";
 karutaStr['fr']['projects-admin']="dossiers";
 karutaStr['fr']['portfolios-admin']="Portfolios";
 karutaStr['fr']['bin-admin']="Poubelle";
 karutaStr['fr']['substitute']="Substitution";
-karutaStr['fr']['select_user']="Selectionner un usager";
+karutaStr['fr']['select_user']="Selectionner un utilisateur";
 karutaStr['fr']['other']="Autre";
 karutaStr['fr']['delete-temporary-users']="Supprimer tous";
 karutaStr['fr']['delete-empty-users']="Supprimer la sélection";
 karutaStr['fr']['c-a-s']="C/A/S/P";
-karutaStr['fr']['too-much-users']="Il y a plus de 200 usagers actifs. Cliquez sur le bouton 'Voir' pour les afficher ou faites une recherche ci-dessus."
+karutaStr['fr']['too-much-users']="Il y a plus de 200 utilisateurs actifs. Cliquez sur le bouton 'Voir' pour les afficher ou faites une recherche ci-dessus."
 karutaStr['fr']['new-code']="Envoyez votre login. Vous recevrez une code pour vous connecter."
 
 //=========================================
@@ -462,7 +462,7 @@ karutaStr['fr']['select_role']="Sélectionner un rôle";
 karutaStr['fr']['batch']="Exécuter un script de batch";
 karutaStr['fr']['upload_csv']="Téléverser un fichier CSV";
 karutaStr['fr']['process_csv']="Exécuter";
-karutaStr['fr']['create_user_portfolios']="Créer un usager et ses portfolios";
+karutaStr['fr']['create_user_portfolios']="Créer un utilisateur et ses portfolios";
 karutaStr['fr']['show-hide-log']="Montrer/Cacher le journal";
 
 //=========================================
@@ -535,21 +535,21 @@ karutaStr['fr']['bubble-share-qrcode']="QR Code";
 //========== GROUPS =======================
 //=========================================
 
-karutaStr['fr']['select_usersgroups']="Sélectionner des groupes d'usagers";
-karutaStr['fr']['create_usersgroup']="Créer un groupe d'usagers";
-karutaStr['fr']['list_usersgroups']="Groupes d'usagers";
+karutaStr['fr']['select_usersgroups']="Sélectionner des groupes d'utilisateurs";
+karutaStr['fr']['create_usersgroup']="Créer un groupe d'utilisateurs";
+karutaStr['fr']['list_usersgroups']="Groupes d'utilisateurs";
 karutaStr['fr']['no_group']="Aucun group";
 karutaStr['fr']['addshare-portfoliosgroups']="Partager des groupes de portfolios";
 karutaStr['fr']['addshare-portfolios']="Partager des Portfolios";
-karutaStr['fr']['addshare-usersgroups']="Partager avec des groupes d'usagers";
-karutaStr['fr']['addshare-users']="Partager avec des usagers";
-karutaStr['fr']['confirm-remove-user-group']="Voulez-vous vraiment retirer cet usager du group ? Cette action est irréversible.";
+karutaStr['fr']['addshare-usersgroups']="Partager avec des groupes d'utilisateurs";
+karutaStr['fr']['addshare-users']="Partager avec des utilisateurs";
+karutaStr['fr']['confirm-remove-user-group']="Voulez-vous vraiment retirer cet utilisateur du group ? Cette action est irréversible.";
 karutaStr['fr']['empty-group']="Groupe vide";
 karutaStr['fr']['list_portfoliosgroups']="Groupes de portfolios";
 karutaStr['fr']['note-list_portfoliosgroups']="Attention - Les dossiers contenants les portfolios doivent être ouverts dans la page des portfolios";
-karutaStr['fr']['note-list_usergroups']="Attention - Les usagers ne doivent pas être filtrés dans la page Usagers";
+karutaStr['fr']['note-list_usergroups']="Attention - Les utilisateurs ne doivent pas être filtrés dans la page utilisateurs";
 karutaStr['fr']['confirm-remove-item-group']="Voulez-vous vraiment retirer cet élément du groupe ? Cette action est irréversible.";
-karutaStr['fr']['add_users']="Ajouter des usagers";
+karutaStr['fr']['add_users']="Ajouter des utilisateurs";
 karutaStr['fr']['add_portfolios']="Ajouter des portfolios";
 karutaStr['fr']['select_groups']="Sélectionner des groupes";
 karutaStr['fr']['select_portfoliosgroups']="Sélectionner des groupes de portfolios";
