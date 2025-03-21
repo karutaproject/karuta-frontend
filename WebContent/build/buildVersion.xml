@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="updateVersion" default="updateVersion" basedir="."> 
+	<property name="noVersion" value="3.73.0"/>
+	<property name="textVersion" value="FEAT   -  enhancement Get_Resource and Get_Get_resource"/>
+	<property name="dirSrce" value="src/htm-srce"/>
+	<property name="dirTrgt" value="WebContent/karuta/htm"/>
+	<target name="testIfNewVersion">
+		<uptodate srcfile="${dirTrgt}/karuta.htm" targetfile="WebContent/karuta/buildVersion.xml" property="new"/>
+	</target>
+	<target name="Version" if="new">
+		<tstamp>
+			<format property="current.time" pattern="yyyy-MM-dd hh:mm:ss" />
+		</tstamp> 
+		<tstamp>
+			<format property="current.date" pattern="yyyy-MM-dd" />
+		</tstamp> 
+		<echo>Date : ${current.time}</echo>
+		<echo>Version : ${noVersion}</echo>
+		<copy todir="${dirTrgt}" overwrite='true'>
+			<fileset dir="${dirSrce}"/>
+		</copy>
+		<replace dir="${dirTrgt}" token="@version@" value="${noVersion}"/>
+		<concat destfile="WebContent/karuta/js/version.js" append="true">&#10;// ${noVersion} ${textVersion}</concat>
+		<replaceregexp match="const karuta_version_eportfolium =.*$" replace="const karuta_version_eportfolium = 'eportfolium-${noVersion}';" flags="g" byline="true" file="WebContent/karuta/js/version.js" ></replaceregexp>
+		<replaceregexp match="const karuta_date_eportfolium =.*$" replace="const karuta_date_eportfolium = '${current.date}';" flags="g" byline="true" file="WebContent/karuta/js/version.js" ></replaceregexp>
+	</target>
+</project>
