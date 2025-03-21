@@ -1079,6 +1079,7 @@ g_actions['join-usergroup'] = function JoinUserGroup(node)
 	var ok = false;
 	var user = "";
 	var usergroup = getTxtvals($("usergroup",node));
+	usergroup = decodeURI(usergroup);
 	var select_user = $("user>txtval",node).attr("select");
 	if(typeof(select_user)=='undefined')
 		user = $("user>txtval",node).text();
@@ -2217,6 +2218,7 @@ g_actions['join-portfoliogroup'] = function JoinPortfolioGroup(node)
 {
 	var ok = false;
 	var portfoliogroup = getTxtvals($("portfoliogroup",node));
+	portfoliogroup = decodeURI(portfoliogroup);
 	var select = $(node).attr("select");  // select = #portfoliocode. or refid
 	//---- get portfoliogroupid ----------
 	var groupid = "";

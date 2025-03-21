@@ -751,11 +751,14 @@ UIFactory["Get_Get_Resource"].prototype.parse = function(destid,type,langcode,da
 				resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",nodes[i]); 
 			else
 				resource = $("asmResource[xsi_type='nodeRes']",nodes[i]);
-			if (resource.length>0)
+			if (resource.length>0) {
 				code = $('code',resource).text();
-			else if (portfoliocode.indexOf("#portfoliogroup")>-1) {
+				libelle = $(srce+"[lang='"+languages[langcode]+"']",resource).text();
+				tableau2[tableau2.length] = {'code':code,'libelle':libelle};
+			} else if (portfoliocode.indexOf("#portfoliogroup")>-1) {
 				code = portfolioid = $(nodes[i]).attr("id");
-				
+				libelle = $('label',nodes[i]).text();
+				tableau2[tableau2.length] = {'code':code,'libelle':libelle};
 			} else if (portfoliocode.indexOf("#usergroup")>-1) {
 				code  = userid = $(nodes[i]).attr("id");
 				UIFactory.User.load(userid);
@@ -819,7 +822,7 @@ UIFactory["Get_Get_Resource"].prototype.parse = function(destid,type,langcode,da
 				}
 				value = $('value',resource).text();
 				code = $('code',resource).text();
-				label = $(srce+"[lang='"+languages[langcode]+"']",resource).text();
+//				label = $(srce+"[lang='"+languages[langcode]+"']",resource).text();
 				for (var j=0; j<languages.length;j++){
 					label[j]= $(srce+"[lang='"+languages[j]+"']",resource).text();
 				}
@@ -1169,7 +1172,165 @@ UIFactory["Get_Get_Resource"].prototype.parse = function(destid,type,langcode,da
 		$("#"+destid).append(inputs_obj);
 	}
 	//------------------------------------------------------------
-};
+	//------------------------------------------------------------
+	//------------------------------------------------------------
+	if (type=='completion') {
+	//------------------------------------------------------------
+	//------------------------------------------------------------
+		var html ="";
+		html += "<form autocomplete='off'>";
+		html += "</form>";
+		var form = $(html);
+		html = "";
+		html += "<div class='auto-complete btn-group roles-choice select-"+semtag+"'>";
+		html += "<input id='button_"+langcode+self.id+"' type='text' class='btn btn-default select' code= '' value=''/>";
+		html += "<button type='button' class='btn btn-default dropdown-toggle select' data-toggle='dropdown' aria-expanded='false'><span class='caret'></span><span class='sr-only'>&nbsp;</span></button>";
+		html += "</div>";
+		var btn_group = $(html);
+		$(form).append($(btn_group));
+		$("#"+destid).append(form);
+		//---------------------------------------------------
+		
+		html = "<div class='dropdown-menu dropdown-menu-right'></div>";
+		var select  = $(html);
+		//----------------- null value to erase
+//		if (resettable) {
+			html = "<a class='dropdown-item' value='' code='' uuid='' style='' ";
+			for (var j=0; j<languages.length;j++) {
+				html += "label_"+languages[j]+"='&nbsp;' ";
+			}
+			html += ">";
+			html += "&nbsp;</a>";
+			var select_item = $(html);
+			$(select_item).click(function (ev){
+				document.getElementById("button_"+langcode+self.id).defaultValue = "";
+				document.getElementById("button_"+langcode+self.id).value = "";
+				document.getElementById("button_"+langcode+self.id).className = "btn btn-default select selected-label";
+				UIFactory["Get_Resource"].update(this,self,langcode);
+			});
+			$(select).append($(select_item));
+//		}
+		//---------------------
+		if (target=='label') {
+			for ( var i = 0; i < newTableau1.length; i++) {
+				//------------------------------
+				var uuid = $(newTableau1[i][1]).attr('id');
+				var style = "";
+				var resource = null;
+				//------------------------------
+				if ($("asmResource",newTableau1[i][1]).length==3) {
+					style = UIFactory.Node.getDataContentStyle(newTableau1[i][1].querySelector("metadata-epm"));
+					resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i][1]); 
+				} else {
+					style = UIFactory.Node.getDataLabelStyle(newTableau1[i][1].querySelector("metadata-epm"));
+					resource = $("asmResource[xsi_type='nodeRes']",newTableau1[i][1]);
+				}
+				//------------------------------
+				//------------------------------
+				var value = $('value',resource).text();
+				var code = $('code',resource).text();
+				var display_code = false;
+				var display_label = true;
+				var display_value = false;
+				if (code.indexOf("$")>-1) 
+					display_label = false;
+				if (code.indexOf("@")<0) {
+					display_code = true;
+				}
+				if (code.indexOf("?")>-1) {
+					display_value = true;
+				}
+				code = cleanCode(code);
+				//------------------------------
+				var select_item = null;
+				if ($('code',resource).text().indexOf('----')>-1) {
+					html = "<div class='dropdown-divider'></div>";
+					select_item = $(html);
+				} else {
+					html = "<a class='dropdown-item' value='"+$('value',resource).text()+"' code='"+$('code',resource).text()+"' class='sel"+code+"' ";
+					for (var j=0; j<languages.length;j++){
+						html += "label_"+languages[j]+"=\""+$(srce+"[lang='"+languages[j]+"']",resource).text()+"\" ";
+					}
+					html += " style=\""+style+"\">";
+					if (display_code)
+						html += "<span class='li-code'>"+code+"</span>";
+					if (display_value)
+						html += "<span class='li-value'>"+value+"</span>";
+					if (display_label)
+						html += "<span class='li-label'>"+$(srce+"[lang='"+languages[langcode]+"']",resource).text()+"</span>";
+					html += "</a>";
+					select_item = $(html);
+					$(select_item).click(function (ev){
+						//--------------------------------
+						var code = $(this).attr('code');
+						var display_code = false;
+						var display_label = true;
+						if (code.indexOf("$")>-1) 
+							display_label = false;
+						if (code.indexOf("@")<0) {
+							display_code = true;
+						}
+						code = cleanCode(code);
+						//--------------------------------
+						var html = "";
+						if (display_code)
+							html += code+" ";
+						if (display_label)
+							html += $(this).attr("label_"+languages[langcode]);
+						$("#button_"+langcode+self.id).attr("style",style);
+						$("#button_"+langcode+self.id).html(html);
+						$("#button_"+langcode+self.id).attr("value",html);
+						$("#button_"+langcode+self.id).attr('class', 'btn btn-default select select-label').addClass("sel"+code);
+						UIFactory["Get_Resource"].update(this,self,langcode);
+						//--------------------------------
+					});
+				}
+				//-------------- update button -----
+				if (code!="" && self_code==$('code',resource).text()) {
+					var html = "";
+					if (display_code)
+						html += code+" ";
+					if (display_label)
+						html += $(srce+"[lang='"+languages[langcode]+"']",resource).text();
+					$("#button_"+langcode+self.id).attr("style",style);
+					$("#button_"+langcode+self.id).html(html);
+					$("#button_"+langcode+self.id).attr("value",html);
+					$("#button_"+langcode+self.id).attr('class', 'btn btn-default select select-label').addClass("sel"+code);
+				}
+				$(select).append($(select_item));
+			}
+		}
+		//---------------------
+		if (target=='text') {
+			for ( var i = 0; i < newTableau1.length; i++) {
+				var uuid = $(newTableau1[i][1]).attr('id');
+				var style = UIFactory.Node.getDataContentStyle(newTableau1[i][1].querySelector("metadata-epm"));
+				var resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i][1]); 
+				html = "<li></li>";
+				var select_item = $(html);
+				html = "<a class='dropdown-item' value='"+$('value',resource).text()+"' code='"+$('code',resource).text()+"' class='sel"+code+"' ";
+				for (var j=0; j<languages.length;j++){
+					html += "label_"+languages[j]+"=\""+$(srce+"[lang='"+languages[j]+"']",resource).text()+"\" ";
+				}
+				html += " style=\""+style+"\">";
+				
+				html += $(srce+"[lang='"+languages[langcode]+"']",resource).text()+"</a>";
+				var select_item_a = $(html);
+				$(select_item_a).click(function (ev){
+					$("#button_"+langcode+self.id).attr("style",style);
+					$("#button_"+langcode+self.id).attr('value',$(this).attr("label_"+languages[langcode]));
+					$("#button_"+langcode+self.id).attr('class', 'btn btn-default select select-label').addClass("sel"+code);
+					UIFactory["Get_Resource"].update(this,self,langcode);
+				});
+				$(select_item).append($(select_item_a))
+				$(select).append($(select_item));
+			}
+		}
+		//---------------------
+		$(btn_group).append($(select));
+		var onupdate = "UIFactory.Get_Get_Resource.update(input,self)";
+		autocomplete(document.getElementById("button_"+langcode+self.id), tableau2,onupdate,self,langcode);
+	}};
 
 //==================================
 UIFactory["Get_Get_Resource"].getChildren = function(dest,langcode,self,srce,portfoliocode,semtag,semtag_parent,code,cachable,tabadded)

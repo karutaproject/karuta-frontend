@@ -1275,6 +1275,8 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 			var select_item = $(html);
 			$(select_item).click(function (ev){
 				document.getElementById("button_"+langcode+self.id).defaultValue = "";
+				$("#button_"+langcode+self.id).html(html);
+				document.getElementById("button_"+langcode+self.id).value = "";
 				document.getElementById("button_"+langcode+self.id).className = "btn btn-default select selected-label";
 				UIFactory["Get_Resource"].update(this,self,langcode);
 			});
@@ -1348,7 +1350,7 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 						if (display_label)
 							html += $(this).attr("label_"+languages[langcode]);
 						$("#button_"+langcode+self.id).attr("style",style);
-						$("#button_"+langcode+self.id).html(html);
+//						$("#button_"+langcode+self.id).html(html);
 						$("#button_"+langcode+self.id).attr("value",html);
 						$("#button_"+langcode+self.id).attr('class', 'btn btn-default select select-label').addClass("sel"+code);
 						UIFactory["Get_Resource"].update(this,self,langcode);
