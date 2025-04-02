@@ -190,10 +190,6 @@ UIFactory["Calendar"].prototype.displayEditor = function(dest,type,langcode,disa
 	html += "value=\""+$(this.text_node[langcode]).text()+"\" >"
 	var input1 = $(html);
 	var self = this;
-	$(input1).change(function (){
-		$(self.text_node[langcode]).text($(this).val());
-		UIFactory["Calendar"].update(self,langcode);
-	});
 	var format = $(this.format_node[langcode]).text();
 	if (format.length<2)
 		format = "yyyy/mm/dd";
@@ -202,7 +198,12 @@ UIFactory["Calendar"].prototype.displayEditor = function(dest,type,langcode,disa
 		minViewMode = "days";
 	$(input1).datepicker({minViewMode:minViewMode,format:format,language:LANG});
 	$(input1).datepicker().on('changeDate', function (ev) {
-		$(self.utc).text($(this).datepicker('getDate').getTime());
+		$(self.utc).text(Date.parse($(this).val()));
+		$(self.text_node[langcode]).text($(this).val());
+		UIFactory.Calendar.update(self,langcode);
+	});
+	$(input1).datepicker().on('clearDate', function (ev) {
+		$(self.utc).text(Date.parse($(this).val()));
 		$(self.text_node[langcode]).text($(this).val());
 		UIFactory.Calendar.update(self,langcode);
 	});

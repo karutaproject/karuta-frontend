@@ -954,6 +954,32 @@ UIFactory["Portfolio"].getRootid_bycode = function(code)
 	});
 	return result;
 };
+
+//==================================
+UIFactory["Portfolio"].getCodeLabel_byid = function(portfolioid,level) 
+//==================================
+{
+	var result = "";
+	var param = "";
+	if (level==null)
+		param="?resources=true";
+	else
+		param = "?level=" + level;
+	$.ajax({
+		async: false,
+		type : "GET",
+		dataType : "xml",
+		url : serverBCK_API+"/portfolios/portfolio/" + portfolioid + param,
+		success : function(data) {
+			const portfolio = $("portfolio", data);
+			const code = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",portfolio)[0]).text();
+			const label = $("label[lang='"+languages[LANGCODE]+"']",$("asmRoot>asmResource[xsi_type='nodeRes']",portfolio)[0]).text();
+			result =  {'code':code,'label':label};
+		}
+	});
+	return result;
+};
+
 /* ===not used
 //==================================
 UIFactory["Portfolio"].instantiate_bycode = function(sourcecode,targetcode,callback)

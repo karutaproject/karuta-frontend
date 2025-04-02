@@ -10,8 +10,8 @@
     <stringAttribute key="org.eclipse.jdt.launching.CLASSPATH_PROVIDER" value="org.eclipse.ant.ui.AntClasspathProvider"/>
     <booleanAttribute key="org.eclipse.jdt.launching.DEFAULT_CLASSPATH" value="true"/>
     <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="karuta-frontend-FEAT2025"/>
-    <stringAttribute key="org.eclipse.ui.externaltools.ATTR_LOCATION" value="${project_loc:/karuta-frontend-FEAT2025}/build/buildVersion.xml"/>
+    <stringAttribute key="org.eclipse.ui.externaltools.ATTR_LOCATION" value="${workspace_loc:/karuta-frontend-FEAT2025/WebContent/build/buildVersion.xml}"/>
     <stringAttribute key="org.eclipse.ui.externaltools.ATTR_RUN_BUILD_KINDS" value="full,incremental,auto,"/>
     <booleanAttribute key="org.eclipse.ui.externaltools.ATTR_TRIGGERS_CONFIGURED" value="true"/>
-    <stringAttribute key="org.eclipse.ui.externaltools.ATTR_WORKING_DIRECTORY" value="${project_loc:/karuta-frontend-FEAT2025}"/>
+    <stringAttribute key="org.eclipse.ui.externaltools.ATTR_WORKING_DIRECTORY" value="${workspace_loc:/karuta-frontend-FEAT2025}"/>
 </launchConfiguration>

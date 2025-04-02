@@ -2371,7 +2371,8 @@ function removeStr(str1,str2)
 function cleanCode(code,variable)
 //==============================
 {
-	code = removeStr(code,"@");
+	if (code.startsWith("@"))
+		code = code.substring("1");
 	if (!variable)
 		code = removeStr(code,"#");
 	code = removeStr(code,"%");

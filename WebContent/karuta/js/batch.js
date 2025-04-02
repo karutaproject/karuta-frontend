@@ -100,7 +100,7 @@ function replaceBatchVariable(text,node,withquote)
 			n++; // to avoid infinite loop
 		}
 	}
-	return text;
+	return text.trim();
 }
 //-----------------------------------------------------------------------
 
@@ -237,7 +237,7 @@ function getvarvals(node)
 			str += text;
 		}
 	}
-	return replaceVariable(str.trim());
+	return replaceVariable(str.trim()).trim();
 }
 
 //==================================
@@ -251,7 +251,7 @@ function getTest(test)
 				test = test.replace(/#lang#/g,languages[LANGCODE]);
 		}
 	}
-	return test;
+	return test.trim();
 }
 
 //==================================
@@ -346,6 +346,27 @@ function getSourceUrl(node)
 }
 
 //==================================
+function evalTest(test,nodes)
+//==================================
+{
+	test = replaceBatchVariable(test);
+	if (test.indexOf("'value':")<0)
+		test = getTest(test);
+	for (let i=0;i<nodes.length;i++){
+		let nodeid = $(nodes[i]).attr("id");
+		$.ajax({
+			async : false,
+			type : "GET",
+			dataType : "xml",
+			url : serverBCK_API+"/nodes/node/"+nodeid,
+			success : function(data) {
+				nodes[i] = $(":root",data)[0];
+			}
+		});
+	}
+	return eval("$(nodes)"+test);
+}
+//==================================
 function getTargetNodes(node,data,teststr)
 //==================================
 {
@@ -383,22 +404,7 @@ function getTargetNodes(node,data,teststr)
 	//----------Test ----------
 	let test = $(node).attr(teststr);
 	if (test!=undefined && test!="" && nodes.length>0) {
-		test = replaceBatchVariable(test);
-		if (test.indexOf("'value':")<0)
-			test = getTest(test);
-		for (let i=0;i<nodes.length;i++){
-			let nodeid = $(nodes[i]).attr("id");
-			$.ajax({
-				async : false,
-				type : "GET",
-				dataType : "xml",
-				url : serverBCK_API+"/nodes/node/"+nodeid,
-				success : function(data) {
-					nodes[i] = $(":root",data)[0];
-				}
-			});
-		}
-		nodes = eval("$(nodes)"+test);
+		nodes = evalTest(test,nodes);
 	}
 	return nodes;
 }
@@ -436,22 +442,7 @@ function getSourceNodes(node,data,teststr)
 	//----------Test ----------
 	let test = $(node).attr(teststr);
 	if (test!=undefined) {
-		test = replaceBatchVariable(test);
-		if (test.indexOf("'value':")<0)
-			test = getTest(test);
-		for (let i=0;i<nodes.length;i++){
-			let nodeid = $(nodes[i]).attr("id");
-			$.ajax({
-				async : false,
-				type : "GET",
-				dataType : "xml",
-				url : serverBCK_API+"/nodes/node/"+nodeid,
-				success : function(data) {
-					nodes[i] = $(":root",data)[0];
-				}
-			});
-		}
-		nodes = eval("$(nodes)"+test);
+		nodes = evalTest(test,nodes);
 	}
 	return nodes;
 }
@@ -530,6 +521,7 @@ g_actions['for-each-tree'] = function (node)
 {
 	const code = getTxtvals($(">code",node));
 	const label = getTxtvals($(">label",node));
+	code =  cleanCode(code);
 	//------------------------------------
 	var url1 = serverBCK_API+"/portfolios?active=1&search="+code;
 	$.ajax({
@@ -1507,6 +1499,7 @@ g_actions['create-tree'] = function createTree(node)
 	var code = getvarvals($("code",node));
 	if (code=="")
 		code = getTxtvals($("code",node));
+	code =  cleanCode(code);
 	var treeref = $(node).attr('id');
 	if (code!="") {
 		var url = serverBCK_API+"/portfolios/portfolio/code/" + code;
@@ -1620,6 +1613,7 @@ g_actions['select-tree'] = function selectTree(node)
 	var code = getvarvals($("code",node));
 	if (code=="")
 		code = getTxtvals($("code",node));
+	code =  cleanCode(code);
 	//----- get tree id -----
 	var portfolioid = "";
 	if (code=='self' || code=='#self') { 
@@ -1627,7 +1621,6 @@ g_actions['select-tree'] = function selectTree(node)
 		code = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",g_portfolio_current)).text();
 	} else
 		portfolioid = UIFactory["Portfolio"].getid_bycode(code,false); 
-	
 	//------------------------
 	if (portfolioid!=""){
 		ok = true;
@@ -2767,8 +2760,13 @@ g_actions['update-resource'] = function updateResource(node,data)
 							$(attribute_name+"[lang='"+languages[langcode]+"']",resource).text(attribute_value);
 						}
 					}
-				} else
+				} else {
 					$(attribute_name,resource).text(attribute_value);
+				}
+				if (type=="Calendar" && attribute_name=="text") {
+					const utc = DATE.parse(attribute_value);
+					$("utc",resource).text(utc);
+				}
 			}
 			var data = "<asmResource xsi_type='"+type+"'>" + $(resource).html() + "</asmResource>";
 			var strippeddata = data.replace(/xmlns=\"http:\/\/www.w3.org\/1999\/xhtml\"/g,"");  // remove xmlns attribute
@@ -3864,7 +3862,7 @@ g_actions['batch-variable'] = function (node)
 				nodes = $("node",data);
 				UICom.parseStructure(data,false);
 				if (test!=undefined)
-					nodes = eval("$(nodes)"+test);
+					nodes = evalTest(test,nodes);
 				if (nodes.length>0){
 					nodeid = $(nodes[0]).attr('id');
 				} else {
@@ -3895,6 +3893,9 @@ g_actions['batch-variable'] = function (node)
 		else if (select=='resource label') {
 			text = UICom.structure.ui[nodeid].resource.getLabel();
 		}
+		else if (select=='resource utc') {
+				text = UICom.structure.ui[nodeid].getAttributes("utc");
+			}
 		else if (select=='node label') {
 			text = UICom.structure.ui[nodeid].getLabel();
 		}
@@ -4001,7 +4002,7 @@ g_actions['for-each-node'] = function (node)
 					nodes.push(UICom.structure.ui[nodeid].nodeid);
 				}
 				if (test!=undefined)
-					nodes = eval("$(nodes)"+test);
+					nodes = evalTest(test,nodes);
 				$("#batch-log").append("<br>" + nodes.length + " node(s)");
 				let actions = $(node).children();
 				$("#batch-log").append("<br>Actions : ");
@@ -4062,7 +4063,7 @@ g_actions['for-each-node'] = function (node)
 				UICom.parseStructure(data,false);
 				let nodes = $("node",data);
 				if (test!=undefined)
-					nodes = eval("$(nodes)"+test);
+					nodes = evalTest(test,nodes);
 				$("#batch-log").append("<br>" + nodes.length + " node(s)");
 				let actions = $(node).children();
 				$("#batch-log").append("<br>Actions : ");
@@ -4366,7 +4367,7 @@ function convertCSVLine2json(codes,csvline)
 	var items = csvline.split(csvseparator);
 	var g_json_line = {};
 	for ( var i = 0; i < codes.length; i++) {
-		g_json_line[codes[i]] = items[i];
+		g_json_line[codes[i]] = items[i].trim();
 	}
 	return g_json_line;
 };

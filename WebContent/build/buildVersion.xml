@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="updateVersion" default="updateVersion" basedir="."> 
-	<property name="noVersion" value="3.73.0"/>
-	<property name="textVersion" value="FEAT   -  enhancement Get_Resource and Get_Get_resource"/>
+	<property name="noVersion" value="3.75.0"/>
+	<property name="textVersion" value="FEAT   -  Calendar can be used in form and batch"/>
 	<property name="dirSrce" value="src/htm-srce"/>
 	<property name="dirTrgt" value="WebContent/karuta/htm"/>
 	<target name="testIfNewVersion">
-		<uptodate srcfile="${dirTrgt}/karuta.htm" targetfile="WebContent/karuta/buildVersion.xml" property="new"/>
+		<uptodate srcfile="${dirTrgt}/karuta.htm" targetfile="WebContent/build/buildVersion.xml" property="new"/>
 	</target>
 	<target name="Version" if="new">
 		<tstamp>
