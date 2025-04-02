@@ -461,7 +461,7 @@ UIFactory["Portfolio"].displayHorizontalMenu = function(root,destid,type,langcod
 	html += "		<ul id='parent-"+rootid+"' class='navbar-nav topbarmenu'></ul>";
 	html += "	</div>";
 	$("#"+destid).html($(html));
-	UIFactory.Node.displayHorizontalMenu(root,'parent-'+UICom.rootid,type,langcode,edit,rootid);
+	UIFactory.Node.displayHorizontalMenu(root,'parent-'+rootid,type,langcode,edit,rootid);
 };
 
 //======================
@@ -954,6 +954,32 @@ UIFactory["Portfolio"].getRootid_bycode = function(code)
 	});
 	return result;
 };
+
+//==================================
+UIFactory["Portfolio"].getCodeLabel_byid = function(portfolioid,level) 
+//==================================
+{
+	var result = "";
+	var param = "";
+	if (level==null)
+		param="?resources=true";
+	else
+		param = "?level=" + level;
+	$.ajax({
+		async: false,
+		type : "GET",
+		dataType : "xml",
+		url : serverBCK_API+"/portfolios/portfolio/" + portfolioid + param,
+		success : function(data) {
+			const portfolio = $("portfolio", data);
+			const code = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",portfolio)[0]).text();
+			const label = $("label[lang='"+languages[LANGCODE]+"']",$("asmRoot>asmResource[xsi_type='nodeRes']",portfolio)[0]).text();
+			result =  {'code':code,'label':label};
+		}
+	});
+	return result;
+};
+
 /* ===not used
 //==================================
 UIFactory["Portfolio"].instantiate_bycode = function(sourcecode,targetcode,callback)
@@ -1227,9 +1253,9 @@ UIFactory["Portfolio"].copy_rename = function(templateid,targetcode,reload,targe
 {
 	var uuid = null;
 	var url = serverBCK_API+"/portfolios/copy/"+templateid+"?targetcode="+targetcode+"&owner=true";
-	const exist = UIFactory.Portfolio.existPortfolio(targetcode);
+//	const exist = UIFactory.Portfolio.existPortfolio(targetcode);
 	//-----------------------
-	if (!exist) {
+//	if (!exist) {
 		$.ajax({
 			async : false,
 			type : "POST",
@@ -1284,11 +1310,11 @@ UIFactory["Portfolio"].copy_rename = function(templateid,targetcode,reload,targe
 					alertHTML("Error : "+jqxhr.responseText);
 			}
 		});
-	} else {
-		$("#wait-window").hide();
-		alertHTML(karutaStr[LANG]['error-existing-code']);
+//	} else {
+//		$("#wait-window").hide();
+//		alertHTML(karutaStr[LANG]['error-existing-code']);
 
-	}
+//	}
 	return uuid;
 };
 

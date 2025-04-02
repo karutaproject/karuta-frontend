@@ -59,6 +59,7 @@ var g_roles = []; // list of portfolio roles for designer
 var g_variables = {}; // variables for substitution in Get_resource and menus
 var g_importednodestack = [];
 var g_backstack = [];
+var g_menubarstack = [];
 
 //-------------- used for designer-----
 var redisplays = {};
@@ -176,7 +177,7 @@ function getNavBar(type,portfolioid,edit)
 		} else
 			html += "<li id='navbar-mailto' class='nav-item icon'><a class='nav-link' href='mailto:"+g_configVar['technical-support']+"?subject="+karutaStr[LANG]['technical_support']+" ("+appliname+")' data-title='"+karutaStr[LANG]["technical_support"]+"' data-toggle='tooltip' data-placement='bottom'><i class='fas fa-envelope' data-title='"+karutaStr[LANG]["technical_support"]+"' data-toggle='tooltip' data-placement='bottom'></i></a></li>";
 	} else if (USER.username.indexOf("karuser")<0) {
-		html += "<li id='navbar-home' class='nav-item icon'><a class='nav-link' onclick='show_list_page();fill_list_page()' data-title='"+karutaStr[LANG]["home"]+"' data-toggle='tooltip' data-placement='bottom'><i class='fas fa-home'></i></a></li>";
+		html += "<li id='navbar-home' class='nav-item icon'><a class='nav-link' onclick=\"$('#wait-window').modal('show');show_list_page();fill_list_page()\" data-title='"+karutaStr[LANG]["home"]+"' data-toggle='tooltip' data-placement='bottom'><i class='fas fa-home'></i></a></li>";
 		if (g_configVar['tech-support']!=undefined && g_configVar['tech-support']!='') {
 			if (g_configVar['tech-support']=='email')
 				if (g_configVar['tech-subject']!=undefined && g_configVar['tech-subject']!='')
@@ -833,6 +834,9 @@ function displayPage(uuid,depth,type,langcode,edit,print) {
 		langcode = LANGCODE;
 	if (print==null)
 		print = false;
+	if (print)
+		$('#wait-window').modal('show');
+
 	//---------------------
 	var scrollTop = window.pageYOffset || document.documentElement.scrollTop; 
 	var scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
@@ -884,8 +888,10 @@ function displayPage(uuid,depth,type,langcode,edit,print) {
 				UIFactory['Node'].displayWelcomePage(UICom.structure.tree[uuid],'contenu',depth,langcode,g_edit);
 			else
 				UICom.structure.ui[uuid].displayNode('standard',UICom.structure.tree[uuid],'contenu',depth,langcode,g_edit);
-			if (print && name=='asmRoot')
+			if (print && name=='asmRoot') {
 				$("#node_"+uuid).removeClass("asmRoot");
+				$("#node_"+uuid).addClass("printView");
+			}
 		}
 		if (type=='translate')
 			UICom.structure.ui[uuid].displayTranslateNode(type,UICom.structure.tree[uuid],'contenu',depth,langcode,g_edit);
@@ -971,6 +977,7 @@ function reloadPage() {
 function previewPage(uuid,depth,type,langcode,edit,reload) 
 //==================================
 {
+	let original_edit = g_edit;
 	if (uuid!=null) {
 		//---------------------
 		if (langcode==null)
@@ -1034,7 +1041,7 @@ function previewPage(uuid,depth,type,langcode,edit,reload)
 			}
 		});
 	}
-		g_edit = original_edit;
+	g_edit = original_edit;
 }
 
 //==================================
@@ -2364,7 +2371,8 @@ function removeStr(str1,str2)
 function cleanCode(code,variable)
 //==============================
 {
-	code = removeStr(code,"@");
+	if (code.startsWith("@"))
+		code = code.substring("1");
 	if (!variable)
 		code = removeStr(code,"#");
 	code = removeStr(code,"%");
@@ -4364,7 +4372,19 @@ $.fn.nodeLabelContains = function (options)
 	return $(result);
 };
 $.fn.test_nodeLabelContains = function (options) { return result = ($(this).nodeLabelContains(options).length>0) ? true : false;};
+
 //=====================================
+$.fn.nodeLabelNotContains = function (options)
+//=====================================
+{
+	var defaults= { "value":"v","function":""};
+	var parameters = $.extend(defaults, options);
+	var result = $(this).has(">asmResource[xsi_type='nodeRes']>label[lang='"+languages[LANGCODE]+"']:not(:contains('"+parameters.value+"'))");
+	if (parameters.function!="")
+		result = eval("$(result)."+parameters.function);
+	return $(result);
+};
+$.fn.test_nodeLabelNotContains = function (options) { return result = ($(this).nodeLabelNotContains(options).length>0) ? true : false;};
 
 //=====================================
 $.fn.nodeValueContains = function (options)  

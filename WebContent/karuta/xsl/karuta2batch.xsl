@@ -434,6 +434,22 @@
 	<!-- ====================================================================================== -->
 	<!-- ====================================================================================== -->
 	
+	<xsl:template match="*[metadata/@semantictag='for-each-group-portfolio']">
+		<xsl:variable name="id">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='treeid']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<for-each-group-portfolio id="{$id}">
+			<group>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">portfoliogroup</xsl:with-param>
+				</xsl:call-template>
+			</group>
+			<actions>
+				<xsl:apply-templates select='asmUnitStructure'/>
+			</actions>
+		</for-each-group-portfolio>
+	</xsl:template>
+	
 	<xsl:template match="*[metadata/@semantictag='join-portfoliogroup']">
 		<xsl:variable name="id">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='tree-select']/asmResource[@xsi_type='Get_Resource']/label[@lang=$lang]"></xsl:value-of>
@@ -1525,7 +1541,7 @@
 					</xsl:when>
 					<xsl:otherwise>
 						<xsl:choose>
-							<xsl:when test="$semtag=''"><xsl:value-of select='$ref-id'/>.<xsl:value-of select='$varname'/></xsl:when>
+							<xsl:when test="$semtag=''"><xsl:value-of select='$ref-id'/>.###<xsl:value-of select='$varname'/>###</xsl:when>
 							<xsl:otherwise>
 								<xsl:choose>
 									<xsl:when test="$select!=''"><xsl:value-of select='$select'/>.<xsl:value-of select='$ref-id'/>.<xsl:value-of select='$semtag'/></xsl:when>

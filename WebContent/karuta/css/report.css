@@ -184,6 +184,9 @@
 .report .for-each-portfolio-js,
 .report .for-each-portfolios-nodes,
 .report .for-each-node,
+.report .for-each-node-js,
+.report .for-each-portfoliogroup,
+.report .for-each-usergroup,
 .report .loop,
 .report .for-each-vector {
   margin-top: 7px;
@@ -223,7 +226,8 @@
 .report .username,
 .report .firstname,
 .report .lastname,
-.report .firstname-lastname,
+.report .first-last-name,
+.report .user_attribute,
 .report .text,
 .report .node_resource,
 .report .url2unit,

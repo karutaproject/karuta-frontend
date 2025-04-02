@@ -173,7 +173,7 @@ UIFactory["PortfolioFolder"].loadAndDisplayAll = function (type)
 //==================================
 {
 	$.ajax({
-		async:false,
+		async:true,
 		type : "GET",
 		dataType : "xml",
 		url : serverBCK_API+"/portfolios?active=1&project=true",
@@ -190,8 +190,17 @@ UIFactory["PortfolioFolder"].loadAndDisplayAll = function (type)
 				$("#nb_folders_active").html( (nb_folders==0)?0:nb_folders);
 			}
 			//--------------------------------------
-			$('[data-toggle=tooltip]').tooltip({html: true, trigger: 'hover'}); 
+			$('[data-toggle=tooltip]').tooltip({html: true, trigger: 'hover'});
+			if (localStorage.getItem('currentDisplayedportfolioCode')=='portfolios') {
+				UIFactory.PortfolioFolder.loadAndDisplayPortfolios('portfolio-content2-rightside','list');
+			}
+			if (nb_folders==0 && nb_portfolios==0 && g_execbatch!=undefined && g_execbatch){
+				$("#search-portfolio-div").hide();
+				$("#refresh").hide();
+				displayExecBatchButton();
+			}
 			$("#wait-window").modal('hide');
+			$("#spinner-4").hide();
 		},
 		error : function(jqxhr,textStatus) {			
 			alertHTML("Server Error GET UIFactory.PortfolioFolder.loadAndDisplayAll: "+textStatus);
@@ -984,7 +993,7 @@ UIFactory["PortfolioFolder"].checkPortfolios = function()
 //==================================
 {
 	$.ajax({
-		async: false,
+		async: true,
 		type : "GET",
 		dataType : "xml",
 		url : serverBCK_API+"/portfolios?active=1&project=false&count=true",

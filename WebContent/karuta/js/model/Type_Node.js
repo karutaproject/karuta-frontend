@@ -886,11 +886,13 @@ UIFactory["Node"].prototype.updateLabel = function(langcode)
 	var label = sanitizeText($.trim($("#label_"+this.id+"_"+langcode).val()));
 	$(this.label_node[langcode]).text(label);
 	$(UICom.structure.ui[this.id].label_node[LANGCODE]).text(label);
+	$("label[lang='"+languages[langcode]+"']",$("asmResource[xsi_type='nodeRes']",$("#"+this.id,g_portfolio_current))[0]).text(label);// new
 	//---------------------
 	if (!this.multilingual) {
 		for (var i=0; i<languages.length; i++) {
 			$(this.label_node[i]).text(label);
 			$(UICom.structure.ui[this.id].label_node[i]).text(label);
+			$("label[lang='"+languages[i]+"']",$("asmResource[xsi_type='nodeRes']",$("#"+this.id,g_portfolio_current))[0]).text(label);// new
 		}
 	}
 	//---------------------
@@ -913,22 +915,26 @@ UIFactory["Node"].prototype.update = function(langcode)
 			var code = sanitizeText($.trim($("#code_"+this.id).val()));
 			$(this.code_node).text(code);
 			$(UICom.structure.ui[this.id].code_node).text(code);
+			$("code",$("asmResource[xsi_type='nodeRes']",$("#"+this.id,g_portfolio_current))[0]).text(code); // new
 		}
 		//---------------------
 		if ($("#value_"+this.id).length){
 			var value = sanitizeText($.trim($("#value_"+this.id).val()));
 			$(this.value_node).text(value);
 			$(UICom.structure.ui[this.id].value_node).text(value);
+			$("value",$("asmResource[xsi_type='nodeRes']",$("#"+this.id,g_portfolio_current))[0]).text(value); // new
 		}
 		//---------------------
 		var label = sanitizeText($.trim($("#label_"+this.id+"_"+langcode).val()));
 		$(this.label_node[langcode]).text(label);
 		$(UICom.structure.ui[this.id].label_node[langcode]).text(label);
+		$("label[lang='"+languages[langcode]+"']",$("asmResource[xsi_type='nodeRes']",$("#"+this.id,g_portfolio_current))[0]).text(label);// new
 		//---------------------
 		if (!this.multilingual) {
 			for (var i=0; i<languages.length; langcode++) {
 				$(this.label_node[i]).text(label);
 				$(UICom.structure.ui[this.id].label_node[i]).text(label);
+				$("label[lang='"+languages[i]+"']",$("asmResource[xsi_type='nodeRes']",$("#"+this.id,g_portfolio_current))[0]).text(label);// new
 			}
 		}
 		//---------------------
@@ -1543,9 +1549,23 @@ UIFactory["Node"].displaySidebar = function(root,destid,type,langcode,edit,paren
 
 	//----------------------------------------------------------------------------------------------------------------------------
 	//----------------------------------------------------------------------------------------------------------------------------
-	//----------------------- HORIZONTAL MENU ------------------------------------------------------------------------------------
+	//----------------------- HORIZONTAL MENU -----------------------------------------------------------------------
 	//----------------------------------------------------------------------------------------------------------------------------
 	//----------------------------------------------------------------------------------------------------------------------------
+	
+	function displaySubMenu(uuid) {
+		let html = "<nav id='pagemenu-"+uuid+"' class='menu_bar navbar navbar-expand-md navbar-light bg-lightfont'>";
+		html += "	<div class='navbar-collapse collapse navbars";
+		if (g_bar_type=='horizontal-right')
+			html += " justify-content-end";
+		html += "''>";
+		html += "<ul id='parentmenu-"+uuid+"' class='navbar-nav'></ul>";
+		html += "	</div>";
+		html += "	</nav>";
+		$("#sub-bar").append($(html));
+		const root = UICom.structure.tree[uuid];
+		UIFactory.Node.displayHorizontalMenu(root,'parentmenu-'+uuid,'standard',LANGCODE,g_edit,uuid);
+	}
 
 	//===========================================
 	UIFactory["Node"].displayHorizontalMenu = function(root,destid,type,langcode,edit,parentid,level)
@@ -1557,7 +1577,6 @@ UIFactory["Node"].displaySidebar = function(root,destid,type,langcode,edit,paren
 		//---------------------
 		if (level==null)
 			level = 0;
-		//---------------------
 		const welcomeid = $("asmUnit:has(metadata[semantictag*='WELCOME'])",UICom.structure.ui[UICom.rootid].node).attr('id');
 		let i = 0;
 		while (i<root.children.length)
@@ -1573,6 +1592,13 @@ UIFactory["Node"].displaySidebar = function(root,destid,type,langcode,edit,paren
 			let langnotvisible = ($(node.metadatawad).attr('langnotvisible')==undefined)?'':$(node.metadatawad).attr('langnotvisible');
 			let privatevalue = ($(node.metadatawad).attr('private')==undefined)?false:$(node.metadatawad).attr('private')=='Y';
 			let resource_type = UICom.structure.ui[uuid].resource_type;
+			const semantictag = UICom.structure.ui[uuid].semantictag;
+			const hm = (semantictag.indexOf('sub-menu')>-1);
+			const onelevel = (semantictag.indexOf('one-level-menu')>-1);
+			
+
+
+
 			//--------------------------------------------------
 			if (i==0 && resource_type!=null && resource_type == "URL2Portfolio") {
 				$("#portfolio_bar").show();
@@ -1598,11 +1624,13 @@ UIFactory["Node"].displaySidebar = function(root,destid,type,langcode,edit,paren
 					html += "<div class='dropdown-submenu";
 					if (privatevalue)
 						html+= "private"
-					html += "' id='parent-"+uuid+"' role='tabdivst'>";
+					html += "' id='parent-"+uuid+"' role='tabdivst' name='"+semantictag+"'>";
 					html += "<div class='dropdown-item' style='cursor:pointer ";
 					if (g_configVar['portfolio-hmenu-logo']!="" && uuid==welcomeid)
 						html += ";display:none";
-					html += "' onclick=\"displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+");pageClick ('"+uuid+"')\" id='sidebar_"+uuid+"'>"+text+"</div>";
+					let js = "";
+					js += "$(this).parent().parent().parent().parent().nextAll().remove();";
+					html += "' onclick=\""+js+"displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+");pageClick ('"+uuid+"')\" id='sidebar_"+uuid+"'>"+text+"</div>";
 					$("#"+destid).append($(html));
 				}
 				if(name == "asmUnit" && level==1) // in a dropdown
@@ -1621,12 +1649,19 @@ UIFactory["Node"].displaySidebar = function(root,destid,type,langcode,edit,paren
 					html += "<div class='dropdown-submenu";
 					if (privatevalue)
 						html+= "private"
-					html += "' id='parent-"+uuid+"' role='tabdivst'>";
-					html += "<div class='dropdown-item' style='cursor:pointer' onclick=\"displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+")\" id='sidebar_"+uuid+"'>"+text+"</div>";
-					html += "<div id='dropdown"+uuid+"' class='dropdown-menu dropdown-menu-right nodisplay' aria-labelledby='sidebar_"+uuid+"'></div>";
+					html += "' id='parent-"+uuid+"' role='tabdivst' name='"+semantictag+"'>";
+					let js = "";
+					js += "$(this).parent().parent().parent().parent().nextAll().remove();";
+					if (hm) {
+						js += "displaySubMenu('"+uuid+"');";
+					}
+					html += "<div class='dropdown-item' style='cursor:pointer' onclick=\""+js+"displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+")\" id='sidebar_"+uuid+"'>"+text+"</div>";
+					if (!hm && !onelevel)
+						html += "<div id='dropdown"+uuid+"' class='dropdown-menu dropdown-menu-right nodisplay' aria-labelledby='sidebar_"+uuid+"'></div>";
 					html += "</div>";
 					$("#"+destid).append($(html));
-					UIFactory["Node"].displayHorizontalMenu(UICom.structure.tree[root.children[i]],'dropdown'+uuid,type,langcode,g_edit,uuid,1);
+					if (!hm && !onelevel)
+						UIFactory["Node"].displayHorizontalMenu(UICom.structure.tree[root.children[i]],'dropdown'+uuid,type,langcode,g_edit,uuid,1);
 				}
 				if (name=='asmContext' && resource_type == "URL2Portfolio") {
 					var html = "";

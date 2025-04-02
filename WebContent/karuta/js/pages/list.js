@@ -75,7 +75,7 @@ function fill_list_page()
 	html += "		<div id='portfolio-search' class='search'></div>";
 	html += "		<div id='portfolio-rightside-title' class='title'></div>";
 	html += "		<div id='portfolio-rightside-header' class='header'></div>";
-	html += "		<div id='portfolio-rightside-content1' class='content1'></div>";
+	html += "		<div id='portfolio-rightside-content1' class='content1'><img id='spinner-4' style='display: block;margin-left:auto;margin-right:auto' src='../img/Spinner-3.gif'/></div>";
 	html += "		<div id='portfolio-rightside-navbar-pages-top' class='navbar-pages' style='display:none'></div>";
 	html += "		<div id='portfolio-rightside-content2' class='content2'></div>";
 	html += "		<div id='portfolio-rightside-navbar-pages-bottom' class='navbar-pages' style='display:none'></div>";
@@ -100,6 +100,7 @@ function fill_list_page()
 	html += "</div>";
 	//-----------------------------------------------------------
 	$("#main-list").html(html);
+
 	UIFactory.PortfolioFolder.displayPortfolioSearch("portfolio",false);	
 	//---------------------------------------------
 	if (USER.admin || USER.creator ){
@@ -120,14 +121,6 @@ function fill_list_page()
 	//--------we load the folders-----------------------
 	UIFactory.PortfolioFolder.loadAndDisplayAll('portfolio');
 	UIFactory.PortfolioFolder.checkPortfolios();
-	if (localStorage.getItem('currentDisplayedportfolioCode')=='portfolios') {
-		UIFactory.PortfolioFolder.loadAndDisplayPortfolios('portfolio-content2-rightside','list');
-	}
-	if (nb_folders==0 && nb_portfolios==0 && g_execbatch!=undefined && g_execbatch){
-		$("#search-portfolio-div").hide();
-		$("#refresh").hide();
-		displayExecBatchButton();
-	}
 	$("#wait-window").modal('hide');
 }
 

@@ -1,5 +1,5 @@
 @charset "UTF-8";
-/* copyright eportfolium 2021 */
+/* copyright eportfolium 2025 */
 /* ====================== */
 /*     DEFAULT VALUES     */
 /* ====================== */
@@ -86,6 +86,19 @@ body,
   display: block;
   font-size: 70%;
   font-style: italic;
+}
+
+.ellipsis {
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ellipsis:hover {
+  white-space: normal;
+  height: auto;
+  overflow: visible;
+  background-color: #f0efef;
 }
 
 /* ====================== */
@@ -765,6 +778,14 @@ body,
 /* ====================== */
 /*    BUTTONS - MENUS     */
 /* ====================== */
+div.dropdown-submenu[name=not-visible-in-menu] {
+  display: none;
+}
+
+body[userrole=designer] div.dropdown-submenu[name=not-visible-in-menu] {
+  display: block;
+}
+
 .dropdown.menu .btn {
   height: 25px;
   padding-left: 9px;
@@ -841,27 +862,39 @@ body,
   color: var(--portfolio-sidebar-selected-text-color);
 }
 
-#menu_bar {
+.hide-structure .asmUnit, .hide-structure .asmStructure {
+  display: none;
+}
+
+.menu_bar {
+  padding-top: 0px;
+}
+
+#menu_bar + .menu_bar {
+  margin-top: -1.3em;
+}
+
+#menu_bar, .menu_bar {
   background-color: var(--portfolio-sidebar-background-color);
   color: var(--portfolio-sidebar-text-color);
 }
-#menu_bar .dropdown-menu {
+#menu_bar .dropdown-menu, .menu_bar .dropdown-menu {
   background-color: var(--portfolio-sidebar-background-color);
   color: var(--portfolio-sidebar-text-color);
 }
-#menu_bar .dropdown-item {
+#menu_bar .dropdown-item, .menu_bar .dropdown-item {
   color: var(--portfolio-sidebar-text-color);
   padding: 0.25rem 0.75rem;
   white-space: normal;
 }
-#menu_bar .dropdown-item:hover {
+#menu_bar .dropdown-item:hover, .menu_bar .dropdown-item:hover {
   background-color: var(--portfolio-sidebar-text-color);
   color: var(--portfolio-sidebar-background-color);
 }
-#menu_bar .dropdown-submenu {
+#menu_bar .dropdown-submenu, .menu_bar .dropdown-submenu {
   position: relative;
 }
-#menu_bar .dropdown-submenu > .dropdown-menu {
+#menu_bar .dropdown-submenu > .dropdown-menu, .menu_bar .dropdown-submenu > .dropdown-menu {
   width: 200px;
   margin-top: -6px;
   margin-left: -1px;
@@ -869,20 +902,20 @@ body,
   -moz-border-radius: 0 6px 6px;
   border-radius: 0 6px 6px 6px;
 }
-#menu_bar .dropdown-submenu:hover > .dropdown-menu {
+#menu_bar .dropdown-submenu:hover > .dropdown-menu, .menu_bar .dropdown-submenu:hover > .dropdown-menu {
   display: block;
 }
-#menu_bar .dropdown-submenu .dropdown-submenu .dropdown-menu {
+#menu_bar .dropdown-submenu .dropdown-submenu .dropdown-menu, .menu_bar .dropdown-submenu .dropdown-submenu .dropdown-menu {
   top: 0.4rem;
   left: 198px;
   border-radius: 6px 0 0 6px;
 }
-#menu_bar .justify-content-end .dropdown-submenu .dropdown-submenu .dropdown-menu {
+#menu_bar .justify-content-end .dropdown-submenu .dropdown-submenu .dropdown-menu, .menu_bar .justify-content-end .dropdown-submenu .dropdown-submenu .dropdown-menu {
   top: 0.4rem;
   left: -198px;
   border-radius: 6px 0 0 6px;
 }
-#menu_bar .selected {
+#menu_bar .selected, .menu_bar .selected {
   font-weight: bold;
   color: var(--portfolio-sidebar-selected-text-color);
 }
@@ -3275,6 +3308,17 @@ s table.tablesorter th.restore {
 .audiosavebutton {
   margin-top: -45px;
   margin-left: 20px;
+}
+
+/* ====================== */
+/*    PORTFOLIO PRINT VIEW       */
+/* ====================== */
+.asmRoot .fa-print {
+  display: none;
+}
+
+.root .printView .section2hide {
+  display: none;
 }
 
 /* ===========================

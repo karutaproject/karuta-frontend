@@ -1,5 +1,5 @@
 /* =======================================================
-	Copyright 2018 - ePortfolium - Licensed under the
+	Copyright 2025 - ePortfolium - Licensed under the
 	Educational Community License, Version 2.0 (the "License"); you may
 	not use this file except in compliance with the License. You may
 	obtain a copy of the License at
@@ -100,7 +100,7 @@ function replaceBatchVariable(text,node,withquote)
 			n++; // to avoid infinite loop
 		}
 	}
-	return text;
+	return text.trim();
 }
 //-----------------------------------------------------------------------
 
@@ -237,7 +237,7 @@ function getvarvals(node)
 			str += text;
 		}
 	}
-	return replaceVariable(str.trim());
+	return replaceVariable(str.trim()).trim();
 }
 
 //==================================
@@ -251,7 +251,7 @@ function getTest(test)
 				test = test.replace(/#lang#/g,languages[LANGCODE]);
 		}
 	}
-	return test;
+	return test.trim();
 }
 
 //==================================
@@ -261,8 +261,12 @@ function getTargetUrl(node)
 	let url = "";
 	const select = $(node).attr("select");
 	const idx = select.lastIndexOf(".");
-	var treeref = select.substring(0,idx);
-	const semtag = replaceBatchVariable(replaceVariable(select.substring(idx+1)));
+	let semtag = replaceBatchVariable(replaceVariable(select.substring(idx+1)));
+	let treeref = select.substring(0,idx);
+	if (treeref.indexOf('#current_node')>-1) {
+		treeref = treeref.substring(0,treeref.indexOf("#)"));
+		semtag = '#current_node';
+	}
 	if (semtag=='#current_node')
 		if (treeref!="")
 			url = serverBCK_API+"/nodes/node/"+g_trees[treeref].currentnode[g_trees[treeref].currentnode.length-1];
@@ -278,7 +282,7 @@ function getTargetUrl(node)
 		else if (treeref.indexOf("##")>-1)
 			treeref = replaceBatchVariable(replaceVariable(treeref));
 		url = serverBCK_API+"/nodes/node/"+treeref;
-	} else if (treeref.indexOf("#")>-1)
+	} else if (treeref.indexOf("#")>-1 && treeref.indexOf("#currentnode")<0)
 		url = serverBCK_API+"/nodes?portfoliocode=" + treeref.substring(1) + "&semtag="+semtag;	
 	else
 		url = serverBCK_API+"/nodes?portfoliocode=" + g_trees[treeref].code + "&semtag="+semtag;
@@ -342,6 +346,27 @@ function getSourceUrl(node)
 }
 
 //==================================
+function evalTest(test,nodes)
+//==================================
+{
+	test = replaceBatchVariable(test);
+	if (test.indexOf("'value':")<0)
+		test = getTest(test);
+	for (let i=0;i<nodes.length;i++){
+		let nodeid = $(nodes[i]).attr("id");
+		$.ajax({
+			async : false,
+			type : "GET",
+			dataType : "xml",
+			url : serverBCK_API+"/nodes/node/"+nodeid,
+			success : function(data) {
+				nodes[i] = $(":root",data)[0];
+			}
+		});
+	}
+	return eval("$(nodes)"+test);
+}
+//==================================
 function getTargetNodes(node,data,teststr)
 //==================================
 {
@@ -356,10 +381,15 @@ function getTargetNodes(node,data,teststr)
 			type : "GET",
 			dataType : "xml",
 			url : url,
+			semtag : semtag,
 			success : function(data) {
 				if (this.url.indexOf('/node/')>-1) {  // get by uuid
-					let results = $('*',data);
-					nodes[0] = results[0];
+					if (getTreef(node).indexOf('#current_node')>-1) {
+						nodes = $("*:has(>metadata[semantictag*='"+this.semtag+"'])",data)
+					} else {
+						let results = $('*',data);
+						nodes[0] = results[0];
+					}
 				} else {							// get by code and semtag
 					nodes = $("node",data);
 				}
@@ -374,22 +404,7 @@ function getTargetNodes(node,data,teststr)
 	//----------Test ----------
 	let test = $(node).attr(teststr);
 	if (test!=undefined && test!="" && nodes.length>0) {
-		test = replaceBatchVariable(test);
-		if (test.indexOf("'value':")<0)
-			test = getTest(test);
-		for (let i=0;i<nodes.length;i++){
-			let nodeid = $(nodes[i]).attr("id");
-			$.ajax({
-				async : false,
-				type : "GET",
-				dataType : "xml",
-				url : serverBCK_API+"/nodes/node/"+nodeid,
-				success : function(data) {
-					nodes[i] = $(":root",data)[0];
-				}
-			});
-		}
-		nodes = eval("$(nodes)"+test);
+		nodes = evalTest(test,nodes);
 	}
 	return nodes;
 }
@@ -427,22 +442,7 @@ function getSourceNodes(node,data,teststr)
 	//----------Test ----------
 	let test = $(node).attr(teststr);
 	if (test!=undefined) {
-		test = replaceBatchVariable(test);
-		if (test.indexOf("'value':")<0)
-			test = getTest(test);
-		for (let i=0;i<nodes.length;i++){
-			let nodeid = $(nodes[i]).attr("id");
-			$.ajax({
-				async : false,
-				type : "GET",
-				dataType : "xml",
-				url : serverBCK_API+"/nodes/node/"+nodeid,
-				success : function(data) {
-					nodes[i] = $(":root",data)[0];
-				}
-			});
-		}
-		nodes = eval("$(nodes)"+test);
+		nodes = evalTest(test,nodes);
 	}
 	return nodes;
 }
@@ -473,7 +473,7 @@ function processAll(model_code,portfoliologcode)
 function processListActions(list)
 //=================================================
 {
-	for (var i=0; i<list.length; i++){
+	for (let i=0; i<list.length; i++){
 		var actiontype = $(list[i]).prop("nodeName");
 		var actionnode = list[i];
 		if (actiontype!='for-each-line' && actiontype!='if-then-else') {
@@ -521,6 +521,7 @@ g_actions['for-each-tree'] = function (node)
 {
 	const code = getTxtvals($(">code",node));
 	const label = getTxtvals($(">label",node));
+	code =  cleanCode(code);
 	//------------------------------------
 	var url1 = serverBCK_API+"/portfolios?active=1&search="+code;
 	$.ajax({
@@ -541,6 +542,8 @@ g_actions['for-each-tree'] = function (node)
 					currentnode: [], // current node stack
 					lastimported: [], // imported node stack
 				}
+				g_variables['treecode'] = portfolio.code;
+				g_variables['treelabel'] = portfolio.label;
 				const treeref = $(node).attr('id');
 				if (label!="") {
 					if (portfolio.label.indexOf(label)>-1) {
@@ -556,7 +559,7 @@ g_actions['for-each-tree'] = function (node)
 					nb++;
 					$("#batch-log").append("<br>------------- current-tree -----------------");
 					$("#batch-log").append("<br>- tree selected - code:"+portfolio.id+" - portfolioid:"+portfolio.code+" Label:"+portfolio.label);
-					processListActions($("actions",node).children());
+					processListActions($(">actions",node).children());
 				}
 			}
 			$("#batch-log").append("<br> Number of trees :"+nb);
@@ -591,7 +594,7 @@ g_actions['for-each-user'] = function (node)
 					g_users[userref] = username;
 			$("#batch-log").append("<br>------------- current-user -----------------");
 					$("#batch-log").append("<br>- user selected - username:"+username);
-					processListActions($("actions",node).children());
+					processListActions($(">actions",node).children());
 						//------------------------------------
 				}
 			}
@@ -609,7 +612,7 @@ g_actions['for-each-user'] = function (node)
 					var userref = $(node).attr('id');
 					g_users[userref] = username;
 					$("#batch-log").append("<br>- user selected - username:"+username);
-					processListActions($("actions",node).children());
+					processListActions($(">actions",node).children());
 						//------------------------------------
 				}
 			}
@@ -1068,6 +1071,7 @@ g_actions['join-usergroup'] = function JoinUserGroup(node)
 	var ok = false;
 	var user = "";
 	var usergroup = getTxtvals($("usergroup",node));
+	usergroup = decodeURI(usergroup);
 	var select_user = $("user>txtval",node).attr("select");
 	if(typeof(select_user)=='undefined')
 		user = $("user>txtval",node).text();
@@ -1234,11 +1238,11 @@ g_actions['create-usergroup-by-id'] = function DeleteUserGroupById(node)
 	return ok;
 }
 
-//-----------------------------------------------------------------------
-//-----------------------------------------------------------------------
-//---------------------------FOR EACH GROUP USER ------------------------
-//-----------------------------------------------------------------------
-//-----------------------------------------------------------------------
+//===============================================
+//===============================================
+//=======FOR EACH GROUP USER================
+//===============================================
+//===============================================
 
 
 //==================================
@@ -1273,8 +1277,8 @@ g_actions['for-each-group-person'] = function (node)
 							dataType : "xml",
 							url : serverBCK_API+"/usersgroups?group="+groupid,
 							success : function(data) {
-								var items = $("user",data);
-								for ( var i = 0; i < items.length; i++) {
+								let items = $("user",data);
+								for ( let i = 0; i < items.length; i++) {
 									uuid = $(items[i]).attr('id');
 									if (Users_byid[uuid]==undefined){
 										$.ajax({
@@ -1289,11 +1293,11 @@ g_actions['for-each-group-person'] = function (node)
 										});
 									}
 									if (Users_byid[uuid]!=undefined){
-										var username = Users_byid[uuid].username;
+										const username = Users_byid[uuid].username;
 										g_variables['currentuser'] = username;
 										$("#batch-log").append("<br>------------- current-user -----------------");
 										$("#batch-log").append("<br>- user selected - username:"+username);
-										processListActions($("actions",node).children());
+										processListActions($(">actions",node).children());
 									}
 								}
 							}
@@ -1305,6 +1309,82 @@ g_actions['for-each-group-person'] = function (node)
 				}
 			});
 }
+
+//===============================================
+//===============================================
+//=======FOR EACH GROUP PORTFOLIO===========
+//===============================================
+//===============================================
+
+
+//==================================
+g_actions['for-each-group-portfolio'] = function (node)
+//==================================
+{
+	let group = getTxtvals($("group",node));
+	let treeref = $(node).attr("id");
+	if (group!="")
+			//---- get groupid ----------
+			var groupid = "";
+			var url = serverBCK_API+"/portfoliogroups";
+			$.ajax({
+				async : false,
+				type : "GET",
+				contentType: "text/html",
+				dataType : "text",
+				url : url,
+				success : function(data) {
+					var groups = $("group",data);
+					for (var k=0;k<groups.length;k++){
+						if ($('label',groups[k]).text()==group) {
+							groupid = $(groups[k]).attr("id");
+							break;
+						}
+					}
+					if (groupid=="")
+						$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in for-each-group-portfolio - group:"+group+" NOT FOUND");
+					else {
+						$.ajax({
+							async: false,
+							type : "GET",
+							dataType : "xml",
+							url : serverBCK_API+"/portfoliogroups?group="+groupid,
+							success : function(data) {
+								var items = $("portfolio",data);
+								for ( let i = 0; i < items.length; i++) {
+									uuid = $(items[i]).attr('id');
+									if (portfolios_byid[uuid]==undefined){
+										$.ajax({
+											async: false,
+											type : "GET",
+											dataType : "xml",
+											url : serverBCK_API+"/portfolios/portfolio/"+uuid,
+											success : function(data) {
+												UIFactory.Portfolio.parse_add(data);
+											}
+										});
+									}
+									const portfolio = {
+										id : portfolios_byid[uuid].id,
+										code: portfolios_byid[uuid].code_node.text(),
+										label: portfolios_byid[uuid].label_node[LANGCODE].text(),
+										currentnode: [], // current node stack
+										lastimported: [] // imported node stack
+									}
+									g_trees[treeref] = portfolio;
+									$("#batch-log").append("<br>------------- current-portfolio ---------<br>- - code:"+portfolio.code);
+									processListActions($(">actions",node).children());
+								}
+							}
+						});
+					}
+				},
+				error : function(data) {
+					$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in for-each-group-portfolio:"+group);
+				}
+			});
+}
+
 //-----------------------------------------------------------------------
 //-----------------------------------------------------------------------
 //------------------------ Delete Tree ----------------------------------
@@ -1419,6 +1499,7 @@ g_actions['create-tree'] = function createTree(node)
 	var code = getvarvals($("code",node));
 	if (code=="")
 		code = getTxtvals($("code",node));
+	code =  cleanCode(code);
 	var treeref = $(node).attr('id');
 	if (code!="") {
 		var url = serverBCK_API+"/portfolios/portfolio/code/" + code;
@@ -1532,14 +1613,14 @@ g_actions['select-tree'] = function selectTree(node)
 	var code = getvarvals($("code",node));
 	if (code=="")
 		code = getTxtvals($("code",node));
+	code =  cleanCode(code);
 	//----- get tree id -----
 	var portfolioid = "";
-	if (code=='self') { 
+	if (code=='self' || code=='#self') { 
 		portfolioid = g_portfolioid;
 		code = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",g_portfolio_current)).text();
 	} else
 		portfolioid = UIFactory["Portfolio"].getid_bycode(code,false); 
-	
 	//------------------------
 	if (portfolioid!=""){
 		ok = true;
@@ -2130,6 +2211,7 @@ g_actions['join-portfoliogroup'] = function JoinPortfolioGroup(node)
 {
 	var ok = false;
 	var portfoliogroup = getTxtvals($("portfoliogroup",node));
+	portfoliogroup = decodeURI(portfoliogroup);
 	var select = $(node).attr("select");  // select = #portfoliocode. or refid
 	//---- get portfoliogroupid ----------
 	var groupid = "";
@@ -2678,8 +2760,13 @@ g_actions['update-resource'] = function updateResource(node,data)
 							$(attribute_name+"[lang='"+languages[langcode]+"']",resource).text(attribute_value);
 						}
 					}
-				} else
+				} else {
 					$(attribute_name,resource).text(attribute_value);
+				}
+				if (type=="Calendar" && attribute_name=="text") {
+					const utc = DATE.parse(attribute_value);
+					$("utc",resource).text(utc);
+				}
 			}
 			var data = "<asmResource xsi_type='"+type+"'>" + $(resource).html() + "</asmResource>";
 			var strippeddata = data.replace(/xmlns=\"http:\/\/www.w3.org\/1999\/xhtml\"/g,"");  // remove xmlns attribute
@@ -3108,8 +3195,10 @@ g_actions['import-node'] = function importNode(node,data)
 				success : function(data) {
 					if (data.indexOf("llegal operation")<0) {
 						ok = true;
-						if (this.treeref!="")
+						if (this.treeref!="") {
 							g_trees[treeref].lastimported.push(data);
+							g_trees[treeref].currentnode.push(data);
+						}
 						g_current_node_uuid = data;
 						$("#batch-log").append("<br>- node ("+g_current_node_uuid+") added at ("+this.destid+") - semtag="+getSemtag(node)+ " source="+srcetag);
 					} else{
@@ -3138,8 +3227,10 @@ g_actions['import-node'] = function importNode(node,data)
 			success : function(data) {
 				if (data.indexOf("llegal operation")<0) {
 					ok = true;
-					if (this.treeref!="")
+					if (this.treeref!="") {
 						g_trees[treeref].lastimported.push(data);
+						g_trees[treeref].currentnode.push(data);
+					}
 					g_current_node_uuid = data;
 					$("#batch-log").append("<br>- node ("+g_current_node_uuid+") added at ("+this.destid+") - semtag="+getSemtag(node)+ " source="+srcetag);
 				} else{
@@ -3669,7 +3760,7 @@ g_actions['test'] = function (node)
 	catch(err) {
 		ok = false;
 	}
-	if (!ok) g_batch_error.push("test");
+//	if (!ok) g_batch_error.push("test");
 	return ok;
 
 }
@@ -3771,7 +3862,7 @@ g_actions['batch-variable'] = function (node)
 				nodes = $("node",data);
 				UICom.parseStructure(data,false);
 				if (test!=undefined)
-					nodes = eval("$(nodes)"+test);
+					nodes = evalTest(test,nodes);
 				if (nodes.length>0){
 					nodeid = $(nodes[0]).attr('id');
 				} else {
@@ -3802,6 +3893,9 @@ g_actions['batch-variable'] = function (node)
 		else if (select=='resource label') {
 			text = UICom.structure.ui[nodeid].resource.getLabel();
 		}
+		else if (select=='resource utc') {
+				text = UICom.structure.ui[nodeid].getAttributes("utc");
+			}
 		else if (select=='node label') {
 			text = UICom.structure.ui[nodeid].getLabel();
 		}
@@ -3908,7 +4002,7 @@ g_actions['for-each-node'] = function (node)
 					nodes.push(UICom.structure.ui[nodeid].nodeid);
 				}
 				if (test!=undefined)
-					nodes = eval("$(nodes)"+test);
+					nodes = evalTest(test,nodes);
 				$("#batch-log").append("<br>" + nodes.length + " node(s)");
 				let actions = $(node).children();
 				$("#batch-log").append("<br>Actions : ");
@@ -3969,7 +4063,7 @@ g_actions['for-each-node'] = function (node)
 				UICom.parseStructure(data,false);
 				let nodes = $("node",data);
 				if (test!=undefined)
-					nodes = eval("$(nodes)"+test);
+					nodes = evalTest(test,nodes);
 				$("#batch-log").append("<br>" + nodes.length + " node(s)");
 				let actions = $(node).children();
 				$("#batch-log").append("<br>Actions : ");
@@ -4273,7 +4367,7 @@ function convertCSVLine2json(codes,csvline)
 	var items = csvline.split(csvseparator);
 	var g_json_line = {};
 	for ( var i = 0; i < codes.length; i++) {
-		g_json_line[codes[i]] = items[i];
+		g_json_line[codes[i]] = items[i].trim();
 	}
 	return g_json_line;
 };
