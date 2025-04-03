@@ -2764,7 +2764,7 @@ g_actions['update-resource'] = function updateResource(node,data)
 					$(attribute_name,resource).text(attribute_value);
 				}
 				if (type=="Calendar" && attribute_name=="text") {
-					const utc = DATE.parse(attribute_value);
+					const utc = Date.parse(attribute_value);
 					$("utc",resource).text(utc);
 				}
 			}
