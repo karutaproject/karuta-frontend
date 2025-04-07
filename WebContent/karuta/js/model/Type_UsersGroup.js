@@ -221,7 +221,7 @@ UIFactory["UsersGroup"].prototype.loadContent = function (type)
 							UIFactory.User.parse_add(data);
 						},
 						error : function() {
-							if (confirm("The user "+this.userid+" does not exist anymore. Delete from the Usergroup ?"))
+							if (confirm(karutaStr[LANG]['error-usergroup-user-not-exits1'] + this.userid + karutaStr[LANG]['error-usergroup-user-not-exits2']))
 								UIFactory.UsersGroup.remove(this.groupid,this.userid)
 						}
 					});

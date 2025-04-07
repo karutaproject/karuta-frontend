@@ -519,9 +519,8 @@ function processListActions(list)
 g_actions['for-each-tree'] = function (node)
 //=================================================
 {
-	const code = getTxtvals($(">code",node));
+	const code = cleanCode(getTxtvals($(">code",node)));
 	const label = getTxtvals($(">label",node));
-	code =  cleanCode(code);
 	//------------------------------------
 	var url1 = serverBCK_API+"/portfolios?active=1&search="+code;
 	$.ajax({
@@ -824,6 +823,8 @@ g_actions['update-user'] = function updateUser(node)
 	var newadmin = getTxtvals($("admin",node));
 	var newpassword = getTxtvals($("password",node));
 	var newother = getTxtvals($("other",node));
+	if (identifier.startsWith("@"))
+		identifier = identifier.substring(1);
 	//---- get userid ----------
 	var url = serverBCK_API+"/users?username="+identifier;
 	$.ajax({
@@ -880,6 +881,8 @@ g_actions['delete-user'] = function deleteUser(node)
 	var userref = $(node).attr("select");
 	if (userref!=="")
 		identifier = g_users[userref];
+	if (identifier.startsWith("@"))
+		identifier = identifier.substring(1);
 	//---- get userid ----------
 	var userid = "";
 	var url = serverBCK_API+"/users/user/username/"+identifier;
@@ -921,6 +924,8 @@ g_actions['inactivate-user'] = function inactivateUser(node)
 	var userref = $(node).attr("select");
 	if (userref!=="")
 		identifier = g_users[userref];
+	if (identifier.startsWith("@"))
+		identifier = identifier.substring(1);
 	//---- get userid ----------
 	var userid = "";
 	var url = serverBCK_API+"/users/user/username/"+identifier;
@@ -980,6 +985,8 @@ g_actions['activate-user'] = function activateUser(node)
 	var userref = $(node).attr("select");
 	if (userref!=="")
 		identifier = g_users[userref];
+	if (identifier.startsWith("@"))
+		identifier = identifier.substring(1);
 	//---- get userid ----------
 	var userid = "";
 	var url = serverBCK_API+"/users/user/username/"+identifier;
@@ -1051,7 +1058,6 @@ g_actions['create-usergroup'] = function CreateUserGroup(node)
 		url : url,
 		success : function(data) {
 			ok = true;
-			var usergroupid = data;
 			get_list_usergroups();
 			$("#batch-log").append("<br>- usergroup created - label:"+usergroup);
 		},
@@ -1072,11 +1078,15 @@ g_actions['join-usergroup'] = function JoinUserGroup(node)
 	var user = "";
 	var usergroup = getTxtvals($("usergroup",node));
 	usergroup = decodeURI(usergroup);
+	if (usergroup.startsWith("@"))
+		usergroup = usergroup.substring(1);
 	var select_user = $("user>txtval",node).attr("select");
 	if(typeof(select_user)=='undefined')
 		user = $("user>txtval",node).text();
 	else
 		user = eval("g_json.lines["+g_noline+"]."+select_user);
+	if (user.startsWith("@"))
+		user = user.substring(1);
 	//---- get userid ----------
 	var url = serverBCK_API+"/users/user/username/"+user;
 	$.ajax({
@@ -1099,7 +1109,7 @@ g_actions['join-usergroup'] = function JoinUserGroup(node)
 				success : function(data) {
 					var groups = $("group",data);
 					for (var k=0;k<groups.length;k++){
-						if ($('label',groups[k]).text()==usergroup)
+						if ($('label',groups[k]).text()==usergroup|| $(groups[k]).attr("id")==usergroup)
 							groupid = $(groups[k]).attr("id");
 					}
 					if (groupid=="")
@@ -1142,11 +1152,15 @@ g_actions['leave-usergroup'] = function LeaveUserGroup(node)
 	var ok = false;
 	var user = "";
 	var usergroup = getTxtvals($("usergroup",node));
+	if (usergroup.startsWith("@"))
+		usergroup = usergroup.substring(1);
 	var select_user = $("user>txtval",node).attr("select");
 	if(typeof(select_user)=='undefined')
 		user = $("user>txtval",node).text();
 	else
 		user = eval("g_json.lines["+g_noline+"]."+select_user);
+	if (user.startsWith("@"))
+		user = user.substring(1);
 	//---- get userid ----------
 	var url = serverBCK_API+"/users/user/username/"+user;
 	$.ajax({
@@ -1169,7 +1183,7 @@ g_actions['leave-usergroup'] = function LeaveUserGroup(node)
 				success : function(data) {
 					var groups = $("group",data);
 					for (var k=0;k<groups.length;k++){
-						if ($('label',groups[k]).text()==usergroup)
+						if ($('label',groups[k]).text()==usergroup || $(groups[k]).attr("id")==usergroup)
 							groupid = $(groups[k]).attr("id");
 					}
 					if (groupid=="")
@@ -1202,39 +1216,6 @@ g_actions['leave-usergroup'] = function LeaveUserGroup(node)
 		}
 	});
 	if (!ok) g_batch_error.push("leave-usergroup");
-	return ok;
-}
-
-//=================================================
-g_actions['delete-usergroup'] = function DeleteUserGroup(node)
-//=================================================
-{
-}
-
-//=================================================
-g_actions['create-usergroup-by-id'] = function DeleteUserGroupById(node)
-//=================================================
-{
-	var ok = false;
-	var usergroup = getTxtvals($("usergroup",node));
-	var url = serverBCK_API+"/usersgroups?group="+usergroup;
-	$.ajax({
-		async : false,
-		type : "DELETE",
-		contentType: "application/xml; charset=UTF-8",
-		dataType : "text",
-		url : url,
-		success : function(data) {
-			ok = true;
-			var usergroupid = data;
-			get_list_usergroups();
-			$("#batch-log").append("<br>- usergroup delete - id:"+usergroup);
-		},
-		error : function(data) {
-			$("#batch-log").append("<br>- *** not exist - id:"+usergroup);
-		}
-	});
-	if (!ok) g_batch_error.push("create-usergroup-by-id");
 	return ok;
 }
 
@@ -1923,6 +1904,8 @@ g_actions['set-owner'] = function setOwner(node)
 	var user = "";
 	var treeref = $(node).attr("select");
 	var user = getTxtvals($("user",node));
+	if (user.startsWith("@"))
+		user = user.substring(1);
 	//---- get userid ----------
 	var url = serverBCK_API+"/users/user/username/"+user;
 	$.ajax({
@@ -2508,7 +2491,6 @@ g_actions['share-usergroup'] = function shareUserGroup(node)
 {
 	var ok = false;
 	var role = "";
-	var user = "";
 	var treeref = $(node).attr("select");
 	var role = getTxtvals($("role",node));
 	var usergroupname = getTxtvals($("groupname",node));

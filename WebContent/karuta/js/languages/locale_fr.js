@@ -129,6 +129,8 @@ karutaStr['fr']['error-filenotfound']="*** Fichier non sauvegardé ou manquant";
 karutaStr['fr']['error-login']="Erreur à la connexion : votre login ou votre mot de passe est incorrect.";
 karutaStr['fr']['error-delete']="Vous ne pouvez pas supprimer cet élément.";
 karutaStr['fr']['error-script']="ERREUR - Une erreur s'est produite pendant l'exécution du script.";
+karutaStr['fr']['error-usergroup-user-not-exits1']="L'utilisateur ";
+karutaStr['fr']['error-usergroup-user-not-exits2']=" n'existe plus. On le supprime du groupe d'utilisateur ?";
 
 //=========================================
 //========== NODE =========================
@@ -148,7 +150,6 @@ karutaStr['fr']['help-label']="Aide";
 karutaStr['fr']['semantictag']="Tag sémantique";
 karutaStr['fr']['multilingual-node']="Noeud multilingue";
 karutaStr['fr']['multilingual-resource']="Ressource multilingue";
-karutaStr['fr']['seenoderoles']="Voir";
 karutaStr['fr']['resnopencil']="Ressource sans crayon ";
 karutaStr['fr']['editresroles']="Éditer ressource";
 karutaStr['fr']['delnoderoles']="Supprimer";

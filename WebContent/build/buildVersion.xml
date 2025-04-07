@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="updateVersion" default="updateVersion" basedir="."> 
-	<property name="noVersion" value="3.75.1"/>
-	<property name="textVersion" value="FIX   -  Calendar Date.parse"/>
+	<property name="noVersion" value="3.76.0"/>
+	<property name="textVersion" value="FEAT  -  Batch and usergroup enhancement"/>
 	<property name="dirSrce" value="src/htm-srce"/>
 	<property name="dirTrgt" value="WebContent/karuta/htm"/>
 	<target name="testIfNewVersion">
@@ -25,3 +25,4 @@
 		<replaceregexp match="const karuta_date_eportfolium =.*$" replace="const karuta_date_eportfolium = '${current.date}';" flags="g" byline="true" file="WebContent/karuta/js/version.js" ></replaceregexp>
 	</target>
 </project>
+

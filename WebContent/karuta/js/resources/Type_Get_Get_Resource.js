@@ -743,6 +743,7 @@ UIFactory["Get_Get_Resource"].prototype.parse = function(destid,type,langcode,da
 	var tableau1 = new Array();
 	var tableau2 = new Array();
 	for ( var i = 0; i < $(nodes).length; i++) {
+		let ok = true;
 		const langnotvisible = ($("metadata-wad",nodes[i]).attr('langnotvisible')==undefined)?'':$("metadata-wad",nodes[i]).attr('langnotvisible');
 		if (langnotvisible!=karutaStr[languages[LANGCODE]]['language']) {
 			var resource = null;
@@ -762,9 +763,13 @@ UIFactory["Get_Get_Resource"].prototype.parse = function(destid,type,langcode,da
 			} else if (portfoliocode.indexOf("#usergroup")>-1) {
 				code  = userid = $(nodes[i]).attr("id");
 				UIFactory.User.load(userid);
-				tableau2[tableau2.length] = {'code':Users_byid[userid].username,'libelle':Users_byid[userid].firstname+" " +Users_byid[userid].lastname};
+				if (Users_byid[userid]!=undefined)
+					tableau2[tableau2.length] = {'code':Users_byid[userid].username,'libelle':Users_byid[userid].firstname+" " +Users_byid[userid].lastname};
+				else
+					ok = false;
 			}
-			tableau1[i] = [code,nodes[i]];
+			if (ok)
+				tableau1.push([code,nodes[i]]);
 		}
 	}
 	var newTableau1 = tableau1.sort(sortOn1);

@@ -2775,7 +2775,7 @@ UIFactory.Portfolio.displayListPortfolios = function(list,userid,firstname,lastn
 	$("#edit-window-footer").append($(footer));
 
 	var html = "<table id='displayListPortfolios' class='zebra-table'>";
-	html += "<tr class='head'><td>"+karutaStr[LANG]['label']+"</td><td>"+karutaStr[LANG]['role']+"</td><td>"+karutaStr[LANG]['code']+"</td></tr>"
+	html += "<tr class='head'><td>"+karutaStr[LANG]['label']+"</td><td>"+karutaStr[LANG]['role']+"</td><td>"+karutaStr[LANG]['code']+"</td><td></td></tr>"
 	for (var i=0;i<list.length;i++)
 		{
 		var portfolio = portfolios_byid[list[i]];
@@ -2783,12 +2783,11 @@ UIFactory.Portfolio.displayListPortfolios = function(list,userid,firstname,lastn
 		var portfoliocode = portfolio.code_node.text();
 		var portfolio_label = portfolio.label_node[langcode].text();
 
-		html += "<tr><td class='portfolio_label'>"+portfolio_label+"</td><td class='role' id='role_"+portfolioid+"'>&nbsp;</td><td class='portfoliocode'>"+portfoliocode+"</td><td id='role_"+portfolioid+"'></td></tr>";
+		html += "<tr><td class='portfolio_label'>"+portfolio_label+"</td><td class='role' id='role_"+portfolioid+"'>&nbsp;</td><td class='portfoliocode'>"+portfoliocode+"</td><td><button class='btn btn-danger' onclick='UIFactory.Portfolio.confirmDelPortfolio(\""+portfolioid+"\")'>"+karutaStr[LANG]['button-delete']+"</button></td></tr>";
 		$.ajax({ // get group-role for the user
 			Accept: "application/xml",
 			type : "GET",
 			dataType : "xml",
-// https://www.eportfolium.com/karuta-backend2.3/rest/api/rolerightsgroups/all/users?portfolio=19d287ad-8d5f-41c8-8df8-3d54db51daa1
 			url : serverBCK_API+"/rolerightsgroups/all/users?portfolio=" + portfolioid,
 			userid : userid,
 			portfolioid : portfolioid,
