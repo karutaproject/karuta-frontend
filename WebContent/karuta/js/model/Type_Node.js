@@ -394,7 +394,7 @@ if (execJS(this,"display-if")) {
 		const menus_color = this.getMenuStyle();
 		if(edit) {
 			var buttons = "";
-			if (this.xsi_type.indexOf("Block")>-1) {
+			if (this.xsi_type!=undefined && this.xsi_type.indexOf("Block")>-1) {
 				buttons += this.structured_resource.getButtons();
 			}
 			buttons += this.getButtons();

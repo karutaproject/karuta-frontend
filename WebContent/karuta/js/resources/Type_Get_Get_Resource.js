@@ -782,13 +782,16 @@ UIFactory["Get_Get_Resource"].prototype.parse = function(destid,type,langcode,da
 		html += "	<button type='button' class='btn select selected-label' id='button_"+self.id+"'>&nbsp;</button>";
 		html += "<button type='button' onclick=\"UIFactory.Get_Get_Resource.reloadIfInLine('"+self.id+"','"+destid+"','"+type+"','"+langcode+"')\" class='btn btn-default dropdown-toggle select' data-toggle='dropdown' aria-expanded='false'><span class='caret'></span><span class='sr-only'>Toggle Dropdown</span></button>";
 		html += "</div>";
-		var btn_group = $(html);
+		const btn_group = $(html);
 		if ($("#btngroup"+self.id).length==0)
-			$("#"+destid).append($(btn_group));
+			$("#"+destid).append(btn_group);
+		if ($("#dropdown-"+self.id).length>0)
+			$("#dropdown-"+self.id).html("");
 		//--------------------------------
 //		html = "<div class='dropdown-menu dropdown-menu-right'></div>";
 		html = "<div id='dropdown-"+self.id+"' class='dropdown-menu dropdown-menu-right'></div>";
-		var select  = $(html);
+		const dropdown  = $(html);
+		$(btn_group).append(dropdown);
 		//----------------- null value to erase
 		html = "<a class='dropdown-item' uuid='' value='' code='' ";
 		for (var j=0; j<languages.length;j++) {
@@ -802,7 +805,7 @@ UIFactory["Get_Get_Resource"].prototype.parse = function(destid,type,langcode,da
 			$("#button_"+self.id).attr('class', 'btn btn-default select select-label');
 			UIFactory["Get_Get_Resource"].update(this,self,langcode);
 		});
-		$(select).append($(select_item_a));
+		$("#dropdown-"+self.id).append($(select_item_a));
 		//--------------------
 		for ( var i = 0; i < newTableau1.length; i++) {
 			let uuid = $(newTableau1[i][1]).attr('id');
@@ -900,9 +903,10 @@ UIFactory["Get_Get_Resource"].prototype.parse = function(destid,type,langcode,da
 				$("#button_"+self.id).html(html);
 				$("#button_"+self.id).attr('class', 'btn btn-default select select-label').addClass("sel"+code);
 			}
-			$(select).append($(select_item));
+			$("#dropdown-"+self.id).append($(select_item));
 		}
-		$(btn_group).append($(select));
+//		$("#dropdown-"+self.id).append($(select));
+//		$(btn_group).append(select);
 		
 	}
 	if (type.indexOf('radio')>-1) {

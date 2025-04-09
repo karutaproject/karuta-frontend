@@ -2,8 +2,8 @@
 var karuta_version = "@project.version@";
 var karuta_date = "@build.timestamp@";
 
-const karuta_version_eportfolium = 'eportfolium-3.76.0';
-const karuta_date_eportfolium = '2025-04-07';
+const karuta_version_eportfolium = 'eportfolium-3.77.0';
+const karuta_date_eportfolium = '2025-04-09';
 
 var karuta_backend_version = "?";
 var karuta_backend_date = "?";
@@ -84,3 +84,4 @@ var karuta_fileserver_date = "?";
 // 3.75.0 FEAT - Calendar can be used in form and batch
 // 3.75.1 FIX - Calendar Date.parse
 // 3.76.0 FEAT  -  Batch and usergroup enhancement
+// 3.77.0 FEAT  -  Batch enhancement

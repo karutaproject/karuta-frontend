@@ -2314,16 +2314,21 @@ function setVariables(data)
 function updateVariable(node)
 //==================================
 {
-	var value = UICom.structure.ui[$(node).attr("id")].resource.getAttributes().value;
-	var code = UICom.structure.ui[$(node).attr("id")].resource.getAttributes().code;
-	var text = UICom.structure.ui[$(node).attr("id")].resource.getAttributes().text;
-	var utc = UICom.structure.ui[$(node).attr("id")].resource.getAttributes().utc;
-	var variable_value = (value=="") ? code : value;
+	const nodeid = $(node).attr("id");
+	const value = UICom.structure.ui[nodeid].resource.getAttributes().value;
+	const code = UICom.structure.ui[nodeid].resource.getAttributes().code;
+	const text = UICom.structure.ui[nodeid].resource.getAttributes().text;
+	const utc = UICom.structure.ui[nodeid].resource.getAttributes().utc;
+	const label = UICom.structure.ui[nodeid].resource.getAttributes().label;
+	let variable_value = (value=="") ? code : value;
 	if (variable_value==undefined)
 		variable_value = text;
 	if (variable_value==undefined)
 		variable_value = utc;
-	g_variables[UICom.structure.ui[$(node).attr("id")].getCode()] = cleanCode(variable_value,true);
+	const variable_name = UICom.structure.ui[nodeid].getCode();
+	g_variables[variable_name] = cleanCode(variable_value,true);
+	g_variables[variable_name+"_code"] = cleanCode(variable_value,true);
+	g_variables[variable_name+"_label"] = label;
 }
 
 

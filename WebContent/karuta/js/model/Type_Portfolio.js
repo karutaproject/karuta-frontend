@@ -2467,9 +2467,9 @@ UIFactory["Portfolio"].archive = function(projectcode,langcode)
 		url : serverBCK_API+"/portfolios?active=1&search="+projectcode,
 		success : function(data) {
 			UIFactory["Portfolio"].parse(data);
-			for (var i=1;i<portfolios_list.length+1;i=i+parseInt(nbeltsperarchive)){
+			for (var i=0;i<portfolios_list.length;i=i+parseInt(nbeltsperarchive)){
 				var uuids = "";
-				for (var j=0;j<nbeltsperarchive;j++){
+				for (var j=0;j<nbeltsperarchive && i+j<portfolios_list.length;j++){
 					if (j>0)
 						uuids += ",";
 					uuids += portfolios_list[i+j].id;
@@ -2724,7 +2724,7 @@ UIFactory["Portfolio"].removeSearchedPortfolios = function()
 
 
 //==================================
-UIFactory["Portfolio"].getListPortfolios = function(userid,firstname,lastname) 
+UIFactory["Portfolio"].getListPortfolios = function(userid,firstname,lastname,deletebutton) 
 //==================================
 {
 
@@ -2748,7 +2748,7 @@ UIFactory["Portfolio"].getListPortfolios = function(userid,firstname,lastname)
 					alertHTML("Error UIFactory.Portfolio.parse:"+uuid+" - "+e.message);
 				}
 			}
-			UIFactory.Portfolio.displayListPortfolios(list,this.userid,this.firstname,this.lastname);
+			UIFactory.Portfolio.displayListPortfolios(list,this.userid,this.firstname,this.lastname,deletebutton);
 			$("#wait-window").modal('hide');
 		},
 		error : function(jqxhr,textStatus) {
@@ -2758,14 +2758,12 @@ UIFactory["Portfolio"].getListPortfolios = function(userid,firstname,lastname)
 }
 
 //==================================
-UIFactory.Portfolio.displayListPortfolios = function(list,userid,firstname,lastname,langcode)
+UIFactory.Portfolio.displayListPortfolios = function(list,userid,firstname,lastname,deletebutton)
 //==================================
 {
-	var serverURL = url.substring(0,url.indexOf(appliname)-1);
-	var application_server = serverURL+"/"+appliname;
 	//---------------------
-	if (langcode==null)
-		langcode = LANGCODE;
+	if (deletebutton==null)
+		deletebutton = false;
 	//---------------------
 	$("#edit-window-footer").html("");
 	$("#edit-window-title").html(karutaStr[LANG]['list_user_portfolio']+" " + firstname + " " +lastname);
@@ -2781,9 +2779,12 @@ UIFactory.Portfolio.displayListPortfolios = function(list,userid,firstname,lastn
 		var portfolio = portfolios_byid[list[i]];
 		var portfolioid = portfolio.id;
 		var portfoliocode = portfolio.code_node.text();
-		var portfolio_label = portfolio.label_node[langcode].text();
+		var portfolio_label = portfolio.label_node[LANGCODE].text();
 
-		html += "<tr><td class='portfolio_label'>"+portfolio_label+"</td><td class='role' id='role_"+portfolioid+"'>&nbsp;</td><td class='portfoliocode'>"+portfoliocode+"</td><td><button class='btn btn-danger' onclick='UIFactory.Portfolio.confirmDelPortfolio(\""+portfolioid+"\")'>"+karutaStr[LANG]['button-delete']+"</button></td></tr>";
+		html += "<tr><td class='portfolio_label'>"+portfolio_label+"</td><td class='role' id='role_"+portfolioid+"'>&nbsp;</td><td class='portfoliocode'>"+portfoliocode+"</td>";
+		if (deletebutton)
+			html += "<td><button class='btn btn-danger' onclick='UIFactory.Portfolio.confirmDelPortfolio(\""+portfolioid+"\")'>"+karutaStr[LANG]['button-delete']+"</button></td>";
+		html += "</tr>";
 		$.ajax({ // get group-role for the user
 			Accept: "application/xml",
 			type : "GET",

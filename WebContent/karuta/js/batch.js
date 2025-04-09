@@ -72,12 +72,12 @@ function replaceBatchVariable(text,node,withquote)
 		while (text!=undefined && text.indexOf("{###")>-1 && n<100) {
 			var test_string = text.substring(text.indexOf("{###")+4); // test_string = abcd{###variable###}efgh.....
 			var variable_name = test_string.substring(0,test_string.indexOf("###}"));
-			if (g_variables[variable_name]!=undefined)
-				text = text.replace("###"+variable_name+"###", g_variables[variable_name]);
-			else if (eval("g_json."+variable_name)!=undefined)
-				text = text.replace("###"+variable_name+"###", eval("g_json."+variable_name));
+			if (eval("g_json."+variable_name)!=undefined)
+				text = text.replace("###"+variable_name+"###", eval("g_json."+variable_name));// text = text.replace("###"+variable_name+"###", g_json[variable_name]);
 			else if (eval("g_json.lines["+g_noline+"]."+variable_name)!=undefined)
 				text = text.replace("###"+variable_name+"###", eval("g_json.lines["+g_noline+"]."+variable_name));
+			else if (g_variables[variable_name]!=undefined)
+				text = text.replace("###"+variable_name+"###", g_variables[variable_name]);
 			n++; // to avoid infinite loop
 		}
 		n = 0
@@ -476,7 +476,7 @@ function processListActions(list)
 	for (let i=0; i<list.length; i++){
 		var actiontype = $(list[i]).prop("nodeName");
 		var actionnode = list[i];
-		if (actiontype!='for-each-line' && actiontype!='if-then-else') {
+		if (actiontype!='for-each-line') {
 			$("#batch-log").append("<br>------------- "+actiontype+" -----------------");
 			g_actions[actiontype](actionnode);
 			previous_action = actiontype;
@@ -488,7 +488,7 @@ function processListActions(list)
 				processListActions($(actionnode).children());
 			}
 		}
-		if (actiontype=='if-then-else') {
+/*		if (actiontype=='if-then-else') {
 			var if_action = $('if-part',actionnode).children()[0]; // only one action in test
 			var then_actions = $($('>then-part',actionnode)[0]).children();
 			var else_actions = $($('>else-part',actionnode)[0]).children();
@@ -505,9 +505,30 @@ function processListActions(list)
 			}
 			$("#batch-log").append("<br>================ END IF ============================");			
 		}
+		*/
 	}
 };
 
+//=================================================
+g_actions['if-then-else'] = function (node)
+//=================================================
+{
+	var if_action = $('if-part',node).children()[0]; // only one action in test
+	var then_actions = $($('>then-part',node)[0]).children();
+	var else_actions = $($('>else-part',node)[0]).children();
+	var actiontype = $(if_action).prop("nodeName");
+	var actionnode = if_action;
+	$("#batch-log").append("<br>================ IF ===============================");			
+	if (g_actions[actiontype](actionnode)){
+		$("#batch-log").append("<br>================ THEN =============================");			
+		processListActions(then_actions);
+	}
+	else {
+		$("#batch-log").append("<br>================ ELSE =============================");			
+		processListActions(else_actions);
+	}
+	$("#batch-log").append("<br>================ END IF ============================");			
+}
 
 //-----------------------------------------------------------------------
 //-----------------------------------------------------------------------

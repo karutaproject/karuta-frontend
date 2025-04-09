@@ -317,6 +317,8 @@ UIFactory["UsersGroup"].prototype.displayView = function(dest,type)
 		//-------------------------------------------------
 		html += "<div id='usergroup_"+this.id+"' class='usergroup'>";
 		html += "	<div id='tree_usergroup-label_"+this.id+"' class='tree-label usergroup-label'>";
+		if (usergroup_code=="")
+			usergroup_code = "error : no label"
 		html += "		<span id='usergrouplabel_"+this.id+"' onclick=\"usergroups_byid['"+this.id+"'].toggleContent('"+type+"')\" class='project-label'>"+usergroup_code+"</span>";
 		html += "		&nbsp;<span class='nbchildren badge' id='nbchildren_"+this.id+"' >"+this.nbchildren+"</span>";
 		html += "	</div>";

@@ -1701,22 +1701,17 @@ UIFactory["Get_Resource"].update = function(selected_item,itself,langcode,type)
 			//-------- if function js -------------
 			execJS(itself,"update-resource-before");
 			//---------------------
-			var value = $(selected_item).attr('value');
-			var code = $(selected_item).attr('code');
-			var uuid = $(selected_item).attr('uuid');
-			var style = $(selected_item).attr('style');
-			//---------------------
-			if (UICom.structure.ui[itself.id].semantictag.indexOf("g-select-variable")>-1) {
-				var variable_value = (value=="") ? code : value;
-				g_variables[UICom.structure.ui[itself.id].getCode()] = cleanCode(variable_value,true);
-			}
+			const value = $(selected_item).attr('value');
+			const code = $(selected_item).attr('code');
+			const uuid = $(selected_item).attr('uuid');
+			const style = $(selected_item).attr('style');
 			//---------------------
 			$(UICom.structure.ui[itself.id].resource.value_node[0]).text(value);
 			$(UICom.structure.ui[itself.id].resource.code_node[0]).text(code);
 			$(UICom.structure.ui[itself.id].resource.uuid_node[0]).text(uuid);
 			$(UICom.structure.ui[itself.id].resource.style_node[0]).text(style.trim());
 			for (var i=0; i<languages.length;i++){
-				var label = $(selected_item).attr('label_'+languages[i]);
+				let label = $(selected_item).attr('label_'+languages[i]);
 				$(UICom.structure.ui[itself.id].resource.label_node[i][0]).text(label);
 			}
 			itself.save();
@@ -1735,6 +1730,9 @@ UIFactory["Get_Resource"].update = function(selected_item,itself,langcode,type)
 UIFactory["Get_Resource"].prototype.save = function()
 //==================================
 {
+	//------------------------------
+	if (UICom.structure.ui[this.id].semantictag.indexOf("g-select-variable")>-1)
+		updateVariable(this.node);
 	//------------------------------
 	var log = (UICom.structure.ui[this.id]!=undefined && UICom.structure.ui[this.id].logcode!=undefined && UICom.structure.ui[this.id].logcode!="");
 	if (log)
