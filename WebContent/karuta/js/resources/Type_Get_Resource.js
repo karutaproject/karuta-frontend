@@ -253,6 +253,8 @@ UIFactory["Get_Resource"].prototype.getView = function(dest,type,langcode,indash
 				}
 				if (code.indexOf("&")>-1)
 					html += " ["+$(this.value_node).text()+ "] ";
+				if (code.indexOf(":")>-1)
+					html += $(this.value_node).text();
 				if (indashboard)
 					html += "</span>";
 				else
@@ -311,6 +313,8 @@ UIFactory["Get_Resource"].prototype.getView = function(dest,type,langcode,indash
 		}
 		if (code.indexOf("&")>-1)
 			html += " ["+$(this.value_node).text()+ "] ";
+		if (code.indexOf(":")>-1)
+			html += $(this.value_node).text();
 		if (this.preview){
 			let js = "previewPage('"+resid+"',100,'standard')";
 			if (this.previewsharing!=""){
@@ -370,6 +374,8 @@ UIFactory["Get_Resource"].prototype.getView = function(dest,type,langcode,indash
 				}
 				if (code.indexOf("&")>-1)
 					html += " ["+$(this.value_node).text()+ "] ";
+				if (code.indexOf(":")>-1)
+					html += $(this.value_node).text();
 				if (this.preview){
 					let js = "previewPage('"+this.uuid_node.text()+"',100,'standard')";
 					if (this.previewsharing!=""){

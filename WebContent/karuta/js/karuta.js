@@ -2329,6 +2329,7 @@ function updateVariable(node)
 	g_variables[variable_name] = cleanCode(variable_value,true);
 	g_variables[variable_name+"_code"] = cleanCode(variable_value,true);
 	g_variables[variable_name+"_label"] = label;
+	g_variables[variable_name+"_text"] = text;
 }
 
 

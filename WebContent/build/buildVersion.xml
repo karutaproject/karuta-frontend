@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="updateVersion" default="updateVersion" basedir="."> 
-	<property name="noVersion" value="3.77.0"/>
-	<property name="textVersion" value="FEAT  -  Batch enhancement"/>
+	<property name="noVersion" value="3.78.0"/>
+	<property name="textVersion" value="FEAT  -  BATCH join-leave group modified to be used with get_resource and get_get_resource group in form"/>
 	<property name="dirSrce" value="src/htm-srce"/>
 	<property name="dirTrgt" value="WebContent/karuta/htm"/>
 	<target name="testIfNewVersion">

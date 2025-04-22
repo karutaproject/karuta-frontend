@@ -398,7 +398,7 @@ UIFactory["Portfolio"].displayPortfolio = function(destid,type,langcode,edit)
 		$("#sidebar_"+uuid).click();
 	}
 	else if (type=='standard' || type=='raw'){
-		if (g_bar_type.indexOf('horizontal')>-1) {
+		if (g_bar_type.indexOf('horizontal')>-1 && window.innerWidth>700) {
 			html += "<div id='breadcrumb'></div>";
 			html += "<div id='contenu' class='container-fluid'></div>";
 			$("#"+destid).html($(html));

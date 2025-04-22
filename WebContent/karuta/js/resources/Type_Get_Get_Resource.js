@@ -163,6 +163,8 @@ UIFactory["Get_Get_Resource"].prototype.getView = function(dest,type,langcode)
 			html += label;
 		if (($(this.code_node).text()).indexOf("&")>-1)
 			html += " ["+$(this.value_node).text()+ "] ";
+		if (($(this.code_node).text()).indexOf(":")>-1)
+			html += $(this.value_node).text();
 		html += "</div>";
 	}
 	if (type=='none'){
@@ -172,6 +174,8 @@ UIFactory["Get_Get_Resource"].prototype.getView = function(dest,type,langcode)
 			html += label;
 		if (($(this.code_node).text()).indexOf("&")>-1)
 			html += " ["+$(this.value_node).text()+ "] ";
+		if (($(this.code_node).text()).indexOf(":")>-1)
+			html += $(this.value_node).text();
 		html = "<span class='"+ cleanCode(code) + "'>" + html + "</span>";
 	}
 	if (type=='batchform'){

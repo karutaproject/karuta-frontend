@@ -72,10 +72,10 @@ function replaceBatchVariable(text,node,withquote)
 		while (text!=undefined && text.indexOf("{###")>-1 && n<100) {
 			var test_string = text.substring(text.indexOf("{###")+4); // test_string = abcd{###variable###}efgh.....
 			var variable_name = test_string.substring(0,test_string.indexOf("###}"));
-			if (eval("g_json."+variable_name)!=undefined)
-				text = text.replace("###"+variable_name+"###", eval("g_json."+variable_name));// text = text.replace("###"+variable_name+"###", g_json[variable_name]);
-			else if (eval("g_json.lines["+g_noline+"]."+variable_name)!=undefined)
-				text = text.replace("###"+variable_name+"###", eval("g_json.lines["+g_noline+"]."+variable_name));
+			if ( g_json[variable_name]!=undefined)
+				text = text.replace("###"+variable_name+"###",  g_json[variable_name]);// text = text.replace("###"+variable_name+"###", g_json[variable_name]);
+			else if (g_json.lines[g_noline][variable_name]!=undefined)
+				text = text.replace("###"+variable_name+"###", g_json.lines["+g_noline+"][variable_name]);
 			else if (g_variables[variable_name]!=undefined)
 				text = text.replace("###"+variable_name+"###", g_variables[variable_name]);
 			n++; // to avoid infinite loop
@@ -84,12 +84,12 @@ function replaceBatchVariable(text,node,withquote)
 		while (text!=undefined && text.indexOf("###")>-1 && n<100) {
 			var test_string = text.substring(text.indexOf("###")+3); // test_string = abcd###variable###efgh.....
 			var variable_name = test_string.substring(0,test_string.indexOf("###"));
-			if (g_variables[variable_name]!=undefined)
+			if (g_json[variable_name]!=undefined)
+				text = text.replace("###"+variable_name+"###", g_json[variable_name]);
+			else if (g_json.lines[g_noline][variable_name]!=undefined)
+				text = text.replace("###"+variable_name+"###", g_json.lines[g_noline][variable_name]);
+			else if (g_variables[variable_name]!=undefined)
 				text = text.replace("###"+variable_name+"###", g_variables[variable_name]);
-			else if (eval("g_json."+variable_name)!=undefined)
-				text = text.replace("###"+variable_name+"###", eval("g_json."+variable_name));
-			else if (eval("g_json.lines["+g_noline+"]."+variable_name)!=undefined)
-				text = text.replace("###"+variable_name+"###", eval("g_json.lines["+g_noline+"]."+variable_name));
 			if (text.indexOf("[")>-1) {
 				var variable_value = variable_name.substring(0,variable_name.indexOf("["))
 				var i = text.substring(text.indexOf("[")+1,text.indexOf("]"));
@@ -2216,6 +2216,8 @@ g_actions['join-portfoliogroup'] = function JoinPortfolioGroup(node)
 	var ok = false;
 	var portfoliogroup = getTxtvals($("portfoliogroup",node));
 	portfoliogroup = decodeURI(portfoliogroup);
+	if (portfoliogroup.startsWith("@"))
+		portfoliogroup = portfoliogroup.substring(1);
 	var select = $(node).attr("select");  // select = #portfoliocode. or refid
 	//---- get portfoliogroupid ----------
 	var groupid = "";
@@ -2298,6 +2300,8 @@ g_actions['leave-portfoliogroup'] = function LeavePortfolioGroup(node)
 {
 	var ok = false;
 	var portfoliogroup = getTxtvals($("portfoliogroup",node));
+	if (portfoliogroup.startsWith("@"))
+		portfoliogroup = portfoliogroup.substring(1);
 	var select = $(node).attr("select");
 	var treeref = select.replace(".","");
 	//---- get portfoliogroupid ----------
@@ -4282,22 +4286,22 @@ function getInputsLine(node)
 	line_inputs = $("asmContext:has(>metadata[semantictag*='BatchFormInputCode'])",node);
 	for ( var j = 0; j < line_inputs.length; j++) {
 		let inputid = $(line_inputs[j]).attr('id');
-		let variable = UICom.structure.ui[inputid].getCode();
+		let variable = UICom.structure.ui[inputid].getCode().trim();
 		if (UICom.structure.ui[inputid].resource.type=="Get_Resource" || UICom.structure.ui[inputid].resource.type=="Get_Get_Resource")
-			json_line[variable] = replaceVariable(UICom.structure.ui[inputid].resource.getCode(null));
+			json_line[variable] = replaceVariable(UICom.structure.ui[inputid].resource.getCode(null).trim()).trim();
 	}
 	line_inputs = $("asmContext:has(>metadata[semantictag*='BatchFormInputLabelCode'])",node);
 	for ( var j = 0; j < line_inputs.length; j++) {
 		var inputid = $(line_inputs[j]).attr('id');
-		let variable = UICom.structure.ui[inputid].getCode();
-		json_line[variable+"_code"] = replaceVariable(UICom.structure.ui[inputid].resource.getCode(null));
+		let variable = UICom.structure.ui[inputid].getCode().trim();
+		json_line[variable+"_code"] = replaceVariable(UICom.structure.ui[inputid].resource.getCode(null).trim());
 		json_line[variable+"_label"] = replaceVariable(UICom.structure.ui[inputid].resource.getView(null,'batchform').trim());
 	}
 	line_inputs = $("asmContext:has(>metadata[semantictag*='BatchFormInputLabelCodeValue'])",node);
 	for ( var j = 0; j < line_inputs.length; j++) {
 		var inputid = $(line_inputs[j]).attr('id');
-		let variable = UICom.structure.ui[inputid].getCode();
-		json_line[variable+"_code"] = replaceVariable(UICom.structure.ui[inputid].resource.getCode(null));
+		let variable = UICom.structure.ui[inputid].getCode().trim();
+		json_line[variable+"_code"] = replaceVariable(UICom.structure.ui[inputid].resource.getCode(null).trim());
 		json_line[variable+"_label"] = replaceVariable(UICom.structure.ui[inputid].resource.getView(null,'batchform').trim());
 		json_line[variable+"_value"] = replaceVariable(UICom.structure.ui[inputid].resource.getValue(null,'batchform').trim());
 	}
