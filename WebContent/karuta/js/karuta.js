@@ -4204,6 +4204,7 @@ $.fn.hasChildCodeContains = function (options)   // hasChildCodeContains({"semta
 {
 	var defaults= {"value":"v"};
 	var parameters = $.extend(defaults, options);
+	parameters.value = cleanCode(parameters.value);
 	var result = $(this).has("asmResource>code:contains('"+parameters.value+"')");
 	return $(result);
 };
@@ -4216,6 +4217,7 @@ $.fn.hasChildSemtagAndCodeContains = function (options)   // hasChildSemtagAndCo
 {
 	var defaults= {"semtag":"s","value":"v"};
 	var parameters = $.extend(defaults, options);
+	parameters.value = cleanCode(parameters.value);
 	var result = $(this).has("*:has('>metadata[semantictag*=" + parameters.semtag + "]'):has(\">asmResource[xsi_type='nodeRes']>code:contains('"+parameters.value+"')\")");
 	return $(result);
 };
@@ -4228,6 +4230,7 @@ $.fn.hasChildSemtagAndResourceCodeContains = function (options)   // hasChildSem
 {
 	var defaults= {"semtag":"s","value":"v"};
 	var parameters = $.extend(defaults, options);
+	parameters.value = cleanCode(parameters.value);
 	var result = $(this).has("*:has('>metadata[semantictag*=" + parameters.semtag + "]'):has('asmResource[xsi_type!=context][xsi_type!=nodeRes]>code:contains("+parameters.value+")')");
 	return $(result);
 };
@@ -4553,6 +4556,7 @@ $.fn.hasAncestorSemtagAndNodeCodeContains = function (options)   // hasChildSemt
 {
 	var defaults= {"semtag":"s","value":"v"};
 	var parameters = $.extend(defaults, options);
+	parameters.value = cleanCode(parameters.value);
 	var result = [];
 	for (let i=0;i<this.length;i++){
 		var parent = $(this[i]).parent();
@@ -4580,6 +4584,7 @@ $.fn.hasParentSemtagAndNodeCodeContains = function (options)   // hasChildSemtag
 {
 	var defaults= {"semtag":"s","value":"v"};
 	var parameters = $.extend(defaults, options);
+	parameters.value = cleanCode(parameters.value);
 	var result = $(this).addBack().parent().has("*:has('>metadata[semantictag*=" + parameters.semtag + "]'):has('asmResource[xsi_type!=context][xsi_type!=nodeRes]>code:contains("+parameters.value+")')");
 	return $(result);
 };
