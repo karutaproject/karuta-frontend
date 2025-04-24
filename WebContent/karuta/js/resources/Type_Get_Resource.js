@@ -1289,12 +1289,20 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 			$(select).append($(select_item));
 		}
 		//---------------------
-		if (target=='label') {
+		if (target=="label" || target=="grouplabel" ) {
 			for ( var i = 0; i < newTableau1.length; i++) {
 				//------------------------------
 				var uuid = $(newTableau1[i][1]).attr('id');
 				var style = "";
 				var resource = null;
+				let value = "";
+				let code = "";
+				let label = "";
+				if (target=='grouplabel') {
+					code = "@" + tableau2[i].code;
+					value = code;
+					label = tableau2[i].libelle;
+				} else {
 				//------------------------------
 				if ($("asmResource",newTableau1[i][1]).length==3) {
 					style = UIFactory.Node.getDataContentStyle(newTableau1[i][1].querySelector("metadata-epm"));
@@ -1303,10 +1311,10 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 					style = UIFactory.Node.getDataLabelStyle(newTableau1[i][1].querySelector("metadata-epm"));
 					resource = $("asmResource[xsi_type='nodeRes']",newTableau1[i][1]);
 				}
-				//------------------------------
-				//------------------------------
-				var value = $('value',resource).text();
-				var code = $('code',resource).text();
+					value = $('value',resource).text();
+					code = $('code',resource).text();
+					label = $(srce+"[lang='"+languages[langcode]+"']",resource).text();
+				}
 				var display_code = false;
 				var display_label = true;
 				var display_value = false;
@@ -1325,20 +1333,20 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 					html = "<div class='dropdown-divider'></div>";
 					select_item = $(html);
 				} else {
-					html = "<a class='dropdown-item' value='"+$('value',resource).text()+"' code='"+$('code',resource).text()+"' class='sel"+code+"' ";
+					html = "<a class='dropdown-item "+code+"' uuid='"+uuid+"' value='"+value+"' code='"+code+"' ";
 					for (var j=0; j<languages.length;j++){
-						html += "label_"+languages[j]+"=\""+$(srce+"[lang='"+languages[j]+"']",resource).text()+"\" ";
+						html += "label_"+languages[j]+"=\""+label+"\" ";
 					}
 					html += " style=\""+style+"\">";
 					if (display_code)
-						html += "<span class='li-code'>"+code+"</span>";
+						html += "<span class='li-code'>"+cleanCode(code)+"</span>";
 					if (display_value)
 						html += "<span class='li-value'>"+value+"</span>";
 					if (display_label)
-						html += "<span class='li-label'>"+$(srce+"[lang='"+languages[langcode]+"']",resource).text()+"</span>";
+						html += "<span class='li-label'>"+label+"</span>";
 					html += "</a>";
 					select_item = $(html);
-					$(select_item).click(function (ev){
+			$(select_item).click(function (ev){
 						//--------------------------------
 						var code = $(this).attr('code');
 						var display_code = false;
@@ -1712,13 +1720,22 @@ UIFactory["Get_Resource"].update = function(selected_item,itself,langcode,type)
 			const uuid = $(selected_item).attr('uuid');
 			const style = $(selected_item).attr('style');
 			//---------------------
-			$(UICom.structure.ui[itself.id].resource.value_node[0]).text(value);
-			$(UICom.structure.ui[itself.id].resource.code_node[0]).text(code);
-			$(UICom.structure.ui[itself.id].resource.uuid_node[0]).text(uuid);
-			$(UICom.structure.ui[itself.id].resource.style_node[0]).text(style.trim());
-			for (var i=0; i<languages.length;i++){
-				let label = $(selected_item).attr('label_'+languages[i]);
-				$(UICom.structure.ui[itself.id].resource.label_node[i][0]).text(label);
+			if (this.clause=="xsi_type='Get_Resource'") {
+				$(UICom.structure.ui[itself.id].resource.value_node[0]).text(value);
+				$(UICom.structure.ui[itself.id].resource.code_node[0]).text(code);
+				$(UICom.structure.ui[itself.id].resource.uuid_node[0]).text(uuid);
+				$(UICom.structure.ui[itself.id].resource.style_node[0]).text(style.trim());
+				for (var i=0; i<languages.length;i++){
+					let label = $(selected_item).attr('label_'+languages[i]);
+					$(UICom.structure.ui[itself.id].resource.label_node[i][0]).text(label);
+				}
+			} else {
+				$(UICom.structure.ui[itself.id].value_node[0]).text(value);
+				$(UICom.structure.ui[itself.id].code_node[0]).text(code);
+				for (var i=0; i<languages.length;i++){
+					let label = $(selected_item).attr('label_'+languages[i]);
+					$(UICom.structure.ui[itself.id].label_node[i][0]).text(label);
+				}
 			}
 			itself.save();
 			//-------- if function js -------------
