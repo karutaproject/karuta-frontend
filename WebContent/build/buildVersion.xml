@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="updateVersion" default="updateVersion" basedir="."> 
-	<property name="noVersion" value="3.79.0"/>
-	<property name="textVersion" value="FIX - Get_resource in node"/>
+	<property name="noVersion" value="3.79.2"/>
+	<property name="textVersion" value="FIX - Report submission in report"/>
 	<property name="dirSrce" value="src/htm-srce"/>
 	<property name="dirTrgt" value="WebContent/karuta/htm"/>
 	<target name="testIfNewVersion">

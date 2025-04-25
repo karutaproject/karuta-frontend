@@ -1936,10 +1936,7 @@ g_report_actions['node_resource'] = function (destid,action,no,data)
 			if (g_designerrole || writenode) {
 				shownode = (showroles.containsArrayElt(g_userroles) || showroles.indexOf($(USER.username_node).text())>-1 )
 			}
-			var submitnode = false;
-			if (g_designerrole || writenode) {
-				submitnode = (submitroles.containsArrayElt(g_userroles) || submitroles.indexOf($(USER.username_node).text())>-1 )
-			}
+			const submitnode = (submitroles.containsArrayElt(g_userroles) || submitroles.indexOf($(USER.username_node).text())>-1 );
 			var deletenode = ($(node.node).attr('delete')=='Y')? true:false;
 			if (delnoderoles.indexOf("user")>-1)
 				delnoderoles = ($(node.metadatawad).attr('delnoderoles')==undefined)?'':$(node.metadatawad).attr('delnoderoles');
@@ -2035,29 +2032,29 @@ g_report_actions['node_resource'] = function (destid,action,no,data)
 			if (submitnode) {
 				//------------------
 				var labels = [];
-				labels[0] = karutaStr[languages[langcode]]['button-submit'];
-				labels[1] = karutaStr[languages[langcode]]['button-unsubmit'];
-				labels[2] = karutaStr[languages[langcode]]['submitted'];
-				labels[3] = karutaStr[languages[langcode]]['notsubmitted'];
+				labels[0] = karutaStr[languages[LANGCODE]]['button-submit'];
+				labels[1] = karutaStr[languages[LANGCODE]]['button-unsubmit'];
+				labels[2] = karutaStr[languages[LANGCODE]]['submitted'];
+				labels[3] = karutaStr[languages[LANGCODE]]['notsubmitted'];
 				if (node.textssubmit!="") {
 					var texts = node.textssubmit.split(";");
 					for (let j=0; j<texts.length; j++){
 						var textlang = texts[j].split("/");
 						for (var k=0; k<textlang.length; k++){
-							if (textlang[k].indexOf("@"+languages[langcode])>-1)
+							if (textlang[k].indexOf("@"+languages[LANGCODE])>-1)
 								labels[j] = textlang[k].substring(0,textlang[k].indexOf("@"));
 						}
 					}
 				}
 				//------------------
 				if ( node.submitted!='Y') {
-					html += "<span id='submit-"+node.id+"' style='"+menus_style+"' class='submitbutton button add-button' onclick=\"javascript:confirmSubmit('"+node.id+"'";
+					text += "<span id='submit-"+node.id+"'  class='submitbutton button add-button' onclick=\"javascript:confirmSubmit('"+node.id+"'";
 					if (node.submitall=='Y')
-						html += ",true";
-					html += ")\" ";
-					html += " >"+labels[0]+"</span>";
+						text += ",true";
+					text += ")\" ";
+					text += " >"+labels[0]+"</span>";
 				} else {
-						html += "<div class='alert submitted button add-button'>"+labels[2] + " " +node.submitteddate+"</div>";
+						text += "<div class='alert submitted button add-button'>"+labels[2] + " " +node.submitteddate+"</div>";
 				}
 			}
 			//----------------------------
@@ -2158,10 +2155,10 @@ g_report_actions['menu'] = function (destid,action,no,data)
 			UICom.structure.ui[nodeid].setMetadata();
 		document.getElementById(destid).setAttribute('dashboardid',dashboard_infos[dashboard_current].dashboardid);
 		$("#"+destid).attr('dashboardid',dashboard_infos[dashboard_current].dashboardid);
-		var text = "<span dashboardid='"+dashboard_infos[dashboard_current].dashboardid+"'></span>"
+		var text = "<span id='menu_"+destid+"' dashboardid='"+dashboard_infos[dashboard_current].dashboardid+"'></span>"
 		$("#"+destid).append($(text));
 		g_menuinreport = true;
-		UICom.structure.ui[nodeid].displayMenus("#"+destid,LANGCODE);
+		UICom.structure.ui[nodeid].displayMenus("#menu_"+destid,LANGCODE);
 		g_menuinreport = false;
 	}
 

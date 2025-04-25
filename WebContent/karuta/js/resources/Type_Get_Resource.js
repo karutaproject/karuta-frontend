@@ -1720,7 +1720,7 @@ UIFactory["Get_Resource"].update = function(selected_item,itself,langcode,type)
 			const uuid = $(selected_item).attr('uuid');
 			const style = $(selected_item).attr('style');
 			//---------------------
-			if (this.clause=="xsi_type='Get_Resource'") {
+			if (itself.clause=="xsi_type='Get_Resource'") {
 				$(UICom.structure.ui[itself.id].resource.value_node[0]).text(value);
 				$(UICom.structure.ui[itself.id].resource.code_node[0]).text(code);
 				$(UICom.structure.ui[itself.id].resource.uuid_node[0]).text(uuid);

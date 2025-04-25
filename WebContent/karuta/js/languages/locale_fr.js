@@ -150,6 +150,7 @@ karutaStr['fr']['help-label']="Aide";
 karutaStr['fr']['semantictag']="Tag sémantique";
 karutaStr['fr']['multilingual-node']="Noeud multilingue";
 karutaStr['fr']['multilingual-resource']="Ressource multilingue";
+karutaStr['fr']['seenoderoles']="See";
 karutaStr['fr']['resnopencil']="Ressource sans crayon ";
 karutaStr['fr']['editresroles']="Éditer ressource";
 karutaStr['fr']['delnoderoles']="Supprimer";

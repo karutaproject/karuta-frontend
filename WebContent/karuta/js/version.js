@@ -2,8 +2,8 @@
 var karuta_version = "@project.version@";
 var karuta_date = "@build.timestamp@";
 
-const karuta_version_eportfolium = 'eportfolium-3.79.0';
-const karuta_date_eportfolium = '2025-04-24';
+const karuta_version_eportfolium = 'eportfolium-3.79.2';
+const karuta_date_eportfolium = '2025-04-25';
 
 var karuta_backend_version = "?";
 var karuta_backend_date = "?";
@@ -87,3 +87,5 @@ var karuta_fileserver_date = "?";
 // 3.77.0 FEAT  -  Batch enhancement
 // 3.78.0 FEAT  -  BATCH join-leave group modified to be used with get_resource and get_get_resource group in form
 // 3.79.0 FIX - Get_resource in node
+// 3.79.1 FIX - Get_resource in node
+// 3.79.2 FIX - Report submission in report
