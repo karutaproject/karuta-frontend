@@ -2315,7 +2315,7 @@ g_actions['leave-portfoliogroup'] = function LeavePortfolioGroup(node)
 		success : function(data) {
 			var groups = $("group",data);
 			for (var k=0;k<groups.length;k++){
-				if ($('label',groups[k]).text()==portfoliogroup)
+				if ($('label',groups[k]).text()==portfoliogroup || $(groups[k]).attr("id")==portfoliogroup)
 					groupid = $(groups[k]).attr("id");
 			}
 			if (groupid=="")

@@ -152,7 +152,6 @@ UIFactory["PortfoliosGroup"].parse = function(data)
 	portfoliogroups_list = [];
 	var items = $("group",data);
 	var tableau1 = new Array();
-	var tableau2 = new Array();
 	for ( var i = 0; i < items.length; i++) {
 		var gid = $(items[i]).attr('id');
 		portfoliogroups_byid[gid] = new UIFactory["PortfoliosGroup"](items[i]);

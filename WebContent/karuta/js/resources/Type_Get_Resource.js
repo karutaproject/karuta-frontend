@@ -705,21 +705,23 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 					select_item = $(html);
 					$(select_item).click(function (ev){
 						//--------------------------------
-						var code = $(this).attr('code');
-						var display_code = false;
-						var display_label = true;
-						if (code.indexOf("$")>-1) 
+						let code = $(this).attr('code');
+						let display_code = false;
+						let display_value = false;
+						let display_label = true;
+						if (code.indexOf("%")>-1) 
 							display_label = false;
-						if (code.indexOf("@")<0) {
+						if (code.indexOf("#")>-1)
 							display_code = true;
-						}
+						if (code.indexOf(":")>-1)
+							display_value = true;
 						code = cleanCode(code);
 						//--------------------------------
-						var html = "";
+						let html = "";
 						if (display_code)
 							html += code+" ";
 						if (display_value)
-							html += $(this).attr("value")+" ";
+							html += value+" ";
 						if (display_label)
 							html += $(this).attr("label_"+languages[langcode]);
 						$("#button_"+langcode+self.id).attr("style",style);
@@ -731,16 +733,26 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 				}
 				//-------------- update button -----
 				if (code!="" && self_code==code) {
-					var html = "";
-					if (display_code)
-						html += code+" ";
-					if (display_value)
-						html += value+" ";
-					if (display_label)
-						html +=label;
-					$("#button_"+langcode+self.id).attr("style",style);
-					$("#button_"+langcode+self.id).html(html);
-					$("#button_"+langcode+self.id).attr('class', 'btn select selected-label').addClass("sel"+code).addClass(code);
+						let display_code = false;
+						let display_value = false;
+						let display_label = true;
+						if (code.indexOf("%")>-1) 
+							display_label = false;
+						if (code.indexOf("#")>-1)
+							display_code = true;
+						if (code.indexOf(":")>-1)
+							display_value = true;
+						//--------------------------------
+						let html = "";
+						if (display_code)
+							html += code+" ";
+						if (display_value)
+							html += value+" ";
+						if (display_label)
+							html += label;
+						$("#button_"+langcode+self.id).attr("style",style);
+						$("#button_"+langcode+self.id).html(html);
+						$("#button_"+langcode+self.id).attr('class', 'btn btn-default select select-label').addClass("sel"+code).addClass(code);
 				}
 				$(select).append($(select_item));
 			}
