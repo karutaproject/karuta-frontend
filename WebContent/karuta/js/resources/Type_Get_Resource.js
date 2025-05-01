@@ -456,8 +456,8 @@ UIFactory["Get_Resource"].prototype.displayEditor = function(destid,type,langcod
 			semtag = semtag.substring(0,semtag.indexOf('+'));
 		}
 		var target = queryattr_value.substring(srce_indx+1); // label or text
-		//------------
 		var portfoliocode = replaceVariable(queryattr_value.substring(0,semtag_indx));
+		//---------------------------------------------
 		if (queryattr_value.indexOf("#group.user.group")>-1  || queryattr_value.indexOf("#group.portfolio.group")>-1){
 			if (cachable && g_Get_Resource_caches[queryattr_value]!=undefined && g_Get_Resource_caches[queryattr_value]!="")
 				self.parse(destid,type,langcode,g_Get_Resource_caches[queryattr_value],disabled,srce,resettable,target,semtag,multiple_tags,portfoliocode,semtag2,cachable);
@@ -471,11 +471,42 @@ UIFactory["Get_Resource"].prototype.displayEditor = function(destid,type,langcod
 					success : function(data) {
 						if (cachable)
 							g_Get_Resource_caches[queryattr_value] = data;
-						self.parse(destid,type,langcode,g_Get_Resource_caches[queryattr_value],disabled,srce,resettable,target,semtag,multiple_tags,portfoliocode,semtag2,cachable);
+						self.parse(destid,type,langcode,data,disabled,srce,resettable,target,semtag,multiple_tags,portfoliocode,semtag2,cachable);
 					}
 				});
 			}
-		} else{
+		} else if (queryattr_value.indexOf("#users.user.first-last-name")>-1) {
+			if (cachable && g_Get_Resource_caches[queryattr_value]!=undefined && g_Get_Resource_caches[queryattr_value]!="")
+				self.parse(destid,type,langcode,g_Get_Resource_caches[queryattr_value],disabled,srce,resettable,target,semtag,multiple_tags,portfoliocode,semtag2,cachable);
+			else {
+				$.ajax({
+					type : "GET",
+					dataType : "xml",
+					url : serverBCK_API+"/users",
+					success : function(data) {
+						if (cachable)
+							g_Get_Resource_caches[queryattr_value] = data;
+						self.parse(destid,type,langcode,data,disabled,srce,resettable,target,semtag,multiple_tags,portfoliocode,semtag2,cachable);
+					}
+				});
+			}
+		} else if (queryattr_value.indexOf("#portfolios.")>-1) {
+			if (cachable && g_Get_Resource_caches[queryattr_value]!=undefined && g_Get_Resource_caches[queryattr_value]!="")
+				self.parse(destid,type,langcode,g_Get_Resource_caches[queryattr_value],disabled,srce,resettable,target,semtag,multiple_tags,portfoliocode,semtag2,cachable);
+			else {
+				$.ajax({
+					async: false,
+					type : "GET",
+					dataType : "xml",
+					url : serverBCK_API+"/portfolios?active=1&search=" + semtag,
+					success : function(data) {
+							if (cachable)
+								g_Get_Resource_caches[queryattr_value] = data;
+							self.parse(destid,type,langcode,data,disabled,srce,resettable,target,semtag,multiple_tags,portfoliocode,semtag2,cachable);
+					}
+				});
+			}
+		} else {
 			var selfcode = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",g_portfolio_current)).text();
 			if (portfoliocode.indexOf('.')<0 && selfcode.indexOf('.')>0 && portfoliocode!='self'  && portfoliocode!='#self')  // There is no project, we add the project of the current portfolio
 				portfoliocode = selfcode.substring(0,selfcode.indexOf('.')) + "." + portfoliocode;
@@ -504,11 +535,95 @@ UIFactory["Get_Resource"].prototype.displayEditor = function(destid,type,langcod
 				});
 			}
 		}
+		//--------------------------------------------------------------
 	}
 	if (this.get_type=="import_comp"){
 //		let portfoliocode = cleanCode(replaceVariable(this.query_portfolio));
 		let portfoliocode = replaceVariable(this.query_portfolio);
-		let selfcode = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",g_portfolio_current)).text();
+		let semtag = this.query_semtag;
+		let semtag2 = "";
+		if (semtag.indexOf('+')>-1) {
+			semtag2 = semtag.substring(semtag.indexOf('+')+1);
+			semtag = semtag.substring(0,semtag.indexOf('+'));
+		}
+		let srce = this.query_object;
+		let target = this.query_object;
+		type = 'multiple';
+		queryattr_value = portfoliocode+"."+semtag+"."+target;
+		//---------------------------------------------
+		if (queryattr_value.indexOf("#group.user.group")>-1  || queryattr_value.indexOf("#group.portfolio.group")>-1){
+			if (cachable && g_Get_Resource_caches[queryattr_value]!=undefined && g_Get_Resource_caches[queryattr_value]!="")
+				self.parse(destid,type,langcode,g_Get_Resource_caches[queryattr_value],disabled,srce,resettable,target,semtag,multiple_tags,portfoliocode,semtag2,cachable);
+			else {
+				const url =  queryattr_value.indexOf("#group.user.group")>-1 ?  serverBCK_API+"/usersgroups" : serverBCK_API+"/portfoliogroups";
+				$.ajax({
+					async:false,
+					type : "GET",
+					dataType : "xml",
+					url : url,
+					success : function(data) {
+						if (cachable)
+							g_Get_Resource_caches[queryattr_value] = data;
+						self.parse(destid,type,langcode,data,disabled,srce,resettable,target,semtag,multiple_tags,portfoliocode,semtag2,cachable);
+					}
+				});
+			}
+		} else if (queryattr_value.indexOf("#users.user.first-last-name")>-1) {
+			if (cachable && g_Get_Resource_caches[queryattr_value]!=undefined && g_Get_Resource_caches[queryattr_value]!="")
+				self.parse(destid,type,langcode,g_Get_Resource_caches[queryattr_value],disabled,srce,resettable,target,semtag,multiple_tags,portfoliocode,semtag2,cachable);
+			else {
+				$.ajax({
+					type : "GET",
+					dataType : "xml",
+					url : serverBCK_API+"/users",
+					success : function(data) {
+						if (cachable)
+							g_Get_Resource_caches[queryattr_value] = data;
+						self.parse(destid,type,langcode,data,disabled,srce,resettable,target,semtag,multiple_tags,portfoliocode,semtag2,cachable);
+					}
+				});
+			}
+		} else if (queryattr_value.indexOf("#portfolios.portfolio")>-1) {
+			if (cachable && g_Get_Resource_caches[queryattr_value]!=undefined && g_Get_Resource_caches[queryattr_value]!="")
+				self.parse(destid,type,langcode,g_Get_Resource_caches[queryattr_value],disabled,srce,resettable,target,semtag,multiple_tags,portfoliocode,semtag2,cachable);
+			else {
+				$.ajax({
+					async: false,
+					type : "GET",
+					dataType : "xml",
+					url : serverBCK_API+"/portfolios?active=1&search=" + semtag,
+					success : function(data) {
+							if (cachable)
+								g_Get_Resource_caches[queryattr_value] = data;
+							self.parse(destid,type,langcode,data,disabled,srce,resettable,target,semtag,multiple_tags,portfoliocode,semtag2,cachable);
+					}
+				});
+			}
+		} else {
+			let selfcode = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",g_portfolio_current)).text();
+			if (portfoliocode=='self' || portfoliocode=='#self') {
+				portfoliocode = selfcode;
+				cachable = false;
+			}
+			if (cachable && g_Get_Resource_caches[portfoliocode+semtag]!=undefined && g_Get_Resource_caches[portfoliocode+semtag]!="")
+				self.parse(destid,type,langcode,g_Get_Resource_caches[portfoliocode+semtag],disabled,srce,resettable,target,semtag,multiple_tags,portfoliocode,semtag2,cachable);
+			else {
+				$.ajax({
+					async:false,
+					type : "GET",
+					dataType : "xml",
+					url : serverBCK_API+"/nodes?portfoliocode=" + portfoliocode + "&semtag="+semtag.replace("!",""),
+					success : function(data) {
+						if (cachable)
+							g_Get_Resource_caches[portfoliocode+semtag] = data;
+						self.parse(destid,type,langcode,data,disabled,srce,resettable,target,semtag,multiple_tags,portfoliocode,semtag2,cachable);
+					}
+				});
+			}
+		}
+		//--------------------------------------------------------------
+
+/*		let selfcode = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",g_portfolio_current)).text();
 		if (portfoliocode=='self' || portfoliocode=='#self') {
 			portfoliocode = selfcode;
 			cachable = false;
@@ -538,8 +653,9 @@ UIFactory["Get_Resource"].prototype.displayEditor = function(destid,type,langcod
 					self.parse(destid,type,langcode,data,disabled,srce,resettable,target,semtag,null,portfoliocode,semtag2,cachable);
 				}
 			});
-		}
+		}*/
 	}
+
 	//-------- if function js -------------
 	if (UICom.structure.ui[this.id].js!="") {
 		var fcts = UICom.structure.ui[this.id].js.split("|");
@@ -575,10 +691,15 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 	//---------------------
 	if (type==undefined || type==null)
 		type = 'select';
-//-----Node ordering-------------------------------------------------------
+//-----Nodes ------------------------------------------------------------
 	let nodes = $("node",data);
 	if (nodes.length==0)
 		nodes = $("group",data);
+	if (nodes.length==0)
+		nodes = $("user",data);
+	if (nodes.length==0)
+		nodes = $("portfolio",data);
+//-----Node ordering-------------------------------------------------------
 	let tableau1 = new Array();
 	let tableau2 = new Array();
 	for ( var i = 0; i < $(nodes).length; i++) {
@@ -590,28 +711,38 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 		const endUTC = new Date(seeend).getTime();
 		const today = new Date().getTime();
 		const display = (seestart=="") ? true : (startUTC < today && today < endUTC);
-		//--------------------------
-
 		if (langnotvisible!=karutaStr[languages[LANGCODE]]['language'] && display) {
+			//----------------------------------------------------------
 			let resource = null;
 			let code = null;
 			let libelle = null;
-			if ($("asmResource",nodes[i]).length==3)
-				resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",nodes[i]); 
-			else
-				resource = $("asmResource[xsi_type='nodeRes']",nodes[i]);
-			if (resource.length>0) {
-				code = $('code',resource).text();
-				libelle = $(srce+"[lang='"+languages[langcode]+"']",resource).text();
-			} else { // usergroup or portfoliogroup
-				code = $(nodes[i]).attr("id");
-				libelle = $('label',nodes[i]).text();
+			if (target=="portfoliolabel") {
+					code = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",nodes[i])).text();
+					libelle = $("label[lang='"+languages[langcode]+"']",$("asmRoot>asmResource[xsi_type='nodeRes']",nodes[i])[0]).text();
+			} else {
+				if ($("asmResource",nodes[i]).length==3)
+					resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",nodes[i]); 
+				else
+					resource = $("asmResource[xsi_type='nodeRes']",nodes[i]);
+				if (resource.length>0) {
+					code = $('code',resource).text();
+					libelle = $(srce+"[lang='"+languages[langcode]+"']",resource).text();
+				} else { // users, portfolios, usergroup or portfoliogroup
+					if (target=="first-last-name") {
+						code = $(nodes[i]).attr('id');
+						libelle = $("firstname",nodes[i]).text()+ " "+$("lastname",nodes[i]).text();
+					} else {
+						code = $(nodes[i]).attr("id");
+						libelle = $('label',nodes[i]).text();
+					}
+				}
 			}
 			if (code.indexOf("~")<0)   // si ~ on trie sur le libellé sinon sur le code
 				tableau1[tableau1.length] = [code,nodes[i]];
 			else
 				tableau1[tableau1.length] = [libelle,nodes[i]]
 			tableau2[tableau2.length] = {'code':code,'libelle':libelle};
+			//----------------------------------------------------------
 		}
 	}
 	let newTableau1 = tableau1.sort(sortOn1);
@@ -647,7 +778,7 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 			$(select).append($(select_item));
 		}
 		//---------------------
-		if (target=="label" || target=="grouplabel" ) {
+		if (target=="label" || target=="grouplabel" || target=="first-last-name" || target=="portfoliolabel") {
 			for ( let i = 0; i < newTableau1.length; i++) {
 				//------------------------------
 				let uuid = $(newTableau1[i][1]).attr('id');
@@ -656,7 +787,7 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 				let value = "";
 				let code = "";
 				let label = "";
-				if (target=='grouplabel') {
+				if (target=='grouplabel' || target=="first-last-name" || target=="portfoliolabel") {
 					code = "@" + tableau2[i].code;
 					value = code;
 					label = tableau2[i].libelle;
@@ -1171,11 +1302,14 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 		}
 		//----------remove allready added----------------
 		var newTableau2 = [];
+		var newTableau3 = [];
 		if (this.unique!=undefined && this.unique!="" && this.unique!="false") {
 			for ( var i = 0; i < newTableau1.length; ++i) {
 				const indx = tabadded.indexOf(newTableau1[i][0]);
-				if (indx==-1)
+				if (indx==-1) {
 					newTableau2.push(newTableau1[i]);
+					newTableau3.push(tableau2[i]);
+				}
 			}
 		} else {
 			newTableau2 = newTableau1;
@@ -1187,16 +1321,26 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 			var input = "";
 			var style = "";
 			var resource = null;
-			//------------------------------
-			if ($("asmResource",newTableau2[i][1]).length==3) {
-				style = UIFactory.Node.getDataContentStyle(newTableau2[i][1].querySelector("metadata-epm"));
-				resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau2[i][1]); 
+			let value = "";
+			let code = "";
+			let label = "";
+			if (target=='grouplabel' || target=="first-last-name" || target=="portfoliolabel") {
+				code = "@" + newTableau3[i].code;
+				value = code;
+				label = newTableau3[i].libelle;
 			} else {
-				style = UIFactory.Node.getDataLabelStyle(newTableau2[i][1].querySelector("metadata-epm"));
-				resource = $("asmResource[xsi_type='nodeRes']",newTableau2[i][1]);
+				//------------------------------
+				if ($("asmResource",newTableau1[i][1]).length==3) {
+					style = UIFactory.Node.getDataContentStyle(newTableau1[i][1].querySelector("metadata-epm"));
+					resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i][1]); 
+				} else {
+					style = UIFactory.Node.getDataLabelStyle(newTableau1[i][1].querySelector("metadata-epm"));
+					resource = $("asmResource[xsi_type='nodeRes']",newTableau1[i][1]);
+				}
+				value = $('value',resource).text();
+				code = $('code',resource).text();
+				label = $(srce+"[lang='"+languages[langcode]+"']",resource).text();
 			}
-			//------------------------------
-			var code = $('code',resource).text();
 			if (code=="" || code!=previouscode){
 				previouscode = code
 				var selectable = true;
@@ -1221,15 +1365,17 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 				//------------------------------
 				input += "<div id='"+code+"' style=\""+style+"\">";
 				if (selectable) {
-					input += "	<input type='checkbox' id='input-"+uuid+"' uuid='"+uuid+"' name='multiple_"+self.id+"' value='"+$('value',resource).text()+"' code='"+$('code',resource).text()+"' class='multiple-item'";
+					input += "	<input type='checkbox' id='input-"+uuid+"' uuid='"+uuid+"' name='multiple_"+self.id+"' value='"+value+"' code='"+code+"' class='multiple-item'";
 					for (var j=0; j<languages.length;j++){
 						if (target=='fileid' || target=='resource') {
 							if (target=='fileid')
 								input += " label_"+languages[j] + "=\"" + target + "-" + uuid + "\" ";
 							else
 								input += " label_"+languages[j] + "=\"" + target + ":" + uuid + "|semtag:"+semtag+"|label:"+$("label[lang='"+languages[j]+"']",resource).text()+"\" ";
-						} else if (target=='nodelabel')
+						} else if (target=='nodelabel') {
 							input += " label_"+languages[j]+"=\"nodelabel:"+uuid + "|semtag:"+semtag+"|label:"+UICom.structure.ui[uuid].getLabel(null,'none')+"\" ";
+						} else if (target=='portfoliolabel')
+							input += " label_"+languages[j]+"=\""+label+"\" ";
 						else 
 							input += " label_"+languages[j]+"=\""+$(srce+"[lang='"+languages[j]+"']",resource).text()+"\" ";
 					}
@@ -1240,8 +1386,10 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 				if (display_code)
 					input += "<span class='input-code'>" + code + "</span> ";
 				if (display_label) {
-					if (srce=='resource' || srce=='nodelabel')
+					if (srce=='resource' || srce=='nodelabel') {
 						input += "<span class='input-label'>" + $("label[lang='"+languages[langcode]+"']",resource).text()+"</span>";
+						} else if (target=='portfoliolabel' || target=='first-last-name')
+							input += "<span class='input-label'>" + label +"</span>";
 					else
 						input += "<span class='input-label'>" + $(srce+"[lang='"+languages[langcode]+"']",resource).text()+"</span>";
 				}

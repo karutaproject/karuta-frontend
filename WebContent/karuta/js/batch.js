@@ -1603,6 +1603,133 @@ g_actions['create-tree'] = function createTree(node)
 
 //-----------------------------------------------------------------------
 //-----------------------------------------------------------------------
+//---------------------------FOLDERS  -----------------------------------
+//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
+
+//=================================================
+g_actions['select-folder'] = function (node)
+//=================================================
+{
+	var ok = false;
+	var code = getvarvals($("code",node));
+	if (code=="")
+		code = getTxtvals($("code",node));
+	code =  cleanCode(code);
+	//----- get tree id -----
+	var portfolioid = UIFactory["Portfolio"].getid_bycode(code,false); 
+	//------------------------
+	if (portfolioid!=""){
+		ok = true;
+		const portfolio = {
+			id : portfolioid,
+			code: code,
+			label: "",
+			currentnode: [], // current node stack
+			lastimported: [], // imported node stack
+		}
+		var treeref = $(node).attr('id');
+		g_trees[treeref] = portfolio;
+		$("#batch-log").append("<br>- folder selected -  - code:"+code+" - portfolioid:"+portfolioid);
+	}
+	else {
+		$("#batch-log").append("<br> **** folder does not exist  - code:"+code);
+	}
+	if (!ok) g_batch_error.push("select-folder");
+	return ok;
+}
+
+//=================================================
+g_actions['delete-folder'] = function (node)
+//=================================================
+{
+	var ok = false;
+	var treeref = $(node).attr("select");
+	try {
+		var portfolioid = g_trees[treeref].id;
+		if (portfolioid!=undefined) {
+			var url = serverBCK_API+"/portfolios/portfolio/" + portfolioid;
+			$.ajax({
+				async : false,
+				type : "DELETE",
+				contentType: "application/xml",
+				dataType : "xml",
+				url : url,
+				data : "",
+				success : function(data) {
+					ok = true;
+					$("#batch-log").append("<br>- folder deleted - portfolioid:"+portfolioid);
+				},
+				error : function(jqxhr,textStatus) {
+					$("#batch-log").append("<br>- ***<span class='danger'>ERROR 1</span> delete folder - portfolioid:"+portfolioid+" ---- NOT FOUND ----");
+				}
+			});
+		} else {
+			$("#batch-log").append("<br>- ***<span class='danger'>ERROR 2</span> delete folder - portfolioid:"+portfolioid+" ---- NOT FOUND ----");
+		}	
+	}
+	catch(err) {
+		$("#batch-log").append("<br>- ***<span class='danger'>ERROR 3</span> delete folder - portfolioid:"+portfolioid+" ---- NOT FOUND ----");
+	}
+	if (!ok) g_batch_error.push("delete-folder");
+	return ok;
+}
+
+//=================================================
+g_actions['archive-folder'] = function (node)
+//=================================================
+{
+	var ok = false;
+	var treeref = $(node).attr("select");
+	var uuids = "";
+	var nbeltsperarchive = 10;
+	try {
+		var projectcode = g_trees[treeref].code;
+		if (projectcode!=undefined) {
+			$.ajax({
+				type : "GET",
+				dataType : "xml",
+				url : serverBCK_API+"/portfolios?active=1&search="+projectcode,
+				success : function(data) {
+					UIFactory["Portfolio"].parse(data);
+					for (var i=0;i<portfolios_list.length;i=i+parseInt(nbeltsperarchive)){
+						uuids = "";
+						for (var j=0;j<nbeltsperarchive && i+j<portfolios_list.length;j++){
+							if (j>0)
+								uuids += ",";
+							uuids += portfolios_list[i+j].id;
+						}
+						$.ajax({
+							async : false,
+							type : "GET",
+							dataType : "text",
+							url : serverBCK_API+"/portfolios/zip?portfolios="+uuids+"&archive=y",
+							success : function(data) {
+								$("#batch-log").append("<br>- folder archive - portfolioids:"+uuids);
+							},
+							error : function(jqxhr,textStatus) {
+								$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> archive folder - portfolioid:"+uuids);
+							}
+						});
+					}
+				},
+				error : function(jqxhr,textStatus) {
+					$("#batch-log").append("<br>- ***<span class='danger'>ERROR 2</span> archive folder - portfolioid:"+uuids+" ---- NOT FOUND ----");
+				}
+			});
+		} else {
+			$("#batch-log").append("<br>- ***<span class='danger'>ERROR 2</span> archive folder - portfolioid:"+uuids+" ---- NOT FOUND ----");
+		}	
+	}
+	catch(err) {
+		$("#batch-log").append("<br>- ***<span class='danger'>ERROR 3</span> archive folder - portfolioid:"+uuids+" ---- NOT FOUND ----");
+	}
+	if (!ok) g_batch_error.push("archive-folder");
+	return ok;
+}
+
+//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
 //---------------------------Select Tree --------------------------------
 //-----------------------------------------------------------------------
 //-----------------------------------------------------------------------

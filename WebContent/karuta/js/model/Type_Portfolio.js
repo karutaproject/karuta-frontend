@@ -318,8 +318,7 @@ UIFactory["Portfolio"].getAdminPortfolioMenu = function(gid,self,semtag)
 			html += "<a class='dropdown-item' onclick=\"UIFactory.Portfolio.callRenameMove('"+self.id+"')\" ><i class='fa fa-edit'></i> "+karutaStr[LANG]["rename-move"]+"</a>";
 		html += "<a class='dropdown-item' onclick=\"UIFactory.Portfolio.callRenameCopy('"+self.id+"')\" ><i class='fa fa-file-o'></i><i class='far fa-copy'></i> "+karutaStr[LANG]["button-duplicate"]+"</a>";
 //		html += "<a class='dropdown-item' onclick=\"document.getElementById('wait-window').style.display='block';UIFactory.Portfolio.copy('"+self.id+"','"+self.code_node.text()+"-copy',true)\" ><i class='fa fa-file-o'></i><i class='far fa-copy'></i> "+karutaStr[LANG]["button-duplicate"]+"</a>";
-		if (semtag.indexOf('karuta-model')>-1 || semtag.indexOf('karuta-batch-form')>-1)
-			html += "<a class='dropdown-item' onclick=\"UIFactory.Portfolio.callRenameInstantiate('"+self.id+"')\" ><i class='fas fa-copy'></i> "+karutaStr[LANG]["button-instantiate"]+"</a>";
+		html += "<a class='dropdown-item' onclick=\"UIFactory.Portfolio.callRenameInstantiate('"+self.id+"')\" ><i class='fas fa-copy'></i> "+karutaStr[LANG]["button-instantiate"]+"</a>";
 //			html += "<a class='dropdown-item' onclick=\"document.getElementById('wait-window').style.display='block';UIFactory.Portfolio.instantiate('"+self.id+"','"+self.code_node.text()+"-instance',true)\" ><i class='fas fa-copy'></i> "+karutaStr[LANG]["button-instantiate"]+"</a>";
 		html += "<a class='dropdown-item' onclick=\"UIFactory.Portfolio.confirmDelPortfolio('"+self.id+"')\" ><i class='fas fa-trash'></i> "+karutaStr[LANG]["button-delete"]+"</a>";
 		html += "<a class='dropdown-item' href='../../../"+serverBCK_API+"/portfolios/portfolio/"+self.id+"?resources=true&export=true'><i class='fa fa-download'></i> "+karutaStr[LANG]["export"]+"</a>";
@@ -2453,14 +2452,16 @@ UIFactory["Portfolio"].callArchive = function(projectcode,langcode)
 };
 
 //==================================
-UIFactory["Portfolio"].archive = function(projectcode,langcode)
+UIFactory["Portfolio"].archive = function(projectcode,langcode,nbelts)
 //==================================
 {
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
 	//---------------------
-	var nbeltsperarchive = $("input[name='nbeltsperarchive']").val();
+	if (nbelts==undefined)
+		nbelts = 1;
+	const nbeltsperarchive = $("input[name='nbeltsperarchive']")!=undefined ? $("input[name='nbeltsperarchive']").val(): nbelts;
 	$.ajax({
 		type : "GET",
 		dataType : "xml",

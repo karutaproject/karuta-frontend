@@ -276,6 +276,41 @@
 
 	<!-- ====================================================================================== -->
 	<!-- ====================================================================================== -->
+	<!-- ================================ FOLDER ============================================== -->
+	<!-- ====================================================================================== -->
+	<!-- ====================================================================================== -->
+
+	<xsl:template match="*[metadata/@semantictag='select-folder']">
+		<xsl:variable name="id">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='folderid']/asmResource[@xsi_type='Field']/text[@lang=$lang]"/>
+		</xsl:variable>
+		<select-folder id="{$id}">
+			<code>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">code</xsl:with-param>
+				</xsl:call-template>
+		</code>
+		</select-folder>
+	</xsl:template>
+
+	<xsl:template match="*[metadata/@semantictag='delete-folder']">
+		<xsl:variable name="id">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='tree-select']/asmResource[@xsi_type='Get_Resource']/label[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<delete-folder select="{$id}">
+		</delete-folder>
+	</xsl:template>
+
+	<xsl:template match="*[metadata/@semantictag='archive-folder']">
+		<xsl:variable name="id">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='tree-select']/asmResource[@xsi_type='Get_Resource']/label[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<archive-folder select="{$id}">
+		</archive-folder>
+	</xsl:template>
+
+	<!-- ====================================================================================== -->
+	<!-- ====================================================================================== -->
 	<!-- ================================ TREE ================================================ -->
 	<!-- ====================================================================================== -->
 	<!-- ====================================================================================== -->

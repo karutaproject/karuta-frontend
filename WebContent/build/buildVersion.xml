@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="updateVersion" default="updateVersion" basedir="."> 
-	<property name="noVersion" value="3.79.3"/>
-	<property name="textVersion" value="FIX - Get_Resource special characters in inline mode"/>
+	<property name="noVersion" value="3.80.0"/>
+	<property name="textVersion" value="FEAT - Get_Resource on portfolios - Batch archive folder"/>
 	<property name="dirSrce" value="src/htm-srce"/>
 	<property name="dirTrgt" value="WebContent/karuta/htm"/>
 	<target name="testIfNewVersion">
