@@ -3306,18 +3306,51 @@ g_actions['import-node'] = function importNode(node,data)
 	const srce_nodes = getSourceNodes(node,data,"srce-test");
 	let srceid = "";
 	if (srce_nodes.length>0)
-		srceid = $(srce_nodes[0]).attr('id');;
-	//-------------------- TARGET --------------------------------------
-	let nodes = getTargetNodes(node,data,"dest-test")
-	const treeref= getTreef(node);
-	if (nodes.length>0){
-		for (let i=0; i<nodes.length; i++){
-			destid = $(nodes[i]).attr('id');
-			let urlS ="";
-			if (srceid!="")
-				urlS = serverBCK_API+"/nodes/node/import/"+destid+"?uuid="+srceid;
-			else
-				urlS = serverBCK_API+"/nodes/node/import/"+destid+"?srcetag="+srcetag+"&srcecode="+srcecode;
+		srceid = $(srce_nodes[0]).attr('id');
+	//---- if test exists and and source exists then import ---
+	let test = $(node).attr(teststr);
+	if (test!=undefined && test!="" && srceid!="") {
+		//-------------------- TARGET --------------------------------------
+		let nodes = getTargetNodes(node,data,"dest-test")
+		const treeref= getTreef(node);
+		if (nodes.length>0){
+			for (let i=0; i<nodes.length; i++){
+				destid = $(nodes[i]).attr('id');
+				let urlS ="";
+				if (srceid!="")
+					urlS = serverBCK_API+"/nodes/node/import/"+destid+"?uuid="+srceid;
+				else
+					urlS = serverBCK_API+"/nodes/node/import/"+destid+"?srcetag="+srcetag+"&srcecode="+srcecode;
+				$.ajax({
+					async:false,
+					type : "POST",
+					dataType : "text",
+					url : urlS,
+					data : "",
+					destid:destid,
+					treeref:treeref,
+					success : function(data) {
+						if (data.indexOf("llegal operation")<0) {
+							ok = true;
+							if (this.treeref!="") {
+								g_trees[treeref].lastimported.push(data);
+								g_trees[treeref].currentnode.push(data);
+							}
+							g_current_node_uuid = data;
+							$("#batch-log").append("<br>- node ("+g_current_node_uuid+") added at ("+this.destid+") - semtag="+getSemtag(node)+ " source="+srcetag);
+						} else{
+							$("#batch-log").append("<br>- <span class='danger'>ERROR</span> SOURCE NOT FOUND - semtag="+getSemtag(node)+ " source="+srcetag);
+						}
+					},
+					error : function(data) {
+						$("#batch-log").append("<br>- <span class='danger'>ERROR</span> in import node("+this.destid+") - semtag="+getSemtag(node)+ " source="+srcetag);
+					}
+				});
+			}
+		} else if (getSemtag(node)=="#uuid"){
+			const select = $(node).attr("select");
+			destid = replaceVariable(b_replaceVariable(treeref)); // select = porfolio_uuid.#uuid
+			let urlS = serverBCK_API+"/nodes/node/import/"+destid+"?srcetag="+srcetag+"&srcecode="+srcecode;
 			$.ajax({
 				async:false,
 				type : "POST",
@@ -3343,40 +3376,9 @@ g_actions['import-node'] = function importNode(node,data)
 					$("#batch-log").append("<br>- <span class='danger'>ERROR</span> in import node("+this.destid+") - semtag="+getSemtag(node)+ " source="+srcetag);
 				}
 			});
+		}else {
+			$("#batch-log").append("<br>- <span class='danger'>ERROR</span> NOT FOUND - semtag="+getSemtag(node)+ " source="+srcetag);
 		}
-	} else if (getSemtag(node)=="#uuid"){
-		const select = $(node).attr("select");
-//		var treeref_idx = select.lastIndexOf(".");
-//		var treeref = select.substring(0,treeref_idx);
-		destid = replaceVariable(b_replaceVariable(treeref)); // select = porfolio_uuid.#uuid
-		let urlS = serverBCK_API+"/nodes/node/import/"+destid+"?srcetag="+srcetag+"&srcecode="+srcecode;
-		$.ajax({
-			async:false,
-			type : "POST",
-			dataType : "text",
-			url : urlS,
-			data : "",
-			destid:destid,
-			treeref:treeref,
-			success : function(data) {
-				if (data.indexOf("llegal operation")<0) {
-					ok = true;
-					if (this.treeref!="") {
-						g_trees[treeref].lastimported.push(data);
-						g_trees[treeref].currentnode.push(data);
-					}
-					g_current_node_uuid = data;
-					$("#batch-log").append("<br>- node ("+g_current_node_uuid+") added at ("+this.destid+") - semtag="+getSemtag(node)+ " source="+srcetag);
-				} else{
-					$("#batch-log").append("<br>- <span class='danger'>ERROR</span> SOURCE NOT FOUND - semtag="+getSemtag(node)+ " source="+srcetag);
-				}
-			},
-			error : function(data) {
-				$("#batch-log").append("<br>- <span class='danger'>ERROR</span> in import node("+this.destid+") - semtag="+getSemtag(node)+ " source="+srcetag);
-			}
-		});
-	}else {
-		$("#batch-log").append("<br>- <span class='danger'>ERROR</span> NOT FOUND - semtag="+getSemtag(node)+ " source="+srcetag);
 	}
 	if (!ok) g_batch_error.push("import-node");
 	return ok;

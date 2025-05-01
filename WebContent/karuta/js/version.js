@@ -2,7 +2,7 @@
 var karuta_version = "@project.version@";
 var karuta_date = "@build.timestamp@";
 
-const karuta_version_eportfolium = 'eportfolium-3.80.0';
+const karuta_version_eportfolium = 'eportfolium-3.80.1';
 const karuta_date_eportfolium = '2025-05-01';
 
 var karuta_backend_version = "?";
@@ -91,3 +91,4 @@ var karuta_fileserver_date = "?";
 // 3.79.2 FIX - Report submission in report
 // 3.79.3 FIX - Get_Resource special characters in inline mode
 // 3.80.0 FEAT - Get_Resource on portfolios - Batch archive folder
+// 3.80.1 FIX - Batch import-node - no import if test exists and returns nothing
