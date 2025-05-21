@@ -129,6 +129,8 @@ karutaStr['en']['error-filenotfound']="*** File not saved or missing";
 karutaStr['en']['error-login']="Connection Error : your login or your password is incorrect.";
 karutaStr['en']['error-delete']="You cannot delete this item.";
 karutaStr['en']['error-script']="ERROR - An error occurred while executing the script.";
+karutaStr['en']['error-user-not-exits1']="The user ";
+karutaStr['en']['error-user-not-exits1']=" does not exist anymore. Delete from the Usergroup ?";
 
 //=========================================
 //========== NODE =====================

@@ -35,16 +35,8 @@
 		font-family: var(--font-family);
 		font-size: calc(var(--font-size-coeff) * 0.8rem);
 	}
-	
-		@media (max-width: 640px) {  
-		body,
-		.form-control,
-		.btn {
-			font-size: calc(var(--font-size-coeff) * 0.6rem);
-		}
-	}
-	
-		@media (min-width: 1024px) {  
+		
+	@media (min-width: 1024px) {  
 		body,
 		.form-control,
 		.btn {
@@ -1738,7 +1730,7 @@
 			padding-right:0px;
 		}
 		table{
-			widht:100%;
+			width:100%;
 			margin-left:5px;
 			margin-right:5px;
 		}
@@ -2295,7 +2287,7 @@ a.btn {
 }
 
 .btn-danger {
-	background-color:#d9534f;
+	background-color:#d9534f !important;
 	background-image: none;}
 
 
@@ -2396,7 +2388,7 @@ textarea {
 		margin-top:4px;
 		font-weight:bold;
 		text-align:center;
-		verticla-align:middle;
+		vertical-align:middle;
 		font-size:14px;
 	}
 

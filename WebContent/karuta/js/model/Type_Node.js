@@ -394,7 +394,7 @@ if (execJS(this,"display-if")) {
 		const menus_color = this.getMenuStyle();
 		if(edit) {
 			var buttons = "";
-			if (this.xsi_type.indexOf("Block")>-1) {
+			if (this.xsi_type!=undefined && this.xsi_type.indexOf("Block")>-1) {
 				buttons += this.structured_resource.getButtons();
 			}
 			buttons += this.getButtons();
@@ -1503,7 +1503,12 @@ UIFactory["Node"].displaySidebar = function(root,destid,type,langcode,edit,paren
 				if (privatevalue)
 					html+= "private"
 				html += "' id='parent-"+uuid+"' role='tablist'>";
-				html += "  <a style='cursor:pointer' id='sidebar_"+uuid+"' href='#' class='sidebar-link' onclick=\"displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+");pageClick ('"+uuid+"')\" >"+text+"</a>";
+				html += "  <a style='cursor:pointer' id='sidebar_"+uuid+"' ";
+				if (window.innerWidth<700)
+					html +="href='#node_"+uuid+"' ";
+				else
+					html +="href='#' ";
+				html +=" class='sidebar-link' onclick=\"displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+");pageClick ('"+uuid+"')\" >"+text+"</a>";
 				html += "</div><!-- panel -->";
 				$("#"+destid).append($(html));
 			}
@@ -1520,7 +1525,12 @@ UIFactory["Node"].displaySidebar = function(root,destid,type,langcode,edit,paren
 					html += "  <small ><span onclick=\"toggleSidebarPlusMinus('"+uuid+"')\" id='toggle_"+uuid+"' class='fas fa-minus' style='float:right;padding-left:5px;margin-right:5px;'></span></small>";
 				else
 					html += "  <small ><span onclick=\"toggleSidebarPlusMinus('"+uuid+"')\" id='toggle_"+uuid+"' class='fas fa-plus' style='float:right;padding-left:5px;margin-right:5px;'></span></small>";
-				html += "  <a class='sidebar-link' href='#' onclick=\"toggleSidebarPlus('"+uuid+"');displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+")\" id='sidebar_"+uuid+"'>"+text+"</a>";
+				html += "  <a class='sidebar-link'";
+				if (window.innerWidth<700)
+					html +="href='#node_"+uuid+"' ";
+				else
+					html +="href='#' ";
+				html += "onclick=\"toggleSidebarPlus('"+uuid+"');displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+")\" id='sidebar_"+uuid+"'>"+text+"</a>";
 				html += "  </div>"
 				if (localStorage.getItem('sidebar'+uuid)!=undefined && localStorage.getItem('sidebar'+uuid)=='open' || open)
 					html += "<div id='collapse"+uuid+"' class='panel-collapse collapse show' role='tabpanel' aria-labelledby='sidebar_"+uuid+"'>";

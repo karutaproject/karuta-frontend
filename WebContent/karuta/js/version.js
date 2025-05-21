@@ -2,8 +2,8 @@
 var karuta_version = "@project.version@";
 var karuta_date = "@build.timestamp@";
 
-const karuta_version_eportfolium = "eportfolium-3.62.0";
-const karuta_date_eportfolium = "2025-01-19";
+const karuta_version_eportfolium = 'eportfolium-3.80.2';
+const karuta_date_eportfolium = '2025-05-16';
 
 var karuta_backend_version = "?";
 var karuta_backend_date = "?";
@@ -65,8 +65,32 @@ var karuta_fileserver_date = "?";
 // 3.60.0 Feat - Configuration CSS - var page-title-text-color added - played role management - 2024-12-23
 // 3.61.0 Feat - Get_Resource checkbox in view mode - 2024-12-31
 // 3.62.0 Feat - New:  semanictag not-visible-in-menu - 2025-01-19
-
-
-
-
-
+// 3.63.0 FEAT new way to build project - version is added in html for js and css files
+// 3.64.0 FEAT using variable in table variables in report is possible
+// 3.65.0 FEAT - new way to erase variables in report reference
+// 3.66.0 FEAT - new CSS class ellipsis
+// 3.66.1 FIX - new CSS to hide print button on root except if for print portfolio
+// 3.67.0 FEAT - submenu in asmstructure - FIX - table date sorter﻿
+// 3.68.0 FEAT - recursive horizontal submenu in asmstructure
+// 3.69.0 FEAT - menu can be limited to one level using one-level-menu class
+// 3.69.1 FIX - variables with $ in report
+// 3.70.0 FEAT - Batch for-each-tree built-in variables treecode and treelabel are available
+// 3.70.1 FIX   - create folder - veification of existng code by the server
+// 3.71.0 FEAT   -  Report : new for-each-usergroup, for-each-portfoliogroup - Batch: new for-each-group-portfolio
+// 3.72.0 FEAT   -  Get_resource : usergroup  / portfoliogroup
+// 3.72.1 FIX   -  Get_Get_resource : error when inline and using variables in query
+// 3.73.0 FEAT   -  enhancement Get_Resource and Get_Get_resource
+// 3.74.0 FEAT   -  Get_Get_resource usergroup and portfoliogroup
+// 3.75.0 FEAT - Calendar can be used in form and batch
+// 3.75.1 FIX - Calendar Date.parse
+// 3.76.0 FEAT  -  Batch and usergroup enhancement
+// 3.77.0 FEAT  -  Batch enhancement
+// 3.78.0 FEAT  -  BATCH join-leave group modified to be used with get_resource and get_get_resource group in form
+// 3.79.0 FIX - Get_resource in node
+// 3.79.1 FIX - Get_resource in node
+// 3.79.2 FIX - Report submission in report
+// 3.79.3 FIX - Get_Resource special characters in inline mode
+// 3.80.0 FEAT - Get_Resource on portfolios - Batch archive folder
+// 3.80.1 FIX - Batch import-node - no import if test exists and returns nothing
+// 3.80.1 FIX - Batch import-node - no import if test exists and returns nothing
+// 3.80.2 FIX - url not well defined when sharing 2world

@@ -318,8 +318,7 @@ UIFactory["Portfolio"].getAdminPortfolioMenu = function(gid,self,semtag)
 			html += "<a class='dropdown-item' onclick=\"UIFactory.Portfolio.callRenameMove('"+self.id+"')\" ><i class='fa fa-edit'></i> "+karutaStr[LANG]["rename-move"]+"</a>";
 		html += "<a class='dropdown-item' onclick=\"UIFactory.Portfolio.callRenameCopy('"+self.id+"')\" ><i class='fa fa-file-o'></i><i class='far fa-copy'></i> "+karutaStr[LANG]["button-duplicate"]+"</a>";
 //		html += "<a class='dropdown-item' onclick=\"document.getElementById('wait-window').style.display='block';UIFactory.Portfolio.copy('"+self.id+"','"+self.code_node.text()+"-copy',true)\" ><i class='fa fa-file-o'></i><i class='far fa-copy'></i> "+karutaStr[LANG]["button-duplicate"]+"</a>";
-		if (semtag.indexOf('karuta-model')>-1 || semtag.indexOf('karuta-batch-form')>-1)
-			html += "<a class='dropdown-item' onclick=\"UIFactory.Portfolio.callRenameInstantiate('"+self.id+"')\" ><i class='fas fa-copy'></i> "+karutaStr[LANG]["button-instantiate"]+"</a>";
+		html += "<a class='dropdown-item' onclick=\"UIFactory.Portfolio.callRenameInstantiate('"+self.id+"')\" ><i class='fas fa-copy'></i> "+karutaStr[LANG]["button-instantiate"]+"</a>";
 //			html += "<a class='dropdown-item' onclick=\"document.getElementById('wait-window').style.display='block';UIFactory.Portfolio.instantiate('"+self.id+"','"+self.code_node.text()+"-instance',true)\" ><i class='fas fa-copy'></i> "+karutaStr[LANG]["button-instantiate"]+"</a>";
 		html += "<a class='dropdown-item' onclick=\"UIFactory.Portfolio.confirmDelPortfolio('"+self.id+"')\" ><i class='fas fa-trash'></i> "+karutaStr[LANG]["button-delete"]+"</a>";
 		html += "<a class='dropdown-item' href='../../../"+serverBCK_API+"/portfolios/portfolio/"+self.id+"?resources=true&export=true'><i class='fa fa-download'></i> "+karutaStr[LANG]["export"]+"</a>";
@@ -398,7 +397,7 @@ UIFactory["Portfolio"].displayPortfolio = function(destid,type,langcode,edit)
 		$("#sidebar_"+uuid).click();
 	}
 	else if (type=='standard' || type=='raw'){
-		if (g_bar_type.indexOf('horizontal')>-1) {
+		if (g_bar_type.indexOf('horizontal')>-1 && window.innerWidth>700) {
 			html += "<div id='breadcrumb'></div>";
 			html += "<div id='contenu' class='container-fluid'></div>";
 			$("#"+destid).html($(html));
@@ -2453,23 +2452,25 @@ UIFactory["Portfolio"].callArchive = function(projectcode,langcode)
 };
 
 //==================================
-UIFactory["Portfolio"].archive = function(projectcode,langcode)
+UIFactory["Portfolio"].archive = function(projectcode,langcode,nbelts)
 //==================================
 {
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
 	//---------------------
-	var nbeltsperarchive = $("input[name='nbeltsperarchive']").val();
+	if (nbelts==undefined)
+		nbelts = 1;
+	const nbeltsperarchive = $("input[name='nbeltsperarchive']")!=undefined ? $("input[name='nbeltsperarchive']").val(): nbelts;
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
 		url : serverBCK_API+"/portfolios?active=1&search="+projectcode,
 		success : function(data) {
 			UIFactory["Portfolio"].parse(data);
-			for (var i=1;i<portfolios_list.length+1;i=i+parseInt(nbeltsperarchive)){
+			for (var i=0;i<portfolios_list.length;i=i+parseInt(nbeltsperarchive)){
 				var uuids = "";
-				for (var j=0;j<nbeltsperarchive;j++){
+				for (var j=0;j<nbeltsperarchive && i+j<portfolios_list.length;j++){
 					if (j>0)
 						uuids += ",";
 					uuids += portfolios_list[i+j].id;
@@ -2724,7 +2725,7 @@ UIFactory["Portfolio"].removeSearchedPortfolios = function()
 
 
 //==================================
-UIFactory["Portfolio"].getListPortfolios = function(userid,firstname,lastname) 
+UIFactory["Portfolio"].getListPortfolios = function(userid,firstname,lastname,deletebutton) 
 //==================================
 {
 
@@ -2748,7 +2749,7 @@ UIFactory["Portfolio"].getListPortfolios = function(userid,firstname,lastname)
 					alertHTML("Error UIFactory.Portfolio.parse:"+uuid+" - "+e.message);
 				}
 			}
-			UIFactory.Portfolio.displayListPortfolios(list,this.userid,this.firstname,this.lastname);
+			UIFactory.Portfolio.displayListPortfolios(list,this.userid,this.firstname,this.lastname,deletebutton);
 			$("#wait-window").modal('hide');
 		},
 		error : function(jqxhr,textStatus) {
@@ -2758,14 +2759,12 @@ UIFactory["Portfolio"].getListPortfolios = function(userid,firstname,lastname)
 }
 
 //==================================
-UIFactory.Portfolio.displayListPortfolios = function(list,userid,firstname,lastname,langcode)
+UIFactory.Portfolio.displayListPortfolios = function(list,userid,firstname,lastname,deletebutton)
 //==================================
 {
-	var serverURL = url.substring(0,url.indexOf(appliname)-1);
-	var application_server = serverURL+"/"+appliname;
 	//---------------------
-	if (langcode==null)
-		langcode = LANGCODE;
+	if (deletebutton==null)
+		deletebutton = false;
 	//---------------------
 	$("#edit-window-footer").html("");
 	$("#edit-window-title").html(karutaStr[LANG]['list_user_portfolio']+" " + firstname + " " +lastname);
@@ -2775,20 +2774,22 @@ UIFactory.Portfolio.displayListPortfolios = function(list,userid,firstname,lastn
 	$("#edit-window-footer").append($(footer));
 
 	var html = "<table id='displayListPortfolios' class='zebra-table'>";
-	html += "<tr class='head'><td>"+karutaStr[LANG]['label']+"</td><td>"+karutaStr[LANG]['role']+"</td><td>"+karutaStr[LANG]['code']+"</td></tr>"
+	html += "<tr class='head'><td>"+karutaStr[LANG]['label']+"</td><td>"+karutaStr[LANG]['role']+"</td><td>"+karutaStr[LANG]['code']+"</td><td></td></tr>"
 	for (var i=0;i<list.length;i++)
 		{
 		var portfolio = portfolios_byid[list[i]];
 		var portfolioid = portfolio.id;
 		var portfoliocode = portfolio.code_node.text();
-		var portfolio_label = portfolio.label_node[langcode].text();
+		var portfolio_label = portfolio.label_node[LANGCODE].text();
 
-		html += "<tr><td class='portfolio_label'>"+portfolio_label+"</td><td class='role' id='role_"+portfolioid+"'>&nbsp;</td><td class='portfoliocode'>"+portfoliocode+"</td><td id='role_"+portfolioid+"'></td></tr>";
+		html += "<tr><td class='portfolio_label'>"+portfolio_label+"</td><td class='role' id='role_"+portfolioid+"'>&nbsp;</td><td class='portfoliocode'>"+portfoliocode+"</td>";
+		if (deletebutton)
+			html += "<td><button class='btn btn-danger' onclick='UIFactory.Portfolio.confirmDelPortfolio(\""+portfolioid+"\")'>"+karutaStr[LANG]['button-delete']+"</button></td>";
+		html += "</tr>";
 		$.ajax({ // get group-role for the user
 			Accept: "application/xml",
 			type : "GET",
 			dataType : "xml",
-// https://www.eportfolium.com/karuta-backend2.3/rest/api/rolerightsgroups/all/users?portfolio=19d287ad-8d5f-41c8-8df8-3d54db51daa1
 			url : serverBCK_API+"/rolerightsgroups/all/users?portfolio=" + portfolioid,
 			userid : userid,
 			portfolioid : portfolioid,

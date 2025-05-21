@@ -221,7 +221,7 @@ UIFactory["UsersGroup"].prototype.loadContent = function (type)
 							UIFactory.User.parse_add(data);
 						},
 						error : function() {
-							if (confirm("The user "+this.userid+" does not exist anymore. Delete from the Usergroup ?"))
+							if (confirm(karutaStr[LANG]['error-usergroup-user-not-exits1'] + this.userid + karutaStr[LANG]['error-usergroup-user-not-exits2']))
 								UIFactory.UsersGroup.remove(this.groupid,this.userid)
 						}
 					});
@@ -317,6 +317,8 @@ UIFactory["UsersGroup"].prototype.displayView = function(dest,type)
 		//-------------------------------------------------
 		html += "<div id='usergroup_"+this.id+"' class='usergroup'>";
 		html += "	<div id='tree_usergroup-label_"+this.id+"' class='tree-label usergroup-label'>";
+		if (usergroup_code=="")
+			usergroup_code = "error : no label"
 		html += "		<span id='usergrouplabel_"+this.id+"' onclick=\"usergroups_byid['"+this.id+"'].toggleContent('"+type+"')\" class='project-label'>"+usergroup_code+"</span>";
 		html += "		&nbsp;<span class='nbchildren badge' id='nbchildren_"+this.id+"' >"+this.nbchildren+"</span>";
 		html += "	</div>";

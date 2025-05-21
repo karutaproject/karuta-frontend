@@ -2314,16 +2314,22 @@ function setVariables(data)
 function updateVariable(node)
 //==================================
 {
-	var value = UICom.structure.ui[$(node).attr("id")].resource.getAttributes().value;
-	var code = UICom.structure.ui[$(node).attr("id")].resource.getAttributes().code;
-	var text = UICom.structure.ui[$(node).attr("id")].resource.getAttributes().text;
-	var utc = UICom.structure.ui[$(node).attr("id")].resource.getAttributes().utc;
-	var variable_value = (value=="") ? code : value;
+	const nodeid = $(node).attr("id");
+	const value = UICom.structure.ui[nodeid].resource.getAttributes().value;
+	const code = UICom.structure.ui[nodeid].resource.getAttributes().code;
+	const text = UICom.structure.ui[nodeid].resource.getAttributes().text;
+	const utc = UICom.structure.ui[nodeid].resource.getAttributes().utc;
+	const label = UICom.structure.ui[nodeid].resource.getAttributes().label;
+	let variable_value = (value=="") ? code : value;
 	if (variable_value==undefined)
 		variable_value = text;
 	if (variable_value==undefined)
 		variable_value = utc;
-	g_variables[UICom.structure.ui[$(node).attr("id")].getCode()] = cleanCode(variable_value,true);
+	const variable_name = UICom.structure.ui[nodeid].getCode();
+	g_variables[variable_name] = cleanCode(variable_value,true);
+	g_variables[variable_name+"_code"] = cleanCode(variable_value,true);
+	g_variables[variable_name+"_label"] = label;
+	g_variables[variable_name+"_text"] = text;
 }
 
 
@@ -4198,6 +4204,7 @@ $.fn.hasChildCodeContains = function (options)   // hasChildCodeContains({"semta
 {
 	var defaults= {"value":"v"};
 	var parameters = $.extend(defaults, options);
+	parameters.value = cleanCode(parameters.value);
 	var result = $(this).has("asmResource>code:contains('"+parameters.value+"')");
 	return $(result);
 };
@@ -4210,6 +4217,7 @@ $.fn.hasChildSemtagAndCodeContains = function (options)   // hasChildSemtagAndCo
 {
 	var defaults= {"semtag":"s","value":"v"};
 	var parameters = $.extend(defaults, options);
+	parameters.value = cleanCode(parameters.value);
 	var result = $(this).has("*:has('>metadata[semantictag*=" + parameters.semtag + "]'):has(\">asmResource[xsi_type='nodeRes']>code:contains('"+parameters.value+"')\")");
 	return $(result);
 };
@@ -4222,6 +4230,7 @@ $.fn.hasChildSemtagAndResourceCodeContains = function (options)   // hasChildSem
 {
 	var defaults= {"semtag":"s","value":"v"};
 	var parameters = $.extend(defaults, options);
+	parameters.value = cleanCode(parameters.value);
 	var result = $(this).has("*:has('>metadata[semantictag*=" + parameters.semtag + "]'):has('asmResource[xsi_type!=context][xsi_type!=nodeRes]>code:contains("+parameters.value+")')");
 	return $(result);
 };
@@ -4547,6 +4556,7 @@ $.fn.hasAncestorSemtagAndNodeCodeContains = function (options)   // hasChildSemt
 {
 	var defaults= {"semtag":"s","value":"v"};
 	var parameters = $.extend(defaults, options);
+	parameters.value = cleanCode(parameters.value);
 	var result = [];
 	for (let i=0;i<this.length;i++){
 		var parent = $(this[i]).parent();
@@ -4574,6 +4584,7 @@ $.fn.hasParentSemtagAndNodeCodeContains = function (options)   // hasChildSemtag
 {
 	var defaults= {"semtag":"s","value":"v"};
 	var parameters = $.extend(defaults, options);
+	parameters.value = cleanCode(parameters.value);
 	var result = $(this).addBack().parent().has("*:has('>metadata[semantictag*=" + parameters.semtag + "]'):has('asmResource[xsi_type!=context][xsi_type!=nodeRes]>code:contains("+parameters.value+")')");
 	return $(result);
 };

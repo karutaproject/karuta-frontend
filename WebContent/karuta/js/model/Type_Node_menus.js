@@ -216,7 +216,7 @@ UIFactory["Node"].prototype.displayMenus = function(dest,langcode)
 					url : urlS,
 					success : function (data){
 						var url = window.location.href;
-						var serverURL = url.substring(0,url.lastIndexOf(appliname+"/")+appliname.length);
+						var serverURL = url.substring(0,url.indexOf(appliname+"/")+appliname.length);
 						url = serverURL+"/karuta/htm/public.htm?i="+data+"&amp;lang="+languages[langcode];
 						$("#2world-"+this.id).html("<a  class='fas fa-globe button' target='_blank' href='"+url+"' data-title='"+karutaStr[LANG]["button-2world"]+"' data-toggle='tooltip' data-placement='bottom'></a> ");
 					}
