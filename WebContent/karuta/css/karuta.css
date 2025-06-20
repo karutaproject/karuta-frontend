@@ -32,11 +32,14 @@ body,
   font-size: calc(var(--font-size-coeff) * 0.8rem);
 }
 
-@media (min-width: 1024px) {
+@media screen and (min-width: 1024px) {
   body,
   .form-control,
   .btn {
     font-size: calc(var(--font-size-coeff) * 1rem);
+  }
+  .help {
+    font-size: calc(var(--font-size-coeff) * 0.8rem);
   }
 }
 #contenu {

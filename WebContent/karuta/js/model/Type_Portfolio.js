@@ -2782,11 +2782,9 @@ UIFactory.Portfolio.displayListPortfolios = function(list,userid,firstname,lastn
 		var portfoliocode = portfolio.code_node.text();
 		var portfolio_label = portfolio.label_node[LANGCODE].text();
 
-		html += "<tr><td class='portfolio_label'>"+portfolio_label+"</td><td class='role' id='role_"+portfolioid+"'>&nbsp;</td><td class='portfoliocode'>"+portfoliocode+"</td>";
-		if (deletebutton)
-			html += "<td><button class='btn btn-danger' onclick='UIFactory.Portfolio.confirmDelPortfolio(\""+portfolioid+"\")'>"+karutaStr[LANG]['button-delete']+"</button></td>";
-		html += "</tr>";
+		html += "<tr><td class='portfolio_label'>"+portfolio_label+"</td><td class='role' id='role_"+portfolioid+"'>";
 		$.ajax({ // get group-role for the user
+			async: false,
 			Accept: "application/xml",
 			type : "GET",
 			dataType : "xml",
@@ -2795,10 +2793,14 @@ UIFactory.Portfolio.displayListPortfolios = function(list,userid,firstname,lastn
 			portfolioid : portfolioid,
 			success : function(data) {
 				var userrole = $("user[id='"+this.userid+"']",data).parent().parent().find('label').text();
-				$("#role_"+this.portfolioid).html(userrole);
+				html += userrole;
+				//$("#role_"+this.portfolioid).html(userrole);
 			}
 		});
-
+		html += "</td><td class='portfoliocode'>"+portfoliocode+"</td>";
+		if (deletebutton)
+			html += "<td><button class='btn btn-danger' onclick='UIFactory.Portfolio.confirmDelPortfolio(\""+portfolioid+"\")'>"+karutaStr[LANG]['button-delete']+"</button></td>";
+		html += "</tr>";
 		}
 	html += "</table>";
 	$("#edit-window-body").html(html);

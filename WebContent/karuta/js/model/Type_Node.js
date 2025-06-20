@@ -219,14 +219,15 @@ UIFactory["Node"].prototype.displayNode = function(type,root,dest,depth,langcode
 						}
 						if (display_help){
 							help_text += helps[helplang].substring(0,helps[helplang].indexOf("@"));
-							let help = " <a href='javascript://' class='popinfo'><span style='font-size:12px' class='fas fa-question-circle'></span></a> ";
+							let help = " <a class='popinfo'><span class='help fas fa-question-circle'></span></a> ";
 							$("#help_"+uuid).html(help);
 							$(".popinfo").popover({ 
 								placement : 'right',
 								container : 'body',
 								title:karutaStr[LANG]['help-label'],
 								html : true,
-								trigger:'click hover',
+								trigger:'hover',
+								delay: {'hide': 2000 },
 								content: help_text
 							});
 						}

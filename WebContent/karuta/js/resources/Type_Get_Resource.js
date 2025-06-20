@@ -1330,12 +1330,12 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 				label = newTableau3[i].libelle;
 			} else {
 				//------------------------------
-				if ($("asmResource",newTableau1[i][1]).length==3) {
-					style = UIFactory.Node.getDataContentStyle(newTableau1[i][1].querySelector("metadata-epm"));
-					resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i][1]); 
+				if ($("asmResource",newTableau2[i][1]).length==3) {
+					style = UIFactory.Node.getDataContentStyle(newTableau2[i][1].querySelector("metadata-epm"));
+					resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau2[i][1]); 
 				} else {
-					style = UIFactory.Node.getDataLabelStyle(newTableau1[i][1].querySelector("metadata-epm"));
-					resource = $("asmResource[xsi_type='nodeRes']",newTableau1[i][1]);
+					style = UIFactory.Node.getDataLabelStyle(newTableau2[i][1].querySelector("metadata-epm"));
+					resource = $("asmResource[xsi_type='nodeRes']",newTableau2[i][1]);
 				}
 				value = $('value',resource).text();
 				code = $('code',resource).text();
@@ -1365,7 +1365,7 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 				//------------------------------
 				input += "<div id='"+code+"' style=\""+style+"\">";
 				if (selectable) {
-					input += "	<input type='checkbox' id='input-"+uuid+"' uuid='"+uuid+"' name='multiple_"+self.id+"' value='"+value+"' code='"+code+"' class='multiple-item'";
+					input += "	<input type='checkbox' id='input-"+uuid+"' uuid='"+uuid+"' name='multiple_"+self.id+"' value='"+value+"' code='"+original_code+"' class='multiple-item'";
 					for (var j=0; j<languages.length;j++){
 						if (target=='fileid' || target=='resource') {
 							if (target=='fileid')
