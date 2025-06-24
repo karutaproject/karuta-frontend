@@ -2,8 +2,8 @@
 var karuta_version = "@project.version@";
 var karuta_date = "@build.timestamp@";
 
-const karuta_version_eportfolium = 'eportfolium-3.81.3';
-const karuta_date_eportfolium = '2025-06-20';
+const karuta_version_eportfolium = 'eportfolium-3.82.0';
+const karuta_date_eportfolium = '2025-06-24';
 
 var karuta_backend_version = "?";
 var karuta_backend_date = "?";
@@ -98,3 +98,4 @@ var karuta_fileserver_date = "?";
 // 3.81.1 FIX - display portfolios of a user
 // 3.81.2 FIX - Import multiple and nodes allready added
 // 3.81.3 FIX - Batch - test in import-node
+// 3.82.0 FEAT - Report sort in for-each-portfolio with ##current_portfoliogroup## keyword

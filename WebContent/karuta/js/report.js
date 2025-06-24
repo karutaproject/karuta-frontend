@@ -1457,34 +1457,100 @@ g_report_actions['for-each-portfolio'] = function (destid,action,no,data)
 		const groupid = data;
 		portfoliogroups_byid[groupid].loadContent();
 		let j = 0;
-		for (uuid in portfoliogroups_byid[groupid].children){
-			let portfolioid = portfolios_byid[uuid].id;
-			//------------------------------------
-			if (countvar!=undefined)
-				g_variables[countvar] = j;
-			initVariables(action);
-			//------------------------------------
-			portfolioid_current = portfolioid;
-			$.ajax({
-				async:false,
-				type : "GET",
-				dataType : "xml",
-				j : j,
-				url : serverBCK_API+"/portfolios/portfolio/" + portfolioid + "?resources=true",
-				success : function(data) {
-					if (report_not_in_a_portfolio){
-						UICom.structure.tree = {};
-						UICom.structure.ui = {};
+		//----------- optional sort -----------------------
+		var sortag = $(action).attr("sortag");
+		if (sortag!=""){
+			var sortelt = $(action).attr("sortelt");
+			var tableau = new Array();
+			var sortvalue = "";
+			for (uuid in portfoliogroups_byid[groupid].children){
+				let portfolioid = portfolios_byid[uuid].id;
+				let code = UIFactory.Portfolio.getCodeLabel_byid(portfolioid).code;
+				$.ajax({
+					async:false,
+					type : "GET",
+					dataType : "xml",
+					url : serverBCK_API+"/nodes?portfoliocode=" + code + "&semtag="+sortag,
+					success : function(data) {
+						var text = ";"
+						if (sortelt=='resource code') {
+							sortvalue = $("code",data)[0].text();
+						}
+						if (sortelt=='value') {
+							sortvalue = $("value",data)[0].text();
+						}
+						if (sortelt=='node label') {
+							sortvalue = $("label[lang='"+languages[LANGCODE]+"']",data)[0].text();
+						}
+						if (sortelt=='resource') {
+							sortvalue = $("text[lang='"+languages[LANGCODE]+"']",$("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",data)).text();
+						}
+						tableau[tableau.length] = [sortvalue,portfolioid];
 					}
-					UICom.parseStructure(data,true, null, null,true);
-					var actions = $(action).children();
-					for (let i=0; i<actions.length;i++){
-						var tagname = $(actions[i])[0].tagName;
-						g_report_actions[tagname](destid,actions[i],no+'-'+this.j.toString()+i.toString(),data);
-					};
-				}
-			});
-			j++;
+				});
+			//------------------------------------
+			}
+			var newTableau = tableau.sort(sortOn1);
+			for ( let i = 0; i < newTableau.length; i++) {
+				let portfolioid = newTableau[i][1];
+				//------------------------------------
+				if (countvar!=undefined)
+					g_variables[countvar] = j;
+				initVariables(action);
+				//------------------------------------
+				portfolioid_current = portfolioid;
+				$.ajax({
+					async:false,
+					type : "GET",
+					dataType : "xml",
+					j : j,
+					url : serverBCK_API+"/portfolios/portfolio/" + portfolioid + "?resources=true",
+					success : function(data) {
+						if (report_not_in_a_portfolio){
+							UICom.structure.tree = {};
+							UICom.structure.ui = {};
+						}
+						UICom.parseStructure(data,true, null, null,true);
+						var actions = $(action).children();
+						for (let i=0; i<actions.length;i++){
+							var tagname = $(actions[i])[0].tagName;
+							g_report_actions[tagname](destid,actions[i],no+'-'+this.j.toString()+i.toString(),data);
+						};
+					}
+				});
+				j++;
+			}
+		//-------------------------------
+		} else {
+			for (uuid in portfoliogroups_byid[groupid].children){
+				let portfolioid = portfolios_byid[uuid].id;
+				//------------------------------------
+				if (countvar!=undefined)
+					g_variables[countvar] = j;
+				initVariables(action);
+				//------------------------------------
+				portfolioid_current = portfolioid;
+				$.ajax({
+					async:false,
+					type : "GET",
+					dataType : "xml",
+					j : j,
+					url : serverBCK_API+"/portfolios/portfolio/" + portfolioid + "?resources=true",
+					success : function(data) {
+						if (report_not_in_a_portfolio){
+							UICom.structure.tree = {};
+							UICom.structure.ui = {};
+						}
+						UICom.parseStructure(data,true, null, null,true);
+						var actions = $(action).children();
+						for (let i=0; i<actions.length;i++){
+							var tagname = $(actions[i])[0].tagName;
+							g_report_actions[tagname](destid,actions[i],no+'-'+this.j.toString()+i.toString(),data);
+						};
+					}
+				});
+				j++;
+			}
 		}
 	} else {
 		//----------------
