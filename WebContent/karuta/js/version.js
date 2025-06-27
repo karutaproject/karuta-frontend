@@ -2,8 +2,8 @@
 var karuta_version = "@project.version@";
 var karuta_date = "@build.timestamp@";
 
-const karuta_version_eportfolium = 'eportfolium-3.82.0';
-const karuta_date_eportfolium = '2025-06-24';
+const karuta_version_eportfolium = 'eportfolium-3.82.1';
+const karuta_date_eportfolium = '2025-06-27';
 
 var karuta_backend_version = "?";
 var karuta_backend_date = "?";
@@ -92,10 +92,10 @@ var karuta_fileserver_date = "?";
 // 3.79.3 FIX - Get_Resource special characters in inline mode
 // 3.80.0 FEAT - Get_Resource on portfolios - Batch archive folder
 // 3.80.1 FIX - Batch import-node - no import if test exists and returns nothing
-// 3.80.1 FIX - Batch import-node - no import if test exists and returns nothing
 // 3.80.2 FIX - url not well defined when sharing 2world
 // 3.81.0 FEAT - Report Rounded Percentage addes
 // 3.81.1 FIX - display portfolios of a user
 // 3.81.2 FIX - Import multiple and nodes allready added
 // 3.81.3 FIX - Batch - test in import-node
 // 3.82.0 FEAT - Report sort in for-each-portfolio with ##current_portfoliogroup## keyword
+// 3.82.1 FIX - Batch - join-usergroup with variable

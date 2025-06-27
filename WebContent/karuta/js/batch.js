@@ -269,11 +269,11 @@ function getTargetUrl(node)
 	}
 	if (semtag=='#current_node')
 		if (treeref!="")
-			url = serverBCK_API+"/nodes/node/"+g_trees[treeref].currentnode[g_trees[treeref].currentnode.length-1];
+			url = serverBCK_API+"/nodes/node/"+g_trees[treeref].currentnode[g_trees[treeref].currentnode.length-1]; // ref-currentnode
 		else
-			url = serverBCK_API+"/nodes/node/"+g_current_node_uuid;
+			url = serverBCK_API+"/nodes/node/"+g_current_node_uuid; // currentnode
 	else if (semtag=='#last_imported')
-			url = serverBCK_API+"/nodes/node/"+g_trees[treeref].lastimported[g_trees[treeref].lastimported.length-1];
+			url = serverBCK_API+"/nodes/node/"+g_trees[treeref].lastimported[g_trees[treeref].lastimported.length-1]; // ref-lastimported
 	else if (semtag=='#uuid') {
 		if (treeref.indexOf("//")>-1)
 			treeref = eval("g_json."+treeref.substring(2));
@@ -285,7 +285,7 @@ function getTargetUrl(node)
 	} else if (treeref.indexOf("#")>-1 && treeref.indexOf("#currentnode")<0)
 		url = serverBCK_API+"/nodes?portfoliocode=" + treeref.substring(1) + "&semtag="+semtag;	
 	else
-		url = serverBCK_API+"/nodes?portfoliocode=" + g_trees[treeref].code + "&semtag="+semtag;
+		url = serverBCK_API+"/nodes?portfoliocode=" + g_trees[treeref].code + "&semtag="+semtag; // ref-tag
 	return url;
 }
 
@@ -326,7 +326,7 @@ function getSourceUrl(node)
 	const semtag = replaceBatchVariable(replaceVariable(select.substring(idx+1)));
 	if (semtag=='#current_node')
 		if (treeref!="")
-			url = serverBCK_API+"/nodes/node/"+g_trees[treeref].currentnode[g_trees[treeref].currentnode-1];
+			url = serverBCK_API+"/nodes/node/"+g_trees[treeref].currentnode[g_trees[treeref].currentnode.length-1];
 		else
 			url = serverBCK_API+"/nodes/node/"+g_current_node_uuid;
 	else if (semtag=='#uuid') {
@@ -1103,9 +1103,13 @@ g_actions['join-usergroup'] = function JoinUserGroup(node)
 		usergroup = usergroup.substring(1);
 	var select_user = $("user>txtval",node).attr("select");
 	if(typeof(select_user)=='undefined')
-		user = $("user>txtval",node).text();
-	else
-		user = replaceBatchVariable(replaceVariable(select_user));
+		user = replaceBatchVariable(replaceVariable($("user>txtval",node).text()));
+	else {
+		if (select_user.indexOf("//")>-1)
+				user = g_json[select_user.substring(2)];
+		else 
+			user = g_json.lines[g_noline][select_user];	
+	}
 	if (user.startsWith("@"))
 		user = user.substring(1);
 	//---- get userid ----------
@@ -1177,9 +1181,13 @@ g_actions['leave-usergroup'] = function LeaveUserGroup(node)
 		usergroup = usergroup.substring(1);
 	var select_user = $("user>txtval",node).attr("select");
 	if(typeof(select_user)=='undefined')
-		user = $("user>txtval",node).text();
-	else
-		user = eval("g_json.lines["+g_noline+"]."+select_user);
+		user = replaceBatchVariable(replaceVariable($("user>txtval",node).text()));
+	else {
+		if (select_user.indexOf("//")>-1)
+				user = g_json[select_user.substring(2)];
+		else 
+			user = g_json.lines[g_noline][select_user];	
+	}
 	if (user.startsWith("@"))
 		user = user.substring(1);
 	//---- get userid ----------
@@ -3383,7 +3391,7 @@ g_actions['import-node'] = function importNode(node,data)
 
 //-----------------------------------------------------------------------
 //-----------------------------------------------------------------------
-//------------------------- Import Node ----------------------------------
+//------------------------- Previous Imported Node ----------------------------------
 //-----------------------------------------------------------------------
 //-----------------------------------------------------------------------
 
