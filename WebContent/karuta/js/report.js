@@ -711,11 +711,16 @@ g_report_actions['for-each-node'] = function (destid,action,no,data)
 		//----------------------------------
 		if (portfoliocode!=undefined) {
 			portfoliocode = replaceVariable(portfoliocode);
+			const portfolioid = UIFactory.Portfolio.getid_bycode(portfoliocode);
+			let url = serverBCK_API+"/portfolios/portfolio/" + portfolioid + "?resources=true";
+			if (userrole){
+				url += "&userrole="+userrole;
+			}
 			$.ajax({
 				async:false,
 				type : "GET",
 				dataType : "xml",
-				url : serverBCK_API+"/portfolios/portfolio/code/" + portfoliocode +"?resources=true",
+				url : url,
 				success : function(data_portfolio) {
 					if (report_not_in_a_portfolio){
 						UICom.structure.tree = {};
@@ -1441,6 +1446,7 @@ g_report_actions['for-each-portfolio'] = function (destid,action,no,data)
 	var searchvalue = "";
 	var select = $(action).attr("select");
 	select = replaceVariable(select);
+	var user_role = replaceVariable($(action).attr("user-role"));
 	var test = $(action).attr("test");
  	if (test!=undefined)
  		test = replaceVariable(test);
@@ -1499,12 +1505,18 @@ g_report_actions['for-each-portfolio'] = function (destid,action,no,data)
 				initVariables(action);
 				//------------------------------------
 				portfolioid_current = portfolioid;
+				let url = serverBCK_API+"/portfolios/portfolio/" + portfolioid + "?resources=true";
+				if (user_role!=""){
+					url += "&userrole="+user_role;
+					g_userroles[2] = user_role;
+					userrole = user_role;
+				}
 				$.ajax({
 					async:false,
 					type : "GET",
 					dataType : "xml",
 					j : j,
-					url : serverBCK_API+"/portfolios/portfolio/" + portfolioid + "?resources=true",
+					url : url,
 					success : function(data) {
 						if (report_not_in_a_portfolio){
 							UICom.structure.tree = {};
@@ -1530,12 +1542,18 @@ g_report_actions['for-each-portfolio'] = function (destid,action,no,data)
 				initVariables(action);
 				//------------------------------------
 				portfolioid_current = portfolioid;
+				let url = serverBCK_API+"/portfolios/portfolio/" + portfolioid + "?resources=true";
+				if (user_role!=""){
+					url += "&userrole="+user_role;
+					g_userroles[2] = user_role;
+					userrole = user_role;
+				}
 				$.ajax({
 					async:false,
 					type : "GET",
 					dataType : "xml",
 					j : j,
-					url : serverBCK_API+"/portfolios/portfolio/" + portfolioid + "?resources=true",
+					url : url,
 					success : function(data) {
 						if (report_not_in_a_portfolio){
 							UICom.structure.tree = {};
@@ -1685,16 +1703,22 @@ g_report_actions['for-each-portfolio'] = function (destid,action,no,data)
 						condition = eval(toeval);
 					}
 					//------------------------------------
-					if (condition){
+					if (condition || user_role!=""){
 						portfolioid = items_list[j].id;
 						portfolioid_current = portfolioid;
 						if (load) {
+							let url = serverBCK_API+"/portfolios/portfolio/" + portfolioid + "?resources=true";
+							if (user_role!=""){
+								url += "&userrole="+user_role;
+								g_userroles[2] = user_role;
+								userrole = user_role;
+							}
 							$.ajax({
 								async:false,
 								type : "GET",
 								dataType : "xml",
 								j : j,
-								url : serverBCK_API+"/portfolios/portfolio/" + portfolioid + "?resources=true",
+								url : url,
 								success : function(data) {
 									if (report_not_in_a_portfolio){
 										UICom.structure.tree = {};
@@ -1733,6 +1757,7 @@ g_report_actions['for-each-portfolio-js'] = function (destid,action,no,data)
 	const NOELT = g_variables["NOELT"];
 	var countvar = $(action).attr("countvar");
 	var portfoliovar = $(action).attr("portfoliovar");
+	var user_role = replaceVariable($(action).attr("user-role"));
 	var select = $(action).attr("select");
 	select = replaceVariable(select);
 	var portfolioids = eval(select); // return array of portfolioids
@@ -1760,13 +1785,19 @@ g_report_actions['for-each-portfolio-js'] = function (destid,action,no,data)
 			g_variables[portfoliovar] = portfolioid;
 		}
 		portfolioid_current = portfolioid;
+		let url = serverBCK_API+"/portfolios/portfolio/" + portfolioid + "?resources=true";
+		if (user_role!=""){
+			url += "&userrole="+user_role;
+			g_userroles[2] = user_role;
+			userrole = user_role;
+		}
 		if (load) {
 			$.ajax({
 				async:false,
 				type : "GET",
 				dataType : "xml",
 				j : j,
-				url : serverBCK_API+"/portfolios/portfolio/" + portfolioid + "?resources=true",
+				url : url,
 				success : function(data) {
 					if (report_not_in_a_portfolio){
 						UICom.structure.tree = {};

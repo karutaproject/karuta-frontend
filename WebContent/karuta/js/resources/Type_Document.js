@@ -141,6 +141,10 @@ UIFactory["Document"].prototype.getView = function(dest,type,langcode)
 	//---------------------
 	if (type==null)
 		type = "standard";
+	//---------
+	const cssclass = $("metadata-epm",this.node).attr("cssclass");
+	if (cssclass=="doc-pdf")
+		type = "pdf";
 	//------------------------
 	var nodefileid = this.id;
 	if (nodefileid.indexOf("_")>-1) // proxy-audio
@@ -160,8 +164,10 @@ UIFactory["Document"].prototype.getView = function(dest,type,langcode)
 		} else if (type=='icon-url'){
 			html =  "<a id='file_"+this.id+"' href='../../../"+serverBCK+"/resources/resource/file/"+nodefileid+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"'><img style='width:24px' src='"+iconfile+"'/></a>"; 
 		} else if (type=='icon'){
-				html =  documentIcon[extension]; 
-		}
+			html =  documentIcon[extension]; 
+		} else if (type=='pdf'){
+			html =  "<embed src=\"../../../"+serverBCK+"/resources/resource/file/"+nodefileid+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"\" width='800' height='500' type='application/pdf'/>";
+		}		
 	} else {
 		html =  "<img src='../../karuta/img/document-icon.png' style='width:24px'>"+karutaStr[LANG]['no-document'];
 	}

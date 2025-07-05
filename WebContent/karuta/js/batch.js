@@ -2894,6 +2894,12 @@ g_actions['update-resource'] = function updateResource(node,data)
 					attribute_value = getTxtvals($("attribute[name='"+attribute_name+"']",node));
 				else
 					attribute_value = getTxtvalsWithoutReplacement($("attribute[name='"+attribute_name+"']",node));
+				if (attribute_value=="TREEREFID"){
+						const select = $(node).attr("select");
+						const idx = select.lastIndexOf(".");
+						let treeref = select.substring(0,idx);
+						attribute_value = g_trees[treeref].id;
+					}
 				if (language_dependent=='Y') {
 					if ($("metadata",nodes[i]).attr("multilingual-resource")=="Y") {
 						$(attribute_name+"[lang='"+LANG+"']",resource).text(attribute_value);

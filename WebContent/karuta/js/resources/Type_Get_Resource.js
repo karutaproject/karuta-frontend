@@ -745,7 +745,46 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 			//----------------------------------------------------------
 		}
 	}
-	let newTableau1 = tableau1.sort(sortOn1);
+	//-----portfolios filter--------------------------------------
+	if (semtag2.indexOf("role=")>-1) {
+		const tableau1original = tableau1;
+		let toberemoved = [];
+		for ( let i = 0; i < tableau1original.length; i++) {
+			const portfolioid = $(tableau1original[i][1]).attr('id');
+			const role = replaceVariable(semtag2.substring(5));
+			let ok = false;
+			$.ajax({
+				async:false,
+				type : "GET",
+				dataType : "xml",
+				url : serverBCK_API+"/rolerightsgroups/all/users?portfolio="+portfolioid,
+				success : function(data) {
+					var rrgs = $("rrg",data);
+					for ( let j = 0; j < rrgs.length; j++) {
+						const label =  $("label",rrgs[j]).text();
+						if (label==role) {
+							const users =  $("user",rrgs[j]);
+							for ( let k = 0; k < users.length; k++) {
+								if (USER.id==$(users[k]).attr("id"))
+									ok = true;
+							}
+						}
+					}
+				}
+			});
+			if (!ok)
+				toberemoved.push(i);
+		}
+		if (toberemoved.length>0){
+			tableau1 = []
+			for ( let i = 0; i < tableau1original.length; i++) {
+				if (toberemoved.indexOf(i)<0)
+					tableau1.push(tableau1original[i])
+			}
+		}
+	}
+	//------------------------------------------------------------
+	let newTableau1 = tableau1.sort(sortOn1);	
 	var tabadded = [];
 	//------------------------------------------------------------
 	//------------------------------------------------------------

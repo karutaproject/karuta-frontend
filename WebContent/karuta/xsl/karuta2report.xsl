@@ -943,6 +943,9 @@
 		<xsl:variable name="select">
 			<xsl:value-of select="asmContext[metadata/@semantictag='select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"/>
 		</xsl:variable>
+		<xsl:variable name="user-role">
+			<xsl:value-of select="asmContext[metadata/@semantictag='user-role']/asmResource[@xsi_type='Field']/text[@lang=$lang]"/>
+		</xsl:variable>
 		<xsl:variable name="sortag">
 			<xsl:value-of select="asmContext[metadata/@semantictag='sortag']/asmResource[@xsi_type='Field']/text[@lang=$lang]"/>
 		</xsl:variable>
@@ -953,21 +956,12 @@
 			<xsl:value-of select="asmContext[metadata/@semantictag='test']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
  		<for-each-portfolio select='{$select}'>
-			<xsl:if test="not($ref-init='')">
-				<xsl:attribute name="ref-init"><xsl:value-of select="$ref-init"/></xsl:attribute>
-			</xsl:if>
-			<xsl:if test="not($countvar='')">
-				<xsl:attribute name="countvar"><xsl:value-of select="$countvar"/></xsl:attribute>
-			</xsl:if>
-			<xsl:if test="not(sortag='')">
-				<xsl:attribute name="sortag"><xsl:value-of select="$sortag"/></xsl:attribute>
-			</xsl:if>
-			<xsl:if test="not(sortelt='')">
-				<xsl:attribute name="sortelt"><xsl:value-of select="$sortelt"/></xsl:attribute>
-			</xsl:if>
-			<xsl:if test="not(test='')">
- 				<xsl:attribute name="test"><xsl:value-of select="$test"/></xsl:attribute>
- 			</xsl:if>
+			<xsl:attribute name="ref-init"><xsl:value-of select="$ref-init"/></xsl:attribute>
+			<xsl:attribute name="countvar"><xsl:value-of select="$countvar"/></xsl:attribute>
+			<xsl:attribute name="sortag"><xsl:value-of select="$sortag"/></xsl:attribute>
+			<xsl:attribute name="user-role"><xsl:value-of select="$user-role"/></xsl:attribute>
+			<xsl:attribute name="sortelt"><xsl:value-of select="$sortelt"/></xsl:attribute>
+ 			<xsl:attribute name="test"><xsl:value-of select="$test"/></xsl:attribute>
 			<xsl:apply-templates select='asmUnitStructure'/>
 		</for-each-portfolio>
 	</xsl:template>
@@ -992,7 +986,7 @@
 			<xsl:if test="not($countvar='')">
 				<xsl:attribute name="countvar"><xsl:value-of select="$countvar"/></xsl:attribute>
 			</xsl:if>
-			<xsl:if test="not(portfoliovar='')">
+			<xsl:if test="not($portfoliovar='')">
 				<xsl:attribute name="portfoliovar"><xsl:value-of select="$portfoliovar"/></xsl:attribute>
 			</xsl:if>
 			<xsl:apply-templates select='asmUnitStructure'/>
@@ -1026,6 +1020,9 @@
 		<xsl:variable name="ref-init">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='ref-init']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
+		<xsl:variable name="user-role">
+			<xsl:value-of select="asmContext[metadata/@semantictag='user-role']/asmResource[@xsi_type='Field']/text[@lang=$lang]"/>
+		</xsl:variable>
 		<xsl:variable name="countvar">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='countvar']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
@@ -1036,13 +1033,14 @@
 			<xsl:value-of select="asmContext[metadata/@semantictag='select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"/>
 		</xsl:variable>
 		<for-each-portfolio-js select='{$select}'>
+			<xsl:attribute name="user-role"><xsl:value-of select="$user-role"/></xsl:attribute>
 			<xsl:if test="not($ref-init='')">
 				<xsl:attribute name="ref-init"><xsl:value-of select="$ref-init"/></xsl:attribute>
 			</xsl:if>
 			<xsl:if test="not($countvar='')">
 				<xsl:attribute name="countvar"><xsl:value-of select="$countvar"/></xsl:attribute>
 			</xsl:if>
-			<xsl:if test="not(portfoliovar='')">
+			<xsl:if test="not($portfoliovar='')">
 				<xsl:attribute name="portfoliovar"><xsl:value-of select="$portfoliovar"/></xsl:attribute>
 			</xsl:if>
 			<xsl:apply-templates select='asmUnitStructure'/>
@@ -1075,13 +1073,13 @@
 			<xsl:if test="not($countvar='')">
 				<xsl:attribute name="countvar"><xsl:value-of select="$countvar"/></xsl:attribute>
 			</xsl:if>
-			<xsl:if test="not(sortag='')">
+			<xsl:if test="not($sortag='')">
 				<xsl:attribute name="sortag"><xsl:value-of select="$sortag"/></xsl:attribute>
 			</xsl:if>
-			<xsl:if test="not(sortelt='')">
+			<xsl:if test="not($sortelt='')">
 				<xsl:attribute name="sortelt"><xsl:value-of select="$sortelt"/></xsl:attribute>
 			</xsl:if>
-			<xsl:if test="not(nodetag='')">
+			<xsl:if test="not($nodetag='')">
 				<xsl:attribute name="nodetag"><xsl:value-of select="$nodetag"/></xsl:attribute>
 			</xsl:if>
 			<xsl:apply-templates select='asmUnitStructure'/>
