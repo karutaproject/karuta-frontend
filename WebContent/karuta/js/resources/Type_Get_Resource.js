@@ -540,7 +540,7 @@ UIFactory["Get_Resource"].prototype.displayEditor = function(destid,type,langcod
 	if (this.get_type=="import_comp"){
 //		let portfoliocode = cleanCode(replaceVariable(this.query_portfolio));
 		let portfoliocode = replaceVariable(this.query_portfolio);
-		let semtag = this.query_semtag;
+		let semtag = replaceVariable(this.query_semtag);
 		let semtag2 = "";
 		if (semtag.indexOf('+')>-1) {
 			semtag2 = semtag.substring(semtag.indexOf('+')+1);

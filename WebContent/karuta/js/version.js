@@ -2,8 +2,8 @@
 var karuta_version = "@project.version@";
 var karuta_date = "@build.timestamp@";
 
-const karuta_version_eportfolium = 'eportfolium-3.83.0';
-const karuta_date_eportfolium = '2025-07-05';
+const karuta_version_eportfolium = 'eportfolium-3.83.1';
+const karuta_date_eportfolium = '2025-07-14';
 
 var karuta_backend_version = "?";
 var karuta_backend_date = "?";
@@ -100,3 +100,4 @@ var karuta_fileserver_date = "?";
 // 3.82.0 FEAT - Report sort in for-each-portfolio with ##current_portfoliogroup## keyword
 // 3.82.1 FIX - Batch - join-usergroup with variable
 // 3.83.0 FEAT - Batch, Report, Get_Resource - multiple new functionalities
+// 3.83.1 FIX - Get_resource with #portfolios+role= - userrole added in preview

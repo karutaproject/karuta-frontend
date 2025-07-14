@@ -1013,6 +1013,8 @@ function previewPage(uuid,depth,type,langcode,edit,reload)
 		$("#preview-window-header-"+uuid).html(header);
 		$("#preview-window-body-"+uuid).html("");
 		let url = serverBCK_API+"/nodes/node/" + uuid + "?resources=true";
+		if (userrole!="")
+			url += "&userole="+userrole;
 		$.ajax({
 			async:false,
 			type : "GET",
