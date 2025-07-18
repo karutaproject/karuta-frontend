@@ -406,13 +406,20 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 			//----------------------
 			if (code_parent!="") {
 				let self = this;
+				let url1 = "";
 				if  (portfoliocode.indexOf("#portfoliogroup")>-1) {
+					if (isNaN(code_parent)) {
+						const groupid = UIFactory.PortfoliosGroup.getIdByLabel(cleanCode(code_parent));
+						url1 = serverBCK_API+"/portfoliogroups?group="+groupid;
+					} else {
+						url1 = serverBCK_API+"/portfoliogroups?group="+cleanCode(code_parent);
+					}
 					$.ajax({
 						async: false,
 						type : "GET",
 						dataType : "xml",
 						portfoliocode:portfoliocode,
-						url : serverBCK_API+"/portfoliogroups?group="+cleanCode(code_parent),
+						url : url1,
 						success : function(data) {
 							self.parse(destid,type,langcode,data,disabled,srce,srce2,this.portfoliocode,target,semtag,semtag2,cachable);
 						},

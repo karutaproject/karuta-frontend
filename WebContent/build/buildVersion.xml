@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="updateVersion" default="updateVersion" basedir="."> 
-	<property name="noVersion" value="3.83.1"/>
-	<property name="textVersion" value="FIX - Get_resource with #portfolios+role= - userrole added in preview"/>
+	<property name="noVersion" value="3.84.0"/>
+	<property name="textVersion" value="FEAT - variables can be used wuth for-each-usergroup, for-each-portfoliogroup and in get_get_rtesource"/>
 	<property name="dirSrce" value="src/htm-srce"/>
 	<property name="dirTrgt" value="WebContent/karuta/htm"/>
 	<target name="testIfNewVersion">

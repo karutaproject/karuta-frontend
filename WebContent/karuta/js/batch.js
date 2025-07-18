@@ -1105,10 +1105,7 @@ g_actions['join-usergroup'] = function JoinUserGroup(node)
 	if(typeof(select_user)=='undefined')
 		user = replaceBatchVariable(replaceVariable($("user>txtval",node).text()));
 	else {
-		if (select_user.indexOf("//")>-1)
-				user = g_json[select_user.substring(2)];
-		else 
-			user = g_json.lines[g_noline][select_user];	
+		user = replaceBatchVariable(replaceVariable(select_user));
 	}
 	if (user.startsWith("@"))
 		user = user.substring(1);

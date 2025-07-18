@@ -398,6 +398,36 @@ UIFactory["PortfoliosGroup"].prototype.refresh = function()
 
 //--------------------------------------------------------------
 //--------------------------------------------------------------
+//------------------------ UTILITIES ---------------------------
+//--------------------------------------------------------------
+//--------------------------------------------------------------
+
+//==================================
+UIFactory["PortfoliosGroup"].getIdByLabel = function(label)
+//==================================
+{
+	let result = "";
+	$.ajax({
+		async:false,
+		type : "GET",
+		dataType : "xml",
+		url : serverBCK_API+"/portfoliogroups",
+		success : function(data) {
+			UIFactory.PortfoliosGroup.parse(data);
+			label = replaceVariable(label);
+			for ( let i = 0; i < portfoliogroups_list.length; i++) {
+				if ($(portfoliogroups_list[i].attributes["label"]).text() == label){
+					result = portfoliogroups_list[i].id;
+					break;
+				}
+			}
+		}
+	});
+	return result;
+}
+
+//--------------------------------------------------------------
+//--------------------------------------------------------------
 //------------------------ CREATE ------------------------------
 //--------------------------------------------------------------
 //--------------------------------------------------------------

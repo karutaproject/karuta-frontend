@@ -1094,7 +1094,7 @@ g_report_actions['for-each-usergroup'] = function (destid,action,no,data)
 //==================================
 {
 	const countvar = $(action).attr("countvar");
-	let select = $(action).attr("select");
+	let select = replaceVariable($(action).attr("select"));
 	$.ajax({
 		async:false,
 		type : "GET",
@@ -1157,7 +1157,7 @@ g_report_actions['for-each-portfoliogroup'] = function (destid,action,no,data)
 //==================================
 {
 	const countvar = $(action).attr("countvar");
-	let select = $(action).attr("select");
+	let select = replaceVariable($(action).attr("select"));
 	$.ajax({
 		async:false,
 		type : "GET",
