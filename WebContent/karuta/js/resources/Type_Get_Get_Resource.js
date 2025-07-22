@@ -1308,7 +1308,7 @@ UIFactory["Get_Get_Resource"].prototype.parse = function(destid,type,langcode,da
 						$("#button_"+langcode+self.id).attr("value",$(this).attr("label_"+languages[langcode]));
 						$("#button_"+langcode+self.id).attr("label_"+languages[langcode],$(this).attr("label_"+languages[langcode]));
 						$("#button_"+langcode+self.id).attr('class', 'btn btn-default select select-label').addClass("sel"+code);
-						UIFactory["Get_Resource"].update(this,self,langcode);
+						UIFactory["Get_Get_Resource"].update(this,self,langcode,type);
 						var onupdate = "UIFactory.Get_Get_Resource.update(input,self)";
 						autocomplete(document.getElementById("button_"+langcode+self.id), tableau2,onupdate,self,langcode);
 						//--------------------------------
@@ -1350,7 +1350,7 @@ UIFactory["Get_Get_Resource"].prototype.parse = function(destid,type,langcode,da
 					$("#button_"+langcode+self.id).attr("style",style);
 					$("#button_"+langcode+self.id).attr('value',$(this).attr("label_"+languages[langcode]));
 					$("#button_"+langcode+self.id).attr('class', 'btn btn-default select select-label').addClass("sel"+code);
-					UIFactory["Get_Resource"].update(this,self,langcode);
+					UIFactory["Get_Get_Resource"].update(this,self,langcode,type);
 				});
 				$(select_item).append($(select_item_a))
 				$(select).append($(select_item));

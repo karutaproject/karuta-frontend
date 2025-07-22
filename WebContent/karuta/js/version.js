@@ -2,8 +2,8 @@
 var karuta_version = "@project.version@";
 var karuta_date = "@build.timestamp@";
 
-const karuta_version_eportfolium = 'eportfolium-3.84.0';
-const karuta_date_eportfolium = '2025-07-18';
+const karuta_version_eportfolium = 'eportfolium-3.84.1';
+const karuta_date_eportfolium = '2025-07-22';
 
 var karuta_backend_version = "?";
 var karuta_backend_date = "?";
@@ -103,3 +103,4 @@ var karuta_fileserver_date = "?";
 // 3.83.1 FIX - Get_resource with #portfolios+role= - userrole added in preview
 // 3.83.2 FIX - call with userrole
 // 3.84.0 FEAT - variables can be used wuth for-each-usergroup, for-each-portfoliogroup and in get_get_rtesource
+// 3.84.1 FIX - Get_Get_resource completion

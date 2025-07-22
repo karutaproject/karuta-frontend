@@ -976,7 +976,7 @@ g_actions['inactivate-user'] = function inactivateUser(node)
 						data : data,
 						success : function(data) {
 							ok = true;
-							$("#batch-log").append("<br>- user inactived ("+userid+") - identifier:"+identifier);
+							$("#batch-log").append("<br>- user inactivated ("+userid+") - identifier:"+identifier);
 						},
 						error : function(data) {
 							$("#batch-log").append("<br>- <span class='danger'>ERROR</span> cannot inactivate user - identifier:"+identifier);
@@ -1096,17 +1096,17 @@ g_actions['join-usergroup'] = function JoinUserGroup(node)
 //=================================================
 {
 	var ok = false;
-	var user = "";
+	var user = getTxtvals($("user",node));
 	var usergroup = getTxtvals($("usergroup",node));
 	usergroup = decodeURI(usergroup);
 	if (usergroup.startsWith("@"))
 		usergroup = usergroup.substring(1);
-	var select_user = $("user>txtval",node).attr("select");
-	if(typeof(select_user)=='undefined')
-		user = replaceBatchVariable(replaceVariable($("user>txtval",node).text()));
-	else {
-		user = replaceBatchVariable(replaceVariable(select_user));
-	}
+//	var select_user = $("user>txtval",node).attr("select");
+//	if(typeof(select_user)=='undefined')
+//		user = replaceBatchVariable(replaceVariable($(getTxtvals($("user",node)))));
+//	else {
+//		user = replaceBatchVariable(replaceVariable(select_user));
+//	}
 	if (user.startsWith("@"))
 		user = user.substring(1);
 	//---- get userid ----------
