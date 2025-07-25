@@ -166,7 +166,7 @@ UIFactory["Document"].prototype.getView = function(dest,type,langcode)
 		} else if (type=='icon'){
 			html =  documentIcon[extension]; 
 		} else if (type=='pdf'){
-			html =  "<embed src=\"../../../"+serverBCK+"/resources/resource/file/"+nodefileid+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"\" width='800' height='500' type='application/pdf'/>";
+			html =  "<embed src=\"../../../"+serverBCK+"/resources/resource/file/"+nodefileid+"?raw&lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"\" class='pdf-viewer' type='application/pdf'/>";
 		}		
 	} else {
 		html =  "<img src='../../karuta/img/document-icon.png' style='width:24px'>"+karutaStr[LANG]['no-document'];

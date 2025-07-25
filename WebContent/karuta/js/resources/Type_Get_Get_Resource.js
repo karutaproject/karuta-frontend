@@ -270,7 +270,7 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 				semtag2 = semtag.substring(semtag.indexOf('+')+1);
 				semtag = semtag.substring(0,semtag.indexOf('+'));
 			}
-			var target = queryattr_value.substring(srce_indx+1);  // label or text or userlabel or grouplabel
+			var target = queryattr_value.substring(srce_indx+1);  // label or text or personlabel or grouplabel
 			var semtag_parent_indx = queryattr_value.substring(0,semtag_indx).lastIndexOf('.');
 			var semtag_parent = queryattr_value.substring(semtag_parent_indx+1,semtag_indx);
 			if (semtag_parent.indexOf('#')==0)
@@ -427,13 +427,19 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 							$("#"+destid).html("No result");
 						}
 					});
-				} else if  (portfoliocode.indexOf("#usergroup")>-1) {
+				} else if  (portfoliocode.indexOf("#persongroup")>-1) {
+					if (isNaN(cleanCode(code_parent))) {
+						const groupid = UIFactory.UsersGroup.getIdByLabel(cleanCode(code_parent));
+						url1 = serverBCK_API+"/usersgroups?group="+groupid;
+					} else {
+						url1 = serverBCK_API+"/usersgroups?group="+cleanCode(code_parent);
+					}
 					$.ajax({
 						async: false,
 						type : "GET",
 						dataType : "xml",
 						portfoliocode:portfoliocode,
-						url : serverBCK_API+"/usersgroups?group="+cleanCode(code_parent),
+						url : url1,
 						success : function(data) {
 							self.parse(destid,type,langcode,data,disabled,srce,srce2,this.portfoliocode,target,semtag,semtag2,cachable);
 						},
@@ -771,7 +777,7 @@ UIFactory["Get_Get_Resource"].prototype.parse = function(destid,type,langcode,da
 				const portfolioid = $(nodes[i]).attr("id");
 				const code_label = UIFactory.Portfolio.getCodeLabel_byid(portfolioid,"1");
 				tableau2[tableau2.length] = {'code':code_label.code,'libelle':code_label.label};
-			} else if (portfoliocode.indexOf("#usergroup")>-1) {
+			} else if (portfoliocode.indexOf("#persongroup")>-1) {
 				code  = userid = $(nodes[i]).attr("id");
 				UIFactory.User.load(userid);
 				if (Users_byid[userid]!=undefined)
@@ -825,7 +831,7 @@ UIFactory["Get_Get_Resource"].prototype.parse = function(destid,type,langcode,da
 			let value = "";
 			let code = "";
 			let label = [];
-			if (target=='userlabel' || target=='portfoliolabel') {
+			if (target=='personlabel' || target=='portfoliolabel') {
 				code = "@"+tableau2[i].code;
 				value = code;
 				for (var j=0; j<languages.length;j++){

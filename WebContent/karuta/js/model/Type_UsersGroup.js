@@ -642,3 +642,33 @@ UIFactory["UsersGroup"].toggleUsersList = function(gid,destid,checked)
 		$("#"+destid).hide();
 	}
 };
+
+//--------------------------------------------------------------
+//--------------------------------------------------------------
+//------------------------ UTILITIES ---------------------------
+//--------------------------------------------------------------
+//--------------------------------------------------------------
+
+//==================================
+UIFactory["UsersGroup"].getIdByLabel = function(label)
+//==================================
+{
+	let result = "";
+	$.ajax({
+		async:false,
+		type : "GET",
+		dataType : "xml",
+		url : serverBCK_API+"/usersgroups",
+		success : function(data) {
+			UIFactory.UsersGroup.parse(data);
+			label = replaceVariable(label);
+			for ( let i = 0; i < usergroups_list.length; i++) {
+				if ($(usergroups_list[i].attributes["label"]).text() == label){
+					result = usergroups_list[i].id;
+					break;
+				}
+			}
+		}
+	});
+	return result;
+}

@@ -1101,12 +1101,6 @@ g_actions['join-usergroup'] = function JoinUserGroup(node)
 	usergroup = decodeURI(usergroup);
 	if (usergroup.startsWith("@"))
 		usergroup = usergroup.substring(1);
-//	var select_user = $("user>txtval",node).attr("select");
-//	if(typeof(select_user)=='undefined')
-//		user = replaceBatchVariable(replaceVariable($(getTxtvals($("user",node)))));
-//	else {
-//		user = replaceBatchVariable(replaceVariable(select_user));
-//	}
 	if (user.startsWith("@"))
 		user = user.substring(1);
 	//---- get userid ----------
@@ -1172,19 +1166,11 @@ g_actions['leave-usergroup'] = function LeaveUserGroup(node)
 //=================================================
 {
 	var ok = false;
-	var user = "";
+	var user = getTxtvals($("user",node));
 	var usergroup = getTxtvals($("usergroup",node));
+	usergroup = decodeURI(usergroup);
 	if (usergroup.startsWith("@"))
 		usergroup = usergroup.substring(1);
-	var select_user = $("user>txtval",node).attr("select");
-	if(typeof(select_user)=='undefined')
-		user = replaceBatchVariable(replaceVariable($("user>txtval",node).text()));
-	else {
-		if (select_user.indexOf("//")>-1)
-				user = g_json[select_user.substring(2)];
-		else 
-			user = g_json.lines[g_noline][select_user];	
-	}
 	if (user.startsWith("@"))
 		user = user.substring(1);
 	//---- get userid ----------
@@ -1946,6 +1932,8 @@ g_actions['share-tree'] = function shareTree(node)
 	var treeref = $(node).attr("select");
 	var role = getTxtvals($("role",node));
 	var user = getTxtvals($("user",node));
+	if (user.startsWith("@"))
+		user = user.substring(1);
 	//---- get userid ----------
 	var url = serverBCK_API+"/users/user/username/"+user;
 	$.ajax({
@@ -2139,6 +2127,8 @@ g_actions['unshare-tree'] = function unshareTree(node)
 	var treeref = $(node).attr("select");
 	var role = getTxtvals($("role",node));
 	var user = getTxtvals($("user",node));
+	if (user.startsWith("@"))
+		user = user.substring(1);
 	//---- get userid ----------
 	var url = serverBCK_API+"/users/user/username/"+user;
 	$.ajax({
@@ -2484,6 +2474,8 @@ g_actions['share-portfoliogroup'] = function sharePortfolioGroup(node)
 {
 	var ok = false;
 	var user = getTxtvals($("identifier",node));;
+	if (user.startsWith("@"))
+		user = user.substring(1);
 	var role = getTxtvals($("role",node));
 	var portfoliogroup = getTxtvals($("portfoliogroup",node));
 	var portfoliogroupid = get_portfoliogroupid(portfoliogroup);
@@ -2564,6 +2556,8 @@ g_actions['unshare-portfoliogroup'] = function unsharePortfolioGroup(node)
 {
 	var ok = false;
 	var user = getTxtvals($("identifier",node));;
+	if (user.startsWith("@"))
+		user = user.substring(1);
 	var role = getTxtvals($("role",node));
 	var portfoliogroup = getTxtvals($("portfoliogroup",node));
 	var portfoliogroupid = get_portfoliogroupid(portfoliogroup);

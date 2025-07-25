@@ -2,8 +2,8 @@
 var karuta_version = "@project.version@";
 var karuta_date = "@build.timestamp@";
 
-const karuta_version_eportfolium = 'eportfolium-3.84.1';
-const karuta_date_eportfolium = '2025-07-22';
+const karuta_version_eportfolium = 'eportfolium-3.85.0';
+const karuta_date_eportfolium = '2025-07-25';
 
 var karuta_backend_version = "?";
 var karuta_backend_date = "?";
@@ -104,3 +104,4 @@ var karuta_fileserver_date = "?";
 // 3.83.2 FIX - call with userrole
 // 3.84.0 FEAT - variables can be used wuth for-each-usergroup, for-each-portfoliogroup and in get_get_rtesource
 // 3.84.1 FIX - Get_Get_resource completion
+// 3.85.0 FEAT - usergroup changed to persongroup in metadata ('user' was changed to userid at instantiation) - Viewer pdf inline in Document

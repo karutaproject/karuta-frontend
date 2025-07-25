@@ -458,11 +458,11 @@ UIFactory["Get_Resource"].prototype.displayEditor = function(destid,type,langcod
 		var target = queryattr_value.substring(srce_indx+1); // label or text
 		var portfoliocode = replaceVariable(queryattr_value.substring(0,semtag_indx));
 		//---------------------------------------------
-		if (queryattr_value.indexOf("#group.user.group")>-1  || queryattr_value.indexOf("#group.portfolio.group")>-1){
+		if (queryattr_value.indexOf("#group.person.group")>-1  || queryattr_value.indexOf("#group.portfolio.group")>-1){
 			if (cachable && g_Get_Resource_caches[queryattr_value]!=undefined && g_Get_Resource_caches[queryattr_value]!="")
 				self.parse(destid,type,langcode,g_Get_Resource_caches[queryattr_value],disabled,srce,resettable,target,semtag,multiple_tags,portfoliocode,semtag2,cachable);
 			else {
-				const url =  queryattr_value.indexOf("#group.user.group")>-1 ?  serverBCK_API+"/usersgroups" : serverBCK_API+"/portfoliogroups";
+				const url =  queryattr_value.indexOf("#group.person.group")>-1 ?  serverBCK_API+"/usersgroups" : serverBCK_API+"/portfoliogroups";
 				$.ajax({
 					async:false,
 					type : "GET",
@@ -475,7 +475,7 @@ UIFactory["Get_Resource"].prototype.displayEditor = function(destid,type,langcod
 					}
 				});
 			}
-		} else if (queryattr_value.indexOf("#users.user.first-last-name")>-1) {
+		} else if (queryattr_value.indexOf("#persons.person.first-last-name")>-1) {
 			if (cachable && g_Get_Resource_caches[queryattr_value]!=undefined && g_Get_Resource_caches[queryattr_value]!="")
 				self.parse(destid,type,langcode,g_Get_Resource_caches[queryattr_value],disabled,srce,resettable,target,semtag,multiple_tags,portfoliocode,semtag2,cachable);
 			else {
@@ -551,11 +551,11 @@ UIFactory["Get_Resource"].prototype.displayEditor = function(destid,type,langcod
 		type = 'multiple';
 		queryattr_value = portfoliocode+"."+semtag+"."+target;
 		//---------------------------------------------
-		if (queryattr_value.indexOf("#group.user.group")>-1  || queryattr_value.indexOf("#group.portfolio.group")>-1){
+		if (queryattr_value.indexOf("#group.person.group")>-1  || queryattr_value.indexOf("#group.portfolio.group")>-1){
 			if (cachable && g_Get_Resource_caches[queryattr_value]!=undefined && g_Get_Resource_caches[queryattr_value]!="")
 				self.parse(destid,type,langcode,g_Get_Resource_caches[queryattr_value],disabled,srce,resettable,target,semtag,multiple_tags,portfoliocode,semtag2,cachable);
 			else {
-				const url =  queryattr_value.indexOf("#group.user.group")>-1 ?  serverBCK_API+"/usersgroups" : serverBCK_API+"/portfoliogroups";
+				const url =  queryattr_value.indexOf("#group.person.group")>-1 ?  serverBCK_API+"/usersgroups" : serverBCK_API+"/portfoliogroups";
 				$.ajax({
 					async:false,
 					type : "GET",
@@ -568,7 +568,7 @@ UIFactory["Get_Resource"].prototype.displayEditor = function(destid,type,langcod
 					}
 				});
 			}
-		} else if (queryattr_value.indexOf("#users.user.first-last-name")>-1) {
+		} else if (queryattr_value.indexOf("#persons.person.first-last-name")>-1) {
 			if (cachable && g_Get_Resource_caches[queryattr_value]!=undefined && g_Get_Resource_caches[queryattr_value]!="")
 				self.parse(destid,type,langcode,g_Get_Resource_caches[queryattr_value],disabled,srce,resettable,target,semtag,multiple_tags,portfoliocode,semtag2,cachable);
 			else {

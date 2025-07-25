@@ -1099,7 +1099,7 @@ UIFactory["User"].displaySelectActive = function(destid,type,lang)
 	if (!UsersLoaded)
 		UIFactory.User.loadAll();
 	for ( var i = 0; i < UsersActive_list.length; i++) {
-		var input = UsersActive_list[i].getRadio(null,null,destid);
+		var input = UsersActive_list[i].getRadio(null,null,'select_users');
 		$("#"+destid).append($(input));
 		$("#"+destid).append($("<br>"));
 	}
