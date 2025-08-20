@@ -197,6 +197,10 @@ UIFactory["Get_Resource"].prototype.getView = function(dest,type,langcode,indash
 			}
 		}
 	}
+	//------------------------------
+	if (UICom.structure.ui[this.id].semantictag.indexOf("g-select-variable")>-1)
+		updateVariable(this.node);
+	//------------------------------
 	//---------------------
 	if (indashboard==null)
 		indashboard = false;
@@ -440,7 +444,10 @@ UIFactory["Get_Resource"].prototype.displayEditor = function(destid,type,langcod
 		type = 'simple';
 	}
 	var self = this;
-	
+	//------------------------------
+	if (UICom.structure.ui[this.id].semantictag.indexOf("g-select-variable")>-1)
+		updateVariable(this.node);
+	//------------------------------	
 	if (queryattr_value!=undefined && queryattr_value!='') {
 		//------------------
 		queryattr_value = replaceVariable(queryattr_value);

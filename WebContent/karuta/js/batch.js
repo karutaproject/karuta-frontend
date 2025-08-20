@@ -148,7 +148,7 @@ function getTxtvalsWithoutReplacement(node)
 					text = "@" + Date.now();
 				else
 					text = eval("g_json."+select.substring(2));
-			} else if (select.indexOf("/")>-1) {
+			} else if (select.indexOf("/")>-1 && select.indexOf("##")<0) {
 				text = eval("g_users['"+select.substring(1)+"']");
 			} else if (select.indexOf("##")>-1)
 				text = replaceVariable(select);
@@ -1231,9 +1231,58 @@ g_actions['leave-usergroup'] = function LeaveUserGroup(node)
 	return ok;
 }
 
+//=================================================
+g_actions['delete-usergroup'] = function (node)
+//=================================================
+{
+	var ok = false;
+	var usergroup = getTxtvals($("usergroup",node));
+	usergroup = decodeURI(usergroup);
+	if (usergroup.startsWith("@"))
+		usergroup = usergroup.substring(1);
+			//---- get usergroupid ----------
+			var groupid = "";
+			var url = serverBCK_API+"/usersgroups";
+			$.ajax({
+				async : false,
+				type : "GET",
+				contentType: "text/html",
+				dataType : "text",
+				url : url,
+				success : function(data) {
+					var groups = $("group",data);
+					for (var k=0;k<groups.length;k++){
+						if ($('label',groups[k]).text().indexOf(usergroup)>-1 || $(groups[k]).attr("id")==usergroup) {
+							groupid = $(groups[k]).attr("id");
+							//---- delete group --------------
+							$.ajax({
+								async : false,
+								type : 'DELETE',
+								dataType : "text",
+								url : serverBCK_API+"/usersgroups?group=" + groupid,
+								data : "",
+								success : function(data) {
+									ok = true;
+									$("#batch-log").append("<br>- DeleteUserGroup - usergroup:"+usergroup);
+								},
+								error : function(data) {
+									$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in DeleteUserGroup - usergroup:"+usergroup);
+								}
+							});
+						}
+					}
+				},
+				error : function(data) {
+					$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in DeleteUserGroup - usergroup:"+usergroup);
+				}
+			});
+	if (!ok) g_batch_error.push("delete-usergroup");
+	return ok;
+}
+
 //===============================================
 //===============================================
-//=======FOR EACH GROUP USER================
+//======= FOR EACH GROUP USER ===================
 //===============================================
 //===============================================
 
@@ -1305,7 +1354,7 @@ g_actions['for-each-group-person'] = function (node)
 
 //===============================================
 //===============================================
-//=======FOR EACH GROUP PORTFOLIO===========
+//======= FOR EACH GROUP PORTFOLIO ==============
 //===============================================
 //===============================================
 
@@ -2627,6 +2676,53 @@ g_actions['unshare-portfoliogroup'] = function unsharePortfolioGroup(node)
 		}
 	});
 	if (!ok) g_batch_error.push("unshare-portfoliogroup");
+	return ok;
+}
+
+//=================================================
+g_actions['delete-portfoliogroup'] = function (node)
+//=================================================
+{
+	var ok = false;
+	var portfoliogroup = getTxtvals($("portfoliogroup",node));
+	if (portfoliogroup.startsWith("@"))
+		portfoliogroup = portfoliogroup.substring(1);
+	//---- get portfoliogroupid ----------
+	var groupid = "";
+	var url = serverBCK_API+"/portfoliogroups";
+	$.ajax({
+		async : false,
+		type : "GET",
+		dataType : "xml",
+		url : url,
+		success : function(data) {
+			var groups = $("group",data);
+			for (var k=0;k<groups.length;k++){
+				if ($('label',groups[k]).text().indexOf(portfoliogroup)>-1 || $(groups[k]).attr("id")==portfoliogroup) {
+					groupid = $(groups[k]).attr("id");
+					//---- delete group --------------
+					$.ajax({
+						async : false,
+						type : 'DELETE',
+						dataType : "text",
+						url : serverBCK_API+"/portfoliogroups?group="+groupid,
+						data : "",
+						success : function(data) {
+							ok = true;
+							$("#batch-log").append("<br>- DeletePortfolioGroup - portfoliogroup : "+portfoliogroup);
+						},
+						error : function(data) {
+							$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in DeletePortfolioGroup - portfoliogroup : "+portfoliogroup);
+						}
+					});
+				}
+			}
+		},
+		error : function(data) {
+			$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in DeletePortfolioGroup - portfoliogroup:"+portfoliogroup);
+		}
+	});
+	if (!ok) g_batch_error.push("delete-portfoliogroup");
 	return ok;
 }
 
@@ -3977,6 +4073,8 @@ g_actions['batch-variable'] = function (node)
 		if (source.indexOf('#current_node')>-1) {
 			if (srce_treeref!="")
 				nodeid = g_trees[srce_treeref].currentnode[g_trees[srce_treeref].currentnode.length-1];
+			else 
+				nodeid = g_current_node_uuid;
 		} else
 			nodeid = replaceVariable(b_replaceVariable(treeref)); // select = porfolio_uuid.#uuid
 	} else if (source.indexOf('#current_portfolio')>-1){

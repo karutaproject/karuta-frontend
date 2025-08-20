@@ -1574,14 +1574,6 @@ UIFactory["Portfolio"].getActions = function(portfolioid)
 //==================================
 {
 	var html ="";
-//	if (portfolios_byid[portfolioid].export_pdf)
-//		html += "<a class='dropdown-item' href='../../../"+serverBCK+"/xsl?portfolioids="+portfolioid+"&xsl="+appliname+"/karuta/xsl/xmlportfolio2fo.xsl&parameters=lang:"+LANG+";url:"+serverURL+"/"+serverBCK+";url-appli:"+serverURL+"/"+appliname+"&format=application/pdf'>"+karutaStr[LANG]['getPDF']+"</a>";
-//	if (portfolios_byid[portfolioid].export_rtf)
-//		html += "<a class='dropdown-item' href='../../../"+serverBCK+"/xsl?portfolioids="+portfolioid+"&xsl="+appliname+"/karuta/xsl/xmlportfolio2fo.xsl&parameters=lang:"+LANG+";url:"+serverURL+"/"+serverBCK+";url-appli:"+serverURL+"/"+appliname+"&format=application/rtf'>"+karutaStr[LANG]['getRTF']+"</a>";
-//	if (portfolios_byid[portfolioid].export_htm)
-//		html += "<a class='dropdown-item'  onclick='export_html()'>"+karutaStr[LANG]['getWebsite']+"</a>";
-//	html += "<a class='dropdown-item'  onclick=\"toggleButton('hidden')\">"+karutaStr[LANG]['hide-button']+"</a>";
-//	html += "<a class='dropdown-item'  onclick=\"toggleButton('visible')\">"+karutaStr[LANG]['show-button']+"</a>";
 	if ( (USER.admin || portfolios_byid[portfolioid].owner=='Y') && !USER.xlimited) {
 		html += "<a class='dropdown-item' onclick=\"UIFactory.Portfolio.callShareUsers('"+portfolioid+"')\" >"+karutaStr[LANG]["addshare-users"]+"</a>";
 		html += "<a class='dropdown-item' onclick=\"UIFactory.Portfolio.callShareUsersGroups('"+portfolioid+"')\" >"+karutaStr[LANG]["addshare-usersgroups"]+"</a>";

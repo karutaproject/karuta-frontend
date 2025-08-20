@@ -51,6 +51,7 @@ var g_Get_Portfolio_caches = {};
 var g_wysihtml5_autosave = 60000; // 60 seconds
 var g_portfolio_current = ""; // XML jQuery Object - must be set after loading xml
 var g_portfolio_rootid = "";
+var g_portfolio_UIcom_root = "";
 var g_toggle_sidebar = [];
 var g_current_page = "";
 var g_nb_trees = 0;

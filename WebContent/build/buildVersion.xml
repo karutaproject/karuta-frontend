@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="updateVersion" default="updateVersion" basedir="."> 
-	<property name="noVersion" value="3.85.0"/>
-	<property name="textVersion" value="FEAT - usergroup changed to persongroup in metadata ('user' was changed to userid at instantiation) - Viewer pdf inline in Document"/>
+	<property name="noVersion" value="3.86.0"/>
+	<property name="textVersion" value="FEAT - Batch update-get-get-resource added"/>
 	<property name="dirSrce" value="src/htm-srce"/>
 	<property name="dirTrgt" value="WebContent/karuta/htm"/>
 	<target name="testIfNewVersion">

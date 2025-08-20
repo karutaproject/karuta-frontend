@@ -121,7 +121,7 @@ UIFactory["UsersGroup"].loadAndDisplayAll = function (type)
 		data: "",
 		success : function(data) {
 			UIFactory.UsersGroup.parse(data);
-			UIFactory.UsersGroup.displayAll(type);
+			UIFactory.UsersGroup.displayAll2(type);
 			$("#wait-window").modal('hide');
 		},
 		error : function(jqxhr,textStatus) {
@@ -272,6 +272,50 @@ UIFactory["UsersGroup"].displayAll = function(type)
 		usergroups_list[i].displayView(type+"-leftside-content1",type);
 	}
 };
+
+//==================================
+UIFactory["UsersGroup"].displayAll2 = function(type)
+//==================================
+{
+	$("#"+type+"-leftside-content1").html("");
+	var group_labels = [];
+	for ( let i = 0; i < usergroups_list.length; i++) {
+		group_labels[i] = [usergroups_list[i].code,i];
+	}
+	var prev_prefix = "";
+	var sorted_groups = group_labels.sort(sortOn1);
+	for (let j=0; j<sorted_groups.length; j++) {
+		const label = sorted_groups[j][0];
+		if (label.indexOf('_')>-1){
+			const prefix = label.substring(0,label.indexOf('_'));
+			if (prefix!=prev_prefix) {
+			var html = "";
+			html += "<div id='usergroupfolder_"+this.id+"' class='tree-label'>";
+			html += prefix;
+			html += "</div>";		
+			$("#"+type+"-leftside-content1").append($(html));
+			prev_prefix = prefix;
+		} else {		
+			usergroups_list[no].displayView(type+"-leftside-content1",type);
+		}
+	}
+};
+
+function displayUsergroup(label,no,type) {
+	if (label.indexOf('_')>-1){
+		const prefix = label.substring(0,label.indexOf('_'));
+		const ss_label = label.substring(label.indexOf('_')+1);
+		var html = "";
+		html += "<div id='usergroupfolder_"+this.id+"' class='tree-label'>";
+		html += prefix;
+		html += "</div>";		
+		$("#"+type+"-leftside-content1").append($(html));
+		displayUsergroup(ss_label,no,type);
+	} else {
+		usergroups_list[no].displayView(type+"-leftside-content1",type);
+	}
+
+}
 
 //==================================
 UIFactory["UsersGroup"].prototype.displayView = function(dest,type)

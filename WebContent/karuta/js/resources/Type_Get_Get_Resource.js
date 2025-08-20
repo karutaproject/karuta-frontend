@@ -424,7 +424,7 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 							self.parse(destid,type,langcode,data,disabled,srce,srce2,this.portfoliocode,target,semtag,semtag2,cachable);
 						},
 						error : function(jqxhr,textStatus) {
-							$("#"+destid).html("No result");
+							$("#"+destid).html("<span id='noresult-"+ destid +"'>No result</span>");
 						}
 					});
 				} else if  (portfoliocode.indexOf("#persongroup")>-1) {
@@ -444,7 +444,7 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 							self.parse(destid,type,langcode,data,disabled,srce,srce2,this.portfoliocode,target,semtag,semtag2,cachable);
 						},
 						error : function(jqxhr,textStatus) {
-							$("#"+destid).html("No result");
+							$("#"+destid).html("<span id='noresult-"+ destid +"'>No result</span>");
 						}
 					});
 				} else {
@@ -459,7 +459,7 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 							self.parse(destid,type,langcode,data,disabled,srce,srce2,this.portfoliocode,target,semtag,semtag2,cachable);
 						},
 						error : function(jqxhr,textStatus) {
-							$("#"+destid).html("No result");
+							$("#"+destid).html("<span id='noresult-"+ destid +"'>No result</span>");
 							self.parse(destid,type,langcode,null,disabled,srce,srce2,this.portfoliocod,target,semtag,semtag2,cachable);
 						}
 					});
@@ -501,7 +501,7 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 							self.parse(destid,type,langcode,data,disabled,srce,this.portfoliocode,target,semtag,semtag2,cachable);
 						},
 						error : function(jqxhr,textStatus) {
-							$("#"+destid).html("No result");
+							$("#"+destid).html("<span id='noresult-"+ destid +"'>No result</span>");
 							self.parse(destid,type,langcode,null,disabled,srce,srce2,this.portfoliocode,target,semtag,semtag2,cachable);
 						}
 					});
@@ -680,8 +680,8 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 						self.parse(destid,type,langcode,data,disabled,srce,srce2,this.portfoliocode,target,semtag,semtag2,cachable);
 					},
 					error : function(jqxhr,textStatus) {
-						$("#"+destid).html("No result");
 						self.parse(destid,type,langcode,null,disabled,srce,srce2,this.portfoliocode,target,semtag,semtag2,cachable);
+						$("#"+destid).html("<span id='noresult-"+ destid +"'>No result</span>");
 					}
 				});
 			} else {
@@ -722,8 +722,8 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 							self.parse(destid,type,langcode,data,disabled,srce,srce2,this.portfoliocode,target,this.semtag,this.semtag2,cachable);
 						},
 						error : function(jqxhr,textStatus) {
-							$("#"+destid).html("No result");
 							self.parse(destid,type,langcode,null,disabled,srce,srce2,this.portfoliocode,target,this.semtag,this.semtag2,cachable);
+							$("#"+destid).html("<span id='noresult-"+ destid +"'>No result</span>");
 						}
 					});
 				}
@@ -805,7 +805,6 @@ UIFactory["Get_Get_Resource"].prototype.parse = function(destid,type,langcode,da
 		if ($("#dropdown-"+self.id).length>0)
 			$("#dropdown-"+self.id).html("");
 		//--------------------------------
-//		html = "<div class='dropdown-menu dropdown-menu-right'></div>";
 		html = "<div id='dropdown-"+self.id+"' class='dropdown-menu dropdown-menu-right'></div>";
 		const dropdown  = $(html);
 		$(btn_group).append(dropdown);
@@ -905,26 +904,39 @@ UIFactory["Get_Get_Resource"].prototype.parse = function(destid,type,langcode,da
 					$("#button_"+self.id).attr('class', 'btn btn-default select select-label').addClass("sel"+code);
 					UIFactory["Get_Get_Resource"].update(this,self,langcode);
 					//--------------------------------
+					$("#noresult-"+destid).html("");
+					//--------------------------------
 				});
 			}
 			//-------------- update button -----
-			if (code!="" && self_code==$('code',resource).text()) {
+			if (code!="" && self_code==code) {
+				//--------------------------------
+				//var code = $(this).attr('code');
+				var display_code = false;
+				var display_label = true;
+				if (code.indexOf("$")>-1) 
+					display_label = false;
+				if (code.indexOf("@")<0) {
+					display_code = true;
+				}
+				code = cleanCode(code);
+				//--------------------------------
 				var html = "";
 				if (display_code)
 					html += code+" ";
 				if (display_value)
 					html += value+" ";
 				if (display_label)
-					html += $(srce+"[lang='"+languages[langcode]+"']",resource).text();
+					html += label[langcode];
 				$("#button_"+self.id).attr("style",style);
 				$("#button_"+self.id).html(html);
 				$("#button_"+self.id).attr('class', 'btn btn-default select select-label').addClass("sel"+code);
-			}
+				//--------------------------------
+				$("#noresult-"+destid).html("");
+				//--------------------------------
+			} 
 			$("#dropdown-"+self.id).append($(select_item));
 		}
-//		$("#dropdown-"+self.id).append($(select));
-//		$(btn_group).append(select);
-		
 	}
 	if (type.indexOf('radio')>-1) {
 		//----------------- null value to erase

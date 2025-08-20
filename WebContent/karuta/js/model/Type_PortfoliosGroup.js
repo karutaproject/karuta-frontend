@@ -415,7 +415,7 @@ UIFactory["PortfoliosGroup"].getIdByLabel = function(label)
 		success : function(data) {
 			UIFactory.PortfoliosGroup.parse(data);
 			label = replaceVariable(label);
-			for ( let i = 0; i < portfoliogroups_list.length; i++) {
+			for ( let i = 0; i < portfoliogroups_list.length; i++) {z
 				if ($(portfoliogroups_list[i].attributes["label"]).text() == label){
 					result = portfoliogroups_list[i].id;
 					break;

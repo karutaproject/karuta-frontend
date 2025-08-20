@@ -2178,17 +2178,17 @@ UIFactory['Node'].reloadStruct = function(uuid,redisplay,redisplay_uuid)
 				$("#portfolio_bar").html("");
 				$("#menu_bar").html("");
 				$("#menu_bar").show();
-				UIFactory.Portfolio.displayHorizontalMenu(UICom.root,'menu_bar',null,null,g_edit,UICom.rootid);
+				UIFactory.Portfolio.displayHorizontalMenu(UICom.root,'menu_bar',null,null,g_edit,g_portfolio_rootid);
 			} else {
 				$("#portfolio_bar").html("");
 				$("#sidebar").html("");
 				$("#menu_bar").hide();
-				UIFactory["Portfolio"].displaySidebar(UICom.root,'sidebar',null,null,g_edit,UICom.rootid);
+				UIFactory["Portfolio"].displaySidebar(UICom.root,'sidebar',null,null,g_edit,g_portfolio_rootid);
 			}
 			if (redisplay) {
 				var uuid = (redisplay_uuid==null || redisplay_uuid=="null")?$("#page").attr('uuid'):redisplay_uuid;
 				if (g_display_type=='model')
-					displayPage(UICom.rootid,1,g_display_type,LANGCODE,g_edit);
+					displayPage(g_portfolio_rootid,1,g_display_type,LANGCODE,g_edit);
 				else
 					displayPage(uuid,1,g_display_type,LANGCODE,g_edit);
 				$('#wait-window').modal('hide');
@@ -2246,16 +2246,16 @@ UIFactory['Node'].reloadUnit = function(uuid,redisplay,nodeid,userrole)
 					$("#portfolio_bar").html("");
 					$("#menu_bar").html("");
 					$("#menu_bar").show();
-					UIFactory.Portfolio.displayHorizontalMenu(UICom.root,'menu_bar',g_display_type,null,g_edit,UICom.rootid);
+					UIFactory.Portfolio.displayHorizontalMenu(g_portfolio_UIcom_root,'menu_bar',g_display_type,null,g_edit,g_portfolio_rootid);
 				} else {
 					$("#portfolio_bar").html("");
 					$("#sidebar").html("");
 					$("#menu_bar").hide();
-					UIFactory.Portfolio.displaySidebar(UICom.root,'sidebar',g_display_type,null,g_edit,UICom.rootid);
+					UIFactory.Portfolio.displaySidebar(g_portfolio_UIcom_root,'sidebar',g_display_type,null,g_edit,g_portfolio_rootid);
 				}
 				if (redisplay) {
 					if (g_display_type=='model')
-						displayPage(UICom.rootid,1,g_display_type,LANGCODE,g_edit);
+						displayPage(g_portfolio_rootid,1,g_display_type,LANGCODE,g_edit);
 					else
 						displayPage(uuid,99,g_display_type,LANGCODE,g_edit);
 				}
