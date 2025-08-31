@@ -280,42 +280,54 @@ UIFactory["UsersGroup"].displayAll2 = function(type)
 	$("#"+type+"-leftside-content1").html("");
 	var group_labels = [];
 	for ( let i = 0; i < usergroups_list.length; i++) {
-		group_labels[i] = [usergroups_list[i].code,i];
+		usergroups_list[i].loadNumberOfUsers();
+		let label = usergroups_list[i].code;
+		let prefix = "";
+		while (label.indexOf("_")>-1){
+			group_labels.push([prefix+label.substring(0,label.indexOf("_")+1),i]);
+			prefix = label.substring(0,label.indexOf("_")+1)
+		label = label.substring(label.indexOf("_")+1);
+		}
+		group_labels.push([usergroups_list[i].code,i]);
 	}
-	var prev_prefix = "";
 	var sorted_groups = group_labels.sort(sortOn1);
+	let prevlabel = "";
+	let lbl = {};
+	let no = 0;
 	for (let j=0; j<sorted_groups.length; j++) {
 		const label = sorted_groups[j][0];
-		if (label.indexOf('_')>-1){
-			const prefix = label.substring(0,label.indexOf('_'));
-			if (prefix!=prev_prefix) {
-			var html = "";
-			html += "<div id='usergroupfolder_"+this.id+"' class='tree-label'>";
-			html += prefix;
-			html += "</div>";		
-			$("#"+type+"-leftside-content1").append($(html));
-			prev_prefix = prefix;
-		} else {		
-			usergroups_list[no].displayView(type+"-leftside-content1",type);
+		if (label != prevlabel) {
+			if (label.endsWith("_")) {
+				lbl[label] = j;
+				var html = "";
+				html += "<div><button id='b-"+j+"' class='tree-label usergroup-label' type='button' data-toggle='collapse' data-target='#collapse-"+j+"' aria-expanded='false' aria-controls='#collapse-"+j+"'>";
+				html += label.substring(0,label.length-1);
+				html += "</button></div>";		
+				html += " <div class='collapse' id='collapse-"+j+"'>";
+				html += "</div>";
+				const t = label.substring(0,label.lastIndexOf("_"));
+				const u = t.substring(0,t.lastIndexOf("_")+1);
+				no = lbl[u];
+				if (no !=undefined)					
+					$("#collapse-"+no).append($(html));
+				else
+					$("#"+type+"-leftside-content1").append($(html));
+			} else {
+				if (label.indexOf("_")>-1) {
+					const t = label.substring(0,label.lastIndexOf("_")+1);
+					no = lbl[t];
+					usergroups_list[sorted_groups[j][1]].displayView("collapse-"+no,type);
+				} else {
+					usergroups_list[sorted_groups[j][1]].displayView(type+"-leftside-content1",type);
+					no.pop();
+					}
+			}
+			prevlabel = label;
+		} else {
 		}
 	}
 };
 
-function displayUsergroup(label,no,type) {
-	if (label.indexOf('_')>-1){
-		const prefix = label.substring(0,label.indexOf('_'));
-		const ss_label = label.substring(label.indexOf('_')+1);
-		var html = "";
-		html += "<div id='usergroupfolder_"+this.id+"' class='tree-label'>";
-		html += prefix;
-		html += "</div>";		
-		$("#"+type+"-leftside-content1").append($(html));
-		displayUsergroup(ss_label,no,type);
-	} else {
-		usergroups_list[no].displayView(type+"-leftside-content1",type);
-	}
-
-}
 
 //==================================
 UIFactory["UsersGroup"].prototype.displayView = function(dest,type)

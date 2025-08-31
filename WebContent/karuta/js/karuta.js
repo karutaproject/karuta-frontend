@@ -263,7 +263,7 @@ function getNavBar(type,portfolioid,edit)
 		html += "	</li>";
 		if (USER.username.indexOf("karuser")<0) {
 			//-----------------USERNAME-----------------------------------------
-			if ( (cas_url=="" && typeof openid_url !=="undefined" && openid_url=="") || USER.admin) {
+			if ( (cas_url=="" && typeof openid_url =="undefined" || (typeof openid_url !=="undefined" && openid_url=="")) || USER.admin) {
 				html += "	<li class='nav-item dropdown'>";
 				html += "		<a class='nav-link dropdown-toggle' href='#' id='userDropdown' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'  data-title='"+karutaStr[LANG]["button-change-password"]+"' data-toggle='tooltip' data-placement='bottom'>";
 				html += "			<i class='fas fa-user'></i>&nbsp;&nbsp;"+USER.firstname+" "+USER.lastname;

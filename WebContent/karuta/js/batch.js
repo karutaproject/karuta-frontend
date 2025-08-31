@@ -263,16 +263,21 @@ function getTargetUrl(node)
 	const idx = select.lastIndexOf(".");
 	let semtag = replaceBatchVariable(replaceVariable(select.substring(idx+1)));
 	let treeref = select.substring(0,idx);
+	let elt = select.substring(select.indexOf(".")+1,select.lastIndexOf("."));
 	if (treeref.indexOf('#current_node')>-1) {
-		treeref = treeref.substring(0,treeref.indexOf("#)"));
+		treeref = treeref.substring(0,treeref.indexOf(".#"));
 		semtag = '#current_node';
+	}
+	if (treeref.indexOf('#lastimported')>-1) {
+		treeref = treeref.substring(0,treeref.indexOf(".#"));
+		semtag = '#lastimported';
 	}
 	if (semtag=='#current_node')
 		if (treeref!="")
 			url = serverBCK_API+"/nodes/node/"+g_trees[treeref].currentnode[g_trees[treeref].currentnode.length-1]; // ref-currentnode
 		else
 			url = serverBCK_API+"/nodes/node/"+g_current_node_uuid; // currentnode
-	else if (semtag=='#last_imported')
+	else if (semtag=='#lastimported')
 			url = serverBCK_API+"/nodes/node/"+g_trees[treeref].lastimported[g_trees[treeref].lastimported.length-1]; // ref-lastimported
 	else if (semtag=='#uuid') {
 		if (treeref.indexOf("//")>-1)
@@ -374,7 +379,7 @@ function getTargetNodes(node,data,teststr)
 	let semtag = getSemtag(node);
 	semtag = replaceBatchVariable(replaceVariable(semtag));
 	//--------------------------
-	if (semtag=="#current_node" || data==undefined || data==null || getTreef(node)!="") {
+	if (semtag=="#current_node" || semtag=="#lastimported" ||data==undefined || data==null || getTreef(node)!="") {
 		let url = getTargetUrl(node);
 		$.ajax({
 			async : false,
@@ -384,7 +389,7 @@ function getTargetNodes(node,data,teststr)
 			semtag : semtag,
 			success : function(data) {
 				if (this.url.indexOf('/node/')>-1) {  // get by uuid
-					if (getTreef(node).indexOf('#current_node')>-1) {
+					if (getTreef(node).indexOf('#current_node')>-1 || getTreef(node).indexOf('#lastimported')>-1) {
 						nodes = $("*:has(>metadata[semantictag*='"+this.semtag+"'])",data)
 					} else {
 						let results = $('*',data);
@@ -440,9 +445,11 @@ function getSourceNodes(node,data,teststr)
 		nodes = $("*:has(>metadata[semantictag*='"+semtag+"'])",data).addBack("*:has(>metadata[semantictag*='"+semtag+"'])");
 	}
 	//----------Test ----------
-	let test = $(node).attr(teststr);
-	if (test!=undefined) {
-		nodes = evalTest(test,nodes);
+	if (teststr!=undefined) {
+		let test = $(node).attr(teststr);
+		if (test!=undefined) {
+			nodes = evalTest(test,nodes);
+		}
 	}
 	return nodes;
 }
@@ -3831,7 +3838,6 @@ g_actions['update-proxy'] = function update_proxy(node,data)
 	//----------------------------------------
 	if (nodes.length>0){	
 		for (i=0; i<nodes.length; i++){
-			ok++;
 			var targetid = $(nodes[i]).attr('id');
 			//----- get target ----------------
 			var resource = $("asmResource[xsi_type='Proxy']",nodes[i]);
@@ -3855,7 +3861,7 @@ g_actions['update-proxy'] = function update_proxy(node,data)
 					//===========================================================
 				},
 				error : function(data) {
-					$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in update resource");
+					$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in update proxy");
 				}
 			});
 		}
@@ -4047,7 +4053,7 @@ g_actions['variable-value'] = function (node)
 }
 
 //==================================
-g_actions['batch-variable'] = function (node)
+g_actions['batch-variable'] = function (node,data)
 //==================================
 {
 	//-----------------------------------
@@ -4066,7 +4072,12 @@ g_actions['batch-variable'] = function (node)
 	var srce_idx = source.lastIndexOf(".");
 	var srce_treeref = source.substring(0,srce_idx);
 	var srce_semtag = source.substring(srce_idx+1);
-	srce_semtag = replaceBatchVariable(replaceVariable(srce_semtag))
+	srce_semtag = replaceBatchVariable(replaceVariable(srce_semtag));
+	//------------- source -----------------------
+	const srce_nodes = getSourceNodes(node,data);
+	var nodeid = $(srce_nodes[0]).attr('id');;
+
+/*
 	//------------- source -----------------------
 	var nodeid = "";
 	if (source.indexOf('#current_node')+source.indexOf('#uuid')>-2){
@@ -4109,6 +4120,7 @@ g_actions['batch-variable'] = function (node)
 			}
 		});
 	}
+	*/
 	//---------- node-resource -----------
 	//------------------------------------
 	const select = $(node).attr("select");
@@ -4219,11 +4231,12 @@ g_actions['for-each-node'] = function (node)
 	//------------- source -----------------------
 	if (source.indexOf('#current_node')+source.indexOf('#uuid')>-2){
 		if (source.indexOf('#current_node')>-1) {
-			if (srce_treeref!="")
+			if (srce_treeref!="" && g_trees[srce_treeref]!=undefined)
 				nodeid = g_trees[srce_treeref].currentnode[g_trees[srce_treeref].currentnode.length-1];
-//				nodeid = g_current_node_uuid;
+			else
+				nodeid = g_current_node_uuid;
 		} else
-			nodeid = replaceVariable(b_replaceVariable(srce_treeref)); // select = porfolio_uuid.#uuid
+			nodeid = replaceVariable(replaceBatchVariable(srce_treeref)); // select = porfolio_uuid.#uuid
 		$.ajax({
 			async : false,
 			type : "GET",
@@ -4231,10 +4244,11 @@ g_actions['for-each-node'] = function (node)
 			url : serverBCK_API+"/nodes/node/"+nodeid,
 			success : function(data) {
 				let nodes = [];
-				if (srce_semtag!=undefined) {
+				if (srce_semtag!=undefined && srce_semtag!='#uuid') {
 					nodes = $("*:has(>metadata[semantictag*='"+srce_semtag+"'])",data);
 				} else {
-					nodes.push(UICom.structure.ui[nodeid].nodeid);
+//					nodes.push(UICom.structure.ui[nodeid].nodeid);
+					nodes.push(nodeid);
 				}
 				if (test!=undefined)
 					nodes = evalTest(test,nodes);
@@ -4245,11 +4259,13 @@ g_actions['for-each-node'] = function (node)
 					$("#batch-log").append($(actions[j])[0].tagName+" / ");
 				}
 				let previous_node_uuid ="";
-				if (srce_treeref!="")
+				if (srce_treeref!="" && g_trees[srce_treeref]!=undefined)
 					lastimported = g_trees[srce_treeref].lastimported[g_trees[srce_treeref].lastimported.length-1];
 				for (let i=0; i<nodes.length; i++){
-					const nodeid = $(nodes[i]).attr('id');
-					if (srce_treeref!=""){
+					let nodeid = $(nodes[i]).attr('id');
+					if (nodeid==undefined)
+						nodeid = nodes[i];
+					if (srce_treeref!="" && g_trees[srce_treeref]!=undefined){
 						g_trees[srce_treeref].currentnode.push(nodeid);
 					}
 					previous_node_uuid = g_current_node_uuid;
@@ -4271,7 +4287,7 @@ g_actions['for-each-node'] = function (node)
 							$("#batch-log").append("<br>- ***NOT FOUND <span class='danger'>ERROR - for-each-node "+srce_semtag+"</span>");
 						}
 					});
-					if (srce_treeref!="") {
+					if (srce_treeref!="" && g_trees[srce_treeref]!=undefined) {
 						g_current_node_uuid = g_trees[srce_treeref].currentnode.pop();
 					} else
 						g_current_node_uuid = previous_node_uuid;
