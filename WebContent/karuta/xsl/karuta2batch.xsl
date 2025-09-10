@@ -998,6 +998,35 @@
 			</source>
 		</update-url2portfolio>
 	</xsl:template>
+	
+	<xsl:template match="*[metadata/@semantictag='update-url2portfolio-attributes']">
+		<xsl:variable name="select">
+			<xsl:call-template name='get-select'>
+				<xsl:with-param name='parent'>subsection-target</xsl:with-param>
+			</xsl:call-template>
+		</xsl:variable>
+		<xsl:variable name="test">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='test']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<update-resource type='URL2Portfolio' select="{$select}" test="{$test}" >
+			<attribute name='code' language-dependent='N' replace-variable='Y'>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">code</xsl:with-param>
+				</xsl:call-template>
+			</attribute>
+			<attribute name='label' language-dependent='Y' replace-variable='Y'>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">libelle</xsl:with-param>
+				</xsl:call-template>
+			</attribute>
+			<attribute name='value' language-dependent='N' replace-variable='Y'>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">value</xsl:with-param>
+				</xsl:call-template>
+			</attribute>
+		</update-resource>
+	</xsl:template>
+	
 
 	<xsl:template match="*[metadata/@semantictag='update-dashboard']">
 		<xsl:variable name="select">
