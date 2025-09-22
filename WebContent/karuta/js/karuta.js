@@ -61,6 +61,7 @@ var g_variables = {}; // variables for substitution in Get_resource and menus
 var g_importednodestack = [];
 var g_backstack = [];
 var g_menubarstack = [];
+var g_curPos = 0;
 
 //-------------- used for designer-----
 var redisplays = {};
@@ -973,6 +974,12 @@ function reloadPage() {
 	UIFactory.Node.reloadUnit();
 }
 
+//==================================
+function getCurPos(htmlelt) 
+//==================================
+{
+	g_curPos = htmlelt.getBoundingClientRect();
+}
 
 //==================================
 function previewPage(uuid,depth,type,langcode,edit,reload) 
@@ -1004,8 +1011,9 @@ function previewPage(uuid,depth,type,langcode,edit,reload)
 		previewwindow.setAttribute("class", "preview-window");
 		previewwindow.setAttribute("preview-uuid", uuid);
 		previewwindow.setAttribute("preview-edit", edit);
-		previewwindow.innerHTML =  previewBox(uuid);
+		previewwindow.innerHTML = previewBox(uuid);
 		$('body').append(previewwindow);
+		previewwindow.style.top = (g_curPos.top+window.scrollY-20)+"px";
 		$("#preview-"+uuid).hide();
 		var header = "<button class='btn add-button' style='float:right' onclick=\"$('#preview-"+uuid+"').remove();$('#previewbackdrop-"+uuid+"').remove();";
 		if (reload!=null && reload)
@@ -1032,7 +1040,7 @@ function previewPage(uuid,depth,type,langcode,edit,reload)
 				g_report_edit = g_edit;
 				$("#preview-"+uuid).show();
 				$("#previewbackdrop-"+uuid).show();
-				window.scrollTo(0,0);
+//				window.scrollTo(0,0);
 			},
 			error : function() {
 				var html = "";
@@ -1040,7 +1048,7 @@ function previewPage(uuid,depth,type,langcode,edit,reload)
 				$("#preview-window-body-"+uuid).html(html);
 				$("#previewbackdrop-"+uuid).show();
 				$("#preview-"+uuid).show();
-				window.scrollTo(0,0);
+//				window.scrollTo(0,0);
 			}
 		});
 	}
