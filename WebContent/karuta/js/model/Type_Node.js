@@ -1641,7 +1641,7 @@ UIFactory["Node"].displaySidebar = function(root,destid,type,langcode,edit,paren
 						html += ";display:none";
 					let js = "";
 					js += "$(this).parent().parent().parent().parent().nextAll().remove();";
-					html += "' onclick=\""+js+"displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+");pageClick ('"+uuid+"')\" id='sidebar_"+uuid+"'>"+text+"</div>";
+					html += "' onclick=\""+js+"displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"');pageClick ('"+uuid+"')\" id='sidebar_"+uuid+"'>"+text+"</div>";
 					$("#"+destid).append($(html));
 				}
 				if(name == "asmUnit" && level==1) // in a dropdown
@@ -1649,7 +1649,7 @@ UIFactory["Node"].displaySidebar = function(root,destid,type,langcode,edit,paren
 					$("#"+destid).removeClass("nodisplay");
 					var html = "";
 					var depth = 99;
-					html += "<div class='dropdown-item' style='cursor:pointer' onclick=\"displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+");pageClick ('"+uuid+"')\" id='sidebar_"+uuid+"'>"+text+"</div>";
+					html += "<div class='dropdown-item' style='cursor:pointer' onclick=\"displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"');pageClick ('"+uuid+"')\" id='sidebar_"+uuid+"'>"+text+"</div>";
 					$("#"+destid).append($(html));
 				}
 				if(name == "asmStructure") // Click on Structure
@@ -1666,7 +1666,7 @@ UIFactory["Node"].displaySidebar = function(root,destid,type,langcode,edit,paren
 					if (hm) {
 						js += "displaySubMenu('"+uuid+"');";
 					}
-					html += "<div class='dropdown-item' style='cursor:pointer' onclick=\""+js+"displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+")\" id='sidebar_"+uuid+"'>"+text+"</div>";
+					html += "<div class='dropdown-item' style='cursor:pointer' onclick=\""+js+"displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"');pageClick ('"+uuid+"')\" id='sidebar_"+uuid+"'>"+text+"</div>";
 					if (!hm && !onelevel)
 						html += "<div id='dropdown"+uuid+"' class='dropdown-menu dropdown-menu-right nodisplay' aria-labelledby='sidebar_"+uuid+"'></div>";
 					html += "</div>";

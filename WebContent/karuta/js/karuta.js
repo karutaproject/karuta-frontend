@@ -816,8 +816,8 @@ function displayBack() {
 //==================================
 function displayPage(uuid,depth,type,langcode,edit,print) {
 //==================================
-	let original_edit = g_edit;
-	g_edit = edit;
+	if (edit!=undefined)
+		g_edit = edit;
 	//---------------------
 	if (g_backstack.length>0 && g_backstack[g_backstack.length-1].uuid!=uuid)
 		g_backstack.push({'uuid':uuid,'portfolioid': g_portfolioid});
@@ -1013,7 +1013,7 @@ function previewPage(uuid,depth,type,langcode,edit,reload)
 		previewwindow.setAttribute("preview-edit", edit);
 		previewwindow.innerHTML = previewBox(uuid);
 		$('body').append(previewwindow);
-		previewwindow.style.top = (g_curPos.top+window.scrollY-20)+"px";
+		previewwindow.style.top = (g_curPos.top+window.scrollY-30)+"px";
 		$("#preview-"+uuid).hide();
 		var header = "<button class='btn add-button' style='float:right' onclick=\"$('#preview-"+uuid+"').remove();$('#previewbackdrop-"+uuid+"').remove();";
 		if (reload!=null && reload)

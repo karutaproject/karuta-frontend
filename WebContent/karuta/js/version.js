@@ -2,8 +2,8 @@
 var karuta_version = "@project.version@";
 var karuta_date = "@build.timestamp@";
 
-const karuta_version_eportfolium = 'eportfolium-3.88.0';
-const karuta_date_eportfolium = '2025-09-10';
+const karuta_version_eportfolium = 'eportfolium-3.89.0';
+const karuta_date_eportfolium = '2025-09-22';
 
 var karuta_backend_version = "?";
 var karuta_backend_date = "?";
@@ -108,3 +108,4 @@ var karuta_fileserver_date = "?";
 // 3.86.0 FEAT - Batch update-get-get-resource added
 // 3.87.0 FEAT - multiples updates
 // 3.88.0 FEAT - Batch url2portfolio attributes added
+// 3.89.0 FIX - edit mode
