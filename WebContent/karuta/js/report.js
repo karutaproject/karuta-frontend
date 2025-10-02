@@ -713,9 +713,9 @@ g_report_actions['for-each-node'] = function (destid,action,no,data)
 			portfoliocode = replaceVariable(portfoliocode);
 			const portfolioid = UIFactory.Portfolio.getid_bycode(portfoliocode);
 			let url = serverBCK_API+"/portfolios/portfolio/" + portfolioid + "?resources=true";
-			if (userrole){
-				url += "&userrole="+userrole;
-			}
+//			if (userrole){
+//				url += "&userrole="+userrole;
+//			}
 			$.ajax({
 				async:false,
 				type : "GET",

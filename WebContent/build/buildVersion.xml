@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="updateVersion" default="updateVersion" basedir="."> 
-	<property name="noVersion" value="3.89.0"/>
-	<property name="textVersion" value="FIX - edit mode"/>
+	<property name="noVersion" value="3.90.0"/>
+	<property name="textVersion" value="FIX - report - usersgroup"/>
 	<property name="dirSrce" value="src/htm-srce"/>
 	<property name="dirTrgt" value="WebContent/karuta/htm"/>
 	<target name="testIfNewVersion">

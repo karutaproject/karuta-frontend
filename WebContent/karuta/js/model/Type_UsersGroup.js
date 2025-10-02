@@ -319,7 +319,6 @@ UIFactory["UsersGroup"].displayAll2 = function(type)
 					usergroups_list[sorted_groups[j][1]].displayView("collapse-"+no,type);
 				} else {
 					usergroups_list[sorted_groups[j][1]].displayView(type+"-leftside-content1",type);
-					no.pop();
 					}
 			}
 			prevlabel = label;
