@@ -1108,6 +1108,9 @@
 		<xsl:variable name="ref-init">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='ref-init']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
+		<xsl:variable name="user-role">
+			<xsl:value-of select="asmContext[metadata/@semantictag='user-role']/asmResource[@xsi_type='Field']/text[@lang=$lang]"/>
+		</xsl:variable>
 		<xsl:variable name="countvar">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='countvar']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
@@ -1125,6 +1128,7 @@
 		</xsl:variable>
 		<xsl:variable name="select">.<xsl:value-of select="$semtag"/></xsl:variable>
 		<for-each-node>
+			<xsl:attribute name="user-role"><xsl:value-of select="$user-role"/></xsl:attribute>
 			<xsl:if test="not($ref-init='')">
 				<xsl:attribute name="ref-init"><xsl:value-of select="$ref-init"/></xsl:attribute>
 			</xsl:if>

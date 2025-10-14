@@ -697,6 +697,7 @@ g_report_actions['for-each-node'] = function (destid,action,no,data)
 {
 	var select = $(action).attr("select");
 	var test = $(action).attr("test");
+	var user_role = replaceVariable($(action).attr("user-role"));
 	var countvar = replaceVariable($(action).attr("countvar"));
 	if (countvar!=undefined)
 		g_variables[countvar] = 0;
@@ -713,9 +714,11 @@ g_report_actions['for-each-node'] = function (destid,action,no,data)
 			portfoliocode = replaceVariable(portfoliocode);
 			const portfolioid = UIFactory.Portfolio.getid_bycode(portfoliocode);
 			let url = serverBCK_API+"/portfolios/portfolio/" + portfolioid + "?resources=true";
-//			if (userrole){
-//				url += "&userrole="+userrole;
-//			}
+			if (user_role!=""){
+				url += "&userrole="+user_role;
+				g_userroles[g_userroles.length] = user_role;
+				userrole = user_role;
+			}
 			$.ajax({
 				async:false,
 				type : "GET",
@@ -2296,6 +2299,8 @@ g_report_actions['variable'] = function (destid,action,no,data)
 						sum += parseFloat(g_variables[select][i]);
 				}
 				text = sum;
+				if (text.toString().indexOf(".")>-1)
+					text = text.toFixed(2);
 			}
 			if (aggregatetype=="max" && g_variables[select]!=undefined){
 				text = Math.max(...g_variables[select]);
@@ -2310,8 +2315,7 @@ g_report_actions['variable'] = function (destid,action,no,data)
 				}
 				text = sum/g_variables[select].length;
 				if (text.toString().indexOf(".")>-1)
-					text = text.toFixed(2);
-				
+					text = text.toFixed(2);			
 			}
 			if (!$.isNumeric(text))
 				text="";
@@ -2690,7 +2694,7 @@ g_report_actions['preview2unit'] = function (destid,action,no,data)
 	}
 	//-------------------
 	text = "<span id='"+nodeid+"' style='"+style+"' class='report-preview2unit "+cssclass+"'>"+label+"</span>&nbsp;";
-	text += "<span class='button fas fa-binoculars' onclick=\"previewPage('"+targetid+"',100,'standard',null,"+edit+") \" data-title='"+karutaStr[LANG]["preview"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
+	text += "<span class='button fas fa-binoculars' onclick=\"getCurPos(this);previewPage('"+targetid+"',100,'standard',null,"+edit+") \" data-title='"+karutaStr[LANG]["preview"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
 	//-------------------
 	$("#"+destid).append($(text));
 	$("#"+nodeid).attr("style",style);
@@ -2848,6 +2852,8 @@ g_report_actions['aggregate'] = function (destid,action,no,data)
 				sum += parseFloat(g_variables[select][i]);
 		}
 		text = sum;
+	if (text.toString().indexOf(".")>-1)
+		text = text.toFixed(2);
 	}
 	if (type=="avg" && g_variables[select]!=undefined){
 		var sum = 0;

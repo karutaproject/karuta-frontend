@@ -488,6 +488,17 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 					if (display_error){
 						alertHTML(error_text);
 					}
+					//---------------------
+					$(UICom.structure.ui[this.id].resource.value_node[0]).text("");
+					$(UICom.structure.ui[this.id].resource.code_node[0]).text("");
+					$(UICom.structure.ui[this.id].resource.uuid_node[0]).text("");
+					$(UICom.structure.ui[this.id].resource.style_node[0]).text("");
+					for (var i=0; i<languages.length;i++){
+						$(UICom.structure.ui[this.id].resource.label_node[i][0]).text("");
+					}
+					$(UICom.structure.ui[this.id].resource.lastmodified_node).text(new Date().getTime());
+					this.save();
+					//-----------------------
 				} else { // we execute anyway
 					var self = this;
 					$.ajax({
@@ -708,6 +719,17 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 					if (display_error){
 						alertHTML(error_text);
 					}
+					//---------------------
+					$(UICom.structure.ui[this.id].resource.value_node[0]).text("");
+					$(UICom.structure.ui[this.id].resource.code_node[0]).text("");
+					$(UICom.structure.ui[this.id].resource.uuid_node[0]).text("");
+					$(UICom.structure.ui[this.id].resource.style_node[0]).text("");
+					for (var i=0; i<languages.length;i++){
+						$(UICom.structure.ui[this.id].resource.label_node[i][0]).text("");
+					}
+					$(UICom.structure.ui[this.id].resource.lastmodified_node).text(new Date().getTime());
+					this.save();
+					//-----------------------
 				} else { // we execute anyway
 					var self = this;
 					$.ajax({

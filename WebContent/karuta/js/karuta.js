@@ -2512,8 +2512,8 @@ function toggleMode()
 		$("#toggle-mode-icon").removeClass('fas fa-toggle-off').addClass('fas fa-toggle-on');
 	}
 //	UIFactory.Portfolio.displaySidebar(UICom.root,'sidebar','standard',LANGCODE,g_edit,g_portfolio_rootid);
-	var uuid = $("#page").attr('uuid');
-	$("#sidebar_"+uuid).click();
+//	var uuid = $("#page").attr('uuid');
+//	$("#sidebar_"+uuid).click();
 }
 
 //==============================
