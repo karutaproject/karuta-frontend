@@ -2087,7 +2087,7 @@ UIFactory["Node"].prototype.getButtons = function(dest,type,langcode,inline,dept
 			html += "<span data-toggle='modal' data-target='#edit-window' onclick=\"javascript:getEditBox('"+this.id+"')\"><span class='button fas fa-pencil-alt' style='"+menus_color+"' data-toggle='tooltip' data-title='"+karutaStr[LANG]["button-edit"]+"' data-placement='bottom'></span></span>";
 		}
 		//------------ delete button ---------------------
-		if (( (this.deletenode && (this.delnoderoles.containsArrayElt(g_userroles) || this.delnoderoles.indexOf($(USER.username_node).text())>-1) ) || USER.admin || g_userroles[0]=='designer') && this.asmtype != 'asmRoot') {
+		if (( (this.deletenode && (this.delnoderoles.indexOf('all')>-1 || this.delnoderoles.containsArrayElt(g_userroles) || this.delnoderoles.indexOf($(USER.username_node).text())>-1) ) || USER.admin || g_userroles[0]=='designer') && this.asmtype != 'asmRoot') {
 			if (this.asmtype == 'asmStructure' || this.asmtype == 'asmUnit') {
 				if ($("#page").attr('uuid')!=this.id) {
 					html += deleteButton(this.id,this.asmtype,undefined,undefined,"UIFactory.Node.reloadStruct",g_portfolio_rootid,null,null);

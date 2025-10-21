@@ -2672,29 +2672,29 @@ g_report_actions['jsfunction'] = function (destid,action,no,data)
 g_report_actions['preview2unit'] = function (destid,action,no,data)
 //==================================
 {
-	var nodeid = $(data).attr("id");
-	var targetid = "";
-	var text = "";
-	var style = replaceVariable($(action).attr("style"));
-	var cssclass = replaceVariable($(action).attr("class"));
-	var editable = replaceVariable($(action).attr("editable"));
-	var edit = (editable=='1')? true:false;
-	var select = $(action).attr("select");
-	select = replaceVariable(select);
-	var selector = r_getSelector(select);
-	var node = $(selector.jquery,data);
+	let targetid = "";
+	let nodeid = $(data).attr("id");
+	const userrole = replaceVariable($(action).attr("userrole"));
+	const style = replaceVariable($(action).attr("style"));
+	const cssclass = replaceVariable($(action).attr("class"));
+	const editable = replaceVariable($(action).attr("editable"));
+	const edit = (editable=='1')? true:false;
+	const select = replaceVariable($(action).attr("select"));
+	const selector = r_getSelector(select);
+	let node = $(selector.jquery,data);
 	if (node.length==0) // try the node itself
 		node = $(selector.jquery,data).addBack();
 	if (select.substring(0,2)=="..") // node itself
 		node = data;
 	if (node.length>0 || select.substring(0,1)=="."){
-		var nodeid = $(node).attr("id");
+		nodeid = $(node).attr("id");
 		targetid = UICom.structure.ui[nodeid].getUuid();
 		label = UICom.structure.ui[nodeid].getLabel(null,'none');
 	}
 	//-------------------
+	let text = "";
 	text = "<span id='"+nodeid+"' style='"+style+"' class='report-preview2unit "+cssclass+"'>"+label+"</span>&nbsp;";
-	text += "<span class='button fas fa-binoculars' onclick=\"getCurPos(this);previewPage('"+targetid+"',100,'standard',null,"+edit+") \" data-title='"+karutaStr[LANG]["preview"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
+	text += "<span class='button fas fa-binoculars' onclick=\"getCurPos(this);previewPage('"+targetid+"',100,'standard',null,"+edit+",null,'"+userrole+"') \" data-title='"+karutaStr[LANG]["preview"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
 	//-------------------
 	$("#"+destid).append($(text));
 	$("#"+nodeid).attr("style",style);

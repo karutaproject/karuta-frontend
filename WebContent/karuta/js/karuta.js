@@ -982,7 +982,7 @@ function getCurPos(htmlelt)
 }
 
 //==================================
-function previewPage(uuid,depth,type,langcode,edit,reload) 
+function previewPage(uuid,depth,type,langcode,edit,reload,role) 
 //==================================
 {
 	let original_edit = g_edit;
@@ -1022,8 +1022,8 @@ function previewPage(uuid,depth,type,langcode,edit,reload)
 		$("#preview-window-header-"+uuid).html(header);
 		$("#preview-window-body-"+uuid).html("");
 		let url = serverBCK_API+"/nodes/node/" + uuid + "?resources=true";
-		if (userrole!="")
-			url += "&userrole="+userrole;
+		if (role!=null && role!="")
+			url += "&userrole="+role;
 		$.ajax({
 			async:false,
 			type : "GET",

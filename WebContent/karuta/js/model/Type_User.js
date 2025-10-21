@@ -538,6 +538,7 @@ UIFactory["User"].prototype.getView = function(dest,type,lang,gid)
 	//--------------------------------------------------------------------------------------------
 	if (type=='user') {
 		html += "<tr class='user-row sort-tr'>"
+		html += "<td class='id'>"+this.id+"</td>";
 		html += "<td class='firstname'>"+this.firstname_node.text()+"</td>";
 		html += "<td class='lastname'>"+this.lastname_node.text()+"</td>";
 		html += "<td class='creator'>"+this.designer_node.text()+"/"+this.admin_node.text()+"/"+this.substitute_node.text()+"/"+this.sharer_node.text()+"</td>";

@@ -759,6 +759,9 @@
 		<xsl:variable name="semtag">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='semtag']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
+		<xsl:variable name="userrole">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='user-role']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
 		<xsl:variable name="editable">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='editable']/asmResource[@xsi_type='Get_Resource']/value"></xsl:value-of>
 		</xsl:variable>
@@ -769,6 +772,9 @@
 		<preview2unit>
 			<xsl:if test="not($editable='')">
 				<xsl:attribute name="editable"><xsl:value-of select="$editable"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not($userrole='')">
+				<xsl:attribute name="userrole"><xsl:value-of select="$userrole"/></xsl:attribute>
 			</xsl:if>
 			<xsl:if test="not($class='')">
 				<xsl:attribute name="class"><xsl:value-of select="$class"/></xsl:attribute>
