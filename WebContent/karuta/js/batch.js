@@ -763,19 +763,20 @@ function updateUserAttribute(data,attribute,value) {
 }
 
 //=================================================
-g_actions['update-userX'] = function updateUser(node)
+g_actions['update-user'] = function (node)
 //=================================================
 {
 	var ok = false;
 	var identifier = getTxtvals($("identifier",node));
-	var newlastname = getTxtvals($("lastname",node));
-	var newfirstname = getTxtvals($("firstname",node));
-	var newemail = getTxtvals($("email",node));
-	var newdesigner = getTxtvals($("designer",node));
-	var newsharer = getTxtvals($("sharer",node));
-	var newadmin = getTxtvals($("admin",node));
-	var newpassword = getTxtvals($("password",node));
-	var newother = getTxtvals($("other",node));
+	var lastname = getTxtvals($("lastname",node));
+	var firstname = getTxtvals($("firstname",node));
+	var email = getTxtvals($("email",node));
+	var designer = getTxtvals($("designer",node));
+	var sharer = getTxtvals($("sharer",node));
+	var password = getTxtvals($("password",node));
+	var other = getTxtvals($("other",node));
+	if (designer==undefined || designer=='')
+		designer ='0';
 	//---- get userid ----------
 	var userid = "";
 	var url = serverBCK_API+"/users/user/username/"+identifier;
@@ -787,93 +788,20 @@ g_actions['update-userX'] = function updateUser(node)
 		url : url,
 		success : function(data) {
 			userid = data;
-			var url = serverBCK_API+"/users/user/"+userid;
-			$.ajax({
-				async : false,
-				type : "GET",
-				contentType: "application/xml",
-				dataType : "xml",
-				url : url,
-				success : function(data) {
-					ok = true;
-					updateUserAttribute(data,"lastname",newlastname);
-					updateUserAttribute(data,"firstname",newfirstname);
-					updateUserAttribute(data,"email",newemail);
-					updateUserAttribute(data,"designer",newdesigner);
-					updateUserAttribute(data,"sharer",newsharer);
-					updateUserAttribute(data,"admin",newadmin);
-					updateUserAttribute(data,"password",newpassword);
-					updateUserAttribute(data,"other",newother);
-					var newdata = "<user>" + $(":root",data).html() + "</user>";
-					var strippeddata = newdata.replace(/xmlns=\"http:\/\/www.w3.org\/1999\/xhtml\"/g,"");  // remove xmlns attribute
-					var url = serverBCK_API+"/users/user/"+userid;
-					$.ajax({
-						async : false,
-						type : "PUT",
-						contentType: "application/xml; charset=UTF-8",
-						dataType : "text",
-						url : url,
-						data : strippeddata,
-						success : function(data) {
-							userid = data;
-							ok = true;
-							$("#batch-log").append("<br>- user updated("+userid+") - identifier:"+identifier);
-						},
-						error : function(data) {
-							$("#batch-log").append("<br>- ***<span class='danger'>ERROR 1</span> in update-user ("+userid+") - identifier:"+identifier);
-						}
-					});
-				},
-				error : function(data) {
-					$("#batch-log").append("<br>- ***<span class='danger'>ERROR 2</span> in update-user ("+userid+") - identifier:"+identifier);
-				}
-			});
-		},
-		error : function(data) {
-			$("#batch-log").append("<br>- ***<span class='danger'>ERROR 3</span> in update-user ("+userid+") - identifier:"+identifier);
-		}
-	});
-	if (!ok) g_batch_error.push("update-user");
-	return ok;
-};
-
-//=================================================
-g_actions['update-user'] = function updateUser(node)
-//=================================================
-{
-	var ok = false;
-	var identifier = getTxtvals($("identifier",node));
-	var newlastname = getTxtvals($("lastname",node));
-	var newfirstname = getTxtvals($("firstname",node));
-	var newemail = getTxtvals($("email",node));
-	var newdesigner = getTxtvals($("designer",node));
-	var newsharer = getTxtvals($("sharer",node));
-	var newadmin = getTxtvals($("admin",node));
-	var newpassword = getTxtvals($("password",node));
-	var newother = getTxtvals($("other",node));
-	if (identifier.startsWith("@"))
-		identifier = identifier.substring(1);
-	//---- get userid ----------
-	var url = serverBCK_API+"/users?username="+identifier;
-	$.ajax({
-		async : false,
-		type : "GET",
-		contentType: "application/xml",
-		dataType : "xml",
-		url : url,
-		success : function(data) {
-			const userid = $($("user",data)[0]).attr("id");
-			ok = true;
-			updateUserAttribute(data,"lastname",newlastname);
-			updateUserAttribute(data,"firstname",newfirstname);
-			updateUserAttribute(data,"email",newemail);
-			updateUserAttribute(data,"designer",newdesigner);
-			updateUserAttribute(data,"sharer",newsharer);
-			updateUserAttribute(data,"admin",newadmin);
-			updateUserAttribute(data,"password",newpassword);
-			updateUserAttribute(data,"other",newother);
-			var newdata = "<user id='"+userid+"'>" + $("user",data).html() + "</user>";
-			var strippeddata = newdata.replace(/xmlns=\"http:\/\/www.w3.org\/1999\/xhtml\"/g,"");  // remove xmlns attribute
+			var xml = "";
+			xml +="<?xml version='1.0' encoding='UTF-8'?>";
+			xml +="<user>";
+			xml +="	<username>"+identifier+"</username>";
+			xml +="	<lastname>"+lastname+"</lastname>";
+			xml +="	<firstname>"+firstname+"</firstname>";
+			xml +="	<email>"+email+"</email>";
+			xml +="	<password>"+password+"</password>"; 
+			xml +="	<active>1</active>";
+			xml +="	<other>"+other+"</other>";
+			xml +="	<admin>0</admin>";
+			xml +="	<designer>"+designer+"</designer>";
+			xml +="	<sharer>"+sharer+"</sharer>";
+			xml +="</user>";
 			var url = serverBCK_API+"/users/user/"+userid;
 			$.ajax({
 				async : false,
@@ -881,19 +809,18 @@ g_actions['update-user'] = function updateUser(node)
 				contentType: "application/xml; charset=UTF-8",
 				dataType : "text",
 				url : url,
-				data : strippeddata,
+				data : xml,
 				success : function(data) {
 					userid = data;
 					ok = true;
-					$("#batch-log").append("<br>- user updated("+userid+") - identifier:"+identifier);
+					$("#batch-log").append("<br>- user updated("+userid+") - identifier:"+identifier+" lastname:"+lastname+" firstname:"+firstname);
 				},
 				error : function(data) {
-					$("#batch-log").append("<br>- ***<span class='danger'>ERROR 1</span> in update-user ("+userid+") - identifier:"+identifier);
+					$("#batch-log").append("<br>- ***<span class='danger'>ERROR 1</span> in update-user ("+userid+") - identifier:"+identifier+" lastname:"+lastname+" firstname:"+firstname);					
 				}
 			});
-		},
+			},
 		error : function(data) {
-			$("#batch-log").append("<br>- ***<span class='danger'>ERROR 2</span> in update-user ("+userid+") - identifier:"+identifier);
 		}
 	});
 	if (!ok) g_batch_error.push("update-user");
@@ -4141,7 +4068,12 @@ g_actions['batch-variable'] = function (node,data)
 			text = UICom.structure.ui[nodeid].resource.getLabel();
 		}
 		else if (select=='resource utc') {
-				text = UICom.structure.ui[nodeid].getAttributes("utc");
+			const attributes = UICom.structure.ui[nodeid].resource.getAttributes();
+			text =attributes['utc'];
+			}
+		else if (select=='filename') {
+				const attributes = UICom.structure.ui[nodeid].resource.getAttributes();
+				text =attributes['filename'];
 			}
 		else if (select=='node label') {
 			text = UICom.structure.ui[nodeid].getLabel();

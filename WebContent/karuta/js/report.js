@@ -2055,29 +2055,32 @@ g_report_actions['node_resource'] = function (destid,action,no,data)
 					text = UICom.structure.ui[nodeid].structured_resource.getView("dashboard_node_resource"+nodeid,null,null,true);
 				}
 				
-			}
+			} else
 			if (selector.type=='resource code') {
 				text = UICom.structure.ui[nodeid].resource.getCode();
-			}
+			} else
 			if (selector.type=='resource utc') {
 				text = UICom.structure.ui[nodeid].resource.getAttributes()['utc'];
-			}
+			} else
+			if (selector.type=='filename') {
+				text = UICom.structure.ui[nodeid].resource.getAttributes()['filename'];
+			} else
 			if (selector.type=='resource value') {
 				text = UICom.structure.ui[nodeid].resource.getValue("dashboard_value_"+nodeid);
 				prefix_id += "value_";
-			}
+			} else
 			if (selector.type=='resource label') {
 				text = UICom.structure.ui[nodeid].resource.getLabel();
-			}
+			} else
 			if (selector.type=='node label') {
 				text = UICom.structure.ui[nodeid].getLabel();
-			}
+			} else
 			if (selector.type=='node point label') {
 				text = "<a href='#' data-toggle='tooltip' title=\""+UICom.structure.ui[nodeid].getLabel('none')+"\"><i class='fas fa-circle'></i></a>";
-			}
+			} else
 			if (selector.type=='node code') {
 				text = UICom.structure.ui[nodeid].getCode();
-			}
+			} else
 			if (selector.type=='loginfo') {
 				var lastmodified = UICom.structure.ui[nodeid].resource.lastmodified_node.text().toLocaleString();
 				var user = UICom.structure.ui[nodeid].resource.user_node.text();
@@ -2085,26 +2088,26 @@ g_report_actions['node_resource'] = function (destid,action,no,data)
 					text = lastmodified+" - user : "+user;
 					}
 				catch(error) {text="/"};
-			}
+			} else
 			if (selector.type=='resourcelastmodified') {
 				text = new Date(parseInt(UICom.structure.ui[nodeid].resource.lastmodified_node.text())).toLocaleString();
-			}
+			} else
 			if (selector.type=='nodelastmodified') {
 				text = new Date(parseInt(UICom.structure.ui[nodeid].lastmodified_node.text())).toLocaleString();
 			}
 			else if (selector.type=='submitteddate') {
 				text = UICom.structure.ui[nodeid].submitteddate;  //node.submitteddate
-			}
+			} else
 			if (selector.type=='node value') {
 				text = UICom.structure.ui[nodeid].getValue();
-			}
+			} else
 			if (selector.type=='uuid') {
 				text = nodeid;
-			}
+			} else
 			if (selector.type=='node context') {
 				text = UICom.structure.ui[nodeid].getContext("dashboard_context_"+nodeid);
 				prefix_id += "context_";
-			}
+			} else
 			if (ref!=undefined && ref!="") {
 				ref = replaceVariable(ref);
 				if (g_variables[ref]==undefined)
@@ -2383,44 +2386,55 @@ g_report_actions['variable'] = function (destid,action,no,data)
 					//----------------------------
 					var node = UICom.structure.ui[nodeid];
 					//----------------------------
-					if (selector.type=='resource') {
-						text = UICom.structure.ui[nodeid].resource.getView("dashboard_"+nodeid,null,null,true);
-					} else if (selector.type=='resource utc') {
-						text = UICom.structure.ui[nodeid].resource.getAttributes()['utc'];
-					} else if (selector.type=='resource code') {
-						text = UICom.structure.ui[nodeid].resource.getCode();
-					}
-					else if (selector.type=='resource value') {
-						text = UICom.structure.ui[nodeid].resource.getValue("dashboard_value_"+nodeid);
-						prefix_id += "value_";
-					}
-					else if (selector.type=='resource label') {
-						text = UICom.structure.ui[nodeid].resource.getLabel();
-					}
-					else if (selector.type=='node label') {
-						text = UICom.structure.ui[nodeid].getLabel();
-					}
-					else if (selector.type=='submitteddate') {
-						text = UICom.structure.ui[nodeid].submitteddate;  //node.submitteddate
-					}
-					else if (selector.type=='node code') {
-						text = UICom.structure.ui[nodeid].getCode();
-					}
-					else if (selector.type=='node value') {
-						text = UICom.structure.ui[nodeid].getValue();
-					}
-					else if (selector.type=='resourcelastmodified') {
-						text = new Date(parseInt(UICom.structure.ui[nodeid].resource.lastmodified_node.text())).toLocaleString();
-					}
-					else if (selector.type=='nodelastmodified') {
-						text = new Date(parseInt(UICom.structure.ui[nodeid].lastmodified_node.text())).toLocaleString();
-					}
-					else if (selector.type=='uuid') {
-						text = nodeid;
-					}
-					else if (selector.type=='node context') {
-						text = UICom.structure.ui[nodeid].getContext("dashboard_context_"+nodeid);
-						prefix_id += "context_";
+					if (select=='..username') { // -- userattributes
+						select= select.substring(2);
+						if (select=='userid')
+							text = data;
+						else
+							text = eval("Users_byid[data].attributes['"+select+"'].text()");
+					} else {
+						if (selector.type=='resource') {
+							text = UICom.structure.ui[nodeid].resource.getView("dashboard_"+nodeid,null,null,true);
+						} else if (selector.type=='resource utc') {
+							text = UICom.structure.ui[nodeid].resource.getAttributes()['utc'];
+						} else if (selector.type=='resource code') {
+							text = UICom.structure.ui[nodeid].resource.getCode();
+						}
+						else if (selector.type=='resource value') {
+							text = UICom.structure.ui[nodeid].resource.getValue("dashboard_value_"+nodeid);
+							prefix_id += "value_";
+						}
+						else if (selector.type=='resource label') {
+							text = UICom.structure.ui[nodeid].resource.getLabel();
+						}
+						else if (selector.type=='node label') {
+							text = UICom.structure.ui[nodeid].getLabel();
+						}
+						else if (selector.type=='filename') {
+							text =  UICom.structure.ui[nodeid].resource.getAttributes()['filename'];
+						}
+						else if (selector.type=='submitteddate') {
+							text = UICom.structure.ui[nodeid].submitteddate;  //node.submitteddate
+						}
+						else if (selector.type=='node code') {
+							text = UICom.structure.ui[nodeid].getCode();
+						}
+						else if (selector.type=='node value') {
+							text = UICom.structure.ui[nodeid].getValue();
+						}
+						else if (selector.type=='resourcelastmodified') {
+							text = new Date(parseInt(UICom.structure.ui[nodeid].resource.lastmodified_node.text())).toLocaleString();
+						}
+						else if (selector.type=='nodelastmodified') {
+							text = new Date(parseInt(UICom.structure.ui[nodeid].lastmodified_node.text())).toLocaleString();
+						}
+						else if (selector.type=='uuid') {
+							text = nodeid;
+						}
+						else if (selector.type=='node context') {
+							text = UICom.structure.ui[nodeid].getContext("dashboard_context_"+nodeid);
+							prefix_id += "context_";
+						}
 					}
 				}
 		} else {

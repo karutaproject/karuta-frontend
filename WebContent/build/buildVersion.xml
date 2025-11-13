@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="updateVersion" default="updateVersion" basedir="."> 
-	<property name="noVersion" value="3.91.0"/>
-	<property name="textVersion" value="FEAT - report - for-each-node userrole added and previewpage at cursor position"/>
+	<property name="noVersion" value="3.94.0"/>
+	<property name="textVersion" value="FEAT - Report\Batch - node resource can be filename"/>
 	<property name="dirSrce" value="src/htm-srce"/>
 	<property name="dirTrgt" value="WebContent/karuta/htm"/>
 	<target name="testIfNewVersion">

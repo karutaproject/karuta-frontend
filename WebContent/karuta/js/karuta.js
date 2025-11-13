@@ -726,8 +726,8 @@ function getURLParameter(sParam) {
 //==================================
 function displayBack() {
 //==================================
+	if (g_backstack.length==1 || g_backstack.length==0) return;
 	g_backstack.pop();
-	if (g_backstack.length==0) return;
 	let uuid = g_backstack[g_backstack.length-1].uuid
 	let portfolioid = g_backstack[g_backstack.length-1].portfolioid;
 	if (portfolioid!=g_portfolioid) {
