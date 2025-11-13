@@ -2,8 +2,8 @@
 var karuta_version = "@project.version@";
 var karuta_date = "@build.timestamp@";
 
-const karuta_version_eportfolium = 'eportfolium-3.94.0';
-const karuta_date_eportfolium = '2025-11-12';
+const karuta_version_eportfolium = 'eportfolium-3.95.0';
+const karuta_date_eportfolium = '2025-11-13';
 
 var karuta_backend_version = "?";
 var karuta_backend_date = "?";
@@ -114,3 +114,4 @@ var karuta_fileserver_date = "?";
 // 3.92.0 BUG - Back Arrow did not always retrun to the first page
 // 3.93.0 BUG - update-user needs password if not logged as root
 // 3.94.0 FEAT - Report\Batch - node resource can be filename
+// 3.95.0 BUG - Display of group of portfolios or users

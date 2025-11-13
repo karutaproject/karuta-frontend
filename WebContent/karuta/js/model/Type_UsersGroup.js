@@ -300,23 +300,23 @@ UIFactory["UsersGroup"].displayAll2 = function(type)
 			if (label.endsWith("_")) {
 				lbl[label] = j;
 				var html = "";
-				html += "<div><button id='b-"+j+"' class='tree-label usergroup-label' type='button' data-toggle='collapse' data-target='#collapse-"+j+"' aria-expanded='false' aria-controls='#collapse-"+j+"'>";
+				html += "<div><button id='b-"+j+"' class='tree-label usergroup-label' type='button' data-toggle='collapse' data-target='#u-collapse-"+j+"' aria-expanded='false' aria-controls='#u-collapse-"+j+"'>";
 				html += label.substring(0,label.length-1);
 				html += "</button></div>";		
-				html += " <div class='collapse' id='collapse-"+j+"'>";
+				html += " <div class='collapse' id='u-collapse-"+j+"'>";
 				html += "</div>";
 				const t = label.substring(0,label.lastIndexOf("_"));
 				const u = t.substring(0,t.lastIndexOf("_")+1);
 				no = lbl[u];
 				if (no !=undefined)					
-					$("#collapse-"+no).append($(html));
+					$("#u-collapse-"+no).append($(html));
 				else
 					$("#"+type+"-leftside-content1").append($(html));
 			} else {
 				if (label.indexOf("_")>-1) {
 					const t = label.substring(0,label.lastIndexOf("_")+1);
 					no = lbl[t];
-					usergroups_list[sorted_groups[j][1]].displayView("collapse-"+no,type);
+					usergroups_list[sorted_groups[j][1]].displayView("u-collapse-"+no,type);
 				} else {
 					usergroups_list[sorted_groups[j][1]].displayView(type+"-leftside-content1",type);
 					}
