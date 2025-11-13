@@ -273,7 +273,7 @@ UIFactory["UsersGroup"].displayAll = function(type)
 	}
 };
 
-//==================================
+//===================================
 UIFactory["UsersGroup"].displayAll2 = function(type)
 //==================================
 {
