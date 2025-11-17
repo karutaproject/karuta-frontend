@@ -2,8 +2,8 @@
 var karuta_version = "@project.version@";
 var karuta_date = "@build.timestamp@";
 
-const karuta_version_eportfolium = 'eportfolium-3.95.0';
-const karuta_date_eportfolium = '2025-11-13';
+const karuta_version_eportfolium = 'eportfolium-3.97.0';
+const karuta_date_eportfolium = '2025-11-17';
 
 var karuta_backend_version = "?";
 var karuta_backend_date = "?";
@@ -115,3 +115,5 @@ var karuta_fileserver_date = "?";
 // 3.93.0 BUG - update-user needs password if not logged as root
 // 3.94.0 FEAT - Report\Batch - node resource can be filename
 // 3.95.0 BUG - Display of group of portfolios or users
+// 3.96.0 FEAT - Designer/creator can update user in batch
+// 3.97.0 FEAT - Message for forgotten password has been changed.

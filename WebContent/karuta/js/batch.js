@@ -796,6 +796,7 @@ g_actions['update-user'] = function (node)
 			xml +="	<firstname>"+firstname+"</firstname>";
 			xml +="	<email>"+email+"</email>";
 			xml +="	<password>"+password+"</password>"; 
+			xml +="	<prevpass>"+USER.password+"</prevpass>"; 
 			xml +="	<active>1</active>";
 			xml +="	<other>"+other+"</other>";
 			xml +="	<admin>0</admin>";

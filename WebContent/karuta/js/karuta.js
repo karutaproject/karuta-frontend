@@ -2348,6 +2348,7 @@ function updateVariable(node)
 function logout()
 //==============================
 {
+	sessionStorage.setItem('pwd',"");
 	$.ajax({
 		async:false,
 		type: "GET",

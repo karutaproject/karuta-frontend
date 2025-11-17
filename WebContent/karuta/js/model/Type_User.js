@@ -40,8 +40,8 @@ UIFactory["User"] = function( node )
 	this.lastname = $("lastname",node).text();
 	this.username = $("username",node).text();
 	this.email = $("email",node).text();
-	this.password = localStorage.getItem('pwd');
-	localStorage.setItem('pwd',"");
+	this.password = sessionStorage.getItem('pwd');
+//	localStorage.setItem('pwd',"");
 	this.username_node = $("username",node);
 	this.firstname_node = $("firstname",node);
 	this.lastname_node = $("lastname",node);

@@ -28,7 +28,7 @@ function callSubmit(encrypt_url,lang)
 //==============================
 {
 	var data = "<credential><login>"+document.getElementById("useridentifier").value+"</login><password>"+document.getElementById("password").value+"</password></credential>";
-	localStorage.setItem('pwd',document.getElementById("password").value);
+	sessionStorage.setItem('pwd',document.getElementById("password").value);
 	$.ajax({
 		contentType: "application/xml",
 		type : "POST",

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="updateVersion" default="updateVersion" basedir="."> 
-	<property name="noVersion" value="3.95.0"/>
-	<property name="textVersion" value="BUG - Display of group of portfolios or users"/>
+	<property name="noVersion" value="3.97.0"/>
+	<property name="textVersion" value="FEAT - Message for forgotten password has been changed."/>
 	<property name="dirSrce" value="src/htm-srce"/>
 	<property name="dirTrgt" value="WebContent/karuta/htm"/>
 	<target name="testIfNewVersion">
