@@ -121,7 +121,7 @@ UIFactory["UsersGroup"].loadAndDisplayAll = function (type)
 		data: "",
 		success : function(data) {
 			UIFactory.UsersGroup.parse(data);
-			UIFactory.UsersGroup.displayAll(type);
+			UIFactory.UsersGroup.displayAll2(type);
 			$("#wait-window").modal('hide');
 		},
 		error : function(jqxhr,textStatus) {
@@ -221,8 +221,8 @@ UIFactory["UsersGroup"].prototype.loadContent = function (type)
 							UIFactory.User.parse_add(data);
 						},
 						error : function() {
-							if (confirm(karutaStr[LANG]['error-usergroup-user-not-exits1'] + this.userid + karutaStr[LANG]['error-usergroup-user-not-exits2']))
-								UIFactory.UsersGroup.remove(this.groupid,this.userid)
+//							if (confirm(karutaStr[LANG]['error-usergroup-user-not-exits1'] + this.userid + karutaStr[LANG]['error-usergroup-user-not-exits2']))
+								UIFactory.UsersGroup.remove(this.groupid,this.userid);
 						}
 					});
 				}
@@ -272,6 +272,61 @@ UIFactory["UsersGroup"].displayAll = function(type)
 		usergroups_list[i].displayView(type+"-leftside-content1",type);
 	}
 };
+
+//===================================
+UIFactory["UsersGroup"].displayAll2 = function(type)
+//==================================
+{
+	$("#"+type+"-leftside-content1").html("");
+	var group_labels = [];
+	for ( let i = 0; i < usergroups_list.length; i++) {
+		usergroups_list[i].loadNumberOfUsers();
+		let label = usergroups_list[i].code;
+		let prefix = "";
+		while (label.indexOf("_")>-1){
+			group_labels.push([prefix+label.substring(0,label.indexOf("_")+1),i]);
+			prefix = label.substring(0,label.indexOf("_")+1)
+		label = label.substring(label.indexOf("_")+1);
+		}
+		group_labels.push([usergroups_list[i].code,i]);
+	}
+	var sorted_groups = group_labels.sort(sortOn1);
+	let prevlabel = "";
+	let lbl = {};
+	let no = 0;
+	for (let j=0; j<sorted_groups.length; j++) {
+		const label = sorted_groups[j][0];
+		if (label != prevlabel) {
+			if (label.endsWith("_")) {
+				lbl[label] = j;
+				var html = "";
+				html += "<div><button id='b-"+j+"' class='tree-label usergroup-label' type='button' data-toggle='collapse' data-target='#u-collapse-"+j+"' aria-expanded='false' aria-controls='#u-collapse-"+j+"'>";
+				html += label.substring(0,label.length-1);
+				html += "</button></div>";		
+				html += " <div class='collapse' id='u-collapse-"+j+"'>";
+				html += "</div>";
+				const t = label.substring(0,label.lastIndexOf("_"));
+				const u = t.substring(0,t.lastIndexOf("_")+1);
+				no = lbl[u];
+				if (no !=undefined)					
+					$("#u-collapse-"+no).append($(html));
+				else
+					$("#"+type+"-leftside-content1").append($(html));
+			} else {
+				if (label.indexOf("_")>-1) {
+					const t = label.substring(0,label.lastIndexOf("_")+1);
+					no = lbl[t];
+					usergroups_list[sorted_groups[j][1]].displayView("u-collapse-"+no,type);
+				} else {
+					usergroups_list[sorted_groups[j][1]].displayView(type+"-leftside-content1",type);
+					}
+			}
+			prevlabel = label;
+		} else {
+		}
+	}
+};
+
 
 //==================================
 UIFactory["UsersGroup"].prototype.displayView = function(dest,type)
@@ -642,3 +697,33 @@ UIFactory["UsersGroup"].toggleUsersList = function(gid,destid,checked)
 		$("#"+destid).hide();
 	}
 };
+
+//--------------------------------------------------------------
+//--------------------------------------------------------------
+//------------------------ UTILITIES ---------------------------
+//--------------------------------------------------------------
+//--------------------------------------------------------------
+
+//==================================
+UIFactory["UsersGroup"].getIdByLabel = function(label)
+//==================================
+{
+	let result = "";
+	$.ajax({
+		async:false,
+		type : "GET",
+		dataType : "xml",
+		url : serverBCK_API+"/usersgroups",
+		success : function(data) {
+			UIFactory.UsersGroup.parse(data);
+			label = replaceVariable(label);
+			for ( let i = 0; i < usergroups_list.length; i++) {
+				if ($(usergroups_list[i].attributes["label"]).text() == label){
+					result = usergroups_list[i].id;
+					break;
+				}
+			}
+		}
+	});
+	return result;
+}

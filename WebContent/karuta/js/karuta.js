@@ -51,6 +51,7 @@ var g_Get_Portfolio_caches = {};
 var g_wysihtml5_autosave = 60000; // 60 seconds
 var g_portfolio_current = ""; // XML jQuery Object - must be set after loading xml
 var g_portfolio_rootid = "";
+var g_portfolio_UIcom_root = "";
 var g_toggle_sidebar = [];
 var g_current_page = "";
 var g_nb_trees = 0;
@@ -60,6 +61,7 @@ var g_variables = {}; // variables for substitution in Get_resource and menus
 var g_importednodestack = [];
 var g_backstack = [];
 var g_menubarstack = [];
+var g_curPos = 0;
 
 //-------------- used for designer-----
 var redisplays = {};
@@ -262,7 +264,7 @@ function getNavBar(type,portfolioid,edit)
 		html += "	</li>";
 		if (USER.username.indexOf("karuser")<0) {
 			//-----------------USERNAME-----------------------------------------
-			if ( (cas_url=="" && typeof openid_url !=="undefined" && openid_url=="") || USER.admin) {
+			if ( (cas_url=="" && typeof openid_url =="undefined" || (typeof openid_url !=="undefined" && openid_url=="")) || USER.admin) {
 				html += "	<li class='nav-item dropdown'>";
 				html += "		<a class='nav-link dropdown-toggle' href='#' id='userDropdown' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'  data-title='"+karutaStr[LANG]["button-change-password"]+"' data-toggle='tooltip' data-placement='bottom'>";
 				html += "			<i class='fas fa-user'></i>&nbsp;&nbsp;"+USER.firstname+" "+USER.lastname;
@@ -724,8 +726,8 @@ function getURLParameter(sParam) {
 //==================================
 function displayBack() {
 //==================================
+	if (g_backstack.length==1 || g_backstack.length==0) return;
 	g_backstack.pop();
-	if (g_backstack.length==0) return;
 	let uuid = g_backstack[g_backstack.length-1].uuid
 	let portfolioid = g_backstack[g_backstack.length-1].portfolioid;
 	if (portfolioid!=g_portfolioid) {
@@ -814,8 +816,8 @@ function displayBack() {
 //==================================
 function displayPage(uuid,depth,type,langcode,edit,print) {
 //==================================
-	let original_edit = g_edit;
-	g_edit = edit;
+	if (edit!=undefined)
+		g_edit = edit;
 	//---------------------
 	if (g_backstack.length>0 && g_backstack[g_backstack.length-1].uuid!=uuid)
 		g_backstack.push({'uuid':uuid,'portfolioid': g_portfolioid});
@@ -972,9 +974,15 @@ function reloadPage() {
 	UIFactory.Node.reloadUnit();
 }
 
+//==================================
+function getCurPos(htmlelt) 
+//==================================
+{
+	g_curPos = htmlelt.getBoundingClientRect();
+}
 
 //==================================
-function previewPage(uuid,depth,type,langcode,edit,reload) 
+function previewPage(uuid,depth,type,langcode,edit,reload,role) 
 //==================================
 {
 	let original_edit = g_edit;
@@ -1003,8 +1011,9 @@ function previewPage(uuid,depth,type,langcode,edit,reload)
 		previewwindow.setAttribute("class", "preview-window");
 		previewwindow.setAttribute("preview-uuid", uuid);
 		previewwindow.setAttribute("preview-edit", edit);
-		previewwindow.innerHTML =  previewBox(uuid);
+		previewwindow.innerHTML = previewBox(uuid);
 		$('body').append(previewwindow);
+		previewwindow.style.top = (g_curPos.top+window.scrollY-30)+"px";
 		$("#preview-"+uuid).hide();
 		var header = "<button class='btn add-button' style='float:right' onclick=\"$('#preview-"+uuid+"').remove();$('#previewbackdrop-"+uuid+"').remove();";
 		if (reload!=null && reload)
@@ -1013,6 +1022,8 @@ function previewPage(uuid,depth,type,langcode,edit,reload)
 		$("#preview-window-header-"+uuid).html(header);
 		$("#preview-window-body-"+uuid).html("");
 		let url = serverBCK_API+"/nodes/node/" + uuid + "?resources=true";
+		if (role!=null && role!="")
+			url += "&userrole="+role;
 		$.ajax({
 			async:false,
 			type : "GET",
@@ -1029,7 +1040,7 @@ function previewPage(uuid,depth,type,langcode,edit,reload)
 				g_report_edit = g_edit;
 				$("#preview-"+uuid).show();
 				$("#previewbackdrop-"+uuid).show();
-				window.scrollTo(0,0);
+//				window.scrollTo(0,0);
 			},
 			error : function() {
 				var html = "";
@@ -1037,7 +1048,7 @@ function previewPage(uuid,depth,type,langcode,edit,reload)
 				$("#preview-window-body-"+uuid).html(html);
 				$("#previewbackdrop-"+uuid).show();
 				$("#preview-"+uuid).show();
-				window.scrollTo(0,0);
+//				window.scrollTo(0,0);
 			}
 		});
 	}
@@ -2337,6 +2348,7 @@ function updateVariable(node)
 function logout()
 //==============================
 {
+	sessionStorage.setItem('pwd',"");
 	$.ajax({
 		async:false,
 		type: "GET",
@@ -2501,8 +2513,8 @@ function toggleMode()
 		$("#toggle-mode-icon").removeClass('fas fa-toggle-off').addClass('fas fa-toggle-on');
 	}
 //	UIFactory.Portfolio.displaySidebar(UICom.root,'sidebar','standard',LANGCODE,g_edit,g_portfolio_rootid);
-	var uuid = $("#page").attr('uuid');
-	$("#sidebar_"+uuid).click();
+//	var uuid = $("#page").attr('uuid');
+//	$("#sidebar_"+uuid).click();
 }
 
 //==============================

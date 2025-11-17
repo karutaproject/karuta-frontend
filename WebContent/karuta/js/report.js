@@ -697,6 +697,7 @@ g_report_actions['for-each-node'] = function (destid,action,no,data)
 {
 	var select = $(action).attr("select");
 	var test = $(action).attr("test");
+	var user_role = replaceVariable($(action).attr("user-role"));
 	var countvar = replaceVariable($(action).attr("countvar"));
 	if (countvar!=undefined)
 		g_variables[countvar] = 0;
@@ -711,11 +712,18 @@ g_report_actions['for-each-node'] = function (destid,action,no,data)
 		//----------------------------------
 		if (portfoliocode!=undefined) {
 			portfoliocode = replaceVariable(portfoliocode);
+			const portfolioid = UIFactory.Portfolio.getid_bycode(portfoliocode);
+			let url = serverBCK_API+"/portfolios/portfolio/" + portfolioid + "?resources=true";
+			if (user_role!=""){
+				url += "&userrole="+user_role;
+				g_userroles[g_userroles.length] = user_role;
+				userrole = user_role;
+			}
 			$.ajax({
 				async:false,
 				type : "GET",
 				dataType : "xml",
-				url : serverBCK_API+"/portfolios/portfolio/code/" + portfoliocode +"?resources=true",
+				url : url,
 				success : function(data_portfolio) {
 					if (report_not_in_a_portfolio){
 						UICom.structure.tree = {};
@@ -1089,7 +1097,7 @@ g_report_actions['for-each-usergroup'] = function (destid,action,no,data)
 //==================================
 {
 	const countvar = $(action).attr("countvar");
-	let select = $(action).attr("select");
+	let select = replaceVariable($(action).attr("select"));
 	$.ajax({
 		async:false,
 		type : "GET",
@@ -1152,7 +1160,7 @@ g_report_actions['for-each-portfoliogroup'] = function (destid,action,no,data)
 //==================================
 {
 	const countvar = $(action).attr("countvar");
-	let select = $(action).attr("select");
+	let select = replaceVariable($(action).attr("select"));
 	$.ajax({
 		async:false,
 		type : "GET",
@@ -1441,6 +1449,7 @@ g_report_actions['for-each-portfolio'] = function (destid,action,no,data)
 	var searchvalue = "";
 	var select = $(action).attr("select");
 	select = replaceVariable(select);
+	var user_role = replaceVariable($(action).attr("user-role"));
 	var test = $(action).attr("test");
  	if (test!=undefined)
  		test = replaceVariable(test);
@@ -1457,34 +1466,112 @@ g_report_actions['for-each-portfolio'] = function (destid,action,no,data)
 		const groupid = data;
 		portfoliogroups_byid[groupid].loadContent();
 		let j = 0;
-		for (uuid in portfoliogroups_byid[groupid].children){
-			let portfolioid = portfolios_byid[uuid].id;
-			//------------------------------------
-			if (countvar!=undefined)
-				g_variables[countvar] = j;
-			initVariables(action);
-			//------------------------------------
-			portfolioid_current = portfolioid;
-			$.ajax({
-				async:false,
-				type : "GET",
-				dataType : "xml",
-				j : j,
-				url : serverBCK_API+"/portfolios/portfolio/" + portfolioid + "?resources=true",
-				success : function(data) {
-					if (report_not_in_a_portfolio){
-						UICom.structure.tree = {};
-						UICom.structure.ui = {};
+		//----------- optional sort -----------------------
+		var sortag = $(action).attr("sortag");
+		if (sortag!=""){
+			var sortelt = $(action).attr("sortelt");
+			var tableau = new Array();
+			var sortvalue = "";
+			for (uuid in portfoliogroups_byid[groupid].children){
+				let portfolioid = portfolios_byid[uuid].id;
+				let code = UIFactory.Portfolio.getCodeLabel_byid(portfolioid).code;
+				$.ajax({
+					async:false,
+					type : "GET",
+					dataType : "xml",
+					url : serverBCK_API+"/nodes?portfoliocode=" + code + "&semtag="+sortag,
+					success : function(data) {
+						var text = ";"
+						if (sortelt=='resource code') {
+							sortvalue = $("code",data)[0].text();
+						}
+						if (sortelt=='value') {
+							sortvalue = $("value",data)[0].text();
+						}
+						if (sortelt=='node label') {
+							sortvalue = $("label[lang='"+languages[LANGCODE]+"']",data)[0].text();
+						}
+						if (sortelt=='resource') {
+							sortvalue = $("text[lang='"+languages[LANGCODE]+"']",$("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",data)).text();
+						}
+						tableau[tableau.length] = [sortvalue,portfolioid];
 					}
-					UICom.parseStructure(data,true, null, null,true);
-					var actions = $(action).children();
-					for (let i=0; i<actions.length;i++){
-						var tagname = $(actions[i])[0].tagName;
-						g_report_actions[tagname](destid,actions[i],no+'-'+this.j.toString()+i.toString(),data);
-					};
+				});
+			//------------------------------------
+			}
+			var newTableau = tableau.sort(sortOn1);
+			for ( let i = 0; i < newTableau.length; i++) {
+				let portfolioid = newTableau[i][1];
+				//------------------------------------
+				if (countvar!=undefined)
+					g_variables[countvar] = j;
+				initVariables(action);
+				//------------------------------------
+				portfolioid_current = portfolioid;
+				let url = serverBCK_API+"/portfolios/portfolio/" + portfolioid + "?resources=true";
+				if (user_role!=""){
+					url += "&userrole="+user_role;
+					g_userroles[2] = user_role;
+					userrole = user_role;
 				}
-			});
-			j++;
+				$.ajax({
+					async:false,
+					type : "GET",
+					dataType : "xml",
+					j : j,
+					url : url,
+					success : function(data) {
+						if (report_not_in_a_portfolio){
+							UICom.structure.tree = {};
+							UICom.structure.ui = {};
+						}
+						UICom.parseStructure(data,true, null, null,true);
+						var actions = $(action).children();
+						for (let i=0; i<actions.length;i++){
+							var tagname = $(actions[i])[0].tagName;
+							g_report_actions[tagname](destid,actions[i],no+'-'+this.j.toString()+i.toString(),data);
+						};
+					}
+				});
+				j++;
+			}
+		//-------------------------------
+		} else {
+			for (uuid in portfoliogroups_byid[groupid].children){
+				let portfolioid = portfolios_byid[uuid].id;
+				//------------------------------------
+				if (countvar!=undefined)
+					g_variables[countvar] = j;
+				initVariables(action);
+				//------------------------------------
+				portfolioid_current = portfolioid;
+				let url = serverBCK_API+"/portfolios/portfolio/" + portfolioid + "?resources=true";
+				if (user_role!=""){
+					url += "&userrole="+user_role;
+					g_userroles[2] = user_role;
+					userrole = user_role;
+				}
+				$.ajax({
+					async:false,
+					type : "GET",
+					dataType : "xml",
+					j : j,
+					url : url,
+					success : function(data) {
+						if (report_not_in_a_portfolio){
+							UICom.structure.tree = {};
+							UICom.structure.ui = {};
+						}
+						UICom.parseStructure(data,true, null, null,true);
+						var actions = $(action).children();
+						for (let i=0; i<actions.length;i++){
+							var tagname = $(actions[i])[0].tagName;
+							g_report_actions[tagname](destid,actions[i],no+'-'+this.j.toString()+i.toString(),data);
+						};
+					}
+				});
+				j++;
+			}
 		}
 	} else {
 		//----------------
@@ -1619,16 +1706,22 @@ g_report_actions['for-each-portfolio'] = function (destid,action,no,data)
 						condition = eval(toeval);
 					}
 					//------------------------------------
-					if (condition){
+					if (condition || user_role!=""){
 						portfolioid = items_list[j].id;
 						portfolioid_current = portfolioid;
 						if (load) {
+							let url = serverBCK_API+"/portfolios/portfolio/" + portfolioid + "?resources=true";
+							if (user_role!=""){
+								url += "&userrole="+user_role;
+								g_userroles[2] = user_role;
+								userrole = user_role;
+							}
 							$.ajax({
 								async:false,
 								type : "GET",
 								dataType : "xml",
 								j : j,
-								url : serverBCK_API+"/portfolios/portfolio/" + portfolioid + "?resources=true",
+								url : url,
 								success : function(data) {
 									if (report_not_in_a_portfolio){
 										UICom.structure.tree = {};
@@ -1667,6 +1760,7 @@ g_report_actions['for-each-portfolio-js'] = function (destid,action,no,data)
 	const NOELT = g_variables["NOELT"];
 	var countvar = $(action).attr("countvar");
 	var portfoliovar = $(action).attr("portfoliovar");
+	var user_role = replaceVariable($(action).attr("user-role"));
 	var select = $(action).attr("select");
 	select = replaceVariable(select);
 	var portfolioids = eval(select); // return array of portfolioids
@@ -1694,13 +1788,19 @@ g_report_actions['for-each-portfolio-js'] = function (destid,action,no,data)
 			g_variables[portfoliovar] = portfolioid;
 		}
 		portfolioid_current = portfolioid;
+		let url = serverBCK_API+"/portfolios/portfolio/" + portfolioid + "?resources=true";
+		if (user_role!=""){
+			url += "&userrole="+user_role;
+			g_userroles[2] = user_role;
+			userrole = user_role;
+		}
 		if (load) {
 			$.ajax({
 				async:false,
 				type : "GET",
 				dataType : "xml",
 				j : j,
-				url : serverBCK_API+"/portfolios/portfolio/" + portfolioid + "?resources=true",
+				url : url,
 				success : function(data) {
 					if (report_not_in_a_portfolio){
 						UICom.structure.tree = {};
@@ -1955,29 +2055,32 @@ g_report_actions['node_resource'] = function (destid,action,no,data)
 					text = UICom.structure.ui[nodeid].structured_resource.getView("dashboard_node_resource"+nodeid,null,null,true);
 				}
 				
-			}
+			} else
 			if (selector.type=='resource code') {
 				text = UICom.structure.ui[nodeid].resource.getCode();
-			}
+			} else
 			if (selector.type=='resource utc') {
 				text = UICom.structure.ui[nodeid].resource.getAttributes()['utc'];
-			}
+			} else
+			if (selector.type=='filename') {
+				text = UICom.structure.ui[nodeid].resource.getAttributes()['filename'];
+			} else
 			if (selector.type=='resource value') {
 				text = UICom.structure.ui[nodeid].resource.getValue("dashboard_value_"+nodeid);
 				prefix_id += "value_";
-			}
+			} else
 			if (selector.type=='resource label') {
 				text = UICom.structure.ui[nodeid].resource.getLabel();
-			}
+			} else
 			if (selector.type=='node label') {
 				text = UICom.structure.ui[nodeid].getLabel();
-			}
+			} else
 			if (selector.type=='node point label') {
 				text = "<a href='#' data-toggle='tooltip' title=\""+UICom.structure.ui[nodeid].getLabel('none')+"\"><i class='fas fa-circle'></i></a>";
-			}
+			} else
 			if (selector.type=='node code') {
 				text = UICom.structure.ui[nodeid].getCode();
-			}
+			} else
 			if (selector.type=='loginfo') {
 				var lastmodified = UICom.structure.ui[nodeid].resource.lastmodified_node.text().toLocaleString();
 				var user = UICom.structure.ui[nodeid].resource.user_node.text();
@@ -1985,26 +2088,26 @@ g_report_actions['node_resource'] = function (destid,action,no,data)
 					text = lastmodified+" - user : "+user;
 					}
 				catch(error) {text="/"};
-			}
+			} else
 			if (selector.type=='resourcelastmodified') {
 				text = new Date(parseInt(UICom.structure.ui[nodeid].resource.lastmodified_node.text())).toLocaleString();
-			}
+			} else
 			if (selector.type=='nodelastmodified') {
 				text = new Date(parseInt(UICom.structure.ui[nodeid].lastmodified_node.text())).toLocaleString();
 			}
 			else if (selector.type=='submitteddate') {
 				text = UICom.structure.ui[nodeid].submitteddate;  //node.submitteddate
-			}
+			} else
 			if (selector.type=='node value') {
 				text = UICom.structure.ui[nodeid].getValue();
-			}
+			} else
 			if (selector.type=='uuid') {
 				text = nodeid;
-			}
+			} else
 			if (selector.type=='node context') {
 				text = UICom.structure.ui[nodeid].getContext("dashboard_context_"+nodeid);
 				prefix_id += "context_";
-			}
+			} else
 			if (ref!=undefined && ref!="") {
 				ref = replaceVariable(ref);
 				if (g_variables[ref]==undefined)
@@ -2199,6 +2302,8 @@ g_report_actions['variable'] = function (destid,action,no,data)
 						sum += parseFloat(g_variables[select][i]);
 				}
 				text = sum;
+				if (text.toString().indexOf(".")>-1)
+					text = text.toFixed(2);
 			}
 			if (aggregatetype=="max" && g_variables[select]!=undefined){
 				text = Math.max(...g_variables[select]);
@@ -2213,8 +2318,7 @@ g_report_actions['variable'] = function (destid,action,no,data)
 				}
 				text = sum/g_variables[select].length;
 				if (text.toString().indexOf(".")>-1)
-					text = text.toFixed(2);
-				
+					text = text.toFixed(2);			
 			}
 			if (!$.isNumeric(text))
 				text="";
@@ -2282,44 +2386,55 @@ g_report_actions['variable'] = function (destid,action,no,data)
 					//----------------------------
 					var node = UICom.structure.ui[nodeid];
 					//----------------------------
-					if (selector.type=='resource') {
-						text = UICom.structure.ui[nodeid].resource.getView("dashboard_"+nodeid,null,null,true);
-					} else if (selector.type=='resource utc') {
-						text = UICom.structure.ui[nodeid].resource.getAttributes()['utc'];
-					} else if (selector.type=='resource code') {
-						text = UICom.structure.ui[nodeid].resource.getCode();
-					}
-					else if (selector.type=='resource value') {
-						text = UICom.structure.ui[nodeid].resource.getValue("dashboard_value_"+nodeid);
-						prefix_id += "value_";
-					}
-					else if (selector.type=='resource label') {
-						text = UICom.structure.ui[nodeid].resource.getLabel();
-					}
-					else if (selector.type=='node label') {
-						text = UICom.structure.ui[nodeid].getLabel();
-					}
-					else if (selector.type=='submitteddate') {
-						text = UICom.structure.ui[nodeid].submitteddate;  //node.submitteddate
-					}
-					else if (selector.type=='node code') {
-						text = UICom.structure.ui[nodeid].getCode();
-					}
-					else if (selector.type=='node value') {
-						text = UICom.structure.ui[nodeid].getValue();
-					}
-					else if (selector.type=='resourcelastmodified') {
-						text = new Date(parseInt(UICom.structure.ui[nodeid].resource.lastmodified_node.text())).toLocaleString();
-					}
-					else if (selector.type=='nodelastmodified') {
-						text = new Date(parseInt(UICom.structure.ui[nodeid].lastmodified_node.text())).toLocaleString();
-					}
-					else if (selector.type=='uuid') {
-						text = nodeid;
-					}
-					else if (selector.type=='node context') {
-						text = UICom.structure.ui[nodeid].getContext("dashboard_context_"+nodeid);
-						prefix_id += "context_";
+					if (select=='..username') { // -- userattributes
+						select= select.substring(2);
+						if (select=='userid')
+							text = data;
+						else
+							text = eval("Users_byid[data].attributes['"+select+"'].text()");
+					} else {
+						if (selector.type=='resource') {
+							text = UICom.structure.ui[nodeid].resource.getView("dashboard_"+nodeid,null,null,true);
+						} else if (selector.type=='resource utc') {
+							text = UICom.structure.ui[nodeid].resource.getAttributes()['utc'];
+						} else if (selector.type=='resource code') {
+							text = UICom.structure.ui[nodeid].resource.getCode();
+						}
+						else if (selector.type=='resource value') {
+							text = UICom.structure.ui[nodeid].resource.getValue("dashboard_value_"+nodeid);
+							prefix_id += "value_";
+						}
+						else if (selector.type=='resource label') {
+							text = UICom.structure.ui[nodeid].resource.getLabel();
+						}
+						else if (selector.type=='node label') {
+							text = UICom.structure.ui[nodeid].getLabel();
+						}
+						else if (selector.type=='filename') {
+							text =  UICom.structure.ui[nodeid].resource.getAttributes()['filename'];
+						}
+						else if (selector.type=='submitteddate') {
+							text = UICom.structure.ui[nodeid].submitteddate;  //node.submitteddate
+						}
+						else if (selector.type=='node code') {
+							text = UICom.structure.ui[nodeid].getCode();
+						}
+						else if (selector.type=='node value') {
+							text = UICom.structure.ui[nodeid].getValue();
+						}
+						else if (selector.type=='resourcelastmodified') {
+							text = new Date(parseInt(UICom.structure.ui[nodeid].resource.lastmodified_node.text())).toLocaleString();
+						}
+						else if (selector.type=='nodelastmodified') {
+							text = new Date(parseInt(UICom.structure.ui[nodeid].lastmodified_node.text())).toLocaleString();
+						}
+						else if (selector.type=='uuid') {
+							text = nodeid;
+						}
+						else if (selector.type=='node context') {
+							text = UICom.structure.ui[nodeid].getContext("dashboard_context_"+nodeid);
+							prefix_id += "context_";
+						}
 					}
 				}
 		} else {
@@ -2571,29 +2686,29 @@ g_report_actions['jsfunction'] = function (destid,action,no,data)
 g_report_actions['preview2unit'] = function (destid,action,no,data)
 //==================================
 {
-	var nodeid = $(data).attr("id");
-	var targetid = "";
-	var text = "";
-	var style = replaceVariable($(action).attr("style"));
-	var cssclass = replaceVariable($(action).attr("class"));
-	var editable = replaceVariable($(action).attr("editable"));
-	var edit = (editable=='1')? true:false;
-	var select = $(action).attr("select");
-	select = replaceVariable(select);
-	var selector = r_getSelector(select);
-	var node = $(selector.jquery,data);
+	let targetid = "";
+	let nodeid = $(data).attr("id");
+	const userrole = replaceVariable($(action).attr("userrole"));
+	const style = replaceVariable($(action).attr("style"));
+	const cssclass = replaceVariable($(action).attr("class"));
+	const editable = replaceVariable($(action).attr("editable"));
+	const edit = (editable=='1')? true:false;
+	const select = replaceVariable($(action).attr("select"));
+	const selector = r_getSelector(select);
+	let node = $(selector.jquery,data);
 	if (node.length==0) // try the node itself
 		node = $(selector.jquery,data).addBack();
 	if (select.substring(0,2)=="..") // node itself
 		node = data;
 	if (node.length>0 || select.substring(0,1)=="."){
-		var nodeid = $(node).attr("id");
+		nodeid = $(node).attr("id");
 		targetid = UICom.structure.ui[nodeid].getUuid();
 		label = UICom.structure.ui[nodeid].getLabel(null,'none');
 	}
 	//-------------------
+	let text = "";
 	text = "<span id='"+nodeid+"' style='"+style+"' class='report-preview2unit "+cssclass+"'>"+label+"</span>&nbsp;";
-	text += "<span class='button fas fa-binoculars' onclick=\"previewPage('"+targetid+"',100,'standard',null,"+edit+") \" data-title='"+karutaStr[LANG]["preview"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
+	text += "<span class='button fas fa-binoculars' onclick=\"getCurPos(this);previewPage('"+targetid+"',100,'standard',null,"+edit+",null,'"+userrole+"') \" data-title='"+karutaStr[LANG]["preview"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
 	//-------------------
 	$("#"+destid).append($(text));
 	$("#"+nodeid).attr("style",style);
@@ -2751,6 +2866,8 @@ g_report_actions['aggregate'] = function (destid,action,no,data)
 				sum += parseFloat(g_variables[select][i]);
 		}
 		text = sum;
+	if (text.toString().indexOf(".")>-1)
+		text = text.toFixed(2);
 	}
 	if (type=="avg" && g_variables[select]!=undefined){
 		var sum = 0;

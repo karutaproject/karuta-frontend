@@ -377,7 +377,7 @@ UIFactory["Node"].getMenus = function(node,langcode)
 	//------------- specific menu ---------------
 	var no_monomenu = 0;
 	try {
-		if ((g_menuinreport || node.depth>0 || node.asmtype == 'asmUnitStructure' || node.asmtype == 'asmContext') && replaceVariable(node.menuroles) != undefined && replaceVariable(node.menuroles).length>10 && (replaceVariable(node.menuroles).indexOf(node.userrole)>-1 || node.menuroles.indexOf($(USER.username_node).text())>-1 || (replaceVariable(node.menuroles).containsArrayElt(g_userroles) && replaceVariable(node.menuroles).indexOf("designer")<0) || USER.admin || g_userroles[0]=='designer') ){
+		if ((g_menuinreport || node.depth>0 || node.asmtype == 'asmUnitStructure' || node.asmtype == 'asmContext') && replaceVariable(node.menuroles) != undefined && replaceVariable(node.menuroles).length>10 && (replaceVariable(node.menuroles).indexOf(node.userrole)>-1 || node.menuroles.indexOf('all')>-1 || node.menuroles.indexOf($(USER.username_node).text())>-1 || (replaceVariable(node.menuroles).containsArrayElt(g_userroles) && replaceVariable(node.menuroles).indexOf("designer")<0) || USER.admin || g_userroles[0]=='designer') ){
 			//--------------------------------
 			if (node.menuroles.charAt(0)!="<") {  //old menus ============================================================================================================
 				var mlabels = [];
@@ -1217,7 +1217,7 @@ UIFactory["Node"].testDisplay = function(node,roles,condition)
 	var display = false;
 	condition = replaceVariable(condition,node);
 	condition = condition.replaceAll("++","&&");
-	if (roles.indexOf(node.userrole)>-1 || roles.indexOf($(USER.username_node).text())>-1 || (roles.containsArrayElt(g_userroles) && g_userroles[0]!='designer') || USER.admin || g_userroles[0]=='designer'){
+	if (roles.indexOf('all')>-1 || roles.indexOf(node.userrole)>-1 || roles.indexOf($(USER.username_node).text())>-1 || (roles.containsArrayElt(g_userroles) && g_userroles[0]!='designer') || USER.admin || g_userroles[0]=='designer'){
 		if (condition==""){
 			display = true;
 		}

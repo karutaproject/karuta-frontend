@@ -155,10 +155,6 @@ UIFactory["Image"].prototype.getAttributes = function(type,langcode)
 	if (langcode==null)
 		langcode = LANGCODE;
 	//---------------------
-	if (dest!=null) {
-		this.display[dest]=langcode;
-	}
-	//---------------------
 	if (type==null)
 		type = 'default';
 	//---------------------

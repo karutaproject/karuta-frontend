@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="updateVersion" default="updateVersion" basedir="."> 
-	<property name="noVersion" value="3.81.3"/>
-	<property name="textVersion" value="FIX - Batch - test in import-node"/>
+	<property name="noVersion" value="3.97.0"/>
+	<property name="textVersion" value="FEAT - Message for forgotten password has been changed."/>
 	<property name="dirSrce" value="src/htm-srce"/>
 	<property name="dirTrgt" value="WebContent/karuta/htm"/>
 	<target name="testIfNewVersion">

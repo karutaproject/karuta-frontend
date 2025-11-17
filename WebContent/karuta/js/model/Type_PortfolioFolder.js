@@ -1158,7 +1158,8 @@ UIFactory["PortfolioFolder"].displayPortfolioSearch = function(type,searchOnly)
 	html +="		<button id='search-button' type='button' onclick=\"UIFactory.PortfolioFolder.searchPortfolio('"+type+"')\" class='btn'><i class='fas fa-search'></i></button>";
 	if (!searchOnly) {
 		html +="		<a id='archive-button' href='' disabled='true' class='btn'><i class='fas fa-download'></i></a>";
-		html +="		<button id='remove-button' type='button' disabled='true' onclick='UIFactory.Portfolio.removeSearchedPortfolios()' class='btn'><i class='fas fa-trash'></i></button>";
+		if (USER.admin)
+			html +="		<button id='remove-button' type='button' disabled='true' onclick='UIFactory.Portfolio.removeSearchedPortfolios()' class='btn'><i class='fas fa-trash'></i></button>";
 	}
 	html += "	</div>";
 	html += "</div>";

@@ -564,6 +564,19 @@
 		</create-portfoliogroup>
 	</xsl:template>
 
+	<xsl:template match="*[metadata/@semantictag='delete-portfoliogroup']">
+		<xsl:variable name="portfoliogroup">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='portfoliogroup']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<delete-portfoliogroup>
+			<portfoliogroup>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">portfoliogroup</xsl:with-param>
+				</xsl:call-template>
+			</portfoliogroup>
+		</delete-portfoliogroup>
+	</xsl:template>
+
 	<!-- ====================================================================================== -->
 	<!-- ====================================================================================== -->
 	<!-- ================================ NODE ================================================ -->
@@ -985,6 +998,35 @@
 			</source>
 		</update-url2portfolio>
 	</xsl:template>
+	
+	<xsl:template match="*[metadata/@semantictag='update-url2portfolio-attributes']">
+		<xsl:variable name="select">
+			<xsl:call-template name='get-select'>
+				<xsl:with-param name='parent'>subsection-target</xsl:with-param>
+			</xsl:call-template>
+		</xsl:variable>
+		<xsl:variable name="test">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='test']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<update-resource type='URL2Portfolio' select="{$select}" test="{$test}" >
+			<attribute name='code' language-dependent='N' replace-variable='Y'>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">code</xsl:with-param>
+				</xsl:call-template>
+			</attribute>
+			<attribute name='label' language-dependent='Y' replace-variable='Y'>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">libelle</xsl:with-param>
+				</xsl:call-template>
+			</attribute>
+			<attribute name='value' language-dependent='N' replace-variable='Y'>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">value</xsl:with-param>
+				</xsl:call-template>
+			</attribute>
+		</update-resource>
+	</xsl:template>
+	
 
 	<xsl:template match="*[metadata/@semantictag='update-dashboard']">
 		<xsl:variable name="select">
@@ -1048,6 +1090,29 @@
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='test']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
 		<update-resource type='Get_Resource' select="{$select}" test="{$test}" >
+			<attribute name='code' language-dependent='N' replace-variable='Y'>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">code</xsl:with-param>
+				</xsl:call-template>
+			</attribute>
+			<attribute name='label' language-dependent='Y' replace-variable='Y'>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">libelle</xsl:with-param>
+				</xsl:call-template>
+			</attribute>
+		</update-resource>
+	</xsl:template>
+
+	<xsl:template match="*[metadata/@semantictag='update-get-get-resource']">
+		<xsl:variable name="select">
+			<xsl:call-template name='get-select'>
+				<xsl:with-param name='parent'>subsection-target</xsl:with-param>
+			</xsl:call-template>
+		</xsl:variable>
+		<xsl:variable name="test">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='test']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<update-resource type='Get_Get_Resource' select="{$select}" test="{$test}" >
 			<attribute name='code' language-dependent='N' replace-variable='Y'>
 				<xsl:call-template name="txtval">
 					<xsl:with-param name="semtag">code</xsl:with-param>
@@ -1265,7 +1330,7 @@
 	<!-- ====================================================================================== -->
 
 	
-		<xsl:template match="*[metadata/@semantictag='create-usergroup']">
+	<xsl:template match="*[metadata/@semantictag='create-usergroup']">
 		<create-usergroup>
 			<usergroup>
 				<xsl:call-template name="txtval">
@@ -1273,6 +1338,16 @@
 				</xsl:call-template>
 			</usergroup>
 		</create-usergroup>
+	</xsl:template>
+
+	<xsl:template match="*[metadata/@semantictag='delete-usergroup']">
+		<delete-usergroup>
+			<usergroup>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">usergroup</xsl:with-param>
+				</xsl:call-template>
+			</usergroup>
+		</delete-usergroup>
 	</xsl:template>
 
 	<xsl:template match="*[metadata/@semantictag='share-usergroup']">

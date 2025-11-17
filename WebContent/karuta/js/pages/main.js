@@ -82,6 +82,7 @@ function fill_main_page(portfolioid,userrole)
 			}
 			// --------------------------
 			UICom.parseStructure(data,true);
+			g_portfolio_UIcom_root = UICom.root;
 			// --------Display Type------------------
 			g_display_type = $("metadata[display-type]",data).attr('display-type');
 			if (g_display_type=="" || g_display_type==null || g_display_type==undefined)

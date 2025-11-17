@@ -133,7 +133,7 @@ UIFactory["PortfoliosGroup"].loadAndDisplayAll = function (type)
 		data: "",
 		success : function(data) {
 			UIFactory.PortfoliosGroup.parse(data);
-			UIFactory.PortfoliosGroup.displayAll(type);
+			UIFactory.PortfoliosGroup.displayAll2(type);
 			$("#wait-window").modal('hide');
 			//----------------
 		},
@@ -286,6 +286,61 @@ UIFactory["PortfoliosGroup"].displayAll = function(type)
 };
 
 //==================================
+UIFactory["PortfoliosGroup"].displayAll2 = function(type)
+//===================================
+{
+	$("#"+type+"-leftside-content1").html("");
+	var group_labels = [];
+	for ( let i = 0; i < portfoliogroups_list.length; i++) {
+		portfoliogroups_list[i].loadNumberOfPortfolios();
+		let label = portfoliogroups_list[i].code;
+		let prefix = "";
+		while (label.indexOf("_")>-1){
+			group_labels.push([prefix+label.substring(0,label.indexOf("_")+1),i]);
+			prefix = label.substring(0,label.indexOf("_")+1)
+		label = label.substring(label.indexOf("_")+1);
+		}
+		group_labels.push([portfoliogroups_list[i].code,i]);
+	}
+	var sorted_groups = group_labels.sort(sortOn1);
+	let prevlabel = "";
+	let lbl = {};
+	let no = 0;
+	for (let j=0; j<sorted_groups.length; j++) {
+		const label = sorted_groups[j][0];
+		if (label != prevlabel) {
+			if (label.endsWith("_")) {
+				lbl[label] = j;
+				var html = "";
+				html += "<div><button id='b-"+j+"' class='tree-label usergroup-label' type='button' data-toggle='collapse' data-target='#p-collapse-"+j+"' aria-expanded='false' aria-controls='#p-collapse-"+j+"'>";
+				html += label.substring(0,label.length-1);
+				html += "</button></div>";		
+				html += " <div class='collapse' id='p-collapse-"+j+"'>";
+				html += "</div>";
+				const t = label.substring(0,label.lastIndexOf("_"));
+				const u = t.substring(0,t.lastIndexOf("_")+1);
+				no = lbl[u];
+				if (no !=undefined)					
+					$("#p-collapse-"+no).append($(html));
+				else
+					$("#"+type+"-leftside-content1").append($(html));
+			} else {
+				if (label.indexOf("_")>-1) {
+					const t = label.substring(0,label.lastIndexOf("_")+1);
+					no = lbl[t];
+					portfoliogroups_list[sorted_groups[j][1]].displayView("p-collapse-"+no,type);
+				} else {
+					portfoliogroups_list[sorted_groups[j][1]].displayView(type+"-leftside-content1",type);
+					no.pop();
+					}
+			}
+			prevlabel = label;
+		} else {
+		}
+	}
+};
+
+//==================================
 UIFactory["PortfoliosGroup"].prototype.getLabel = function(langcode)
 //==================================
 {
@@ -395,6 +450,36 @@ UIFactory["PortfoliosGroup"].prototype.refresh = function()
 	};
 
 };
+
+//--------------------------------------------------------------
+//--------------------------------------------------------------
+//------------------------ UTILITIES ---------------------------
+//--------------------------------------------------------------
+//--------------------------------------------------------------
+
+//==================================
+UIFactory["PortfoliosGroup"].getIdByLabel = function(label)
+//==================================
+{
+	let result = "";
+	$.ajax({
+		async:false,
+		type : "GET",
+		dataType : "xml",
+		url : serverBCK_API+"/portfoliogroups",
+		success : function(data) {
+			UIFactory.PortfoliosGroup.parse(data);
+			label = replaceVariable(label);
+			for ( let i = 0; i < portfoliogroups_list.length; i++) {
+				if ($(portfoliogroups_list[i].attributes["label"]).text() == label){
+					result = portfoliogroups_list[i].id;
+					break;
+				}
+			}
+		}
+	});
+	return result;
+}
 
 //--------------------------------------------------------------
 //--------------------------------------------------------------

@@ -40,8 +40,8 @@ UIFactory["User"] = function( node )
 	this.lastname = $("lastname",node).text();
 	this.username = $("username",node).text();
 	this.email = $("email",node).text();
-	this.password = localStorage.getItem('pwd');
-	localStorage.setItem('pwd',"");
+	this.password = sessionStorage.getItem('pwd');
+//	localStorage.setItem('pwd',"");
 	this.username_node = $("username",node);
 	this.firstname_node = $("firstname",node);
 	this.lastname_node = $("lastname",node);
@@ -538,6 +538,7 @@ UIFactory["User"].prototype.getView = function(dest,type,lang,gid)
 	//--------------------------------------------------------------------------------------------
 	if (type=='user') {
 		html += "<tr class='user-row sort-tr'>"
+		html += "<td class='id'>"+this.id+"</td>";
 		html += "<td class='firstname'>"+this.firstname_node.text()+"</td>";
 		html += "<td class='lastname'>"+this.lastname_node.text()+"</td>";
 		html += "<td class='creator'>"+this.designer_node.text()+"/"+this.admin_node.text()+"/"+this.substitute_node.text()+"/"+this.sharer_node.text()+"</td>";
@@ -1099,7 +1100,7 @@ UIFactory["User"].displaySelectActive = function(destid,type,lang)
 	if (!UsersLoaded)
 		UIFactory.User.loadAll();
 	for ( var i = 0; i < UsersActive_list.length; i++) {
-		var input = UsersActive_list[i].getRadio(null,null,destid);
+		var input = UsersActive_list[i].getRadio(null,null,'select_users');
 		$("#"+destid).append($(input));
 		$("#"+destid).append($("<br>"));
 	}

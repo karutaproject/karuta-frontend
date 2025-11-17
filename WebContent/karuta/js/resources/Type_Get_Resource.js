@@ -197,6 +197,10 @@ UIFactory["Get_Resource"].prototype.getView = function(dest,type,langcode,indash
 			}
 		}
 	}
+	//------------------------------
+	if (UICom.structure.ui[this.id].semantictag.indexOf("g-select-variable")>-1)
+		updateVariable(this.node);
+	//------------------------------
 	//---------------------
 	if (indashboard==null)
 		indashboard = false;
@@ -440,7 +444,10 @@ UIFactory["Get_Resource"].prototype.displayEditor = function(destid,type,langcod
 		type = 'simple';
 	}
 	var self = this;
-	
+	//------------------------------
+	if (UICom.structure.ui[this.id].semantictag.indexOf("g-select-variable")>-1)
+		updateVariable(this.node);
+	//------------------------------	
 	if (queryattr_value!=undefined && queryattr_value!='') {
 		//------------------
 		queryattr_value = replaceVariable(queryattr_value);
@@ -458,11 +465,11 @@ UIFactory["Get_Resource"].prototype.displayEditor = function(destid,type,langcod
 		var target = queryattr_value.substring(srce_indx+1); // label or text
 		var portfoliocode = replaceVariable(queryattr_value.substring(0,semtag_indx));
 		//---------------------------------------------
-		if (queryattr_value.indexOf("#group.user.group")>-1  || queryattr_value.indexOf("#group.portfolio.group")>-1){
+		if (queryattr_value.indexOf("#group.person.group")>-1  || queryattr_value.indexOf("#group.portfolio.group")>-1){
 			if (cachable && g_Get_Resource_caches[queryattr_value]!=undefined && g_Get_Resource_caches[queryattr_value]!="")
 				self.parse(destid,type,langcode,g_Get_Resource_caches[queryattr_value],disabled,srce,resettable,target,semtag,multiple_tags,portfoliocode,semtag2,cachable);
 			else {
-				const url =  queryattr_value.indexOf("#group.user.group")>-1 ?  serverBCK_API+"/usersgroups" : serverBCK_API+"/portfoliogroups";
+				const url =  queryattr_value.indexOf("#group.person.group")>-1 ?  serverBCK_API+"/usersgroups" : serverBCK_API+"/portfoliogroups";
 				$.ajax({
 					async:false,
 					type : "GET",
@@ -475,7 +482,7 @@ UIFactory["Get_Resource"].prototype.displayEditor = function(destid,type,langcod
 					}
 				});
 			}
-		} else if (queryattr_value.indexOf("#users.user.first-last-name")>-1) {
+		} else if (queryattr_value.indexOf("#persons.person.first-last-name")>-1) {
 			if (cachable && g_Get_Resource_caches[queryattr_value]!=undefined && g_Get_Resource_caches[queryattr_value]!="")
 				self.parse(destid,type,langcode,g_Get_Resource_caches[queryattr_value],disabled,srce,resettable,target,semtag,multiple_tags,portfoliocode,semtag2,cachable);
 			else {
@@ -540,7 +547,7 @@ UIFactory["Get_Resource"].prototype.displayEditor = function(destid,type,langcod
 	if (this.get_type=="import_comp"){
 //		let portfoliocode = cleanCode(replaceVariable(this.query_portfolio));
 		let portfoliocode = replaceVariable(this.query_portfolio);
-		let semtag = this.query_semtag;
+		let semtag = replaceVariable(this.query_semtag);
 		let semtag2 = "";
 		if (semtag.indexOf('+')>-1) {
 			semtag2 = semtag.substring(semtag.indexOf('+')+1);
@@ -551,11 +558,11 @@ UIFactory["Get_Resource"].prototype.displayEditor = function(destid,type,langcod
 		type = 'multiple';
 		queryattr_value = portfoliocode+"."+semtag+"."+target;
 		//---------------------------------------------
-		if (queryattr_value.indexOf("#group.user.group")>-1  || queryattr_value.indexOf("#group.portfolio.group")>-1){
+		if (queryattr_value.indexOf("#group.person.group")>-1  || queryattr_value.indexOf("#group.portfolio.group")>-1){
 			if (cachable && g_Get_Resource_caches[queryattr_value]!=undefined && g_Get_Resource_caches[queryattr_value]!="")
 				self.parse(destid,type,langcode,g_Get_Resource_caches[queryattr_value],disabled,srce,resettable,target,semtag,multiple_tags,portfoliocode,semtag2,cachable);
 			else {
-				const url =  queryattr_value.indexOf("#group.user.group")>-1 ?  serverBCK_API+"/usersgroups" : serverBCK_API+"/portfoliogroups";
+				const url =  queryattr_value.indexOf("#group.person.group")>-1 ?  serverBCK_API+"/usersgroups" : serverBCK_API+"/portfoliogroups";
 				$.ajax({
 					async:false,
 					type : "GET",
@@ -568,7 +575,7 @@ UIFactory["Get_Resource"].prototype.displayEditor = function(destid,type,langcod
 					}
 				});
 			}
-		} else if (queryattr_value.indexOf("#users.user.first-last-name")>-1) {
+		} else if (queryattr_value.indexOf("#persons.person.first-last-name")>-1) {
 			if (cachable && g_Get_Resource_caches[queryattr_value]!=undefined && g_Get_Resource_caches[queryattr_value]!="")
 				self.parse(destid,type,langcode,g_Get_Resource_caches[queryattr_value],disabled,srce,resettable,target,semtag,multiple_tags,portfoliocode,semtag2,cachable);
 			else {
@@ -745,7 +752,46 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 			//----------------------------------------------------------
 		}
 	}
-	let newTableau1 = tableau1.sort(sortOn1);
+	//-----portfolios filter--------------------------------------
+	if (semtag2.indexOf("role=")>-1) {
+		const tableau1original = tableau1;
+		let toberemoved = [];
+		for ( let i = 0; i < tableau1original.length; i++) {
+			const portfolioid = $(tableau1original[i][1]).attr('id');
+			const role = replaceVariable(semtag2.substring(5));
+			let ok = false;
+			$.ajax({
+				async:false,
+				type : "GET",
+				dataType : "xml",
+				url : serverBCK_API+"/rolerightsgroups/all/users?portfolio="+portfolioid,
+				success : function(data) {
+					var rrgs = $("rrg",data);
+					for ( let j = 0; j < rrgs.length; j++) {
+						const label =  $("label",rrgs[j]).text();
+						if (label==role) {
+							const users =  $("user",rrgs[j]);
+							for ( let k = 0; k < users.length; k++) {
+								if (USER.id==$(users[k]).attr("id"))
+									ok = true;
+							}
+						}
+					}
+				}
+			});
+			if (!ok)
+				toberemoved.push(i);
+		}
+		if (toberemoved.length>0){
+			tableau1 = []
+			for ( let i = 0; i < tableau1original.length; i++) {
+				if (toberemoved.indexOf(i)<0)
+					tableau1.push(tableau1original[i])
+			}
+		}
+	}
+	//------------------------------------------------------------
+	let newTableau1 = tableau1.sort(sortOn1);	
 	var tabadded = [];
 	//------------------------------------------------------------
 	//------------------------------------------------------------

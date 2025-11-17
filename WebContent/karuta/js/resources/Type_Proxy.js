@@ -93,6 +93,20 @@ UIFactory["Proxy"].prototype.getAttributes = function(type,langcode)
 	return result;
 }
 
+//==================================
+UIFactory["Proxy"].prototype.getCode = function()
+//==================================
+{
+	return this.code_node.text();
+};
+
+//==================================
+UIFactory["Proxy"].prototype.getValue = function(dest)
+//==================================
+{
+	return this.value_node.text();
+};
+
 /// Display
 //==================================
 UIFactory["Proxy"].prototype.getView = function(dest,type,langcode)

@@ -2,8 +2,8 @@
 var karuta_version = "@project.version@";
 var karuta_date = "@build.timestamp@";
 
-const karuta_version_eportfolium = 'eportfolium-3.81.3';
-const karuta_date_eportfolium = '2025-06-20';
+const karuta_version_eportfolium = 'eportfolium-3.97.0';
+const karuta_date_eportfolium = '2025-11-17';
 
 var karuta_backend_version = "?";
 var karuta_backend_date = "?";
@@ -92,9 +92,28 @@ var karuta_fileserver_date = "?";
 // 3.79.3 FIX - Get_Resource special characters in inline mode
 // 3.80.0 FEAT - Get_Resource on portfolios - Batch archive folder
 // 3.80.1 FIX - Batch import-node - no import if test exists and returns nothing
-// 3.80.1 FIX - Batch import-node - no import if test exists and returns nothing
 // 3.80.2 FIX - url not well defined when sharing 2world
 // 3.81.0 FEAT - Report Rounded Percentage addes
 // 3.81.1 FIX - display portfolios of a user
 // 3.81.2 FIX - Import multiple and nodes allready added
 // 3.81.3 FIX - Batch - test in import-node
+// 3.82.0 FEAT - Report sort in for-each-portfolio with ##current_portfoliogroup## keyword
+// 3.82.1 FIX - Batch - join-usergroup with variable
+// 3.83.0 FEAT - Batch, Report, Get_Resource - multiple new functionalities
+// 3.83.1 FIX - Get_resource with #portfolios+role= - userrole added in preview
+// 3.83.2 FIX - call with userrole
+// 3.84.0 FEAT - variables can be used wuth for-each-usergroup, for-each-portfoliogroup and in get_get_rtesource
+// 3.84.1 FIX - Get_Get_resource completion
+// 3.85.0 FEAT - usergroup changed to persongroup in metadata ('user' was changed to userid at instantiation) - Viewer pdf inline in Document
+// 3.86.0 FEAT - Batch update-get-get-resource added
+// 3.87.0 FEAT - multiples updates
+// 3.88.0 FEAT - Batch url2portfolio attributes added
+// 3.89.0 FIX - edit mode
+// 3.90.0 FIX - report - usersgroup
+// 3.91.0 FEAT - report - for-each-node userrole added and previewpage at cursor position
+// 3.92.0 BUG - Back Arrow did not always retrun to the first page
+// 3.93.0 BUG - update-user needs password if not logged as root
+// 3.94.0 FEAT - Report\Batch - node resource can be filename
+// 3.95.0 BUG - Display of group of portfolios or users
+// 3.96.0 FEAT - Designer/creator can update user in batch
+// 3.97.0 FEAT - Message for forgotten password has been changed.

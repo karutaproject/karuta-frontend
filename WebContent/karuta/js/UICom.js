@@ -446,8 +446,9 @@ var UICom =
 		var data = xml2string(resource);
 		var strippeddata = data.replace(/xmlns=\"http:\/\/www.w3.org\/1999\/xhtml\"/g,"");  // remove xmlns attribute
 		var urlS = serverBCK_API+'/resources/resource/'+uuid;
+		const role = (typeof userrole === 'undefined')? g_userroles[0]:userrole;
 		if (g_userroles[0]!='designer')
-			urlS += "?userrole="+g_userroles[0];
+			urlS += "?userrole=" + role;
 		if (delfile!=null && delfile)
 			if (urlS.indexOf('?')<0)
 				urlS += "?delfile=true";
