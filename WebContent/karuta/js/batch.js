@@ -1227,64 +1227,65 @@ g_actions['for-each-group-person'] = function (node)
 //==================================
 {
 	var usergroup = getTxtvals($("usergroup",node));
-	if (usergroup!="")
-			//---- get usergroupid ----------
-			var groupid = "";
-			var url = serverBCK_API+"/usersgroups";
-			$.ajax({
-				async : false,
-				type : "GET",
-				contentType: "text/html",
-				dataType : "text",
-				url : url,
-				success : function(data) {
-					var groups = $("group",data);
-					for (var k=0;k<groups.length;k++){
-						if ($('label',groups[k]).text()==usergroup) {
-							groupid = $(groups[k]).attr("id");
-							break;
-						}
+	if (usergroup!="") {
+		//---- get usergroupid ----------
+		var groupid = "";
+		var url = serverBCK_API+"/usersgroups";
+		$.ajax({
+			async : false,
+			type : "GET",
+			contentType: "text/html",
+			dataType : "text",
+			url : url,
+			success : function(data) {
+				var groups = $("group",data);
+				for (var k=0;k<groups.length;k++){
+					if ($('label',groups[k]).text()==usergroup) {
+						groupid = $(groups[k]).attr("id");
+						break;
 					}
-					if (groupid=="")
-						$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in for-each-group-person - usergroup:"+usergroup+" NOT FOUND");
-					else {
-						$.ajax({
-							async: false,
-							type : "GET",
-							dataType : "xml",
-							url : serverBCK_API+"/usersgroups?group="+groupid,
-							success : function(data) {
-								let items = $("user",data);
-								for ( let i = 0; i < items.length; i++) {
-									uuid = $(items[i]).attr('id');
-									if (Users_byid[uuid]==undefined){
-										$.ajax({
-											async: false,
-											type : "GET",
-											dataType : "xml",
-											url : serverBCK_API+"/users/user/"+uuid,
-											userid : uuid,
-											success : function(data) {
-												UIFactory.User.parse_add(data);
-											}
-										});
-									}
-									if (Users_byid[uuid]!=undefined){
-										const username = Users_byid[uuid].username;
-										g_variables['currentuser'] = username;
-										$("#batch-log").append("<br>------------- current-user -----------------");
-										$("#batch-log").append("<br>- user selected - username:"+username);
-										processListActions($(">actions",node).children());
-									}
+				}
+				if (groupid=="")
+					$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in for-each-group-person - usergroup:"+usergroup+" NOT FOUND");
+				else {
+					$.ajax({
+						async: false,
+						type : "GET",
+						dataType : "xml",
+						url : serverBCK_API+"/usersgroups?group="+groupid,
+						success : function(data) {
+							let items = $("user",data);
+							for ( let i = 0; i < items.length; i++) {
+								uuid = $(items[i]).attr('id');
+								if (Users_byid[uuid]==undefined){
+									$.ajax({
+										async: false,
+										type : "GET",
+										dataType : "xml",
+										url : serverBCK_API+"/users/user/"+uuid,
+										userid : uuid,
+										success : function(data) {
+											UIFactory.User.parse_add(data);
+										}
+									});
+								}
+								if (Users_byid[uuid]!=undefined){
+									const username = Users_byid[uuid].username;
+									g_variables['currentuser'] = username;
+									$("#batch-log").append("<br>------------- current-user -----------------");
+									$("#batch-log").append("<br>- user selected - username:"+username);
+									processListActions($(">actions",node).children());
 								}
 							}
-						});
-					}
-				},
-				error : function(data) {
-					$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in For-EACH-GROUP-PERSON - usergroup:"+usergroup);
+						}
+					});
 				}
-			});
+			},
+			error : function(data) {
+				$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in For-EACH-GROUP-PERSON - usergroup:"+usergroup);
+			}
+		});
+	}
 }
 
 //===============================================

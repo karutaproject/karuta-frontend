@@ -939,7 +939,6 @@ function reloadPreviewBox(node)
 	const uuid = $(node).attr("preview-uuid");
 	const edit = $(node).attr("preview-edit");
 	if (uuid!=null) {
-		$("#preview-window-body-"+uuid).html("");
 		$.ajax({
 			type : "GET",
 			dataType : "xml",
@@ -950,6 +949,7 @@ function reloadPreviewBox(node)
 					g_report_edit = false;
 				else
 					g_report_edit = edit;
+				$("#preview-window-body-"+uuid).html("");
 				UICom.structure.ui[uuid].displayNode('standard',UICom.structure.tree[uuid],"preview-window-body-"+uuid,100,LANGCODE,g_report_edit);
 				g_report_edit = g_edit;
 				$("#preview-window-"+uuid).show();

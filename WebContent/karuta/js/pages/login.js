@@ -90,7 +90,7 @@ function callSend()
 		url : serverBCK_API+"/credential/forgot",
 		data: data,
 		success : function(data) {
-			alertHTML(karutaStr[LANG]['password-sent']);
+			alert(karutaStr[LANG]['password-sent']);
 			window.location="login.htm?lang="+LANG;
 		},
 		error : function(jqxhr,textStatus) {

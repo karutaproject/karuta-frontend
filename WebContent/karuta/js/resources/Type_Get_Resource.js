@@ -320,13 +320,13 @@ UIFactory["Get_Resource"].prototype.getView = function(dest,type,langcode,indash
 		if (code.indexOf(":")>-1)
 			html += $(this.value_node).text();
 		if (this.preview){
-			let js = "previewPage('"+resid+"',100,'standard')";
+			let js = "getCurPos(this);previewPage('"+resid+"',100,'standard')";
 			if (this.previewsharing!=""){
 				options = this.previewsharing.split(",");
 				if (options[3].indexOf(g_userroles[0])>-1){
 					//-------------------------------------------sharerole,level,duration,role
 					const previewURL = getPreviewSharedURL(this.uuid_node.text(),options[0],options[1],options[2],g_userroles[0])
-					js = "previewPage('"+previewURL+"',100,'previewURL',null,true)";
+					js = "getCurPos(this);previewPage('"+previewURL+"',100,'previewURL',null,true)";
 				}
 			}
 			html+= "&nbsp;<span class='button preview-button fas fa-binoculars' onclick=\" "+ js +" \" data-title='"+karutaStr[LANG]["preview"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
@@ -381,13 +381,13 @@ UIFactory["Get_Resource"].prototype.getView = function(dest,type,langcode,indash
 				if (code.indexOf(":")>-1)
 					html += $(this.value_node).text();
 				if (this.preview){
-					let js = "previewPage('"+this.uuid_node.text()+"',100,'standard')";
+					let js = "getCurPos(this);previewPage('"+this.uuid_node.text()+"',100,'standard')";
 					if (this.previewsharing!=""){
 						options = this.previewsharing.split(",");
 						if (options[3].indexOf(g_userroles[0])>-1){
 							//-------------------------------------------sharerole,level,duration,role
 							const previewURL = getPreviewSharedURL(this.uuid_node.text(),options[0],options[1],options[2],g_userroles[0])
-							js = "previewPage('"+previewURL+"',100,'previewURL',null,true)";
+							js = "getCurPos(this);previewPage('"+previewURL+"',100,'previewURL',null,true)";
 						}
 					}
 					html+= "&nbsp;<span class='button preview-button fas fa-binoculars' onclick=\" "+ js +" \" data-title='"+karutaStr[LANG]["preview"]+"' data-toggle='tooltip' data-placement='bottom'></span>";

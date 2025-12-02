@@ -182,7 +182,7 @@ UIFactory["Get_Get_Resource"].prototype.getView = function(dest,type,langcode)
 		html = label;
 	}
 	if (this.preview)
-		html+= "&nbsp;<span class='button preview-button fas fa-binoculars' onclick=\"previewPage('"+this.uuid_node.text()+"',100,'standard') \" data-title='"+karutaStr[LANG]["preview"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
+		html+= "&nbsp;<span class='button preview-button fas fa-binoculars' onclick=\"getCurPos(this);previewPage('"+this.uuid_node.text()+"',100,'standard') \" data-title='"+karutaStr[LANG]["preview"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
 	//------------------if function js-----------------
 	const result1 = execJS(this,'display-resource-before');
 	if (typeof result1 == 'string')
@@ -1194,7 +1194,7 @@ UIFactory["Get_Get_Resource"].prototype.parse = function(destid,type,langcode,da
 				//------------------------------
 				input += "<div id='"+code+"' style=\""+style+"\">";
 				if (selectable) {
-					input += "	<input type='checkbox' name='multiple_"+self.id+"' value='"+$('value',resource).text()+"' code='"+$('code',resource).text()+"' portfoliocode='"+portfoliocode+"' class='multiple-item";
+					input += "	<input type='checkbox' name='multiple_"+self.id+"'  uuid='"+uuid+"' value='"+$('value',resource).text()+"' code='"+$('code',resource).text()+"' portfoliocode='"+portfoliocode+"' class='multiple-item";
 					input += "' ";
 					if (srce=="resource") {
 						for (var j=0; j<languages.length;j++){
@@ -1983,9 +1983,11 @@ UIFactory["Get_Get_Resource"].updateaddedpart = function(data,get_resource_semta
 	if (fct=="+parentcode") {
 		code += "$"+UICom.structure.ui[parentid].getCode();
 	}
+	var uuid = $(selected_item).attr('uuid');
 	var xml = "<asmResource xsi_type='Get_Get_Resource'>";
 	xml += "<code>"+code+"</code>";
 	xml += "<value>"+value+"</value>";
+	xml += "<uuid>"+uuid+"</uuid>";
 	for (var i=0; i<languages.length;i++){
 		var label = $(selected_item).attr('label_'+languages[i]);
 		xml += "<label lang='"+languages[i]+"'>"+label+"</label>";

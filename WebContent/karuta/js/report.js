@@ -2103,11 +2103,11 @@ g_report_actions['node_resource'] = function (destid,action,no,data)
 			} else
 			if (selector.type=='uuid') {
 				text = nodeid;
-			} else
-			if (selector.type=='node context') {
+			} else if (selector.type=='node context') {
 				text = UICom.structure.ui[nodeid].getContext("dashboard_context_"+nodeid);
 				prefix_id += "context_";
-			} else
+			}
+			//-------------------------------------------
 			if (ref!=undefined && ref!="") {
 				ref = replaceVariable(ref);
 				if (g_variables[ref]==undefined)
