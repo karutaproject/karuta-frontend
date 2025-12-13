@@ -2513,7 +2513,7 @@ button.selected-label {
 }
 
 table.tablesorter thead tr th, table.tablesorter tfoot tr th {
-  min-width: 150px;
+  min-width: 50px;
 }
 
 s table.tablesorter th.restore {

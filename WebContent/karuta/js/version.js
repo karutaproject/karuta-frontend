@@ -2,8 +2,8 @@
 var karuta_version = "@project.version@";
 var karuta_date = "@build.timestamp@";
 
-const karuta_version_eportfolium = 'eportfolium-3.99.0';
-const karuta_date_eportfolium = '2025-12-02';
+const karuta_version_eportfolium = 'eportfolium-3.100.0';
+const karuta_date_eportfolium = '2025-12-13';
 
 var karuta_backend_version = "?";
 var karuta_backend_date = "?";
@@ -119,3 +119,4 @@ var karuta_fileserver_date = "?";
 // 3.97.0 FEAT - Message for forgotten password has been changed.
 // 3.98.0 FEAT - position of preview page at cursor position.
 // 3.99.0 FIX - Report - node resource with variable
+// 3.100.0 FEAT - Portfolio list is sortable

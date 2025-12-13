@@ -161,6 +161,7 @@ UIFactory["Portfolio"].prototype.displayOwner = function(dest)
 		$("#"+dest).html(owner);
 	}
 }
+
 //==================================
 UIFactory["Portfolio"].prototype.getPortfolioView = function(dest,type,langcode,parentcode,owner,gid)
 //==================================
@@ -305,6 +306,150 @@ UIFactory["Portfolio"].prototype.getPortfolioView = function(dest,type,langcode,
 	return html;
 };
 
+//==================================
+UIFactory["Portfolio"].prototype.getPortfolioViewSortable = function(dest,type,langcode,parentcode,owner,gid)
+//==================================
+{
+	if (dest!=null) {
+		this.display[dest] = type;
+	}
+	//---------------------
+	if (this.date_modified!=null) {
+		var msec = Date.parse(this.date_modified);
+		var d = new Date(msec);
+		var dmodified = d.toLocaleDateString();
+	}
+	//---------------------
+	if (langcode==null)
+		langcode = LANGCODE;
+	//---------------------
+	var tree_type = "";
+	var semtag = "";
+	if (this.semantictag!=undefined)
+		semtag = this.semantictag;
+	if (semtag.indexOf('karuta-components')>-1)
+		tree_type='<span class="fa fa-wrench" aria-hidden="true"></span>';
+	if (semtag.indexOf('karuta-model')>-1) {
+		tree_type='<span class="far fa-file" aria-hidden="true"></span>';
+		//---------------------
+		var roles = $("role",this.rights);
+		var model = roles.length==0;
+		if (this.rights!="") {
+			if (model)
+				tree_type='<span class="far fa-file-alt" aria-hidden="true"></span>';
+			else
+				tree_type = '<span class="fas fa-file-alt" aria-hidden="true"></span>';
+		}
+	}
+	if (semtag.indexOf('karuta-instance')>-1)
+		tree_type='<span class="fas fa-file" aria-hidden="true"></span>';
+	if (semtag.indexOf('karuta-report')>-1)
+		tree_type='<span class="fas fa-chart-line" aria-hidden="true"></span>';
+	if (semtag.indexOf('karuta-batch')>-1)
+		tree_type='<span class="fas fa-cogs" aria-hidden="true"></span>';
+	if (semtag.indexOf('karuta-project')>-1)
+		tree_type='<span class="fas fa-folder" aria-hidden="true"></span>';
+	if (semtag.indexOf('karuta-rubric')>-1)
+		tree_type='<span class="fas fa-list" aria-hidden="true"></span>';
+	if (semtag.indexOf('karuta-batch-form')>-1)
+		tree_type='<span class="fab fa-wpforms" aria-hidden="true"></span>';
+	if (semtag.indexOf('karuta-dashboard')>-1)
+		tree_type='<span class="fa fa-line-chart" aria-hidden="true"></span>';
+	//---------------------
+	var portfolio_label = this.label_node[langcode].text();
+	if (portfolio_label==undefined || portfolio_label=='' || portfolio_label=='&nbsp;')
+		portfolio_label = '- no label in '+languages[langcode]+' -';
+	//---------------------
+	var html = "";
+	//==================================================================
+	if (type=='list' || type=='portfolio') {
+		html += "<td class='portfolio-label col-10 col-md-5' onclick=\"display_main_page('"+this.id+"')\" ><a class='portfolio-label' >"+portfolio_label+"</a> "+tree_type+" <span id='owner_"+this.id+"' class='owner'/> </div>";
+		if (USER.creator && !USER.limited) {
+			html += "<td class='d-none d-sm-block'>";
+			html += "<span id='pcode_"+this.id+"' class='portfolio-code'>"+this.code_node.text()+"</span>";
+			html += " <span class='copy-button fas fa-clipboard' ";
+			html += "   onclick=\"copyInclipboad('"+this.id+"')\" ";
+			html += "   onmouseover=\"$(this).tooltip('show')\" data-html='true' data-toggle='tooltip' data-placement='top' title=\"" + karutaStr[LANG]['copy'] +" : "+this.code_node.text()+"\" ";
+			html += "   onmouseout=\"outCopy('"+this.id+"')\">";
+			html += "</span>";
+			html += "</td>";
+		}
+		if (this.date_modified!=null) {
+			html += "<td class='' onclick=\"display_main_page('"+this.id+"')\">"+dmodified+"</td>";
+		}
+		//------------ buttons ---------------
+		html += "<td style='padding-left:15px;padding-right:15px' class='";
+		if (USER.admin || (this.owner=='Y' && !USER.xlimited) || (USER.creator && !USER.limited)) {
+			html += UIFactory.Portfolio.getAdminPortfolioMenu(gid,this,semtag);
+		}
+		html += "</td><!-- class='col' -->";
+		//------------------------------------
+	}
+	//==================================================================
+	//--------------------------------------------------------------------------------------------
+	if (type=='portfoliogroup') {
+		html += "	<div class='portfoliogroup-portfolio-label' >"+portfolio_label+" <span class='fas fa-trash' onclick=\"UIFactory.PortfoliosGroup.confirmRemove('"+gid+"','"+this.id+"')\"></span></div>";
+	}
+	//--------------------------------------------------------------------------------------------
+	if (type=='portfoliogroup-portfolio') {
+		html += "	<div class='portfoliogroup-portfolio-label' >"+portfolio_label+"</div>";
+	}
+	//--------------------------------------------------------------------------------------------
+	if (type=='card') {
+		html += "	<div class='card-header' >";
+		html += portfolio_label;
+		html += "	</div>";
+		html += "	<div class='card-body' >";
+		html += this.context_text_node[langcode].text();
+		html += "	</div>";
+		html += "	<div class='card-footer' >";
+		if (this.date_modified!=null) {
+			html += dmodified;
+		}
+		html += "	</div>";
+	}
+	//--------------------------------------------------------------------------------------------
+	if (type=='card-admin') {
+		html += "<div class='card-header' >";
+		html += tree_type + " <a class='portfolio-label' onclick=\"display_main_page('"+this.id+"')\" >"+portfolio_label+"</a></div>"
+		html += "	</div>";
+		html += "<div class='card-body' >";
+		if (this.context_text_node[langcode].text()!="")
+			html += "<div class='comments' >"+this.context_text_node[langcode].text()+"</div>";
+		html += "<div id='pcode_"+this.id+"' class='portfolio-code'>"+this.code_node.text();
+		html += " <span class='copy-button fas fa-clipboard' ";
+		html += "   onclick=\"copyInclipboad('"+this.id+"')\" ";
+		html += "   onmouseover=\"$(this).tooltip('show')\" data-html='true' data-toggle='tooltip' data-placement='top' title=\"" + karutaStr[LANG]['copy'] +" : "+this.code_node.text()+"\" ";
+		html += "   onmouseout=\"outCopy('"+this.id+"')\">";
+		html += "</span></div>";
+		html += "	<div id='owner_"+this.id+"' class='owner'></div>";
+		html += "</div>";
+		html += "<div class='card-footer' >";
+		if (this.date_modified!=null) {
+			html += dmodified;
+		}
+		//------------ buttons ---------------
+		html += "<div class='card-button'>";
+		if (USER.admin || (this.owner=='Y' && !USER.xlimited) || (USER.creator && !USER.limited)) {
+			html += UIFactory.Portfolio.getAdminPortfolioMenu(gid,this,semtag);
+		}
+		html += "</div>";
+		//------------------------------------
+		html += "</div>";
+	}
+	//--------------------------------------------------------------------------------------------
+	if (type=='select') {
+//		if (USER.admin || (USER.creator && !USER.limited) ){
+			html += "<div class='col-md-1 col-xs-1'>"+this.getSelector(null,null,'select_portfolios',true)+"</div>";
+			html += "<div class='col-md-3 col-sm-5 col-xs-7'><a class='portfolio-label' >"+this.label_node[langcode].text()+"</a> "+tree_type+"</div>";
+			html += "<div class='col-md-3 hidden-sm hidden-xs '><a class='portfolio-owner' >"+owner+"</a></div>";
+			html += "<div class='col-md-3 col-sm-2 hidden-xs' >"+this.code_node.text()+"</a></div>";
+			html += "<div class='col-md-1 col-xs-2'>"+this.date_modified.substring(0,10)+"</div>";
+//		}
+	}
+	//--------------------------------------------------------------------------------------------
+	return html;
+};
 //======================
 UIFactory["Portfolio"].getAdminPortfolioMenu = function(gid,self,semtag)
 //======================
