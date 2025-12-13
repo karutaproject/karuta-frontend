@@ -120,3 +120,4 @@ var karuta_fileserver_date = "?";
 // 3.98.0 FEAT - position of preview page at cursor position.
 // 3.99.0 FIX - Report - node resource with variable
 // 3.100.0 FEAT - Portfolio list is sortable
+// 3.100.0 FEAT - Portfolio list is sortable

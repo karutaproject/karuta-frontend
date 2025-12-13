@@ -3557,12 +3557,6 @@ table.tablesorter th.restore {
 		.tab-content>.tab-pane {
 			display:block!important
 		}
-		.asmUnit {
-			page-break-before: always;
-		}
-		.asmUnit:first-child {
-			page-break-before: avoid;
-		}
 	}
 
 
