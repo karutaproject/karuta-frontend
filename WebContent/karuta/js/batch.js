@@ -268,7 +268,7 @@ function getTargetUrl(node)
 		treeref = treeref.substring(0,treeref.indexOf(".#"));
 		semtag = '#current_node';
 	}
-	if (treeref.indexOf('#lastimported')>-1  || treeref.indexOf('#last_imported')>-1)) {
+	if (treeref.indexOf('#lastimported')>-1  || treeref.indexOf('#last_imported')>-1) {
 		treeref = treeref.substring(0,treeref.indexOf(".#"));
 		semtag = '#lastimported';
 	}
@@ -277,7 +277,7 @@ function getTargetUrl(node)
 			url = serverBCK_API+"/nodes/node/"+g_trees[treeref].currentnode[g_trees[treeref].currentnode.length-1]; // ref-currentnode
 		else
 			url = serverBCK_API+"/nodes/node/"+g_current_node_uuid; // currentnode
-	else if (semtag=='#lastimported' || treeref.indexOf('#last_imported')>-1))
+	else if (semtag=='#lastimported' || treeref.indexOf('#last_imported')>-1)
 			url = serverBCK_API+"/nodes/node/"+g_trees[treeref].lastimported[g_trees[treeref].lastimported.length-1]; // ref-lastimported
 	else if (semtag=='#uuid') {
 		if (treeref.indexOf("//")>-1)

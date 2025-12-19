@@ -275,7 +275,10 @@ UIFactory["PortfolioFolder"].prototype.toggleContent = function(type,parentid)
 	} else {
 		cleanList();
 		if (this.loaded)
-			this.displayContentSortable(type,parentid);
+			if (type=="portfoliogroup-portfolio")
+				this.displayContent(type,parentid);
+			else
+				this.displayContentSortable(type,parentid);
 		else
 			this.loadAndDisplayContent(type,parentid);
 		$("."+type+"-label").removeClass('active');
@@ -315,7 +318,10 @@ UIFactory["PortfolioFolder"].prototype.loadAndDisplayContent = function (type,pa
 				this.folder.children[newTableau1[i][1]] = {'id':newTableau1[i][1]};
 			}
 			//-------------------------
-			this.folder.displayContentSortable(type,this.folder.id);
+			if (type=="portfoliogroup-portfolio")
+				this.folder.displayContent(type,parentid);
+			else
+				this.folder.displayContentSortable(type,parentid);
 		},
 		error : function(jqxhr,textStatus) {
 			alertHTML("Server Error loadAndDisplayContent: "+textStatus);
@@ -699,7 +705,7 @@ UIFactory["PortfolioFolder"].prototype.displayFolderDetail = function(type,paren
 	if (viewtype == 'list') {
 		var tree_type='<span class="fas fa-folder" aria-hidden="true"></span>';
 		html += "<div class='row portfolio-row'>";
-		html += "<div class='folder-label col-5' id='portfolio_list_"+this.id+"' parentid='"+parentid+"' onclick=\"folders_byid['"+this.id+"'].toggleContent('"+type+"','"+parentid+"')\" draggable='true' ondragstart='dragPortfolioFolder(event)'><a class='folder-label' >"+folder_label+"</a> "+tree_type+" <span id='owner_"+this.id+"' class='owner'></span></div>";
+		html += "<div class='folder-label col-5' id='portfolio_list_"+this.id+"' parentid='"+parentid+"' onclick=\"folders_byid['"+this.id+"'].onontent('"+type+"','"+parentid+"')\" draggable='true' ondragstart='dragPortfolioFolder(event)'><a class='folder-label' >"+folder_label+"</a> "+tree_type+" <span id='owner_"+this.id+"' class='owner'></span></div>";
 		if (USER.creator && !USER.limited) {
 			html += "<div class='col-5'>";
 			html += "<span id='pcode_"+this.id+"' class='portfolio-code'>"+this.code_node.text()+"</span>";

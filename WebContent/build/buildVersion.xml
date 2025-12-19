@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="updateVersion" default="updateVersion" basedir="."> 
-	<property name="noVersion" value="3.100.0"/>
-	<property name="textVersion" value="FEAT - Portfolio list is sortable"/>
+	<property name="noVersion" value="3.101.0"/>
+	<property name="textVersion" value="FIX - Portfolio list is sortable but not in portfolio group view"/>
 	<property name="dirSrce" value="src/htm-srce"/>
 	<property name="dirTrgt" value="WebContent/karuta/htm"/>
 	<target name="testIfNewVersion">

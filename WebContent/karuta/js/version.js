@@ -2,8 +2,8 @@
 var karuta_version = "@project.version@";
 var karuta_date = "@build.timestamp@";
 
-const karuta_version_eportfolium = 'eportfolium-3.100.0';
-const karuta_date_eportfolium = '2025-12-13';
+const karuta_version_eportfolium = 'eportfolium-3.101.0';
+const karuta_date_eportfolium = '2025-12-19';
 
 var karuta_backend_version = "?";
 var karuta_backend_date = "?";
@@ -120,4 +120,4 @@ var karuta_fileserver_date = "?";
 // 3.98.0 FEAT - position of preview page at cursor position.
 // 3.99.0 FIX - Report - node resource with variable
 // 3.100.0 FEAT - Portfolio list is sortable
-// 3.100.0 FEAT - Portfolio list is sortable
+// 3.101.0 FIX - Portfolio list is sortable but not in portfolio group view
