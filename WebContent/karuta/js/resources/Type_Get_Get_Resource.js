@@ -2265,4 +2265,24 @@ function import_get_get_multiple(parentid,targetid,title,parent_position,parent_
 	//--------------------------------------
 }
 
-
+//==================================
+function eraseGet_Get_resource(nodeid,tags){
+//==================================
+	tags = tags.split(",");
+	for (let i=0; i<tags.length; i++){
+		const parent = $(UICom.structure.ui[nodeid].node).parent();
+		const elt = $("asmContext:has(>metadata[semantictag*='"+tags[i]+"'])",parent);
+		const eltid = $(elt).attr("id");
+		$(UICom.structure.ui[eltid].resource.value_node[0]).text("");
+		$(UICom.structure.ui[eltid].resource.code_node[0]).text("");
+		$(UICom.structure.ui[eltid].resource.uuid_node[0]).text("");
+		$(UICom.structure.ui[eltid].resource.style_node[0]).text("");
+		for (var j=0; j<languages.length;j++){
+			$(UICom.structure.ui[eltid].resource.label_node[j][0]).text("");
+		}
+		$(UICom.structure.ui[eltid].resource.lastmodified_node).text(new Date().getTime());
+		UICom.structure.ui[eltid].save();
+		UICom.structure.ui[eltid].refresh();
+//		UIFactory.Node.reloadUnit();
+	}
+}

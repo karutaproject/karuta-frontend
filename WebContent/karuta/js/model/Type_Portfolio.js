@@ -2972,7 +2972,7 @@ UIFactory["Portfolio"].prototype.refresh = function()
 		$("#"+dest1).html(portfolio_label);
 	};
 	for (dest2 in this.display) {
-		$("#"+dest2).html(this.getPortfolioView(null,this.display[dest2],null));
+		$("#"+dest2).html(this.getPortfolioViewSortable(null,this.display[dest2],null));
 	};
 };
 
