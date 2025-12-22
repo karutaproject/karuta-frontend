@@ -1058,7 +1058,7 @@ UIFactory["PortfolioFolder"].checkPortfolios = function()
 			if (nb_portfolios==0)
 				$("#portfolios-label").hide();
 			else {
-				if (nb_folders==0 || !USER.admin)
+				if (nb_folders==0)
 					UIFactory.PortfolioFolder.loadAndDisplayPortfolios('portfolio-content2-rightside');
 			}
 		},

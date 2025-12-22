@@ -2,8 +2,8 @@
 var karuta_version = "@project.version@";
 var karuta_date = "@build.timestamp@";
 
-const karuta_version_eportfolium = 'eportfolium-3.103.0';
-const karuta_date_eportfolium = '2025-12-20';
+const karuta_version_eportfolium = 'eportfolium-3.104.0';
+const karuta_date_eportfolium = '2025-12-22';
 
 var karuta_backend_version = "?";
 var karuta_backend_date = "?";
@@ -123,3 +123,4 @@ var karuta_fileserver_date = "?";
 // 3.101.0 FIX - Portfolio list is sortable but not in portfolio group view
 // 3.102.0 FIX - Portfolio list - display when label or code are edited
 // 3.103.0 FEAT - function eraseGet_Get_resource
+// 3.104.0 FEAT - Get_Resource - Get persons of a group - #persongroup.{grouplabe}.first-last-name
