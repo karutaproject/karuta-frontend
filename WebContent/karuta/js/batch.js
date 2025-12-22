@@ -3340,12 +3340,12 @@ g_actions['import-node'] = function importNode(node,data)
 		srcecode = g_trees[srcecode].code;
 	let srcetag = replaceBatchVariable(replaceVariable(b_replaceVariable(source.substring(idx_source+1))));
 	//------------- Source -----------------------
-	const srce_nodes = getSourceNodes(node,data,"srce-test");
+	const srce_nodes = getSourceNodes(node,null,"srce-test");
 	let srceid = "";
 	if (srce_nodes.length>0)
 		srceid = $(srce_nodes[0]).attr('id');
 	//-------------------- TARGET --------------------------------------
-	let nodes = getTargetNodes(node,data,"dest-test")
+	let nodes = getTargetNodes(node,null,"dest-test")
 	const treeref= getTreef(node);
 	if (nodes.length>0){
 		for (let i=0; i<nodes.length; i++){
@@ -4164,6 +4164,7 @@ g_actions['for-each-node'] = function (node)
 	srce_semtag = replaceBatchVariable(replaceVariable(srce_semtag))
 	//------------- source -----------------------
 	if (source.indexOf('#current_node')+source.indexOf('#uuid')>-2){
+		//---------------------------
 		if (source.indexOf('#current_node')>-1) {
 			if (srce_treeref!="" && g_trees[srce_treeref]!=undefined)
 				nodeid = g_trees[srce_treeref].currentnode[g_trees[srce_treeref].currentnode.length-1];
@@ -4171,6 +4172,7 @@ g_actions['for-each-node'] = function (node)
 				nodeid = g_current_node_uuid;
 		} else
 			nodeid = replaceVariable(replaceBatchVariable(srce_treeref)); // select = porfolio_uuid.#uuid
+		//---------------------------
 		$.ajax({
 			async : false,
 			type : "GET",

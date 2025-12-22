@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="updateVersion" default="updateVersion" basedir="."> 
-	<property name="noVersion" value="3.104.0"/>
-	<property name="textVersion" value="FEAT - Get_Resource - Get persons of a group - #persongroup.{grouplabe}.first-last-name"/>
+	<property name="noVersion" value="3.105.0"/>
+	<property name="textVersion" value="FIX - Batch : correction test de import-node"/>
 	<property name="dirSrce" value="src/htm-srce"/>
 	<property name="dirTrgt" value="WebContent/karuta/htm"/>
 	<target name="testIfNewVersion">
