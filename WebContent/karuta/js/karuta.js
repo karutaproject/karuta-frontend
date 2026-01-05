@@ -4038,6 +4038,41 @@ function confirmSubmitAndChangeVisibility(nodeid,path,value){
 //================================================
 //================================================
 
+//==================================
+function eraseResource(nodeid,tags){
+//==================================
+	tags = tags.split(",");
+	let parent = UICom.structure.ui[nodeid].node;
+	for (let i=0; i<tags.length; i++){
+		let elts = $("asmContext:has(>metadata[semantictag*='"+tags[i]+"'])",parent);
+		while (elts.length==0 && $(parent).prop("nodeName")!="asmRoot") {
+			parent = $(parent).parent();
+			elts = $("asmContext:has(>metadata[semantictag*='"+tags[i]+"'])",parent);
+		}
+		if (elts.length!=0) {
+			for (let j=0; j<elts.length; j++){
+				let eltid = $(elts[j]).attr("id");
+				UICom.structure.ui[eltid].resource.erase();
+			}
+		}
+	}
+}
+
+//==================================
+function eraseAllChildren(nodeid,types){
+//==================================
+	types = types.split(",");
+	const parent = UICom.structure.ui[nodeid].node;
+	for (let i=0; i<types.length; i++){
+		const elts = $("asmContext:has(asmResource[xsi_type='"+types[i]+"'])",parent);
+		for (let i=0; i<elts.length; i++){
+			const elt = elts[i];
+			const eltid = $(elt).attr("id");
+			UICom.structure.ui[eltid].resource.erase();
+		}
+	}
+}
+
 function sanitizeText(text) {
 	text = text.replace(/<script.*?>[\s\S]*?<\/.*?script>/gi,"");
 	text = text.replace(/javascript.*:[^"]*/gi,"");

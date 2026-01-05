@@ -2948,6 +2948,64 @@ g_report_actions['operation'] = function (destid,action,no,data)
 	$("#"+destid).append($(result));
 }
 
+//=============================================================================
+//=============================================================================
+//======================== UPDATE-RESOURCE ====================================
+//=============================================================================
+//=============================================================================
+
+//==================================
+g_report_actions['update-resource'] = function (destid,action,no,data)
+//==================================
+{
+	const restype = replaceVariable($(action).attr("restype"));
+	const semtag = replaceVariable($(action).attr("select"));
+	const attribute_value = replaceVariable($(action).attr("value"));
+	let language_dependent = 'N';
+	let attribute_name = 'text';
+	if (restype=="Field") {
+		language_dependent = 'Y';
+		attribute_name = 'text'
+	}
+	//---------------------------
+	node = $("*:has(>metadata[semantictag*='"+semtag+"'])",data);
+	const nodeid = $(node).attr('id');
+	let resource = $("asmResource[xsi_type='"+restype+"']",node);
+	if (language_dependent=='Y') {
+		if ($("metadata",node).attr("multilingual-resource")=="Y") {
+			$(attribute_name+"[lang='"+LANG+"']",resource).text(attribute_value);
+		} else {
+			for (var langcode=0; langcode<languages.length; langcode++) {
+				$(attribute_name+"[lang='"+languages[langcode]+"']",resource).text(attribute_value);
+			}
+		}
+	} else {
+		$(attribute_name,resource).text(attribute_value);
+	}
+	//--------------------------
+	if (restype=="Calendar" && attribute_name=="text") {
+		const utc = Date.parse(attribute_value);
+		$("utc",resource).text(utc);
+	}
+	//--------------------------	
+	const resdata = "<asmResource xsi_type='"+restype+"'>" + $(resource).html() + "</asmResource>";
+	const strippeddata = resdata.replace(/xmlns=\"http:\/\/www.w3.org\/1999\/xhtml\"/g,"");  // remove xmlns attribute
+	//-------------------
+	$.ajax({
+		async : false,
+		type : "PUT",
+		contentType: "application/xml",
+		dataType : "text",
+		data : strippeddata,
+		id : nodeid,
+		url : serverBCK_API+"/resources/resource/" + nodeid,
+		success : function(data) {
+			UICom.structure.ui[this.id].refresh();
+		},
+		error : function(data) {
+		}
+	});
+}
 
 //=========================================================================
 //=========================================================================

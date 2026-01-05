@@ -2269,20 +2269,31 @@ function import_get_get_multiple(parentid,targetid,title,parent_position,parent_
 function eraseGet_Get_resource(nodeid,tags){
 //==================================
 	tags = tags.split(",");
+	let parent = UICom.structure.ui[nodeid].node;
 	for (let i=0; i<tags.length; i++){
-		const parent = $(UICom.structure.ui[nodeid].node).parent();
-		const elt = $("asmContext:has(>metadata[semantictag*='"+tags[i]+"'])",parent);
-		const eltid = $(elt).attr("id");
-		$(UICom.structure.ui[eltid].resource.value_node[0]).text("");
-		$(UICom.structure.ui[eltid].resource.code_node[0]).text("");
-		$(UICom.structure.ui[eltid].resource.uuid_node[0]).text("");
-		$(UICom.structure.ui[eltid].resource.style_node[0]).text("");
-		for (var j=0; j<languages.length;j++){
-			$(UICom.structure.ui[eltid].resource.label_node[j][0]).text("");
+		let elt = $("asmContext:has(>metadata[semantictag*='"+tags[i]+"'])",parent);
+		if (elt.length==0) {
+			parent = $(parent).parent();
+			elt = $("asmContext:has(>metadata[semantictag*='"+tags[i]+"'])",parent);
 		}
-		$(UICom.structure.ui[eltid].resource.lastmodified_node).text(new Date().getTime());
-		UICom.structure.ui[eltid].save();
-		UICom.structure.ui[eltid].refresh();
-//		UIFactory.Node.reloadUnit();
+		const eltid = $(elt).attr("id");
+		UICom.structure.ui[eltid].resource.erase();
 	}
 }
+
+//==================================
+UIFactory["Get_Get_Resource"].prototype.erase = function()
+//==================================
+{
+	$(this.value_node[0]).text("");
+	$(this.code_node[0]).text("");
+	$(this.uuid_node[0]).text("");
+	$(this.style_node[0]).text("");
+	for (var j=0; j<languages.length;j++){
+		$(this.label_node[j][0]).text("");
+	}
+	$(this.lastmodified_node).text(new Date().getTime());
+	UICom.structure.ui[this.id].save();
+	UICom.structure.ui[this.id].refresh();
+}
+

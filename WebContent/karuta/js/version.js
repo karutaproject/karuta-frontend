@@ -2,8 +2,8 @@
 var karuta_version = "@project.version@";
 var karuta_date = "@build.timestamp@";
 
-const karuta_version_eportfolium = 'eportfolium-3.105.0';
-const karuta_date_eportfolium = '2025-12-22';
+const karuta_version_eportfolium = 'eportfolium-3.107.0';
+const karuta_date_eportfolium = '2026-01-05';
 
 var karuta_backend_version = "?";
 var karuta_backend_date = "?";
@@ -125,3 +125,5 @@ var karuta_fileserver_date = "?";
 // 3.103.0 FEAT - function eraseGet_Get_resource
 // 3.104.0 FEAT - Get_Resource - Get persons of a group - #persongroup.{grouplabe}.first-last-name
 // 3.105.0 FIX - Batch : correction test de import-node
+// 3.106.0 FEAT - new functions: eraseResource(nodeid,tags) and eraseAllChildren(nodeid,types)
+// 3.107.0 FEAT - REPORT: new component update-resource

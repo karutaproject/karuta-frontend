@@ -319,6 +319,18 @@ UIFactory["TextField"].prototype.refresh = function()
 };
 
 //==================================
+UIFactory["TextField"].prototype.erase = function()
+//==================================
+{
+	$(this.lastmodified_node).text(new Date().getTime());
+	for (var j=0; j<languages.length;j++){
+		$(this.text_node[j][0]).text("");
+	}
+	UICom.structure.ui[this.id].save();
+	UICom.structure.ui[this.id].refresh();
+}
+
+//==================================
 function countWords(html) {
 //==================================
 	var text = html.replace(/(<([^>]+)>)/ig," ").replace(/(&lt;([^&gt;]+)&gt;)/ig," ").replace( /[^\w ]/g," " );
