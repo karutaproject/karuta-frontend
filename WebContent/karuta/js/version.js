@@ -2,8 +2,8 @@
 var karuta_version = "@project.version@";
 var karuta_date = "@build.timestamp@";
 
-const karuta_version_eportfolium = 'eportfolium-3.97.0';
-const karuta_date_eportfolium = '2025-11-17';
+const karuta_version_eportfolium = 'eportfolium-3.105.0';
+const karuta_date_eportfolium = '2025-12-22';
 
 var karuta_backend_version = "?";
 var karuta_backend_date = "?";
@@ -117,3 +117,11 @@ var karuta_fileserver_date = "?";
 // 3.95.0 BUG - Display of group of portfolios or users
 // 3.96.0 FEAT - Designer/creator can update user in batch
 // 3.97.0 FEAT - Message for forgotten password has been changed.
+// 3.98.0 FEAT - position of preview page at cursor position.
+// 3.99.0 FIX - Report - node resource with variable
+// 3.100.0 FEAT - Portfolio list is sortable
+// 3.101.0 FIX - Portfolio list is sortable but not in portfolio group view
+// 3.102.0 FIX - Portfolio list - display when label or code are edited
+// 3.103.0 FEAT - function eraseGet_Get_resource
+// 3.104.0 FEAT - Get_Resource - Get persons of a group - #persongroup.{grouplabe}.first-last-name
+// 3.105.0 FIX - Batch : correction test de import-node

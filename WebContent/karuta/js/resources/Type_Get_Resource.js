@@ -320,13 +320,13 @@ UIFactory["Get_Resource"].prototype.getView = function(dest,type,langcode,indash
 		if (code.indexOf(":")>-1)
 			html += $(this.value_node).text();
 		if (this.preview){
-			let js = "previewPage('"+resid+"',100,'standard')";
+			let js = "getCurPos(this);previewPage('"+resid+"',100,'standard')";
 			if (this.previewsharing!=""){
 				options = this.previewsharing.split(",");
 				if (options[3].indexOf(g_userroles[0])>-1){
 					//-------------------------------------------sharerole,level,duration,role
 					const previewURL = getPreviewSharedURL(this.uuid_node.text(),options[0],options[1],options[2],g_userroles[0])
-					js = "previewPage('"+previewURL+"',100,'previewURL',null,true)";
+					js = "getCurPos(this);previewPage('"+previewURL+"',100,'previewURL',null,true)";
 				}
 			}
 			html+= "&nbsp;<span class='button preview-button fas fa-binoculars' onclick=\" "+ js +" \" data-title='"+karutaStr[LANG]["preview"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
@@ -381,13 +381,13 @@ UIFactory["Get_Resource"].prototype.getView = function(dest,type,langcode,indash
 				if (code.indexOf(":")>-1)
 					html += $(this.value_node).text();
 				if (this.preview){
-					let js = "previewPage('"+this.uuid_node.text()+"',100,'standard')";
+					let js = "getCurPos(this);previewPage('"+this.uuid_node.text()+"',100,'standard')";
 					if (this.previewsharing!=""){
 						options = this.previewsharing.split(",");
 						if (options[3].indexOf(g_userroles[0])>-1){
 							//-------------------------------------------sharerole,level,duration,role
 							const previewURL = getPreviewSharedURL(this.uuid_node.text(),options[0],options[1],options[2],g_userroles[0])
-							js = "previewPage('"+previewURL+"',100,'previewURL',null,true)";
+							js = "getCurPos(this);previewPage('"+previewURL+"',100,'previewURL',null,true)";
 						}
 					}
 					html+= "&nbsp;<span class='button preview-button fas fa-binoculars' onclick=\" "+ js +" \" data-title='"+karutaStr[LANG]["preview"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
@@ -464,7 +464,7 @@ UIFactory["Get_Resource"].prototype.displayEditor = function(destid,type,langcod
 		}
 		var target = queryattr_value.substring(srce_indx+1); // label or text
 		var portfoliocode = replaceVariable(queryattr_value.substring(0,semtag_indx));
-		//---------------------------------------------
+		//----------------- List of groups ----------------------------
 		if (queryattr_value.indexOf("#group.person.group")>-1  || queryattr_value.indexOf("#group.portfolio.group")>-1){
 			if (cachable && g_Get_Resource_caches[queryattr_value]!=undefined && g_Get_Resource_caches[queryattr_value]!="")
 				self.parse(destid,type,langcode,g_Get_Resource_caches[queryattr_value],disabled,srce,resettable,target,semtag,multiple_tags,portfoliocode,semtag2,cachable);
@@ -482,6 +482,7 @@ UIFactory["Get_Resource"].prototype.displayEditor = function(destid,type,langcod
 					}
 				});
 			}
+		//----------------- List of users ----------------------------
 		} else if (queryattr_value.indexOf("#persons.person.first-last-name")>-1) {
 			if (cachable && g_Get_Resource_caches[queryattr_value]!=undefined && g_Get_Resource_caches[queryattr_value]!="")
 				self.parse(destid,type,langcode,g_Get_Resource_caches[queryattr_value],disabled,srce,resettable,target,semtag,multiple_tags,portfoliocode,semtag2,cachable);
@@ -497,6 +498,24 @@ UIFactory["Get_Resource"].prototype.displayEditor = function(destid,type,langcod
 					}
 				});
 			}
+			//----------------- List of users of a group----------------------------
+		} else if (queryattr_value.indexOf("#persongroup")>-1) {
+			if (cachable && g_Get_Resource_caches[queryattr_value]!=undefined && g_Get_Resource_caches[queryattr_value]!="")
+				self.parse(destid,type,langcode,g_Get_Resource_caches[queryattr_value],disabled,srce,resettable,target,semtag,multiple_tags,portfoliocode,semtag2,cachable);
+			else {
+				const groupid = UIFactory.UsersGroup.getIdByLabel(semtag);
+				$.ajax({
+					type : "GET",
+					dataType : "xml",
+					url : serverBCK_API+"/usersgroups?group="+groupid,
+					success : function(data) {
+						if (cachable)
+							g_Get_Resource_caches[queryattr_value] = data;
+						self.parse(destid,type,langcode,data,disabled,srce,resettable,target,semtag,multiple_tags,portfoliocode,semtag2,cachable);
+					}
+				});
+			}
+		//----------------- List of portfolios ----------------------------
 		} else if (queryattr_value.indexOf("#portfolios.")>-1) {
 			if (cachable && g_Get_Resource_caches[queryattr_value]!=undefined && g_Get_Resource_caches[queryattr_value]!="")
 				self.parse(destid,type,langcode,g_Get_Resource_caches[queryattr_value],disabled,srce,resettable,target,semtag,multiple_tags,portfoliocode,semtag2,cachable);
@@ -557,7 +576,7 @@ UIFactory["Get_Resource"].prototype.displayEditor = function(destid,type,langcod
 		let target = this.query_object;
 		type = 'multiple';
 		queryattr_value = portfoliocode+"."+semtag+"."+target;
-		//---------------------------------------------
+		//----------------- List of groups ----------------------------
 		if (queryattr_value.indexOf("#group.person.group")>-1  || queryattr_value.indexOf("#group.portfolio.group")>-1){
 			if (cachable && g_Get_Resource_caches[queryattr_value]!=undefined && g_Get_Resource_caches[queryattr_value]!="")
 				self.parse(destid,type,langcode,g_Get_Resource_caches[queryattr_value],disabled,srce,resettable,target,semtag,multiple_tags,portfoliocode,semtag2,cachable);
@@ -575,6 +594,7 @@ UIFactory["Get_Resource"].prototype.displayEditor = function(destid,type,langcod
 					}
 				});
 			}
+		//----------------- List of users ----------------------------
 		} else if (queryattr_value.indexOf("#persons.person.first-last-name")>-1) {
 			if (cachable && g_Get_Resource_caches[queryattr_value]!=undefined && g_Get_Resource_caches[queryattr_value]!="")
 				self.parse(destid,type,langcode,g_Get_Resource_caches[queryattr_value],disabled,srce,resettable,target,semtag,multiple_tags,portfoliocode,semtag2,cachable);
@@ -590,6 +610,7 @@ UIFactory["Get_Resource"].prototype.displayEditor = function(destid,type,langcod
 					}
 				});
 			}
+		//----------------- List of portfolios ----------------------------
 		} else if (queryattr_value.indexOf("#portfolios.portfolio")>-1) {
 			if (cachable && g_Get_Resource_caches[queryattr_value]!=undefined && g_Get_Resource_caches[queryattr_value]!="")
 				self.parse(destid,type,langcode,g_Get_Resource_caches[queryattr_value],disabled,srce,resettable,target,semtag,multiple_tags,portfoliocode,semtag2,cachable);
@@ -700,8 +721,8 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 		type = 'select';
 //-----Nodes ------------------------------------------------------------
 	let nodes = $("node",data);
-	if (nodes.length==0)
-		nodes = $("group",data);
+//	if (nodes.length==0)
+//		nodes = $("group",data);
 	if (nodes.length==0)
 		nodes = $("user",data);
 	if (nodes.length==0)
@@ -736,8 +757,16 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 					libelle = $(srce+"[lang='"+languages[langcode]+"']",resource).text();
 				} else { // users, portfolios, usergroup or portfoliogroup
 					if (target=="first-last-name") {
+						if (portfoliocode=="#group") {
 						code = $(nodes[i]).attr('id');
 						libelle = $("firstname",nodes[i]).text()+ " "+$("lastname",nodes[i]).text();
+						} else if (portfoliocode=="#persongroup") {
+							const userid = $(nodes[i]).attr("id");
+							UIFactory.User.load(userid);
+							code = Users_byid[userid].username;
+							libelle =Users_byid[userid].firstname+" " +Users_byid[userid].lastname;
+							
+						}
 					} else {
 						code = $(nodes[i]).attr("id");
 						libelle = $('label',nodes[i]).text();

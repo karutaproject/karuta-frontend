@@ -275,7 +275,10 @@ UIFactory["PortfolioFolder"].prototype.toggleContent = function(type,parentid)
 	} else {
 		cleanList();
 		if (this.loaded)
-			this.displayContent(type,parentid);
+			if (type=="portfoliogroup-portfolio")
+				this.displayContent(type,parentid);
+			else
+				this.displayContentSortable(type,parentid);
 		else
 			this.loadAndDisplayContent(type,parentid);
 		$("."+type+"-label").removeClass('active');
@@ -315,7 +318,10 @@ UIFactory["PortfolioFolder"].prototype.loadAndDisplayContent = function (type,pa
 				this.folder.children[newTableau1[i][1]] = {'id':newTableau1[i][1]};
 			}
 			//-------------------------
-			this.folder.displayContent(type,this.folder.id);
+			if (type=="portfoliogroup-portfolio")
+				this.folder.displayContent(type,parentid);
+			else
+				this.folder.displayContentSortable(type,parentid);
 		},
 		error : function(jqxhr,textStatus) {
 			alertHTML("Server Error loadAndDisplayContent: "+textStatus);
@@ -422,7 +428,10 @@ UIFactory["PortfolioFolder"].prototype.displayFolder = function(type,dest,parent
 		if (localStorage.getItem('currentDisplayed'+type+'Code')==folder_code) {
 			if (!this.loaded)
 				this.loadContent(type);
-			this.displayContent(type,parentid);
+			if (type=="portfoliogroup-portfolio")
+				this.displayContent(type,parentid);
+			else
+				this.displayContentSortable(type,parentid);
 			$("."+type+"-label").removeClass('active');
 			$("#"+type+"-tree-label_"+this.id).addClass('active');
 		}
@@ -505,6 +514,53 @@ UIFactory["PortfolioFolder"].prototype.displayContent = function(type,parentid,v
 	$("#wait-window").modal('hide');
 }
 
+//==================================
+UIFactory["PortfolioFolder"].prototype.displayContentSortable = function(type,parentid,viewtype)
+//==================================
+{
+	$("#"+type+"-rightside-content1").html("");
+	$("#"+type+"-rightside-content2").html("");
+	if (viewtype==null && type!='portfolio')
+		viewtype = type;
+	else
+		viewtype = list_view_type;
+	//--------------------
+	this.displayFolderDetail(type,parentid,type);
+	//------------------ folders ---------------------------
+	if (this.nbfolders>0) {
+		$("#"+type+"-rightside-content1").html("<div class='portfolios-content' id='"+type+"-folders-content'></div>");
+		for (uuid in this.folders){
+			var folder = folders_byid[uuid];
+			folder.displayFolderDetail(type,parentid,'list');
+		}
+	}
+	//------------------ portfolios -------------------------
+	if (viewtype=='card' || viewtype=='card-admin') {
+		$("#"+type+"-rightside-content2").html("<div class='card-deck' id='"+type+"-porfolios-deck'></div>");
+	}
+	else {
+		$("#"+type+"-rightside-content2").html("<table style='width:100%' class='tablesorter portfolios-content' id='"+type+"-portfolios-table'><thead><tr class='portfolio-row'><th style='padding-left:15px'><i class='fas fa-sort'></i></th><th class='d-none d-sm-block'><i class='fas fa-sort'></i></th><th class='sorter-shortDate dateFormat-ddmmyyyy  '><i class='fas fa-sort'></i></th><th></th></tr></thead><tbody id='"+type+"-portfolios-content'><tbody></table>");
+	}
+	for (uuid in this.children){
+		var portfolio = portfolios_byid[uuid];
+		//-------------------- PORTFOLIO ----------------------
+		if (portfolio.visible || (USER.creator && !USER.limited) ) {
+			if (viewtype=='card')
+				$("#"+type+"-porfolios-deck").append($("<div class='card portfolio-card' id='"+type+"_"+portfolio.id+"' onclick=\"display_main_page('"+uuid+"')\" parentid='"+this.id+"' draggable='true' ondragstart='dragPortfolio(event)'></div>"));
+			else if (viewtype=='card-admin')
+				$("#"+type+"-porfolios-deck").append($("<div class='card portfolio-card' id='"+type+"_"+portfolio.id+"' parentid='"+this.id+"' draggable='true' ondragstart='dragPortfolio(event)'></div>"));
+			else
+//				$("#"+type+"-portfolios-content").append($("<div class='row portfolio-row' id='"+type+"_"+portfolio.id+"' parentid='"+this.id+"' draggable='true' ondragstart='dragPortfolio(event)'></div>"));
+				$("#"+type+"-portfolios-content").append($("<tr class='portfolio-row' id='"+type+"_"+portfolio.id+"' parentid='"+this.id+"' draggable='true' ondragstart='dragPortfolio(event)'></t>"));
+			$("#"+type+"_"+portfolio.id).html(portfolio.getPortfolioViewSortable("portfolio_"+portfolio.id,viewtype));
+			if (portfolio.ownerid!=null)
+				portfolio.displayOwner('owner_'+portfolio.id);
+		}
+	}
+	$("#"+type+"-portfolios-table").tablesorter();
+	$(window).scrollTop(0);
+	$("#wait-window").modal('hide');
+}
 //==================================
 UIFactory["PortfolioFolder"].prototype.setRights = function()
 //==================================
@@ -1002,7 +1058,7 @@ UIFactory["PortfolioFolder"].checkPortfolios = function()
 			if (nb_portfolios==0)
 				$("#portfolios-label").hide();
 			else {
-				if (nb_folders==0 || !USER.admin)
+				if (nb_folders==0)
 					UIFactory.PortfolioFolder.loadAndDisplayPortfolios('portfolio-content2-rightside');
 			}
 		},

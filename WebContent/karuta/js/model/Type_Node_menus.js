@@ -1563,7 +1563,7 @@ UIFactory["Node"].getFunctionArray = function(node,item)
 	let fcts = $("function",item);
 	if (fcts.length>0) {
 		for (let k=0;k<fcts.length;k++){
-			fctarray.push(replaceVariable(encode($(fcts[k]).text()),node));
+			fctarray.push(encode(replaceVariable($(fcts[k]).text(),node)));
 		}
 	}
 	return fctarray;

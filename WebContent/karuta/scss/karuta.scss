@@ -2715,7 +2715,7 @@ button.selected-label {
 
 table.tablesorter thead tr th, table.tablesorter tfoot tr th
 {
-	min-width:150px;
+	min-width:50px;
 }s
 
 table.tablesorter th.restore {
@@ -3556,12 +3556,6 @@ table.tablesorter th.restore {
 		}
 		.tab-content>.tab-pane {
 			display:block!important
-		}
-		.asmUnit {
-			page-break-before: always;
-		}
-		.asmUnit:first-child {
-			page-break-before: avoid;
 		}
 	}
 

@@ -268,7 +268,7 @@ function getTargetUrl(node)
 		treeref = treeref.substring(0,treeref.indexOf(".#"));
 		semtag = '#current_node';
 	}
-	if (treeref.indexOf('#lastimported')>-1) {
+	if (treeref.indexOf('#lastimported')>-1  || treeref.indexOf('#last_imported')>-1) {
 		treeref = treeref.substring(0,treeref.indexOf(".#"));
 		semtag = '#lastimported';
 	}
@@ -277,7 +277,7 @@ function getTargetUrl(node)
 			url = serverBCK_API+"/nodes/node/"+g_trees[treeref].currentnode[g_trees[treeref].currentnode.length-1]; // ref-currentnode
 		else
 			url = serverBCK_API+"/nodes/node/"+g_current_node_uuid; // currentnode
-	else if (semtag=='#lastimported')
+	else if (semtag=='#lastimported' || treeref.indexOf('#last_imported')>-1)
 			url = serverBCK_API+"/nodes/node/"+g_trees[treeref].lastimported[g_trees[treeref].lastimported.length-1]; // ref-lastimported
 	else if (semtag=='#uuid') {
 		if (treeref.indexOf("//")>-1)
@@ -1227,64 +1227,65 @@ g_actions['for-each-group-person'] = function (node)
 //==================================
 {
 	var usergroup = getTxtvals($("usergroup",node));
-	if (usergroup!="")
-			//---- get usergroupid ----------
-			var groupid = "";
-			var url = serverBCK_API+"/usersgroups";
-			$.ajax({
-				async : false,
-				type : "GET",
-				contentType: "text/html",
-				dataType : "text",
-				url : url,
-				success : function(data) {
-					var groups = $("group",data);
-					for (var k=0;k<groups.length;k++){
-						if ($('label',groups[k]).text()==usergroup) {
-							groupid = $(groups[k]).attr("id");
-							break;
-						}
+	if (usergroup!="") {
+		//---- get usergroupid ----------
+		var groupid = "";
+		var url = serverBCK_API+"/usersgroups";
+		$.ajax({
+			async : false,
+			type : "GET",
+			contentType: "text/html",
+			dataType : "text",
+			url : url,
+			success : function(data) {
+				var groups = $("group",data);
+				for (var k=0;k<groups.length;k++){
+					if ($('label',groups[k]).text()==usergroup) {
+						groupid = $(groups[k]).attr("id");
+						break;
 					}
-					if (groupid=="")
-						$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in for-each-group-person - usergroup:"+usergroup+" NOT FOUND");
-					else {
-						$.ajax({
-							async: false,
-							type : "GET",
-							dataType : "xml",
-							url : serverBCK_API+"/usersgroups?group="+groupid,
-							success : function(data) {
-								let items = $("user",data);
-								for ( let i = 0; i < items.length; i++) {
-									uuid = $(items[i]).attr('id');
-									if (Users_byid[uuid]==undefined){
-										$.ajax({
-											async: false,
-											type : "GET",
-											dataType : "xml",
-											url : serverBCK_API+"/users/user/"+uuid,
-											userid : uuid,
-											success : function(data) {
-												UIFactory.User.parse_add(data);
-											}
-										});
-									}
-									if (Users_byid[uuid]!=undefined){
-										const username = Users_byid[uuid].username;
-										g_variables['currentuser'] = username;
-										$("#batch-log").append("<br>------------- current-user -----------------");
-										$("#batch-log").append("<br>- user selected - username:"+username);
-										processListActions($(">actions",node).children());
-									}
+				}
+				if (groupid=="")
+					$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in for-each-group-person - usergroup:"+usergroup+" NOT FOUND");
+				else {
+					$.ajax({
+						async: false,
+						type : "GET",
+						dataType : "xml",
+						url : serverBCK_API+"/usersgroups?group="+groupid,
+						success : function(data) {
+							let items = $("user",data);
+							for ( let i = 0; i < items.length; i++) {
+								uuid = $(items[i]).attr('id');
+								if (Users_byid[uuid]==undefined){
+									$.ajax({
+										async: false,
+										type : "GET",
+										dataType : "xml",
+										url : serverBCK_API+"/users/user/"+uuid,
+										userid : uuid,
+										success : function(data) {
+											UIFactory.User.parse_add(data);
+										}
+									});
+								}
+								if (Users_byid[uuid]!=undefined){
+									const username = Users_byid[uuid].username;
+									g_variables['currentuser'] = username;
+									$("#batch-log").append("<br>------------- current-user -----------------");
+									$("#batch-log").append("<br>- user selected - username:"+username);
+									processListActions($(">actions",node).children());
 								}
 							}
-						});
-					}
-				},
-				error : function(data) {
-					$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in For-EACH-GROUP-PERSON - usergroup:"+usergroup);
+						}
+					});
 				}
-			});
+			},
+			error : function(data) {
+				$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in For-EACH-GROUP-PERSON - usergroup:"+usergroup);
+			}
+		});
+	}
 }
 
 //===============================================
@@ -3339,12 +3340,12 @@ g_actions['import-node'] = function importNode(node,data)
 		srcecode = g_trees[srcecode].code;
 	let srcetag = replaceBatchVariable(replaceVariable(b_replaceVariable(source.substring(idx_source+1))));
 	//------------- Source -----------------------
-	const srce_nodes = getSourceNodes(node,data,"srce-test");
+	const srce_nodes = getSourceNodes(node,null,"srce-test");
 	let srceid = "";
 	if (srce_nodes.length>0)
 		srceid = $(srce_nodes[0]).attr('id');
 	//-------------------- TARGET --------------------------------------
-	let nodes = getTargetNodes(node,data,"dest-test")
+	let nodes = getTargetNodes(node,null,"dest-test")
 	const treeref= getTreef(node);
 	if (nodes.length>0){
 		for (let i=0; i<nodes.length; i++){
@@ -4163,6 +4164,7 @@ g_actions['for-each-node'] = function (node)
 	srce_semtag = replaceBatchVariable(replaceVariable(srce_semtag))
 	//------------- source -----------------------
 	if (source.indexOf('#current_node')+source.indexOf('#uuid')>-2){
+		//---------------------------
 		if (source.indexOf('#current_node')>-1) {
 			if (srce_treeref!="" && g_trees[srce_treeref]!=undefined)
 				nodeid = g_trees[srce_treeref].currentnode[g_trees[srce_treeref].currentnode.length-1];
@@ -4170,6 +4172,7 @@ g_actions['for-each-node'] = function (node)
 				nodeid = g_current_node_uuid;
 		} else
 			nodeid = replaceVariable(replaceBatchVariable(srce_treeref)); // select = porfolio_uuid.#uuid
+		//---------------------------
 		$.ajax({
 			async : false,
 			type : "GET",

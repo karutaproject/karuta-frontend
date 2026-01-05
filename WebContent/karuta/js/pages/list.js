@@ -119,8 +119,12 @@ function fill_list_page()
 	}
 
 	//--------we load the folders-----------------------
-	UIFactory.PortfolioFolder.loadAndDisplayAll('portfolio');
-	UIFactory.PortfolioFolder.checkPortfolios();
+	try {
+		specificDisplay();
+	} catch(e) {
+		UIFactory.PortfolioFolder.loadAndDisplayAll('portfolio');
+		UIFactory.PortfolioFolder.checkPortfolios();
+	}
 	$("#wait-window").modal('hide');
 }
 

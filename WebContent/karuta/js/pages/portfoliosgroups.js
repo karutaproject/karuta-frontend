@@ -62,7 +62,7 @@ function fill_list_portfoliosgroups()
 	//------------------------------------------
 	html += "	<div id='portfoliogroup-leftside'  class='leftside'>";
 	html += "		<div id='menu'></div>";
-	html += "		<h3 class='title'>";
+	html += "		<h3 id='add-folder' class='title'>";
 	html += "			<span id='folders-label' class='folder-label'>"+karutaStr[LANG]['list_portfoliosgroups']+"</span>&nbsp<span class='badge number_of_folders' id='nb_folders_active'></span>";
 	html += "			<span class='folder-label btn'><i class='fas fa-folder-plus' id='folder-create' onclick=\"UIFactory.PortfoliosGroup.callCreateGroup();\"></i></span>";
 	html += "		</h3>";
