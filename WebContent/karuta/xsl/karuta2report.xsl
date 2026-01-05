@@ -822,6 +822,23 @@
 		</preview-icon>
 	</xsl:template>
 	
+	<!-- ================ update-resource ============================ -->
+	<xsl:template match="*[metadata/@semantictag='update-resource']">
+		<xsl:variable name="semtag">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='semtag']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="restype">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='restype']/asmResource[@xsi_type='Get_Resource']/value"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="txtval">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='txtval']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<update-resource>
+			<xsl:attribute name="select"><xsl:value-of select="$semtag"/></xsl:attribute>
+			<xsl:attribute name="restype"><xsl:value-of select="$restype"/></xsl:attribute>
+			<xsl:attribute name="value"><xsl:value-of select="$txtval"/></xsl:attribute>
+		</update-resource>
+	</xsl:template>
 	<!-- ================ JSFunction ============================ -->
 	<xsl:template match="*[metadata/@semantictag='jsfunction']">
 		<xsl:variable name="function">

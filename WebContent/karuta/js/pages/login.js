@@ -407,6 +407,8 @@ function applyLoginConfiguration()
 	if (g_configVar['maintenance-display']=="1") {
 		$('#welcome2').hide();
 		$('#welcome3').hide();
+		$("#connection-cas").remove();
+		$("#connection-openid").remove();
 		$('#login').hide();
 		$('#maintenance').show();
 		$('#maintenance').html(g_configVar['maintenance-text']);

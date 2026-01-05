@@ -364,3 +364,16 @@ UIFactory["Calendar"].updateaddedpart = function(data,calendar_semtag)
 	});
 }
 
+//==================================
+UIFactory["Calendar"].prototype.erase = function()
+//==================================
+{
+	$(this.lastmodified_node).text(new Date().getTime());
+	$(this.utc).text("null");
+	for (var j=0; j<languages.length;j++){
+		$(this.text_node[j][0]).text("");
+	}
+	UICom.structure.ui[this.id].save();
+	UICom.structure.ui[this.id].refresh();
+}
+
