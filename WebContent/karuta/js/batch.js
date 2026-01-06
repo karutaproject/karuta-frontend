@@ -476,6 +476,16 @@ function processAll(model_code,portfoliologcode)
 	}
 }
 
+function processLine(j,actionnode) {
+	if (j<g_json.lines.length){
+		$("#batch-log").append("<br>================ LINE "+(g_noline+1)+" =============================");
+		processListActions($(actionnode).children());
+		j++;
+		$("#progressbar").attr("value",j/g_json.lines.length);
+		g_noline = j;
+		setTimeout(processLine,0,j,actionnode);
+	}
+}
 //=================================================
 function processListActions(list)
 //=================================================
@@ -486,15 +496,20 @@ function processListActions(list)
 		if (actiontype!='for-each-line') {
 			$("#batch-log").append("<br>------------- "+actiontype+" -----------------");
 			g_actions[actiontype](actionnode);
-			previous_action = actiontype;
+			previous_action = actiontype; j =0
 		}
 		if (actiontype=='for-each-line') {
-			for (j=0; j<g_json.lines.length; j++){
+			let j = 0;
+			setTimeout(processLine,0,j,actionnode);
+		}
+
+/*			for (j=0; j<g_json.lines.length; j++){
+				$("#progressbar").attr("value",(j+1)/g_json.lines.length);
 				g_noline = j;
 				$("#batch-log").append("<br>================ LINE "+(g_noline+1)+" =============================");
 				processListActions($(actionnode).children());
-			}
-		}
+			} */
+		
 /*		if (actiontype=='if-then-else') {
 			var if_action = $('if-part',actionnode).children()[0]; // only one action in test
 			var then_actions = $($('>then-part',actionnode)[0]).children();
