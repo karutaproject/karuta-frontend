@@ -2038,6 +2038,22 @@ UIFactory["Get_Resource"].prototype.refresh = function()
 	};
 };
 
+//==================================
+UIFactory["Get_Resource"].prototype.erase = function()
+//==================================
+{
+	$(this.value_node[0]).text("");
+	$(this.code_node[0]).text("");
+	$(this.uuid_node[0]).text("");
+	$(this.style_node[0]).text("");
+	for (var j=0; j<languages.length;j++){
+		$(this.label_node[j][0]).text("");
+	}
+	$(this.lastmodified_node).text(new Date().getTime());
+	UICom.structure.ui[this.id].save();
+	UICom.structure.ui[this.id].refresh();
+}
+
 //==================================================================================
 //==================================================================================
 //==================================================================================

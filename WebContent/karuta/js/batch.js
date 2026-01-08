@@ -466,7 +466,7 @@ function processAll(model_code,portfoliologcode)
 	$.ajaxSetup({async: false});
 	var actions_list = $("model",g_xmlDoc).children();
 	processListActions(actions_list);
-	$("#batch-log").append("<br>=============== THIS IS THE END ===============================");
+//	$("#batch-log").append("<br>=============== THIS IS THE END ===============================");
 	//--------------------
 	if (portfoliologcode!="")
 		saveLog(model_code,portfoliologcode,$("#batch-log").html());
@@ -479,9 +479,10 @@ function processAll(model_code,portfoliologcode)
 function processLine(j,actionnode) {
 	if (j<g_json.lines.length){
 		$("#batch-log").append("<br>================ LINE "+(g_noline+1)+" =============================");
+		$("#batchlinenumber").html((g_noline+1)+"/"+g_json.lines.length);
 		processListActions($(actionnode).children());
 		j++;
-		$("#progressbar").attr("value",j/g_json.lines.length);
+		$("#progressbar").attr("value",j/(g_json.lines.length-1));
 		g_noline = j;
 		setTimeout(processLine,0,j,actionnode);
 	}

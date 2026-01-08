@@ -31,7 +31,7 @@ function fill_exec_batch()
 	html += "<div id='batch-model_description' style='margin-left:20px'></div>";
 	html += "<div id='batch-csv_file_upload2' style='margin-left:20px'></div>";
 	html += "<h4 class='line'><span class='badge badge-secondary'>2</span> <span id='batch-title-2'></span></h4>";
-	html += "<div id='batch-process_button' style='margin-left:20px'><progress id='progressbar' value='0'></progress></div>";
+	html += "<div id='batch-process_button' style='margin-left:20px'><progress id='progressbar' value='0'></progress><div id='batchlinenumber'></div>";
 	html += "<div id='batch-log' style='margin-left:20px;margin-top:20px'></div>";
 	$("#main-exec-batch").html(html);
 
