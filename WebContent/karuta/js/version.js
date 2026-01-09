@@ -2,8 +2,8 @@
 var karuta_version = "@project.version@";
 var karuta_date = "@build.timestamp@";
 
-const karuta_version_eportfolium = 'eportfolium-3.108.0';
-const karuta_date_eportfolium = '2026-01-06';
+const karuta_version_eportfolium = 'eportfolium-3.109.0';
+const karuta_date_eportfolium = '2026-01-09';
 
 var karuta_backend_version = "?";
 var karuta_backend_date = "?";
@@ -128,3 +128,4 @@ var karuta_fileserver_date = "?";
 // 3.106.0 FEAT - new functions: eraseResource(nodeid,tags) and eraseAllChildren(nodeid,types)
 // 3.107.0 FEAT - REPORT: new component update-resource
 // 3.108.0 FEAT - BATCH : progress bar
+// 3.109.0 FIX - eraseAllChildren : do not erase dashboard node

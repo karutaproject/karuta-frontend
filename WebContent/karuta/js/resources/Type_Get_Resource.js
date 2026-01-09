@@ -721,8 +721,8 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 		type = 'select';
 //-----Nodes ------------------------------------------------------------
 	let nodes = $("node",data);
-//	if (nodes.length==0)
-//		nodes = $("group",data);
+	if (nodes.length==0)
+		nodes = $("group",data);
 	if (nodes.length==0)
 		nodes = $("user",data);
 	if (nodes.length==0)
