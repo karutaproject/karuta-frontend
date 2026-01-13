@@ -488,6 +488,7 @@ UIFactory["Get_Resource"].prototype.displayEditor = function(destid,type,langcod
 				self.parse(destid,type,langcode,g_Get_Resource_caches[queryattr_value],disabled,srce,resettable,target,semtag,multiple_tags,portfoliocode,semtag2,cachable);
 			else {
 				$.ajax({
+					async: false,
 					type : "GET",
 					dataType : "xml",
 					url : serverBCK_API+"/users",
@@ -505,6 +506,7 @@ UIFactory["Get_Resource"].prototype.displayEditor = function(destid,type,langcod
 			else {
 				const groupid = UIFactory.UsersGroup.getIdByLabel(semtag);
 				$.ajax({
+					async: false,
 					type : "GET",
 					dataType : "xml",
 					url : serverBCK_API+"/usersgroups?group="+groupid,
@@ -600,6 +602,7 @@ UIFactory["Get_Resource"].prototype.displayEditor = function(destid,type,langcod
 				self.parse(destid,type,langcode,g_Get_Resource_caches[queryattr_value],disabled,srce,resettable,target,semtag,multiple_tags,portfoliocode,semtag2,cachable);
 			else {
 				$.ajax({
+					async: false,
 					type : "GET",
 					dataType : "xml",
 					url : serverBCK_API+"/users",
@@ -723,7 +726,7 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 	let nodes = $("node",data);
 	if (nodes.length==0)
 		nodes = $("group",data);
-	if (nodes.length==0)
+	if (nodes.length==0 || portfoliocode=="#persongroup")
 		nodes = $("user",data);
 	if (nodes.length==0)
 		nodes = $("portfolio",data);

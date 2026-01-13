@@ -325,3 +325,18 @@ UIFactory["Document"].prototype.refresh = function()
 	};
 
 };
+
+//==================================
+UIFactory["Document"].prototype.erase = function()
+//==================================
+{
+	for (var j=0; j<languages.length;j++){
+		$(this.filename_node[j][0]).text("");
+		$(this.type_node[j][0]).text("");
+		$(this.size_node[j][0]).text("");
+		$(this.fileid_node[j][0]).text("");
+	}
+	$(this.lastmodified_node).text(new Date().getTime());
+	UICom.structure.ui[this.id].save();
+}
+

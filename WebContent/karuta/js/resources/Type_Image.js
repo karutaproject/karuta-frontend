@@ -570,11 +570,7 @@ UIFactory["Image"].prototype.refresh = function()
 UIFactory["Image"].prototype.erase = function()
 //==================================
 {
-	$(this.value_node[0]).text("");
-	$(this.code_node[0]).text("");
 	for (var j=0; j<languages.length;j++){
-		$(this.label_node[j][0]).text("");
-		$(this.filename_node[j][0]).text("");
 		$(this.type_node[j][0]).text("");
 		$(this.size_node[j][0]).text("");
 		$(this.fileid_node[j][0]).text("");
@@ -584,8 +580,8 @@ UIFactory["Image"].prototype.erase = function()
 	}
 	$(this.lastmodified_node).text(new Date().getTime());
 	UICom.structure.ui[this.id].save();
-	UICom.structure.ui[this.id].refresh();
 }
+
 //==================================
 function clearphoto()
 //==================================

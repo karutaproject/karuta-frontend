@@ -4069,7 +4069,6 @@ function eraseAllChildren(nodeid,types){
 		for (let i=0; i<elts.length; i++){
 			const elt = elts[i];
 			const eltid = $(elt).attr("id");
-			
 			UICom.structure.ui[eltid].resource.erase();
 		}
 	}

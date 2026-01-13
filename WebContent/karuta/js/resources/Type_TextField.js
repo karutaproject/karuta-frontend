@@ -327,7 +327,6 @@ UIFactory["TextField"].prototype.erase = function()
 		$(this.text_node[j][0]).text("");
 	}
 	UICom.structure.ui[this.id].save();
-	UICom.structure.ui[this.id].refresh();
 }
 
 //==================================

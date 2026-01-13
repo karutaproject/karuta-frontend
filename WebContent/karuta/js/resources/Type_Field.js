@@ -220,5 +220,4 @@ UIFactory["Field"].prototype.erase = function()
 	}
 	$(this.lastmodified_node).text(new Date().getTime());
 	UICom.structure.ui[this.id].save();
-	UICom.structure.ui[this.id].refresh();
 }
