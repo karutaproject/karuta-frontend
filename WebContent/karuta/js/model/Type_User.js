@@ -601,7 +601,7 @@ UIFactory["User"].prototype.getView = function(dest,type,lang,gid)
 				html += "</button>";				
 			}
 			//----------------------------------
-			html += "<button class='btn ' onclick=\"UIFactory.UsersGroup.editGroupsByUser('"+this.id+"')\"";
+			html += "<button class='btn ' onclick=\"UIFactory.UsersGroup.displayGroupsByUser('"+this.id+"',true)\"";
 			if (this.username_node.text()!='root' && this.username_node.text()!='public') {
 				html += ">";
 			} else {
@@ -611,7 +611,7 @@ UIFactory["User"].prototype.getView = function(dest,type,lang,gid)
 			html += "</button>";
 			//----------------------------------
 			if (this.username_node.text()!='root') {
-				html += "<button class='btn ' onclick=\"UIFactory.Portfolio.getListPortfolios('"+this.id+"','"+this.firstname+"','"+this.lastname+"')\">";
+				html += "<button class='btn ' onclick=\"UIFactory.Portfolio.displayUserPortfolios('"+this.id+"','"+this.firstname+"','"+this.lastname+"')\">";
 				html += "<i class='fa fa-file' ></i>";
 				html += "</button>";
 			}
@@ -1454,7 +1454,7 @@ UIFactory["User"].prototype.getAdminUserMenu = function(type,gid)
 	//----------------------------------
 	if (type!='list3' && type!="list-ondrop") {
 		//----------------------------------
-		html += "<span class='button btn' onclick=\"UIFactory['UsersGroup'].editGroupsByUser('"+this.id+"')\"";
+		html += "<span class='button btn' onclick=\"UIFactory['UsersGroup'].displayGroupsByUser('"+this.id+"',true)\"";
 		if (this.username_node.text()!='root' && this.username_node.text()!='public') {
 			html += ">";
 		} else {
@@ -1464,7 +1464,7 @@ UIFactory["User"].prototype.getAdminUserMenu = function(type,gid)
 		html += "</span>";
 		//----------------------------------
 		if (this.username_node.text()!='root') {
-			html += "<span class='button btn' onclick=\"UIFactory.Portfolio.getListPortfolios('"+this.id+"','"+this.firstname+"','"+this.lastname+"')\">";
+			html += "<span class='button btn' onclick=\"UIFactory.Portfolio.displayUserPortfolios('"+this.id+"','"+this.firstname+"','"+this.lastname+"')\">";
 			html += "<span class='fa fa-file'/>";
 			html += "</span>";
 		}

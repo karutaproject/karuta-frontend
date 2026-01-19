@@ -465,18 +465,42 @@ function processAll(model_code,portfoliologcode)
 {
 	$.ajaxSetup({async: false});
 	var actions_list = $("model",g_xmlDoc).children();
-	processListActions(actions_list);
-//	$("#batch-log").append("<br>=============== THIS IS THE END ===============================");
-	//--------------------
-	if (portfoliologcode!="")
-		saveLog(model_code,portfoliologcode,$("#batch-log").html());
-	//--------------------
-	if (g_execbatch) { // after creation of portfolio
-		window.location.reload();
-	}
+	processActions(0,actions_list,portfoliologcode);
 }
 
-function processLine(j,actionnode) {
+//=================================================
+function processActions(i,list,portfoliologcode)
+//=================================================
+{
+	if (i<list.length) {
+		var actiontype = $(list[i]).prop("nodeName");
+		var actionnode = list[i];
+		if (actiontype=='for-each-line') {
+			processLine(0,actionnode,i,list,portfoliologcode);
+		} else {
+			$("#batch-log").append("<br>------------- "+actiontype+" -----------------");
+			g_actions[actiontype](actionnode);
+			previous_action = actiontype;
+			i++;
+			setTimeout(processActions,0,i,list,portfoliologcode);
+		}
+	} else {
+		$("#batch-log").append("<br>=============== THIS IS THE END ===============================");
+		$("#batchend").html(" THIS IS THE END ");
+		//--------------------
+		if (portfoliologcode!="")
+			saveLog(model_code,portfoliologcode,$("#batch-log").html());
+		//--------------------
+		if (g_execbatch) { // after creation of portfolio
+			window.location.reload();
+		}
+	}
+};
+
+//=================================================
+function processLine(j,actionnode,i,list,portfoliologcode)
+//=================================================
+{
 	if (j<g_json.lines.length){
 		$("#batch-log").append("<br>================ LINE "+(g_noline+1)+" =============================");
 		$("#batchlinenumber").html((g_noline+1)+"/"+g_json.lines.length);
@@ -484,7 +508,10 @@ function processLine(j,actionnode) {
 		j++;
 		$("#progressbar").attr("value",j/(g_json.lines.length-1));
 		g_noline = j;
-		setTimeout(processLine,0,j,actionnode);
+		setTimeout(processLine,0,j,actionnode,i,list,portfoliologcode);
+	} else {
+		i++;
+		setTimeout(processActions,0,i,list,portfoliologcode);		
 	}
 }
 //=================================================
@@ -499,12 +526,12 @@ function processListActions(list)
 			g_actions[actiontype](actionnode);
 			previous_action = actiontype; j =0
 		}
-		if (actiontype=='for-each-line') {
+/*		if (actiontype=='for-each-line') {
 			let j = 0;
 			setTimeout(processLine,0,j,actionnode);
 		}
 
-/*			for (j=0; j<g_json.lines.length; j++){
+			for (j=0; j<g_json.lines.length; j++){
 				$("#progressbar").attr("value",(j+1)/g_json.lines.length);
 				g_noline = j;
 				$("#batch-log").append("<br>================ LINE "+(g_noline+1)+" =============================");

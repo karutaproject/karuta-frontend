@@ -319,6 +319,7 @@ karutaStr['fr']['seecalendarroles']="Voir - Calendrier";
 karutaStr['fr']['list_portfolios']="Portfolios";
 karutaStr['fr']['list_users']="Utilisateurs";
 karutaStr['fr']['list_user_portfolio']="Portfolios de ";
+karutaStr['fr']['list_user_group']="Groupes de ";
 karutaStr['fr']['list_roles']="Rôles";
 karutaStr['fr']['list_groups']="Groupes";
 karutaStr['fr']['create-test-user']="Créer un utilisateur test";

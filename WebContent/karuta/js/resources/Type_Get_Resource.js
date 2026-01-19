@@ -726,9 +726,25 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 	let nodes = $("node",data);
 	if (nodes.length==0)
 		nodes = $("group",data);
-	if (nodes.length==0 || portfoliocode=="#persongroup")
-		nodes = $("user",data);
-	if (nodes.length==0)
+	if (nodes.length==0 || portfoliocode=="#persongroup") {
+			nodes = [];
+			const users = $("user",data);
+			for ( var i = 0; i < $(users).length; i++) { // test if user exists anymore
+				const userid = $(users[i]).attr("id");
+				$.ajax({
+					async: false,
+					type : "GET",
+					dataType : "xml",
+					url : serverBCK_API+"/users/user/"+userid,
+					success : function(data) {
+						const username = $("username",data);
+						if (username.length>0)
+							nodes.push(users[i])
+					}
+				});
+			}
+		}
+	if (nodes.length==0 || portfoliocode=="#portfoliogroup")
 		nodes = $("portfolio",data);
 //-----Node ordering-------------------------------------------------------
 	let tableau1 = new Array();

@@ -27,32 +27,35 @@ function callCAS()
 function callSubmit(encrypt_url,lang)
 //==============================
 {
-	var data = "<credential><login>"+document.getElementById("useridentifier").value+"</login><password>"+document.getElementById("password").value+"</password></credential>";
-	sessionStorage.setItem('pwd',document.getElementById("password").value);
-	$.ajax({
-		contentType: "application/xml",
-		type : "POST",
-		dataType : "text",
-		url : serverBCK_API+"/credential/login",
-		data: data,
-		i : encrypt_url,
-		lang :lang,
-		success : function(data) {
-			if (self.encrypt_url=="")
-				window.location="karuta.htm";
-			else if (self.encrypt_url.length==36)
-				window.location="karuta.htm?i="+self.encrypt_url+"&lang="+self.lang
-			else {
-				if (x!=undefined)
-					window.location="public.htm?i="+self.encrypt_url+"&x="+x+"&lang="+self.lang
-				else
-					window.location="public.htm?i="+self.encrypt_url+"&lang="+self.lang;
-				}
-		},
-		error : function(jqxhr,textStatus) {
-			alertHTML(karutaStr[LANG]['error-login']);
-		}
-	});
+	const identifier = document.getElementById("useridentifier").value;
+	if (g_configVar['maintenance-display']=="0" || identifier=="root") {
+		var data = "<credential><login>"+document.getElementById("useridentifier").value+"</login><password>"+document.getElementById("password").value+"</password></credential>";
+		sessionStorage.setItem('pwd',document.getElementById("password").value);
+		$.ajax({
+			contentType: "application/xml",
+			type : "POST",
+			dataType : "text",
+			url : serverBCK_API+"/credential/login",
+			data: data,
+			i : encrypt_url,
+			lang :lang,
+			success : function(data) {
+				if (self.encrypt_url=="")
+					window.location="karuta.htm";
+				else if (self.encrypt_url.length==36)
+					window.location="karuta.htm?i="+self.encrypt_url+"&lang="+self.lang
+				else {
+					if (x!=undefined)
+						window.location="public.htm?i="+self.encrypt_url+"&x="+x+"&lang="+self.lang
+					else
+						window.location="public.htm?i="+self.encrypt_url+"&lang="+self.lang;
+					}
+			},
+			error : function(jqxhr,textStatus) {
+				alertHTML(karutaStr[LANG]['error-login']);
+			}
+		});
+	}
 }
 
 //==============================

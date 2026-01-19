@@ -2862,21 +2862,18 @@ UIFactory["Portfolio"].removeSearchedPortfolios = function()
 	//----------------
 }
 
-
 //==================================
-UIFactory["Portfolio"].getListPortfolios = function(userid,firstname,lastname,deletebutton) 
+UIFactory["Portfolio"].userListPortfolios = function(userid) 
 //==================================
 {
 
 	var url0 = serverBCK_API+"/portfolios?active=1&userid="+userid;
 	var list = [];
 	$.ajax({
+		async:false,
 		type : "GET",
 		dataType : "xml",
 		url : url0,
-		userid : userid,
-		firstname :firstname,
-		lastname :lastname,
 		success : function(data) {
 			UIFactory.Portfolio.parse_add(data);
 			var items = $("portfolio",data);
@@ -2888,23 +2885,24 @@ UIFactory["Portfolio"].getListPortfolios = function(userid,firstname,lastname,de
 					alertHTML("Error UIFactory.Portfolio.parse:"+uuid+" - "+e.message);
 				}
 			}
-			UIFactory.Portfolio.displayListPortfolios(list,this.userid,this.firstname,this.lastname,deletebutton);
-			$("#wait-window").modal('hide');
 		},
 		error : function(jqxhr,textStatus) {
 			alertHTML("Server Error GET active=1: "+textStatus);
 		}
 	});
+	return list
 }
 
+
 //==================================
-UIFactory.Portfolio.displayListPortfolios = function(list,userid,firstname,lastname,deletebutton)
+UIFactory.Portfolio.displayUserPortfolios = function(userid,firstname,lastname,deletebutton)
 //==================================
 {
 	//---------------------
 	if (deletebutton==null)
 		deletebutton = false;
 	//---------------------
+	const list = UIFactory.Portfolio.userListPortfolios(userid);
 	$("#edit-window-footer").html("");
 	$("#edit-window-title").html(karutaStr[LANG]['list_user_portfolio']+" " + firstname + " " +lastname);
 	var js1 = "javascript:$('#edit-window').modal('hide')";

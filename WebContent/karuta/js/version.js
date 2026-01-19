@@ -2,8 +2,8 @@
 var karuta_version = "@project.version@";
 var karuta_date = "@build.timestamp@";
 
-const karuta_version_eportfolium = 'eportfolium-3.110.0';
-const karuta_date_eportfolium = '2026-01-13';
+const karuta_version_eportfolium = 'eportfolium-3.112.0';
+const karuta_date_eportfolium = '2026-01-19';
 
 var karuta_backend_version = "?";
 var karuta_backend_date = "?";
@@ -130,3 +130,6 @@ var karuta_fileserver_date = "?";
 // 3.108.0 FEAT - BATCH : progress bar
 // 3.109.0 FIX - eraseAllChildren : do not erase dashboard node
 // 3.110.0 FIX - Get_resource #persongroup
+// 3.111.0 FIX - Tooltip disabled for portfolio list on touch screen
+// 3.111.1 FIX - Tooltip disabled for portfolio list on touch screen
+// 3.112.0 FEAT - various features

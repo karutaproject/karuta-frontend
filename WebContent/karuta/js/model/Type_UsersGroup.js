@@ -109,6 +109,25 @@ UIFactory["UsersGroup"].drop = function(ev)
 //--------------------------------------------------------------
 
 //==================================
+UIFactory["UsersGroup"].loadAll = function (type)
+//==================================
+{
+	$.ajax({
+		async: false,
+		type : "GET",
+		dataType : "xml",
+		url : serverBCK_API+"/usersgroups",
+		data: "",
+		success : function(data) {
+			UIFactory.UsersGroup.parse(data);
+		},
+		error : function(jqxhr,textStatus) {
+			alertHTML("Server Error GET UIFactory.UsersGroup.loadAll: "+textStatus);
+		}
+	});
+}
+
+//==================================
 UIFactory["UsersGroup"].loadAndDisplayAll = function (type)
 //==================================
 {
@@ -125,7 +144,7 @@ UIFactory["UsersGroup"].loadAndDisplayAll = function (type)
 			$("#wait-window").modal('hide');
 		},
 		error : function(jqxhr,textStatus) {
-			alertHTML("Server Error GET UIFactory.UsersGroup.loadAndDisplayGroups: "+textStatus);
+			alertHTML("Server Error GET UIFactory.UsersGroup.loadAndDisplayAll: "+textStatus);
 			$("#wait-window").modal('hide');
 		}
 	});
@@ -447,9 +466,11 @@ UIFactory["UsersGroup"].add = function(groupid,userid)
 };
 
 //==================================
-UIFactory["UsersGroup"].confirmRemove = function(gid,uid) 
+UIFactory["UsersGroup"].confirmRemove = function(gid,uid,js) 
 //==================================
 {
+	if (js==null)
+		js="";
 	var str1 = karutaStr[LANG]["confirm-delete"];
 	var str2 = karutaStr[LANG]["button-delete"];
 	if (uid!=null && uid!='null') {
@@ -458,7 +479,7 @@ UIFactory["UsersGroup"].confirmRemove = function(gid,uid)
 	}
 	document.getElementById('delete-window-body').innerHTML = str1;
 	var buttons = "<button class='btn' onclick=\"javascript:$('#delete-window').modal('hide');\">" + karutaStr[LANG]["Cancel"] + "</button>";
-	buttons += "<button class='btn btn-danger' onclick=\"UIFactory.UsersGroup.remove('"+gid+"','"+uid+"');$('#delete-window').modal('hide');\">" + str2 + "</button>";
+	buttons += "<button class='btn btn-danger' onclick=\"UIFactory.UsersGroup.remove('"+gid+"','"+uid+"');$('#delete-window').modal('hide');"+js+"\">" + str2 + "</button>";
 	document.getElementById('delete-window-footer').innerHTML = buttons;
 	$('#delete-window').modal('show');
 };
@@ -727,3 +748,49 @@ UIFactory["UsersGroup"].getIdByLabel = function(label)
 	});
 	return result;
 }
+//==================================
+UIFactory["UsersGroup"].getGroupsByUser = function(userid)
+//==================================
+{
+	var list = [];
+	UIFactory.UsersGroup.loadAll();
+	for ( let i = 0; i < usergroups_list.length; i++) {
+		const gid = usergroups_list[i].id;
+		if (!usergroups_byid[gid].loaded)
+			usergroups_byid[gid].loadContent();
+		for (uuid in usergroups_byid[gid].children){
+			if (uuid==userid) {
+				list.push({id:gid,label:usergroups_list[i].code});
+			}
+		}
+	}
+	return list;
+};
+
+
+//==================================
+UIFactory["UsersGroup"].displayGroupsByUser = function(userid,remove)
+//==================================
+{
+	if (remove==null)
+		remove=false;
+	const list = UIFactory.UsersGroup.getGroupsByUser(userid);
+	$("#edit-window-footer").html("");
+	$("#edit-window-title").html(karutaStr[LANG]['list_user_group']+" " + Users_byid[userid].firstname + " " +Users_byid[userid].lastname);
+	var js1 = "javascript:$('#edit-window').modal('hide')";
+	
+	var footer = " <button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
+	$("#edit-window-footer").append($(footer));
+	var html = "<table id='editGroupsByUser'>";
+	for (var i=0;i<list.length;i++) {
+		html += "<tr>";
+		if (remove)
+			html+= "<td class='portfolio_label'><input id='remove-"+list[i].id+"' onclick=\"UIFactory.UsersGroup.confirmRemove('"+list[i].id+"','"+userid+"')\" type='checkbox' checked></td>"
+		;
+		html += "<td class='portfolio_label'>"+list[i].label+"</td></tr>";
+	}
+	html += "</table>";
+	$("#edit-window-body").html(html);
+	$('#edit-window').modal('show')
+}
+

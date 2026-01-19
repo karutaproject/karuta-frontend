@@ -404,7 +404,9 @@ UIFactory["PortfolioFolder"].prototype.displayFolder = function(type,dest,parent
 			folder_label = '- no label in '+languages[LANGCODE]+' -';
 		//-------------------------------------------------
 		html += "<div id='folder_"+this.id+"' class='tree-elt' parentid='"+parentid+"' draggable='true' ondragstart='dragPortfolioFolder(event)' ondrop='dropPortfolioFolder(event)' ondragover='ondragoverPortfolioFolder(event)' ondragleave='ondragleavePortfolioFolder(event)'";
-		html += "  data-html='true' data-toggle='tooltip' data-placement='top' title=\"" + folder_code+"\" >";
+		if(!('ontouchstart' in window))
+			html += "  data-html='true' data-toggle='tooltip' data-placement='top' title=\"" + folder_code+"\" ";
+		html += "  >";
 		html += "	<div id='"+type+"-tree-label_"+this.id+"' class='"+type+"-label tree-label'>";
 		if (this.nbfolders>0)
 			html += "<span id='"+type+"-toggle_"+this.id+"' class='closeSign' onclick=\"toggleElt('closeSign','openSign','"+this.id+"','"+type+"');\"></span>";
@@ -624,7 +626,7 @@ UIFactory["PortfolioFolder"].prototype.displayFolderDetail = function(type,paren
 		html += "			<span id='pcode_"+this.id+"' >"+folder_code+"</span>";
 		html += "			<span class='copy-button fas fa-clipboard' ";
 		html += "				onclick=\"copyInclipboad('"+this.id+"')\" ";
-		html += "				onmouseover=\"$(this).tooltip('show')\" data-html='true' data-toggle='tooltip' data-placement='top' title=\"" + karutaStr[LANG]['copy'] +" : "+this.code_node.text()+"\" ";
+		html += "				onmouseover=\"if(!('ontouchstart' in window))$(this).tooltip('show')\" data-html='true' data-toggle='tooltip' data-placement='top' title=\"" + karutaStr[LANG]['copy'] +" : "+this.code_node.text()+"\" ";
 		html += "				onmouseout=\"outCopy('"+this.id+"')\">";
 		html += "			</span>";
 		html += "		</div>";
@@ -714,7 +716,7 @@ UIFactory["PortfolioFolder"].prototype.displayFolderDetail = function(type,paren
 			html += "<span id='pcode_"+this.id+"' class='portfolio-code'>"+this.code_node.text()+"</span>";
 			html += " <span class='copy-button fas fa-clipboard' ";
 			html += "   onclick=\"copyInclipboad('"+this.id+"')\" ";
-			html += "   onmouseover=\"$(this).tooltip('show')\" data-html='true' data-toggle='tooltip' data-placement='top' title=\"" + karutaStr[LANG]['copy'] +" : "+this.code_node.text()+"\" ";
+			html += "   onmouseover=\"if(!('ontouchstart' in window))$(this).tooltip('show')\" data-html='true' data-toggle='tooltip' data-placement='top' title=\"" + karutaStr[LANG]['copy'] +" : "+this.code_node.text()+"\" ";
 			html += "   onmouseout=\"outCopy('"+this.id+"')\">";
 			html += "</span>";
 			html += "</div>";

@@ -4052,8 +4052,7 @@ function eraseResource(nodeid,tags){
 		if (elts.length!=0) {
 			for (let j=0; j<elts.length; j++){
 				let eltid = $(elts[j]).attr("id");
-				if (UICom.structure.ui[eltid].semantictag!="model_code") // do not erase dashboard node
-					UICom.structure.ui[eltid].resource.erase();
+				UICom.structure.ui[eltid].resource.erase();
 			}
 		}
 	}
@@ -4069,7 +4068,8 @@ function eraseAllChildren(nodeid,types){
 		for (let i=0; i<elts.length; i++){
 			const elt = elts[i];
 			const eltid = $(elt).attr("id");
-			UICom.structure.ui[eltid].resource.erase();
+			if (UICom.structure.ui[eltid].semantictag!="model_code") // do not erase dashboard node
+				UICom.structure.ui[eltid].resource.erase();
 		}
 	}
 }
