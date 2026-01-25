@@ -748,6 +748,7 @@ UIFactory["UsersGroup"].getIdByLabel = function(label)
 	});
 	return result;
 }
+
 //==================================
 UIFactory["UsersGroup"].getGroupsByUser = function(userid)
 //==================================

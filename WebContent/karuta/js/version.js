@@ -2,8 +2,8 @@
 var karuta_version = "@project.version@";
 var karuta_date = "@build.timestamp@";
 
-const karuta_version_eportfolium = 'eportfolium-3.112.0';
-const karuta_date_eportfolium = '2026-01-19';
+const karuta_version_eportfolium = 'eportfolium-3.114.0';
+const karuta_date_eportfolium = '2026-01-25';
 
 var karuta_backend_version = "?";
 var karuta_backend_date = "?";
@@ -133,3 +133,5 @@ var karuta_fileserver_date = "?";
 // 3.111.0 FIX - Tooltip disabled for portfolio list on touch screen
 // 3.111.1 FIX - Tooltip disabled for portfolio list on touch screen
 // 3.112.0 FEAT - various features
+// 3.113.0 FEAT - GetGetResource completion with person or portfolio label
+// 3.114.0 FEAT - GetResource GetGetResource with person, portfolio, groups

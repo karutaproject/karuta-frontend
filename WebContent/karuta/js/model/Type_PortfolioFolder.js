@@ -1051,7 +1051,7 @@ UIFactory["PortfolioFolder"].checkPortfolios = function()
 //==================================
 {
 	$.ajax({
-		async: true,
+		async: false,
 		type : "GET",
 		dataType : "xml",
 		url : serverBCK_API+"/portfolios?active=1&project=false&count=true",

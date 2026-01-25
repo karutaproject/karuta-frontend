@@ -270,7 +270,7 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 				semtag2 = semtag.substring(semtag.indexOf('+')+1);
 				semtag = semtag.substring(0,semtag.indexOf('+'));
 			}
-			var target = queryattr_value.substring(srce_indx+1);  // label or text or personlabel or grouplabel
+			var target = queryattr_value.substring(srce_indx+1);  // label or text or personlabel or grouplabel or first-last-name
 			var semtag_parent_indx = queryattr_value.substring(0,semtag_indx).lastIndexOf('.');
 			var semtag_parent = queryattr_value.substring(semtag_parent_indx+1,semtag_indx);
 			if (semtag_parent.indexOf('#')==0)
@@ -408,11 +408,12 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 				let self = this;
 				let url1 = "";
 				if  (portfoliocode.indexOf("#portfoliogroup")>-1) {
+					code_parent = cleanCode(code_parent);
 					if (isNaN(code_parent)) {
-						const groupid = UIFactory.PortfoliosGroup.getIdByLabel(cleanCode(code_parent));
+						const groupid = UIFactory.PortfoliosGroup.getIdByLabel(code_parent);
 						url1 = serverBCK_API+"/portfoliogroups?group="+groupid;
 					} else {
-						url1 = serverBCK_API+"/portfoliogroups?group="+cleanCode(code_parent);
+						url1 = serverBCK_API+"/portfoliogroups?group="+code_parent;
 					}
 					$.ajax({
 						async: false,
@@ -852,7 +853,7 @@ UIFactory["Get_Get_Resource"].prototype.parse = function(destid,type,langcode,da
 			let value = "";
 			let code = "";
 			let label = [];
-			if (target=='personlabel' || target=='portfoliolabel') {
+			if (target=='first-last-name' || target=='personlabel' || target=='portfoliolabel') {
 				code = "@"+tableau2[i].code;
 				value = code;
 				for (var j=0; j<languages.length;j++){
@@ -988,12 +989,27 @@ UIFactory["Get_Get_Resource"].prototype.parse = function(destid,type,langcode,da
 			var input = "";
 			var resource = null;
 			//------------------------------
-			if ($("asmResource",newTableau1[i][1]).length==3) {
-				style = UIFactory.Node.getDataContentStyle(newTableau1[i][1].querySelector("metadata-epm"));
-				resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i][1]); 
+			if (target=='first-last-name' || target=='personlabel' || target=='portfoliolabel') {
+				code = "@"+tableau2[i].code;
+				value = code;
+				for (var j=0; j<languages.length;j++){
+					label[j]= tableau2[i].libelle;
+				}
 			} else {
-				style = UIFactory.Node.getDataLabelStyle(newTableau1[i][1].querySelector("metadata-epm"));
-				resource = $("asmResource[xsi_type='nodeRes']",newTableau1[i][1]);
+				//------------------------------
+				if ($("asmResource",newTableau1[i][1]).length==3) {
+					style = UIFactory.Node.getDataContentStyle(newTableau1[i][1].querySelector("metadata-epm"));
+					resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i][1]); 
+				} else {
+					style = UIFactory.Node.getDataLabelStyle(newTableau1[i][1].querySelector("metadata-epm"));
+					resource = $("asmResource[xsi_type='nodeRes']",newTableau1[i][1]);
+				}
+				value = $('value',resource).text();
+				code = $('code',resource).text();
+//				label = $(srce+"[lang='"+languages[langcode]+"']",resource).text();
+				for (var j=0; j<languages.length;j++){
+					label[j]= $(srce+"[lang='"+languages[j]+"']",resource).text();
+				}
 			}
 			//------------------------------
 			var code = $('code',resource).text();
@@ -1021,7 +1037,7 @@ UIFactory["Get_Get_Resource"].prototype.parse = function(destid,type,langcode,da
 			if (display_code)
 				input += "<span class='li-code'>"+code+"</span> ";
 			if (display_label)
-				input += "<span class='li-label'>"+$(srce+"[lang='"+languages[langcode]+"']",resource).text()+"</span>";
+				input += "<span class='li-label'>"+label[langcode]+"</span>";
 			input += "</div></input>";
 			var obj = $(input);
 			$(obj).click(function (){
@@ -1064,15 +1080,29 @@ UIFactory["Get_Get_Resource"].prototype.parse = function(destid,type,langcode,da
 			var input = "";
 			var resource = null;
 			//------------------------------
-			if ($("asmResource",newTableau1[i][1]).length==3) {
-				style = UIFactory.Node.getDataContentStyle(newTableau1[i][1].querySelector("metadata-epm"));
-				resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i][1]); 
+			if (target=='first-last-name' || target=='personlabel' || target=='portfoliolabel') {
+				code = "@"+tableau2[i].code;
+				value = code;
+				for (var j=0; j<languages.length;j++){
+					label[j]= tableau2[i].libelle;
+				}
 			} else {
-				style = UIFactory.Node.getDataLabelStyle(newTableau1[i][1].querySelector("metadata-epm"));
-				resource = $("asmResource[xsi_type='nodeRes']",newTableau1[i][1]);
+				//------------------------------
+				if ($("asmResource",newTableau1[i][1]).length==3) {
+					style = UIFactory.Node.getDataContentStyle(newTableau1[i][1].querySelector("metadata-epm"));
+					resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i][1]); 
+				} else {
+					style = UIFactory.Node.getDataLabelStyle(newTableau1[i][1].querySelector("metadata-epm"));
+					resource = $("asmResource[xsi_type='nodeRes']",newTableau1[i][1]);
+				}
+				value = $('value',resource).text();
+				code = $('code',resource).text();
+//				label = $(srce+"[lang='"+languages[langcode]+"']",resource).text();
+				for (var j=0; j<languages.length;j++){
+					label[j]= $(srce+"[lang='"+languages[j]+"']",resource).text();
+				}
 			}
-			//------------------------------
-			var code = $('code',resource).text();
+			//-----------------------------
 			var display_code = false;
 			var display_label = true;
 			if (code.indexOf("$")>-1) 
@@ -1094,7 +1124,7 @@ UIFactory["Get_Get_Resource"].prototype.parse = function(destid,type,langcode,da
 			if (display_code)
 				input += code + " ";
 			if (display_label)
-				input +=$("label[lang='"+languages[langcode]+"']",resource).text();
+				input +=label[langcode];
 			input += " </div>"
 			var input_obj = $(input);
 			$(input_obj).click(function (){
@@ -1156,20 +1186,35 @@ UIFactory["Get_Get_Resource"].prototype.parse = function(destid,type,langcode,da
 		//------------------------------------------------
 		var previouscode = "";
 		for ( var i = 0; i < newTableau2.length; ++i) {
-			var uuid = $(newTableau2[i][1]).attr('id');
-			var input = "";
-			var style = "";
-			var resource = null;
+			let uuid = $(newTableau1[i][1]).attr('id');
+			let style = "";
+			let resource = null;
+			let value = "";
+			let code = "";
+			let label = [];
 			//------------------------------
-			if ($("asmResource",newTableau2[i][1]).length==3) {
-				style = UIFactory.Node.getDataContentStyle(newTableau2[i][1].querySelector("metadata-epm"));
-				resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau2[i][1]); 
+			if (target=='first-last-name' || target=='personlabel' || target=='portfoliolabel') {
+				code = "@"+tableau2[i].code;
+				value = code;
+				for (var j=0; j<languages.length;j++){
+					label[j]= tableau2[i].libelle;
+				}
 			} else {
-				style = UIFactory.Node.getDataLabelStyle(newTableau2[i][1].querySelector("metadata-epm"));
-				resource = $("asmResource[xsi_type='nodeRes']",newTableau2[i][1]);
+				//------------------------------
+				if ($("asmResource",newTableau1[i][1]).length==3) {
+					style = UIFactory.Node.getDataContentStyle(newTableau1[i][1].querySelector("metadata-epm"));
+					resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i][1]); 
+				} else {
+					style = UIFactory.Node.getDataLabelStyle(newTableau1[i][1].querySelector("metadata-epm"));
+					resource = $("asmResource[xsi_type='nodeRes']",newTableau1[i][1]);
+				}
+				value = $('value',resource).text();
+				code = $('code',resource).text();
+				for (var j=0; j<languages.length;j++){
+					label[j]= $(srce+"[lang='"+languages[j]+"']",resource).text();
+				}
 			}
 			//------------------------------
-			var code = $('code',resource).text();
 			if (code!=previouscode){
 				previouscode = code
 				var selectable = true;
@@ -1214,11 +1259,11 @@ UIFactory["Get_Get_Resource"].prototype.parse = function(destid,type,langcode,da
 				if (display_code)
 					input += code + " ";
 					if (srce=="resource") {
-						var elts = $("label[lang='"+languages[langcode]+"']",resource).text().split("|");
+						var elts = label[langcode].split("|");
 						input +="<span  class='"+code+"'>" + elts[2].substring(6) + "</span></div>";
 					}
 				else	
-					input +="<span  class='"+code+"'>"+$(srce+"[lang='"+languages[langcode]+"']",resource).text()+"</span></div>";
+					input +="<span  class='"+code+"'>"+label[langcode]+"</span></div>";
 				var input_obj = $(input);
 				$(inputs_obj).append(input_obj);
 				// ---------------------- children ---------
@@ -1273,24 +1318,39 @@ UIFactory["Get_Get_Resource"].prototype.parse = function(destid,type,langcode,da
 			$(select).append($(select_item));
 //		}
 		//---------------------
-		if (target=='label') {
+		if (target.indexOf('label')>-1) {
 			for ( var i = 0; i < newTableau1.length; i++) {
 				//------------------------------
-				var uuid = $(newTableau1[i][1]).attr('id');
-				var style = "";
-				var resource = null;
+				let uuid = $(newTableau1[i][1]).attr('id');
+				let style = "";
+				let resource = null;
+				let value = "";
+				let code = "";
+				let label = [];
 				//------------------------------
-				if ($("asmResource",newTableau1[i][1]).length==3) {
-					style = UIFactory.Node.getDataContentStyle(newTableau1[i][1].querySelector("metadata-epm"));
-					resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i][1]); 
+				if (target=='first-last-name' || target=='personlabel' || target=='portfoliolabel') {
+					code = "@"+tableau2[i].code;
+					value = code;
+					for (var j=0; j<languages.length;j++){
+						label[j]= tableau2[i].libelle;
+					}
 				} else {
-					style = UIFactory.Node.getDataLabelStyle(newTableau1[i][1].querySelector("metadata-epm"));
-					resource = $("asmResource[xsi_type='nodeRes']",newTableau1[i][1]);
+					//------------------------------
+					if ($("asmResource",newTableau1[i][1]).length==3) {
+						style = UIFactory.Node.getDataContentStyle(newTableau1[i][1].querySelector("metadata-epm"));
+						resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i][1]); 
+					} else {
+						style = UIFactory.Node.getDataLabelStyle(newTableau1[i][1].querySelector("metadata-epm"));
+						resource = $("asmResource[xsi_type='nodeRes']",newTableau1[i][1]);
+					}
+					value = $('value',resource).text();
+					code = $('code',resource).text();
+	//				label = $(srce+"[lang='"+languages[langcode]+"']",resource).text();
+					for (var j=0; j<languages.length;j++){
+						label[j]= $(srce+"[lang='"+languages[j]+"']",resource).text();
+					}
 				}
 				//------------------------------
-				//------------------------------
-				var value = $('value',resource).text();
-				var code = $('code',resource).text();
 				var display_code = false;
 				var display_label = true;
 				var display_value = false;
@@ -1319,7 +1379,7 @@ UIFactory["Get_Get_Resource"].prototype.parse = function(destid,type,langcode,da
 					if (display_value)
 						html += "<span class='li-value'>"+value+"</span>";
 					if (display_label)
-						html += "<span class='li-label'>"+$(srce+"[lang='"+languages[langcode]+"']",resource).text()+"</span>";
+						html += "<span class='li-label'>"+label[langcode]+"</span>";
 					html += "</a>";
 					select_item = $(html);
 					$(select_item).click(function (ev){

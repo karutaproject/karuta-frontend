@@ -526,11 +526,11 @@ function processListActions(list)
 			g_actions[actiontype](actionnode);
 			previous_action = actiontype; j =0
 		}
-/*		if (actiontype=='for-each-line') {
+		if (actiontype=='for-each-line') {
 			let j = 0;
 			setTimeout(processLine,0,j,actionnode);
 		}
-
+/*
 			for (j=0; j<g_json.lines.length; j++){
 				$("#progressbar").attr("value",(j+1)/g_json.lines.length);
 				g_noline = j;

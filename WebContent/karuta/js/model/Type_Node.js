@@ -1449,7 +1449,7 @@ UIFactory["Node"].displaySidebar = function(root,destid,type,langcode,edit,paren
 	if (langcode==null)
 		langcode = LANGCODE;
 	//---------------------
-	if (type=='standard' || type=='translate' || type=='raw') {
+	if (root!="" && (type=='standard' || type=='translate' || type=='raw')) {
 		let i = 0;
 		while (i<root.children.length)
 		{

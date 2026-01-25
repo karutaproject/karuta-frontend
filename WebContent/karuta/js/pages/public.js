@@ -84,57 +84,65 @@ function displayKarutaPublic()
 						$("#contenu").html(g_variables["partage"]);
 					} else {	
 						$.ajax({
-							async:false,
 							type : "GET",
 							dataType : "xml",
-							url : serverBCK_API+"/nodes/node/" + g_uuid + '?userrole='+userrole,
+							url : serverBCK_API+"/nodes/node/" + g_uuid,
+							async:false,
 							success : function(data) {
-								let nodeid = (nid!=undefined)? nid : g_uuid;
-								g_edit = true; //no edit button
-								g_portfolio_current = data;
-								UICom.parseStructure(data);
-								var depth = 99;
-								var rootnode = UICom.structure.ui[nodeid];
-								if (rootnode.asmtype=='asmRoot' || rootnode.asmtype=='asmStructure')
-									depth = 1;
-								// --------------------------
-								var role = $(":root",data).attr("role");
-								if (role!="") {
-									g_userroles[0] = g_userroles[1] = role;
-								} else {
-									g_userroles[0] = g_userroles[1] ='designer';
-									g_designerrole = true;
-									g_visible = localStorage.getItem('metadata');
-									toggleMetadata(g_visible);
-								}
-								setCSSportfolio(data);
-								setLanguage(lang,'publichtm');
-								if (rootnode.asmtype=='asmRoot' || rootnode.asmtype=='asmStructure') {
-									UIFactory.Node.displaySidebarItem(nodeid,'sidebar-parent','standard',LANGCODE,false,nodeid);
-			//						UIFactory["Node"].displaySidebar(UICom.structure.tree[nodeid],'sidebar','standard',LANGCODE,false,nodeid);
-								}
-								$("#contenu").html("<div id='page' uuid='"+nodeid+"'></div>");
-								var semtag =  ($("metadata",rootnode.node)[0]==undefined || $($("metadata",rootnode.node)[0]).attr('semantictag')==undefined)?'': $($("metadata",rootnode.node)[0]).attr('semantictag');
-								if (semtag == 'bubble_level1') {
-									$("#main-container").html("");
-									UICom.structure.ui[nodeid].displayNode('standard',UICom.structure.tree[nodeid],'main-container',depth,LANGCODE,true);
-								}
-								else
-									UICom.structure.ui[nodeid].displayNode('standard',UICom.structure.tree[nodeid],'contenu',depth,LANGCODE,true);
-								var welcomes = $("asmUnit:has(metadata[semantictag*='WELCOME'])",data);
-								if (welcomes.length==0) // for backward compatibility
-									welcomes = $("asmUnit:has(metadata[semantictag*='welcome-unit'])",data);
-								if (welcomes.length>0){
-									var welcomeid = $(welcomes[0]).attr('id');
-									$("#sidebar_"+welcomeid).click();
-								} else {
-									var root = $("asmRoot",data);
-									var rootid = $(root[0]).attr('id');
-									$("#sidebar_"+rootid).click();
-								}
-							},		
-							error : function( jqXHR, textStatus, errorThrown ) {
-								alert("Fermer votre browser et rouvrir le lien pour accéder au portfolio.");
+								$.ajax({
+									type : "GET",
+									dataType : "xml",
+									url : serverBCK_API+"/nodes/node/" + g_uuid + '?userrole='+userrole,
+									async:false,
+									success : function(data) {
+										let nodeid = (nid!=undefined)? nid : g_uuid;
+										g_edit = true; //no edit button
+										g_portfolio_current = data;
+										UICom.parseStructure(data);
+										var depth = 99;
+										var rootnode = UICom.structure.ui[nodeid];
+										if (rootnode.asmtype=='asmRoot' || rootnode.asmtype=='asmStructure')
+											depth = 1;
+										// --------------------------
+										var role = $(":root",data).attr("role");
+										if (role!="") {
+											g_userroles[0] = g_userroles[1] = role;
+										} else {
+											g_userroles[0] = g_userroles[1] ='designer';
+											g_designerrole = true;
+											g_visible = localStorage.getItem('metadata');
+											toggleMetadata(g_visible);
+										}
+										setCSSportfolio(data);
+										setLanguage(lang,'publichtm');
+										if (rootnode.asmtype=='asmRoot' || rootnode.asmtype=='asmStructure') {
+											UIFactory.Node.displaySidebarItem(nodeid,'sidebar-parent','standard',LANGCODE,false,nodeid);
+					//						UIFactory["Node"].displaySidebar(UICom.structure.tree[nodeid],'sidebar','standard',LANGCODE,false,nodeid);
+										}
+										$("#contenu").html("<div id='page' uuid='"+nodeid+"'></div>");
+										var semtag =  ($("metadata",rootnode.node)[0]==undefined || $($("metadata",rootnode.node)[0]).attr('semantictag')==undefined)?'': $($("metadata",rootnode.node)[0]).attr('semantictag');
+										if (semtag == 'bubble_level1') {
+											$("#main-container").html("");
+											UICom.structure.ui[nodeid].displayNode('standard',UICom.structure.tree[nodeid],'main-container',depth,LANGCODE,true);
+										}
+										else
+											UICom.structure.ui[nodeid].displayNode('standard',UICom.structure.tree[nodeid],'contenu',depth,LANGCODE,true);
+										var welcomes = $("asmUnit:has(metadata[semantictag*='WELCOME'])",data);
+										if (welcomes.length==0) // for backward compatibility
+											welcomes = $("asmUnit:has(metadata[semantictag*='welcome-unit'])",data);
+										if (welcomes.length>0){
+											var welcomeid = $(welcomes[0]).attr('id');
+											$("#sidebar_"+welcomeid).click();
+										} else {
+											var root = $("asmRoot",data);
+											var rootid = $(root[0]).attr('id');
+											$("#sidebar_"+rootid).click();
+										}
+									},		
+									error : function( jqXHR, textStatus, errorThrown ) {
+										alert("Fermer votre browser et rouvrir le lien pour accéder au portfolio.");
+									}
+								});
 							}
 						});
 					}
