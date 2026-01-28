@@ -2,8 +2,8 @@
 var karuta_version = "@project.version@";
 var karuta_date = "@build.timestamp@";
 
-const karuta_version_eportfolium = 'eportfolium-3.114.0';
-const karuta_date_eportfolium = '2026-01-25';
+const karuta_version_eportfolium = 'eportfolium-3.114.1';
+const karuta_date_eportfolium = '2026-01-27';
 
 var karuta_backend_version = "?";
 var karuta_backend_date = "?";
@@ -135,3 +135,4 @@ var karuta_fileserver_date = "?";
 // 3.112.0 FEAT - various features
 // 3.113.0 FEAT - GetGetResource completion with person or portfolio label
 // 3.114.0 FEAT - GetResource GetGetResource with person, portfolio, groups
+// 3.114.1 FIX - GetResource GetGetResource with person, portfolio, groups

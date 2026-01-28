@@ -1,4 +1,4 @@
-/* =======================================================
+	/* =======================================================
 	Copyright 2018 - ePortfolium - Licensed under the
 	Educational Community License, Version 2.0 (the "License"); you may
 	not use this file except in compliance with the License. You may
@@ -981,6 +981,9 @@ UIFactory["Get_Get_Resource"].prototype.parse = function(destid,type,langcode,da
 		});
 		$(radio_obj).append(obj);
 		$("#"+destid).append(radio_obj);
+		let value = "";
+		let code = "";
+		let label = [];
 		//-------------------
 		for ( var i = 0; i < newTableau1.length; i++) {
 			var uuid = $(newTableau1[i][1]).attr('id');
@@ -1007,12 +1010,11 @@ UIFactory["Get_Get_Resource"].prototype.parse = function(destid,type,langcode,da
 				value = $('value',resource).text();
 				code = $('code',resource).text();
 //				label = $(srce+"[lang='"+languages[langcode]+"']",resource).text();
-				for (var j=0; j<languages.length;j++){
+				for (let j=0; j<languages.length;j++){
 					label[j]= $(srce+"[lang='"+languages[j]+"']",resource).text();
 				}
 			}
 			//------------------------------
-			var code = $('code',resource).text();
 			var display_code = false;
 			var display_label = true;
 			if (code.indexOf("$")>-1) 
@@ -1023,22 +1025,22 @@ UIFactory["Get_Get_Resource"].prototype.parse = function(destid,type,langcode,da
 			var original_code = code
 			code = cleanCode(code);
 			//------------------------------
-			input += "<div class='radio-div' value='"+$('value',resource).text()+"' uuid='"+uuid+"' code='"+$('code',resource).text()+"' ";
-			for (var j=0; j<languages.length;j++){
-				input += "label_"+languages[j]+"=\""+$(srce+"[lang='"+languages[j]+"']",resource).text()+"\" ";
+			input += "<div class='radio-div' value='"+value+"' uuid='"+uuid+"' code='"+code+"' ";
+			for (let j=0; j<languages.length;j++){
+				input += "label_"+languages[j]+"=\""+label[j]+"\" ";
 			}
 			input += "><input type='radio' name='radio_"+self.id+"' ";
 			if (disabled)
 				input +="disabled='disabled' ";
 			if (code!="" && self_code==$('code',resource).text())
 				input += " checked ";
-			input += " style=\""+style+"\"></div>";
-			input += "<div  class='sel"+code+" radio-label' style=\""+style+"\">";
+			input += " style=\""+style+"\">";
+			input += "<div  class='sel"+code+" radio-label' style=\"margin-left:5px;"+style+"\">";
 			if (display_code)
 				input += "<span class='li-code'>"+code+"</span> ";
 			if (display_label)
 				input += "<span class='li-label'>"+label[langcode]+"</span>";
-			input += "</div></input>";
+			input += "</div></input></div>";
 			var obj = $(input);
 			$(obj).click(function (){
 				UIFactory["Get_Get_Resource"].update(this,self,langcode,type);
@@ -1073,12 +1075,14 @@ UIFactory["Get_Get_Resource"].prototype.parse = function(destid,type,langcode,da
 		});
 		$(inputs_obj).append(input_obj);
 		//-----------------------
-		var first = true;
 		for ( var i = 0; i < newTableau1.length; ++i) {
 			var uuid = $(newTableau1[i][1]).attr('id');
 			var style = "";
 			var input = "";
-			var resource = null;
+			let resource = null;
+			let value = "";
+			let code = "";
+			let label = [];
 			//------------------------------
 			if (target=='first-last-name' || target=='personlabel' || target=='portfoliolabel') {
 				code = "@"+tableau2[i].code;
@@ -1113,12 +1117,12 @@ UIFactory["Get_Get_Resource"].prototype.parse = function(destid,type,langcode,da
 			var original_code = code
 			code = cleanCode(code);
 			//------------------------------
-			input += "<div name='click_"+self.id+"' code='"+$('code',resource).text()+"' value='"+$('value',resource).text()+"' class='sel"+code+" click-item";
-			if (self_code==$('code',resource).text())
+			input += "<div name='click_"+self.id+"' code='"+code+"' value='"+value+"' class='sel"+code+" click-item";
+			if (self_code==code)
 				input += " clicked";
 			input += "' ";
-			for (var j=0; j<languages.length;j++){
-				input += "label_"+languages[j]+"=\""+$("label[lang='"+languages[j]+"']",resource).text()+"\" ";
+			for (let j=0; j<languages.length;j++){
+				input += "label_"+languages[j]+"=\""+label[j]+"\" ";
 			}
 			input += " style=\""+style+"\">";
 			if (display_code)
@@ -1369,9 +1373,9 @@ UIFactory["Get_Get_Resource"].prototype.parse = function(destid,type,langcode,da
 					html = "<div class='dropdown-divider'></div>";
 					select_item = $(html);
 				} else {
-					html = "<a class='dropdown-item' value='"+$('value',resource).text()+"' code='"+$('code',resource).text()+"' class='sel"+code+"' ";
-					for (var j=0; j<languages.length;j++){
-						html += "label_"+languages[j]+"=\""+$(srce+"[lang='"+languages[j]+"']",resource).text()+"\" ";
+					html = "<a class='dropdown-item' value='"+value+"' code='"+code+"' class='sel"+code+"' ";
+					for (let j=0; j<languages.length;j++){
+						html += "label_"+languages[j]+"=\""+label[j]+"\" ";
 					}
 					html += " style=\""+style+"\">";
 					if (display_code)
