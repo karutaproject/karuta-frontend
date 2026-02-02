@@ -1481,7 +1481,7 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 				else
 					resource = $(">asmResource[xsi_type='nodeRes']",allreadyadded[i]);
 				let code = $('code',resource).text();
-				tabadded[i] = code;
+				tabadded[i] = cleanCode(code);
 			}
 		}
 		//----------remove allready added----------------
