@@ -1250,6 +1250,15 @@
 		<display-sharing>
 		</display-sharing>
 	</xsl:template>
+	<!-- ================ exist-sharing ============================ -->
+	<xsl:template match="*[metadata/@semantictag='exist-sharing']">
+		<xsl:variable name="select">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='text-value']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<exist-sharing>
+			<xsl:attribute name="select"><xsl:value-of select="$select"/></xsl:attribute>
+		</exist-sharing>				
+	</xsl:template>
 		<!-- ================ menu ============================ -->
 	<xsl:template match="*[metadata/@semantictag='menu']">
 		<xsl:variable name="semtag">

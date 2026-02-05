@@ -931,6 +931,44 @@ g_report_actions['display-sharing'] = function (destid,action,no,data)
 	});
 }
 
+//==================================
+g_report_actions['exist-sharing'] = function (destid,action,no,data)
+//==================================
+{
+	const select = cleanCode(replaceVariable($(action).attr("select")));
+	$.ajax({
+		async:false,
+		type : "GET",
+		dataType : "xml",
+		url : serverBCK_API+"/rolerightsgroups/all/users?portfolio="+portfolioid_current,
+		success : function(data) {
+			let html ="";
+			const groups = $("rrg",data);
+			let group_labels = [];
+			for (var i=0; i<groups.length; i++) {
+				group_labels[i] = [$("label",groups[i]).text(),$(groups[i]).attr('id'),$("user",groups[i])];
+			}
+			for (var i=0; i<groups.length; i++) {
+				const label = group_labels[i][0];
+				const groupid = group_labels[i][1];
+				const users = group_labels[i][2];
+				if (label==select) {
+					for (var j=0; j<users.length; j++){
+						var userid = $(users[j]).attr('id');
+						if (Users_byid[userid]!=undefined) {
+							html += "<div>"+Users_byid[userid].firstname+" "+Users_byid[userid].lastname+"</div>";
+						} else {
+							UIFactory.User.load(userid);
+							html += "<div>"+Users_byid[userid].firstname+" "+Users_byid[userid].lastname+"</div>";
+						}
+					}
+				}
+			}
+			$("#"+destid).append(html);	
+		}
+	});
+}
+
 //=============================================================================
 //=============================================================================
 //======================= TABLE - ROW - CELL ==================================
@@ -2320,6 +2358,24 @@ g_report_actions['variable'] = function (destid,action,no,data)
 				if (text.toString().indexOf(".")>-1)
 					text = text.toFixed(2);			
 			}
+			if (aggregatetype=="avgint" && g_variables[select]!=undefined){
+				var sum = 0;
+				for (let i=0;i<g_variables[select].length;i++){
+					if ($.isNumeric(g_variables[select][i]))
+						sum += parseFloat(g_variables[select][i]);
+				}
+				text = sum/g_variables[select].length;
+				text = Math.round(text);
+			}
+			if (aggregatetype=="avghalfint" && g_variables[select]!=undefined){
+				var sum = 0;
+				for (let i=0;i<g_variables[select].length;i++){
+					if ($.isNumeric(g_variables[select][i]))
+						sum += parseFloat(g_variables[select][i]);
+				}
+				text = sum/g_variables[select].length;
+				text = Math.round(text * 2) / 2;
+			}
 			if (!$.isNumeric(text))
 				text="";
 		//------------function--------------------------------
@@ -2879,6 +2935,24 @@ g_report_actions['aggregate'] = function (destid,action,no,data)
 		if (text.toString().indexOf(".")>-1)
 			text = text.toFixed(2);
 		
+	}
+	if (type=="avgint" && g_variables[select]!=undefined){
+		var sum = 0;
+		for (let i=0;i<g_variables[select].length;i++){
+			if ($.isNumeric(g_variables[select][i]))
+				sum += parseFloat(g_variables[select][i]);
+		}
+		text = sum/g_variables[select].length;
+		text = Math.round(text);
+	}
+	if (type=="avghalfint" && g_variables[select]!=undefined){
+		var sum = 0;
+		for (let i=0;i<g_variables[select].length;i++){
+			if ($.isNumeric(g_variables[select][i]))
+				sum += parseFloat(g_variables[select][i]);
+		}
+		text = sum/g_variables[select].length;
+		text = Math.round(text * 2) / 2;
 	}
 	if (ref!=undefined && ref!="") {
 		if (g_variables[ref]==undefined)

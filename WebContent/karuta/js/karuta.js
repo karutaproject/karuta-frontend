@@ -2961,6 +2961,10 @@ function replaceVariable(text,node,withquote)
 			text = text.replaceAll('##accountlogin##',USER.username);
 		}
 		//-------------
+		if (text.indexOf('##userid##')>-1) {
+			text = text.replaceAll('##userid##',USER.id);
+		}
+		//-------------
 		var n = 0;
 		while (text!=undefined && text.indexOf("{##")>-1 && n<100) {
 			var test_string = text.substring(text.indexOf("{##")+3); // test_string = abcd{##variable##}efgh.....

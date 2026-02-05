@@ -1241,7 +1241,7 @@ UIFactory["Get_Get_Resource"].prototype.parse = function(destid,type,langcode,da
 				let original_code = code
 				code = cleanCode(code);
 				//------------------------------
-				input += "<div id='"+code+"' style=\""+style+"\">";
+				let input = "<div id='"+code+"' style=\""+style+"\">";
 				if (selectable) {
 					input += "	<input type='checkbox' name='multiple_"+self.id+"'  uuid='"+uuid+"' value='"+$('value',resource).text()+"' code='"+$('code',resource).text()+"' portfoliocode='"+portfoliocode+"' class='multiple-item";
 					input += "' ";
