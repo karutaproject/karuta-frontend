@@ -1489,7 +1489,7 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 		var newTableau3 = [];
 		if (this.unique!=undefined && this.unique!="" && this.unique!="false") {
 			for ( var i = 0; i < newTableau1.length; ++i) {
-				const indx = tabadded.indexOf(newTableau1[i][0]);
+				const indx = tabadded.indexOf(cleanCode(newTableau1[i][0]));
 				if (indx==-1) {
 					newTableau2.push(newTableau1[i]);
 					newTableau3.push(tableau2[i]);

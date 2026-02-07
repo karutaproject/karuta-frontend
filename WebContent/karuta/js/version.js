@@ -2,8 +2,8 @@
 var karuta_version = "@project.version@";
 var karuta_date = "@build.timestamp@";
 
-const karuta_version_eportfolium = 'eportfolium-3.115.0';
-const karuta_date_eportfolium = '2026-02-05';
+const karuta_version_eportfolium = 'eportfolium-3.115.1';
+const karuta_date_eportfolium = '2026-02-07';
 
 var karuta_backend_version = "?";
 var karuta_backend_date = "?";
@@ -139,3 +139,4 @@ var karuta_fileserver_date = "?";
 // 3.114.2 FIX - GetResource cleancode-multiple - list of portfolios
 // 3.114.3 FIX - GetGetResource varaible undefined
 // 3.115.0 FEAT - report: sharing - aggregate avg int and half int
+// 3.115.1 FIX - cleanCode dans multiple
