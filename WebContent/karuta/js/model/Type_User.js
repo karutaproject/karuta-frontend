@@ -611,7 +611,7 @@ UIFactory["User"].prototype.getView = function(dest,type,lang,gid)
 			html += "</button>";
 			//----------------------------------
 			if (this.username_node.text()!='root') {
-				html += "<button class='btn ' onclick=\"UIFactory.Portfolio.displayUserPortfolios('"+this.id+"','"+this.firstname+"','"+this.lastname+"')\">";
+				html += "<button class='btn ' onclick=\"UIFactory.Portfolio.displayUserPortfolios('"+this.id+"','"+this.firstname+"','"+this.lastname+"',true,true)\">";
 				html += "<i class='fa fa-file' ></i>";
 				html += "</button>";
 			}
@@ -1464,7 +1464,7 @@ UIFactory["User"].prototype.getAdminUserMenu = function(type,gid)
 		html += "</span>";
 		//----------------------------------
 		if (this.username_node.text()!='root') {
-			html += "<span class='button btn' onclick=\"UIFactory.Portfolio.displayUserPortfolios('"+this.id+"','"+this.firstname+"','"+this.lastname+"')\">";
+			html += "<span class='button btn' onclick=\"UIFactory.Portfolio.displayUserPortfolios('"+this.id+"','"+this.firstname+"','"+this.lastname+"',true,true)\">";
 			html += "<span class='fa fa-file'/>";
 			html += "</span>";
 		}

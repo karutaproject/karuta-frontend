@@ -2083,6 +2083,45 @@ UIFactory["Portfolio"].displayUnSharing = function(destid,data,unshare_disabled)
 };
 
 //==================================
+UIFactory["Portfolio"].confirmUnshare = function(gid,uid,js) 
+//==================================
+{
+	if (js==null)
+		js="";
+	var str1 = karutaStr[LANG]["confirm-delete"];
+	var str2 = karutaStr[LANG]["button-delete"];
+	if (uid!=null && uid!='null') {
+		str1 = karutaStr[LANG]["confirm-unshare"];
+		str2 = karutaStr[LANG]["button-unshare"];
+	}
+	document.getElementById('delete-window-body').innerHTML = str1;
+	var buttons = "<button class='btn' onclick=\"javascript:$('#delete-window').modal('hide');\">" + karutaStr[LANG]["Cancel"] + "</button>";
+	buttons += "<button class='btn btn-danger' onclick=\"UIFactory.Portfolio.unshare('"+gid+"','"+uid+"');$('#delete-window').modal('hide');"+js+"\">" + str2 + "</button>";
+	document.getElementById('delete-window-footer').innerHTML = buttons;
+	$('#delete-window').modal('show');
+};
+
+//==================================
+UIFactory["Portfolio"].unshare = function(groupid,userid)
+//==================================
+{
+	var url = serverBCK_API+"/rolerightsgroups/rolerightsgroup/" + groupid + "/users/user/"+userid;
+	$.ajax({
+		type : "DELETE",
+		contentType: "application/xml",
+		dataType : "xml",
+		url : url,
+		data : "",
+		success : function(data) {
+			UIFactory.Portfolio.displayUserPortfolios(userid,Users_byid[userid].firstname,Users_byid[userid].lastname,true,true)
+		},
+		error : function(jqxhr,textStatus) {
+			alertHTML("Error in unshare : "+jqxhr.responseText);
+		}
+	});
+}
+
+//==================================
 UIFactory["Portfolio"].unshareUsers = function(portfolioid,destid,unshare_disabled)
 //==================================
 {
@@ -2117,7 +2156,6 @@ UIFactory["Portfolio"].unshareUsers = function(portfolioid,destid,unshare_disabl
 		});
 	}
 };
-
 
 //==================================
 UIFactory["Portfolio"].shareUsers = function(portfolioid)
@@ -2895,7 +2933,7 @@ UIFactory["Portfolio"].userListPortfolios = function(userid)
 
 
 //==================================
-UIFactory.Portfolio.displayUserPortfolios = function(userid,firstname,lastname,deletebutton)
+UIFactory.Portfolio.displayUserPortfolios = function(userid,firstname,lastname,deletebutton,remove)
 //==================================
 {
 	//---------------------
@@ -2911,7 +2949,7 @@ UIFactory.Portfolio.displayUserPortfolios = function(userid,firstname,lastname,d
 	$("#edit-window-footer").append($(footer));
 
 	var html = "<table id='displayListPortfolios' class='zebra-table'>";
-	html += "<tr class='head'><td>"+karutaStr[LANG]['label']+"</td><td>"+karutaStr[LANG]['role']+"</td><td>"+karutaStr[LANG]['code']+"</td><td></td></tr>"
+	html += "<tr class='head'><td>"+karutaStr[LANG]['label']+"</td><td>"+karutaStr[LANG]['role']+"</td><td></td><td>"+karutaStr[LANG]['code']+"</td><td></td></tr>"
 	for (var i=0;i<list.length;i++)
 		{
 		var portfolio = portfolios_byid[list[i]];
@@ -2929,12 +2967,15 @@ UIFactory.Portfolio.displayUserPortfolios = function(userid,firstname,lastname,d
 			userid : userid,
 			portfolioid : portfolioid,
 			success : function(data) {
-				var userrole = $("user[id='"+this.userid+"']",data).parent().parent().find('label').text();
-				html += userrole;
+				const userrole = $("user[id='"+this.userid+"']",data).parent().parent().find('label').text();
+				const gid = $("user[id='"+this.userid+"']",data).parent().parent().attr('id');
+				html += userrole +"</td>";
+				if (remove)
+					html += "<td><button class='btn btn-danger'  onclick=\"UIFactory.Portfolio.confirmUnshare('"+gid+"','"+userid+"')\">"+karutaStr[LANG]['button-unshare']+"</button></td>";
 				//$("#role_"+this.portfolioid).html(userrole);
 			}
 		});
-		html += "</td><td class='portfoliocode'>"+portfoliocode+"</td>";
+		html += "<td class='portfoliocode'>"+portfoliocode+"</td>";
 		if (deletebutton)
 			html += "<td><button class='btn btn-danger' onclick='UIFactory.Portfolio.confirmDelPortfolio(\""+portfolioid+"\")'>"+karutaStr[LANG]['button-delete']+"</button></td>";
 		html += "</tr>";

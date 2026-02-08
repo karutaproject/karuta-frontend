@@ -786,8 +786,7 @@ UIFactory["UsersGroup"].displayGroupsByUser = function(userid,remove)
 	for (var i=0;i<list.length;i++) {
 		html += "<tr>";
 		if (remove)
-			html+= "<td class='portfolio_label'><input id='remove-"+list[i].id+"' onclick=\"UIFactory.UsersGroup.confirmRemove('"+list[i].id+"','"+userid+"')\" type='checkbox' checked></td>"
-		;
+			html+= "<td class='portfolio_label'><input id='remove-"+list[i].id+"' onclick=\"UIFactory.UsersGroup.confirmRemove('"+list[i].id+"','"+userid+"')\" type='checkbox' checked></td>";
 		html += "<td class='portfolio_label'>"+list[i].label+"</td></tr>";
 	}
 	html += "</table>";

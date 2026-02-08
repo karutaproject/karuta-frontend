@@ -813,9 +813,18 @@ function displayBack() {
 		displayPage(uuid);
 	}
 }
+
 //==================================
 function displayPage(uuid,depth,type,langcode,edit,print) {
 //==================================
+	$('#wait-window').modal('show');
+	setTimeout(displayPageFCT,0,uuid,depth,type,langcode,edit,print);
+	}
+
+//==================================
+function displayPageFCT(uuid,depth,type,langcode,edit,print) {
+//==================================
+	$('#wait-window').modal('show');
 	if (edit!=undefined)
 		g_edit = edit;
 	//---------------------
@@ -836,9 +845,6 @@ function displayPage(uuid,depth,type,langcode,edit,print) {
 		langcode = LANGCODE;
 	if (print==null)
 		print = false;
-	if (print)
-		$('#wait-window').modal('show');
-
 	//---------------------
 	var scrollTop = window.pageYOffset || document.documentElement.scrollTop; 
 	var scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
