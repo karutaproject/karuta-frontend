@@ -2,8 +2,8 @@
 var karuta_version = "@project.version@";
 var karuta_date = "@build.timestamp@";
 
-const karuta_version_eportfolium = 'eportfolium-3.116.0';
-const karuta_date_eportfolium = '2026-02-08';
+const karuta_version_eportfolium = 'eportfolium-3.116.1';
+const karuta_date_eportfolium = '2026-02-10';
 
 var karuta_backend_version = "?";
 var karuta_backend_date = "?";
@@ -141,3 +141,4 @@ var karuta_fileserver_date = "?";
 // 3.115.0 FEAT - report: sharing - aggregate avg int and half int
 // 3.115.1 FIX - cleanCode dans multiple
 // 3.116.0 FEAT - Users List unsharing and deleting portfolio enabled
+// 3.116.1 FIX - CleanCode test if variable==null
