@@ -1028,8 +1028,10 @@ function previewPage(uuid,depth,type,langcode,edit,reload,role)
 		$("#preview-window-header-"+uuid).html(header);
 		$("#preview-window-body-"+uuid).html("");
 		let url = serverBCK_API+"/nodes/node/" + uuid + "?resources=true";
-		if (role!=null && role!="")
+		if (role!=null && role!="") {
 			url += "&userrole="+role;
+			userrole = role;
+		}
 		$.ajax({
 			async:false,
 			type : "GET",

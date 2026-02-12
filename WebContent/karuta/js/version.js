@@ -2,8 +2,8 @@
 var karuta_version = "@project.version@";
 var karuta_date = "@build.timestamp@";
 
-const karuta_version_eportfolium = 'eportfolium-3.116.1';
-const karuta_date_eportfolium = '2026-02-10';
+const karuta_version_eportfolium = 'eportfolium-3.117.1';
+const karuta_date_eportfolium = '2026-02-12';
 
 var karuta_backend_version = "?";
 var karuta_backend_date = "?";
@@ -142,3 +142,5 @@ var karuta_fileserver_date = "?";
 // 3.115.1 FIX - cleanCode dans multiple
 // 3.116.0 FEAT - Users List unsharing and deleting portfolio enabled
 // 3.116.1 FIX - CleanCode test if variable==null
+// 3.117.0 FEAT - Batch optimsation for-each-tree with code= and share-tree with variables g_userids
+// 3.117.1 FIX - PreviewPage variable userrole is set if role is provided 
