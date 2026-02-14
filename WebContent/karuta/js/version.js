@@ -2,7 +2,7 @@
 var karuta_version = "@project.version@";
 var karuta_date = "@build.timestamp@";
 
-const karuta_version_eportfolium = 'eportfolium-3.117.2';
+const karuta_version_eportfolium = 'eportfolium-3.118.0';
 const karuta_date_eportfolium = '2026-02-14';
 
 var karuta_backend_version = "?";
@@ -145,3 +145,4 @@ var karuta_fileserver_date = "?";
 // 3.117.0 FEAT - Batch optimsation for-each-tree with code= and share-tree with variables g_userids
 // 3.117.1 FIX - PreviewPage variable userrole is set if role is provided 
 // 3.117.2 FIX - displayBack - menu was not the goog one if portfolio changed 
+// 3.118.0 FEAT - Report : url2portfolio with role 
