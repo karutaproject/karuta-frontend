@@ -743,6 +743,7 @@ function displayBack() {
 					g_userroles = [];
 					g_portfolio_current = data;
 					g_portfolio_rootid = $("asmRoot",data).attr("id");
+					g_portfolio_UIcom_root = $("asmRoot",data)[0];
 					setCSSportfolio(data);
 					//-------------------------
 					var portfoliocode = portfolios_byid[g_portfolioid].code_node.text();
@@ -785,6 +786,7 @@ function displayBack() {
 					});
 					// --------------------------
 					UICom.parseStructure(data,true);
+					g_portfolio_UIcom_root = UICom.root;
 					$("#sub-bar").html(UIFactory.Portfolio.getNavBar(g_display_type,LANGCODE,g_edit,g_portfolioid));
 					if (g_bar_type.indexOf('horizontal')>-1) {
 						UIFactory.Portfolio.displayPortfolio('portfolio-container',g_display_type,LANGCODE,g_edit);
