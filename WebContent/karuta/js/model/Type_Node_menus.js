@@ -1386,7 +1386,7 @@ UIFactory["Node"].getXmlItemMenu = function(node,parentid,item,title,databack,ca
 				const portfolios = UIFactory.Portfolio.search_bycode(search_foliocode.replaceAll('*',''));
 				search_foliocode = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",portfolios)[0]).text();
 			}
-			let search_semtag = replaceVariable( ($("semtag",search).length>0)?$("semtag",search).text():"" );
+			let search_semtag = ($("semtag",search).length>0)?$("semtag",search).text():"";
 			let search_object = replaceVariable( ($("object",search).length>0)?$("object",search).text():"" );
 			// --------import-comp ------
 			imports = $("import-component",itemelts[i]);

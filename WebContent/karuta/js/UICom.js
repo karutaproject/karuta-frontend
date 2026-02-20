@@ -126,14 +126,17 @@ var UICom =
 		//---------------------
 		UICom.structure.tree[id] = r;
 		UICom.structure.ui[id] = new UIFactory["Node"](root);
-		UICom.parseElement(r);
+		UICom.parseElement(r,report);
 	},
 
 
 	//=======================================================================
-	parseElement: function(currentNode)
+	parseElement: function(currentNode,report)
 	//=======================================================================
 	{
+		if (report==null) {
+			report = false;
+		}
 		if (g_userroles[0]=='designer')
 			UICom.addRoles(currentNode.node);
 		var current = currentNode.node;
@@ -153,7 +156,7 @@ var UICom =
 				if (name=='asmContext') {
 					resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",child);
 					resource_type = $(resource).attr("xsi_type");
-					if (resource_type=='Proxy') {
+					if (resource_type=='Proxy' && !report) {
 						var targetid = $("code",$("asmResource[xsi_type='Proxy']",child)).text();
 						var edittargetroles = ($("metadata-wad",child).attr('edittargetroles')==undefined)?'none':$("metadata-wad",child).attr('edittargetroles');
 						var delnoderoles = ($("metadata-wad",child).attr('delnoderoles')==undefined)?'none':$("metadata-wad",child).attr('delnoderoles');
@@ -242,7 +245,7 @@ var UICom =
 				} // end of asmContext
 				var semtag = $("metadata",child).attr('semantictag');
 				// recurse
-				UICom.parseElement(childTree);
+				UICom.parseElement(childTree,report);
 			}
 		}
 	},

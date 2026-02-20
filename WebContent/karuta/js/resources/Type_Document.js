@@ -20,7 +20,7 @@ if( UIFactory === undefined )
 }
 
 var documentIcon = [];
-documentIcon = ['3gp','7z','ae','ai','apk','asf','avi','bak','bmp','cdr','css','csv','divx','dll','doc','docx','dw','dwg','eps','exe','flv','fw','gif','gz','htm','html','ico','iso','jar','jpg','js','mov','mp3','mp4','mpeg','pdf','php','png','ppt','ps','psd','rar','sh','sql','svg','swf','sys','tar','tiff','txt','war','wav','xls','xlsx','xml','zip'];
+documentIcon = ['3gp','7z','ae','ai','apk','asf','avi','bak','bmp','cdr','css','csv','divx','dll','doc','docx','dw','dwg','eps','exe','flv','fw','gif','gz','htm','html','ico','iso','jar','jpg','js','mov','mp3','mp4','mpeg','pdf','php','png','ppt','ps','psd','rar','sh','sql','svg','swf','sys','tar','tiff','txt','war','wav','xls','xlsx','xlsm','xml','zip'];
 
  
 /// Define our type

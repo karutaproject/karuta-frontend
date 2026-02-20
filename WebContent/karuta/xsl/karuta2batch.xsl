@@ -407,6 +407,26 @@
 		</share-tree>
 	</xsl:template>
 
+	<xsl:template match="*[metadata/@semantictag='share-trees']">
+		<xsl:variable name="code">
+			<xsl:call-template name="txtval">
+				<xsl:with-param name="semtag">tree-select</xsl:with-param>
+			</xsl:call-template>
+		</xsl:variable>
+		<share-trees select="{$code}">
+			<user>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">person</xsl:with-param>
+				</xsl:call-template>
+			</user>
+			<role>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">role</xsl:with-param>
+				</xsl:call-template>
+			</role>
+		</share-trees>
+	</xsl:template>
+
 	<xsl:template match="*[metadata/@semantictag='unshare-tree']">
 		<xsl:variable name="id">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='tree-select']/asmResource[@xsi_type='Get_Resource']/label[@lang=$lang]"></xsl:value-of>

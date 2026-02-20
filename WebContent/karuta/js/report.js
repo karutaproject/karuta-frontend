@@ -1859,6 +1859,7 @@ g_report_actions['for-each-portfolio-js'] = function (destid,action,no,data)
 				g_report_actions[tagname](destid,actions[i],no+'-'+j.toString()+i.toString(),data);
 			};
 		}
+		userrole = g_userroles[0];
 	}
 	if(NBELT!=undefined && NBELT!="" && NOELT!=undefined && NOELT!="")
 		prevnextbuttons(dashboard_current,first,last,portfolioids.length,NOELT,NBELT);
@@ -2872,6 +2873,7 @@ g_report_actions['url2portfolio'] = function (destid,action,no,data)
 	var style = replaceVariable($(action).attr("style"));
 	var cssclass = replaceVariable($(action).attr("class"));
 	var code = $(action).attr("code");
+	var userrole = $(action).attr("userrole");
 	code = replaceVariable(code);
 	if (code!=portfolios_byid[portfolioid_current].getCode()) {
 		var url = serverBCK_API+"/portfolios/portfolio/code/" + code;
@@ -2890,7 +2892,7 @@ g_report_actions['url2portfolio'] = function (destid,action,no,data)
 		label = portfolios_byid[portfolioid_current].getLabel();
 	}
 	//------------------------
-	text = "<span id='"+nodeid+"' style='"+style+"' class='URL2Portfolio-link "+cssclass+"' onclick=\"display_main_page('"+uuid+"','"+g_userrole+"')\">"+label+"</span>";
+	text = "<span id='"+nodeid+"' style='"+style+"' class='URL2Portfolio-link "+cssclass+"' onclick=\"display_main_page('"+uuid+"','"+userrole+"')\">"+label+"</span>";
 	//------------------------
 	$("#"+destid).append($(text));
 	$("#"+nodeid).attr("style",style);
