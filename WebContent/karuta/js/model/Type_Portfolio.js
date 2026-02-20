@@ -2113,7 +2113,7 @@ UIFactory["Portfolio"].unshare = function(groupid,userid)
 		url : url,
 		data : "",
 		success : function(data) {
-			UIFactory.Portfolio.displayUserPortfolios(userid,Users_byid[userid].firstname,Users_byid[userid].lastname,true,true)
+			UIFactory.Portfolio.displayUserPortfolios(userid,Users_byid[userid].firstname,Users_byid[userid].lastname,false,true)
 		},
 		error : function(jqxhr,textStatus) {
 			alertHTML("Error in unshare : "+jqxhr.responseText);
@@ -2957,7 +2957,7 @@ UIFactory.Portfolio.displayUserPortfolios = function(userid,firstname,lastname,d
 		var portfoliocode = portfolio.code_node.text();
 		var portfolio_label = portfolio.label_node[LANGCODE].text();
 
-		html += "<tr><td class='portfolio_label'>"+portfolio_label+"</td><td class='role' id='role_"+portfolioid+"'>";
+		html += "<tr><td style='width:35%' class='portfolio_label'>"+portfolio_label+"</td><td style='width:25%' class='role' id='role_"+portfolioid+"'>";
 		$.ajax({ // get group-role for the user
 			async: false,
 			Accept: "application/xml",
@@ -2967,15 +2967,19 @@ UIFactory.Portfolio.displayUserPortfolios = function(userid,firstname,lastname,d
 			userid : userid,
 			portfolioid : portfolioid,
 			success : function(data) {
-				const userrole = $("user[id='"+this.userid+"']",data).parent().parent().find('label').text();
+				const userroles = $("user[id='"+this.userid+"']",data).parent().parent().find('label');
+				let labels = "";
+				for (let j=0;j<userroles.length;j++) {
+					labels += $(userroles[j]).text() + "<br>";
+				}
 				const gid = $("user[id='"+this.userid+"']",data).parent().parent().attr('id');
-				html += userrole +"</td>";
+				html += labels +"</td>";
 				if (remove)
 					html += "<td><button class='btn btn-danger'  onclick=\"UIFactory.Portfolio.confirmUnshare('"+gid+"','"+userid+"')\">"+karutaStr[LANG]['button-unshare']+"</button></td>";
 				//$("#role_"+this.portfolioid).html(userrole);
 			}
 		});
-		html += "<td class='portfoliocode'>"+portfoliocode+"</td>";
+		html += "<td style='width:35%' class='portfoliocode'>"+portfoliocode+"</td>";
 		if (deletebutton)
 			html += "<td><button class='btn btn-danger' onclick='UIFactory.Portfolio.confirmDelPortfolio(\""+portfolioid+"\")'>"+karutaStr[LANG]['button-delete']+"</button></td>";
 		html += "</tr>";

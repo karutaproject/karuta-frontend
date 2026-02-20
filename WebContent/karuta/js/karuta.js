@@ -820,13 +820,6 @@ function displayBack() {
 function displayPage(uuid,depth,type,langcode,edit,print) {
 //==================================
 	$('#wait-window').modal('show');
-	setTimeout(displayPageFCT,0,uuid,depth,type,langcode,edit,print);
-	}
-
-//==================================
-function displayPageFCT(uuid,depth,type,langcode,edit,print) {
-//==================================
-	$('#wait-window').modal('show');
 	if (edit!=undefined)
 		g_edit = edit;
 	//---------------------
@@ -834,8 +827,6 @@ function displayPageFCT(uuid,depth,type,langcode,edit,print) {
 		g_backstack.push({'uuid':uuid,'portfolioid': g_portfolioid});
 	else if (g_backstack.length==0)
 		g_backstack.push({'uuid':uuid,'portfolioid': g_portfolioid});
-//	if (g_backstack[g_backstack.length]!=uuid)
-//		g_backstack.push(uuid);
 	//---------------------
 	if (uuid==null)
 		uuid = localStorage.getItem('currentDisplayedPage');
@@ -847,15 +838,6 @@ function displayPageFCT(uuid,depth,type,langcode,edit,print) {
 		langcode = LANGCODE;
 	if (print==null)
 		print = false;
-	//---------------------
-	var scrollTop = window.pageYOffset || document.documentElement.scrollTop; 
-	var scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
-	if (g_current_page!=uuid) {
-		$(window).scrollTop(0);
-		scrollTop = 0;
-		scrollLeft = 0;
-		g_current_page = uuid;
-	}
 	
 	//---------------------
 	$("#contenu").html("<div id='page' uuid='"+uuid+"'></div>");
@@ -884,6 +866,23 @@ function displayPageFCT(uuid,depth,type,langcode,edit,print) {
 			toggleSidebarPlus(nodeid);
 		}
 	}
+	//---------------------
+	setTimeout(displayPageFCT,0,uuid,depth,type,langcode,edit,print);
+}
+
+//==================================
+function displayPageFCT(uuid,depth,type,langcode,edit,print) {
+//==================================
+	//---------------------
+	var scrollTop = window.pageYOffset || document.documentElement.scrollTop; 
+	var scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
+	if (g_current_page!=uuid) {
+		$(window).scrollTop(0);
+		scrollTop = 0;
+		scrollLeft = 0;
+		g_current_page = uuid;
+	}
+
 	var name = $(UICom.structure.ui[uuid].node).prop("nodeName");
 	if (depth==null)
 		depth=100;
@@ -910,6 +909,7 @@ function displayPageFCT(uuid,depth,type,langcode,edit,print) {
 		}
 	}
 	var semtag = UICom.structure.ui[uuid].semantictag;
+	//-------------------------------
 	if ( (g_userroles[0]=='designer' && semtag.indexOf('welcome-unit')>-1) || (semtag.indexOf('welcome-unit')>-1 && semtag.indexOf('-editable')>-1 && semtag.containsArrayElt(g_userroles)) ) {
 		html = "<a  class='fas fa-edit' onclick=\"if(!g_welcome_edit){g_welcome_edit=true;} else {g_welcome_edit=false;};$('#contenu').html('');displayPage('"+uuid+"',100,'standard','"+langcode+"',true)\" data-title='"+karutaStr[LANG]["button-welcome-edit"]+"' data-toggle='tooltip' data-placement='bottom'></a>";
 		$("#welcome-edit").html(html);
@@ -929,6 +929,7 @@ function displayPageFCT(uuid,depth,type,langcode,edit,print) {
 		$("#welcome-add").html(html);
 	}
 	$("#wait-window").modal('hide');
+	//-------------------------------
 	if ($("#standard-search-text-input").val()!=undefined && $("#standard-search-text-input").val()!="") {
 		var searched_text = $("#standard-search-text-input").val();
 		var  html = document.getElementById("contenu").innerHTML;
