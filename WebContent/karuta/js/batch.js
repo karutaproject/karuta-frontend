@@ -3871,7 +3871,7 @@ g_actions['clear-log'] = function (node,data)
 //=================================================
 {
 	var ok = 1;
-	$("#batch-info").html("");
+	$("#batch-log").html("");
 	return (ok!=0);
 }
 
@@ -3890,8 +3890,8 @@ g_actions['write-log'] = function (node,data)
 //=================================================
 {
 	var ok = 1;
-	let text = getTxtvals($("text",node));
-	$("#batch-info").append(text);
+	let text = "<br>" + getTxtvals($("text",node));
+	$("#batch-log").append(text);
 	return (ok!=0);
 }
 
