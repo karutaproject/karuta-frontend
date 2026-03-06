@@ -1800,14 +1800,14 @@ g_report_actions['for-each-portfolio-js'] = function (destid,action,no,data)
 	var portfoliovar = $(action).attr("portfoliovar");
 	var user_role = replaceVariable($(action).attr("user-role"));
 	var select = $(action).attr("select");
-	select = replaceVariable(select);
-	var portfolioids = eval(select); // return array of portfolioids
 	//--------------------
 	let load = true; //  by default we load each porfolio to have access to its content
 	if (select.indexOf('@noload@')>-1){
 		load = false;
 		select = select.replaceAll('@noload@','');
 	}
+	select = replaceVariable(select);
+	var portfolioids = eval(select); // return array of portfolioids
 	//----------------------------------
 	var first = 0;
 	var last = portfolioids.length;

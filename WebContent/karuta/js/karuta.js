@@ -819,6 +819,8 @@ function displayBack() {
 //==================================
 function displayPage(uuid,depth,type,langcode,edit,print) {
 //==================================
+	const scrollTop = window.pageYOffset || document.documentElement.scrollTop; 
+	const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
 	$('#wait-window').modal('show');
 	if (edit!=undefined)
 		g_edit = edit;
@@ -867,15 +869,13 @@ function displayPage(uuid,depth,type,langcode,edit,print) {
 		}
 	}
 	//---------------------
-	setTimeout(displayPageFCT,0,uuid,depth,type,langcode,edit,print);
+	setTimeout(displayPageFCT,0,uuid,depth,type,langcode,edit,print,scrollTop,scrollLeft);
 }
 
 //==================================
-function displayPageFCT(uuid,depth,type,langcode,edit,print) {
+function displayPageFCT(uuid,depth,type,langcode,edit,print,scrollTop,scrollLeft) {
 //==================================
 	//---------------------
-	var scrollTop = window.pageYOffset || document.documentElement.scrollTop; 
-	var scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
 	if (g_current_page!=uuid) {
 		$(window).scrollTop(0);
 		scrollTop = 0;
@@ -4326,6 +4326,20 @@ $.fn.resourceCodeContains = function (options)
 	return $(result);
 };
 $.fn.test_resourceCodeContains = function (options) { return result = ($(this).resourceCodeContains(options).length>0) ? true : false;};
+//=====================================
+
+//=====================================
+$.fn.resourceCodeNotContains = function (options)
+//=====================================
+{
+	var defaults= { "value":"v","function":""};
+	var parameters = $.extend(defaults, options);
+	var result = $(this).has(">asmResource[xsi_type!='context'][xsi_type!='nodeRes']>code:not(:contains('"+parameters.value+"'))");
+	if (parameters.function!="")
+		result = eval("$(result)."+parameters.function);
+	return $(result);
+};
+$.fn.test_resourceCodeNotContains = function (options) { return result = ($(this).resourceCodeNotContains(options).length>0) ? true : false;};
 //=====================================
 
 //=====================================

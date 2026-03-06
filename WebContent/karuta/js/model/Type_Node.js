@@ -1327,12 +1327,12 @@ UIFactory["Node"].duplicate = function(uuid,callback,databack,param2,param3,para
 											url : urlS,
 											data : strippeddata,
 											success : function (data){
-												$("#saved-window-body").html("<img src='../../karuta/img/green.png'/> saved : "+new Date().toLocaleString());
+/*												$("#saved-window-body").html("<img src='../../karuta/img/green.png'/> saved : "+new Date().toLocaleString());
 												$("#wait-window").modal('hide');			
-												if (UICom.structure.ui[destid].asmtype=='asmContext')
+												if (UICom.structure.ui[destid].asmtype=='asmContext' || UICom.structure.ui[destid].asmtype=='asmUnit')
 													UIFactory.Node.reloadUnit();
 												else
-													UIFactory.Node.reloadStruct();
+													UIFactory.Node.reloadStruct();*/
 											},
 											error : function(jqxhr,textStatus) {
 												alert("Error in duplicate rename : "+jqxhr.responseText);
@@ -1349,7 +1349,7 @@ UIFactory["Node"].duplicate = function(uuid,callback,databack,param2,param3,para
 							} else {
 								$("#saved-window-body").html("<img src='../../karuta/img/green.png'/> saved : "+new Date().toLocaleString());
 								$("#wait-window").modal('hide');
-								if (UICom.structure.ui[destid].asmtype=='asmContext')
+								if (UICom.structure.ui[destid].asmtype=='asmContext'|| UICom.structure.ui[destid].asmtype=='asmUnit')
 									UIFactory.Node.reloadUnit();
 								else
 									UIFactory.Node.reloadStruct();
@@ -2136,7 +2136,7 @@ UIFactory["Node"].prototype.getButtons = function(dest,type,langcode,inline,dept
 			 	 )
 			)
 		{
-			html+= "<span class='button fas fa-clone' style='"+menus_color+"' onclick=\"javascript:UIFactory.Node.duplicate('"+this.id+"','UIFactory.Node.reloadUnit')\" data-title='"+karutaStr[LANG]["button-duplicate"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
+			html+= "<span class='button fas fa-clone' style='"+menus_color+"' onclick=\"javascript:UIFactory.Node.duplicate('"+this.id+"')\" data-title='"+karutaStr[LANG]["button-duplicate"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
 		}
 	}
 	//------------- private button -------------------
