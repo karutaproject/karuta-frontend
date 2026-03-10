@@ -2,8 +2,8 @@
 var karuta_version = "@project.version@";
 var karuta_date = "@build.timestamp@";
 
-const karuta_version_eportfolium = 'eportfolium-3.120.2';
-const karuta_date_eportfolium = '2026-03-04';
+const karuta_version_eportfolium = 'eportfolium-3.120.3';
+const karuta_date_eportfolium = '2026-03-10';
 
 var karuta_backend_version = "?";
 var karuta_backend_date = "?";
@@ -151,3 +151,4 @@ var karuta_fileserver_date = "?";
 // 3.120.0 FEAT - Query .resourceCodeNotContains() added 
 // 3.120.1 FIX - Position in the page 
 // 3.120.2 FIX - Position in the page 
+// 3.120.3 FIX - eraseAllchildren except for Report and Dashboard 

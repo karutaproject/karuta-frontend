@@ -4085,7 +4085,7 @@ function eraseAllChildren(nodeid,types){
 		for (let i=0; i<elts.length; i++){
 			const elt = elts[i];
 			const eltid = $(elt).attr("id");
-			if (UICom.structure.ui[eltid].semantictag!="model_code") // do not erase dashboard node
+			if ( UICom.structure.ui[eltid].semantictag!="model_code" && UICom.structure.ui[eltid].resource.type!="Dashboard" && UICom.structure.ui[eltid].resource.type!="Report") // do not erase dashboard node
 				UICom.structure.ui[eltid].resource.erase();
 		}
 	}

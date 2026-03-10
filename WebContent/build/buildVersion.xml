@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="updateVersion" default="updateVersion" basedir="."> 
-	<property name="noVersion" value="3.120.2"/>
-	<property name="textVersion" value="FIX - Position in the page "/>
+	<property name="noVersion" value="3.120.3"/>
+	<property name="textVersion" value="FIX - eraseAllchildren except for Report and Dashboard "/>
 	<property name="dirSrce" value="src/htm-srce"/>
 	<property name="dirTrgt" value="WebContent/karuta/htm"/>
 	<target name="testIfNewVersion">
