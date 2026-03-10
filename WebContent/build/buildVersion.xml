@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="updateVersion" default="updateVersion" basedir="."> 
+<project name="updateVersion"  basedir="."> 
 	<property name="noVersion" value="3.120.3"/>
 	<property name="textVersion" value="FIX - eraseAllchildren except for Report and Dashboard "/>
 	<property name="dirSrce" value="src/htm-srce"/>
