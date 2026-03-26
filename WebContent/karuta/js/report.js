@@ -2406,6 +2406,12 @@ g_report_actions['variable'] = function (destid,action,no,data)
 				if (result.toString().indexOf(".")>-1)
 					result = result.toFixed(2);
 			}
+			if ( operationtype=="halfrounded_percentage" && $.isNumeric(select1) && $.isNumeric(select2) && select2!=0){
+				result = Number(select1) / Number(select2) * 100;
+				if (result.toString().indexOf(".")>-1)
+					result = Math.round(result * 2) / 2;
+
+			}
 			if ( operationtype=="rounded_percentage" && $.isNumeric(select1) && $.isNumeric(select2) && select2!=0){
 				result = Number(select1) / Number(select2) * 100;
 				if (result.toString().indexOf(".")>-1)
@@ -2418,8 +2424,8 @@ g_report_actions['variable'] = function (destid,action,no,data)
 			}
 			if (!$.isNumeric(result))
 				result="";
-			if ( operationtype=="percentage" || operationtype=="rounded_percentage")
-				result = result.toString() + "%";
+//			if ( operationtype=="percentage" || operationtype=="rounded_percentage")
+//				result = result.toString() + "%";
 			text = result;
 		//-------------value--------------------------
 		} else if (txtval!=undefined && txtval!=""){
@@ -3005,6 +3011,11 @@ g_report_actions['operation'] = function (destid,action,no,data)
 		result = Number(select1) / Number(select2) * 100;
 		if (result.toString().indexOf(".")>-1)
 			result = result.toFixed(2);
+	}
+	if ( type=="halfrounded_percentage" && $.isNumeric(select1) && $.isNumeric(select2) && select2!=0){
+		result = Number(select1) / Number(select2) * 100;
+		if (result.toString().indexOf(".")>-1)
+			result = result.toFixed(1);
 	}
 	if ( type=="rounded_percentage" && $.isNumeric(select1) && $.isNumeric(select2) && select2!=0){
 		result = Number(select1) / Number(select2) * 100;

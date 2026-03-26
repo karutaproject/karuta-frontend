@@ -2,8 +2,8 @@
 var karuta_version = "@project.version@";
 var karuta_date = "@build.timestamp@";
 
-const karuta_version_eportfolium = 'eportfolium-3.120.3';
-const karuta_date_eportfolium = '2026-03-10';
+const karuta_version_eportfolium = 'eportfolium-3.122.0';
+const karuta_date_eportfolium = '2026-03-26';
 
 var karuta_backend_version = "?";
 var karuta_backend_date = "?";
@@ -152,3 +152,5 @@ var karuta_fileserver_date = "?";
 // 3.120.1 FIX - Position in the page 
 // 3.120.2 FIX - Position in the page 
 // 3.120.3 FIX - eraseAllchildren except for Report and Dashboard 
+// 3.121.0 FIX - Field g-select-variable, FIX - GetGetResource allreadyadded, FEAT GetResource optimization 
+// 3.122.0 FEAT - Report rounded average and pourcentage 

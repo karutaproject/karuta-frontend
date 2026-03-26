@@ -781,26 +781,36 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 		type = 'select';
 	//-----Nodes ------------------------------------------------------------
 	let nodes = $("node",data);
+	//-----
 	if (nodes.length==0)
 		nodes = $("group",data);
+	//-----
 	if (nodes.length==0 || portfoliocode=="#persongroup") {
 			nodes = [];
 			const users = $("user",data);
 			for ( var i = 0; i < $(users).length; i++) { // test if user exists anymore
 				const userid = $(users[i]).attr("id");
-				$.ajax({
-					async: false,
-					type : "GET",
-					dataType : "xml",
-					url : serverBCK_API+"/users/user/"+userid,
-					success : function(data) {
-						const username = $("username",data);
-						if (username.length>0)
-							nodes.push(users[i])
-					}
-				});
+				if (Users_byid[userid]==undefined) {
+					$.ajax({
+						async: false,
+						type : "GET",
+						dataType : "xml",
+						url : serverBCK_API+"/users/user/"+userid,
+						success : function(data) {
+							UIFactory.User.load(userid);
+							const username = Users_byid[userid].username;
+							if (username.length>0)
+								nodes.push(users[i])
+						}
+					});
+				} else {
+					const username = Users_byid[userid].username;
+					if (username.length>0)
+						nodes.push(users[i])
+				}
 			}
 		}
+	//-----
 	if (nodes.length==0 || portfoliocode=="#portfoliogroup")
 		nodes = $("portfolio",data);
 	//-----Node ordering-------------------------------------------------------
@@ -838,7 +848,7 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 							libelle = $("firstname",nodes[i]).text()+ " "+$("lastname",nodes[i]).text();
 						} else if (portfoliocode=="#persongroup") {
 							const userid = $(nodes[i]).attr("id");
-							UIFactory.User.load(userid);
+//							UIFactory.User.load(userid);
 							code = Users_byid[userid].username;
 							libelle =Users_byid[userid].firstname+" " +Users_byid[userid].lastname;
 						}

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="updateVersion"  basedir="."> 
-	<property name="noVersion" value="3.120.3"/>
-	<property name="textVersion" value="FIX - eraseAllchildren except for Report and Dashboard "/>
+	<property name="noVersion" value="3.122.0"/>
+	<property name="textVersion" value="FEAT - Report rounded average and pourcentage "/>
 	<property name="dirSrce" value="src/htm-srce"/>
 	<property name="dirTrgt" value="WebContent/karuta/htm"/>
 	<target name="testIfNewVersion">
