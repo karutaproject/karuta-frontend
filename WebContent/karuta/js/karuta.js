@@ -4056,13 +4056,15 @@ function confirmSubmitAndChangeVisibility(nodeid,path,value){
 //================================================
 
 //==================================
-function eraseResource(nodeid,tags){
+function eraseResource(nodeid,tags,top){
 //==================================
+	if (top==null)
+		top = "asmRoot";
 	tags = tags.split(",");
 	let parent = UICom.structure.ui[nodeid].node;
 	for (let i=0; i<tags.length; i++){
 		let elts = $("asmContext:has(>metadata[semantictag*='"+tags[i]+"'])",parent);
-		while (elts.length==0 && $(parent).prop("nodeName")!="asmRoot") {
+		while (elts.length==0 && $(parent).prop("nodeName")!=top) {
 			parent = $(parent).parent();
 			elts = $("asmContext:has(>metadata[semantictag*='"+tags[i]+"'])",parent);
 		}

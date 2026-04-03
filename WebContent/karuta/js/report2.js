@@ -284,13 +284,13 @@ function r_report_process(xmlDoc,json)
 function processReportActions(destid,actions,data)
 //=================================================
 {
-	const boucle = async () => {
+	const boucler = async () => {
 		for (let i=0; i<actions.length;i++){
-			var tagname = $(actions[i])[0].tagName;
+			const tagname = $(actions[i])[0].tagName;
 			await g_report_actions[tagname](destid,actions[i],i.toString(),data);
 		}
 	};
-	boucle();
+	boucler();
 };
 
 //===============================================================
@@ -1095,6 +1095,7 @@ g_report_actions['cell'] = function (destid,action,no,data)
 //==================================
 {
 	return new Promise((resolve) => {setTimeout(() => {
+		$("#report-progress").append(" cell");
 		var style = replaceVariable($(action).attr("style"));
 		var cssclass = replaceVariable($(action).attr("class"));
 		var attr_help = $(action).attr("help");
@@ -1882,10 +1883,17 @@ g_report_actions['for-each-portfolio'] = function (destid,action,no,data)
 							});
 						} else {
 							var actions = $(action).children();
-							for (let i=0; i<actions.length;i++){
-								var tagname = $(actions[i])[0].tagName;
-								g_report_actions[tagname](destid,actions[i],no+'-'+j.toString()+i.toString(),data);
-							};
+							const boucler = async () => {
+									for (let i=0; i<actions.length;i++){
+										var tagname = $(actions[i])[0].tagName;
+										await g_report_actions[tagname](destid,actions[i],no+'-'+j.toString()+i.toString(),data);
+									}
+								};
+							boucler();
+//							for (let i=0; i<actions.length;i++){
+//								var tagname = $(actions[i])[0].tagName;
+//								g_report_actions[tagname](destid,actions[i],no+'-'+j.toString()+i.toString(),data);
+//							};
 						}
 					}
 				//});
@@ -2152,229 +2160,232 @@ g_report_actions['for-each-portfolios-nodes'] = function (destid,action,no,data)
 g_report_actions['node_resource'] = function (destid,action,no,data)
 //==================================
 {
-	var text = "";
-	var style = "";
-	var cssclass = "";
-	var attr_help = "";
-	var prefix_id = "";
-	try {
-		var select = $(action).attr("select");
-		select = replaceVariable(select);
-		var ref = $(action).attr("ref");
-		ref = replaceVariable(ref);
-		var editnoderoles = $(action).attr("editnoderoles");
-		var editresroles = $(action).attr("editresroles");
-		var delnoderoles = $(action).attr("delnoderoles");
-		var showroles = ($(action).attr("showroles")==undefined)? "":$(action).attr("showroles");
-		var submitroles = ($(action).attr("submitroles")==undefined)? "":$(action).attr("submitroles");
-		var nodenopencil = ($(action).attr("nodenopencil")==undefined)? "":$(action).attr("nodenopencil");
-		var nodenopencilroles = ($(action).attr("nodenopencilroles")==undefined)? "":$(action).attr("nodenopencilroles");
-		style = replaceVariable($(action).attr("style"));
-		cssclass = replaceVariable($(action).attr("class"));
-		var selector = r_getSelector(select);
-		var node = $(selector.jquery,data);
-		if (node.length==0) // try the node itself
-			node = $(selector.jquery,data).addBack();
-		if (select.substring(0,2)=="..") // node itself
-			node = data;
-		if (node.length>0 || select.substring(0,1)=="."){
-			var nodeid = $(node).attr("id");
-			//----------------------------
-			if (UICom.structure.ui[nodeid].editresroles==undefined)
-				UICom.structure.ui[nodeid].setMetadata();
-			var node = UICom.structure.ui[nodeid];
-			g_variables["currentnode"] = "UICom.structure.ui['"+nodeid+"']";
-			var writenode = ($(node.node).attr('write')=='Y')? true:false;
-			if (editresroles.indexOf("user")>-1)
-				editresroles = ($(node.metadatawad).attr('editresroles')==undefined)?'':$(node.metadatawad).attr('editresroles');
-			if (editnoderoles.indexOf("user")>-1)
-				editnoderoles = ($(node.metadatawad).attr('editnoderoles')==undefined)?'':$(node.metadatawad).attr('editnoderoles');
-			if (g_designerrole || writenode) {
-				writenode = (editresroles.containsArrayElt(g_userroles) || editresroles.indexOf($(USER.username_node).text())>-1  || editnoderoles.containsArrayElt(g_userroles) || editnoderoles.indexOf($(USER.username_node).text())>-1 ) ;
-			}
-			var shownode = false;
-			if (g_designerrole || writenode) {
-				shownode = (showroles.containsArrayElt(g_userroles) || showroles.indexOf($(USER.username_node).text())>-1 )
-			}
-			const submitnode = (submitroles.containsArrayElt(g_userroles) || submitroles.indexOf($(USER.username_node).text())>-1 );
-			var deletenode = ($(node.node).attr('delete')=='Y')? true:false;
-			if (delnoderoles.indexOf("user")>-1)
-				delnoderoles = ($(node.metadatawad).attr('delnoderoles')==undefined)?'':$(node.metadatawad).attr('delnoderoles');
-			if (g_designerrole || deletenode) {
-				deletenode = (delnoderoles.containsArrayElt(g_userroles) || delnoderoles.indexOf($(USER.username_node).text())>-1);
-			}
-			var inline = false;
-			var inline_metadata = ($(node.metadata).attr('inline')==undefined)? '' : $(node.metadata).attr('inline');
-			if (inline_metadata=='Y')
-				inline = true;
-			//----------------------------
-			if (selector.type=='resource') {
-				try {
-					text = UICom.structure.ui[nodeid].resource.getView("dashboard_node_resource"+nodeid,'none',null,true);
-				} catch(e){
-					text = UICom.structure.ui[nodeid].structured_resource.getView("dashboard_node_resource"+nodeid,null,null,true);
+	return new Promise((resolve) => {setTimeout(() => {
+		var text = "";
+		var style = "";
+		var cssclass = "";
+		var attr_help = "";
+		var prefix_id = "";
+		try {
+			var select = $(action).attr("select");
+			select = replaceVariable(select);
+			var ref = $(action).attr("ref");
+			ref = replaceVariable(ref);
+			var editnoderoles = $(action).attr("editnoderoles");
+			var editresroles = $(action).attr("editresroles");
+			var delnoderoles = $(action).attr("delnoderoles");
+			var showroles = ($(action).attr("showroles")==undefined)? "":$(action).attr("showroles");
+			var submitroles = ($(action).attr("submitroles")==undefined)? "":$(action).attr("submitroles");
+			var nodenopencil = ($(action).attr("nodenopencil")==undefined)? "":$(action).attr("nodenopencil");
+			var nodenopencilroles = ($(action).attr("nodenopencilroles")==undefined)? "":$(action).attr("nodenopencilroles");
+			style = replaceVariable($(action).attr("style"));
+			cssclass = replaceVariable($(action).attr("class"));
+			var selector = r_getSelector(select);
+			var node = $(selector.jquery,data);
+			if (node.length==0) // try the node itself
+				node = $(selector.jquery,data).addBack();
+			if (select.substring(0,2)=="..") // node itself
+				node = data;
+			if (node.length>0 || select.substring(0,1)=="."){
+				var nodeid = $(node).attr("id");
+				//----------------------------
+				if (UICom.structure.ui[nodeid].editresroles==undefined)
+					UICom.structure.ui[nodeid].setMetadata();
+				var node = UICom.structure.ui[nodeid];
+				g_variables["currentnode"] = "UICom.structure.ui['"+nodeid+"']";
+				var writenode = ($(node.node).attr('write')=='Y')? true:false;
+				if (editresroles.indexOf("user")>-1)
+					editresroles = ($(node.metadatawad).attr('editresroles')==undefined)?'':$(node.metadatawad).attr('editresroles');
+				if (editnoderoles.indexOf("user")>-1)
+					editnoderoles = ($(node.metadatawad).attr('editnoderoles')==undefined)?'':$(node.metadatawad).attr('editnoderoles');
+				if (g_designerrole || writenode) {
+					writenode = (editresroles.containsArrayElt(g_userroles) || editresroles.indexOf($(USER.username_node).text())>-1  || editnoderoles.containsArrayElt(g_userroles) || editnoderoles.indexOf($(USER.username_node).text())>-1 ) ;
 				}
-				
-			} else
-			if (selector.type=='resource code') {
-				text = UICom.structure.ui[nodeid].resource.getCode();
-			} else
-			if (selector.type=='resource utc') {
-				text = UICom.structure.ui[nodeid].resource.getAttributes()['utc'];
-			} else
-			if (selector.type=='filename') {
-				text = UICom.structure.ui[nodeid].resource.getAttributes()['filename'];
-			} else
-			if (selector.type=='resource value') {
-				text = UICom.structure.ui[nodeid].resource.getValue("dashboard_value_"+nodeid);
-				prefix_id += "value_";
-			} else
-			if (selector.type=='resource label') {
-				text = UICom.structure.ui[nodeid].resource.getLabel();
-			} else
-			if (selector.type=='node label') {
-				text = UICom.structure.ui[nodeid].getLabel();
-			} else
-			if (selector.type=='node point label') {
-				text = "<a href='#' data-toggle='tooltip' title=\""+UICom.structure.ui[nodeid].getLabel('none')+"\"><i class='fas fa-circle'></i></a>";
-			} else
-			if (selector.type=='node code') {
-				text = UICom.structure.ui[nodeid].getCode();
-			} else
-			if (selector.type=='loginfo') {
-				var lastmodified = UICom.structure.ui[nodeid].resource.lastmodified_node.text().toLocaleString();
-				var user = UICom.structure.ui[nodeid].resource.user_node.text();
-				try {
-					text = lastmodified+" - user : "+user;
+				var shownode = false;
+				if (g_designerrole || writenode) {
+					shownode = (showroles.containsArrayElt(g_userroles) || showroles.indexOf($(USER.username_node).text())>-1 )
+				}
+				const submitnode = (submitroles.containsArrayElt(g_userroles) || submitroles.indexOf($(USER.username_node).text())>-1 );
+				var deletenode = ($(node.node).attr('delete')=='Y')? true:false;
+				if (delnoderoles.indexOf("user")>-1)
+					delnoderoles = ($(node.metadatawad).attr('delnoderoles')==undefined)?'':$(node.metadatawad).attr('delnoderoles');
+				if (g_designerrole || deletenode) {
+					deletenode = (delnoderoles.containsArrayElt(g_userroles) || delnoderoles.indexOf($(USER.username_node).text())>-1);
+				}
+				var inline = false;
+				var inline_metadata = ($(node.metadata).attr('inline')==undefined)? '' : $(node.metadata).attr('inline');
+				if (inline_metadata=='Y')
+					inline = true;
+				//----------------------------
+				if (selector.type=='resource') {
+					try {
+						text = UICom.structure.ui[nodeid].resource.getView("dashboard_node_resource"+nodeid,'none',null,true);
+					} catch(e){
+						text = UICom.structure.ui[nodeid].structured_resource.getView("dashboard_node_resource"+nodeid,null,null,true);
 					}
-				catch(error) {text="/"};
-			} else
-			if (selector.type=='resourcelastmodified') {
-				text = new Date(parseInt(UICom.structure.ui[nodeid].resource.lastmodified_node.text())).toLocaleString();
-			} else
-			if (selector.type=='nodelastmodified') {
-				text = new Date(parseInt(UICom.structure.ui[nodeid].lastmodified_node.text())).toLocaleString();
-			}
-			else if (selector.type=='submitteddate') {
-				text = UICom.structure.ui[nodeid].submitteddate;  //node.submitteddate
-			} else
-			if (selector.type=='node value') {
-				text = UICom.structure.ui[nodeid].getValue();
-			} else
-			if (selector.type=='uuid') {
-				text = nodeid;
-			} else if (selector.type=='node context') {
-				text = UICom.structure.ui[nodeid].getContext("dashboard_context_"+nodeid);
-				prefix_id += "context_";
-			}
-			//-------------------------------------------
-			if (ref!=undefined && ref!="") {
-				ref = replaceVariable(ref);
-				if (g_variables[ref]==undefined)
-					g_variables[ref] = new Array();
-				g_variables[ref][g_variables[ref].length] = text;
-			}
-			text = "<span id='dashboard_node_resource"+nodeid+"' style='"+style+"' class='"+cssclass+"'>"+text+"</span>";
-			if (g_report_edit && writenode && nodenopencil!='Y' && !nodenopencilroles.containsArrayElt(g_userroles)) {
-				text += "<span class='button fas fa-pencil-alt' data-toggle='modal' data-target='#edit-window' onclick=\"javascript:getEditBox('"+nodeid+"')\" data-title='"+karutaStr[LANG]["button-edit"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
-			}
-			if (g_report_edit && deletenode) {
-				var type = UICom.structure.ui[nodeid].asmtype;
-				text += deleteButton(nodeid,type,null,null,'UIFactory.Node.reloadUnit',null,null);
-			}
-			//------------- private button -------------------
-			if (shownode && writenode) {
-				privatevalue = ($(node.metadatawad).attr('private')==undefined)?false:$(node.metadatawad).attr('private')=='Y';
-				if (privatevalue) {
-					text = "<span id='report"+nodeid+"' class='private'>"+text+"<span class='button fas fa-eye-slash' style='' onclick=\"showinreport('"+nodeid+"')\" title='"+karutaStr[LANG]["button-show"]+"' data-toggle='tooltip' data-placement='bottom'></span>"+"</span>";
-				} else {
-					text = "<span id='report"+nodeid+"'>"+text+"<span class='button fas fa-eye' style='' onclick=\"hideinreport('"+nodeid+"')\" title='"+karutaStr[LANG]["button-hide"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
+					
+				} else
+				if (selector.type=='resource code') {
+					text = UICom.structure.ui[nodeid].resource.getCode();
+				} else
+				if (selector.type=='resource utc') {
+					text = UICom.structure.ui[nodeid].resource.getAttributes()['utc'];
+				} else
+				if (selector.type=='filename') {
+					text = UICom.structure.ui[nodeid].resource.getAttributes()['filename'];
+				} else
+				if (selector.type=='resource value') {
+					text = UICom.structure.ui[nodeid].resource.getValue("dashboard_value_"+nodeid);
+					prefix_id += "value_";
+				} else
+				if (selector.type=='resource label') {
+					text = UICom.structure.ui[nodeid].resource.getLabel();
+				} else
+				if (selector.type=='node label') {
+					text = UICom.structure.ui[nodeid].getLabel();
+				} else
+				if (selector.type=='node point label') {
+					text = "<a href='#' data-toggle='tooltip' title=\""+UICom.structure.ui[nodeid].getLabel('none')+"\"><i class='fas fa-circle'></i></a>";
+				} else
+				if (selector.type=='node code') {
+					text = UICom.structure.ui[nodeid].getCode();
+				} else
+				if (selector.type=='loginfo') {
+					var lastmodified = UICom.structure.ui[nodeid].resource.lastmodified_node.text().toLocaleString();
+					var user = UICom.structure.ui[nodeid].resource.user_node.text();
+					try {
+						text = lastmodified+" - user : "+user;
+						}
+					catch(error) {text="/"};
+				} else
+				if (selector.type=='resourcelastmodified') {
+					text = new Date(parseInt(UICom.structure.ui[nodeid].resource.lastmodified_node.text())).toLocaleString();
+				} else
+				if (selector.type=='nodelastmodified') {
+					text = new Date(parseInt(UICom.structure.ui[nodeid].lastmodified_node.text())).toLocaleString();
 				}
-			}
-			//------------- submit  -------------------
-			if (submitnode) {
-				//------------------
-				var labels = [];
-				labels[0] = karutaStr[languages[LANGCODE]]['button-submit'];
-				labels[1] = karutaStr[languages[LANGCODE]]['button-unsubmit'];
-				labels[2] = karutaStr[languages[LANGCODE]]['submitted'];
-				labels[3] = karutaStr[languages[LANGCODE]]['notsubmitted'];
-				if (node.textssubmit!="") {
-					var texts = node.textssubmit.split(";");
-					for (let j=0; j<texts.length; j++){
-						var textlang = texts[j].split("/");
-						for (var k=0; k<textlang.length; k++){
-							if (textlang[k].indexOf("@"+languages[LANGCODE])>-1)
-								labels[j] = textlang[k].substring(0,textlang[k].indexOf("@"));
+				else if (selector.type=='submitteddate') {
+					text = UICom.structure.ui[nodeid].submitteddate;  //node.submitteddate
+				} else
+				if (selector.type=='node value') {
+					text = UICom.structure.ui[nodeid].getValue();
+				} else
+				if (selector.type=='uuid') {
+					text = nodeid;
+				} else if (selector.type=='node context') {
+					text = UICom.structure.ui[nodeid].getContext("dashboard_context_"+nodeid);
+					prefix_id += "context_";
+				}
+				//-------------------------------------------
+				if (ref!=undefined && ref!="") {
+					ref = replaceVariable(ref);
+					if (g_variables[ref]==undefined)
+						g_variables[ref] = new Array();
+					g_variables[ref][g_variables[ref].length] = text;
+				}
+				text = "<span id='dashboard_node_resource"+nodeid+"' style='"+style+"' class='"+cssclass+"'>"+text+"</span>";
+				if (g_report_edit && writenode && nodenopencil!='Y' && !nodenopencilroles.containsArrayElt(g_userroles)) {
+					text += "<span class='button fas fa-pencil-alt' data-toggle='modal' data-target='#edit-window' onclick=\"javascript:getEditBox('"+nodeid+"')\" data-title='"+karutaStr[LANG]["button-edit"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
+				}
+				if (g_report_edit && deletenode) {
+					var type = UICom.structure.ui[nodeid].asmtype;
+					text += deleteButton(nodeid,type,null,null,'UIFactory.Node.reloadUnit',null,null);
+				}
+				//------------- private button -------------------
+				if (shownode && writenode) {
+					privatevalue = ($(node.metadatawad).attr('private')==undefined)?false:$(node.metadatawad).attr('private')=='Y';
+					if (privatevalue) {
+						text = "<span id='report"+nodeid+"' class='private'>"+text+"<span class='button fas fa-eye-slash' style='' onclick=\"showinreport('"+nodeid+"')\" title='"+karutaStr[LANG]["button-show"]+"' data-toggle='tooltip' data-placement='bottom'></span>"+"</span>";
+					} else {
+						text = "<span id='report"+nodeid+"'>"+text+"<span class='button fas fa-eye' style='' onclick=\"hideinreport('"+nodeid+"')\" title='"+karutaStr[LANG]["button-hide"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
+					}
+				}
+				//------------- submit  -------------------
+				if (submitnode) {
+					//------------------
+					var labels = [];
+					labels[0] = karutaStr[languages[LANGCODE]]['button-submit'];
+					labels[1] = karutaStr[languages[LANGCODE]]['button-unsubmit'];
+					labels[2] = karutaStr[languages[LANGCODE]]['submitted'];
+					labels[3] = karutaStr[languages[LANGCODE]]['notsubmitted'];
+					if (node.textssubmit!="") {
+						var texts = node.textssubmit.split(";");
+						for (let j=0; j<texts.length; j++){
+							var textlang = texts[j].split("/");
+							for (var k=0; k<textlang.length; k++){
+								if (textlang[k].indexOf("@"+languages[LANGCODE])>-1)
+									labels[j] = textlang[k].substring(0,textlang[k].indexOf("@"));
+							}
+						}
+					}
+					//------------------
+					if ( node.submitted!='Y') {
+						text += "<span id='submit-"+node.id+"'  class='submitbutton button add-button' onclick=\"javascript:confirmSubmit('"+node.id+"'";
+						if (node.submitall=='Y')
+							text += ",true";
+						text += ")\" ";
+						text += " >"+labels[0]+"</span>";
+					} else {
+							text += "<div class='alert submitted button add-button'>"+labels[2] + " " +node.submitteddate+"</div>";
+					}
+				}
+				//----------------------------
+				if (g_report_edit && inline & writenode && nodenopencil!='Y' && !nodenopencilroles.containsArrayElt(g_userroles)) {
+					//-----------------------
+					if(UICom.structure.ui[nodeid].resource!=null) {
+						try {
+							var test = UICom.structure.ui[nodeid].resource.getEditor();
+							text = "<span id='report_get_editor_"+nodeid+"' style='"+style+"'></span>";
+						}
+						catch(e) {
+							text = "<span id='report_display_editor_"+nodeid+"' style='"+style+"'></span>";
 						}
 					}
 				}
-				//------------------
-				if ( node.submitted!='Y') {
-					text += "<span id='submit-"+node.id+"'  class='submitbutton button add-button' onclick=\"javascript:confirmSubmit('"+node.id+"'";
-					if (node.submitall=='Y')
-						text += ",true";
-					text += ")\" ";
-					text += " >"+labels[0]+"</span>";
-				} else {
-						text += "<div class='alert submitted button add-button'>"+labels[2] + " " +node.submitteddate+"</div>";
+				if ($(node.metadatawad).attr('help')!=undefined && $(node.metadatawad).attr('help')!=""){
+					attr_help = $(node.metadatawad).attr('help');
 				}
 			}
-			//----------------------------
-			if (g_report_edit && inline & writenode && nodenopencil!='Y' && !nodenopencilroles.containsArrayElt(g_userroles)) {
-				//-----------------------
-				if(UICom.structure.ui[nodeid].resource!=null) {
-					try {
-						var test = UICom.structure.ui[nodeid].resource.getEditor();
-						text = "<span id='report_get_editor_"+nodeid+"' style='"+style+"'></span>";
-					}
-					catch(e) {
-						text = "<span id='report_display_editor_"+nodeid+"' style='"+style+"'></span>";
-					}
-				}
-			}
-			if ($(node.metadatawad).attr('help')!=undefined && $(node.metadatawad).attr('help')!=""){
-				attr_help = $(node.metadatawad).attr('help');
-			}
+		} catch(e){
+			text = "<span id='dashboard_"+nodeid+"'></span>";
 		}
-	} catch(e){
-		text = "<span id='dashboard_"+nodeid+"'></span>";
-	}
-	//------------------------------
-	text += "<span id='reshelp_"+nodeid+"'></span>"
-	$("#"+destid).append(text);
-	//--------------------set editor------------------------------------------
-	if ($("#report_display_editor_"+nodeid).length>0) {
-		UICom.structure.ui[nodeid].resource.displayEditor("report_display_editor_"+nodeid);
-	}
+		//------------------------------
+		text += "<span id='reshelp_"+nodeid+"'></span>"
+		$("#"+destid).append(text);
+		//--------------------set editor------------------------------------------
+		if ($("#report_display_editor_"+nodeid).length>0) {
+			UICom.structure.ui[nodeid].resource.displayEditor("report_display_editor_"+nodeid);
+		}
+	
+		// -------- if resource changed refresh the report - editor not inline
+		if (report_refresh && $("#dashboard_node_resource"+nodeid).length>0 && editresroles.length>0) {
+			$("#dashboard_node_resource"+nodeid).attr('dashboard',dashboard_current);
+			var config = { attributes: true, childList: true, characterData: true, subtree:true }
+			var observer = new MutationObserver(function(mutations) {
+				var nodeid = mutations[0].target.parentNode.parentNode.attributes['id'].value;
+				var dashboardid = document.getElementById("dashboard_node_resource"+nodeid).attributes['dashboard'].value;
+				this.disconnect();
+				refresh_report(dashboardid);
+			});
+			//-----------
+			var target = $("#"+nodeid,data)[0];
+			if ($("#"+nodeid,data).length==0)
+				target = data; //node itself
+			//-----------
+			observer.observe(target, config);
+		}
+		// -------- if resource changed refresh the report - editor inline
+		if (report_refresh && $("#report_get_editor_"+nodeid).length>0) {
+			$("#report_get_editor_"+nodeid).append(UICom.structure.ui[nodeid].resource.getEditor());
+			var input = $('input',$("#report_get_editor_"+nodeid));
+			$(input).attr('dashboard',dashboard_current);
+			$(input).change(function (){
+				refresh_report(this.attributes['dashboard'].value);
+			});
+		}
+		resolve();
+	}, 0); });
 
-	// -------- if resource changed refresh the report - editor not inline
-	if (report_refresh && $("#dashboard_node_resource"+nodeid).length>0 && editresroles.length>0) {
-		$("#dashboard_node_resource"+nodeid).attr('dashboard',dashboard_current);
-		var config = { attributes: true, childList: true, characterData: true, subtree:true }
-		var observer = new MutationObserver(function(mutations) {
-			var nodeid = mutations[0].target.parentNode.parentNode.attributes['id'].value;
-			var dashboardid = document.getElementById("dashboard_node_resource"+nodeid).attributes['dashboard'].value;
-			this.disconnect();
-			refresh_report(dashboardid);
-		});
-		//-----------
-		var target = $("#"+nodeid,data)[0];
-		if ($("#"+nodeid,data).length==0)
-			target = data; //node itself
-		//-----------
-		observer.observe(target, config);
-	}
-
-	// -------- if resource changed refresh the report - editor inline
-	if (report_refresh && $("#report_get_editor_"+nodeid).length>0) {
-		$("#report_get_editor_"+nodeid).append(UICom.structure.ui[nodeid].resource.getEditor());
-		var input = $('input',$("#report_get_editor_"+nodeid));
-		$(input).attr('dashboard',dashboard_current);
-		$(input).change(function (){
-			refresh_report(this.attributes['dashboard'].value);
-		});
-	}
 }
 
 //=============================================================================
@@ -2814,33 +2825,36 @@ g_report_actions['europass'] = function (destid,action,no,data)
 g_report_actions['text'] = function (destid,action,no,data,is_out_csv)
 //==================================
 {
-	var nodeid = $(data).attr("id");
-	var text = $(action).text();
-	text = replaceVariable(text);
-	//-------------------
-	if (text.indexOf('function:')>-1) {
-		const functionstring = text.substring(9);
-		text = eval (functionstring);
-	}
-	//-------------------
-	var style = replaceVariable($(action).attr("style"));
-	var cssclass = replaceVariable($(action).attr("class"));
-	var ref = $(action).attr("ref");
-	if (ref!=undefined && ref!="") {
-		ref = replaceVariable(ref);
-		if (g_variables[ref]==undefined)
-			g_variables[ref] = new Array();
-		g_variables[ref][g_variables[ref].length] = text;
-	}
-	//-----------------
-	if (is_out_csv!=null && is_out_csv) {
-		if (typeof csvseparator == 'undefined') // for backward compatibility
-			csvseparator = ";";
-		csvline += text + csvseparator;		
-	}
-	//-----------------
-	text = "<span id='txt"+nodeid+"' style='"+style+"' class='"+cssclass+"'>"+text+"</span>";
-	$("#"+destid).append(text);
+	return new Promise((resolve) => {setTimeout(() => {
+		var nodeid = $(data).attr("id");
+		var text = $(action).text();
+		text = replaceVariable(text);
+		//-------------------
+		if (text.indexOf('function:')>-1) {
+			const functionstring = text.substring(9);
+			text = eval (functionstring);
+		}
+		//-------------------
+		var style = replaceVariable($(action).attr("style"));
+		var cssclass = replaceVariable($(action).attr("class"));
+		var ref = $(action).attr("ref");
+		if (ref!=undefined && ref!="") {
+			ref = replaceVariable(ref);
+			if (g_variables[ref]==undefined)
+				g_variables[ref] = new Array();
+			g_variables[ref][g_variables[ref].length] = text;
+		}
+		//-----------------
+		if (is_out_csv!=null && is_out_csv) {
+			if (typeof csvseparator == 'undefined') // for backward compatibility
+				csvseparator = ";";
+			csvline += text + csvseparator;		
+		}
+		//-----------------
+		text = "<span id='txt"+nodeid+"' style='"+style+"' class='"+cssclass+"'>"+text+"</span>";
+		$("#"+destid).append(text);
+		resolve();
+	}, 0); });
 }
 
 

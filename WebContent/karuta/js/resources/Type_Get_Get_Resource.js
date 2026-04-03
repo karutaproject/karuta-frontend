@@ -2336,12 +2336,14 @@ function eraseGet_Get_resource(nodeid,tags){
 	let parent = UICom.structure.ui[nodeid].node;
 	for (let i=0; i<tags.length; i++){
 		let elt = $("asmContext:has(>metadata[semantictag*='"+tags[i]+"'])",parent);
-		if (elt.length==0) {
+		while ($(parent).prop("nodeName")!="asmUnit" && elt.length==0) {
 			parent = $(parent).parent();
 			elt = $("asmContext:has(>metadata[semantictag*='"+tags[i]+"'])",parent);
 		}
-		const eltid = $(elt).attr("id");
-		UICom.structure.ui[eltid].resource.erase();
+		if (elt.length>0) {
+			const eltid = $(elt).attr("id");
+			UICom.structure.ui[eltid].resource.erase();
+		}
 	}
 }
 
