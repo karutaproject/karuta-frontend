@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="updateVersion"  basedir="."> 
-	<property name="noVersion" value="3.122.0"/>
-	<property name="textVersion" value="FEAT - Report rounded average and pourcentage "/>
+	<property name="noVersion" value="3.122.1"/>
+	<property name="textVersion" value="Fix - Type_usergroup fct displayContent "/>
 	<property name="dirSrce" value="src/htm-srce"/>
 	<property name="dirTrgt" value="WebContent/karuta/htm"/>
 	<target name="testIfNewVersion">

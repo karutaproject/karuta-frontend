@@ -1,5 +1,5 @@
 /* =======================================================
-	Copyright 2020 - ePortfolium - Licensed under the
+	Copyright 2026 - ePortfolium - Licensed under the
 	Educational Community License, Version 2.0 (the "License"); you may
 	not use this file except in compliance with the License. You may
 	obtain a copy of the License at
@@ -24,7 +24,7 @@ if( UIFactory === undefined )
   var UIFactory = {};
 }
 
-/// Define our type
+
 //==================================
 UIFactory["UsersGroup"] = function(node)
 //==================================
@@ -403,6 +403,7 @@ UIFactory["UsersGroup"].prototype.displayView = function(dest,type)
 	//---------------------------------------------------------
 };
 
+
 //==================================
 UIFactory["UsersGroup"].prototype.displayContent = function(type)
 //==================================
@@ -415,8 +416,8 @@ UIFactory["UsersGroup"].prototype.displayContent = function(type)
 	$("#"+type+"-rightside-content2").html($("<div class='users-content' id='"+type+"-users-content'</div>"));
 	for (uuid in this.children){
 		var user = Users_byid[uuid];
-		$("#"+type+"-users-content").append($("<div class='row user-row' id='usergroup_"+user.id+"'</div>"));
-		$("#usergroup_"+user.id).html(user.getView("usergroup_"+user.id,'usergroup',null,this.id));
+		$("#"+type+"-users-content").append($("<div class='row user-row' id='usergroup_user_"+user.id+"'</div>"));
+		$("#usergroup_user_"+user.id).html(user.getView("usergroup_"+user.id,'usergroup',null,this.id));
 	}
 	$("#nbchildren_"+this.id).html(this.nbchildren);
 	$(window).scrollTop(0);
