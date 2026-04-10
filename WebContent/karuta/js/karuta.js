@@ -4522,7 +4522,7 @@ $.fn.utcGreater = function (options)
 	for (let i=0;i<this.length;i++){
 		var node = $("asmContext:has('>metadata[semantictag*=" + parameters.semtag + "]')",this[i]);		
 		var utc = $("utc",node).text();
-		if (replaceVariable(parameters.min) < utc)
+		if (eval(replaceVariable(parameters.min)) < utc)
 			result.push(this[i])
 	}
 	return $(result);
@@ -4540,7 +4540,7 @@ $.fn.utcLower = function (options)
 	for (let i=0;i<this.length;i++){
 		var node = $("asmContext:has('>metadata[semantictag*=" + parameters.semtag + "]')",this[i]);		
 		var utc = $("utc",node).text();
-		if (utc < replaceVariable(parameters.max))
+		if (utc < eval(replaceVariable(parameters.max)))
 			result.push(this[i])
 	}
 	return $(result);
