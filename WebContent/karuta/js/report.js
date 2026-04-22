@@ -1487,7 +1487,7 @@ g_report_actions['for-each-portfolio'] = function (destid,action,no,data)
 	var searchvalue = "";
 	var select = $(action).attr("select");
 	select = replaceVariable(select);
-	var user_role = replaceVariable($(action).attr("user-role"));
+	const user_role = replaceVariable($(action).attr("user-role"));
 	var test = $(action).attr("test");
  	if (test!=undefined)
  		test = replaceVariable(test);
@@ -1519,7 +1519,6 @@ g_report_actions['for-each-portfolio'] = function (destid,action,no,data)
 					dataType : "xml",
 					url : serverBCK_API+"/nodes?portfoliocode=" + code + "&semtag="+sortag,
 					success : function(data) {
-						var text = ";"
 						if (sortelt=='resource code') {
 							sortvalue = $("code",data)[0].text();
 						}
@@ -1549,7 +1548,7 @@ g_report_actions['for-each-portfolio'] = function (destid,action,no,data)
 				let url = serverBCK_API+"/portfolios/portfolio/" + portfolioid + "?resources=true";
 				if (user_role!=""){
 					url += "&userrole="+user_role;
-					g_userroles[2] = user_role;
+					g_userroles[g_userroles.length] = user_role;
 					userrole = user_role;
 				}
 				$.ajax({
@@ -1586,7 +1585,7 @@ g_report_actions['for-each-portfolio'] = function (destid,action,no,data)
 				let url = serverBCK_API+"/portfolios/portfolio/" + portfolioid + "?resources=true";
 				if (user_role!=""){
 					url += "&userrole="+user_role;
-					g_userroles[2] = user_role;
+					g_userroles[g_userroles.length] = user_role;
 					userrole = user_role;
 				}
 				$.ajax({
@@ -1751,7 +1750,7 @@ g_report_actions['for-each-portfolio'] = function (destid,action,no,data)
 							let url = serverBCK_API+"/portfolios/portfolio/" + portfolioid + "?resources=true";
 							if (user_role!=""){
 								url += "&userrole="+user_role;
-								g_userroles[2] = user_role;
+								g_userroles[g_userroles.length] = user_role;
 								userrole = user_role;
 							}
 							$.ajax({
@@ -1829,7 +1828,7 @@ g_report_actions['for-each-portfolio-js'] = function (destid,action,no,data)
 		let url = serverBCK_API+"/portfolios/portfolio/" + portfolioid + "?resources=true";
 		if (user_role!=""){
 			url += "&userrole="+user_role;
-			g_userroles[2] = user_role;
+			g_userroles[g_userroles.length] = user_role;
 			userrole = user_role;
 		}
 		if (load) {
@@ -2751,7 +2750,7 @@ g_report_actions['preview2unit'] = function (destid,action,no,data)
 {
 	let targetid = "";
 	let nodeid = $(data).attr("id");
-	const userrole = replaceVariable($(action).attr("userrole"));
+	const userrole = replaceVariable($(action).attr("user-role"));
 	const style = replaceVariable($(action).attr("style"));
 	const cssclass = replaceVariable($(action).attr("class"));
 	const editable = replaceVariable($(action).attr("editable"));
@@ -2879,7 +2878,7 @@ g_report_actions['url2portfolio'] = function (destid,action,no,data)
 	var style = replaceVariable($(action).attr("style"));
 	var cssclass = replaceVariable($(action).attr("class"));
 	var code = $(action).attr("code");
-	var userrole = $(action).attr("userrole");
+	const userrole = $(action).attr("userrole");
 	code = replaceVariable(code);
 	if (code!=portfolios_byid[portfolioid_current].getCode()) {
 		var url = serverBCK_API+"/portfolios/portfolio/code/" + code;
@@ -3048,6 +3047,7 @@ g_report_actions['update-resource'] = function (destid,action,no,data)
 	const restype = replaceVariable($(action).attr("restype"));
 	const semtag = replaceVariable($(action).attr("select"));
 	const attribute_value = replaceVariable($(action).attr("value"));
+	const user_role = replaceVariable($(action).attr("user-role"));
 	let language_dependent = 'N';
 	let attribute_name = 'text';
 	if (restype=="Field") {
@@ -3085,7 +3085,7 @@ g_report_actions['update-resource'] = function (destid,action,no,data)
 		dataType : "text",
 		data : strippeddata,
 		id : nodeid,
-		url : serverBCK_API+"/resources/resource/" + nodeid,
+		url : serverBCK_API+"/resources/resource/" + nodeid + "?userrole="+user_role,
 		success : function(data) {
 			UICom.structure.ui[this.id].refresh();
 		},

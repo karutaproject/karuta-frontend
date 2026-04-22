@@ -61,9 +61,9 @@ function displayKarutaPage()
 		url : serverBCK_API+"/credential",
 		data: "",
 		success : function(data) {
+			getLanguage();
 			setConfigurationTechVariables(LANGCODE);
 			setConfigurationUIVariables(LANGCODE);
-			getLanguage();
 			loadLanguages(function() {
 //				getLanguage();
 			});

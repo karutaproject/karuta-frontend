@@ -4520,9 +4520,10 @@ $.fn.utcGreater = function (options)
 	var defaults= {"semtag":"s","min":"m"};
 	var parameters = $.extend(defaults, options);
 	for (let i=0;i<this.length;i++){
-		var node = $("asmContext:has('>metadata[semantictag*=" + parameters.semtag + "]')",this[i]);		
-		var utc = $("utc",node).text();
-		if (eval(replaceVariable(parameters.min)) < utc)
+		const node = $("asmContext:has('>metadata[semantictag*=" + parameters.semtag + "]')",this[i]);
+		const utc = Number($("utc",node).text());
+		const min = eval(replaceVariable(parameters.min));
+		if (min < utc)
 			result.push(this[i])
 	}
 	return $(result);
@@ -4538,9 +4539,10 @@ $.fn.utcLower = function (options)
 	var defaults= {"semtag":"s","max":"M"};
 	var parameters = $.extend(defaults, options);
 	for (let i=0;i<this.length;i++){
-		var node = $("asmContext:has('>metadata[semantictag*=" + parameters.semtag + "]')",this[i]);		
-		var utc = $("utc",node).text();
-		if (utc < eval(replaceVariable(parameters.max)))
+		const node = $("asmContext:has('>metadata[semantictag*=" + parameters.semtag + "]')",this[i]);
+		const utc = Number($("utc",node).text());
+		const max = eval(replaceVariable(parameters.max));
+		if (utc < max)
 			result.push(this[i])
 	}
 	return $(result);

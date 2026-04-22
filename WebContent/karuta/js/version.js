@@ -2,8 +2,8 @@
 var karuta_version = "@project.version@";
 var karuta_date = "@build.timestamp@";
 
-const karuta_version_eportfolium = 'eportfolium-3.123.0';
-const karuta_date_eportfolium = '2026-04-10';
+const karuta_version_eportfolium = 'eportfolium-3.124.0';
+const karuta_date_eportfolium = '2026-04-22';
 
 var karuta_backend_version = "?";
 var karuta_backend_date = "?";
@@ -156,3 +156,5 @@ var karuta_fileserver_date = "?";
 // 3.122.0 FEAT - Report rounded average and pourcentage 
 // 3.122.1 Fix - Type_usergroup fct displayContent 
 // 3.123.0 FEAT - jquery utcGreater and utcLower accepts operation 
+// 3.123.1 FIX - Calendar error in utc conversion 
+// 3.124.0 FEAT - a file may be added to force password change 

@@ -720,7 +720,7 @@
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='user-role']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
 		<url2portfolio>
-			<xsl:attribute name="userrole"><xsl:value-of select="$userrole"/></xsl:attribute>
+			<xsl:attribute name="user-role"><xsl:value-of select="$userrole"/></xsl:attribute>
 			<xsl:if test="not($class='')">
 				<xsl:attribute name="class"><xsl:value-of select="$class"/></xsl:attribute>
 			</xsl:if>
@@ -778,7 +778,7 @@
 				<xsl:attribute name="editable"><xsl:value-of select="$editable"/></xsl:attribute>
 			</xsl:if>
 			<xsl:if test="not($userrole='')">
-				<xsl:attribute name="userrole"><xsl:value-of select="$userrole"/></xsl:attribute>
+				<xsl:attribute name="user-role"><xsl:value-of select="$userrole"/></xsl:attribute>
 			</xsl:if>
 			<xsl:if test="not($class='')">
 				<xsl:attribute name="class"><xsl:value-of select="$class"/></xsl:attribute>
@@ -837,10 +837,14 @@
 		<xsl:variable name="txtval">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='txtval']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
+		<xsl:variable name="userrole">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='user-role']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
 		<update-resource>
 			<xsl:attribute name="select"><xsl:value-of select="$semtag"/></xsl:attribute>
 			<xsl:attribute name="restype"><xsl:value-of select="$restype"/></xsl:attribute>
 			<xsl:attribute name="value"><xsl:value-of select="$txtval"/></xsl:attribute>
+			<xsl:attribute name="user-role"><xsl:value-of select="$userrole"/></xsl:attribute>
 		</update-resource>
 	</xsl:template>
 	<!-- ================ JSFunction ============================ -->
@@ -970,7 +974,7 @@
 		<xsl:variable name="select">
 			<xsl:value-of select="asmContext[metadata/@semantictag='select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"/>
 		</xsl:variable>
-		<xsl:variable name="user-role">
+		<xsl:variable name="userrole">
 			<xsl:value-of select="asmContext[metadata/@semantictag='user-role']/asmResource[@xsi_type='Field']/text[@lang=$lang]"/>
 		</xsl:variable>
 		<xsl:variable name="sortag">
@@ -986,7 +990,7 @@
 			<xsl:attribute name="ref-init"><xsl:value-of select="$ref-init"/></xsl:attribute>
 			<xsl:attribute name="countvar"><xsl:value-of select="$countvar"/></xsl:attribute>
 			<xsl:attribute name="sortag"><xsl:value-of select="$sortag"/></xsl:attribute>
-			<xsl:attribute name="user-role"><xsl:value-of select="$user-role"/></xsl:attribute>
+			<xsl:attribute name="user-role"><xsl:value-of select="$userrole"/></xsl:attribute>
 			<xsl:attribute name="sortelt"><xsl:value-of select="$sortelt"/></xsl:attribute>
  			<xsl:attribute name="test"><xsl:value-of select="$test"/></xsl:attribute>
 			<xsl:apply-templates select='asmUnitStructure'/>
@@ -1047,7 +1051,7 @@
 		<xsl:variable name="ref-init">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='ref-init']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
-		<xsl:variable name="user-role">
+		<xsl:variable name="userrole">
 			<xsl:value-of select="asmContext[metadata/@semantictag='user-role']/asmResource[@xsi_type='Field']/text[@lang=$lang]"/>
 		</xsl:variable>
 		<xsl:variable name="countvar">
@@ -1060,7 +1064,7 @@
 			<xsl:value-of select="asmContext[metadata/@semantictag='select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"/>
 		</xsl:variable>
 		<for-each-portfolio-js select='{$select}'>
-			<xsl:attribute name="user-role"><xsl:value-of select="$user-role"/></xsl:attribute>
+			<xsl:attribute name="user-role"><xsl:value-of select="$userrole"/></xsl:attribute>
 			<xsl:if test="not($ref-init='')">
 				<xsl:attribute name="ref-init"><xsl:value-of select="$ref-init"/></xsl:attribute>
 			</xsl:if>
@@ -1135,7 +1139,7 @@
 		<xsl:variable name="ref-init">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='ref-init']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
-		<xsl:variable name="user-role">
+		<xsl:variable name="userrole">
 			<xsl:value-of select="asmContext[metadata/@semantictag='user-role']/asmResource[@xsi_type='Field']/text[@lang=$lang]"/>
 		</xsl:variable>
 		<xsl:variable name="countvar">
@@ -1155,7 +1159,7 @@
 		</xsl:variable>
 		<xsl:variable name="select">.<xsl:value-of select="$semtag"/></xsl:variable>
 		<for-each-node>
-			<xsl:attribute name="user-role"><xsl:value-of select="$user-role"/></xsl:attribute>
+			<xsl:attribute name="user-role"><xsl:value-of select="$userrole"/></xsl:attribute>
 			<xsl:if test="not($ref-init='')">
 				<xsl:attribute name="ref-init"><xsl:value-of select="$ref-init"/></xsl:attribute>
 			</xsl:if>

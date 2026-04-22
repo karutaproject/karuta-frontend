@@ -3122,8 +3122,15 @@ g_actions['update-resource'] = function updateResource(node,data)
 					$(attribute_name,resource).text(attribute_value);
 				}
 				if (type=="Calendar" && attribute_name=="text") {
-					const utc = Date.parse(attribute_value);
-					$("utc",resource).text(utc);
+						const format = $("format[lang='"+languages[langcode]+"']",resource).text();
+						if (format =="" || format == 'dd/mm/yyyy') {
+							const [day, month, year] = attribute_value.split("/");
+							const utc = Date.UTC(year, month, day);
+							$("utc",resource).text(utc);
+						} else {
+							const utc = Date.parse(attribute_value);
+							$("utc",resource).text(utc);
+						}
 				}
 			}
 			var data = "<asmResource xsi_type='"+type+"'>" + $(resource).html() + "</asmResource>";

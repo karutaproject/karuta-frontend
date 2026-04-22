@@ -28,9 +28,10 @@ function callSubmit(encrypt_url,lang)
 //==============================
 {
 	const identifier = document.getElementById("useridentifier").value;
+	const pwd = document.getElementById("password").value;
 	if (g_configVar['maintenance-display']=="0" || identifier=="root") {
 		var data = "<credential><login>"+document.getElementById("useridentifier").value+"</login><password>"+document.getElementById("password").value+"</password></credential>";
-		sessionStorage.setItem('pwd',document.getElementById("password").value);
+		sessionStorage.setItem('pwd',pwd);
 		$.ajax({
 			contentType: "application/xml",
 			type : "POST",
@@ -40,16 +41,34 @@ function callSubmit(encrypt_url,lang)
 			i : encrypt_url,
 			lang :lang,
 			success : function(data) {
-				if (self.encrypt_url=="")
-					window.location="karuta.htm";
-				else if (self.encrypt_url.length==36)
-					window.location="karuta.htm?i="+self.encrypt_url+"&lang="+self.lang
-				else {
-					if (x!=undefined)
-						window.location="public.htm?i="+self.encrypt_url+"&x="+x+"&lang="+self.lang
-					else
-						window.location="public.htm?i="+self.encrypt_url+"&lang="+self.lang;
+				if (identifier==pwd) {
+					try {
+						test_login_password(identifier,pwd);
+					} catch(e) {
+						if (self.encrypt_url=="")
+							window.location="karuta.htm";
+						else if (self.encrypt_url.length==36)
+							window.location="karuta.htm?i="+self.encrypt_url+"&lang="+self.lang
+						else {
+							if (x!=undefined)
+								window.location="public.htm?i="+self.encrypt_url+"&x="+x+"&lang="+self.lang
+							else
+								window.location="public.htm?i="+self.encrypt_url+"&lang="+self.lang;
+							}
+						// do nothing
 					}
+				} else {
+					if (self.encrypt_url=="")
+						window.location="karuta.htm";
+					else if (self.encrypt_url.length==36)
+						window.location="karuta.htm?i="+self.encrypt_url+"&lang="+self.lang
+					else {
+						if (x!=undefined)
+							window.location="public.htm?i="+self.encrypt_url+"&x="+x+"&lang="+self.lang
+						else
+							window.location="public.htm?i="+self.encrypt_url+"&lang="+self.lang;
+						}
+				}
 			},
 			error : function(jqxhr,textStatus) {
 				alertHTML(karutaStr[LANG]['error-login']);
