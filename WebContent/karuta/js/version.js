@@ -157,4 +157,4 @@ var karuta_fileserver_date = "?";
 // 3.122.1 Fix - Type_usergroup fct displayContent 
 // 3.123.0 FEAT - jquery utcGreater and utcLower accepts operation 
 // 3.123.1 FIX - Calendar error in utc conversion 
-// 3.124.0 FEAT - a file may be added to force password change 
+// 3.124.0 FEAT - a file may be added to force password change
