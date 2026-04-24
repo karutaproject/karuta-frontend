@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="updateVersion"  basedir="."> 
-	<property name="noVersion" value="3.124.0"/>
-	<property name="textVersion" value="FEAT - a file may be added to force password change "/>
+	<property name="noVersion" value="3.124.1"/>
+	<property name="textVersion" value="FIX - Get_Resource error when using portfoliolabel keyword "/>
 	<property name="dirSrce" value="src/htm-srce"/>
 	<property name="dirTrgt" value="WebContent/karuta/htm"/>
 	<target name="testIfNewVersion">

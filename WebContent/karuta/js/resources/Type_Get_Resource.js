@@ -816,6 +816,7 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 	//-----Node ordering-------------------------------------------------------
 	let tableau1 = new Array();
 	let tableau2 = new Array();
+	let sorton = 1; // by default sort on code
 	for ( var i = 0; i < $(nodes).length; i++) {
 		//--------------------------
 		const langnotvisible = ($("metadata-wad",nodes[i]).attr('langnotvisible')==undefined)?'':$("metadata-wad",nodes[i]).attr('langnotvisible');
@@ -863,11 +864,9 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 					}
 				}
 			}
-			if (code.indexOf("~")<0)   // si ~ on trie sur le libellé sinon sur le code
-				tableau1[tableau1.length] = [code,nodes[i]];
-			else
-				tableau1[tableau1.length] = [libelle,nodes[i]]
-			tableau2[tableau2.length] = {'code':code,'libelle':libelle};
+			tableau1[tableau1.length] = [code,libelle,nodes[i]];
+			if (code.indexOf("~")>-1)   // si ~ on trie sur le libellé 
+				sorton = 2;
 			//----------------------------------------------------------
 		}
 	}
@@ -876,7 +875,7 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 		const tableau1original = tableau1;
 		let toberemoved = [];
 		for ( let i = 0; i < tableau1original.length; i++) {
-			const portfolioid = $(tableau1original[i][1]).attr('id');
+			const portfolioid = $(tableau1original[i][2]).attr('id');
 			const role = replaceVariable(semtag2.substring(5));
 			let ok = false;
 			$.ajax({
@@ -910,7 +909,11 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 		}
 	}
 	//------------------------------------------------------------
-	let newTableau1 = tableau1.sort(sortOn1);	
+	let newTableau1 = new Array();
+	if (sorton == 2)   // si ~ on trie sur le libellé sinon sur le code
+		newTableau1 = tableau1.sort(sortOn2);
+	else
+		newTableau1 = tableau1.sort(sortOn1);
 	var tabadded = [];
 	//------------------------------------------------------------
 	//------------------------------------------------------------
@@ -946,24 +949,24 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 		if (target=="label" || target=="grouplabel" || target=="first-last-name" || target=="portfoliolabel") {
 			for ( let i = 0; i < newTableau1.length; i++) {
 				//------------------------------
-				let uuid = $(newTableau1[i][1]).attr('id');
+				let uuid = $(newTableau1[i][2]).attr('id');
 				let style = "";
 				let resource = null;
 				let value = "";
 				let code = "";
 				let label = "";
 				if (target=='grouplabel' || target=="first-last-name" || target=="portfoliolabel") {
-					code = "@" + tableau2[i].code;
+					code = "@" + tableau1[i][0];
 					value = code;
-					label = tableau2[i].libelle;
+					label = tableau1[i][1];
 				} else {
 					//------------------------------
-					if ($("asmResource",newTableau1[i][1]).length==3) {
-						style = UIFactory.Node.getDataContentStyle(newTableau1[i][1].querySelector("metadata-epm"));
-						resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i][1]); 
+					if ($("asmResource",newTableau1[i][2]).length==3) {
+						style = UIFactory.Node.getDataContentStyle(newTableau1[i][2].querySelector("metadata-epm"));
+						resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i][2]); 
 					} else {
-						style = UIFactory.Node.getDataLabelStyle(newTableau1[i][1].querySelector("metadata-epm"));
-						resource = $("asmResource[xsi_type='nodeRes']",newTableau1[i][1]);
+						style = UIFactory.Node.getDataLabelStyle(newTableau1[i][2].querySelector("metadata-epm"));
+						resource = $("asmResource[xsi_type='nodeRes']",newTableau1[i][2]);
 					}
 					value = $('value',resource).text();
 					code = $('code',resource).text();
@@ -1080,9 +1083,9 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 		//---------------------
 		if (target=='text') {
 			for ( var i = 0; i < newTableau1.length; i++) {
-				var uuid = $(newTableau1[i][1]).attr('id');
-				var style = UIFactory.Node.getDataContentStyle(newTableau1[i][1].querySelector("metadata-epm"));
-				var resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i][1]); 
+				var uuid = $(newTableau1[i][2]).attr('id');
+				var style = UIFactory.Node.getDataContentStyle(newTableau1[i][2].querySelector("metadata-epm"));
+				var resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i][2]); 
 				html = "<a class='dropdown-item' value='"+$('value',resource).text()+"' code='"+$('code',resource).text()+"' class='sel"+code+"' ";
 				for (var j=0; j<languages.length;j++){
 					html += "label_"+languages[j]+"=\""+$(srce+"[lang='"+languages[j]+"']",resource).text()+"\" ";
@@ -1112,9 +1115,9 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 		//---------------------
 		if (target=='fileid') {
 			for ( var i = 0; i < newTableau1.length; i++) {
-				var uuid = $(newTableau1[i][1]).attr('id');
-				var style = UIFactory.Node.getDataContentStyle(newTableau1[i][1].querySelector("metadata-epm"));
-				var resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i][1]);
+				var uuid = $(newTableau1[i][2]).attr('id');
+				var style = UIFactory.Node.getDataContentStyle(newTableau1[i][2].querySelector("metadata-epm"));
+				var resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i][2]);
 				//------------------------------
 				var code = $('code',resource).text();
 				var display_code = false;
@@ -1165,8 +1168,8 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 		//---------------------
 		if (target=='resource') {
 			for ( var i = 0; i < newTableau1.length; i++) {
-				var uuid = $(newTableau1[i][1]).attr('id');
-				var resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i][1]);
+				var uuid = $(newTableau1[i][2]).attr('id');
+				var resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i][2]);
 				//------------------------------
 				var code = $('code',resource).text();
 				var display_code = false;
@@ -1217,9 +1220,9 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 		//---------------------
 		if (target=='nodelabel') {
 			for ( var i = 0; i < newTableau1.length; i++) {
-				var uuid = $(newTableau1[i][1]).attr('id');
-				var resource = $("asmResource[xsi_type='nodeRes']",newTableau1[i][1]);
-				var style = UIFactory.Node.getDataLabelStyle(newTableau1[i][1].querySelector("metadata-epm"));
+				var uuid = $(newTableau1[i][2]).attr('id');
+				var resource = $("asmResource[xsi_type='nodeRes']",newTableau1[i][2]);
+				var style = UIFactory.Node.getDataLabelStyle(newTableau1[i][2].querySelector("metadata-epm"));
 				var code = $('code',resource).text();
 				var display_code = false;
 				var display_label = true;
@@ -1298,7 +1301,7 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 		}
 		//-------------------
 		for ( var i = 0; i < newTableau1.length; i++) {
-			var uuid = $(newTableau1[i][1]).attr('id');
+			var uuid = $(newTableau1[i][2]).attr('id');
 			var style = "";
 			var radio_obj = $("<div class='get-radio'></div>");
 			var input = "";
@@ -1312,12 +1315,12 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 				value = code;
 				label = tableau2[i].libelle;
 			} else {
-				if ($("asmResource",newTableau1[i][1]).length==3) {
-					style = UIFactory.Node.getDataContentStyle(newTableau1[i][1].querySelector("metadata-epm"));
-					resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i][1]); 
+				if ($("asmResource",newTableau1[i][2]).length==3) {
+					style = UIFactory.Node.getDataContentStyle(newTableau1[i][2].querySelector("metadata-epm"));
+					resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i][2]); 
 				} else {
-					style = UIFactory.Node.getDataLabelStyle(newTableau1[i][1].querySelector("metadata-epm"));
-					resource = $("asmResource[xsi_type='nodeRes']",newTableau1[i][1]);
+					style = UIFactory.Node.getDataLabelStyle(newTableau1[i][2].querySelector("metadata-epm"));
+					resource = $("asmResource[xsi_type='nodeRes']",newTableau1[i][2]);
 				}
 				value = $('value',resource).text();
 				code = $('code',resource).text();
@@ -1402,7 +1405,7 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 		}
 		//-----------------------
 		for ( var i = 0; i < newTableau1.length; ++i) {
-			let uuid = $(newTableau1[i][1]).attr('id');
+			let uuid = $(newTableau1[i][2]).attr('id');
 			let input = "";
 			let style = "";
 			let resource = null;
@@ -1415,12 +1418,12 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 				value = code;
 				label = tableau2[i].libelle;
 			} else {
-				if ($("asmResource",newTableau1[i][1]).length==3) {
-					style = UIFactory.Node.getDataContentStyle(newTableau1[i][1].querySelector("metadata-epm"));
-					resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i][1]); 
+				if ($("asmResource",newTableau1[i][2]).length==3) {
+					style = UIFactory.Node.getDataContentStyle(newTableau1[i][2].querySelector("metadata-epm"));
+					resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i][2]); 
 				} else {
-					style = UIFactory.Node.getDataLabelStyle(newTableau1[i][1].querySelector("metadata-epm"));
-					resource = $("asmResource[xsi_type='nodeRes']",newTableau1[i][1]);
+					style = UIFactory.Node.getDataLabelStyle(newTableau1[i][2].querySelector("metadata-epm"));
+					resource = $("asmResource[xsi_type='nodeRes']",newTableau1[i][2]);
 				}
 				value = $('value',resource).text();
 				code = $('code',resource).text();
@@ -1502,7 +1505,6 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 				const indx = tabadded.indexOf(cleanCode(newTableau1[i][0]));
 				if (indx==-1) {
 					newTableau2.push(newTableau1[i]);
-					newTableau3.push(tableau2[i]);
 				}
 			}
 		} else {
@@ -1511,7 +1513,7 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 		//-----------------------------------------------
 		var previouscode = "";
 		for ( var i = 0; i < newTableau2.length; ++i) {
-			var uuid = $(newTableau2[i][1]).attr('id');
+			var uuid = $(newTableau2[i][2]).attr('id');
 			var input = "";
 			var style = "";
 			var resource = null;
@@ -1519,17 +1521,17 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 			let code = "";
 			let label = "";
 			if (target=='grouplabel' || target=="first-last-name" || target=="portfoliolabel") {
-				code = "@" + newTableau3[i].code;
+				code = "@" + newTableau2[i][0];
 				value = code;
-				label = newTableau3[i].libelle;
+				label = newTableau2[i][1];
 			} else {
 				//------------------------------
-				if ($("asmResource",newTableau2[i][1]).length==3) {
-					style = UIFactory.Node.getDataContentStyle(newTableau2[i][1].querySelector("metadata-epm"));
-					resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau2[i][1]); 
+				if ($("asmResource",newTableau2[i][2]).length==3) {
+					style = UIFactory.Node.getDataContentStyle(newTableau2[i][2].querySelector("metadata-epm"));
+					resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau2[i][2]); 
 				} else {
-					style = UIFactory.Node.getDataLabelStyle(newTableau2[i][1].querySelector("metadata-epm"));
-					resource = $("asmResource[xsi_type='nodeRes']",newTableau2[i][1]);
+					style = UIFactory.Node.getDataLabelStyle(newTableau2[i][2].querySelector("metadata-epm"));
+					resource = $("asmResource[xsi_type='nodeRes']",newTableau2[i][2]);
 				}
 				value = $('value',resource).text();
 				code = $('code',resource).text();
@@ -1646,7 +1648,7 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 		if (target=="label" || target=="grouplabel" || target=="first-last-name" || target=="portfoliolabel")  {
 			for ( var i = 0; i < newTableau1.length; i++) {
 				//------------------------------
-				var uuid = $(newTableau1[i][1]).attr('id');
+				var uuid = $(newTableau1[i][2]).attr('id');
 				var style = "";
 				var resource = null;
 				let value = "";
@@ -1658,12 +1660,12 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 					value = code;
 					label = tableau2[i].libelle;
 				} else {
-					if ($("asmResource",newTableau1[i][1]).length==3) {
-						style = UIFactory.Node.getDataContentStyle(newTableau1[i][1].querySelector("metadata-epm"));
-						resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i][1]); 
+					if ($("asmResource",newTableau1[i][2]).length==3) {
+						style = UIFactory.Node.getDataContentStyle(newTableau1[i][2].querySelector("metadata-epm"));
+						resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i][2]); 
 					} else {
-						style = UIFactory.Node.getDataLabelStyle(newTableau1[i][1].querySelector("metadata-epm"));
-						resource = $("asmResource[xsi_type='nodeRes']",newTableau1[i][1]);
+						style = UIFactory.Node.getDataLabelStyle(newTableau1[i][2].querySelector("metadata-epm"));
+						resource = $("asmResource[xsi_type='nodeRes']",newTableau1[i][2]);
 					}
 					value = $('value',resource).text();
 					code = $('code',resource).text();
@@ -1744,9 +1746,9 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 		//---------------------
 		if (target=='text') {
 			for ( var i = 0; i < newTableau1.length; i++) {
-				var uuid = $(newTableau1[i][1]).attr('id');
-				var style = UIFactory.Node.getDataContentStyle(newTableau1[i][1].querySelector("metadata-epm"));
-				var resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i][1]); 
+				var uuid = $(newTableau1[i][2]).attr('id');
+				var style = UIFactory.Node.getDataContentStyle(newTableau1[i][2].querySelector("metadata-epm"));
+				var resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i][2]); 
 				html = "<li></li>";
 				var select_item = $(html);
 				html = "<a  value='"+$('value',resource).text()+"' code='"+$('code',resource).text()+"' class='sel"+code+"' ";
@@ -1804,16 +1806,16 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 		if (target=='label') {
 			for ( var i = 0; i < newTableau1.length; i++) {
 				//------------------------------
-				var uuid = $(newTableau1[i][1]).attr('id');
+				var uuid = $(newTableau1[i][2]).attr('id');
 				var style = "";
 				var resource = null;
 				//------------------------------
-				if ($("asmResource",newTableau1[i][1]).length==3) {
-					style = UIFactory.Node.getDataContentStyle(newTableau1[i][1].querySelector("metadata-epm"));
-					resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i][1]); 
+				if ($("asmResource",newTableau1[i][2]).length==3) {
+					style = UIFactory.Node.getDataContentStyle(newTableau1[i][2].querySelector("metadata-epm"));
+					resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i][2]); 
 				} else {
-					style = UIFactory.Node.getDataLabelStyle(newTableau1[i][1].querySelector("metadata-epm"));
-					resource = $("asmResource[xsi_type='nodeRes']",newTableau1[i][1]);
+					style = UIFactory.Node.getDataLabelStyle(newTableau1[i][2].querySelector("metadata-epm"));
+					resource = $("asmResource[xsi_type='nodeRes']",newTableau1[i][2]);
 				}
 				//------------------------------
 				var code = $('code',resource).text();
@@ -1886,10 +1888,10 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 		for ( var i = 0; i < 2; i++) {
 			var resource = null;
 			//------------------------------
-			if ($("asmResource",newTableau1[i][1]).length==3) {
-				resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i][1]); 
+			if ($("asmResource",newTableau1[i][2]).length==3) {
+				resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i][2]); 
 			} else {
-				resource = $("asmResource[xsi_type='nodeRes']",newTableau1[i][1]);
+				resource = $("asmResource[xsi_type='nodeRes']",newTableau1[i][2]);
 			}
 			const code = $('code',resource).text();
 			let label = [];
