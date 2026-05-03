@@ -364,7 +364,7 @@ UIFactory["Portfolio"].prototype.getPortfolioViewSortable = function(dest,type,l
 	//==================================================================
 	if (type=='list' || type=='portfolio') {
 		html += "<td class='portfolio-label col-10 col-md-5' onclick=\"display_main_page('"+this.id+"')\" ><a class='portfolio-label' >"+portfolio_label+"</a> "+tree_type+" <span id='owner_"+this.id+"' class='owner'/> </div>";
-		if (USER.creator && !USER.limited) {
+		if (!USER.limited) {
 			html += "<td class='d-none d-sm-block'>";
 			html += "<span id='pcode_"+this.id+"' class='portfolio-code'>"+this.code_node.text()+"</span>";
 			html += " <span class='copy-button fas fa-clipboard' ";

@@ -2,8 +2,8 @@
 var karuta_version = "@project.version@";
 var karuta_date = "@build.timestamp@";
 
-const karuta_version_eportfolium = 'eportfolium-3.124.1';
-const karuta_date_eportfolium = '2026-04-24';
+const karuta_version_eportfolium = 'eportfolium-3.125.0';
+const karuta_date_eportfolium = '2026-05-03';
 
 var karuta_backend_version = "?";
 var karuta_backend_date = "?";
@@ -159,3 +159,4 @@ var karuta_fileserver_date = "?";
 // 3.123.1 FIX - Calendar error in utc conversion 
 // 3.124.0 FEAT - a file may be added to force password change
 // 3.124.1 FIX - Get_Resource error when using portfoliolabel keyword 
+// 3.125.0 FEAT - copy button visible for crator in list of portfolios 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="updateVersion"  basedir="."> 
-	<property name="noVersion" value="3.124.1"/>
-	<property name="textVersion" value="FIX - Get_Resource error when using portfoliolabel keyword "/>
+	<property name="noVersion" value="3.125.0"/>
+	<property name="textVersion" value="FEAT - copy button visible for crator in list of portfolios "/>
 	<property name="dirSrce" value="src/htm-srce"/>
 	<property name="dirTrgt" value="WebContent/karuta/htm"/>
 	<target name="testIfNewVersion">
