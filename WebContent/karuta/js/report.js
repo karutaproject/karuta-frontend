@@ -1488,6 +1488,11 @@ g_report_actions['for-each-portfolio'] = function (destid,action,no,data)
 	var select = $(action).attr("select");
 	select = replaceVariable(select);
 	const user_role = replaceVariable($(action).attr("user-role"));
+	if (user_role!=undefined && user_role!=""){
+		url += "&userrole="+user_role;
+		g_userroles[g_userroles.length] = user_role;
+		userrole = user_role;
+	}
 	var test = $(action).attr("test");
  	if (test!=undefined)
  		test = replaceVariable(test);
@@ -1787,6 +1792,7 @@ g_report_actions['for-each-portfolio'] = function (destid,action,no,data)
 			}
 		});
 	}
+	userrole = g_userroles[0];
 }
 
 //==================================
@@ -2750,7 +2756,12 @@ g_report_actions['preview2unit'] = function (destid,action,no,data)
 {
 	let targetid = "";
 	let nodeid = $(data).attr("id");
-	const userrole = replaceVariable($(action).attr("user-role"));
+	const user_role = replaceVariable($(action).attr("user-role"));
+	if (user_role!=undefined && user_role!=""){
+		url += "&userrole="+user_role;
+		g_userroles[g_userroles.length] = user_role;
+		userrole = user_role;
+	}
 	const style = replaceVariable($(action).attr("style"));
 	const cssclass = replaceVariable($(action).attr("class"));
 	const editable = replaceVariable($(action).attr("editable"));
@@ -2774,6 +2785,7 @@ g_report_actions['preview2unit'] = function (destid,action,no,data)
 	//-------------------
 	$("#"+destid).append($(text));
 	$("#"+nodeid).attr("style",style);
+	userrole = g_userroles[0];
 }
 
 //=============================================================================
@@ -3048,6 +3060,11 @@ g_report_actions['update-resource'] = function (destid,action,no,data)
 	const semtag = replaceVariable($(action).attr("select"));
 	const attribute_value = replaceVariable($(action).attr("value"));
 	const user_role = replaceVariable($(action).attr("user-role"));
+	if (user_role!=undefined && user_role!=""){
+		url += "&userrole="+user_role;
+		g_userroles[g_userroles.length] = user_role;
+		userrole = user_role;
+	}
 	let language_dependent = 'N';
 	let attribute_name = 'text';
 	if (restype=="Field") {
@@ -3092,6 +3109,7 @@ g_report_actions['update-resource'] = function (destid,action,no,data)
 		error : function(data) {
 		}
 	});
+	userrole = g_userroles[0];
 }
 
 //=========================================================================
