@@ -2063,7 +2063,7 @@ UIFactory["Portfolio"].displayUnSharing = function(destid,data,unshare_disabled)
 					dest = "#unshare-other-roles";
 				if (unshare_disabled) // display in report
 					dest = "#"+destid;
-				html = "<div class='row'><div class='col-md-3'>"+label+"</div><div class='col-md-9'>";
+				html = "<div class='row' role='"+label+"'><div class='col-md-3'>"+label+"</div><div class='col-md-9'>";
 				for (var j=0; j<users.length; j++){
 					var userid = $(users[j]).attr('id');
 					if (Users_byid[userid]!=undefined) {

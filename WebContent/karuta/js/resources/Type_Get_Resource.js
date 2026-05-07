@@ -1311,9 +1311,9 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 			let label = "";
 			//------------------------------
 			if (target=='grouplabel' || target=="first-last-name" || target=="portfoliolabel") {
-				code = "@" + tableau2[i].code;
+				code = "@" + tableau1[i].code;
 				value = code;
-				label = tableau2[i].libelle;
+				label = tableau1[i].libelle;
 			} else {
 				if ($("asmResource",newTableau1[i][2]).length==3) {
 					style = UIFactory.Node.getDataContentStyle(newTableau1[i][2].querySelector("metadata-epm"));
@@ -1414,9 +1414,9 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 			let label = "";
 			//------------------------------
 			if (target=='grouplabel' || target=="first-last-name" || target=="portfoliolabel") {
-				code = "@" + tableau2[i].code;
+				code = "@" + tableau1[i].code;
 				value = code;
-				label = tableau2[i].libelle;
+				label = tableau1[i].libelle;
 			} else {
 				if ($("asmResource",newTableau1[i][2]).length==3) {
 					style = UIFactory.Node.getDataContentStyle(newTableau1[i][2].querySelector("metadata-epm"));
@@ -1656,9 +1656,9 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 				let label = "";
 				//------------------------------
 				if (target=='grouplabel' || target=="first-last-name" || target=="portfoliolabel") {
-					code = "@" + tableau2[i].code;
+					code = "@" + newTableau1[i][0];
 					value = code;
-					label = tableau2[i].libelle;
+					label = newTableau1[i][1];
 				} else {
 					if ($("asmResource",newTableau1[i][2]).length==3) {
 						style = UIFactory.Node.getDataContentStyle(newTableau1[i][2].querySelector("metadata-epm"));
@@ -1772,7 +1772,7 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 		//---------------------
 		$(btn_group).append($(select));
 		var onupdate = "UIFactory.Get_Resource.update(input,self)";
-		autocomplete(document.getElementById("button_"+langcode+self.id),tableau2,onupdate,self,langcode);
+		autocomplete(document.getElementById("button_"+langcode+self.id),newTableau1,onupdate,self,langcode);
 	}
 	
 	//------------------------------------------------------------

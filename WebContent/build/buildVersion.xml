@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="updateVersion"  basedir="."> 
-	<property name="noVersion" value="3.125.1"/>
-	<property name="textVersion" value="FIX - Report : preview2unit with user-role "/>
+	<property name="noVersion" value="3.125.2"/>
+	<property name="textVersion" value="FIX - Get_Resource : completion with group  "/>
 	<property name="dirSrce" value="src/htm-srce"/>
 	<property name="dirTrgt" value="WebContent/karuta/htm"/>
 	<target name="testIfNewVersion">
@@ -20,7 +20,7 @@
 			<fileset dir="${dirSrce}"/>
 		</copy>
 		<replace dir="${dirTrgt}" token="@version@" value="${noVersion}"/>
-		<concat destfile="WebContent/karuta/js/version.js" append="true">&#10;// ${noVersion} ${textVersion}</concat>
+		<concat destfile="WebContent/karuta/js/version.js" append="true">&#10;// ${noVersion} ${textVersion} - ${current.time}</concat>
 		<replaceregexp match="const karuta_version_eportfolium =.*$" replace="const karuta_version_eportfolium = 'eportfolium-${noVersion}';" flags="g" byline="true" file="WebContent/karuta/js/version.js" ></replaceregexp>
 		<replaceregexp match="const karuta_date_eportfolium =.*$" replace="const karuta_date_eportfolium = '${current.date}';" flags="g" byline="true" file="WebContent/karuta/js/version.js" ></replaceregexp>
 	</target>

@@ -2744,16 +2744,15 @@ function autocomplete(input,arrayOfValues,onupdate,self,langcode) {
 			a.setAttribute("class", "autocomplete-items");
 			this.parentNode.appendChild(a);
 			for (i = 0; i < arrayOfValues.length; i++) {
-				var indexval = arrayOfValues[i].libelle.toUpperCase().indexOf(val.toUpperCase());
+				const code = arrayOfValues[i][0];
+				const label = arrayOfValues[i][1];
+				var indexval = label.toUpperCase().indexOf(val.toUpperCase());
 				if (indexval>-1) {
 					b = document.createElement("DIV");
-					b.innerHTML = arrayOfValues[i].libelle.substr(0, indexval);
-					b.innerHTML += "<strong>" + arrayOfValues[i].libelle.substr(indexval,val.length) + "</strong>";
-					b.innerHTML += arrayOfValues[i].libelle.substr(indexval+val.length);
-					var value = "";
-					if (arrayOfValues[i].value!==undefined)
-						value = arrayOfValues[i].value;
-					b.innerHTML += "<input type='hidden' code='"+arrayOfValues[i].code+"' label=\""+arrayOfValues[i].libelle+"\" value=\""+value+"\" >";
+					b.innerHTML = label.substr(0, indexval);
+					b.innerHTML += "<strong>" + label.substr(indexval,val.length) + "</strong>";
+					b.innerHTML += label.substr(indexval+val.length);
+					b.innerHTML += "<input type='hidden' code='"+code+"' label=\""+label+"\" value=\""+code+"\" >";
 					b.addEventListener("click", function(e) {
 						$(input).attr("label_"+languages[langcode],$("input",this).attr('label'));
 						$(input).attr('code',$("input",this).attr('code'));
