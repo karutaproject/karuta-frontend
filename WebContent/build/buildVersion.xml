@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="updateVersion"  basedir="."> 
-	<property name="noVersion" value="3.125.3"/>
-	<property name="textVersion" value="FIX - Login - to avoid to be logged as Public Account  "/>
+	<property name="noVersion" value="3.125.4"/>
+	<property name="textVersion" value="FIX - Update Tools in French  "/>
 	<property name="dirSrce" value="src/htm-srce"/>
 	<property name="dirTrgt" value="WebContent/karuta/htm"/>
 	<target name="testIfNewVersion">
