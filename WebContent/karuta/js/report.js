@@ -3056,6 +3056,7 @@ g_report_actions['operation'] = function (destid,action,no,data)
 g_report_actions['update-resource'] = function (destid,action,no,data)
 //==================================
 {
+	const original_userrole = userrole;
 	const restype = replaceVariable($(action).attr("restype"));
 	const semtag = replaceVariable($(action).attr("select"));
 	const attribute_value = replaceVariable($(action).attr("value"));
@@ -3109,7 +3110,7 @@ g_report_actions['update-resource'] = function (destid,action,no,data)
 		error : function(data) {
 		}
 	});
-	userrole = g_userroles[0];
+	userrole = original_userrole;
 }
 
 //=========================================================================

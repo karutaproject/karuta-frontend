@@ -32,19 +32,6 @@
 				}
 			});
 		</script>
-		<script>
-			var pathname = window.location.pathname;
-			var appliname = pathname.substring(0,pathname.substring(1).indexOf('/')+1);
-			var url = "../../.." + appliname + "-config/_init.js"
-			$.ajax({
-				async:false,
-				url: url,
-				dataType: "script",
-				error : function(jqxhr,textStatus) {
-					alert(appliname + "-config/_init.js not found");
-				}
-			});
-		</script>
 		<script src="../../karuta/js/karuta.js?v=@version@"></script>
 		<script src="../../karuta/js/UICom.js?v=@version@"></script>
 		<!-- =============================================================== -->

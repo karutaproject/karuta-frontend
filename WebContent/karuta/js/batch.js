@@ -879,6 +879,7 @@ g_actions['update-user'] = function (node)
 //=================================================
 {
 	var ok = false;
+	const error = ($(node).attr("noterror")==undefined)?true:false;
 	var identifier = getTxtvals($("identifier",node));
 	var lastname = getTxtvals($("lastname",node));
 	var firstname = getTxtvals($("firstname",node));
@@ -934,6 +935,10 @@ g_actions['update-user'] = function (node)
 			});
 			},
 		error : function(data) {
+			if (error)
+				$("#batch-log").append("<br>- ***<span class='danger'>ERROR 1</span> in update-user ("+userid+") - identifier:"+identifier+" lastname:"+lastname+" firstname:"+firstname);					
+			else
+				$("#batch-log").append("<br>- user NOT updated("+userid+") - identifier:"+identifier+" lastname:"+lastname+" firstname:"+firstname);
 		}
 	});
 	if (!ok) g_batch_error.push("update-user");
@@ -945,6 +950,7 @@ g_actions['delete-user'] = function deleteUser(node)
 //=================================================
 {
 	var ok = false;
+	const error = ($(node).attr("noterror")==undefined)?true:false;
 	var identifier = getTxtvals($("identifier",node));
 	var userref = $(node).attr("select");
 	if (userref!=="")
@@ -976,7 +982,10 @@ g_actions['delete-user'] = function deleteUser(node)
 			});
 		},
 		error : function(data) {
-			$("#batch-log").append("<br>- <span class='danger'>ERROR</span> user does not exist - identifier:"+identifier);
+			if (error)
+				$("#batch-log").append("<br>- <span class='danger'>ERROR</span> user does not exist - identifier:"+identifier);
+			else
+				$("#batch-log").append("<br>- user does not exist - identifier:"+identifier);
 		}
 	});
 	if (!ok) g_batch_error.push("delete-user");
@@ -988,6 +997,7 @@ g_actions['inactivate-user'] = function inactivateUser(node)
 //=================================================
 {
 	var ok = false;
+	const error = ($(node).attr("noterror")==undefined)?true:false;
 	var identifier = getTxtvals($("identifier",node));
 	var userref = $(node).attr("select");
 	if (userref!=="")
@@ -996,22 +1006,20 @@ g_actions['inactivate-user'] = function inactivateUser(node)
 		identifier = identifier.substring(1);
 	//---- get userid ----------
 	var userid = "";
-	var url = serverBCK_API+"/users/user/username/"+identifier;
 	$.ajax({
 		async : false,
 		type : "GET",
 		contentType: "application/xml",
 		dataType : "text",
-		url : url,
+		url : serverBCK_API+"/users/user/username/"+identifier,
 		success : function(data) {
 			userid = data;
-			var url = serverBCK_API+"/users/user/" + userid;
 			$.ajax({
 				async : false,
 				type : "GET",
 				contentType: "application/xml",
 				dataType : "xml",
-				url : url,
+				url : serverBCK_API+"/users/user/" + userid,
 				success : function(data) {
 					$("active",data).text('0');
 					data = xml2string(data);
@@ -1037,7 +1045,10 @@ g_actions['inactivate-user'] = function inactivateUser(node)
 			});
 		},
 		error : function(data) {
-			$("#batch-log").append("<br>- NOT FOUND <span class='danger'>ERROR</span> user does not exist - identifier:"+identifier);
+			if (error)
+				$("#batch-log").append("<br>- NOT FOUND <span class='danger'>ERROR</span> user does not exist - identifier:"+identifier);
+			else
+				$("#batch-log").append("<br>- user does not exist - identifier:"+identifier);
 		}
 	});
 	if (!ok) g_batch_error.push("inactivate-user");
@@ -1049,6 +1060,7 @@ g_actions['activate-user'] = function activateUser(node)
 //=================================================
 {
 	var ok = false;
+	const error = ($(node).attr("noterror")==undefined)?true:false;
 	var identifier = getTxtvals($("identifier",node));
 	var userref = $(node).attr("select");
 	if (userref!=="")
@@ -1098,7 +1110,10 @@ g_actions['activate-user'] = function activateUser(node)
 			});
 		},
 		error : function(data) {
-			$("#batch-log").append("<br>- NOT FOUND <span class='danger'>ERROR</span> user does not exist - identifier:"+identifier);
+			if (error)
+				$("#batch-log").append("<br>- NOT FOUND <span class='danger'>ERROR</span> user does not exist - identifier:"+identifier);
+			else
+				$("#batch-log").append("<br>- user does not exist - identifier:"+identifier);
 		}
 	});
 	if (!ok) g_batch_error.push("activate-user");
@@ -3086,6 +3101,7 @@ g_actions['update-resource'] = function updateResource(node,data)
 //=================================================
 {
 	var ok = 0;
+	const error = ($(node).attr("noterror")==undefined)?true:false;
 	var type = $(node).attr("type");
 	var attributes = $("attribute",node)
 	//---------------------
@@ -3148,13 +3164,19 @@ g_actions['update-resource'] = function updateResource(node,data)
 					$("#batch-log").append("<br>- resource updated "+type+" - "+ getSemtag(node)+" - "+attribute_value);
 				},
 				error : function(data) {
-					$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in update resource "+type+" - "+ getSemtag(node)+":"+attribute_value);
+					if (error)
+						$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in update resource "+type+" - "+ getSemtag(node)+":"+attribute_value);
+					else
+						$("#batch-log").append("<br>- resource not updated"+type+" - "+ getSemtag(node)+":"+attribute_value);
 				}
 			});
 			//-------------------
 		}
 	} else {
-		$("#batch-log").append("<br>- ***NOT FOUND <span class='danger'>ERROR - update-resource "+type+" -"+getSemtag(node)+"</span>");
+		if (error)
+			$("#batch-log").append("<br>- ***NOT FOUND <span class='danger'>ERROR - update-resource "+type+" -"+getSemtag(node)+"</span>");
+		else
+			$("#batch-log").append("<br>- resource not found - update-resource "+type+" -"+getSemtag(node));
 	}
 	if (!(ok!=0 && ok == nodes.length)) g_batch_error.push("update-resource");
 	return (ok!=0 && ok == nodes.length);
@@ -3171,6 +3193,7 @@ g_actions['update-node-resource'] = function updateResource(node,data)
 //=================================================
 {
 	let ok = 0;
+	const error = ($(node).attr("noterror")==undefined)?true:false;
 	let type = $(node).attr("type");
 	//-------------------
 	let nodes = getTargetNodes(node,data,"test")
@@ -3226,7 +3249,10 @@ g_actions['update-node-resource'] = function updateResource(node,data)
 			//-------------------
 		}
 	} else {
-		$("#batch-log").append("<br>- ***NOT FOUND <span class='danger'>ERROR - update-node-resource - type: "+type+"</span>");
+		if (error)
+			$("#batch-log").append("<br>- ***NOT FOUND <span class='danger'>ERROR - update-node-resource - type: "+type+"</span>");
+		else
+			$("#batch-log").append("<br>- ***NOT FOUND - update-node-resource - type: "+type);
 	}
 	if (!(ok!=0 && ok == nodes.length)) g_batch_error.push("update-node-resource");
 	return (ok!=0 && ok == nodes.length);

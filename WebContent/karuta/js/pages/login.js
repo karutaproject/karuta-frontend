@@ -258,26 +258,32 @@ function displayKarutaLogin()
 //==============================
 {
 	var data = "<credential><login>public</login><password>public</password></credential>";
-	$.ajax({
-		async:false,
-		contentType: "application/xml",
-		type : "POST",
-		dataType : "text",
-		url : serverBCK_API+"/credential/login",
-		data: data,
-		success : function(data) {
-			if (typeof(localLogin) == 'undefined')
-				localLogin = true;
-			constructKarutaLogin(true && localLogin);
-		},
-		error : function(jqxhr,textStatus) {
-			if (jqxhr.status == '404') {
-				constructKarutaLogin(false);
-			} else {
-				alertHTML("Identification : "+jqxhr.responseText);
+	try {
+		$.ajax({
+			async:false,
+			contentType: "application/xml",
+			type : "POST",
+			dataType : "text",
+			url : serverBCK_API+"/credential/login",
+			data: data,
+			success : function(data) {
+				if (typeof(localLogin) == 'undefined')
+					localLogin = true;
+				constructKarutaLogin(true && localLogin);
+			},
+			error : function(jqxhr,textStatus) {
+				if (jqxhr.status == '404') {
+					constructKarutaLogin(false);
+				} else {
+					alertHTML("Identification : "+jqxhr.responseText);
+				}
 			}
-		}
-	});
+		});
+	}
+	catch (e) {
+		unlog();
+		alert("Quitter votre browser et rouvrir votre page.<br>"+e);
+	}
 }
 
 //==============================
