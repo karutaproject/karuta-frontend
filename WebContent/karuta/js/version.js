@@ -2,7 +2,7 @@
 var karuta_version = "@project.version@";
 var karuta_date = "@build.timestamp@";
 
-const karuta_version_eportfolium = 'eportfolium-3.125.4';
+const karuta_version_eportfolium = 'eportfolium-3.125.5';
 const karuta_date_eportfolium = '2026-05-23';
 
 var karuta_backend_version = "?";
@@ -164,3 +164,4 @@ var karuta_fileserver_date = "?";
 // 3.125.2 FIX - Get_Resource : completion with group   - 2026-05-07 10:34:10
 // 3.125.3 FIX - Login - to avoid to be logged as Public Account   - 2026-05-21 11:12:02
 // 3.125.4 FIX - Update Tools in French   - 2026-05-23 09:00:39
+// 3.125.5 FIX - AsmStructure node style fixed when first node  - 2026-05-23 11:03:35

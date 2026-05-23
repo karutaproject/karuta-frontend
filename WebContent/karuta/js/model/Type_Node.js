@@ -527,7 +527,7 @@ UIFactory["Node"].prototype.displayAsmNode = function(dest,type,langcode,edit,re
 	}
 	const menus_color = this.getMenuStyle();
 	//-------------------- label style -------------------
-	if (this.depth>1) {
+	if (this.depth>1 || (nodetype=='asmStructure' && $("#node_"+this.id).html().indexOf('first-node')>-1)) {
 		style = UIFactory.Node.getLabelStyle(uuid);
 	} else {
 		style = UIFactory.Node.getInParentLabelStyle(uuid);
