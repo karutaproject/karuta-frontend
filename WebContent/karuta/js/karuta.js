@@ -2746,13 +2746,16 @@ function autocomplete(input,arrayOfValues,onupdate,self,langcode) {
 			for (i = 0; i < arrayOfValues.length; i++) {
 				const code = arrayOfValues[i][0];
 				const label = arrayOfValues[i][1];
+				let uuid ="";
+				if (arrayOfValues[i].length>2)
+					uuid = arrayOfValues[i][2];
 				var indexval = label.toUpperCase().indexOf(val.toUpperCase());
 				if (indexval>-1) {
 					b = document.createElement("DIV");
 					b.innerHTML = label.substr(0, indexval);
 					b.innerHTML += "<strong>" + label.substr(indexval,val.length) + "</strong>";
 					b.innerHTML += label.substr(indexval+val.length);
-					b.innerHTML += "<input type='hidden' code='"+code+"' label=\""+label+"\" value=\""+code+"\" >";
+					b.innerHTML += "<input type='hidden' uuid='"+uuid+"' code='"+code+"' label=\""+label+"\" value=\""+code+"\" >";
 					b.addEventListener("click", function(e) {
 						$(input).attr("label_"+languages[langcode],$("input",this).attr('label'));
 						$(input).attr('code',$("input",this).attr('code'));

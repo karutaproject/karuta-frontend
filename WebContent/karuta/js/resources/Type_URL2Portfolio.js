@@ -131,9 +131,10 @@ UIFactory["URL2Portfolio"].update = function(selected_item,itself,langcode,type)
 	$(itself.lastmodified_node).text(new Date().getTime());
 	var value = $(selected_item).attr('value');
 	var code = $(selected_item).attr('code');
+	var uuid = $(selected_item).attr('uuid');
 	//---------------------
-	$(itself.uuid_node).text(value);
-	$(itself.code_node).text(value);
+	$(itself.uuid_node).text(uuid!=undefined?uuid:value);
+	$(itself.code_node).text(code);
 	for (var i=0; i<languages.length;i++){
 		var label = $(selected_item).attr('label_'+languages[i]);
 		$(itself.label_node[i]).text(label);
@@ -278,7 +279,10 @@ UIFactory["URL2Portfolio"].parse = function(destid,type,langcode,data,self,disab
 				for (var j=0; j<languages.length;j++){
 					label[j] = $("label[lang="+languages[j]+"]",$("asmRoot>asmResource[xsi_type='nodeRes']",items[i])).text();
 				}
-				tableau2[tableau2.length] = {'code':code,'libelle':label[langcode]};
+//				tableau2[tableau2.length] = {'code':code,'libelle':label[langcode]};
+				tableau2.push([code,label[langcode],uuid]);
+//				tableau2[tableau2.length][0] = code;
+//				tableau2[tableau2.length][1] = label[langcode];
 				html = "<a class='dropdown-item' value='"+uuid+"' code='"+code+"' ";
 				for (var j=0; j<languages.length;j++){
 					html += "label_"+languages[j]+"=\""+label[j]+"\" ";
@@ -289,6 +293,7 @@ UIFactory["URL2Portfolio"].parse = function(destid,type,langcode,data,self,disab
 				$(select_item_a).click(function (ev){
 					$("#button_"+langcode+self.id).html($(this).attr("label_"+languages[langcode]));
 					$("#button_"+langcode+self.id).attr("value",$(this).attr("label_"+languages[langcode]));
+					$("#button_"+langcode+self.id).attr("uuid",$(this).attr("uuid"));
 					UIFactory["URL2Portfolio"].update(this,self,langcode);
 				});
 				$(select).append($(select_item_a));
