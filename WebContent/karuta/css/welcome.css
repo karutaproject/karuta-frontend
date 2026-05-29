@@ -13,7 +13,7 @@ body {
   background: url("../img/login-background.jpg") no-repeat;
 }
 
-/* ----------------------- */
+/* ------------------------- */
 #form-signin {
   background-color: var(--login-background-color);
   color: var(--login-text-color);

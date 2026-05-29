@@ -345,10 +345,14 @@
 				<xsl:call-template name="txtval"><xsl:with-param name="semtag">tree-code</xsl:with-param></xsl:call-template>
 				<xsl:call-template name="varval"><xsl:with-param name="semtag">tree-code</xsl:with-param></xsl:call-template>
 			</code>
-			<label>
-				<xsl:call-template name="txtval"><xsl:with-param name="semtag">tree-label</xsl:with-param></xsl:call-template>
-				<xsl:call-template name="varval"><xsl:with-param name="semtag">tree-label</xsl:with-param></xsl:call-template>
-			</label>
+			<label-en>
+				<xsl:call-template name="txtval"><xsl:with-param name="language">en</xsl:with-param><xsl:with-param name="semtag">tree-label</xsl:with-param></xsl:call-template>
+				<xsl:call-template name="varval"><xsl:with-param name="language">en</xsl:with-param><xsl:with-param name="semtag">tree-label</xsl:with-param></xsl:call-template>
+			</label-en>
+			<label-fr>
+				<xsl:call-template name="txtval"><xsl:with-param name="language">fr</xsl:with-param><xsl:with-param name="semtag">tree-label</xsl:with-param></xsl:call-template>
+				<xsl:call-template name="varval"><xsl:with-param name="language">fr</xsl:with-param><xsl:with-param name="semtag">tree-label</xsl:with-param></xsl:call-template>
+			</label-fr>
 		</create-tree>
 	</xsl:template>
 	
@@ -1730,6 +1734,17 @@
 
 	<xsl:template name='txtval'>
 		<xsl:param name="semtag"/>
+		<xsl:param name="language"/>
+		<xsl:variable name="langue">
+			<xsl:choose>
+				<xsl:when test="$language=''">
+					<xsl:value-of select="$lang"/>
+				</xsl:when>
+				 <xsl:otherwise>
+					<xsl:value-of select="$language"/>
+			 </xsl:otherwise>
+		 	</xsl:choose>
+		</xsl:variable>
 		<xsl:for-each select=".//*[metadata/@semantictag=$semtag]/*[metadata/@semantictag='txtchoice' or metadata/@semantictag='txtsel' or metadata/@semantictag='txtval' or metadata/@semantictag='textval' or metadata/@semantictag='usersel']">
 			<xsl:if test="metadata/@semantictag='txtchoice'">
 				<xsl:variable name="txtchoice">
@@ -1739,24 +1754,24 @@
 			</xsl:if>
 			<xsl:if test="metadata/@semantictag='txtsel'">
 				<xsl:variable name="txtsel">
-					<xsl:value-of select="asmResource[@xsi_type='Field']/text[@lang=$lang]"/>
+					<xsl:value-of select="asmResource[@xsi_type='Field']/text[@lang=$langue]"/>
 				</xsl:variable>
 				<txtval select='{$txtsel}'/>
 			</xsl:if>
 			<xsl:if test="metadata/@semantictag='txtval'">
 				<xsl:variable name="txtval"> 
-					<xsl:value-of select="asmResource[@xsi_type='Field']/text[@lang=$lang]"/>
+					<xsl:value-of select="asmResource[@xsi_type='Field']/text[@lang=$langue]"/>
 				</xsl:variable>
 				<txtval><xsl:value-of select="$txtval"/></txtval>
 			</xsl:if>
 			<xsl:if test="metadata/@semantictag='textval'">
 				<xsl:variable name="txtval"> 
-					<xsl:value-of select="asmResource[@xsi_type='TextField']/text[@lang=$lang]"/>
+					<xsl:value-of select="asmResource[@xsi_type='TextField']/text[@lang=$langue]"/>
 				</xsl:variable>
 				<txtval><xsl:value-of select="$txtval"/></txtval>
 			</xsl:if>
 			<xsl:if test="metadata/@semantictag='usersel'">
-				<xsl:variable name="usrsel">/<xsl:value-of select="asmResource[@xsi_type='Get_Resource']/label[@lang=$lang]"></xsl:value-of></xsl:variable>
+				<xsl:variable name="usrsel">/<xsl:value-of select="asmResource[@xsi_type='Get_Resource']/label[@lang=$langue]"></xsl:value-of></xsl:variable>
 				<txtval select='{$usrsel}'/>
 			</xsl:if>
 			

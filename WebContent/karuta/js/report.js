@@ -3060,12 +3060,14 @@ g_report_actions['update-resource'] = function (destid,action,no,data)
 	const restype = replaceVariable($(action).attr("restype"));
 	const semtag = replaceVariable($(action).attr("select"));
 	const attribute_value = replaceVariable($(action).attr("value"));
-	const user_role = replaceVariable($(action).attr("user-role"));
+	let user_role = replaceVariable($(action).attr("user-role"));
 	if (user_role!=undefined && user_role!=""){
 		url += "&userrole="+user_role;
 		g_userroles[g_userroles.length] = user_role;
 		userrole = user_role;
 	}
+	if (userrole!=undefined && userrole!="")
+		user_role = userrole;
 	let language_dependent = 'N';
 	let attribute_name = 'text';
 	if (restype=="Field") {

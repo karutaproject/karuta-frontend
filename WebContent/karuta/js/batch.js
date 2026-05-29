@@ -1628,9 +1628,16 @@ g_actions['create-tree'] = function createTree(node)
 				g_trees[treeref] = portfolio;
 			},
 			error : function(data) {
-				var label = getvarvals($("label",node));
-				if (label=="")
-					label = getTxtvals($("label",node));
+				let label_fr = getvarvals($("label-fr",node));
+				if (label_fr=="")
+					label_fr = getTxtvals($("label-fr",node));
+				let label_en = getvarvals($("label-en",node));
+				if (label_en=="")
+					label_en = getTxtvals($("label-en",node));
+				if (label_fr=="")
+					label_fr = label_en;
+				if (label_en=="")
+					label_en = label_fr;
 				var template = getTxtvals($("template",node));
 				//----- create tree from template -----
 				var portfolioid = "";
@@ -1654,7 +1661,7 @@ g_actions['create-tree'] = function createTree(node)
 						}
 						g_trees[treeref] = portfolio;
 						//----- update tree label -----
-						if (code!="" && label!="") {
+						if (code!="" && (label_fr!="" || label_en!="")) {
 							$.ajax({
 								async : false,
 								type : "GET",
@@ -1664,8 +1671,10 @@ g_actions['create-tree'] = function createTree(node)
 									var nodeid = $("asmRoot",data).attr('id');
 									var xml = "<asmResource xsi_type='nodeRes'>";
 									xml += "<code>"+code+"</code>";
-									for (var lan=0; lan<languages.length;lan++)
-										xml += "<label lang='"+languages[lan]+"'>"+label+"</label>";
+									xml += "<label lang='en'>"+label_en+"</label><label lang='fr'>"+label_fr+"</label>";
+
+//									for (var lan=0; lan<languages.length;lan++)
+//										xml += "<label lang='"+languages[lan]+"'>"+label+"</label>";
 									xml += "</asmResource>";
 									$.ajax({
 										async : false,

@@ -63,6 +63,7 @@ var g_backstack = [];
 var g_menubarstack = [];
 var g_curPos = 0;
 
+
 //-------------- used for designer-----
 var redisplays = {};
 // -------------backward compatibility------------------------
@@ -2760,6 +2761,7 @@ function autocomplete(input,arrayOfValues,onupdate,self,langcode) {
 						$(input).attr("label_"+languages[langcode],$("input",this).attr('label'));
 						$(input).attr('code',$("input",this).attr('code'));
 						$(input).attr('value',$("input",this).attr('value'));
+						$(input).attr('uuid',$("input",this).attr('uuid'));
 						input.value = $("input",this).attr('label');
 						eval(onupdate);
 						closeAllLists();

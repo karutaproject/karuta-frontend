@@ -301,6 +301,7 @@ UIFactory["URL2Portfolio"].parse = function(destid,type,langcode,data,self,disab
 				if (code!="" && self_code==uuid) {
 					$("#button_"+langcode+self.id).html(label[langcode]);
 					$("#button_"+langcode+self.id).attr("value",label[langcode]);
+					$("#button_"+langcode+self.id).attr("uuid",$(this).attr("uuid"));
 					$("#button_"+langcode+self.id).attr('class', 'btn btn-default select select-label');
 				}
 			}
