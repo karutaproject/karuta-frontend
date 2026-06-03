@@ -2745,8 +2745,10 @@ function autocomplete(input,arrayOfValues,onupdate,self,langcode) {
 			a.setAttribute("class", "autocomplete-items");
 			this.parentNode.appendChild(a);
 			for (i = 0; i < arrayOfValues.length; i++) {
-				const code = arrayOfValues[i][0];
-				const label = arrayOfValues[i][1];
+//				const code = arrayOfValues[i][0];
+//				const label = arrayOfValues[i][1];
+				const code = arrayOfValues[i].code;
+				const label = arrayOfValues[i].libelle;
 				let uuid ="";
 				if (arrayOfValues[i].length>2)
 					uuid = arrayOfValues[i][2];

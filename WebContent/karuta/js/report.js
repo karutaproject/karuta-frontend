@@ -2739,7 +2739,8 @@ g_report_actions['text'] = function (destid,action,no,data,is_out_csv)
 g_report_actions['jsfunction'] = function (destid,action,no,data)
 //==================================
 {
-	var jsfunction = $(action).attr("function");
+	let jsfunction = replaceVariable($(action).attr("function"));
+	jsfunction = jsfunction.substring(0,jsfunction.length-1)+",'"+destid+"')";
 	eval (jsfunction);
 	// ???????
 }
@@ -3107,7 +3108,9 @@ g_report_actions['update-resource'] = function (destid,action,no,data)
 		id : nodeid,
 		url : serverBCK_API+"/resources/resource/" + nodeid + "?userrole="+user_role,
 		success : function(data) {
-			UICom.structure.ui[this.id].refresh();
+			UICom.structure.ui[nodeid].refresh();
+			execJS(UICom.structure.ui[nodeid].resource,"update-resource-after");
+
 		},
 		error : function(data) {
 		}

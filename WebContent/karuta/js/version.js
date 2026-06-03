@@ -2,8 +2,8 @@
 var karuta_version = "@project.version@";
 var karuta_date = "@build.timestamp@";
 
-const karuta_version_eportfolium = 'eportfolium-3.126.0';
-const karuta_date_eportfolium = '2026-05-29';
+const karuta_version_eportfolium = 'eportfolium-3.126.1';
+const karuta_date_eportfolium = '2026-06-03';
 
 var karuta_backend_version = "?";
 var karuta_backend_date = "?";
@@ -166,3 +166,4 @@ var karuta_fileserver_date = "?";
 // 3.125.4 FIX - Update Tools in French   - 2026-05-23 09:00:39
 // 3.125.5 FIX - AsmStructure node style fixed when first node  - 2026-05-23 11:03:35
 // 3.126.0 FEAT - userrole added for update-resource in report - FIX - url2portfolio uuid attribute  - 2026-05-29 02:31:05
+// 3.126.1 FIX - function autocomplete  - 2026-06-03 01:08:24

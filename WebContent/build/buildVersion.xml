@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="updateVersion"  basedir="."> 
-	<property name="noVersion" value="3.126.0"/>
-	<property name="textVersion" value="FEAT - userrole added for update-resource in report - FIX - url2portfolio uuid attribute "/>
+	<property name="noVersion" value="3.126.1"/>
+	<property name="textVersion" value="FIX - function autocomplete "/>
 	<property name="dirSrce" value="src/htm-srce"/>
 	<property name="dirTrgt" value="WebContent/karuta/htm"/>
 	<target name="testIfNewVersion">

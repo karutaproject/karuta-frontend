@@ -279,8 +279,8 @@ UIFactory["URL2Portfolio"].parse = function(destid,type,langcode,data,self,disab
 				for (var j=0; j<languages.length;j++){
 					label[j] = $("label[lang="+languages[j]+"]",$("asmRoot>asmResource[xsi_type='nodeRes']",items[i])).text();
 				}
-//				tableau2[tableau2.length] = {'code':code,'libelle':label[langcode]};
-				tableau2.push([code,label[langcode],uuid]);
+				tableau2[tableau2.length] = {'code':code,'libelle':label[langcode]};
+//				tableau2.push([code,label[langcode],uuid]);
 //				tableau2[tableau2.length][0] = code;
 //				tableau2[tableau2.length][1] = label[langcode];
 				html = "<a class='dropdown-item' value='"+uuid+"' code='"+code+"' ";
