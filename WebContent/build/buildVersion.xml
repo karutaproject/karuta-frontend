@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="updateVersion"  basedir="."> 
-	<property name="noVersion" value="3.126.1"/>
-	<property name="textVersion" value="FIX - function autocomplete "/>
+	<property name="noVersion" value="3.127.0"/>
+	<property name="textVersion" value="FEAT - Report for-each-person displays info at each person "/>
 	<property name="dirSrce" value="src/htm-srce"/>
 	<property name="dirTrgt" value="WebContent/karuta/htm"/>
 	<target name="testIfNewVersion">
