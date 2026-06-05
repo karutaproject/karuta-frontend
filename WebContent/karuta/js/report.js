@@ -1282,8 +1282,8 @@ g_report_actions['for-each-person'] = function (destid,action,no,data)
 			var actions = $(action).children();
 			for (let i=0; i<actions.length;i++){
 				var tagname = $(actions[i])[0].tagName;
-//				g_report_actions[tagname](destid,actions[i],no+j.toString()+'-'+i.toString(),userid);
-				setTimeout(g_report_actions[tagname],0,destid,actions[i],no+j.toString()+'-'+i.toString(),userid);
+				g_report_actions[tagname](destid,actions[i],no+j.toString()+'-'+i.toString(),userid);
+//				setTimeout(g_report_actions[tagname],0,destid,actions[i],no+j.toString()+'-'+i.toString(),userid);
 			};
 			j++;
 		}
