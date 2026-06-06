@@ -19,6 +19,9 @@
 		<xsl:variable name="ref-init">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='ref-init']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
+		<xsl:variable name="trigger">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='trigger']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
 		<xsl:variable name="class">
 			<xsl:call-template name="class"/>
 		</xsl:variable>
@@ -31,6 +34,9 @@
 			</xsl:if>
 			<xsl:if test="not($ref-init='')">
 				<xsl:attribute name="ref-init"><xsl:value-of select="$ref-init"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not($trigger='')">
+				<xsl:attribute name="trigger"><xsl:value-of select="$trigger"/></xsl:attribute>
 			</xsl:if>
 			<xsl:apply-templates select='asmUnitStructure'/>
 		</table>
@@ -875,6 +881,9 @@
 		<xsl:variable name="ref-init">
 			<xsl:value-of select="asmContext[metadata/@semantictag='ref-init']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
+		<xsl:variable name="trigger">
+			<xsl:value-of select="asmContext[metadata/@semantictag='trigger']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
 		<xsl:variable name="countvar">
 			<xsl:value-of select="asmContext[metadata/@semantictag='countvar']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
@@ -884,6 +893,9 @@
 		<for-each-person select='{$select}'>
 			<xsl:if test="not($ref-init='')">
 				<xsl:attribute name="ref-init"><xsl:value-of select="$ref-init"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not($trigger='')">
+				<xsl:attribute name="trigger"><xsl:value-of select="$trigger"/></xsl:attribute>
 			</xsl:if>
 			<xsl:if test="not($countvar='')">
 				<xsl:attribute name="countvar"><xsl:value-of select="$countvar"/></xsl:attribute>
