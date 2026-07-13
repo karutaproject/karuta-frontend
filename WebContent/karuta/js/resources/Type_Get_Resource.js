@@ -1499,7 +1499,6 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 		}
 		//----------remove allready added----------------
 		var newTableau2 = [];
-		var newTableau3 = [];
 		if (this.unique!=undefined && this.unique!="" && this.unique!="false") {
 			for ( var i = 0; i < newTableau1.length; ++i) {
 				const indx = tabadded.indexOf(cleanCode(newTableau1[i][0]));
@@ -1610,6 +1609,7 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 	if (type=='completion') {
 	//------------------------------------------------------------
 	//------------------------------------------------------------
+		var newTableau3 = [];
 		var html ="";
 		html += "<form autocomplete='off'>";
 		html += "</form>";
@@ -1671,6 +1671,7 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 					code = $('code',resource).text();
 					label = $(srce+"[lang='"+languages[langcode]+"']",resource).text();
 				}
+				newTableau3[newTableau3.length] = {'code':code,'libelle':label};
 				//------------------------------
 				var display_code = false;
 				var display_label = true;
@@ -1772,7 +1773,7 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 		//---------------------
 		$(btn_group).append($(select));
 		var onupdate = "UIFactory.Get_Resource.update(input,self)";
-		autocomplete(document.getElementById("button_"+langcode+self.id),newTableau1,onupdate,self,langcode);
+		autocomplete(document.getElementById("button_"+langcode+self.id),newTableau3,onupdate,self,langcode);
 	}
 	
 	//------------------------------------------------------------

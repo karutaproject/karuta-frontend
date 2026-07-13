@@ -14,6 +14,7 @@
    ======================================================= */
 
 var userid = null; // current user
+var userrole = null; // current user
 var report_refresh = true;
 var csvline = "";
 
@@ -2455,7 +2456,7 @@ g_report_actions['variable'] = function (destid,action,no,data)
 					//----------------------------
 					var node = UICom.structure.ui[nodeid];
 					//----------------------------
-					if (select=='..username') { // -- userattributes
+					if (select=='..userid' || select=='..username' || select=='..lastname' || select=='..firstname' || select=='..email') { // -- userattributes
 						select= select.substring(2);
 						if (select=='userid')
 							text = data;
@@ -3058,7 +3059,7 @@ g_report_actions['operation'] = function (destid,action,no,data)
 g_report_actions['update-resource'] = function (destid,action,no,data)
 //==================================
 {
-	const original_userrole = userrole;
+	const original_userrole = (userrole!=undefined) ? userrole:"";
 	const restype = replaceVariable($(action).attr("restype"));
 	const semtag = replaceVariable($(action).attr("select"));
 	const attribute_value = replaceVariable($(action).attr("value"));
@@ -3068,8 +3069,11 @@ g_report_actions['update-resource'] = function (destid,action,no,data)
 		g_userroles[g_userroles.length] = user_role;
 		userrole = user_role;
 	}
+	const role = (userrole == null || userrole=="")? g_userroles[0]:userrole;
 	if (userrole!=undefined && userrole!="")
 		user_role = userrole;
+	else
+		user_role = role;
 	let language_dependent = 'N';
 	let attribute_name = 'text';
 	if (restype=="Field") {

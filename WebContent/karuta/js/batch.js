@@ -3221,22 +3221,26 @@ g_actions['update-node-resource'] = function updateResource(node,data)
 				code = code.substring(code.indexOf(',')+1,code.indexOf(')'));
 				code = eval(fct+"('"+code+"')");
 			}
-			let label = getTxtvals($("label",node));
-			if (label.indexOf("##oldlabel##")>-1)
-				label = label.replaceAll("##oldlabel##",oldlabel);
+//			let label = getTxtvals($("label",node));
+//			if (label.indexOf("##oldlabel##")>-1)
+//				label = label.replaceAll("##oldlabel##",oldlabel);
+			let label_fr = getvarvals($("label-fr",node));
+			if (label_fr=="")
+				label_fr = getTxtvals($("label-fr",node));
+			let label_en = getvarvals($("label-en",node));
+			if (label_en=="")
+				label_en = getTxtvals($("label-en",node));
+			if (label_fr=="")
+				label_fr = label_en;
+			if (label_en=="")
+				label_en = label_fr;
 			//--------------------------------
 			if (code!="")
 				$("code",resource).text(code);
-			if (label!="") {
-				
-				if ($("metadata",nodes[i]).attr("multilingual-node")=="Y") {
-					$("label[lang='"+LANG+"']",resource).text(label);
-				} else {
-					for (let langcode=0; langcode<languages.length; langcode++) {
-						$("label[lang='"+languages[langcode]+"']",resource).text(label);
-					}
-				}
-			}
+			if (label_fr!="")
+					$("label[lang='fr']",resource).text(label_fr);
+			if (label_en!="")
+					$("label[lang='en']",resource).text(label_en);
 			let data = "<asmResource xsi_type='nodeRes'>" + $(resource).html() + "</asmResource>";
 			let strippeddata = data.replace(/xmlns=\"http:\/\/www.w3.org\/1999\/xhtml\"/g,"");  // remove xmlns attribute
 			//-------------------

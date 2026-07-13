@@ -217,7 +217,16 @@ UIFactory["Get_Get_Resource"].update = function(selected_item,itself,langcode,ty
 			var code = $(selected_item).attr('code');
 			var uuid = $(selected_item).attr('uuid');
 			var style = $(selected_item).attr('style');
-			$(UICom.structure.ui[itself.id].resource.value_node[0]).text(value);
+			$(itself.value_node[0]).text(value);
+			$(itself.code_node[0]).text(code);
+			$(itself.uuid_node[0]).text(uuid);
+			$(itself.style_node[0]).text(style);
+			for (var i=0; i<languages.length;i++){
+				var label = $(selected_item).attr('label_'+languages[i]);
+				$(itself.label_node[i][0]).text(label);
+			}
+			$(itself.lastmodified_node).text(new Date().getTime());
+/*			$(UICom.structure.ui[itself.id].resource.value_node[0]).text(value);
 			$(UICom.structure.ui[itself.id].resource.code_node[0]).text(code);
 			$(UICom.structure.ui[itself.id].resource.uuid_node[0]).text(uuid);
 			$(UICom.structure.ui[itself.id].resource.style_node[0]).text(style);
@@ -225,7 +234,7 @@ UIFactory["Get_Get_Resource"].update = function(selected_item,itself,langcode,ty
 				var label = $(selected_item).attr('label_'+languages[i]);
 				$(UICom.structure.ui[itself.id].resource.label_node[i][0]).text(label);
 			}
-			$(UICom.structure.ui[itself.id].resource.lastmodified_node).text(new Date().getTime());
+			$(UICom.structure.ui[itself.id].resource.lastmodified_node).text(new Date().getTime()); */
 			itself.save();
 			//-----------------------
 			execJS(itself,'update-resource');
@@ -802,7 +811,8 @@ UIFactory["Get_Get_Resource"].prototype.parse = function(destid,type,langcode,da
 				tableau2[tableau2.length] = {'code':code_label.code,'libelle':code_label.label};
 			} else if (portfoliocode.indexOf("#persongroup")>-1) {
 				code  = userid = $(nodes[i]).attr("id");
-				UIFactory.User.load(userid);
+				if (Users_byid[userid]==undefined)
+					UIFactory.User.load(userid);
 				if (Users_byid[userid]!=undefined)
 					tableau2[tableau2.length] = {'code':Users_byid[userid].username,'libelle':Users_byid[userid].firstname+" " +Users_byid[userid].lastname};
 				else

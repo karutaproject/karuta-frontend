@@ -2,8 +2,8 @@
 var karuta_version = "@project.version@";
 var karuta_date = "@build.timestamp@";
 
-const karuta_version_eportfolium = 'eportfolium-3.127.1';
-const karuta_date_eportfolium = '2026-06-05';
+const karuta_version_eportfolium = 'eportfolium-3.127.3';
+const karuta_date_eportfolium = '2026-07-13';
 
 var karuta_backend_version = "?";
 var karuta_backend_date = "?";
@@ -169,3 +169,5 @@ var karuta_fileserver_date = "?";
 // 3.126.1 FIX - function autocomplete  - 2026-06-03 01:08:24
 // 3.127.0 FEAT - Report for-each-person displays info at each person  - 2026-06-03 03:10:42
 // 3.127.1 FIX - Report for-each-person displays info at each person - temporarily removed - Type_Node_Menu.js - multiroles in menu  - 2026-06-05 04:09:25
+// 3.127.2 FIX - update-resource when user has more than one role - 2026-06-21 12:24:40
+// 3.127.3 FIX - get_resource and get_get_resource autocomplete fixed - 2026-07-13 04:07:04

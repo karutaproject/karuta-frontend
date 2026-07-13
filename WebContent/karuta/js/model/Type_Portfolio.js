@@ -2990,6 +2990,44 @@ UIFactory.Portfolio.displayUserPortfolios = function(userid,firstname,lastname,d
 	//--------------------------
 }
 
+//==================================
+UIFactory.Portfolio.getUserRolePortfolios = function(userid,userrole,remove)
+//==================================
+{
+	let text = "<table>";
+	const list = UIFactory.Portfolio.userListPortfolios(userid);
+	for (var i=0;i<list.length;i++) {
+		const portfolio = portfolios_byid[list[i]];
+		const portfolioid = portfolio.id;
+		const portfoliocode = portfolio.code_node.text();
+		const cohorte = portfoliocode.substring(portfoliocode.indexOf("/")+1,portfoliocode.indexOf("."));
+		const portfolio_label = portfolio.label_node[LANGCODE].text();
+
+		$.ajax({ // get group-role for the user
+			async: false,
+			Accept: "application/xml",
+			type : "GET",
+			dataType : "xml",
+			url : serverBCK_API+"/rolerightsgroups/all/users?portfolio=" + portfolioid,
+			userid : userid,
+			portfolioid : portfolioid,
+			success : function(data) {
+				const userroles = $("user[id='"+this.userid+"']",data).parent().parent().find('label');
+				for (let j=0;j<userroles.length;j++) {
+					if (userrole==$(userroles[j]).text()) {
+						const gid = $("user[id='"+this.userid+"']",data).parent().parent().attr('id');
+						text += "<tr><td style='border:none;width:150px'>" + cohorte + "</td><td style='border:none;width:70%'>"+portfolio_label + "</td>";
+					if (remove)
+						text += "<td style='border:none'><button style='color:white; height:18px;font-size:12px;padding-top:0px' class='btn btn-danger'  onclick=\"UIFactory.Portfolio.confirmUnshare('"+gid+"','"+userid+"')\">"+karutaStr[LANG]['button-unshare']+"</button></td></tr>";
+					}
+				}
+			}
+		});
+	}
+	text += "</table>";
+	return text;
+}
+
 
 //=======================================================================
 UIFactory["Portfolio"].confirmDelPortfolio = function (uuid) 

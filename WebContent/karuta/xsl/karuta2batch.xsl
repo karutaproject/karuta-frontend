@@ -692,11 +692,19 @@
 					<xsl:with-param name="semtag">node-code</xsl:with-param>
 				</xsl:call-template>
 			</newcode>
-			<label>
+			<!--label>
 				<xsl:call-template name="txtval">
 					<xsl:with-param name="semtag">node-label</xsl:with-param>
 				</xsl:call-template>
-			</label>
+			</label-->
+			<label-en>
+				<xsl:call-template name="txtval"><xsl:with-param name="language">en</xsl:with-param><xsl:with-param name="semtag">node-label</xsl:with-param></xsl:call-template>
+				<xsl:call-template name="varval"><xsl:with-param name="language">en</xsl:with-param><xsl:with-param name="semtag">node-label</xsl:with-param></xsl:call-template>
+			</label-en>
+			<label-fr>
+				<xsl:call-template name="txtval"><xsl:with-param name="language">fr</xsl:with-param><xsl:with-param name="semtag">node-label</xsl:with-param></xsl:call-template>
+				<xsl:call-template name="varval"><xsl:with-param name="language">fr</xsl:with-param><xsl:with-param name="semtag">node-label</xsl:with-param></xsl:call-template>
+			</label-fr>
 		</update-node-resource>
 	</xsl:template>
 	

@@ -870,7 +870,8 @@ function displayPage(uuid,depth,type,langcode,edit,print) {
 		}
 	}
 	//---------------------
-	setTimeout(displayPageFCT,0,uuid,depth,type,langcode,edit,print,scrollTop,scrollLeft);
+	displayPageFCT(uuid,depth,type,langcode,edit,print,scrollTop,scrollLeft);
+//	setTimeout(displayPageFCT,0,uuid,depth,type,langcode,edit,print,scrollTop,scrollLeft);
 }
 
 //==================================
