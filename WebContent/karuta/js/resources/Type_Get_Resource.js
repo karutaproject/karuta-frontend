@@ -1730,7 +1730,7 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 					});
 				}
 				//-------------- update button -----
-				if (code!="" && self_code==$('code',resource).text()) {
+				if (code!="" && self_code==cleanCode($('code',resource).text())) {
 					var html = "";
 					if (display_code)
 						html += code+" ";
