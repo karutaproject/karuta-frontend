@@ -1327,7 +1327,7 @@ UIFactory["Get_Get_Resource"].prototype.parse = function(destid,type,langcode,da
 				document.getElementById("button_"+langcode+self.id).defaultValue = "";
 				document.getElementById("button_"+langcode+self.id).value = "";
 				document.getElementById("button_"+langcode+self.id).className = "btn btn-default select selected-label";
-				UIFactory["Get_Resource"].update(this,self,langcode);
+				UIFactory["Get_Get_Resource"].update(this,self,langcode);
 			});
 			$(select).append($(select_item));
 //		}
@@ -1429,12 +1429,12 @@ UIFactory["Get_Get_Resource"].prototype.parse = function(destid,type,langcode,da
 					});
 				}
 				//-------------- update button -----
-				if (code!="" && self_code==cleanCode($('code',resource).text())) {
+				if (code!="" && self_code==code) {
 					var html = "";
 					if (display_code)
 						html += code+" ";
 					if (display_label)
-						html += $(srce+"[lang='"+languages[langcode]+"']",resource).text();
+						html += label[langcode];
 					$("#button_"+langcode+self.id).attr("style",style);
 					$("#button_"+langcode+self.id).html(html);
 					$("#button_"+langcode+self.id).attr("value",html);

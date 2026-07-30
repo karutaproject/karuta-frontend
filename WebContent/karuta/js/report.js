@@ -937,6 +937,8 @@ g_report_actions['exist-sharing'] = function (destid,action,no,data)
 //==================================
 {
 	const select = cleanCode(replaceVariable($(action).attr("select")));
+	var ref = $(action).attr("ref");
+	ref = replaceVariable(ref);
 	$.ajax({
 		async:false,
 		type : "GET",
@@ -963,6 +965,14 @@ g_report_actions['exist-sharing'] = function (destid,action,no,data)
 							html += "<div>"+Users_byid[userid].firstname+" "+Users_byid[userid].lastname+"</div>";
 						}
 					}
+					//-------------------------------------------
+					if (ref!=undefined && ref!="") {
+						ref = replaceVariable(ref);
+						if (g_variables[ref]==undefined)
+							g_variables[ref] = new Array();
+						g_variables[ref][g_variables[ref].length] = Users_byid[userid].firstname+" "+Users_byid[userid].lastname;
+					}
+					//-------------------------------------------
 				}
 			}
 			$("#"+destid).append(html);	
@@ -2160,6 +2170,7 @@ g_report_actions['node_resource'] = function (destid,action,no,data)
 					g_variables[ref] = new Array();
 				g_variables[ref][g_variables[ref].length] = text;
 			}
+			//-------------------------------------------
 			text = "<span id='dashboard_node_resource"+nodeid+"' style='"+style+"' class='"+cssclass+"'>"+text+"</span>";
 			if (g_report_edit && writenode && nodenopencil!='Y' && !nodenopencilroles.containsArrayElt(g_userroles)) {
 				text += "<span class='button fas fa-pencil-alt' data-toggle='modal' data-target='#edit-window' onclick=\"javascript:getEditBox('"+nodeid+"')\" data-title='"+karutaStr[LANG]["button-edit"]+"' data-toggle='tooltip' data-placement='bottom'></span>";

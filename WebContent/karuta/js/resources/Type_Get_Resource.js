@@ -430,6 +430,21 @@ UIFactory["Get_Resource"].prototype.displayView = function(dest,type,langcode)
 UIFactory["Get_Resource"].prototype.displayEditor = function(destid,type,langcode,disabled,cachable,resettable)
 //==================================
 {
+	//-------- if function js -------------
+	if (UICom.structure.ui[this.id].js==undefined)
+		UICom.structure.ui[this.id].setMetadata();
+	if (UICom.structure.ui[this.id].js!="") {
+		var fcts = UICom.structure.ui[this.id].js.split("|");
+		for (let i=0;i<fcts.length;i++) {
+			let elts = fcts[i].split("/");
+			if (elts[0]=="inline-resource-before") {
+				fctjs = elts[1].split(";");
+				for (let j=0;j<fctjs.length;j++) {
+					eval(fctjs[j]+"(this.node,g_portfolioid)");
+				}
+			}
+		}
+	}
 	var multiple_tags = "";
 	if (cachable==undefined || cachable==null)
 		cachable = true;

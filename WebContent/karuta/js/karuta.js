@@ -4076,18 +4076,24 @@ function eraseResource(nodeid,tags,top){
 //==================================
 	if (top==null)
 		top = "asmRoot";
+	if (tags==null)
+		tags = "";
 	tags = tags.split(",");
-	let parent = UICom.structure.ui[nodeid].node;
+	let parent = "";
+	if (UICom.structure.ui[nodeid]!=undefined)
+		parent = UICom.structure.ui[nodeid].node;
 	for (let i=0; i<tags.length; i++){
-		let elts = $("asmContext:has(>metadata[semantictag*='"+tags[i]+"'])",parent);
-		while (elts.length==0 && $(parent).prop("nodeName")!=top) {
-			parent = $(parent).parent();
-			elts = $("asmContext:has(>metadata[semantictag*='"+tags[i]+"'])",parent);
-		}
-		if (elts.length!=0) {
-			for (let j=0; j<elts.length; j++){
-				let eltid = $(elts[j]).attr("id");
-				UICom.structure.ui[eltid].resource.erase();
+		if (tags[i]!="") {
+			let elts = $("asmContext:has(>metadata[semantictag*='"+tags[i]+"'])",parent);
+			while (elts.length==0 && $(parent).prop("nodeName")!=top) {
+				parent = $(parent).parent();
+				elts = $("asmContext:has(>metadata[semantictag*='"+tags[i]+"'])",parent);
+			}
+			if (elts.length!=0) {
+				for (let j=0; j<elts.length; j++){
+					let eltid = $(elts[j]).attr("id");
+					UICom.structure.ui[eltid].resource.erase();
+				}
 			}
 		}
 	}
@@ -4221,6 +4227,19 @@ function displayIfDate(nodeid,role,begin,end) {
 	return utc_begin < today && today < utc_end && g_userroles[0]==role;
 
 }
+
+function waitshow(){
+	$("#wait-window").modal('show');
+}
+
+function wait(mode){
+	$("#wait-window").modal(mode);
+}
+
+function waithide(){
+	setTimeout(wait,0,'hide');
+}
+
 //================================================
 //================================================
 //============== Function JQuery =================

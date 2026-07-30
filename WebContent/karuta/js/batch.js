@@ -2078,11 +2078,13 @@ g_actions['share-tree'] = function shareTree(node)
 		type : "GET",
 		contentType: "text/html",
 		dataType : "text",
+		user : user,
+		user_id : user_id,
 		url : serverBCK_API+"/rolerightsgroups?portfolio="+g_trees[treeref].id+"&role="+role,
 		success : function(data) {
 			groupid = data;
 			//---- share tree --------------
-			const xml = "<users><user id='"+user_id+"'/></users>";
+			const xml = "<users><user id='"+this.user_id+"'/></users>";
 			$.ajax({
 				async : false,
 				type : "POST",
@@ -2092,10 +2094,10 @@ g_actions['share-tree'] = function shareTree(node)
 				data : xml,
 				success : function(data) {
 					ok = true;
-					$("#batch-log").append("<br>- tree shared ("+g_trees[treeref].code+") - user:"+user_id+" - role:"+role);
+					$("#batch-log").append("<br>- tree shared ("+g_trees[treeref].code+") - user:"+this.user+"("+this.user_id+") - role:"+role);
 				},
 				error : function(data) {
-					$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in share tree ("+g_trees[treeref].code+") - role:"+role);
+					$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in share tree ("+g_trees[treeref].code+") - user:"+this.user+" ("+this.user_id+") - role:"+role);
 				}
 			});
 		}
