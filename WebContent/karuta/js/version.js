@@ -2,8 +2,8 @@
 var karuta_version = "@project.version@";
 var karuta_date = "@build.timestamp@";
 
-const karuta_version_eportfolium = 'eportfolium-3.127.5';
-const karuta_date_eportfolium = '2026-07-30';
+const karuta_version_eportfolium = 'eportfolium-3.127.7';
+const karuta_date_eportfolium = '2026-08-11';
 
 var karuta_backend_version = "?";
 var karuta_backend_date = "?";
@@ -173,3 +173,5 @@ var karuta_fileserver_date = "?";
 // 3.127.3 FIX - get_resource and get_get_resource autocomplete fixed - 2026-07-13 04:07:04
 // 3.127.4 FIX - get_resource and get_get_resource autocomplete update button fixed - 2026-07-15 10:23:09
 // 3.127.5 FIX - minor corrections - 2026-07-30 10:56:07
+// 3.127.6 FEAT - testAuthorization - FIX - minor corrections - 2026-08-04 12:29:25
+// 3.127.7 FIX - minor corrections - 2026-08-11 03:05:57

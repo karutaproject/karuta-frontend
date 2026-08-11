@@ -799,7 +799,8 @@ g_actions['create-user'] = function createUser(node)
 			xml +="	<lastname>"+lastname+"</lastname>";
 			xml +="	<firstname>"+firstname+"</firstname>";
 			xml +="	<email>"+email+"</email>";
-			xml +="	<password>"+password+"</password>"; 
+			if (password!="")
+				xml +="	<password>"+password+"</password>"; 
 			xml +="	<active>1</active>";
 			xml +="	<other>"+other+"</other>";
 			xml +="	<admin>0</admin>";
@@ -908,7 +909,8 @@ g_actions['update-user'] = function (node)
 			xml +="	<lastname>"+lastname+"</lastname>";
 			xml +="	<firstname>"+firstname+"</firstname>";
 			xml +="	<email>"+email+"</email>";
-			xml +="	<password>"+password+"</password>"; 
+			if (password!="")
+				xml +="	<password>"+password+"</password>"; 
 			xml +="	<prevpass>"+USER.password+"</prevpass>"; 
 			xml +="	<active>1</active>";
 			xml +="	<other>"+other+"</other>";
@@ -2089,6 +2091,8 @@ g_actions['share-tree'] = function shareTree(node)
 				async : false,
 				type : "POST",
 				contentType: "application/xml",
+				user : this.user,
+				user_id : this.user_id,
 				dataType : "xml",
 				url : serverBCK_API+"/rolerightsgroups/rolerightsgroup/" + groupid + "/users",
 				data : xml,
