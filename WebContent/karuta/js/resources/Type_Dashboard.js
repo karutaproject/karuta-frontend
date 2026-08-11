@@ -150,7 +150,7 @@ UIFactory["Dashboard"].prototype.displayView = function(dest,langcode)
 	if (g_userroles[0]!='designer')
 		$("#sub_node_"+uuid).hide();
 	//-----------------------------------------------------
-	$("#extra_"+uuid).append($("<div id='extra_button_"+uuid+"' style='float:right' class='dashboard-buttons btn-group'></div>"));
+	$("#extra_"+uuid).append($("<div id='extra_button_"+uuid+"' style='float:right' class='dashboard-buttons btn-group'><div id='info_"+uuid+"'></div></div>"));
 	$("#extra_"+uuid).append($("<div id='dashboard_"+uuid+"' class='createreport'></div>"));
 	var root_node = g_portfolio_current;
 	var parent_node = UICom.structure.ui[$(this.parent).attr("id")];

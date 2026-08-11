@@ -121,6 +121,13 @@ UIFactory["Calendar"].prototype.getView = function(dest,type,langcode)
 	}
 	//---------------------
 	let html = $(this.text_node[langcode]).text();
+/*	if (this.utc.text() == 'NaN' && this.format_node[langcode].text() == 'dd/mm/yyyy') {
+		const originalDate =  $(this.text_node[langcode]).text();
+		const [day, month, year] = originalDate.split("/");
+		const utc = Date.UTC(year, month, day);
+		$(this.utc).text(utc);
+		this.save();
+	}*/
 	//------------------execJS-----------------
 	const result1 = execJS(this,'display-resource-before');
 	if (typeof result1 == 'string')
@@ -198,12 +205,12 @@ UIFactory["Calendar"].prototype.displayEditor = function(dest,type,langcode,disa
 		minViewMode = "days";
 	$(input1).datepicker({minViewMode:minViewMode,format:format,language:LANG});
 	$(input1).datepicker().on('changeDate', function (ev) {
-		$(self.utc).text(Date.parse($(this).val()));
+		$(self.utc).text(Date.parse(ev.date));
 		$(self.text_node[langcode]).text($(this).val());
 		UIFactory.Calendar.update(self,langcode);
 	});
 	$(input1).datepicker().on('clearDate', function (ev) {
-		$(self.utc).text(Date.parse($(this).val()));
+		$(self.utc).text(Date.parse(ev.date));
 		$(self.text_node[langcode]).text($(this).val());
 		UIFactory.Calendar.update(self,langcode);
 	});

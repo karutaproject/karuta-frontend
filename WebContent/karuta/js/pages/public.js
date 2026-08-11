@@ -20,7 +20,7 @@ var lang = getURLParameter('lang');
 if (lang==null)
 	lang = LANG ;
 //-------------------------------
-g_variables["partage"] = "Votre accès a été validé. Vous aurez accès au livret de l'étudiant dans Karuta.<br><a href='karuta.htm'>Accédez à Karuta</a><br>L'Université de Pau et des Pays de l'Adour (DFTLV)﻿";
+g_variables["partage"] = "Votre accès a été validé. Vous aurez accès au livret de l'étudiant dans Karuta.";
 
 
 //==============================
@@ -68,75 +68,93 @@ function displayKarutaPublic()
 			} else {
 				g_uuid = data;
 			}
-			//----------------
 			$.ajax({
 				async:false,
 				type : "GET",
 				dataType : "xml",
 				url : serverBCK_API+"/credential",
 				success : function(data) {
-					USER = new UIFactory["User"]($("user",data));
 					setConfigurationTechVariables(LANGCODE);
 					setConfigurationUIVariables(LANGCODE);
 					applyKarutaConfiguration();
+					USER = new UIFactory["User"]($("user",data));
 					//----------------
-					if (x!=undefined){
-						$("#contenu").html(g_variables["partage"]);
-					} else {	
-						$.ajax({
-							async:false,
-							type : "GET",
-							dataType : "xml",
-							url : serverBCK_API+"/nodes/node/" + g_uuid + '?userrole='+userrole,
-							success : function(data) {
-								let nodeid = (nid!=undefined)? nid : g_uuid;
-								g_edit = true; //no edit button
-								g_portfolio_current = data;
-								UICom.parseStructure(data);
-								var depth = 99;
-								var rootnode = UICom.structure.ui[nodeid];
-								if (rootnode.asmtype=='asmRoot' || rootnode.asmtype=='asmStructure')
-									depth = 1;
-								// --------------------------
-								var role = $(":root",data).attr("role");
-								if (role!="") {
-									g_userroles[0] = g_userroles[1] = role;
-								} else {
-									g_userroles[0] = g_userroles[1] ='designer';
-									g_designerrole = true;
-									g_visible = localStorage.getItem('metadata');
-									toggleMetadata(g_visible);
+					let ok = true;
+					try {
+						ok = testAuthorization();
+					}
+					catch (e) {
+						ok = true;
+					}
+					//----------------
+					if (ok) {
+						//----------------
+						if (x!=undefined){
+							$("#contenu").html(g_variables["partage"]);
+						} else {	
+							$.ajax({
+								type : "GET",
+								dataType : "xml",
+								url : serverBCK_API+"/nodes/node/" + g_uuid,
+								async:false,
+								success : function(data) {
+									$.ajax({
+										type : "GET",
+										dataType : "xml",
+										url : serverBCK_API+"/nodes/node/" + g_uuid + '?userrole='+userrole,
+										async:false,
+										success : function(data) {
+											let nodeid = (nid!=undefined)? nid : g_uuid;
+											g_edit = true; //no edit button
+											g_portfolio_current = data;
+											UICom.parseStructure(data);
+											var depth = 99;
+											var rootnode = UICom.structure.ui[nodeid];
+											if (rootnode.asmtype=='asmRoot' || rootnode.asmtype=='asmStructure')
+												depth = 1;
+											// --------------------------
+											var role = $(":root",data).attr("role");
+											if (role!="") {
+												g_userroles[0] = g_userroles[1] = role;
+											} else {
+												g_userroles[0] = g_userroles[1] ='designer';
+												g_designerrole = true;
+												g_visible = localStorage.getItem('metadata');
+												toggleMetadata(g_visible);
+											}
+											setCSSportfolio(data);
+											setLanguage(lang,'publichtm');
+											if (rootnode.asmtype=='asmRoot' || rootnode.asmtype=='asmStructure') {
+												UIFactory.Node.displaySidebarItem(nodeid,'sidebar-parent','standard',LANGCODE,false,nodeid);
+						//						UIFactory["Node"].displaySidebar(UICom.structure.tree[nodeid],'sidebar','standard',LANGCODE,false,nodeid);
+											}
+											$("#contenu").html("<div id='page' uuid='"+nodeid+"'></div>");
+											var semtag =  ($("metadata",rootnode.node)[0]==undefined || $($("metadata",rootnode.node)[0]).attr('semantictag')==undefined)?'': $($("metadata",rootnode.node)[0]).attr('semantictag');
+											if (semtag == 'bubble_level1') {
+												$("#main-container").html("");
+												UICom.structure.ui[nodeid].displayNode('standard',UICom.structure.tree[nodeid],'main-container',depth,LANGCODE,true);
+											}
+											else
+												UICom.structure.ui[nodeid].displayNode('standard',UICom.structure.tree[nodeid],'contenu',depth,LANGCODE,true);
+											var welcomes = $("asmUnit:has(metadata[semantictag*='WELCOME'])",data);
+											if (welcomes.length==0) // for backward compatibility
+												welcomes = $("asmUnit:has(metadata[semantictag*='welcome-unit'])",data);
+											if (welcomes.length>0){
+												var welcomeid = $(welcomes[0]).attr('id');
+												$("#sidebar_"+welcomeid).click();
+											} else {
+												var root = $("asmRoot",data);
+												var rootid = $(root[0]).attr('id');
+												$("#sidebar_"+rootid).click();
+											}
+										},		
+										error : function( jqXHR, textStatus, errorThrown ) {
+											alert("Fermer votre browser et rouvrir le lien pour accéder au portfolio.");
+										}
+									});
 								}
-								setCSSportfolio(data);
-								setLanguage(lang,'publichtm');
-								if (rootnode.asmtype=='asmRoot' || rootnode.asmtype=='asmStructure') {
-									UIFactory.Node.displaySidebarItem(nodeid,'sidebar-parent','standard',LANGCODE,false,nodeid);
-			//						UIFactory["Node"].displaySidebar(UICom.structure.tree[nodeid],'sidebar','standard',LANGCODE,false,nodeid);
-								}
-								$("#contenu").html("<div id='page' uuid='"+nodeid+"'></div>");
-								var semtag =  ($("metadata",rootnode.node)[0]==undefined || $($("metadata",rootnode.node)[0]).attr('semantictag')==undefined)?'': $($("metadata",rootnode.node)[0]).attr('semantictag');
-								if (semtag == 'bubble_level1') {
-									$("#main-container").html("");
-									UICom.structure.ui[nodeid].displayNode('standard',UICom.structure.tree[nodeid],'main-container',depth,LANGCODE,true);
-								}
-								else
-									UICom.structure.ui[nodeid].displayNode('standard',UICom.structure.tree[nodeid],'contenu',depth,LANGCODE,true);
-								var welcomes = $("asmUnit:has(metadata[semantictag*='WELCOME'])",data);
-								if (welcomes.length==0) // for backward compatibility
-									welcomes = $("asmUnit:has(metadata[semantictag*='welcome-unit'])",data);
-								if (welcomes.length>0){
-									var welcomeid = $(welcomes[0]).attr('id');
-									$("#sidebar_"+welcomeid).click();
-								} else {
-									var root = $("asmRoot",data);
-									var rootid = $(root[0]).attr('id');
-									$("#sidebar_"+rootid).click();
-								}
-							},		
-							error : function( jqXHR, textStatus, errorThrown ) {
-								alert("Fermer votre browser et rouvrir le lien pour accéder au portfolio.");
-							}
-						});
+							});
+						}
 					}
 				},
 				error : function( jqXHR, textStatus, errorThrown ) {
@@ -148,7 +166,6 @@ function displayKarutaPublic()
 					}						
 				}
 			});
-
 		},
 		error : function( jqXHR, textStatus, errorThrown ) {
 			alert("Get portfolio: "+jqXHR.status + " "+errorThrown)

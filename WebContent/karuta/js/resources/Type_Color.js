@@ -201,6 +201,17 @@ UIFactory["Color"].prototype.save = function()
 };
 
 //==================================
+UIFactory["Color"].prototype.erase = function()
+//==================================
+{
+	for (var j=0; j<languages.length;j++){
+		$(this.text_node[j][0]).text("");
+	}
+	$(this.lastmodified_node).text(new Date().getTime());
+	UICom.structure.ui[this.id].save();
+}
+
+//==================================
 UIFactory["Color"].prototype.refresh = function()
 //==================================
 {

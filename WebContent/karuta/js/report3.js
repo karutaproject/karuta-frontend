@@ -14,7 +14,6 @@
    ======================================================= */
 
 var userid = null; // current user
-var userrole = null; // current user
 var report_refresh = true;
 var csvline = "";
 
@@ -33,6 +32,9 @@ var g_graphs = {};
 var g_unique_functions = {};
 var g_menuinreport = false;
 var current_nodes = null;
+
+const delai = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+var g_triggers = {};
 
 var jqueryReportSpecificFunctions = {};
 
@@ -277,6 +279,7 @@ function r_report_process(xmlDoc,json)
 function processReportActions(destid,actions,data)
 //=================================================
 {
+	g_goal = false;
 	for (let i=0; i<actions.length;i++){
 		var tagname = $(actions[i])[0].tagName;
 		g_report_actions[tagname](destid,actions[i],i.toString(),data);
@@ -937,8 +940,6 @@ g_report_actions['exist-sharing'] = function (destid,action,no,data)
 //==================================
 {
 	const select = cleanCode(replaceVariable($(action).attr("select")));
-	var ref = $(action).attr("ref");
-	ref = replaceVariable(ref);
 	$.ajax({
 		async:false,
 		type : "GET",
@@ -965,14 +966,6 @@ g_report_actions['exist-sharing'] = function (destid,action,no,data)
 							html += "<div>"+Users_byid[userid].firstname+" "+Users_byid[userid].lastname+"</div>";
 						}
 					}
-					//-------------------------------------------
-					if (ref!=undefined && ref!="") {
-						ref = replaceVariable(ref);
-						if (g_variables[ref]==undefined)
-							g_variables[ref] = new Array();
-						g_variables[ref][g_variables[ref].length] = Users_byid[userid].firstname+" "+Users_byid[userid].lastname;
-					}
-					//-------------------------------------------
 				}
 			}
 			$("#"+destid).append(html);	
@@ -987,9 +980,12 @@ g_report_actions['exist-sharing'] = function (destid,action,no,data)
 //=============================================================================
 
 //==================================
-g_report_actions['table'] = function (destid,action,no,data)
+g_report_actions['table'] = async function (destid,action,no,data)
 //==================================
 {
+	const trigger = replaceVariable($(action).attr("trigger"));
+	if (trigger!=undefined)
+		g_triggers[trigger] = false;
 	//---------------------------
 	initVariables(action);
 	//---------------------------
@@ -1004,11 +1000,15 @@ g_report_actions['table'] = function (destid,action,no,data)
 	for (let i=0; i<actions.length;i++){
 		var tagname = $(actions[i])[0].tagName;
 		g_report_actions[tagname](destid+'-'+no,actions[i],i.toString(),data);
+//		await delai(20000); 
 	};
 	//-----------SORT----------------
 	if (cssclass!=undefined && cssclass.indexOf('sort-table')>-1)
 		sortTable(destid+'-'+no);
-	if (cssclass!=undefined && cssclass.indexOf('tablesorter')>-1)
+	if (cssclass!=undefined && cssclass.indexOf('tablesorter')>-1) {
+		while (trigger!=undefined && !g_triggers[trigger]) {
+			await delai(1000); 
+		}
 		$("#"+destid+'-'+no).tablesorter({
 			dateFormat: "ddmmyyyy",
 			sortList: [[0,0]],	
@@ -1016,6 +1016,7 @@ g_report_actions['table'] = function (destid,action,no,data)
 				1: { sorter: "shortDate", dateFormat: "ddmmyyyy" }
 				}
 		});
+	}
 
 }
 
@@ -1267,9 +1268,10 @@ g_report_actions['for-each-portfoliogroup'] = function (destid,action,no,data)
 //=============================================================================
 
 //==================================
-g_report_actions['for-each-person'] = function (destid,action,no,data)
+g_report_actions['for-each-person'] = async function (destid,action,no,data)
 //==================================
 {
+	const trigger = replaceVariable($(action).attr("trigger"));
 	var countvar = $(action).attr("countvar");
 	var select = $(action).attr("select");
 	if (select=="#logged_user") {
@@ -1294,10 +1296,12 @@ g_report_actions['for-each-person'] = function (destid,action,no,data)
 			for (let i=0; i<actions.length;i++){
 				var tagname = $(actions[i])[0].tagName;
 				g_report_actions[tagname](destid,actions[i],no+j.toString()+'-'+i.toString(),userid);
-//				setTimeout(g_report_actions[tagname],0,destid,actions[i],no+j.toString()+'-'+i.toString(),userid);
+				await delai(0); 
 			};
 			j++;
 		}
+		if (trigger!=undefined)
+			g_triggers[trigger] = true;
 	} else {
 		$.ajax({
 			async:false,
@@ -2170,7 +2174,6 @@ g_report_actions['node_resource'] = function (destid,action,no,data)
 					g_variables[ref] = new Array();
 				g_variables[ref][g_variables[ref].length] = text;
 			}
-			//-------------------------------------------
 			text = "<span id='dashboard_node_resource"+nodeid+"' style='"+style+"' class='"+cssclass+"'>"+text+"</span>";
 			if (g_report_edit && writenode && nodenopencil!='Y' && !nodenopencilroles.containsArrayElt(g_userroles)) {
 				text += "<span class='button fas fa-pencil-alt' data-toggle='modal' data-target='#edit-window' onclick=\"javascript:getEditBox('"+nodeid+"')\" data-title='"+karutaStr[LANG]["button-edit"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
@@ -2467,7 +2470,7 @@ g_report_actions['variable'] = function (destid,action,no,data)
 					//----------------------------
 					var node = UICom.structure.ui[nodeid];
 					//----------------------------
-					if (select=='..userid' || select=='..username' || select=='..lastname' || select=='..firstname' || select=='..email') { // -- userattributes
+					if (select=='..username') { // -- userattributes
 						select= select.substring(2);
 						if (select=='userid')
 							text = data;
@@ -2711,6 +2714,7 @@ g_report_actions['europass'] = function (destid,action,no,data)
 g_report_actions['text'] = function (destid,action,no,data,is_out_csv)
 //==================================
 {
+	const trigger = replaceVariable($(action).attr("trigger"));
 	var nodeid = $(data).attr("id");
 	var text = $(action).text();
 	text = replaceVariable(text);
@@ -2738,6 +2742,9 @@ g_report_actions['text'] = function (destid,action,no,data,is_out_csv)
 	//-----------------
 	text = "<span id='txt"+nodeid+"' style='"+style+"' class='"+cssclass+"'>"+text+"</span>";
 	$("#"+destid).append(text);
+	if (trigger!=undefined)
+		g_triggers[trigger] = true;
+
 }
 
 
@@ -3070,7 +3077,7 @@ g_report_actions['operation'] = function (destid,action,no,data)
 g_report_actions['update-resource'] = function (destid,action,no,data)
 //==================================
 {
-	const original_userrole = (userrole!=undefined) ? userrole:"";
+	const original_userrole = userrole;
 	const restype = replaceVariable($(action).attr("restype"));
 	const semtag = replaceVariable($(action).attr("select"));
 	const attribute_value = replaceVariable($(action).attr("value"));
@@ -3080,11 +3087,8 @@ g_report_actions['update-resource'] = function (destid,action,no,data)
 		g_userroles[g_userroles.length] = user_role;
 		userrole = user_role;
 	}
-	const role = (userrole == null || userrole=="")? g_userroles[0]:userrole;
 	if (userrole!=undefined && userrole!="")
 		user_role = userrole;
-	else
-		user_role = role;
 	let language_dependent = 'N';
 	let attribute_name = 'text';
 	if (restype=="Field") {

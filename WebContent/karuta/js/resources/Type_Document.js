@@ -20,7 +20,7 @@ if( UIFactory === undefined )
 }
 
 var documentIcon = [];
-documentIcon = ['3gp','7z','ae','ai','apk','asf','avi','bak','bmp','cdr','css','csv','divx','dll','doc','docx','dw','dwg','eps','exe','flv','fw','gif','gz','htm','html','ico','iso','jar','jpg','js','mov','mp3','mp4','mpeg','pdf','php','png','ppt','ps','psd','rar','sh','sql','svg','swf','sys','tar','tiff','txt','war','wav','xls','xlsx','xml','zip'];
+documentIcon = ['3gp','7z','ae','ai','apk','asf','avi','bak','bmp','cdr','css','csv','divx','dll','doc','docx','dw','dwg','eps','exe','flv','fw','gif','gz','htm','html','ico','iso','jar','jpg','js','mov','mp3','mp4','mpeg','pdf','php','png','ppt','ps','psd','rar','sh','sql','svg','swf','sys','tar','tiff','txt','war','wav','xls','xlsx','xlsm','xml','zip'];
 
  
 /// Define our type
@@ -325,3 +325,18 @@ UIFactory["Document"].prototype.refresh = function()
 	};
 
 };
+
+//==================================
+UIFactory["Document"].prototype.erase = function()
+//==================================
+{
+	for (var j=0; j<languages.length;j++){
+		$(this.filename_node[j][0]).text("");
+		$(this.type_node[j][0]).text("");
+		$(this.size_node[j][0]).text("");
+		$(this.fileid_node[j][0]).text("");
+	}
+	$(this.lastmodified_node).text(new Date().getTime());
+	UICom.structure.ui[this.id].save();
+}
+

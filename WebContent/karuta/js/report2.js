@@ -14,7 +14,6 @@
    ======================================================= */
 
 var userid = null; // current user
-var userrole = null; // current user
 var report_refresh = true;
 var csvline = "";
 
@@ -33,6 +32,7 @@ var g_graphs = {};
 var g_unique_functions = {};
 var g_menuinreport = false;
 var current_nodes = null;
+var g_portfolios_error =[];
 
 var jqueryReportSpecificFunctions = {};
 
@@ -271,16 +271,26 @@ function r_report_process(xmlDoc,json)
 {
 	var children = $(":root",xmlDoc).children();
 	processReportActions("report-content",children);
+	if (g_portfolios_error.length>0) {
+		let text = "ERROR - when loading portfolios";
+		for (let i=0;i<g_portfolios_error.length;i++){
+			text += g_portfolios_error[i]+"\n";
+		}
+		alert(text);
+	}
 }
 
 //=================================================
 function processReportActions(destid,actions,data)
 //=================================================
 {
-	for (let i=0; i<actions.length;i++){
-		var tagname = $(actions[i])[0].tagName;
-		g_report_actions[tagname](destid,actions[i],i.toString(),data);
+	const boucler = async () => {
+		for (let i=0; i<actions.length;i++){
+			const tagname = $(actions[i])[0].tagName;
+			await g_report_actions[tagname](destid,actions[i],i.toString(),data);
+		}
 	};
+	boucler();
 };
 
 //===============================================================
@@ -696,85 +706,105 @@ g_report_actions['for-each-line'] = function (destid,action,no,data)
 g_report_actions['for-each-node'] = function (destid,action,no,data)
 //==================================
 {
-	var select = $(action).attr("select");
-	var test = $(action).attr("test");
-	var user_role = replaceVariable($(action).attr("user-role"));
-	var countvar = replaceVariable($(action).attr("countvar"));
-	if (countvar!=undefined)
-		g_variables[countvar] = 0;
-	var portfoliocode = $(action).attr("portfolio");
-	//----------------------------------
-	initVariables(action)
-	//----------------------------------
- 	if (test!=undefined) 
-		test = replaceVariable(test);
-	if (select!=undefined) {
-		select = replaceVariable(select);
+	return new Promise((resolve) => {setTimeout(() => {
+		$("#progressstar").append("fen ");
+		var select = $(action).attr("select");
+		var test = $(action).attr("test");
+		var user_role = replaceVariable($(action).attr("user-role"));
+		var countvar = replaceVariable($(action).attr("countvar"));
+		if (countvar!=undefined)
+			g_variables[countvar] = 0;
+		var portfoliocode = $(action).attr("portfolio");
 		//----------------------------------
-		if (portfoliocode!=undefined) {
-			portfoliocode = replaceVariable(portfoliocode);
-			const portfolioid = UIFactory.Portfolio.getid_bycode(portfoliocode);
-			let url = serverBCK_API+"/portfolios/portfolio/" + portfolioid + "?resources=true";
-			if (user_role!=""){
-				url += "&userrole="+user_role;
-				g_userroles[g_userroles.length] = user_role;
-				userrole = user_role;
-			}
-			$.ajax({
-				async:false,
-				type : "GET",
-				dataType : "xml",
-				url : url,
-				success : function(data_portfolio) {
-					if (report_not_in_a_portfolio){
-						UICom.structure.tree = {};
-						UICom.structure.ui = {};
+		initVariables(action)
+		//----------------------------------
+	 	if (test!=undefined) 
+			test = replaceVariable(test);
+		if (select!=undefined) {
+			select = replaceVariable(select);
+			//----------------------------------
+			if (portfoliocode!=undefined) {
+				portfoliocode = replaceVariable(portfoliocode);
+				const portfolioid = UIFactory.Portfolio.getid_bycode(portfoliocode);
+				let url = serverBCK_API+"/portfolios/portfolio/" + portfolioid + "?resources=true";
+				if (user_role!=""){
+					url += "&userrole="+user_role;
+					g_userroles[g_userroles.length] = user_role;
+					userrole = user_role;
+				}
+				$.ajax({
+					async:false,
+					type : "GET",
+					dataType : "xml",
+					url : url,
+					success : function(data_portfolio) {
+						if (report_not_in_a_portfolio){
+							UICom.structure.tree = {};
+							UICom.structure.ui = {};
+						}
+						UICom.parseStructure(data_portfolio,true, null, null,true);
+						data = data_portfolio;
 					}
-					UICom.parseStructure(data_portfolio,true, null, null,true);
-					data = data_portfolio;
+				});
+			}
+			//----------------------------------
+			var selector = null;
+			if (test.indexOf('notFound')<0)
+				selector = r_getSelector(select,test);
+			else 
+				selector = r_getSelector(select,"");		
+			var nodes = $(selector.jquery,data).filter(selector.filter1);
+			selector.filter2 = replaceVariable(selector.filter2);
+			nodes = eval("$(nodes)"+selector.filter2);
+			if (nodes.length==0) { // try the node itself
+				var nodes = $(selector.jquery,data).addBack().filter(selector.filter1);
+				nodes = eval("nodes"+selector.filter2);
+			}
+			if (selector.unique!=null) {
+				g_current_nodes = nodes;
+				nodes = nodes.filter(g_unique_functions[selector.unique]);
+			}
+			//---------------------------
+			var actions = $(action).children();
+			if (test.indexOf('notFound')<0) {
+				for (let j=0; j<nodes.length;j++) {
+	//				await nowait("<i class='fa-solid fa-circle'></i>").then(()=> {
+						//----------------------------------
+						if (countvar!=undefined) {
+							g_variables[countvar] = j+1;
+						}
+						g_variables["currentnode"] = "UICom.structure.ui['"+$(nodes[j]).attr("id")+"']";
+						const boucler = async () => {
+							for (let i=0; i<actions.length;i++){
+								var tagname = $(actions[i])[0].tagName;
+								await g_report_actions[tagname](destid,actions[i],no+'-'+j.toString()+'-'+i.toString(),nodes[j]);
+							}
+						};
+						boucler();
+//						for (let i=0; i<actions.length;i++){
+//							var tagname = $(actions[i])[0].tagName;
+//							g_report_actions[tagname](destid,actions[i],no+'-'+j.toString()+'-'+i.toString(),nodes[j]);
+//						}
+						//----------------------------------
+	//				});
 				}
-			});
-		}
-		//----------------------------------
-		var selector = null;
-		if (test.indexOf('notFound')<0)
-			selector = r_getSelector(select,test);
-		else 
-			selector = r_getSelector(select,"");		
-		var nodes = $(selector.jquery,data).filter(selector.filter1);
-		selector.filter2 = replaceVariable(selector.filter2);
-		nodes = eval("$(nodes)"+selector.filter2);
-		if (nodes.length==0) { // try the node itself
-			var nodes = $(selector.jquery,data).addBack().filter(selector.filter1);
-			nodes = eval("nodes"+selector.filter2);
-		}
-		if (selector.unique!=null) {
-			g_current_nodes = nodes;
-			nodes = nodes.filter(g_unique_functions[selector.unique]);
-		}
-		//---------------------------
-		var actions = $(action).children();
-		if (test.indexOf('notFound')<0) {
-			for (let j=0; j<nodes.length;j++){
-				//----------------------------------
-				if (countvar!=undefined) {
-					g_variables[countvar] = j+1;
-				}
-				g_variables["currentnode"] = "UICom.structure.ui['"+$(nodes[j]).attr("id")+"']";
-				for (let i=0; i<actions.length;i++){
-					var tagname = $(actions[i])[0].tagName;
-					g_report_actions[tagname](destid,actions[i],no+'-'+j.toString()+'-'+i.toString(),nodes[j]);
-				}
-				//----------------------------------
-			};
-		}
-		else if (nodes.length==0){
-			for (let i=0; i<actions.length;i++){
-				var tagname = $(actions[i])[0].tagName;
-				g_report_actions[tagname](destid,actions[i],no,data);
+			}
+			else if (nodes.length==0){
+				const boucler = async () => {
+					for (let i=0; i<actions.length;i++){
+						var tagname = $(actions[i])[0].tagName;
+						await g_report_actions[tagname](destid,actions[i],no,data);
+					}
+				};
+				boucler();
+//				for (let i=0; i<actions.length;i++){
+//						var tagname = $(actions[i])[0].tagName;
+//						g_report_actions[tagname](destid,actions[i],no,data);
+//				}
 			}
 		}
-	}
+		resolve();
+	}, 0); });
 }
 
 //=============================================================================
@@ -842,33 +872,44 @@ g_report_actions['for-each-node-js'] = function (destid,action,no,data)
 g_report_actions['loop'] = function (destid,action,no,data)
 //==================================
 {
-	var first = parseInt($(action).attr("first"));
-	if (!$.isNumeric(first)) {
-		first = $(action).attr("first");
-		first = replaceVariable(first);
-		first = eval(first);
-	}
-	var last = parseInt($(action).attr("last"));
-	if (!$.isNumeric(last)) {
-		last = $(action).attr("last");
-		last = replaceVariable(last);
-		last = eval(last);
-	}
-	for (var j=first; j<last+1;j++){
-		//---------------------------
-		var variable = $(action).attr("variable");
-		if (variable!=undefined) {
-				g_variables[variable] = j;
+	return new Promise((resolve) => {setTimeout(() => {
+		$("#progressstar").append("loop ");
+		var first = parseInt($(action).attr("first"));
+		if (!$.isNumeric(first)) {
+			first = $(action).attr("first");
+			first = replaceVariable(first);
+			first = eval(first);
 		}
-		//---------------------------
-		initVariables(action);
-		//---------------------------
-		var actions = $(action).children();
-		for (let i=0; i<actions.length;i++){
-			var tagname = $(actions[i])[0].tagName;
-			g_report_actions[tagname](destid,actions[i],no+'-'+j.toString()+'-'+i.toString(),data);
+		var last = parseInt($(action).attr("last"));
+		if (!$.isNumeric(last)) {
+			last = $(action).attr("last");
+			last = replaceVariable(last);
+			last = eval(last);
 		}
-	};
+		for (var j=first; j<last+1;j++){
+			//---------------------------
+			var variable = $(action).attr("variable");
+			if (variable!=undefined) {
+					g_variables[variable] = j;
+			}
+			//---------------------------
+			initVariables(action);
+			//---------------------------
+			var actions = $(action).children();
+			const boucler = async () => {
+				for (let i=0; i<actions.length;i++){
+					var tagname = $(actions[i])[0].tagName;
+					await g_report_actions[tagname](destid,actions[i],no+'-'+j.toString()+'-'+i.toString(),data);
+				}
+			};
+			boucler();
+//			for (let i=0; i<actions.length;i++){
+//				var tagname = $(actions[i])[0].tagName;
+//				g_report_actions[tagname](destid,actions[i],no+'-'+j.toString()+'-'+i.toString(),data);
+//			}
+		};
+		resolve();
+	}, 0); });
 }
 
 //=============================================================================
@@ -937,8 +978,6 @@ g_report_actions['exist-sharing'] = function (destid,action,no,data)
 //==================================
 {
 	const select = cleanCode(replaceVariable($(action).attr("select")));
-	var ref = $(action).attr("ref");
-	ref = replaceVariable(ref);
 	$.ajax({
 		async:false,
 		type : "GET",
@@ -965,14 +1004,6 @@ g_report_actions['exist-sharing'] = function (destid,action,no,data)
 							html += "<div>"+Users_byid[userid].firstname+" "+Users_byid[userid].lastname+"</div>";
 						}
 					}
-					//-------------------------------------------
-					if (ref!=undefined && ref!="") {
-						ref = replaceVariable(ref);
-						if (g_variables[ref]==undefined)
-							g_variables[ref] = new Array();
-						g_variables[ref][g_variables[ref].length] = Users_byid[userid].firstname+" "+Users_byid[userid].lastname;
-					}
-					//-------------------------------------------
 				}
 			}
 			$("#"+destid).append(html);	
@@ -990,102 +1021,133 @@ g_report_actions['exist-sharing'] = function (destid,action,no,data)
 g_report_actions['table'] = function (destid,action,no,data)
 //==================================
 {
-	//---------------------------
-	initVariables(action);
-	//---------------------------
-	var style = replaceVariable($(action).attr("style"));
-	var cssclass = replaceVariable($(action).attr("class"));
-	if (cssclass==undefined)
-		cssclass="";
-	var html = "<table id='"+destid+'-'+no+"' style='"+style+"' class='"+cssclass+"'></table>";
-	$("#"+destid).append($(html));
-	//---------------------------
-	var actions = $(action).children();
-	for (let i=0; i<actions.length;i++){
-		var tagname = $(actions[i])[0].tagName;
-		g_report_actions[tagname](destid+'-'+no,actions[i],i.toString(),data);
-	};
-	//-----------SORT----------------
-	if (cssclass!=undefined && cssclass.indexOf('sort-table')>-1)
-		sortTable(destid+'-'+no);
-	if (cssclass!=undefined && cssclass.indexOf('tablesorter')>-1)
-		$("#"+destid+'-'+no).tablesorter({
-			dateFormat: "ddmmyyyy",
-			sortList: [[0,0]],	
-			headers: {
-				1: { sorter: "shortDate", dateFormat: "ddmmyyyy" }
-				}
-		});
-
+	return new Promise((resolve) => {setTimeout(() => {
+		//---------------------------
+		initVariables(action);
+		//---------------------------
+		var style = replaceVariable($(action).attr("style"));
+		var cssclass = replaceVariable($(action).attr("class"));
+		if (cssclass==undefined)
+			cssclass="";
+		var html = "<table id='"+destid+'-'+no+"' style='"+style+"' class='"+cssclass+"'></table>";
+		$("#"+destid).append($(html));
+		//---------------------------
+		var actions = $(action).children();
+		const boucler = async () => {
+			for (let i=0; i<actions.length;i++){
+				var tagname = $(actions[i])[0].tagName;
+				await g_report_actions[tagname](destid+'-'+no,actions[i],i.toString(),data);
+			}
+		};
+		boucler();
+	//	for (let i=0; i<actions.length;i++){
+	//		var tagname = $(actions[i])[0].tagName;
+	//		g_report_actions[tagname](destid+'-'+no,actions[i],i.toString(),data);
+	//	};
+		//-----------SORT----------------
+		if (cssclass!=undefined && cssclass.indexOf('sort-table')>-1)
+			sortTable(destid+'-'+no);
+		if (cssclass!=undefined && cssclass.indexOf('tablesorter')>-1)
+			$("#"+destid+'-'+no).tablesorter({
+				dateFormat: "ddmmyyyy",
+				sortList: [[0,0]],	
+				headers: {
+					1: { sorter: "shortDate", dateFormat: "ddmmyyyy" }
+					}
+			});
+		resolve();
+	}, 0); });
 }
 
 //==================================
 g_report_actions['row'] = function (destid,action,no,data)
 //==================================
 {
-	//---------------------------
-	initVariables(action);
-	//---------------------------
-	var style = replaceVariable($(action).attr("style"));
-	var cssclass = replaceVariable($(action).attr("class"));
-	if (cssclass==undefined)
-		cssclass="";
-	var html = "<tr id='"+destid+'-'+no+"' style='"+style+"' class='"+cssclass+"'></tr>";
-	$("#"+destid).append($(html));
-	//---------------------------
-	var actions = $(action).children();
-	for (let i=0; i<actions.length;i++){
-		var tagname = $(actions[i])[0].tagName;
-		g_report_actions[tagname](destid+'-'+no,actions[i],i.toString(),data);
-	};
+	return new Promise((resolve) => {setTimeout(() => {
+		//---------------------------
+		initVariables(action);
+		//---------------------------
+		var style = replaceVariable($(action).attr("style"));
+		var cssclass = replaceVariable($(action).attr("class"));
+		if (cssclass==undefined)
+			cssclass="";
+		var html = "<tr id='"+destid+'-'+no+"' style='"+style+"' class='"+cssclass+"'></tr>";
+		$("#"+destid).append($(html));
+		//---------------------------
+		var actions = $(action).children();
+//		for (let i=0; i<actions.length;i++){
+//			var tagname = $(actions[i])[0].tagName;
+//			g_report_actions[tagname](destid+'-'+no,actions[i],i.toString(),data);
+//		};
+		const boucler = async () => {
+			for (let i=0; i<actions.length;i++){
+				var tagname = $(actions[i])[0].tagName;
+				await g_report_actions[tagname](destid+'-'+no,actions[i],i.toString(),data);
+			}
+		};
+		boucler();
+		resolve();
+	}, 0); });
 }
 
 //==================================
 g_report_actions['cell'] = function (destid,action,no,data)
 //==================================
 {
-	var style = replaceVariable($(action).attr("style"));
-	var cssclass = replaceVariable($(action).attr("class"));
-	var attr_help = $(action).attr("help");
-	var colspan = $(action).attr("colspan");
-
-	var html = "<td id='"+destid+'-'+no+"' style='"+style+"' class='"+cssclass+"'";
-	if (colspan!=null && colspan!='0')
-		html += "colspan='"+colspan+"' "
-	html += ">";
-	html += "<span id='help_"+destid+'-'+no+"' class='ihelp'></span>";
-	if (cssclass!=undefined && cssclass.indexOf('sort-th')>-1)
-		html+= "<i class='fas fa-sort' aria-hidden='true'></i> ";
-	html += "</td>";
-	$("#"+destid).append($(html));
-	if (attr_help!=undefined && attr_help!="") {
-		var help_text = "";
-		var helps = attr_help.split("//"); // lang1/lang2/...
-		if (attr_help.indexOf("@")>-1) { // lang@fr/lang@en/...
-			for (let j=0; j<helps.length; j++){
-				if (helps[j].indexOf("@"+languages[LANGCODE])>-1)
-					help_text = helps[j].substring(0,helps[j].indexOf("@"));
+	return new Promise((resolve) => {setTimeout(() => {
+		$("#report-progress").append(" cell");
+		var style = replaceVariable($(action).attr("style"));
+		var cssclass = replaceVariable($(action).attr("class"));
+		var attr_help = $(action).attr("help");
+		var colspan = $(action).attr("colspan");
+	
+		var html = "<td id='"+destid+'-'+no+"' style='"+style+"' class='"+cssclass+"'";
+		if (colspan!=null && colspan!='0')
+			html += "colspan='"+colspan+"' "
+		html += ">";
+		html += "<span id='help_"+destid+'-'+no+"' class='ihelp'></span>";
+		if (cssclass!=undefined && cssclass.indexOf('sort-th')>-1)
+			html+= "<i class='fas fa-sort' aria-hidden='true'></i> ";
+		html += "</td>";
+		$("#"+destid).append($(html));
+		if (attr_help!=undefined && attr_help!="") {
+			var help_text = "";
+			var helps = attr_help.split("//"); // lang1/lang2/...
+			if (attr_help.indexOf("@")>-1) { // lang@fr/lang@en/...
+				for (let j=0; j<helps.length; j++){
+					if (helps[j].indexOf("@"+languages[LANGCODE])>-1)
+						help_text = helps[j].substring(0,helps[j].indexOf("@"));
+				}
+			} else { // lang1/lang2/...
+				help_text = helps[LANGCODE];  // lang1/lang2/...
 			}
-		} else { // lang1/lang2/...
-			help_text = helps[LANGCODE];  // lang1/lang2/...
+			var help = " <a href='javascript://' class='popinfo'><span style='font-size:12px' class='fas fa-question-circle'></span></a> ";
+			$("#help_"+destid+'-'+no).html(help);
+			$(".popinfo").popover({ 
+				placement : 'bottom',
+				container : 'body',
+				title:karutaStr[LANG]['help-label'],
+				html : true,
+				trigger:'click hover',
+				content: help_text
+			});
 		}
-		var help = " <a href='javascript://' class='popinfo'><span style='font-size:12px' class='fas fa-question-circle'></span></a> ";
-		$("#help_"+destid+'-'+no).html(help);
-		$(".popinfo").popover({ 
-			placement : 'bottom',
-			container : 'body',
-			title:karutaStr[LANG]['help-label'],
-			html : true,
-			trigger:'click hover',
-			content: help_text
-		});
-	}
-	//---------------------------
-	var actions = $(action).children();
-	for (let i=0; i<actions.length;i++){
-		var tagname = $(actions[i])[0].tagName;
-		g_report_actions[tagname](destid+'-'+no,actions[i],i.toString(),data);
-	};
+		//---------------------------
+		var actions = $(action).children();
+//		for (let i=0; i<actions.length;i++){
+//			var tagname = $(actions[i])[0].tagName;
+//			g_report_actions[tagname](destid+'-'+no,actions[i],i.toString(),data);
+//		};
+		const boucler = async () => {
+			for (let i=0; i<actions.length;i++){
+				var tagname = $(actions[i])[0].tagName;
+				await g_report_actions[tagname](destid+'-'+no,actions[i],i.toString(),data);
+			}
+		};
+		boucler();
+
+		resolve();
+	}, 0); });
 }
 
 //-------------------------- used for sortable table -------------------
@@ -1284,19 +1346,20 @@ g_report_actions['for-each-person'] = function (destid,action,no,data)
 		usergroups_byid[groupid].loadContent();
 		let j = 0;
 		for (uuid in usergroups_byid[groupid].children){
-			let userid = Users_byid[uuid].id;
-			//------------------------------------
-			if (countvar!=undefined)
-				g_variables[countvar] = j;
-			initVariables(action);
-			//------------------------------------
-			var actions = $(action).children();
-			for (let i=0; i<actions.length;i++){
-				var tagname = $(actions[i])[0].tagName;
-				g_report_actions[tagname](destid,actions[i],no+j.toString()+'-'+i.toString(),userid);
-//				setTimeout(g_report_actions[tagname],0,destid,actions[i],no+j.toString()+'-'+i.toString(),userid);
-			};
-			j++;
+//			await nowait("<i class='fa-solid fa-user'></i>").then(()=> {
+				let userid = Users_byid[uuid].id;
+				//------------------------------------
+				if (countvar!=undefined)
+					g_variables[countvar] = j;
+				initVariables(action);
+				//------------------------------------
+				var actions = $(action).children();
+				for (let i=0; i<actions.length;i++){
+					var tagname = $(actions[i])[0].tagName;
+					g_report_actions[tagname](destid,actions[i],no+j.toString()+'-'+i.toString(),userid);
+				};
+				j++;
+//			});
 		}
 	} else {
 		$.ajax({
@@ -1306,45 +1369,47 @@ g_report_actions['for-each-person'] = function (destid,action,no,data)
 			url : serverBCK_API+"/users",
 			success : function(data) {
 				UIFactory["User"].parse(data);
-				select = replaceVariable(select);
-				var attribute = "";
-				var value = "";
-				var comparator = "";
-				if (select.indexOf("=")>-1){
-					attribute = select.substring(0,select.indexOf("="));
-					value = select.substring(select.indexOf("=")+1);
-					comparator = "=";
-				}
-				if (select.indexOf("*=")>-1) {
-					attribute = select.substring(0,select.indexOf("*="));
-					value = select.substring(select.indexOf("*=")+2);
-					comparator = "*=";
-				}
-				var condition = false;
-				for ( let j = 0; j < UsersActive_list.length; j++) {
-					if (countvar!=undefined) {
-						g_variables[countvar] = j;
-					}
-					//------------------------------------
-					initVariables(action);
-					//------------------------------------
-					if (comparator=="=")
-						condition = $(UsersActive_list[j].attributes[attribute]).text() == value;
-					if (comparator=="*=")
-						condition = $(UsersActive_list[j].attributes[attribute]).text().indexOf(value)>-1;
-					//------------------------------------
-					if (condition || comparator==""){
-						userid = UsersActive_list[j].id;
-						var actions = $(action).children();
-						for (let i=0; i<actions.length;i++){
-							var tagname = $(actions[i])[0].tagName;
-							g_report_actions[tagname](destid,actions[i],no+j.toString()+'-'+i.toString(),userid);
-						};
-					}
-						//------------------------------------
-				}
 			}
 		});
+		select = replaceVariable(select);
+		var attribute = "";
+		var value = "";
+		var comparator = "";
+		if (select.indexOf("=")>-1){
+			attribute = select.substring(0,select.indexOf("="));
+			value = select.substring(select.indexOf("=")+1);
+			comparator = "=";
+		}
+		if (select.indexOf("*=")>-1) {
+			attribute = select.substring(0,select.indexOf("*="));
+			value = select.substring(select.indexOf("*=")+2);
+			comparator = "*=";
+		}
+		var condition = false;
+		for ( let j = 0; j < UsersActive_list.length; j++) {
+//			await nowait("<i class='fa-solid fa-user'></i>").then(()=> {
+				if (countvar!=undefined) {
+					g_variables[countvar] = j;
+				}
+				//------------------------------------
+				initVariables(action);
+				//------------------------------------
+				if (comparator=="=")
+					condition = $(UsersActive_list[j].attributes[attribute]).text() == value;
+				if (comparator=="*=")
+					condition = $(UsersActive_list[j].attributes[attribute]).text().indexOf(value)>-1;
+				//------------------------------------
+				if (condition || comparator==""){
+					userid = UsersActive_list[j].id;
+					var actions = $(action).children();
+					for (let i=0; i<actions.length;i++){
+						var tagname = $(actions[i])[0].tagName;
+						g_report_actions[tagname](destid,actions[i],no+j.toString()+'-'+i.toString(),userid);
+					};
+				}
+				//------------------------------------
+//			});
+		}
 	}
 }
 
@@ -1491,249 +1556,266 @@ g_report_actions['firstname-lastname'] = function (destid,action,no,data,is_out_
 g_report_actions['for-each-portfolio'] = function (destid,action,no,data)
 //==================================
 {
-	const NBELT = g_variables["NBELT"];
-	const NOELT = g_variables["NOELT"];
-	var countvar = $(action).attr("countvar");
-	if (userid==null)
-		userid = USER.id;
-	var searchvalue = "";
-	var select = $(action).attr("select");
-	select = replaceVariable(select);
-	const user_role = replaceVariable($(action).attr("user-role"));
-	if (user_role!=undefined && user_role!=""){
-		url += "&userrole="+user_role;
-		g_userroles[g_userroles.length] = user_role;
-		userrole = user_role;
-	}
-	var test = $(action).attr("test");
- 	if (test!=undefined)
- 		test = replaceVariable(test);
-	else
-		test = "";
-	//--------------------
-	let load = true; //  by default we load each porfolio to have access to its content
-	if (select.indexOf('@noload@')>-1){
-		load = false;
-		select = select.replaceAll('@noload@','');
-	}
-	//---------------
-	if (select=="##current_portfoliogroup##"){
-		const groupid = data;
-		portfoliogroups_byid[groupid].loadContent();
-		let j = 0;
-		//----------- optional sort -----------------------
-		var sortag = $(action).attr("sortag");
-		if (sortag!=""){
-			var sortelt = $(action).attr("sortelt");
-			var tableau = new Array();
-			var sortvalue = "";
-			for (uuid in portfoliogroups_byid[groupid].children){
-				let portfolioid = portfolios_byid[uuid].id;
-				let code = UIFactory.Portfolio.getCodeLabel_byid(portfolioid).code;
-				$.ajax({
-					async:false,
-					type : "GET",
-					dataType : "xml",
-					url : serverBCK_API+"/nodes?portfoliocode=" + code + "&semtag="+sortag,
-					success : function(data) {
-						if (sortelt=='resource code') {
-							sortvalue = $("code",data)[0].text();
-						}
-						if (sortelt=='value') {
-							sortvalue = $("value",data)[0].text();
-						}
-						if (sortelt=='node label') {
-							sortvalue = $("label[lang='"+languages[LANGCODE]+"']",data)[0].text();
-						}
-						if (sortelt=='resource') {
-							sortvalue = $("text[lang='"+languages[LANGCODE]+"']",$("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",data)).text();
-						}
-						tableau[tableau.length] = [sortvalue,portfolioid];
-					}
-				});
-			//------------------------------------
-			}
-			var newTableau = tableau.sort(sortOn1);
-			for ( let i = 0; i < newTableau.length; i++) {
-				let portfolioid = newTableau[i][1];
-				//------------------------------------
-				if (countvar!=undefined)
-					g_variables[countvar] = j;
-				initVariables(action);
-				//------------------------------------
-				portfolioid_current = portfolioid;
-				let url = serverBCK_API+"/portfolios/portfolio/" + portfolioid + "?resources=true";
-				if (user_role!=""){
-					url += "&userrole="+user_role;
-					g_userroles[g_userroles.length] = user_role;
-					userrole = user_role;
-				}
-				$.ajax({
-					async:false,
-					type : "GET",
-					dataType : "xml",
-					j : j,
-					url : url,
-					success : function(data) {
-						if (report_not_in_a_portfolio){
-							UICom.structure.tree = {};
-							UICom.structure.ui = {};
-						}
-						UICom.parseStructure(data,true, null, null,true);
-						var actions = $(action).children();
-						for (let i=0; i<actions.length;i++){
-							var tagname = $(actions[i])[0].tagName;
-							g_report_actions[tagname](destid,actions[i],no+'-'+this.j.toString()+i.toString(),data);
-						};
-					}
-				});
-				j++;
-			}
-		//-------------------------------
-		} else {
-			for (uuid in portfoliogroups_byid[groupid].children){
-				let portfolioid = portfolios_byid[uuid].id;
-				//------------------------------------
-				if (countvar!=undefined)
-					g_variables[countvar] = j;
-				initVariables(action);
-				//------------------------------------
-				portfolioid_current = portfolioid;
-				let url = serverBCK_API+"/portfolios/portfolio/" + portfolioid + "?resources=true";
-				if (user_role!=""){
-					url += "&userrole="+user_role;
-					g_userroles[g_userroles.length] = user_role;
-					userrole = user_role;
-				}
-				$.ajax({
-					async:false,
-					type : "GET",
-					dataType : "xml",
-					j : j,
-					url : url,
-					success : function(data) {
-						if (report_not_in_a_portfolio){
-							UICom.structure.tree = {};
-							UICom.structure.ui = {};
-						}
-						UICom.parseStructure(data,true, null, null,true);
-						var actions = $(action).children();
-						for (let i=0; i<actions.length;i++){
-							var tagname = $(actions[i])[0].tagName;
-							g_report_actions[tagname](destid,actions[i],no+'-'+this.j.toString()+i.toString(),data);
-						};
-					}
-				});
-				j++;
-			}
+	return new Promise((resolve) => {setTimeout(() => {
+		$("#progressstar").append("fep/");
+		const NBELT = g_variables["NBELT"];
+		const NOELT = g_variables["NOELT"];
+		var countvar = $(action).attr("countvar");
+		if (userid==null)
+			userid = USER.id;
+		var searchvalue = "";
+		var select = $(action).attr("select");
+		select = replaceVariable(select);
+		var user_role = replaceVariable($(action).attr("user-role"));
+		var test = $(action).attr("test");
+	 	if (test!=undefined)
+	 		test = replaceVariable(test);
+		else
+			test = "";
+		//--------------------
+		let load = true; //  by default we load each porfolio to have access to its content
+		if (select.indexOf('@noload@')>-1){
+			load = false;
+			select = select.replaceAll('@noload@','');
 		}
-	} else {
-		//----------------
-		if (select.indexOf("code*=")>-1) {
-			if (select.indexOf("'")>-1)
-				searchvalue = select.substring(7,select.length-1);  // inside quote
-			else if (select.indexOf("//")>-1)
-				searchvalue = eval("json."+select.substring(8));
-			else
-				searchvalue = eval("json.lines["+line+"]."+select.substring(6));
-		}
-		var items_list = [];
-		$.ajax({
-			async:false,
-			type : "GET",
-			dataType : "xml",
-			url : serverBCK_API+"/portfolios?active=1&search="+searchvalue,
-			success : function(data) {
-				UIFactory["Portfolio"].parse_add(data);
-				var items = $("portfolio",data);
-				if (test!="")
-	 				items = eval("items"+test);
-				var value = "";
-				var condition = "";
-				var portfolioid = "";
-				//----------- optional sort -----------------------
-				var sortag = $(action).attr("sortag");
+		//---------------
+		if (select=="##current_portfoliogroup##"){
+			const groupid = data;
+			portfoliogroups_byid[groupid].loadContent();
+			let j = 0;
+			//----------- optional sort -----------------------
+			var sortag = $(action).attr("sortag");
+			if (sortag!=""){
 				var sortelt = $(action).attr("sortelt");
 				var tableau = new Array();
 				var sortvalue = "";
-				if (sortag!=undefined && sortag!="") {
-					for ( let i = 0; i < items.length; i++) {
-						portfolioid = $(items[i]).attr('id');
-						var code = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",items[i])).text();
+				for (uuid in portfoliogroups_byid[groupid].children){
+					let portfolioid = portfolios_byid[uuid].id;
+					let code = UIFactory.Portfolio.getCodeLabel_byid(portfolioid).code;
+					$.ajax({
+						async:false,
+						type : "GET",
+						dataType : "xml",
+						url : serverBCK_API+"/nodes?portfoliocode=" + code + "&semtag="+sortag,
+						success : function(data) {
+							var text = ";"
+							if (sortelt=='resource code') {
+								sortvalue = $("code",data)[0].text();
+							}
+							if (sortelt=='value') {
+								sortvalue = $("value",data)[0].text();
+							}
+							if (sortelt=='node label') {
+								sortvalue = $("label[lang='"+languages[LANGCODE]+"']",data)[0].text();
+							}
+							if (sortelt=='resource') {
+								sortvalue = $("text[lang='"+languages[LANGCODE]+"']",$("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",data)).text();
+							}
+							tableau[tableau.length] = [sortvalue,portfolioid];
+						},
+						error : function(jqxhr,textStatus) {
+							g_portfolios_error.push("code:"+code);
+						}
+					});
+				//------------------------------------
+				}
+				var newTableau = tableau.sort(sortOn1);
+				for ( let i = 0; i < newTableau.length; i++) {
+	//				await nowait("<i class='fa-solid fa-user'></i>").then(()=> {
+						let portfolioid = newTableau[i][1];
 						//------------------------------------
-						if (select.indexOf("code*=")>-1) {
-							if (select.indexOf("'")>-1)
-								value = select.substring(7,select.length-1);  // inside quote
-							else if (select.indexOf("//")>-1)
-								value = eval("json."+select.substring(8));
-							else
-								value = eval("json.lines["+line+"]."+select.substring(6));
-							condition = code.indexOf(value)>-1;
-						}
-						if (select.indexOf("code=")>-1) {
-							if (select.indexOf("'")>-1)
-								value = select.substring(6,select.length-1);  // inside quote
-							else if (select.indexOf("//")>-1)
-								value = eval("json."+select.substring(7));
-							else
-								value = eval("json.lines["+line+"]."+select.substring(5));
-							condition = code==value;
-						}
-						if (select.length==0) {
-							condition = true;;
-						}
+						if (countvar!=undefined)
+							g_variables[countvar] = j;
+						initVariables(action);
 						//------------------------------------
-						if (condition && sortag!=""){
-							$.ajax({
-								async:false,
-								type : "GET",
-								dataType : "xml",
-								url : serverBCK_API+"/nodes?portfoliocode=" + code + "&semtag="+sortag,
-								success : function(data) {
-									var text = ";"
-									if (sortelt=='resource code') {
-										sortvalue = $("code",data)[0].text();
-									}
-									if (sortelt=='value') {
-										sortvalue = $("value",data)[0].text();
-									}
-									if (sortelt=='node label') {
-										sortvalue = $("label[lang='"+languages[LANGCODE]+"']",data)[0].text();
-									}
-									if (sortelt=='resource') {
-										sortvalue = $("text[lang='"+languages[LANGCODE]+"']",$("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",data)).text();
-									}
-									tableau[tableau.length] = [sortvalue,portfolioid];
+						portfolioid_current = portfolioid;
+						let url = serverBCK_API+"/portfolios/portfolio/" + portfolioid + "?resources=true";
+						if (user_role!=""){
+							url += "&userrole="+user_role;
+							g_userroles[2] = user_role;
+							userrole = user_role;
+						}
+						$.ajax({
+							async:false,
+							type : "GET",
+							dataType : "xml",
+							j : j,
+							url : url,
+							success : function(data) {
+								if (report_not_in_a_portfolio){
+									UICom.structure.tree = {};
+									UICom.structure.ui = {};
 								}
-							});
-						}
+								UICom.parseStructure(data,true, null, null,true);
+								var actions = $(action).children();
+								for (let i=0; i<actions.length;i++){
+									var tagname = $(actions[i])[0].tagName;
+									g_report_actions[tagname](destid,actions[i],no+'-'+this.j.toString()+i.toString(),data);
+								};
+							},
+							error : function(jqxhr,textStatus) {
+								g_portfolios_error.push("code:"+code);
+							}
+						});
+						j++;
+	//				});
+				}
+			//-------------------------------
+			} else {
+				for (uuid in portfoliogroups_byid[groupid].children){
+	//				await nowait("<i class='fa-solid fa-user'></i>").then(()=> {
+						let portfolioid = portfolios_byid[uuid].id;
 						//------------------------------------
-					}
-					var newTableau = tableau.sort(sortOn1);
-					for ( let i = 0; i < newTableau.length; i++) {
-						items_list[i] = portfolios_byid[newTableau[i][1]]
-					}
-					items_list.length = newTableau.length;
-				} else {
-					for ( let i = 0; i < items.length; i++) {
-						items_list[i] = portfolios_byid[$(items[i]).attr('id')]
-					}
+						if (countvar!=undefined)
+							g_variables[countvar] = j;
+						initVariables(action);
+						//------------------------------------
+						portfolioid_current = portfolioid;
+						let url = serverBCK_API+"/portfolios/portfolio/" + portfolioid + "?resources=true";
+						if (user_role!=""){
+							url += "&userrole="+user_role;
+							g_userroles[2] = user_role;
+							userrole = user_role;
+						}
+						$.ajax({
+							async:false,
+							type : "GET",
+							dataType : "xml",
+							j : j,
+							url : url,
+							success : function(data) {
+								if (report_not_in_a_portfolio){
+									UICom.structure.tree = {};
+									UICom.structure.ui = {};
+								}
+								UICom.parseStructure(data,true, null, null,true);
+								var actions = $(action).children();
+								for (let i=0; i<actions.length;i++){
+									var tagname = $(actions[i])[0].tagName;
+									g_report_actions[tagname](destid,actions[i],no+'-'+this.j.toString()+i.toString(),data);
+								};
+							},
+							error : function(jqxhr,textStatus) {
+								g_portfolios_error.push("portfolioid:"+portfolioid);
+							}
+						});
+						j++;
+	//				});
 				}
-				//======================================================
-				var first = 0;
-				var last = items_list.length;
-				if (NBELT!=undefined && NBELT!="" && NOELT!=undefined && NOELT!="") {
-					first = parseInt(NOELT);
-					last = (parseInt(NOELT)+parseInt(NBELT)<items_list.length)? parseInt(NOELT)+parseInt(NBELT):items_list.length;
+			}
+		} else {
+			//----------------
+			if (select.indexOf("code*=")>-1) {
+				if (select.indexOf("'")>-1)
+					searchvalue = select.substring(7,select.length-1);  // inside quote
+				else if (select.indexOf("//")>-1)
+					searchvalue = eval("json."+select.substring(8));
+				else
+					searchvalue = eval("json.lines["+line+"]."+select.substring(6));
+			}
+			var items_list = [];
+			$.ajax({
+				async:false,
+				type : "GET",
+				dataType : "xml",
+				url : serverBCK_API+"/portfolios?active=1&search="+searchvalue,
+				success : function(data) {
+					UIFactory["Portfolio"].parse_add(data);
+					var items = $("portfolio",data);
+					if (test!="")
+		 				items = eval("items"+test);
+					var value = "";
+					var condition = "";
+					var portfolioid = "";
+					//----------- optional sort -----------------------
+					var sortag = $(action).attr("sortag");
+					var sortelt = $(action).attr("sortelt");
+					var tableau = new Array();
+					var sortvalue = "";
+					if (sortag!=undefined && sortag!="") {
+						for ( let i = 0; i < items.length; i++) {
+							portfolioid = $(items[i]).attr('id');
+							var code = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",items[i])).text();
+							//------------------------------------
+							if (select.indexOf("code*=")>-1) {
+								if (select.indexOf("'")>-1)
+									value = select.substring(7,select.length-1);  // inside quote
+								else if (select.indexOf("//")>-1)
+									value = eval("json."+select.substring(8));
+								else
+									value = eval("json.lines["+line+"]."+select.substring(6));
+								condition = code.indexOf(value)>-1;
+							}
+							if (select.indexOf("code=")>-1) {
+								if (select.indexOf("'")>-1)
+									value = select.substring(6,select.length-1);  // inside quote
+								else if (select.indexOf("//")>-1)
+									value = eval("json."+select.substring(7));
+								else
+									value = eval("json.lines["+line+"]."+select.substring(5));
+								condition = code==value;
+							}
+							if (select.length==0) {
+								condition = true;;
+							}
+							//------------------------------------
+							if (condition && sortag!=""){
+								$.ajax({
+									async:false,
+									type : "GET",
+									dataType : "xml",
+									url : serverBCK_API+"/nodes?portfoliocode=" + code + "&semtag="+sortag,
+									success : function(data) {
+										var text = ";"
+										if (sortelt=='resource code') {
+											sortvalue = $("code",data)[0].text();
+										}
+										if (sortelt=='value') {
+											sortvalue = $("value",data)[0].text();
+										}
+										if (sortelt=='node label') {
+											sortvalue = $("label[lang='"+languages[LANGCODE]+"']",data)[0].text();
+										}
+										if (sortelt=='resource') {
+											sortvalue = $("text[lang='"+languages[LANGCODE]+"']",$("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",data)).text();
+										}
+										tableau[tableau.length] = [sortvalue,portfolioid];
+									},
+									error : function(jqxhr,textStatus) {
+										g_portfolios_error.push("code:"+code);
+									}
+								});
+							}
+							//------------------------------------
+						}
+						var newTableau = tableau.sort(sortOn1);
+						for ( let i = 0; i < newTableau.length; i++) {
+							items_list[i] = portfolios_byid[newTableau[i][1]]
+						}
+						items_list.length = newTableau.length;
+					} else {
+						for ( let i = 0; i < items.length; i++) {
+							items_list[i] = portfolios_byid[$(items[i]).attr('id')]
+						}
+					}
+	
 				}
-				//----------------------------------
-				for ( let j = first; j < last; j++) {
+			});
+					//======================================================
+			var first = 0;
+			var last = items_list.length;
+			if (NBELT!=undefined && NBELT!="" && NOELT!=undefined && NOELT!="") {
+				first = parseInt(NOELT);
+				last = (parseInt(NOELT)+parseInt(NBELT)<items_list.length)? parseInt(NOELT)+parseInt(NBELT):items_list.length;
+			}
+			//----------------------------------
+			for ( let j = first; j < last; j++) {
+				//await nowait("<i class='fa-solid fa-user'></i>").then(()=> {});
 					if (countvar!=undefined) {
 						g_variables[countvar] = j;
 					}
 					initVariables(action);
 					var code = items_list[j].code_node.text();
-					//------------------------------------
 					if (select.indexOf("code*=")>-1) {
 						if (select.indexOf("'")>-1)
 							value = select.substring(7,select.length-1);  // inside quote
@@ -1759,7 +1841,6 @@ g_report_actions['for-each-portfolio'] = function (destid,action,no,data)
 						var toeval = select.substring(1,select.length-1);
 						condition = eval(toeval);
 					}
-					//------------------------------------
 					if (condition || user_role!=""){
 						portfolioid = items_list[j].id;
 						portfolioid_current = portfolioid;
@@ -1767,7 +1848,7 @@ g_report_actions['for-each-portfolio'] = function (destid,action,no,data)
 							let url = serverBCK_API+"/portfolios/portfolio/" + portfolioid + "?resources=true";
 							if (user_role!=""){
 								url += "&userrole="+user_role;
-								g_userroles[g_userroles.length] = user_role;
+								g_userroles[2] = user_role;
 								userrole = user_role;
 							}
 							$.ajax({
@@ -1783,32 +1864,51 @@ g_report_actions['for-each-portfolio'] = function (destid,action,no,data)
 									}
 									UICom.parseStructure(data,true, null, null,true);
 									var actions = $(action).children();
-									for (let i=0; i<actions.length;i++){
-										var tagname = $(actions[i])[0].tagName;
-										g_report_actions[tagname](destid,actions[i],no+'-'+this.j.toString()+i.toString(),data);
+									const boucler = async () => {
+										for (let i=0; i<actions.length;i++){
+											var tagname = $(actions[i])[0].tagName;
+											await g_report_actions[tagname](destid,actions[i],no+'-'+this.j.toString()+i.toString(),data);
+										}
 									};
+									boucler();
+
+//									for (let i=0; i<actions.length;i++){
+//										var tagname = $(actions[i])[0].tagName;
+//										g_report_actions[tagname](destid,actions[i],no+'-'+this.j.toString()+i.toString(),data);
+//									};
+								},
+								error : function(jqxhr,textStatus) {
+									g_portfolios_error.push("code:"+code);
 								}
 							});
 						} else {
 							var actions = $(action).children();
-							for (let i=0; i<actions.length;i++){
-								var tagname = $(actions[i])[0].tagName;
-								g_report_actions[tagname](destid,actions[i],no+'-'+j.toString()+i.toString(),data);
-							};
+							const boucler = async () => {
+									for (let i=0; i<actions.length;i++){
+										var tagname = $(actions[i])[0].tagName;
+										await g_report_actions[tagname](destid,actions[i],no+'-'+j.toString()+i.toString(),data);
+									}
+								};
+							boucler();
+//							for (let i=0; i<actions.length;i++){
+//								var tagname = $(actions[i])[0].tagName;
+//								g_report_actions[tagname](destid,actions[i],no+'-'+j.toString()+i.toString(),data);
+//							};
 						}
 					}
-					//------------------------------------
-				}
-				if (NBELT!=undefined && NBELT!="" && NOELT!=undefined && NOELT!="")
-					prevnextbuttons(dashboard_current,first,last,portfolioids.length,NOELT,NBELT);
+				//});
 			}
-		});
-	}
-	userrole = g_userroles[0];
+			//------------------------------------
+			if (NBELT!=undefined && NBELT!="" && NOELT!=undefined && NOELT!="")
+				prevnextbuttons(dashboard_current,first,last,portfolioids.length,NOELT,NBELT);
+		}
+		resolve();
+		    }, 0);
+	});
 }
 
 //==================================
-g_report_actions['for-each-portfolio-js'] = function (destid,action,no,data)
+g_report_actions['for-each-portfolio-js'] = async function (destid,action,no,data)
 //==================================
 {
 	const NBELT = g_variables["NBELT"];
@@ -1834,49 +1934,55 @@ g_report_actions['for-each-portfolio-js'] = function (destid,action,no,data)
 	}
 	//----------------------------------
 	for (let j = first; j < last; j++) {
-		if (countvar!=undefined) {
-			g_variables[countvar] = j;
-		}
-		initVariables(action);
-		portfolioid = portfolioids[j];
-		if (portfoliovar!=undefined) {
-			g_variables[portfoliovar] = portfolioid;
-		}
-		portfolioid_current = portfolioid;
-		let url = serverBCK_API+"/portfolios/portfolio/" + portfolioid + "?resources=true";
-		if (user_role!=""){
-			url += "&userrole="+user_role;
-			g_userroles[g_userroles.length] = user_role;
-			userrole = user_role;
-		}
-		if (load) {
-			$.ajax({
-				async:false,
-				type : "GET",
-				dataType : "xml",
-				j : j,
-				url : url,
-				success : function(data) {
-					if (report_not_in_a_portfolio){
-						UICom.structure.tree = {};
-						UICom.structure.ui = {};
+//		await nowait("<i class='fa-solid fa-user'></i>").then(()=> {
+			if (countvar!=undefined) {
+				g_variables[countvar] = j;
+			}
+			initVariables(action);
+			portfolioid = portfolioids[j];
+			if (portfoliovar!=undefined) {
+				g_variables[portfoliovar] = portfolioid;
+			}
+			portfolioid_current = portfolioid;
+			let url = serverBCK_API+"/portfolios/portfolio/" + portfolioid + "?resources=true";
+			if (user_role!=""){
+				url += "&userrole="+user_role;
+				g_userroles[2] = user_role;
+				userrole = user_role;
+			}
+			if (load) {
+				$.ajax({
+					async:false,
+					type : "GET",
+					dataType : "xml",
+					j : j,
+					url : url,
+					success : function(data) {
+						if (report_not_in_a_portfolio){
+							UICom.structure.tree = {};
+							UICom.structure.ui = {};
+						}
+						UICom.parseStructure(data,true, null, null,true);
+						var actions = $(action).children();
+						for (let i=0; i<actions.length;i++){
+							var tagname = $(actions[i])[0].tagName;
+							//await nowait().then(()=> g_report_actions[tagname](destid,actions[i],no+'-'+j.toString()+i.toString(),data));
+							g_report_actions[tagname](destid,actions[i],no+'-'+j.toString()+i.toString(),data);
+						};
+					},
+					error : function(jqxhr,textStatus) {
+						g_portfolios_error.push("portfolioid:"+portfolioid);
 					}
-					UICom.parseStructure(data,true, null, null,true);
-					var actions = $(action).children();
-					for (let i=0; i<actions.length;i++){
-						var tagname = $(actions[i])[0].tagName;
-						g_report_actions[tagname](destid,actions[i],no+'-'+j.toString()+i.toString(),data);
-					};
-				}
-			});
-		} else {
-			var actions = $(action).children();
-			for (let i=0; i<actions.length;i++){
-				var tagname = $(actions[i])[0].tagName;
-				g_report_actions[tagname](destid,actions[i],no+'-'+j.toString()+i.toString(),data);
-			};
-		}
-		userrole = g_userroles[0];
+				});
+			} else {
+				var actions = $(action).children();
+				for (let i=0; i<actions.length;i++){
+					var tagname = $(actions[i])[0].tagName;
+					g_report_actions[tagname](destid,actions[i],no+'-'+j.toString()+i.toString(),data);
+				};
+			}
+			userrole = g_userroles[0];
+//		});
 	}
 	if(NBELT!=undefined && NBELT!="" && NOELT!=undefined && NOELT!="")
 		prevnextbuttons(dashboard_current,first,last,portfolioids.length,NOELT,NBELT);
@@ -1956,6 +2062,9 @@ g_report_actions['for-each-portfolios-nodes'] = function (destid,action,no,data)
 									sortvalue = $("text[lang='"+languages[LANGCODE]+"']",$("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",data)).text();
 								}
 								tableau[tableau.length] = [sortvalue,portfolioid];
+							},
+							error : function(jqxhr,textStatus) {
+								g_portfolios_error.push("portfolioid:"+portfolioid);
 							}
 						});
 					}
@@ -2030,6 +2139,9 @@ g_report_actions['for-each-portfolios-nodes'] = function (destid,action,no,data)
 								});
 								//----------------------------------
 							};
+						},
+						error : function(jqxhr,textStatus) {
+							g_portfolios_error.push("code:"+code);
 						}
 					});
 				}
@@ -2048,230 +2160,232 @@ g_report_actions['for-each-portfolios-nodes'] = function (destid,action,no,data)
 g_report_actions['node_resource'] = function (destid,action,no,data)
 //==================================
 {
-	var text = "";
-	var style = "";
-	var cssclass = "";
-	var attr_help = "";
-	var prefix_id = "";
-	try {
-		var select = $(action).attr("select");
-		select = replaceVariable(select);
-		var ref = $(action).attr("ref");
-		ref = replaceVariable(ref);
-		var editnoderoles = $(action).attr("editnoderoles");
-		var editresroles = $(action).attr("editresroles");
-		var delnoderoles = $(action).attr("delnoderoles");
-		var showroles = ($(action).attr("showroles")==undefined)? "":$(action).attr("showroles");
-		var submitroles = ($(action).attr("submitroles")==undefined)? "":$(action).attr("submitroles");
-		var nodenopencil = ($(action).attr("nodenopencil")==undefined)? "":$(action).attr("nodenopencil");
-		var nodenopencilroles = ($(action).attr("nodenopencilroles")==undefined)? "":$(action).attr("nodenopencilroles");
-		style = replaceVariable($(action).attr("style"));
-		cssclass = replaceVariable($(action).attr("class"));
-		var selector = r_getSelector(select);
-		var node = $(selector.jquery,data);
-		if (node.length==0) // try the node itself
-			node = $(selector.jquery,data).addBack();
-		if (select.substring(0,2)=="..") // node itself
-			node = data;
-		if (node.length>0 || select.substring(0,1)=="."){
-			var nodeid = $(node).attr("id");
-			//----------------------------
-			if (UICom.structure.ui[nodeid].editresroles==undefined)
-				UICom.structure.ui[nodeid].setMetadata();
-			var node = UICom.structure.ui[nodeid];
-			g_variables["currentnode"] = "UICom.structure.ui['"+nodeid+"']";
-			var writenode = ($(node.node).attr('write')=='Y')? true:false;
-			if (editresroles.indexOf("user")>-1)
-				editresroles = ($(node.metadatawad).attr('editresroles')==undefined)?'':$(node.metadatawad).attr('editresroles');
-			if (editnoderoles.indexOf("user")>-1)
-				editnoderoles = ($(node.metadatawad).attr('editnoderoles')==undefined)?'':$(node.metadatawad).attr('editnoderoles');
-			if (g_designerrole || writenode) {
-				writenode = (editresroles.containsArrayElt(g_userroles) || editresroles.indexOf($(USER.username_node).text())>-1  || editnoderoles.containsArrayElt(g_userroles) || editnoderoles.indexOf($(USER.username_node).text())>-1 ) ;
-			}
-			var shownode = false;
-			if (g_designerrole || writenode) {
-				shownode = (showroles.containsArrayElt(g_userroles) || showroles.indexOf($(USER.username_node).text())>-1 )
-			}
-			const submitnode = (submitroles.containsArrayElt(g_userroles) || submitroles.indexOf($(USER.username_node).text())>-1 );
-			var deletenode = ($(node.node).attr('delete')=='Y')? true:false;
-			if (delnoderoles.indexOf("user")>-1)
-				delnoderoles = ($(node.metadatawad).attr('delnoderoles')==undefined)?'':$(node.metadatawad).attr('delnoderoles');
-			if (g_designerrole || deletenode) {
-				deletenode = (delnoderoles.containsArrayElt(g_userroles) || delnoderoles.indexOf($(USER.username_node).text())>-1);
-			}
-			var inline = false;
-			var inline_metadata = ($(node.metadata).attr('inline')==undefined)? '' : $(node.metadata).attr('inline');
-			if (inline_metadata=='Y')
-				inline = true;
-			//----------------------------
-			if (selector.type=='resource') {
-				try {
-					text = UICom.structure.ui[nodeid].resource.getView("dashboard_node_resource"+nodeid,'none',null,true);
-				} catch(e){
-					text = UICom.structure.ui[nodeid].structured_resource.getView("dashboard_node_resource"+nodeid,null,null,true);
+	return new Promise((resolve) => {setTimeout(() => {
+		var text = "";
+		var style = "";
+		var cssclass = "";
+		var attr_help = "";
+		var prefix_id = "";
+		try {
+			var select = $(action).attr("select");
+			select = replaceVariable(select);
+			var ref = $(action).attr("ref");
+			ref = replaceVariable(ref);
+			var editnoderoles = $(action).attr("editnoderoles");
+			var editresroles = $(action).attr("editresroles");
+			var delnoderoles = $(action).attr("delnoderoles");
+			var showroles = ($(action).attr("showroles")==undefined)? "":$(action).attr("showroles");
+			var submitroles = ($(action).attr("submitroles")==undefined)? "":$(action).attr("submitroles");
+			var nodenopencil = ($(action).attr("nodenopencil")==undefined)? "":$(action).attr("nodenopencil");
+			var nodenopencilroles = ($(action).attr("nodenopencilroles")==undefined)? "":$(action).attr("nodenopencilroles");
+			style = replaceVariable($(action).attr("style"));
+			cssclass = replaceVariable($(action).attr("class"));
+			var selector = r_getSelector(select);
+			var node = $(selector.jquery,data);
+			if (node.length==0) // try the node itself
+				node = $(selector.jquery,data).addBack();
+			if (select.substring(0,2)=="..") // node itself
+				node = data;
+			if (node.length>0 || select.substring(0,1)=="."){
+				var nodeid = $(node).attr("id");
+				//----------------------------
+				if (UICom.structure.ui[nodeid].editresroles==undefined)
+					UICom.structure.ui[nodeid].setMetadata();
+				var node = UICom.structure.ui[nodeid];
+				g_variables["currentnode"] = "UICom.structure.ui['"+nodeid+"']";
+				var writenode = ($(node.node).attr('write')=='Y')? true:false;
+				if (editresroles.indexOf("user")>-1)
+					editresroles = ($(node.metadatawad).attr('editresroles')==undefined)?'':$(node.metadatawad).attr('editresroles');
+				if (editnoderoles.indexOf("user")>-1)
+					editnoderoles = ($(node.metadatawad).attr('editnoderoles')==undefined)?'':$(node.metadatawad).attr('editnoderoles');
+				if (g_designerrole || writenode) {
+					writenode = (editresroles.containsArrayElt(g_userroles) || editresroles.indexOf($(USER.username_node).text())>-1  || editnoderoles.containsArrayElt(g_userroles) || editnoderoles.indexOf($(USER.username_node).text())>-1 ) ;
 				}
-				
-			} else
-			if (selector.type=='resource code') {
-				text = UICom.structure.ui[nodeid].resource.getCode();
-			} else
-			if (selector.type=='resource utc') {
-				text = UICom.structure.ui[nodeid].resource.getAttributes()['utc'];
-			} else
-			if (selector.type=='filename') {
-				text = UICom.structure.ui[nodeid].resource.getAttributes()['filename'];
-			} else
-			if (selector.type=='resource value') {
-				text = UICom.structure.ui[nodeid].resource.getValue("dashboard_value_"+nodeid);
-				prefix_id += "value_";
-			} else
-			if (selector.type=='resource label') {
-				text = UICom.structure.ui[nodeid].resource.getLabel();
-			} else
-			if (selector.type=='node label') {
-				text = UICom.structure.ui[nodeid].getLabel();
-			} else
-			if (selector.type=='node point label') {
-				text = "<a href='#' data-toggle='tooltip' title=\""+UICom.structure.ui[nodeid].getLabel('none')+"\"><i class='fas fa-circle'></i></a>";
-			} else
-			if (selector.type=='node code') {
-				text = UICom.structure.ui[nodeid].getCode();
-			} else
-			if (selector.type=='loginfo') {
-				var lastmodified = UICom.structure.ui[nodeid].resource.lastmodified_node.text().toLocaleString();
-				var user = UICom.structure.ui[nodeid].resource.user_node.text();
-				try {
-					text = lastmodified+" - user : "+user;
+				var shownode = false;
+				if (g_designerrole || writenode) {
+					shownode = (showroles.containsArrayElt(g_userroles) || showroles.indexOf($(USER.username_node).text())>-1 )
+				}
+				const submitnode = (submitroles.containsArrayElt(g_userroles) || submitroles.indexOf($(USER.username_node).text())>-1 );
+				var deletenode = ($(node.node).attr('delete')=='Y')? true:false;
+				if (delnoderoles.indexOf("user")>-1)
+					delnoderoles = ($(node.metadatawad).attr('delnoderoles')==undefined)?'':$(node.metadatawad).attr('delnoderoles');
+				if (g_designerrole || deletenode) {
+					deletenode = (delnoderoles.containsArrayElt(g_userroles) || delnoderoles.indexOf($(USER.username_node).text())>-1);
+				}
+				var inline = false;
+				var inline_metadata = ($(node.metadata).attr('inline')==undefined)? '' : $(node.metadata).attr('inline');
+				if (inline_metadata=='Y')
+					inline = true;
+				//----------------------------
+				if (selector.type=='resource') {
+					try {
+						text = UICom.structure.ui[nodeid].resource.getView("dashboard_node_resource"+nodeid,'none',null,true);
+					} catch(e){
+						text = UICom.structure.ui[nodeid].structured_resource.getView("dashboard_node_resource"+nodeid,null,null,true);
 					}
-				catch(error) {text="/"};
-			} else
-			if (selector.type=='resourcelastmodified') {
-				text = new Date(parseInt(UICom.structure.ui[nodeid].resource.lastmodified_node.text())).toLocaleString();
-			} else
-			if (selector.type=='nodelastmodified') {
-				text = new Date(parseInt(UICom.structure.ui[nodeid].lastmodified_node.text())).toLocaleString();
-			}
-			else if (selector.type=='submitteddate') {
-				text = UICom.structure.ui[nodeid].submitteddate;  //node.submitteddate
-			} else
-			if (selector.type=='node value') {
-				text = UICom.structure.ui[nodeid].getValue();
-			} else
-			if (selector.type=='uuid') {
-				text = nodeid;
-			} else if (selector.type=='node context') {
-				text = UICom.structure.ui[nodeid].getContext("dashboard_context_"+nodeid);
-				prefix_id += "context_";
-			}
-			//-------------------------------------------
-			if (ref!=undefined && ref!="") {
-				ref = replaceVariable(ref);
-				if (g_variables[ref]==undefined)
-					g_variables[ref] = new Array();
-				g_variables[ref][g_variables[ref].length] = text;
-			}
-			//-------------------------------------------
-			text = "<span id='dashboard_node_resource"+nodeid+"' style='"+style+"' class='"+cssclass+"'>"+text+"</span>";
-			if (g_report_edit && writenode && nodenopencil!='Y' && !nodenopencilroles.containsArrayElt(g_userroles)) {
-				text += "<span class='button fas fa-pencil-alt' data-toggle='modal' data-target='#edit-window' onclick=\"javascript:getEditBox('"+nodeid+"')\" data-title='"+karutaStr[LANG]["button-edit"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
-			}
-			if (g_report_edit && deletenode) {
-				var type = UICom.structure.ui[nodeid].asmtype;
-				text += deleteButton(nodeid,type,null,null,'UIFactory.Node.reloadUnit',null,null);
-			}
-			//------------- private button -------------------
-			if (shownode && writenode) {
-				privatevalue = ($(node.metadatawad).attr('private')==undefined)?false:$(node.metadatawad).attr('private')=='Y';
-				if (privatevalue) {
-					text = "<span id='report"+nodeid+"' class='private'>"+text+"<span class='button fas fa-eye-slash' style='' onclick=\"showinreport('"+nodeid+"')\" title='"+karutaStr[LANG]["button-show"]+"' data-toggle='tooltip' data-placement='bottom'></span>"+"</span>";
-				} else {
-					text = "<span id='report"+nodeid+"'>"+text+"<span class='button fas fa-eye' style='' onclick=\"hideinreport('"+nodeid+"')\" title='"+karutaStr[LANG]["button-hide"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
+					
+				} else
+				if (selector.type=='resource code') {
+					text = UICom.structure.ui[nodeid].resource.getCode();
+				} else
+				if (selector.type=='resource utc') {
+					text = UICom.structure.ui[nodeid].resource.getAttributes()['utc'];
+				} else
+				if (selector.type=='filename') {
+					text = UICom.structure.ui[nodeid].resource.getAttributes()['filename'];
+				} else
+				if (selector.type=='resource value') {
+					text = UICom.structure.ui[nodeid].resource.getValue("dashboard_value_"+nodeid);
+					prefix_id += "value_";
+				} else
+				if (selector.type=='resource label') {
+					text = UICom.structure.ui[nodeid].resource.getLabel();
+				} else
+				if (selector.type=='node label') {
+					text = UICom.structure.ui[nodeid].getLabel();
+				} else
+				if (selector.type=='node point label') {
+					text = "<a href='#' data-toggle='tooltip' title=\""+UICom.structure.ui[nodeid].getLabel('none')+"\"><i class='fas fa-circle'></i></a>";
+				} else
+				if (selector.type=='node code') {
+					text = UICom.structure.ui[nodeid].getCode();
+				} else
+				if (selector.type=='loginfo') {
+					var lastmodified = UICom.structure.ui[nodeid].resource.lastmodified_node.text().toLocaleString();
+					var user = UICom.structure.ui[nodeid].resource.user_node.text();
+					try {
+						text = lastmodified+" - user : "+user;
+						}
+					catch(error) {text="/"};
+				} else
+				if (selector.type=='resourcelastmodified') {
+					text = new Date(parseInt(UICom.structure.ui[nodeid].resource.lastmodified_node.text())).toLocaleString();
+				} else
+				if (selector.type=='nodelastmodified') {
+					text = new Date(parseInt(UICom.structure.ui[nodeid].lastmodified_node.text())).toLocaleString();
 				}
-			}
-			//------------- submit  -------------------
-			if (submitnode) {
-				//------------------
-				var labels = [];
-				labels[0] = karutaStr[languages[LANGCODE]]['button-submit'];
-				labels[1] = karutaStr[languages[LANGCODE]]['button-unsubmit'];
-				labels[2] = karutaStr[languages[LANGCODE]]['submitted'];
-				labels[3] = karutaStr[languages[LANGCODE]]['notsubmitted'];
-				if (node.textssubmit!="") {
-					var texts = node.textssubmit.split(";");
-					for (let j=0; j<texts.length; j++){
-						var textlang = texts[j].split("/");
-						for (var k=0; k<textlang.length; k++){
-							if (textlang[k].indexOf("@"+languages[LANGCODE])>-1)
-								labels[j] = textlang[k].substring(0,textlang[k].indexOf("@"));
+				else if (selector.type=='submitteddate') {
+					text = UICom.structure.ui[nodeid].submitteddate;  //node.submitteddate
+				} else
+				if (selector.type=='node value') {
+					text = UICom.structure.ui[nodeid].getValue();
+				} else
+				if (selector.type=='uuid') {
+					text = nodeid;
+				} else if (selector.type=='node context') {
+					text = UICom.structure.ui[nodeid].getContext("dashboard_context_"+nodeid);
+					prefix_id += "context_";
+				}
+				//-------------------------------------------
+				if (ref!=undefined && ref!="") {
+					ref = replaceVariable(ref);
+					if (g_variables[ref]==undefined)
+						g_variables[ref] = new Array();
+					g_variables[ref][g_variables[ref].length] = text;
+				}
+				text = "<span id='dashboard_node_resource"+nodeid+"' style='"+style+"' class='"+cssclass+"'>"+text+"</span>";
+				if (g_report_edit && writenode && nodenopencil!='Y' && !nodenopencilroles.containsArrayElt(g_userroles)) {
+					text += "<span class='button fas fa-pencil-alt' data-toggle='modal' data-target='#edit-window' onclick=\"javascript:getEditBox('"+nodeid+"')\" data-title='"+karutaStr[LANG]["button-edit"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
+				}
+				if (g_report_edit && deletenode) {
+					var type = UICom.structure.ui[nodeid].asmtype;
+					text += deleteButton(nodeid,type,null,null,'UIFactory.Node.reloadUnit',null,null);
+				}
+				//------------- private button -------------------
+				if (shownode && writenode) {
+					privatevalue = ($(node.metadatawad).attr('private')==undefined)?false:$(node.metadatawad).attr('private')=='Y';
+					if (privatevalue) {
+						text = "<span id='report"+nodeid+"' class='private'>"+text+"<span class='button fas fa-eye-slash' style='' onclick=\"showinreport('"+nodeid+"')\" title='"+karutaStr[LANG]["button-show"]+"' data-toggle='tooltip' data-placement='bottom'></span>"+"</span>";
+					} else {
+						text = "<span id='report"+nodeid+"'>"+text+"<span class='button fas fa-eye' style='' onclick=\"hideinreport('"+nodeid+"')\" title='"+karutaStr[LANG]["button-hide"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
+					}
+				}
+				//------------- submit  -------------------
+				if (submitnode) {
+					//------------------
+					var labels = [];
+					labels[0] = karutaStr[languages[LANGCODE]]['button-submit'];
+					labels[1] = karutaStr[languages[LANGCODE]]['button-unsubmit'];
+					labels[2] = karutaStr[languages[LANGCODE]]['submitted'];
+					labels[3] = karutaStr[languages[LANGCODE]]['notsubmitted'];
+					if (node.textssubmit!="") {
+						var texts = node.textssubmit.split(";");
+						for (let j=0; j<texts.length; j++){
+							var textlang = texts[j].split("/");
+							for (var k=0; k<textlang.length; k++){
+								if (textlang[k].indexOf("@"+languages[LANGCODE])>-1)
+									labels[j] = textlang[k].substring(0,textlang[k].indexOf("@"));
+							}
+						}
+					}
+					//------------------
+					if ( node.submitted!='Y') {
+						text += "<span id='submit-"+node.id+"'  class='submitbutton button add-button' onclick=\"javascript:confirmSubmit('"+node.id+"'";
+						if (node.submitall=='Y')
+							text += ",true";
+						text += ")\" ";
+						text += " >"+labels[0]+"</span>";
+					} else {
+							text += "<div class='alert submitted button add-button'>"+labels[2] + " " +node.submitteddate+"</div>";
+					}
+				}
+				//----------------------------
+				if (g_report_edit && inline & writenode && nodenopencil!='Y' && !nodenopencilroles.containsArrayElt(g_userroles)) {
+					//-----------------------
+					if(UICom.structure.ui[nodeid].resource!=null) {
+						try {
+							var test = UICom.structure.ui[nodeid].resource.getEditor();
+							text = "<span id='report_get_editor_"+nodeid+"' style='"+style+"'></span>";
+						}
+						catch(e) {
+							text = "<span id='report_display_editor_"+nodeid+"' style='"+style+"'></span>";
 						}
 					}
 				}
-				//------------------
-				if ( node.submitted!='Y') {
-					text += "<span id='submit-"+node.id+"'  class='submitbutton button add-button' onclick=\"javascript:confirmSubmit('"+node.id+"'";
-					if (node.submitall=='Y')
-						text += ",true";
-					text += ")\" ";
-					text += " >"+labels[0]+"</span>";
-				} else {
-						text += "<div class='alert submitted button add-button'>"+labels[2] + " " +node.submitteddate+"</div>";
+				if ($(node.metadatawad).attr('help')!=undefined && $(node.metadatawad).attr('help')!=""){
+					attr_help = $(node.metadatawad).attr('help');
 				}
 			}
-			//----------------------------
-			if (g_report_edit && inline & writenode && nodenopencil!='Y' && !nodenopencilroles.containsArrayElt(g_userroles)) {
-				//-----------------------
-				if(UICom.structure.ui[nodeid].resource!=null) {
-					try {
-						var test = UICom.structure.ui[nodeid].resource.getEditor();
-						text = "<span id='report_get_editor_"+nodeid+"' style='"+style+"'></span>";
-					}
-					catch(e) {
-						text = "<span id='report_display_editor_"+nodeid+"' style='"+style+"'></span>";
-					}
-				}
-			}
-			if ($(node.metadatawad).attr('help')!=undefined && $(node.metadatawad).attr('help')!=""){
-				attr_help = $(node.metadatawad).attr('help');
-			}
+		} catch(e){
+			text = "<span id='dashboard_"+nodeid+"'></span>";
 		}
-	} catch(e){
-		text = "<span id='dashboard_"+nodeid+"'></span>";
-	}
-	//------------------------------
-	text += "<span id='reshelp_"+nodeid+"'></span>"
-	$("#"+destid).append(text);
-	//--------------------set editor------------------------------------------
-	if ($("#report_display_editor_"+nodeid).length>0) {
-		UICom.structure.ui[nodeid].resource.displayEditor("report_display_editor_"+nodeid);
-	}
+		//------------------------------
+		text += "<span id='reshelp_"+nodeid+"'></span>"
+		$("#"+destid).append(text);
+		//--------------------set editor------------------------------------------
+		if ($("#report_display_editor_"+nodeid).length>0) {
+			UICom.structure.ui[nodeid].resource.displayEditor("report_display_editor_"+nodeid);
+		}
+	
+		// -------- if resource changed refresh the report - editor not inline
+		if (report_refresh && $("#dashboard_node_resource"+nodeid).length>0 && editresroles.length>0) {
+			$("#dashboard_node_resource"+nodeid).attr('dashboard',dashboard_current);
+			var config = { attributes: true, childList: true, characterData: true, subtree:true }
+			var observer = new MutationObserver(function(mutations) {
+				var nodeid = mutations[0].target.parentNode.parentNode.attributes['id'].value;
+				var dashboardid = document.getElementById("dashboard_node_resource"+nodeid).attributes['dashboard'].value;
+				this.disconnect();
+				refresh_report(dashboardid);
+			});
+			//-----------
+			var target = $("#"+nodeid,data)[0];
+			if ($("#"+nodeid,data).length==0)
+				target = data; //node itself
+			//-----------
+			observer.observe(target, config);
+		}
+		// -------- if resource changed refresh the report - editor inline
+		if (report_refresh && $("#report_get_editor_"+nodeid).length>0) {
+			$("#report_get_editor_"+nodeid).append(UICom.structure.ui[nodeid].resource.getEditor());
+			var input = $('input',$("#report_get_editor_"+nodeid));
+			$(input).attr('dashboard',dashboard_current);
+			$(input).change(function (){
+				refresh_report(this.attributes['dashboard'].value);
+			});
+		}
+		resolve();
+	}, 0); });
 
-	// -------- if resource changed refresh the report - editor not inline
-	if (report_refresh && $("#dashboard_node_resource"+nodeid).length>0 && editresroles.length>0) {
-		$("#dashboard_node_resource"+nodeid).attr('dashboard',dashboard_current);
-		var config = { attributes: true, childList: true, characterData: true, subtree:true }
-		var observer = new MutationObserver(function(mutations) {
-			var nodeid = mutations[0].target.parentNode.parentNode.attributes['id'].value;
-			var dashboardid = document.getElementById("dashboard_node_resource"+nodeid).attributes['dashboard'].value;
-			this.disconnect();
-			refresh_report(dashboardid);
-		});
-		//-----------
-		var target = $("#"+nodeid,data)[0];
-		if ($("#"+nodeid,data).length==0)
-			target = data; //node itself
-		//-----------
-		observer.observe(target, config);
-	}
-
-	// -------- if resource changed refresh the report - editor inline
-	if (report_refresh && $("#report_get_editor_"+nodeid).length>0) {
-		$("#report_get_editor_"+nodeid).append(UICom.structure.ui[nodeid].resource.getEditor());
-		var input = $('input',$("#report_get_editor_"+nodeid));
-		$(input).attr('dashboard',dashboard_current);
-		$(input).change(function (){
-			refresh_report(this.attributes['dashboard'].value);
-		});
-	}
 }
 
 //=============================================================================
@@ -2467,7 +2581,7 @@ g_report_actions['variable'] = function (destid,action,no,data)
 					//----------------------------
 					var node = UICom.structure.ui[nodeid];
 					//----------------------------
-					if (select=='..userid' || select=='..username' || select=='..lastname' || select=='..firstname' || select=='..email') { // -- userattributes
+					if (select=='..username') { // -- userattributes
 						select= select.substring(2);
 						if (select=='userid')
 							text = data;
@@ -2711,33 +2825,36 @@ g_report_actions['europass'] = function (destid,action,no,data)
 g_report_actions['text'] = function (destid,action,no,data,is_out_csv)
 //==================================
 {
-	var nodeid = $(data).attr("id");
-	var text = $(action).text();
-	text = replaceVariable(text);
-	//-------------------
-	if (text.indexOf('function:')>-1) {
-		const functionstring = text.substring(9);
-		text = eval (functionstring);
-	}
-	//-------------------
-	var style = replaceVariable($(action).attr("style"));
-	var cssclass = replaceVariable($(action).attr("class"));
-	var ref = $(action).attr("ref");
-	if (ref!=undefined && ref!="") {
-		ref = replaceVariable(ref);
-		if (g_variables[ref]==undefined)
-			g_variables[ref] = new Array();
-		g_variables[ref][g_variables[ref].length] = text;
-	}
-	//-----------------
-	if (is_out_csv!=null && is_out_csv) {
-		if (typeof csvseparator == 'undefined') // for backward compatibility
-			csvseparator = ";";
-		csvline += text + csvseparator;		
-	}
-	//-----------------
-	text = "<span id='txt"+nodeid+"' style='"+style+"' class='"+cssclass+"'>"+text+"</span>";
-	$("#"+destid).append(text);
+	return new Promise((resolve) => {setTimeout(() => {
+		var nodeid = $(data).attr("id");
+		var text = $(action).text();
+		text = replaceVariable(text);
+		//-------------------
+		if (text.indexOf('function:')>-1) {
+			const functionstring = text.substring(9);
+			text = eval (functionstring);
+		}
+		//-------------------
+		var style = replaceVariable($(action).attr("style"));
+		var cssclass = replaceVariable($(action).attr("class"));
+		var ref = $(action).attr("ref");
+		if (ref!=undefined && ref!="") {
+			ref = replaceVariable(ref);
+			if (g_variables[ref]==undefined)
+				g_variables[ref] = new Array();
+			g_variables[ref][g_variables[ref].length] = text;
+		}
+		//-----------------
+		if (is_out_csv!=null && is_out_csv) {
+			if (typeof csvseparator == 'undefined') // for backward compatibility
+				csvseparator = ";";
+			csvline += text + csvseparator;		
+		}
+		//-----------------
+		text = "<span id='txt"+nodeid+"' style='"+style+"' class='"+cssclass+"'>"+text+"</span>";
+		$("#"+destid).append(text);
+		resolve();
+	}, 0); });
 }
 
 
@@ -2752,8 +2869,7 @@ g_report_actions['text'] = function (destid,action,no,data,is_out_csv)
 g_report_actions['jsfunction'] = function (destid,action,no,data)
 //==================================
 {
-	let jsfunction = replaceVariable($(action).attr("function"));
-	jsfunction = jsfunction.substring(0,jsfunction.length-1)+",'"+destid+"')";
+	var jsfunction = $(action).attr("function");
 	eval (jsfunction);
 	// ???????
 }
@@ -2770,12 +2886,7 @@ g_report_actions['preview2unit'] = function (destid,action,no,data)
 {
 	let targetid = "";
 	let nodeid = $(data).attr("id");
-	const user_role = replaceVariable($(action).attr("user-role"));
-	if (user_role!=undefined && user_role!=""){
-		url += "&userrole="+user_role;
-		g_userroles[g_userroles.length] = user_role;
-		userrole = user_role;
-	}
+	const userrole = replaceVariable($(action).attr("userrole"));
 	const style = replaceVariable($(action).attr("style"));
 	const cssclass = replaceVariable($(action).attr("class"));
 	const editable = replaceVariable($(action).attr("editable"));
@@ -2799,7 +2910,6 @@ g_report_actions['preview2unit'] = function (destid,action,no,data)
 	//-------------------
 	$("#"+destid).append($(text));
 	$("#"+nodeid).attr("style",style);
-	userrole = g_userroles[0];
 }
 
 //=============================================================================
@@ -2904,7 +3014,7 @@ g_report_actions['url2portfolio'] = function (destid,action,no,data)
 	var style = replaceVariable($(action).attr("style"));
 	var cssclass = replaceVariable($(action).attr("class"));
 	var code = $(action).attr("code");
-	const userrole = $(action).attr("userrole");
+	var user_role = $(action).attr("user-role");
 	code = replaceVariable(code);
 	if (code!=portfolios_byid[portfolioid_current].getCode()) {
 		var url = serverBCK_API+"/portfolios/portfolio/code/" + code;
@@ -2923,7 +3033,7 @@ g_report_actions['url2portfolio'] = function (destid,action,no,data)
 		label = portfolios_byid[portfolioid_current].getLabel();
 	}
 	//------------------------
-	text = "<span id='"+nodeid+"' style='"+style+"' class='URL2Portfolio-link "+cssclass+"' onclick=\"display_main_page('"+uuid+"','"+userrole+"')\">"+label+"</span>";
+	text = "<span id='"+nodeid+"' style='"+style+"' class='URL2Portfolio-link "+cssclass+"' onclick=\"display_main_page('"+uuid+"','"+user_role+"')\">"+label+"</span>";
 	//------------------------
 	$("#"+destid).append($(text));
 	$("#"+nodeid).attr("style",style);
@@ -3070,21 +3180,9 @@ g_report_actions['operation'] = function (destid,action,no,data)
 g_report_actions['update-resource'] = function (destid,action,no,data)
 //==================================
 {
-	const original_userrole = (userrole!=undefined) ? userrole:"";
 	const restype = replaceVariable($(action).attr("restype"));
 	const semtag = replaceVariable($(action).attr("select"));
 	const attribute_value = replaceVariable($(action).attr("value"));
-	let user_role = replaceVariable($(action).attr("user-role"));
-	if (user_role!=undefined && user_role!=""){
-		url += "&userrole="+user_role;
-		g_userroles[g_userroles.length] = user_role;
-		userrole = user_role;
-	}
-	const role = (userrole == null || userrole=="")? g_userroles[0]:userrole;
-	if (userrole!=undefined && userrole!="")
-		user_role = userrole;
-	else
-		user_role = role;
 	let language_dependent = 'N';
 	let attribute_name = 'text';
 	if (restype=="Field") {
@@ -3092,46 +3190,48 @@ g_report_actions['update-resource'] = function (destid,action,no,data)
 		attribute_name = 'text'
 	}
 	//---------------------------
-	node = $("*:has(>metadata[semantictag*='"+semtag+"'])",data);
-	const nodeid = $(node).attr('id');
-	let resource = $("asmResource[xsi_type='"+restype+"']",node);
-	if (language_dependent=='Y') {
-		if ($("metadata",node).attr("multilingual-resource")=="Y") {
-			$(attribute_name+"[lang='"+LANG+"']",resource).text(attribute_value);
-		} else {
-			for (var langcode=0; langcode<languages.length; langcode++) {
-				$(attribute_name+"[lang='"+languages[langcode]+"']",resource).text(attribute_value);
+	let nodes = $("*:has(>metadata[semantictag*='"+semtag+"'])",data);
+	for (let i=0;i<nodes.length;i++) {
+		const node = nodes[i];
+		const nodeid = $(node).attr('id');
+		let resource = $("asmResource[xsi_type='"+restype+"']",node);
+		if (resource.length>0) {
+			if (language_dependent=='Y') {
+				if ($("metadata",node).attr("multilingual-resource")=="Y") {
+					$(attribute_name+"[lang='"+LANG+"']",resource).text(attribute_value);
+				} else {
+					for (var langcode=0; langcode<languages.length; langcode++) {
+						$(attribute_name+"[lang='"+languages[langcode]+"']",resource).text(attribute_value);
+					}
+				}
+			} else {
+				$(attribute_name,resource).text(attribute_value);
 			}
+			//--------------------------
+			if (restype=="Calendar" && attribute_name=="text") {
+				const utc = Date.parse(attribute_value);
+				$("utc",resource).text(utc);
+			}
+			//--------------------------	
+			const resdata = "<asmResource xsi_type='"+restype+"'>" + $(resource).html() + "</asmResource>";
+			const strippeddata = resdata.replace(/xmlns=\"http:\/\/www.w3.org\/1999\/xhtml\"/g,"");  // remove xmlns attribute
+			//-------------------
+			$.ajax({
+				async : false,
+				type : "PUT",
+				contentType: "application/xml",
+				dataType : "text",
+				data : strippeddata,
+				id : nodeid,
+				url : serverBCK_API+"/resources/resource/" + nodeid,
+				success : function(data) {
+					UICom.structure.ui[this.id].refresh();
+				},
+				error : function(data) {
+				}
+			});
 		}
-	} else {
-		$(attribute_name,resource).text(attribute_value);
 	}
-	//--------------------------
-	if (restype=="Calendar" && attribute_name=="text") {
-		const utc = Date.parse(attribute_value);
-		$("utc",resource).text(utc);
-	}
-	//--------------------------	
-	const resdata = "<asmResource xsi_type='"+restype+"'>" + $(resource).html() + "</asmResource>";
-	const strippeddata = resdata.replace(/xmlns=\"http:\/\/www.w3.org\/1999\/xhtml\"/g,"");  // remove xmlns attribute
-	//-------------------
-	$.ajax({
-		async : false,
-		type : "PUT",
-		contentType: "application/xml",
-		dataType : "text",
-		data : strippeddata,
-		id : nodeid,
-		url : serverBCK_API+"/resources/resource/" + nodeid + "?userrole="+user_role,
-		success : function(data) {
-			UICom.structure.ui[nodeid].refresh();
-			execJS(UICom.structure.ui[nodeid].resource,"update-resource-after");
-
-		},
-		error : function(data) {
-		}
-	});
-	userrole = original_userrole;
 }
 
 //=========================================================================

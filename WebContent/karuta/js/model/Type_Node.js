@@ -527,7 +527,7 @@ UIFactory["Node"].prototype.displayAsmNode = function(dest,type,langcode,edit,re
 	}
 	const menus_color = this.getMenuStyle();
 	//-------------------- label style -------------------
-	if (this.depth>1) {
+	if (this.depth>1 || (nodetype=='asmStructure' && $("#node_"+this.id).html().indexOf('first-node')>-1)) {
 		style = UIFactory.Node.getLabelStyle(uuid);
 	} else {
 		style = UIFactory.Node.getInParentLabelStyle(uuid);
@@ -886,7 +886,7 @@ UIFactory["Node"].prototype.updateLabel = function(langcode)
 		langcode = LANGCODE;
 	var label = sanitizeText($.trim($("#label_"+this.id+"_"+langcode).val()));
 	$(this.label_node[langcode]).text(label);
-	$(UICom.structure.ui[this.id].label_node[LANGCODE]).text(label);
+	$(UICom.structure.ui[this.id].label_node[langcode]).text(label);
 	$("label[lang='"+languages[langcode]+"']",$("asmResource[xsi_type='nodeRes']",$("#"+this.id,g_portfolio_current))[0]).text(label);// new
 	//---------------------
 	if (!this.multilingual) {
@@ -1327,12 +1327,12 @@ UIFactory["Node"].duplicate = function(uuid,callback,databack,param2,param3,para
 											url : urlS,
 											data : strippeddata,
 											success : function (data){
-												$("#saved-window-body").html("<img src='../../karuta/img/green.png'/> saved : "+new Date().toLocaleString());
+/*												$("#saved-window-body").html("<img src='../../karuta/img/green.png'/> saved : "+new Date().toLocaleString());
 												$("#wait-window").modal('hide');			
-												if (UICom.structure.ui[destid].asmtype=='asmContext')
+												if (UICom.structure.ui[destid].asmtype=='asmContext' || UICom.structure.ui[destid].asmtype=='asmUnit')
 													UIFactory.Node.reloadUnit();
 												else
-													UIFactory.Node.reloadStruct();
+													UIFactory.Node.reloadStruct();*/
 											},
 											error : function(jqxhr,textStatus) {
 												alert("Error in duplicate rename : "+jqxhr.responseText);
@@ -1349,7 +1349,7 @@ UIFactory["Node"].duplicate = function(uuid,callback,databack,param2,param3,para
 							} else {
 								$("#saved-window-body").html("<img src='../../karuta/img/green.png'/> saved : "+new Date().toLocaleString());
 								$("#wait-window").modal('hide');
-								if (UICom.structure.ui[destid].asmtype=='asmContext')
+								if (UICom.structure.ui[destid].asmtype=='asmContext'|| UICom.structure.ui[destid].asmtype=='asmUnit')
 									UIFactory.Node.reloadUnit();
 								else
 									UIFactory.Node.reloadStruct();
@@ -1449,7 +1449,7 @@ UIFactory["Node"].displaySidebar = function(root,destid,type,langcode,edit,paren
 	if (langcode==null)
 		langcode = LANGCODE;
 	//---------------------
-	if (type=='standard' || type=='translate' || type=='raw') {
+	if (root!="" && (type=='standard' || type=='translate' || type=='raw')) {
 		let i = 0;
 		while (i<root.children.length)
 		{
@@ -2136,7 +2136,7 @@ UIFactory["Node"].prototype.getButtons = function(dest,type,langcode,inline,dept
 			 	 )
 			)
 		{
-			html+= "<span class='button fas fa-clone' style='"+menus_color+"' onclick=\"javascript:UIFactory.Node.duplicate('"+this.id+"','UIFactory.Node.reloadUnit')\" data-title='"+karutaStr[LANG]["button-duplicate"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
+			html+= "<span class='button fas fa-clone' style='"+menus_color+"' onclick=\"javascript:UIFactory.Node.duplicate('"+this.id+"')\" data-title='"+karutaStr[LANG]["button-duplicate"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
 		}
 	}
 	//------------- private button -------------------

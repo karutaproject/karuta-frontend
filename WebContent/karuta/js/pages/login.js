@@ -27,32 +27,54 @@ function callCAS()
 function callSubmit(encrypt_url,lang)
 //==============================
 {
-	var data = "<credential><login>"+document.getElementById("useridentifier").value+"</login><password>"+document.getElementById("password").value+"</password></credential>";
-	sessionStorage.setItem('pwd',document.getElementById("password").value);
-	$.ajax({
-		contentType: "application/xml",
-		type : "POST",
-		dataType : "text",
-		url : serverBCK_API+"/credential/login",
-		data: data,
-		i : encrypt_url,
-		lang :lang,
-		success : function(data) {
-			if (self.encrypt_url=="")
-				window.location="karuta.htm";
-			else if (self.encrypt_url.length==36)
-				window.location="karuta.htm?i="+self.encrypt_url+"&lang="+self.lang
-			else {
-				if (x!=undefined)
-					window.location="public.htm?i="+self.encrypt_url+"&x="+x+"&lang="+self.lang
-				else
-					window.location="public.htm?i="+self.encrypt_url+"&lang="+self.lang;
+	const identifier = document.getElementById("useridentifier").value;
+	const pwd = document.getElementById("password").value;
+	if (g_configVar['maintenance-display']=="0" || identifier=="root") {
+		var data = "<credential><login>"+document.getElementById("useridentifier").value+"</login><password>"+document.getElementById("password").value+"</password></credential>";
+		sessionStorage.setItem('pwd',pwd);
+		$.ajax({
+			contentType: "application/xml",
+			type : "POST",
+			dataType : "text",
+			url : serverBCK_API+"/credential/login",
+			data: data,
+			i : encrypt_url,
+			lang :lang,
+			success : function(data) {
+				if (identifier==pwd) {
+					try {
+						test_login_password(identifier,pwd);
+					} catch(e) {
+						if (self.encrypt_url=="")
+							window.location="karuta.htm";
+						else if (self.encrypt_url.length==36)
+							window.location="karuta.htm?i="+self.encrypt_url+"&lang="+self.lang
+						else {
+							if (x!=undefined)
+								window.location="public.htm?i="+self.encrypt_url+"&x="+x+"&lang="+self.lang
+							else
+								window.location="public.htm?i="+self.encrypt_url+"&lang="+self.lang;
+							}
+						// do nothing
+					}
+				} else {
+					if (self.encrypt_url=="")
+						window.location="karuta.htm";
+					else if (self.encrypt_url.length==36)
+						window.location="karuta.htm?i="+self.encrypt_url+"&lang="+self.lang
+					else {
+						if (x!=undefined)
+							window.location="public.htm?i="+self.encrypt_url+"&x="+x+"&lang="+self.lang
+						else
+							window.location="public.htm?i="+self.encrypt_url+"&lang="+self.lang;
+						}
 				}
-		},
-		error : function(jqxhr,textStatus) {
-			alertHTML(karutaStr[LANG]['error-login']);
-		}
-	});
+			},
+			error : function(jqxhr,textStatus) {
+				alertHTML(karutaStr[LANG]['error-login']);
+			}
+		});
+	}
 }
 
 //==============================
@@ -236,26 +258,32 @@ function displayKarutaLogin()
 //==============================
 {
 	var data = "<credential><login>public</login><password>public</password></credential>";
-	$.ajax({
-		async:false,
-		contentType: "application/xml",
-		type : "POST",
-		dataType : "text",
-		url : serverBCK_API+"/credential/login",
-		data: data,
-		success : function(data) {
-			if (typeof(localLogin) == 'undefined')
-				localLogin = true;
-			constructKarutaLogin(true && localLogin);
-		},
-		error : function(jqxhr,textStatus) {
-			if (jqxhr.status == '404') {
-				constructKarutaLogin(false);
-			} else {
-				alertHTML("Identification : "+jqxhr.responseText);
+	try {
+		$.ajax({
+			async:false,
+			contentType: "application/xml",
+			type : "POST",
+			dataType : "text",
+			url : serverBCK_API+"/credential/login",
+			data: data,
+			success : function(data) {
+				if (typeof(localLogin) == 'undefined')
+					localLogin = true;
+				constructKarutaLogin(true && localLogin);
+			},
+			error : function(jqxhr,textStatus) {
+				if (jqxhr.status == '404') {
+					constructKarutaLogin(false);
+				} else {
+					alertHTML("Identification : "+jqxhr.responseText);
+				}
 			}
-		}
-	});
+		});
+	}
+	catch (e) {
+		unlog();
+		alert("Quitter votre browser et rouvrir votre page.<br>"+e);
+	}
 }
 
 //==============================

@@ -358,7 +358,7 @@ UIFactory["Get_Resource"].prototype.getView = function(dest,type,langcode,indash
 					html += "<span name='code'>" + cleanCode(code) + "</span> ";
 				if (code.indexOf("%")<0) {
 					if (label.indexOf("fileid-")>-1) {
-						if (UICom.structure.ui[label.substring(7)]==undefined)
+						if (UICom.structure.ui[label.substring(7)]==undefined) {
 							$.ajax({
 								async: false,
 								type : "GET",
@@ -372,6 +372,9 @@ UIFactory["Get_Resource"].prototype.getView = function(dest,type,langcode,indash
 									html += "Error file not found:" + label.substring(7);
 								}
 							});
+						} else {
+							html += UICom.structure.ui[label.substring(7)].resource.getView();
+						}
 					} else {
 						html += "<span name='label'>" + label + "</span> ";
 					}
@@ -427,6 +430,7 @@ UIFactory["Get_Resource"].prototype.displayView = function(dest,type,langcode)
 UIFactory["Get_Resource"].prototype.displayEditor = function(destid,type,langcode,disabled,cachable,resettable)
 //==================================
 {
+
 	var multiple_tags = "";
 	if (cachable==undefined || cachable==null)
 		cachable = true;
@@ -488,6 +492,7 @@ UIFactory["Get_Resource"].prototype.displayEditor = function(destid,type,langcod
 				self.parse(destid,type,langcode,g_Get_Resource_caches[queryattr_value],disabled,srce,resettable,target,semtag,multiple_tags,portfoliocode,semtag2,cachable);
 			else {
 				$.ajax({
+					async: false,
 					type : "GET",
 					dataType : "xml",
 					url : serverBCK_API+"/users",
@@ -498,13 +503,14 @@ UIFactory["Get_Resource"].prototype.displayEditor = function(destid,type,langcod
 					}
 				});
 			}
-			//----------------- List of users of a group----------------------------
+		//----------------- List of users of a group----------------------------
 		} else if (queryattr_value.indexOf("#persongroup")>-1) {
 			if (cachable && g_Get_Resource_caches[queryattr_value]!=undefined && g_Get_Resource_caches[queryattr_value]!="")
 				self.parse(destid,type,langcode,g_Get_Resource_caches[queryattr_value],disabled,srce,resettable,target,semtag,multiple_tags,portfoliocode,semtag2,cachable);
 			else {
 				const groupid = UIFactory.UsersGroup.getIdByLabel(semtag);
 				$.ajax({
+					async: false,
 					type : "GET",
 					dataType : "xml",
 					url : serverBCK_API+"/usersgroups?group="+groupid,
@@ -529,6 +535,24 @@ UIFactory["Get_Resource"].prototype.displayEditor = function(destid,type,langcod
 							if (cachable)
 								g_Get_Resource_caches[queryattr_value] = data;
 							self.parse(destid,type,langcode,data,disabled,srce,resettable,target,semtag,multiple_tags,portfoliocode,semtag2,cachable);
+					}
+				});
+			}
+		//----------------- List of portfolio of a group----------------------------
+		} else if (queryattr_value.indexOf("#portfoliogroup")>-1) {
+			if (cachable && g_Get_Resource_caches[queryattr_value]!=undefined && g_Get_Resource_caches[queryattr_value]!="")
+				self.parse(destid,type,langcode,g_Get_Resource_caches[queryattr_value],disabled,srce,resettable,target,semtag,multiple_tags,portfoliocode,semtag2,cachable);
+			else {
+				const groupid = UIFactory.PortfoliosGroup.getIdByLabel(semtag);
+				$.ajax({
+					async: false,
+					type : "GET",
+					dataType : "xml",
+					url : serverBCK_API+"/portfoliogroups?group="+groupid,
+					success : function(data) {
+						if (cachable)
+							g_Get_Resource_caches[queryattr_value] = data;
+						self.parse(destid,type,langcode,data,disabled,srce,resettable,target,semtag,multiple_tags,portfoliocode,semtag2,cachable);
 					}
 				});
 			}
@@ -600,6 +624,7 @@ UIFactory["Get_Resource"].prototype.displayEditor = function(destid,type,langcod
 				self.parse(destid,type,langcode,g_Get_Resource_caches[queryattr_value],disabled,srce,resettable,target,semtag,multiple_tags,portfoliocode,semtag2,cachable);
 			else {
 				$.ajax({
+					async: false,
 					type : "GET",
 					dataType : "xml",
 					url : serverBCK_API+"/users",
@@ -610,8 +635,26 @@ UIFactory["Get_Resource"].prototype.displayEditor = function(destid,type,langcod
 					}
 				});
 			}
+		//----------------- List of users of a group----------------------------
+		} else if (queryattr_value.indexOf("#persongroup")>-1) {
+			if (cachable && g_Get_Resource_caches[queryattr_value]!=undefined && g_Get_Resource_caches[queryattr_value]!="")
+				self.parse(destid,type,langcode,g_Get_Resource_caches[queryattr_value],disabled,srce,resettable,target,semtag,multiple_tags,portfoliocode,semtag2,cachable);
+			else {
+				const groupid = UIFactory.UsersGroup.getIdByLabel(semtag);
+				$.ajax({
+					async: false,
+					type : "GET",
+					dataType : "xml",
+					url : serverBCK_API+"/usersgroups?group="+groupid,
+					success : function(data) {
+						if (cachable)
+							g_Get_Resource_caches[queryattr_value] = data;
+						self.parse(destid,type,langcode,data,disabled,srce,resettable,target,semtag,multiple_tags,portfoliocode,semtag2,cachable);
+					}
+				});
+			}
 		//----------------- List of portfolios ----------------------------
-		} else if (queryattr_value.indexOf("#portfolios.portfolio")>-1) {
+		} else if (queryattr_value.indexOf("#portfolios.")>-1) {
 			if (cachable && g_Get_Resource_caches[queryattr_value]!=undefined && g_Get_Resource_caches[queryattr_value]!="")
 				self.parse(destid,type,langcode,g_Get_Resource_caches[queryattr_value],disabled,srce,resettable,target,semtag,multiple_tags,portfoliocode,semtag2,cachable);
 			else {
@@ -624,6 +667,24 @@ UIFactory["Get_Resource"].prototype.displayEditor = function(destid,type,langcod
 							if (cachable)
 								g_Get_Resource_caches[queryattr_value] = data;
 							self.parse(destid,type,langcode,data,disabled,srce,resettable,target,semtag,multiple_tags,portfoliocode,semtag2,cachable);
+					}
+				});
+			}
+		//----------------- List of portfolio of a group----------------------------
+		} else if (queryattr_value.indexOf("#portfoliogroup")>-1) {
+			if (cachable && g_Get_Resource_caches[queryattr_value]!=undefined && g_Get_Resource_caches[queryattr_value]!="")
+				self.parse(destid,type,langcode,g_Get_Resource_caches[queryattr_value],disabled,srce,resettable,target,semtag,multiple_tags,portfoliocode,semtag2,cachable);
+			else {
+				const groupid = UIFactory.PortfoliosGroup.getIdByLabel(semtag);
+				$.ajax({
+					async: false,
+					type : "GET",
+					dataType : "xml",
+					url : serverBCK_API+"/portfoliogroups?group="+groupid,
+					success : function(data) {
+						if (cachable)
+							g_Get_Resource_caches[queryattr_value] = data;
+						self.parse(destid,type,langcode,data,disabled,srce,resettable,target,semtag,multiple_tags,portfoliocode,semtag2,cachable);
 					}
 				});
 			}
@@ -719,17 +780,44 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 	//---------------------
 	if (type==undefined || type==null)
 		type = 'select';
-//-----Nodes ------------------------------------------------------------
+	//-----Nodes ------------------------------------------------------------
 	let nodes = $("node",data);
-//	if (nodes.length==0)
-//		nodes = $("group",data);
+	//-----
 	if (nodes.length==0)
-		nodes = $("user",data);
-	if (nodes.length==0)
+		nodes = $("group",data);
+	//-----
+	if (nodes.length==0 || portfoliocode=="#persongroup") {
+			nodes = [];
+			const users = $("user",data);
+			for ( var i = 0; i < $(users).length; i++) { // test if user exists anymore
+				const userid = $(users[i]).attr("id");
+				if (Users_byid[userid]==undefined) {
+					$.ajax({
+						async: false,
+						type : "GET",
+						dataType : "xml",
+						url : serverBCK_API+"/users/user/"+userid,
+						success : function(data) {
+							UIFactory.User.load(userid);
+							const username = Users_byid[userid].username;
+							if (username.length>0)
+								nodes.push(users[i])
+						}
+					});
+				} else {
+					const username = Users_byid[userid].username;
+					if (username.length>0)
+						nodes.push(users[i])
+				}
+			}
+		}
+	//-----
+	if (nodes.length==0 || portfoliocode=="#portfoliogroup")
 		nodes = $("portfolio",data);
-//-----Node ordering-------------------------------------------------------
+	//-----Node ordering-------------------------------------------------------
 	let tableau1 = new Array();
 	let tableau2 = new Array();
+	let sorton = 1; // by default sort on code
 	for ( var i = 0; i < $(nodes).length; i++) {
 		//--------------------------
 		const langnotvisible = ($("metadata-wad",nodes[i]).attr('langnotvisible')==undefined)?'':$("metadata-wad",nodes[i]).attr('langnotvisible');
@@ -742,9 +830,9 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 		if (langnotvisible!=karutaStr[languages[LANGCODE]]['language'] && display) {
 			//----------------------------------------------------------
 			let resource = null;
-			let code = null;
-			let libelle = null;
-			if (target=="portfoliolabel") {
+			let code = "";
+			let libelle = "";
+			if (portfoliocode!="#portfoliogroup" && target=="portfoliolabel") {
 					code = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",nodes[i])).text();
 					libelle = $("label[lang='"+languages[langcode]+"']",$("asmRoot>asmResource[xsi_type='nodeRes']",nodes[i])[0]).text();
 			} else {
@@ -757,27 +845,29 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 					libelle = $(srce+"[lang='"+languages[langcode]+"']",resource).text();
 				} else { // users, portfolios, usergroup or portfoliogroup
 					if (target=="first-last-name") {
-						if (portfoliocode=="#group") {
-						code = $(nodes[i]).attr('id');
-						libelle = $("firstname",nodes[i]).text()+ " "+$("lastname",nodes[i]).text();
+						if (portfoliocode=="#group" || portfoliocode=="#persons") {
+							code = $(nodes[i]).attr('id');
+							libelle = $("firstname",nodes[i]).text()+ " "+$("lastname",nodes[i]).text();
 						} else if (portfoliocode=="#persongroup") {
 							const userid = $(nodes[i]).attr("id");
-							UIFactory.User.load(userid);
+//							UIFactory.User.load(userid);
 							code = Users_byid[userid].username;
 							libelle =Users_byid[userid].firstname+" " +Users_byid[userid].lastname;
-							
 						}
+					} else if (portfoliocode=="#portfoliogroup") {
+							const id = $(nodes[i]).attr("id");
+							UIFactory.Portfolio.load(id);
+							code = portfolios_byid[id].getCode();
+							libelle = portfolios_byid[id].getLabel();
 					} else {
 						code = $(nodes[i]).attr("id");
 						libelle = $('label',nodes[i]).text();
 					}
 				}
 			}
-			if (code.indexOf("~")<0)   // si ~ on trie sur le libellé sinon sur le code
-				tableau1[tableau1.length] = [code,nodes[i]];
-			else
-				tableau1[tableau1.length] = [libelle,nodes[i]]
-			tableau2[tableau2.length] = {'code':code,'libelle':libelle};
+			tableau1[tableau1.length] = [code,libelle,nodes[i]];
+			if (code.indexOf("~")>-1)   // si ~ on trie sur le libellé 
+				sorton = 2;
 			//----------------------------------------------------------
 		}
 	}
@@ -786,7 +876,7 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 		const tableau1original = tableau1;
 		let toberemoved = [];
 		for ( let i = 0; i < tableau1original.length; i++) {
-			const portfolioid = $(tableau1original[i][1]).attr('id');
+			const portfolioid = $(tableau1original[i][2]).attr('id');
 			const role = replaceVariable(semtag2.substring(5));
 			let ok = false;
 			$.ajax({
@@ -820,7 +910,11 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 		}
 	}
 	//------------------------------------------------------------
-	let newTableau1 = tableau1.sort(sortOn1);	
+	let newTableau1 = new Array();
+	if (sorton == 2)   // si ~ on trie sur le libellé sinon sur le code
+		newTableau1 = tableau1.sort(sortOn2);
+	else
+		newTableau1 = tableau1.sort(sortOn1);
 	var tabadded = [];
 	//------------------------------------------------------------
 	//------------------------------------------------------------
@@ -856,24 +950,24 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 		if (target=="label" || target=="grouplabel" || target=="first-last-name" || target=="portfoliolabel") {
 			for ( let i = 0; i < newTableau1.length; i++) {
 				//------------------------------
-				let uuid = $(newTableau1[i][1]).attr('id');
+				let uuid = $(newTableau1[i][2]).attr('id');
 				let style = "";
 				let resource = null;
 				let value = "";
 				let code = "";
 				let label = "";
 				if (target=='grouplabel' || target=="first-last-name" || target=="portfoliolabel") {
-					code = "@" + tableau2[i].code;
+					code = "@" + tableau1[i][0];
 					value = code;
-					label = tableau2[i].libelle;
+					label = tableau1[i][1];
 				} else {
 					//------------------------------
-					if ($("asmResource",newTableau1[i][1]).length==3) {
-						style = UIFactory.Node.getDataContentStyle(newTableau1[i][1].querySelector("metadata-epm"));
-						resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i][1]); 
+					if ($("asmResource",newTableau1[i][2]).length==3) {
+						style = UIFactory.Node.getDataContentStyle(newTableau1[i][2].querySelector("metadata-epm"));
+						resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i][2]); 
 					} else {
-						style = UIFactory.Node.getDataLabelStyle(newTableau1[i][1].querySelector("metadata-epm"));
-						resource = $("asmResource[xsi_type='nodeRes']",newTableau1[i][1]);
+						style = UIFactory.Node.getDataLabelStyle(newTableau1[i][2].querySelector("metadata-epm"));
+						resource = $("asmResource[xsi_type='nodeRes']",newTableau1[i][2]);
 					}
 					value = $('value',resource).text();
 					code = $('code',resource).text();
@@ -990,9 +1084,9 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 		//---------------------
 		if (target=='text') {
 			for ( var i = 0; i < newTableau1.length; i++) {
-				var uuid = $(newTableau1[i][1]).attr('id');
-				var style = UIFactory.Node.getDataContentStyle(newTableau1[i][1].querySelector("metadata-epm"));
-				var resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i][1]); 
+				var uuid = $(newTableau1[i][2]).attr('id');
+				var style = UIFactory.Node.getDataContentStyle(newTableau1[i][2].querySelector("metadata-epm"));
+				var resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i][2]); 
 				html = "<a class='dropdown-item' value='"+$('value',resource).text()+"' code='"+$('code',resource).text()+"' class='sel"+code+"' ";
 				for (var j=0; j<languages.length;j++){
 					html += "label_"+languages[j]+"=\""+$(srce+"[lang='"+languages[j]+"']",resource).text()+"\" ";
@@ -1022,9 +1116,9 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 		//---------------------
 		if (target=='fileid') {
 			for ( var i = 0; i < newTableau1.length; i++) {
-				var uuid = $(newTableau1[i][1]).attr('id');
-				var style = UIFactory.Node.getDataContentStyle(newTableau1[i][1].querySelector("metadata-epm"));
-				var resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i][1]);
+				var uuid = $(newTableau1[i][2]).attr('id');
+				var style = UIFactory.Node.getDataContentStyle(newTableau1[i][2].querySelector("metadata-epm"));
+				var resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i][2]);
 				//------------------------------
 				var code = $('code',resource).text();
 				var display_code = false;
@@ -1075,8 +1169,8 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 		//---------------------
 		if (target=='resource') {
 			for ( var i = 0; i < newTableau1.length; i++) {
-				var uuid = $(newTableau1[i][1]).attr('id');
-				var resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i][1]);
+				var uuid = $(newTableau1[i][2]).attr('id');
+				var resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i][2]);
 				//------------------------------
 				var code = $('code',resource).text();
 				var display_code = false;
@@ -1127,9 +1221,9 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 		//---------------------
 		if (target=='nodelabel') {
 			for ( var i = 0; i < newTableau1.length; i++) {
-				var uuid = $(newTableau1[i][1]).attr('id');
-				var resource = $("asmResource[xsi_type='nodeRes']",newTableau1[i][1]);
-				var style = UIFactory.Node.getDataLabelStyle(newTableau1[i][1].querySelector("metadata-epm"));
+				var uuid = $(newTableau1[i][2]).attr('id');
+				var resource = $("asmResource[xsi_type='nodeRes']",newTableau1[i][2]);
+				var style = UIFactory.Node.getDataLabelStyle(newTableau1[i][2].querySelector("metadata-epm"));
 				var code = $('code',resource).text();
 				var display_code = false;
 				var display_label = true;
@@ -1208,21 +1302,32 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 		}
 		//-------------------
 		for ( var i = 0; i < newTableau1.length; i++) {
-			var uuid = $(newTableau1[i][1]).attr('id');
+			var uuid = $(newTableau1[i][2]).attr('id');
 			var style = "";
 			var radio_obj = $("<div class='get-radio'></div>");
 			var input = "";
 			var resource = null;
 			//------------------------------
-			if ($("asmResource",newTableau1[i][1]).length==3) {
-				style = UIFactory.Node.getDataContentStyle(newTableau1[i][1].querySelector("metadata-epm"));
-				resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i][1]); 
+			let value = "";
+			let label = "";
+			//------------------------------
+			if (target=='grouplabel' || target=="first-last-name" || target=="portfoliolabel") {
+				code = "@" + tableau1[i].code;
+				value = code;
+				label = tableau1[i].libelle;
 			} else {
-				style = UIFactory.Node.getDataLabelStyle(newTableau1[i][1].querySelector("metadata-epm"));
-				resource = $("asmResource[xsi_type='nodeRes']",newTableau1[i][1]);
+				if ($("asmResource",newTableau1[i][2]).length==3) {
+					style = UIFactory.Node.getDataContentStyle(newTableau1[i][2].querySelector("metadata-epm"));
+					resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i][2]); 
+				} else {
+					style = UIFactory.Node.getDataLabelStyle(newTableau1[i][2].querySelector("metadata-epm"));
+					resource = $("asmResource[xsi_type='nodeRes']",newTableau1[i][2]);
+				}
+				value = $('value',resource).text();
+				code = $('code',resource).text();
+				label = $(srce+"[lang='"+languages[langcode]+"']",resource).text();
 			}
 			//------------------------------
-			var code = $('code',resource).text();
 			var display_code = false;
 			var display_label = true;
 			if (code.indexOf("$")>-1) 
@@ -1233,16 +1338,18 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 			var original_code = code
 			code = cleanCode(code);
 			//------------------------------
-			input += "<input class='radio-div' type='radio' name='radio_"+self.id+"' value='"+$('value',resource).text()+"' code='"+$('code',resource).text()+"' ";
+			input += "<input class='radio-div' type='radio' name='radio_"+self.id+"' value='"+value+"' code='"+code+"' ";
 			if (disabled)
 				input +="disabled='disabled' ";
 			for (var j=0; j<languages.length;j++){
 				if (target=='fileid')
 					input += "label_"+languages[j]+"=\"fileid-"+uuid+"\" ";
+				else if (target=='grouplabel' || target=="first-last-name" || target=="portfoliolabel")
+					input += "label_"+languages[j]+"=\""+label+"\" ";
 				else
 					input += "label_"+languages[j]+"=\""+$(srce+"[lang='"+languages[j]+"']",resource).text()+"\" ";
 			}
-			if (code!="" && self_code==$('code',resource).text())
+			if (code!="" && self_code==code)
 				input += " checked ";
 			input += " style=\""+style+"\">";
 			input += "<div  class='sel"+code+" radio-label' style=\""+style+"\">";
@@ -1250,8 +1357,8 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 			if (display_code)
 				input += "<span class='li-code'>"+code+"</span> ";
 			if (display_label){
-				if (target=='label')
-					input += "<span class='li-label'>"+$(srce+"[lang='"+languages[langcode]+"']",resource).text()+"</span>";
+				if (target=='label' || target=='grouplabel' || target=="first-last-name" || target=="portfoliolabel")
+					input += "<span class='li-label'>"+label+"</span>";
 				if (target=='fileid')
 					input += UICom.structure.ui[uuid].resource.getView(null,'span');
 			}
@@ -1299,22 +1406,33 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 		}
 		//-----------------------
 		for ( var i = 0; i < newTableau1.length; ++i) {
-			var uuid = $(newTableau1[i][1]).attr('id');
-			var input = "";
-			var style = "";
-			var resource = null;
+			let uuid = $(newTableau1[i][2]).attr('id');
+			let input = "";
+			let style = "";
+			let resource = null;
+			let code = "";
+			let value = "";
+			let label = "";
 			//------------------------------
-			if ($("asmResource",newTableau1[i][1]).length==3) {
-				style = UIFactory.Node.getDataContentStyle(newTableau1[i][1].querySelector("metadata-epm"));
-				resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i][1]); 
+			if (target=='grouplabel' || target=="first-last-name" || target=="portfoliolabel") {
+				code = "@" + tableau1[i].code;
+				value = code;
+				label = tableau1[i].libelle;
 			} else {
-				style = UIFactory.Node.getDataLabelStyle(newTableau1[i][1].querySelector("metadata-epm"));
-				resource = $("asmResource[xsi_type='nodeRes']",newTableau1[i][1]);
+				if ($("asmResource",newTableau1[i][2]).length==3) {
+					style = UIFactory.Node.getDataContentStyle(newTableau1[i][2].querySelector("metadata-epm"));
+					resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i][2]); 
+				} else {
+					style = UIFactory.Node.getDataLabelStyle(newTableau1[i][2].querySelector("metadata-epm"));
+					resource = $("asmResource[xsi_type='nodeRes']",newTableau1[i][2]);
+				}
+				value = $('value',resource).text();
+				code = $('code',resource).text();
+				label = $(srce+"[lang='"+languages[langcode]+"']",resource).text();
 			}
 			//------------------------------
-			var code = $('code',resource).text();
-			var display_code = false;
-			var display_label = true;
+			let display_code = false;
+			let display_label = true;
 			if (code.indexOf("$")>-1) 
 				display_label = false;
 			if (code.indexOf("@")<0) {
@@ -1322,19 +1440,24 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 			}
 			code = cleanCode(code);
 			//------------------------------
-			input += "<div name='click_"+self.id+"' value='"+$('value',resource).text()+"' code='"+$('code',resource).text()+"' class='click-item";
-			if (self_code==$('code',resource).text())
+			input += "<div name='click_"+self.id+"' value='"+value+"' code='"+code+"' class='click-item";
+			if (self_code==code)
 				input += " clicked";
 			input += "' ";
 			for (var j=0; j<languages.length;j++){
-				input += "label_"+languages[j]+"=\""+$("label[lang='"+languages[j]+"']",resource).text()+"\" ";
+				if (target=='fileid')
+					input += "label_"+languages[j]+"=\"fileid-"+uuid+"\" ";
+				else if (target=='grouplabel' || target=="first-last-name" || target=="portfoliolabel")
+					input += "label_"+languages[j]+"=\""+label+"\" ";
+				else
+					input += "label_"+languages[j]+"=\""+$(srce+"[lang='"+languages[j]+"']",resource).text()+"\" ";
 			}
 			input += " style=\""+style+"\">";
 			input += "<span  class='"+code+"'>"
 			if (display_code)
 				input += "<span class='li-code'>"+code+"</span> ";
 			if (display_label)
-					input += "<span class='li-label'>"+$(srce+"[lang='"+languages[langcode]+"']",resource).text()+"</span>";
+					input += "<span class='li-label'>"+label+"</span>";
 			input += "</span></div>";
 			var input_obj = $(input);
 			$(input_obj).click(function (){
@@ -1372,18 +1495,16 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 				else
 					resource = $(">asmResource[xsi_type='nodeRes']",allreadyadded[i]);
 				let code = $('code',resource).text();
-				tabadded[i] = code;
+				tabadded[i] = cleanCode(code);
 			}
 		}
 		//----------remove allready added----------------
 		var newTableau2 = [];
-		var newTableau3 = [];
 		if (this.unique!=undefined && this.unique!="" && this.unique!="false") {
 			for ( var i = 0; i < newTableau1.length; ++i) {
-				const indx = tabadded.indexOf(newTableau1[i][0]);
+				const indx = tabadded.indexOf(cleanCode(newTableau1[i][0]));
 				if (indx==-1) {
 					newTableau2.push(newTableau1[i]);
-					newTableau3.push(tableau2[i]);
 				}
 			}
 		} else {
@@ -1392,7 +1513,7 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 		//-----------------------------------------------
 		var previouscode = "";
 		for ( var i = 0; i < newTableau2.length; ++i) {
-			var uuid = $(newTableau2[i][1]).attr('id');
+			var uuid = $(newTableau2[i][2]).attr('id');
 			var input = "";
 			var style = "";
 			var resource = null;
@@ -1400,17 +1521,17 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 			let code = "";
 			let label = "";
 			if (target=='grouplabel' || target=="first-last-name" || target=="portfoliolabel") {
-				code = "@" + newTableau3[i].code;
+				code = "@" + newTableau2[i][0];
 				value = code;
-				label = newTableau3[i].libelle;
+				label = newTableau2[i][1];
 			} else {
 				//------------------------------
-				if ($("asmResource",newTableau2[i][1]).length==3) {
-					style = UIFactory.Node.getDataContentStyle(newTableau2[i][1].querySelector("metadata-epm"));
-					resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau2[i][1]); 
+				if ($("asmResource",newTableau2[i][2]).length==3) {
+					style = UIFactory.Node.getDataContentStyle(newTableau2[i][2].querySelector("metadata-epm"));
+					resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau2[i][2]); 
 				} else {
-					style = UIFactory.Node.getDataLabelStyle(newTableau2[i][1].querySelector("metadata-epm"));
-					resource = $("asmResource[xsi_type='nodeRes']",newTableau2[i][1]);
+					style = UIFactory.Node.getDataLabelStyle(newTableau2[i][2].querySelector("metadata-epm"));
+					resource = $("asmResource[xsi_type='nodeRes']",newTableau2[i][2]);
 				}
 				value = $('value',resource).text();
 				code = $('code',resource).text();
@@ -1449,7 +1570,7 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 								input += " label_"+languages[j] + "=\"" + target + ":" + uuid + "|semtag:"+semtag+"|label:"+$("label[lang='"+languages[j]+"']",resource).text()+"\" ";
 						} else if (target=='nodelabel') {
 							input += " label_"+languages[j]+"=\"nodelabel:"+uuid + "|semtag:"+semtag+"|label:"+UICom.structure.ui[uuid].getLabel(null,'none')+"\" ";
-						} else if (target=='portfoliolabel')
+						} else if (target=='portfoliolabel' || target=='grouplabel' || target=='first-last-name')
 							input += " label_"+languages[j]+"=\""+label+"\" ";
 						else 
 							input += " label_"+languages[j]+"=\""+$(srce+"[lang='"+languages[j]+"']",resource).text()+"\" ";
@@ -1463,7 +1584,7 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 				if (display_label) {
 					if (srce=='resource' || srce=='nodelabel') {
 						input += "<span class='input-label'>" + $("label[lang='"+languages[langcode]+"']",resource).text()+"</span>";
-						} else if (target=='portfoliolabel' || target=='first-last-name')
+						} else if (target=='portfoliolabel' || target=='first-last-name' || target=='grouplabel')
 							input += "<span class='input-label'>" + label +"</span>";
 					else
 						input += "<span class='input-label'>" + $(srce+"[lang='"+languages[langcode]+"']",resource).text()+"</span>";
@@ -1489,6 +1610,7 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 	if (type=='completion') {
 	//------------------------------------------------------------
 	//------------------------------------------------------------
+		var newTableau3 = [];
 		var html ="";
 		html += "<form autocomplete='off'>";
 		html += "</form>";
@@ -1524,32 +1646,34 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 			$(select).append($(select_item));
 		}
 		//---------------------
-		if (target=="label" || target=="grouplabel" ) {
+		if (target=="label" || target=="grouplabel" || target=="first-last-name" || target=="portfoliolabel")  {
 			for ( var i = 0; i < newTableau1.length; i++) {
 				//------------------------------
-				var uuid = $(newTableau1[i][1]).attr('id');
+				var uuid = $(newTableau1[i][2]).attr('id');
 				var style = "";
 				var resource = null;
 				let value = "";
 				let code = "";
 				let label = "";
-				if (target=='grouplabel') {
-					code = "@" + tableau2[i].code;
-					value = code;
-					label = tableau2[i].libelle;
-				} else {
 				//------------------------------
-				if ($("asmResource",newTableau1[i][1]).length==3) {
-					style = UIFactory.Node.getDataContentStyle(newTableau1[i][1].querySelector("metadata-epm"));
-					resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i][1]); 
+				if (target=='grouplabel' || target=="first-last-name" || target=="portfoliolabel") {
+					code = "@" + newTableau1[i][0];
+					value = code;
+					label = newTableau1[i][1];
 				} else {
-					style = UIFactory.Node.getDataLabelStyle(newTableau1[i][1].querySelector("metadata-epm"));
-					resource = $("asmResource[xsi_type='nodeRes']",newTableau1[i][1]);
-				}
+					if ($("asmResource",newTableau1[i][2]).length==3) {
+						style = UIFactory.Node.getDataContentStyle(newTableau1[i][2].querySelector("metadata-epm"));
+						resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i][2]); 
+					} else {
+						style = UIFactory.Node.getDataLabelStyle(newTableau1[i][2].querySelector("metadata-epm"));
+						resource = $("asmResource[xsi_type='nodeRes']",newTableau1[i][2]);
+					}
 					value = $('value',resource).text();
 					code = $('code',resource).text();
 					label = $(srce+"[lang='"+languages[langcode]+"']",resource).text();
 				}
+				newTableau3[newTableau3.length] = {'code':code,'libelle':label};
+				//------------------------------
 				var display_code = false;
 				var display_label = true;
 				var display_value = false;
@@ -1581,7 +1705,7 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 						html += "<span class='li-label'>"+label+"</span>";
 					html += "</a>";
 					select_item = $(html);
-			$(select_item).click(function (ev){
+					$(select_item).click(function (ev){
 						//--------------------------------
 						var code = $(this).attr('code');
 						var display_code = false;
@@ -1607,7 +1731,7 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 					});
 				}
 				//-------------- update button -----
-				if (code!="" && self_code==$('code',resource).text()) {
+				if (code!="" && self_code==cleanCode($('code',resource).text())) {
 					var html = "";
 					if (display_code)
 						html += code+" ";
@@ -1624,9 +1748,9 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 		//---------------------
 		if (target=='text') {
 			for ( var i = 0; i < newTableau1.length; i++) {
-				var uuid = $(newTableau1[i][1]).attr('id');
-				var style = UIFactory.Node.getDataContentStyle(newTableau1[i][1].querySelector("metadata-epm"));
-				var resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i][1]); 
+				var uuid = $(newTableau1[i][2]).attr('id');
+				var style = UIFactory.Node.getDataContentStyle(newTableau1[i][2].querySelector("metadata-epm"));
+				var resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i][2]); 
 				html = "<li></li>";
 				var select_item = $(html);
 				html = "<a  value='"+$('value',resource).text()+"' code='"+$('code',resource).text()+"' class='sel"+code+"' ";
@@ -1650,7 +1774,7 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 		//---------------------
 		$(btn_group).append($(select));
 		var onupdate = "UIFactory.Get_Resource.update(input,self)";
-		autocomplete(document.getElementById("button_"+langcode+self.id), tableau2,onupdate,self,langcode);
+		autocomplete(document.getElementById("button_"+langcode+self.id),newTableau3,onupdate,self,langcode);
 	}
 	
 	//------------------------------------------------------------
@@ -1684,16 +1808,16 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 		if (target=='label') {
 			for ( var i = 0; i < newTableau1.length; i++) {
 				//------------------------------
-				var uuid = $(newTableau1[i][1]).attr('id');
+				var uuid = $(newTableau1[i][2]).attr('id');
 				var style = "";
 				var resource = null;
 				//------------------------------
-				if ($("asmResource",newTableau1[i][1]).length==3) {
-					style = UIFactory.Node.getDataContentStyle(newTableau1[i][1].querySelector("metadata-epm"));
-					resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i][1]); 
+				if ($("asmResource",newTableau1[i][2]).length==3) {
+					style = UIFactory.Node.getDataContentStyle(newTableau1[i][2].querySelector("metadata-epm"));
+					resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i][2]); 
 				} else {
-					style = UIFactory.Node.getDataLabelStyle(newTableau1[i][1].querySelector("metadata-epm"));
-					resource = $("asmResource[xsi_type='nodeRes']",newTableau1[i][1]);
+					style = UIFactory.Node.getDataLabelStyle(newTableau1[i][2].querySelector("metadata-epm"));
+					resource = $("asmResource[xsi_type='nodeRes']",newTableau1[i][2]);
 				}
 				//------------------------------
 				var code = $('code',resource).text();
@@ -1766,10 +1890,10 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 		for ( var i = 0; i < 2; i++) {
 			var resource = null;
 			//------------------------------
-			if ($("asmResource",newTableau1[i][1]).length==3) {
-				resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i][1]); 
+			if ($("asmResource",newTableau1[i][2]).length==3) {
+				resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i][2]); 
 			} else {
-				resource = $("asmResource[xsi_type='nodeRes']",newTableau1[i][1]);
+				resource = $("asmResource[xsi_type='nodeRes']",newTableau1[i][2]);
 			}
 			const code = $('code',resource).text();
 			let label = [];
@@ -1953,21 +2077,23 @@ UIFactory["Get_Resource"].update = function(selected_item,itself,langcode,type)
 			const value = $(selected_item).attr('value');
 			const code = $(selected_item).attr('code');
 			const uuid = $(selected_item).attr('uuid');
-			const style = $(selected_item).attr('style');
+			let style = $(selected_item).attr('style');
+			if (style!=undefined)
+				style = style.trim();
 			//---------------------
 			if (itself.clause=="xsi_type='Get_Resource'") {
 				$(UICom.structure.ui[itself.id].resource.value_node[0]).text(value);
 				$(UICom.structure.ui[itself.id].resource.code_node[0]).text(code);
 				$(UICom.structure.ui[itself.id].resource.uuid_node[0]).text(uuid);
-				$(UICom.structure.ui[itself.id].resource.style_node[0]).text(style.trim());
-				for (var i=0; i<languages.length;i++){
+				$(UICom.structure.ui[itself.id].resource.style_node[0]).text(style);
+				for (let i=0; i<languages.length;i++){
 					let label = $(selected_item).attr('label_'+languages[i]);
 					$(UICom.structure.ui[itself.id].resource.label_node[i][0]).text(label);
 				}
 			} else {
 				$(UICom.structure.ui[itself.id].value_node[0]).text(value);
 				$(UICom.structure.ui[itself.id].code_node[0]).text(code);
-				for (var i=0; i<languages.length;i++){
+				for (let i=0; i<languages.length;i++){
 					let label = $(selected_item).attr('label_'+languages[i]);
 					$(UICom.structure.ui[itself.id].label_node[i][0]).text(label);
 				}
@@ -2037,6 +2163,22 @@ UIFactory["Get_Resource"].prototype.refresh = function()
 		$("#"+dest).html(this.getLabel(null,this.displayLabel[dest]));
 	};
 };
+
+//==================================
+UIFactory["Get_Resource"].prototype.erase = function()
+//==================================
+{
+	$(this.value_node[0]).text("");
+	$(this.code_node[0]).text("");
+	$(this.uuid_node[0]).text("");
+	$(this.style_node[0]).text("");
+	for (var j=0; j<languages.length;j++){
+		$(this.label_node[j][0]).text("");
+	}
+	$(this.lastmodified_node).text(new Date().getTime());
+	UICom.structure.ui[this.id].save();
+	UICom.structure.ui[this.id].refresh();
+}
 
 //==================================================================================
 //==================================================================================

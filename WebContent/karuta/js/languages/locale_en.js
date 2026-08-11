@@ -37,6 +37,7 @@ karutaStr["en"]["button-submit"] = "Submit";
 karutaStr["en"]["button-unsubmit"] = "Reset";
 karutaStr["en"]["button-send"] = "Send";
 karutaStr["en"]["button-share"] = "Share";
+karutaStr["en"]["button-unshare"] = "Unshare";
 karutaStr["en"]["button-show"] = "Show";
 karutaStr["en"]["button-hide"] = "Hide";
 karutaStr["en"]["button-2world"] = "Public URL";
@@ -319,6 +320,7 @@ karutaStr['en']['seecalendarroles']="See - Calendar";
 karutaStr['en']['list_portfolios']="Portfolios";
 karutaStr['en']['list_users']="Users";
 karutaStr['en']['list_user_portfolio']="Portfolios of ";
+karutaStr['fr']['list_user_group']="Groups of  ";
 karutaStr['en']['list_roles']="Roles";
 karutaStr['en']['list_groups']="Groups";
 karutaStr['en']['create-test-user']="Create a Test User";
@@ -398,6 +400,7 @@ karutaStr['en']['refresh-url2unit']="Refresh URL2Units";
 karutaStr['en']['refresh-url2portfolio']="Refresh URL2Portfolios";
 karutaStr['en']['label-not-multilingual']="Label Not Multilingual";
 karutaStr['en']['resource-not-multilingual']="Resource Not Multilingual";
+karutaStr['en']['confirm-unshare']="Do you want to unshare this portfolio? This action cannot be undone.";
 
 //=========================================
 //========== FOLDERS ======================

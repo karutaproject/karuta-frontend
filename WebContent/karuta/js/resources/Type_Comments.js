@@ -272,6 +272,19 @@ UIFactory["Comments"].prototype.save = function()
 };
 
 //==================================
+UIFactory["Comments"].prototype.erase = function()
+//==================================
+{
+	$(this.author_node[0]).text("");
+	$(this.date_node[0]).text("");
+	for (var j=0; j<languages.length;j++){
+		$(this.text_node[j][0]).text("");
+	}
+	$(this.lastmodified_node).text(new Date().getTime());
+	UICom.structure.ui[this.id].save();
+}
+
+//==================================
 UIFactory["Comments"].prototype.refresh = function()
 //==================================
 {

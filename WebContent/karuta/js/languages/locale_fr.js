@@ -37,6 +37,7 @@ karutaStr['fr']['button-submit']="Soumettre";
 karutaStr['fr']['button-unsubmit']="Réinitialiser";
 karutaStr["fr"]["button-send"] = "Envoyer";
 karutaStr["fr"]["button-share"] = "Partager";
+karutaStr["fr"]["button-unshare"] = "Départager";
 karutaStr["fr"]["button-show"] = "Montrer";
 karutaStr["fr"]["button-hide"] = "Cacher";
 karutaStr["fr"]["button-2world"] = "URL publique";
@@ -319,6 +320,7 @@ karutaStr['fr']['seecalendarroles']="Voir - Calendrier";
 karutaStr['fr']['list_portfolios']="Portfolios";
 karutaStr['fr']['list_users']="Utilisateurs";
 karutaStr['fr']['list_user_portfolio']="Portfolios de ";
+karutaStr['fr']['list_user_group']="Groupes de ";
 karutaStr['fr']['list_roles']="Rôles";
 karutaStr['fr']['list_groups']="Groupes";
 karutaStr['fr']['create-test-user']="Créer un utilisateur test";
@@ -398,6 +400,7 @@ karutaStr['fr']['refresh-url2unit']="Actualiser les URL2Units";
 karutaStr['fr']['refresh-url2portfolio']="Actualiser les URL2Portfolios";
 karutaStr['fr']['label-not-multilingual']="Libellé non multilingue";
 karutaStr['fr']['resource-not-multilingual']="Ressource non multilingue";
+karutaStr['fr']['confirm-unshare']="Voulez-vous vraiment départage ce portfolio ? Cette action est irréversible.";
 
 //=========================================
 //========== FOLDERS ======================

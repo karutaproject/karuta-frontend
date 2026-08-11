@@ -567,6 +567,22 @@ UIFactory["Image"].prototype.refresh = function()
 };
 
 //==================================
+UIFactory["Image"].prototype.erase = function()
+//==================================
+{
+	for (var j=0; j<languages.length;j++){
+		$(this.type_node[j][0]).text("");
+		$(this.size_node[j][0]).text("");
+		$(this.fileid_node[j][0]).text("");
+		$(this.width_node[j][0]).text("");
+		$(this.height_node[j][0]).text("");
+		$(this.alt_node[j][0]).text("");
+	}
+	$(this.lastmodified_node).text(new Date().getTime());
+	UICom.structure.ui[this.id].save();
+}
+
+//==================================
 function clearphoto()
 //==================================
 {

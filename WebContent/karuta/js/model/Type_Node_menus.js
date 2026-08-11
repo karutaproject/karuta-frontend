@@ -616,8 +616,8 @@ UIFactory["Node"].getMenus = function(node,langcode)
 					var items = $("item",menus[i]);
 					var nbitems = 0;
 					for (var j=0;j<items.length;j++) {
-						var roles = $("roles",items[j]).text();
-						var condition = ($("condition",items[j]).length>0)?$("condition",items[j]).text():"";
+						let roles = $("roles",items[j]).text();
+						let condition = ($("condition",items[j]).length>0)?$("condition",items[j]).text():"";
 						if (UIFactory.Node.testDisplay(node,roles,condition))
 							nbitems++;
 					}
@@ -629,7 +629,8 @@ UIFactory["Node"].getMenus = function(node,langcode)
 						html += "	</button>";
 						html += "	<div class='dropdown-menu dropdown-menu-right' style='"+menus_style+"' aria-labelledby='specific_"+node.id+"'>";
 						for (var j=0;j<items.length;j++) {
-							var condition = ($("condition",items[j]).length>0)?$("condition",items[j]).text():"";
+							let roles = $("roles",items[j]).text();
+							let condition = ($("condition",items[j]).length>0)?$("condition",items[j]).text():"";
 							if (UIFactory.Node.testDisplay(node,roles,condition)) {
 								let title = UIFactory.Node.getMenuLabel($("itemlabel",items[j]).text(),langcode);
 								let temphtml = "<div class='dropdown-item' onclick=\"##\">" + title + "</div>";
@@ -641,6 +642,7 @@ UIFactory["Node"].getMenus = function(node,langcode)
 
 					} else if (nbitems>0){
 						for (var j=0;j<items.length;j++) {
+							let roles = $("roles",items[j]).text();
 							var condition = ($("condition",items[j]).length>0)?$("condition",items[j]).text():"";
 							if (UIFactory.Node.testDisplay(node,roles,condition)) {
 								title = UIFactory.Node.getMenuLabel($("itemlabel",items[j]).text(),langcode);
@@ -1386,7 +1388,7 @@ UIFactory["Node"].getXmlItemMenu = function(node,parentid,item,title,databack,ca
 				const portfolios = UIFactory.Portfolio.search_bycode(search_foliocode.replaceAll('*',''));
 				search_foliocode = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",portfolios)[0]).text();
 			}
-			let search_semtag = replaceVariable( ($("semtag",search).length>0)?$("semtag",search).text():"" );
+			let search_semtag = ($("semtag",search).length>0)?$("semtag",search).text():"";
 			let search_object = replaceVariable( ($("object",search).length>0)?$("object",search).text():"" );
 			// --------import-comp ------
 			imports = $("import-component",itemelts[i]);

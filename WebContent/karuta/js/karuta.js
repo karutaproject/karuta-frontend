@@ -63,6 +63,7 @@ var g_backstack = [];
 var g_menubarstack = [];
 var g_curPos = 0;
 
+
 //-------------- used for designer-----
 var redisplays = {};
 // -------------backward compatibility------------------------
@@ -743,6 +744,7 @@ function displayBack() {
 					g_userroles = [];
 					g_portfolio_current = data;
 					g_portfolio_rootid = $("asmRoot",data).attr("id");
+					g_portfolio_UIcom_root = $("asmRoot",data)[0];
 					setCSSportfolio(data);
 					//-------------------------
 					var portfoliocode = portfolios_byid[g_portfolioid].code_node.text();
@@ -785,6 +787,7 @@ function displayBack() {
 					});
 					// --------------------------
 					UICom.parseStructure(data,true);
+					g_portfolio_UIcom_root = UICom.root;
 					$("#sub-bar").html(UIFactory.Portfolio.getNavBar(g_display_type,LANGCODE,g_edit,g_portfolioid));
 					if (g_bar_type.indexOf('horizontal')>-1) {
 						UIFactory.Portfolio.displayPortfolio('portfolio-container',g_display_type,LANGCODE,g_edit);
@@ -813,9 +816,13 @@ function displayBack() {
 		displayPage(uuid);
 	}
 }
+
 //==================================
 function displayPage(uuid,depth,type,langcode,edit,print) {
 //==================================
+	const scrollTop = window.pageYOffset || document.documentElement.scrollTop; 
+	const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
+	$('#wait-window').modal('show');
 	if (edit!=undefined)
 		g_edit = edit;
 	//---------------------
@@ -823,8 +830,6 @@ function displayPage(uuid,depth,type,langcode,edit,print) {
 		g_backstack.push({'uuid':uuid,'portfolioid': g_portfolioid});
 	else if (g_backstack.length==0)
 		g_backstack.push({'uuid':uuid,'portfolioid': g_portfolioid});
-//	if (g_backstack[g_backstack.length]!=uuid)
-//		g_backstack.push(uuid);
 	//---------------------
 	if (uuid==null)
 		uuid = localStorage.getItem('currentDisplayedPage');
@@ -836,18 +841,6 @@ function displayPage(uuid,depth,type,langcode,edit,print) {
 		langcode = LANGCODE;
 	if (print==null)
 		print = false;
-	if (print)
-		$('#wait-window').modal('show');
-
-	//---------------------
-	var scrollTop = window.pageYOffset || document.documentElement.scrollTop; 
-	var scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
-	if (g_current_page!=uuid) {
-		$(window).scrollTop(0);
-		scrollTop = 0;
-		scrollLeft = 0;
-		g_current_page = uuid;
-	}
 	
 	//---------------------
 	$("#contenu").html("<div id='page' uuid='"+uuid+"'></div>");
@@ -876,6 +869,22 @@ function displayPage(uuid,depth,type,langcode,edit,print) {
 			toggleSidebarPlus(nodeid);
 		}
 	}
+	//---------------------
+	displayPageFCT(uuid,depth,type,langcode,edit,print,scrollTop,scrollLeft);
+//	setTimeout(displayPageFCT,0,uuid,depth,type,langcode,edit,print,scrollTop,scrollLeft);
+}
+
+//==================================
+function displayPageFCT(uuid,depth,type,langcode,edit,print,scrollTop,scrollLeft) {
+//==================================
+	//---------------------
+	if (g_current_page!=uuid) {
+		$(window).scrollTop(0);
+		scrollTop = 0;
+		scrollLeft = 0;
+		g_current_page = uuid;
+	}
+
 	var name = $(UICom.structure.ui[uuid].node).prop("nodeName");
 	if (depth==null)
 		depth=100;
@@ -902,6 +911,7 @@ function displayPage(uuid,depth,type,langcode,edit,print) {
 		}
 	}
 	var semtag = UICom.structure.ui[uuid].semantictag;
+	//-------------------------------
 	if ( (g_userroles[0]=='designer' && semtag.indexOf('welcome-unit')>-1) || (semtag.indexOf('welcome-unit')>-1 && semtag.indexOf('-editable')>-1 && semtag.containsArrayElt(g_userroles)) ) {
 		html = "<a  class='fas fa-edit' onclick=\"if(!g_welcome_edit){g_welcome_edit=true;} else {g_welcome_edit=false;};$('#contenu').html('');displayPage('"+uuid+"',100,'standard','"+langcode+"',true)\" data-title='"+karutaStr[LANG]["button-welcome-edit"]+"' data-toggle='tooltip' data-placement='bottom'></a>";
 		$("#welcome-edit").html(html);
@@ -921,6 +931,7 @@ function displayPage(uuid,depth,type,langcode,edit,print) {
 		$("#welcome-add").html(html);
 	}
 	$("#wait-window").modal('hide');
+	//-------------------------------
 	if ($("#standard-search-text-input").val()!=undefined && $("#standard-search-text-input").val()!="") {
 		var searched_text = $("#standard-search-text-input").val();
 		var  html = document.getElementById("contenu").innerHTML;
@@ -1022,8 +1033,10 @@ function previewPage(uuid,depth,type,langcode,edit,reload,role)
 		$("#preview-window-header-"+uuid).html(header);
 		$("#preview-window-body-"+uuid).html("");
 		let url = serverBCK_API+"/nodes/node/" + uuid + "?resources=true";
-		if (role!=null && role!="")
+		if (role!=null && role!="") {
 			url += "&userrole="+role;
+			userrole = role;
+		}
 		$.ajax({
 			async:false,
 			type : "GET",
@@ -1546,6 +1559,15 @@ function sortOn1(a,b)
 {
 	a = a[0];
 	b = b[0];
+	return a == b ? 0 : (a > b ? 1 : -1);
+}
+
+//==================================
+function sortOn2(a,b)
+//==================================
+{
+	a = a[1];
+	b = b[1];
 	return a == b ? 0 : (a > b ? 1 : -1);
 }
 
@@ -2389,6 +2411,8 @@ function removeStr(str1,str2)
 function cleanCode(code,variable)
 //==============================
 {
+	if (variable==null)
+		variable= false;
 	if (code.startsWith("@"))
 		code = code.substring("1");
 	if (!variable)
@@ -2722,20 +2746,25 @@ function autocomplete(input,arrayOfValues,onupdate,self,langcode) {
 			a.setAttribute("class", "autocomplete-items");
 			this.parentNode.appendChild(a);
 			for (i = 0; i < arrayOfValues.length; i++) {
-				var indexval = arrayOfValues[i].libelle.toUpperCase().indexOf(val.toUpperCase());
+//				const code = arrayOfValues[i][0];
+//				const label = arrayOfValues[i][1];
+				const code = arrayOfValues[i].code;
+				const label = arrayOfValues[i].libelle;
+				let uuid ="";
+				if (arrayOfValues[i].length>2)
+					uuid = arrayOfValues[i][2];
+				var indexval = label.toUpperCase().indexOf(val.toUpperCase());
 				if (indexval>-1) {
 					b = document.createElement("DIV");
-					b.innerHTML = arrayOfValues[i].libelle.substr(0, indexval);
-					b.innerHTML += "<strong>" + arrayOfValues[i].libelle.substr(indexval,val.length) + "</strong>";
-					b.innerHTML += arrayOfValues[i].libelle.substr(indexval+val.length);
-					var value = "";
-					if (arrayOfValues[i].value!==undefined)
-						value = arrayOfValues[i].value;
-					b.innerHTML += "<input type='hidden' code='"+arrayOfValues[i].code+"' label=\""+arrayOfValues[i].libelle+"\" value=\""+value+"\" >";
+					b.innerHTML = label.substr(0, indexval);
+					b.innerHTML += "<strong>" + label.substr(indexval,val.length) + "</strong>";
+					b.innerHTML += label.substr(indexval+val.length);
+					b.innerHTML += "<input type='hidden' uuid='"+uuid+"' code='"+code+"' label=\""+label+"\" value=\""+code+"\" >";
 					b.addEventListener("click", function(e) {
 						$(input).attr("label_"+languages[langcode],$("input",this).attr('label'));
 						$(input).attr('code',$("input",this).attr('code'));
 						$(input).attr('value',$("input",this).attr('value'));
+						$(input).attr('uuid',$("input",this).attr('uuid'));
 						input.value = $("input",this).attr('label');
 						eval(onupdate);
 						closeAllLists();
@@ -2959,6 +2988,10 @@ function replaceVariable(text,node,withquote)
 		if (text.indexOf('##userlogin##')>-1 || text.indexOf('##accountlogin##')>-1) {
 			text = text.replaceAll('##userlogin##',USER.username);
 			text = text.replaceAll('##accountlogin##',USER.username);
+		}
+		//-------------
+		if (text.indexOf('##userid##')>-1) {
+			text = text.replaceAll('##userid##',USER.id);
 		}
 		//-------------
 		var n = 0;
@@ -4039,20 +4072,28 @@ function confirmSubmitAndChangeVisibility(nodeid,path,value){
 //================================================
 
 //==================================
-function eraseResource(nodeid,tags){
+function eraseResource(nodeid,tags,top){
 //==================================
+	if (top==null)
+		top = "asmRoot";
+	if (tags==null)
+		tags = "";
 	tags = tags.split(",");
-	let parent = UICom.structure.ui[nodeid].node;
+	let parent = "";
+	if (UICom.structure.ui[nodeid]!=undefined)
+		parent = UICom.structure.ui[nodeid].node;
 	for (let i=0; i<tags.length; i++){
-		let elts = $("asmContext:has(>metadata[semantictag*='"+tags[i]+"'])",parent);
-		while (elts.length==0 && $(parent).prop("nodeName")!="asmRoot") {
-			parent = $(parent).parent();
-			elts = $("asmContext:has(>metadata[semantictag*='"+tags[i]+"'])",parent);
-		}
-		if (elts.length!=0) {
-			for (let j=0; j<elts.length; j++){
-				let eltid = $(elts[j]).attr("id");
-				UICom.structure.ui[eltid].resource.erase();
+		if (tags[i]!="") {
+			let elts = $("asmContext:has(>metadata[semantictag*='"+tags[i]+"'])",parent);
+			while (elts.length==0 && $(parent).prop("nodeName")!=top) {
+				parent = $(parent).parent();
+				elts = $("asmContext:has(>metadata[semantictag*='"+tags[i]+"'])",parent);
+			}
+			if (elts.length!=0) {
+				for (let j=0; j<elts.length; j++){
+					let eltid = $(elts[j]).attr("id");
+					UICom.structure.ui[eltid].resource.erase();
+				}
 			}
 		}
 	}
@@ -4068,7 +4109,8 @@ function eraseAllChildren(nodeid,types){
 		for (let i=0; i<elts.length; i++){
 			const elt = elts[i];
 			const eltid = $(elt).attr("id");
-			UICom.structure.ui[eltid].resource.erase();
+			if ( UICom.structure.ui[eltid].semantictag!="model_code" && UICom.structure.ui[eltid].resource.type!="Dashboard" && UICom.structure.ui[eltid].resource.type!="Report") // do not erase dashboard node
+				UICom.structure.ui[eltid].resource.erase();
 		}
 	}
 }
@@ -4185,6 +4227,19 @@ function displayIfDate(nodeid,role,begin,end) {
 	return utc_begin < today && today < utc_end && g_userroles[0]==role;
 
 }
+
+function waitshow(){
+	$("#wait-window").modal('show');
+}
+
+function wait(mode){
+	$("#wait-window").modal(mode);
+}
+
+function waithide(){
+	setTimeout(wait,0,'hide');
+}
+
 //================================================
 //================================================
 //============== Function JQuery =================
@@ -4308,6 +4363,20 @@ $.fn.resourceCodeContains = function (options)
 	return $(result);
 };
 $.fn.test_resourceCodeContains = function (options) { return result = ($(this).resourceCodeContains(options).length>0) ? true : false;};
+//=====================================
+
+//=====================================
+$.fn.resourceCodeNotContains = function (options)
+//=====================================
+{
+	var defaults= { "value":"v","function":""};
+	var parameters = $.extend(defaults, options);
+	var result = $(this).has(">asmResource[xsi_type!='context'][xsi_type!='nodeRes']>code:not(:contains('"+parameters.value+"'))");
+	if (parameters.function!="")
+		result = eval("$(result)."+parameters.function);
+	return $(result);
+};
+$.fn.test_resourceCodeNotContains = function (options) { return result = ($(this).resourceCodeNotContains(options).length>0) ? true : false;};
 //=====================================
 
 //=====================================
@@ -4486,9 +4555,10 @@ $.fn.utcGreater = function (options)
 	var defaults= {"semtag":"s","min":"m"};
 	var parameters = $.extend(defaults, options);
 	for (let i=0;i<this.length;i++){
-		var node = $("asmContext:has('>metadata[semantictag*=" + parameters.semtag + "]')",this[i]);		
-		var utc = $("utc",node).text();
-		if (replaceVariable(parameters.min) < utc)
+		const node = $("asmContext:has('>metadata[semantictag*=" + parameters.semtag + "]')",this[i]);
+		const utc = Number($("utc",node).text());
+		const min = eval(replaceVariable(parameters.min));
+		if (min < utc)
 			result.push(this[i])
 	}
 	return $(result);
@@ -4504,9 +4574,10 @@ $.fn.utcLower = function (options)
 	var defaults= {"semtag":"s","max":"M"};
 	var parameters = $.extend(defaults, options);
 	for (let i=0;i<this.length;i++){
-		var node = $("asmContext:has('>metadata[semantictag*=" + parameters.semtag + "]')",this[i]);		
-		var utc = $("utc",node).text();
-		if (utc < replaceVariable(parameters.max))
+		const node = $("asmContext:has('>metadata[semantictag*=" + parameters.semtag + "]')",this[i]);
+		const utc = Number($("utc",node).text());
+		const max = eval(replaceVariable(parameters.max));
+		if (utc < max)
 			result.push(this[i])
 	}
 	return $(result);

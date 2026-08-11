@@ -152,6 +152,9 @@ UIFactory["Field"].prototype.getEditor = function(type,langcode,disabled)
 //==================================
 {
 	//---------------------
+	if (UICom.structure.ui[this.id].semantictag.indexOf("g-select-variable")>-1)
+		updateVariable(this.node);
+	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
 	//---------------------
@@ -220,5 +223,4 @@ UIFactory["Field"].prototype.erase = function()
 	}
 	$(this.lastmodified_node).text(new Date().getTime());
 	UICom.structure.ui[this.id].save();
-	UICom.structure.ui[this.id].refresh();
 }

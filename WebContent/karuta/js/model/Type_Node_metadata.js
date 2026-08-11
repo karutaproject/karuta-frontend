@@ -715,7 +715,7 @@ UIFactory["Node"].getMetadataEpm = function(data,attribute,number)
 //==================================================
 {
 	var html = "";
-	if (data.getAttribute(attribute)!=undefined && data.getAttribute(attribute)!="") {
+	if (data!=null && data.getAttribute(attribute)!=undefined && data.getAttribute(attribute)!="") {
 		var value = data.getAttribute(attribute);
 		if (attribute.indexOf("inparent-othercss")>-1)
 			html += attribute.substring(17) + value;

@@ -2,8 +2,8 @@
 var karuta_version = "@project.version@";
 var karuta_date = "@build.timestamp@";
 
-const karuta_version_eportfolium = 'eportfolium-3.107.0';
-const karuta_date_eportfolium = '2026-01-05';
+const karuta_version_eportfolium = 'eportfolium-3.127.7';
+const karuta_date_eportfolium = '2026-08-11';
 
 var karuta_backend_version = "?";
 var karuta_backend_date = "?";
@@ -127,3 +127,51 @@ var karuta_fileserver_date = "?";
 // 3.105.0 FIX - Batch : correction test de import-node
 // 3.106.0 FEAT - new functions: eraseResource(nodeid,tags) and eraseAllChildren(nodeid,types)
 // 3.107.0 FEAT - REPORT: new component update-resource
+// 3.108.0 FEAT - BATCH : progress bar
+// 3.109.0 FIX - eraseAllChildren : do not erase dashboard node
+// 3.110.0 FIX - Get_resource #persongroup
+// 3.111.0 FIX - Tooltip disabled for portfolio list on touch screen
+// 3.111.1 FIX - Tooltip disabled for portfolio list on touch screen
+// 3.112.0 FEAT - various features
+// 3.113.0 FEAT - GetGetResource completion with person or portfolio label
+// 3.114.0 FEAT - GetResource GetGetResource with person, portfolio, groups
+// 3.114.1 FIX - GetResource GetGetResource with person, portfolio, groups
+// 3.114.2 FIX - GetResource cleancode-multiple - list of portfolios
+// 3.114.3 FIX - GetGetResource varaible undefined
+// 3.115.0 FEAT - report: sharing - aggregate avg int and half int
+// 3.115.1 FIX - cleanCode dans multiple
+// 3.116.0 FEAT - Users List unsharing and deleting portfolio enabled
+// 3.116.1 FIX - CleanCode test if variable==null
+// 3.117.0 FEAT - Batch optimsation for-each-tree with code= and share-tree with variables g_userids
+// 3.117.1 FIX - PreviewPage variable userrole is set if role is provided 
+// 3.117.2 FIX - displayBack - menu was not the goog one if portfolio changed 
+// 3.118.0 FEAT - Report : url2portfolio with role 
+// 3.119.0 FEAT - Batch - share-trees added 
+// 3.119.1 Fix - Batch : write-log 
+// 3.120.0 FEAT - Query .resourceCodeNotContains() added 
+// 3.120.1 FIX - Position in the page 
+// 3.120.2 FIX - Position in the page 
+// 3.120.3 FIX - eraseAllchildren except for Report and Dashboard 
+// 3.121.0 FIX - Field g-select-variable, FIX - GetGetResource allreadyadded, FEAT GetResource optimization 
+// 3.122.0 FEAT - Report rounded average and pourcentage 
+// 3.122.1 Fix - Type_usergroup fct displayContent 
+// 3.123.0 FEAT - jquery utcGreater and utcLower accepts operation 
+// 3.123.1 FIX - Calendar error in utc conversion 
+// 3.124.0 FEAT - a file may be added to force password change
+// 3.124.1 FIX - Get_Resource error when using portfoliolabel keyword 
+// 3.125.0 FEAT - copy button visible for crator in list of portfolios 
+// 3.125.1 FIX - Report : preview2unit with user-role 
+// 3.125.2 FIX - Get_Resource : completion with group   - 2026-05-07 10:34:10
+// 3.125.3 FIX - Login - to avoid to be logged as Public Account   - 2026-05-21 11:12:02
+// 3.125.4 FIX - Update Tools in French   - 2026-05-23 09:00:39
+// 3.125.5 FIX - AsmStructure node style fixed when first node  - 2026-05-23 11:03:35
+// 3.126.0 FEAT - userrole added for update-resource in report - FIX - url2portfolio uuid attribute  - 2026-05-29 02:31:05
+// 3.126.1 FIX - function autocomplete  - 2026-06-03 01:08:24
+// 3.127.0 FEAT - Report for-each-person displays info at each person  - 2026-06-03 03:10:42
+// 3.127.1 FIX - Report for-each-person displays info at each person - temporarily removed - Type_Node_Menu.js - multiroles in menu  - 2026-06-05 04:09:25
+// 3.127.2 FIX - update-resource when user has more than one role - 2026-06-21 12:24:40
+// 3.127.3 FIX - get_resource and get_get_resource autocomplete fixed - 2026-07-13 04:07:04
+// 3.127.4 FIX - get_resource and get_get_resource autocomplete update button fixed - 2026-07-15 10:23:09
+// 3.127.5 FIX - minor corrections - 2026-07-30 10:56:07
+// 3.127.6 FEAT - testAuthorization - FIX - minor corrections - 2026-08-04 12:29:25
+// 3.127.7 FIX - minor corrections - 2026-08-11 03:05:57
