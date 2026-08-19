@@ -2,8 +2,8 @@
 var karuta_version = "@project.version@";
 var karuta_date = "@build.timestamp@";
 
-const karuta_version_eportfolium = 'eportfolium-3.127.7';
-const karuta_date_eportfolium = '2026-08-11';
+const karuta_version_eportfolium = 'eportfolium-3.127.8';
+const karuta_date_eportfolium = '2026-08-19';
 
 var karuta_backend_version = "?";
 var karuta_backend_date = "?";
@@ -175,3 +175,4 @@ var karuta_fileserver_date = "?";
 // 3.127.5 FIX - minor corrections - 2026-07-30 10:56:07
 // 3.127.6 FEAT - testAuthorization - FIX - minor corrections - 2026-08-04 12:29:25
 // 3.127.7 FIX - minor corrections - 2026-08-11 03:05:57
+// 3.127.8 FEAT - value added in g-select-variable - 2026-08-19 05:31:49

@@ -2353,14 +2353,17 @@ function updateVariable(node)
 	const text = UICom.structure.ui[nodeid].resource.getAttributes().text;
 	const utc = UICom.structure.ui[nodeid].resource.getAttributes().utc;
 	const label = UICom.structure.ui[nodeid].resource.getAttributes().label;
-	let variable_value = (value=="") ? code : value;
+	let variable_value = code;
 	if (variable_value==undefined)
 		variable_value = text;
 	if (variable_value==undefined)
 		variable_value = utc;
+	if (variable_value==undefined || variable_value=='')
+		variable_value = value;
 	const variable_name = UICom.structure.ui[nodeid].getCode();
 	g_variables[variable_name] = cleanCode(variable_value,true);
 	g_variables[variable_name+"_code"] = cleanCode(variable_value,true);
+	g_variables[variable_name+"_value"] = cleanCode(value,true);
 	g_variables[variable_name+"_label"] = label;
 	g_variables[variable_name+"_text"] = text;
 }
