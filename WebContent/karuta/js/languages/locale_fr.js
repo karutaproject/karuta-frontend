@@ -469,6 +469,7 @@ karutaStr['fr']['upload_csv']="Téléverser un fichier CSV";
 karutaStr['fr']['process_csv']="Exécuter";
 karutaStr['fr']['create_user_portfolios']="Créer un utilisateur et ses portfolios";
 karutaStr['fr']['show-hide-log']="Montrer/Cacher le journal";
+karutaStr['fr']['batch-wait']="NE QUITTER LA FENÊTRE EN AUCUN CAS \r\nCELA INTERROMPERAIT L'OPÉRATION";
 
 //=========================================
 //========== REPORT ========================

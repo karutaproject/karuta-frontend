@@ -466,6 +466,7 @@ function processAll(model_code,portfoliologcode)
 {
 	$.ajaxSetup({async: false});
 	var actions_list = $("model",g_xmlDoc).children();
+	alert("==========================================\r\n"+karutaStr[languages[LANGCODE]]['batch-wait']+"\r\n==========================================");
 	processActions(0,actions_list,portfoliologcode);
 }
 
@@ -3141,7 +3142,7 @@ g_actions['update-resource'] = function updateResource(node,data)
 						let treeref = select.substring(0,idx);
 						attribute_value = g_trees[treeref].id;
 					}
-				if (language_dependent=='Y') {
+				if (language_dependent=='Y' && attribute_value!='nochange') {
 					if ($("metadata",nodes[i]).attr("multilingual-resource")=="Y") {
 						$(attribute_name+"[lang='"+LANG+"']",resource).text(attribute_value);
 					} else {
@@ -3150,7 +3151,8 @@ g_actions['update-resource'] = function updateResource(node,data)
 						}
 					}
 				} else {
-					$(attribute_name,resource).text(attribute_value);
+					if (attribute_value!='nochange')
+						$(attribute_name,resource).text(attribute_value);
 				}
 				if (type=="Calendar" && attribute_name=="text") {
 						const format = $("format[lang='"+languages[langcode]+"']",resource).text();
@@ -4974,7 +4976,8 @@ function updateCalendar(nodes,node,text,semtag)
 			$("minViewMode",resource).text(minViewMode);
 		if (format!='')
 			$("format[lang='"+LANG+"']",resource).text(format);
-		$("text[lang='"+LANG+"']",resource).text(text);
+		if (text!='nochange')
+			$("text[lang='"+LANG+"']",resource).text(text);
 		var data = "<asmResource xsi_type='Calendar'>" + $(resource).html() + "</asmResource>";
 		var strippeddata = data.replace(/xmlns=\"http:\/\/www.w3.org\/1999\/xhtml\"/g,"");  // remove xmlns attribute
 		//-------------------

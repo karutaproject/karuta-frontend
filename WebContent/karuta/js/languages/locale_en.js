@@ -469,6 +469,7 @@ karutaStr['en']['upload_csv']="Upload a CSV File";
 karutaStr['en']['process_csv']="Process";
 karutaStr['en']['create_user_portfolios']="Create an user and his portfolios";
 karutaStr['en']['show-hide-log']="Show/Hide Log";
+karutaStr['en']['batch-wait']="DO NOT LEAVE THE WINDOW UNDER ANY CIRCUMSTANCES – THIS WOULD INTERRUPT THE PROCESS";
 
 //=========================================
 //========== REPORT ========================
