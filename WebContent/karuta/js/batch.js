@@ -1964,8 +1964,8 @@ g_actions['update-tree-root'] = function updateTreeRoot(node)
 			dataType : "xml",
 			url : serverBCK_API+"/nodes?portfoliocode=" + g_trees[treeref].code + "&semtag=root",
 			success : function(data) {
-				var nodeid = $("asmRoot",data).attr('id');
-				var oldcode = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",data)).text();
+				let nodeid = $("asmRoot",data).attr('id');
+				let oldcode = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",data)).text();
 				if (oldcode.indexOf(".")>=0) {
 					//--------------  if not folder -------------
 					var xml = "<asmResource xsi_type='nodeRes'>";

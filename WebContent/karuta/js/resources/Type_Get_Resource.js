@@ -1707,9 +1707,9 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 					select_item = $(html);
 					$(select_item).click(function (ev){
 						//--------------------------------
-						var code = $(this).attr('code');
-						var display_code = false;
-						var display_label = true;
+						let code = $(this).attr('code');
+						let display_code = false;
+						let display_label = true;
 						if (code.indexOf("$")>-1) 
 							display_label = false;
 						if (code.indexOf("@")<0) {
@@ -1731,12 +1731,13 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 					});
 				}
 				//-------------- update button -----
-				if (code!="" && self_code==cleanCode($('code',resource).text())) {
+				if ( code!="" && cleanCode(self_code)==cleanCode(code) ) {
 					var html = "";
 					if (display_code)
 						html += code+" ";
 					if (display_label)
-						html += $(srce+"[lang='"+languages[langcode]+"']",resource).text();
+						html += label
+//						html += $(srce+"[lang='"+languages[langcode]+"']",resource).text();
 					$("#button_"+langcode+self.id).attr("style",style);
 					$("#button_"+langcode+self.id).html(html);
 					$("#button_"+langcode+self.id).attr("value",html);
