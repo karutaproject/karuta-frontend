@@ -2,8 +2,8 @@
 var karuta_version = "@project.version@";
 var karuta_date = "@build.timestamp@";
 
-const karuta_version_eportfolium = 'eportfolium-3.129.0';
-const karuta_date_eportfolium = '2026-08-22';
+const karuta_version_eportfolium = 'eportfolium-3.129.1';
+const karuta_date_eportfolium = '2026-09-14';
 
 var karuta_backend_version = "?";
 var karuta_backend_date = "?";
@@ -178,3 +178,4 @@ var karuta_fileserver_date = "?";
 // 3.127.8 FEAT - value added in g-select-variable - 2026-08-19 05:31:49
 // 3.128.0 FEAT - keyword nochange added in batch update-resource - 2026-08-22 09:47:07
 // 3.129.0 FEAT - message to avoid to close window when processing a batch - 2026-08-22 01:58:54
+// 3.129.1 FIX - Get_Resource Completion with group - 2026-09-14 12:02:12
