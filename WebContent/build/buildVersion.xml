@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="updateVersion"  basedir="."> 
-	<property name="noVersion" value="3.129.1"/>
-	<property name="textVersion" value="FIX - Get_Resource Completion with group"/>
+	<property name="noVersion" value="3.129.2"/>
+	<property name="textVersion" value="FIX - Batch inactivate function"/>
 	<property name="dirSrce" value="src/htm-srce"/>
 	<property name="dirTrgt" value="WebContent/karuta/htm"/>
 	<target name="testIfNewVersion">

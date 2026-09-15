@@ -2348,11 +2348,13 @@ function updateVariable(node)
 //==================================
 {
 	const nodeid = $(node).attr("id");
-	const value = UICom.structure.ui[nodeid].resource.getAttributes().value;
+	let value = UICom.structure.ui[nodeid].resource.getAttributes().value;
 	const code = UICom.structure.ui[nodeid].resource.getAttributes().code;
 	const text = UICom.structure.ui[nodeid].resource.getAttributes().text;
 	const utc = UICom.structure.ui[nodeid].resource.getAttributes().utc;
 	const label = UICom.structure.ui[nodeid].resource.getAttributes().label;
+	if (value==undefined)
+		value= "";
 	let variable_value = code;
 	if (variable_value==undefined)
 		variable_value = text;

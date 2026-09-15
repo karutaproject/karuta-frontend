@@ -1030,7 +1030,7 @@ g_actions['inactivate-user'] = function inactivateUser(node)
 						async : false,
 						type : "PUT",
 						dataType : "text",
-						url : url,
+						url : serverBCK_API+"/users/user/" + userid,
 						data : data,
 						success : function(data) {
 							ok = true;
