@@ -818,7 +818,7 @@ function displayBack() {
 }
 
 //==================================
-function displayPage(uuid,depth,type,langcode,edit,print) {
+async function displayPage(uuid,depth,type,langcode,edit,print) {
 //==================================
 	const scrollTop = window.pageYOffset || document.documentElement.scrollTop; 
 	const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
@@ -870,8 +870,13 @@ function displayPage(uuid,depth,type,langcode,edit,print) {
 		}
 	}
 	//---------------------
+	await attendre(0);
 	displayPageFCT(uuid,depth,type,langcode,edit,print,scrollTop,scrollLeft);
 //	setTimeout(displayPageFCT,0,uuid,depth,type,langcode,edit,print,scrollTop,scrollLeft);
+}
+
+function attendre(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 //==================================

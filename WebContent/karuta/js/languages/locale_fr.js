@@ -469,8 +469,7 @@ karutaStr['fr']['upload_csv']="Téléverser un fichier CSV";
 karutaStr['fr']['process_csv']="Exécuter";
 karutaStr['fr']['create_user_portfolios']="Créer un utilisateur et ses portfolios";
 karutaStr['fr']['show-hide-log']="Montrer/Cacher le journal";
-karutaStr['fr']['batch-wait']="NE QUITTER LA FENÊTRE EN AUCUN CAS \r\nCELA INTERROMPERAIT L'OPÉRATION";
-
+karutaStr['fr']['batch-wait']="<div class='danger'>NE PAS FERMER CETTE PAGE MËME SI UN POP-UP VOUS PROPOSE DE FERMER LA PAGE, IL FAUT ATTENDRE. <BR/> La fin de l'exécution du batch est indiquée par THIS IS THE END.</div>";
 //=========================================
 //========== REPORT ========================
 //=========================================

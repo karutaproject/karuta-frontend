@@ -272,7 +272,7 @@ function displayKarutaLogin()
 				constructKarutaLogin(true && localLogin);
 			},
 			error : function(jqxhr,textStatus) {
-				if (jqxhr.status == '404') {
+				if (jqxhr.status == '404' || jqxhr.status == '403') {
 					constructKarutaLogin(false);
 				} else {
 					alertHTML("Identification : "+jqxhr.responseText);

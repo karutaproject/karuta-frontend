@@ -466,7 +466,7 @@ function processAll(model_code,portfoliologcode)
 {
 	$.ajaxSetup({async: false});
 	var actions_list = $("model",g_xmlDoc).children();
-	alert("==========================================\r\n"+karutaStr[languages[LANGCODE]]['batch-wait']+"\r\n==========================================");
+//	alert("==========================================\r\n"+karutaStr[languages[LANGCODE]]['batch-wait']+"\r\n==========================================");
 	processActions(0,actions_list,portfoliologcode);
 }
 
@@ -4668,9 +4668,12 @@ function get_usergroupid(groupname)
 //==================================================
 
 //==================================================
-function execBatchForm(nodeid)
+async function execBatchForm(nodeid)
 //==================================================
 {
+	$("#message-window-header").html("<div class='danger' style='font-weight:bold;font-size:120%'>ATTENTION</div>");
+	$("#message-window-body").html(karutaStr[languages[LANGCODE]]['batch-wait']);
+	$("#message-window").show();
 	$("#wait-window").modal('show');
 	g_execbatch = false;
 	let batchformnode = g_portfolio_current;
@@ -4689,8 +4692,10 @@ function execBatchForm(nodeid)
 	//------------------------------
 	display_execBatch()
 	//------------------------------
+	await attendre(0);
 	getModelAndProcess(g_json.model_code);
 	$("#wait-window").modal('hide');
+	$("#message-window").hide();
 };
 
 //==================================================
