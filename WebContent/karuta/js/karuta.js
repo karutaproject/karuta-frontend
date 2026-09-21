@@ -641,6 +641,12 @@ function deleteandhidewindow(uuid,type,parentid,destid,callback,param1,param2,pa
 	// ----------------------------------
 }
 
+function submitCurrentPage(submitall) {
+	if (submitall==null || submitall==undefined)
+		submitall = false;
+	const pageid = $("#page").attr('uuid');
+	confirmSubmit(pageid,submitall);
+}
 //=======================================================================
 function confirmSubmit(uuid,submitall,js1,text,js2) 
 // =======================================================================
