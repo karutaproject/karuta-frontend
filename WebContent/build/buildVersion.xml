@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="updateVersion"  basedir="."> 
-	<property name="noVersion" value="3.130.0"/>
-	<property name="textVersion" value="FEAT : message to user when executing a batch"/>
+	<property name="noVersion" value="3.131.0"/>
+	<property name="textVersion" value="FEAT : new function deleteChildren"/>
 	<property name="dirSrce" value="src/htm-srce"/>
 	<property name="dirTrgt" value="WebContent/karuta/htm"/>
 	<target name="testIfNewVersion">

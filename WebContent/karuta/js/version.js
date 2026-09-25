@@ -1,9 +1,9 @@
-// Don't modify these two next lines, it's updated automatically by the maven package commands
+ // Don't modify these two next lines, it's updated automatically by the maven package commands
 var karuta_version = "@project.version@";
 var karuta_date = "@build.timestamp@";
 
-const karuta_version_eportfolium = 'eportfolium-3.130.0';
-const karuta_date_eportfolium = '2026-09-20';
+const karuta_version_eportfolium = 'eportfolium-3.131.0';
+const karuta_date_eportfolium = '2026-09-24';
 
 var karuta_backend_version = "?";
 var karuta_backend_date = "?";
@@ -181,3 +181,4 @@ var karuta_fileserver_date = "?";
 // 3.129.1 FIX - Get_Resource Completion with group - 2026-09-14 12:02:12
 // 3.129.2 FIX - Batch inactivate function - 2026-09-15 03:25:42
 // 3.130.0 FEAT : message to user when executing a batch - 2026-09-20 02:43:10
+// 3.131.0 FEAT : new function deleteChildren - 2026-09-24 12:10:56
