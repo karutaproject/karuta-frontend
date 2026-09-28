@@ -641,12 +641,30 @@ function deleteandhidewindow(uuid,type,parentid,destid,callback,param1,param2,pa
 	// ----------------------------------
 }
 
-function submitCurrentPage(submitall) {
+//=======================================================================
+function submitCurrentPage(submitall)
+//=======================================================================
+{
 	if (submitall==null || submitall==undefined)
 		submitall = false;
 	const pageid = $("#page").attr('uuid');
 	confirmSubmit(pageid,submitall);
 }
+
+//=======================================================================
+function submitParentPage(uuid,submitall)
+//=======================================================================
+{
+	if (submitall==null || submitall==undefined)
+		submitall = false;
+	let parent = UICom.structure.ui[uuid].node;
+	while ($(parent).prop("nodeName")!="asmUnit") {
+		parent = $(parent).parent();
+	}
+	const pageid = $(parent).attr('id');
+	confirmSubmit(pageid,submitall);
+}
+
 //=======================================================================
 function confirmSubmit(uuid,submitall,js1,text,js2) 
 // =======================================================================
