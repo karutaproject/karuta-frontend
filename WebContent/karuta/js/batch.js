@@ -484,10 +484,11 @@ function processActions(i,list,portfoliologcode)
 			g_actions[actiontype](actionnode);
 			previous_action = actiontype;
 			i++;
-			setTimeout(processActions,0,i,list,portfoliologcode);
+			processActions(i,list,portfoliologcode);
+//			setTimeout(processActions,0,i,list,portfoliologcode);
 		}
 	} else {
-		$("#batch-log").append("<br>=============== THIS IS THE END ===============================");
+		$("#batch-log").append("<br><br>============================ THIS IS THE END ===============================<br><br>");
 		$("#batchend").html(" THIS IS THE END ");
 		//--------------------
 		if (portfoliologcode!="")
@@ -510,10 +511,12 @@ function processLine(j,actionnode,i,list,portfoliologcode)
 		j++;
 		$("#progressbar").attr("value",j/(g_json.lines.length-1));
 		g_noline = j;
-		setTimeout(processLine,0,j,actionnode,i,list,portfoliologcode);
+		processLine(j,actionnode,i,list,portfoliologcode)
+//		setTimeout(processLine,0,j,actionnode,i,list,portfoliologcode);
 	} else {
 		i++;
-		setTimeout(processActions,0,i,list,portfoliologcode);		
+		processActions(i,list,portfoliologcode);
+//		setTimeout(processActions,0,i,list,portfoliologcode);		
 	}
 }
 //=================================================
@@ -530,16 +533,17 @@ function processListActions(list)
 		}
 		if (actiontype=='for-each-line') {
 			let j = 0;
-			setTimeout(processLine,0,j,actionnode);
+			processLine(j,actionnode);
+//			setTimeout(processLine,0,j,actionnode);
 		}
-/*
-			for (j=0; j<g_json.lines.length; j++){
-				$("#progressbar").attr("value",(j+1)/g_json.lines.length);
-				g_noline = j;
-				$("#batch-log").append("<br>================ LINE "+(g_noline+1)+" =============================");
-				processListActions($(actionnode).children());
-			} */
-		
+		/*
+		for (j=0; j<g_json.lines.length; j++){
+			$("#progressbar").attr("value",(j+1)/g_json.lines.length);
+			g_noline = j;
+			$("#batch-log").append("<br>================ LINE "+(g_noline+1)+" =============================");
+			processListActions($(actionnode).children());
+		} */
+
 /*		if (actiontype=='if-then-else') {
 			var if_action = $('if-part',actionnode).children()[0]; // only one action in test
 			var then_actions = $($('>then-part',actionnode)[0]).children();
@@ -4690,10 +4694,11 @@ async function execBatchForm(nodeid)
 	g_json['lines'] = [];
 	g_json.lines[0] = getInputsLine(lines);
 	//------------------------------
-	display_execBatch()
+	display_execBatch();
 	//------------------------------
 	await attendre(0);
 	getModelAndProcess(g_json.model_code);
+	$('#edit-window-body').animate({ scrollTop: $('#edit-window-body').height()+200 }, 'slow');
 	$("#wait-window").modal('hide');
 	$("#message-window").hide();
 };
