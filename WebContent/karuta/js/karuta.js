@@ -642,6 +642,30 @@ function deleteandhidewindow(uuid,type,parentid,destid,callback,param1,param2,pa
 }
 
 //=======================================================================
+function submitCurrentPage(submitall)
+//=======================================================================
+{
+	if (submitall==null || submitall==undefined)
+		submitall = false;
+	const pageid = $("#page").attr('uuid');
+	confirmSubmit(pageid,submitall);
+}
+
+//=======================================================================
+function submitParentPage(uuid,submitall)
+//=======================================================================
+{
+	if (submitall==null || submitall==undefined)
+		submitall = false;
+	let parent = UICom.structure.ui[uuid].node;
+	while ($(parent).prop("nodeName")!="asmUnit") {
+		parent = $(parent).parent();
+	}
+	const pageid = $(parent).attr('id');
+	confirmSubmit(pageid,submitall);
+}
+
+//=======================================================================
 function confirmSubmit(uuid,submitall,js1,text,js2) 
 // =======================================================================
 {
@@ -818,7 +842,7 @@ function displayBack() {
 }
 
 //==================================
-function displayPage(uuid,depth,type,langcode,edit,print) {
+async function displayPage(uuid,depth,type,langcode,edit,print) {
 //==================================
 	const scrollTop = window.pageYOffset || document.documentElement.scrollTop; 
 	const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
@@ -870,8 +894,13 @@ function displayPage(uuid,depth,type,langcode,edit,print) {
 		}
 	}
 	//---------------------
+	await attendre(0);
 	displayPageFCT(uuid,depth,type,langcode,edit,print,scrollTop,scrollLeft);
 //	setTimeout(displayPageFCT,0,uuid,depth,type,langcode,edit,print,scrollTop,scrollLeft);
+}
+
+function attendre(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 //==================================
@@ -3587,6 +3616,21 @@ function eltDisplayed (nodeid)
 //==================================
 {
 	pageClick (nodeid);
+}
+
+//==================================
+function deleteChildren(nodeid,semtagParent,semtagChildren)
+//==================================
+{
+	let parent = $(UICom.structure.ui[nodeid].node);
+	if (semtagParent!=null)
+		parent = $("*:has(>metadata[semantictag*='"+semtagParent+"'])",$(UICom.structure.ui[nodeid].node));
+	const children = $("*:has(>metadata[semantictag*='"+semtagChildren+"'])",parent);
+	
+	for (let i=0;i<children.length;i++) {
+		childid = $(children[i]).attr("id");
+		UICom.DeleteNode(childid);
+	}
 }
 
 //=========================================================
