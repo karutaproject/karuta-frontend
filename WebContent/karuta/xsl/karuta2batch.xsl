@@ -713,7 +713,7 @@
 
 	<xsl:template match="*[metadata/@semantictag='reload-node']">
 		<xsl:variable name="not-error">
-			<xsl:value-of select=".//asmContext[metadata/@semantictag='not-error']/asmResource[@xsi_type='Get_Resource']/label[@lang=$lang]"></xsl:value-of>
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='not-error']/asmResource[@xsi_type='Get_Resource']/code"></xsl:value-of>
 		</xsl:variable>
 		<xsl:variable name="destination">
 			<xsl:call-template name='get-select'>
@@ -726,7 +726,7 @@
 
 	<xsl:template match="*[metadata/@semantictag='reload-unit']">
 		<xsl:variable name="not-error">
-			<xsl:value-of select=".//asmContext[metadata/@semantictag='not-error']/asmResource[@xsi_type='Get_Resource']/label[@lang=$lang]"></xsl:value-of>
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='not-error']/asmResource[@xsi_type='Get_Resource']/code"></xsl:value-of>
 		</xsl:variable>
 		<reload-unit not-error="{$not-error}"/>
 	</xsl:template>

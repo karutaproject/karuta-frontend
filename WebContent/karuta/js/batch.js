@@ -3978,6 +3978,11 @@ g_actions['reload-node'] = function (node,data)
 //=================================================
 {
 	var ok = 0;
+	let strerror = $(node).attr("not-error");
+	if (strerror==undefined || strerror=='@1')
+		error = true
+	else
+		error = false;
 	let nodes = getTargetNodes(node,data,"test")
 	if (nodes.length>0){
 		for (i=0; i<nodes.length; i++){
@@ -3997,7 +4002,10 @@ g_actions['reload-node'] = function (node,data)
 						$("#batch-log").append("<br>- node reloaded - nodeid("+nodeid+")");
 					},
 					error : function() {
-						$("#batch-log").append("<br>- <span class='danger'>ERROR</span> in reload-node - "+nodeid);
+						if (error)
+							$("#batch-log").append("<br>- <span class='danger'>ERROR</span> in reload-node - "+nodeid);
+						else
+							$("#batch-log").append("<br>- *** PB in reload-node - "+nodeid);
 					}
 				});
 			} else {
@@ -4005,7 +4013,10 @@ g_actions['reload-node'] = function (node,data)
 			}
 		}
 	} else {
-		$("#batch-log").append("<br>- ***NOT FOUND reload-node <span class='danger'>ERROR</span>");
+		if (error)
+			$("#batch-log").append("<br>- ***NOT FOUND reload-node <span class='danger'>ERROR</span>");
+		else
+			$("#batch-log").append("<br>- ***NOT FOUND reload-node");
 	}
 	if (!(ok!=0 && ok == nodes.length)) g_batch_error.push("reload-node");
 	return (ok!=0 && ok == nodes.length);
@@ -4806,7 +4817,7 @@ async function execBatchForm(nodeid)
 	//------------------------------
 	await attendre(0);
 	getModelAndProcess(g_json.model_code);
-	$('#edit-window-body').animate({ scrollTop: $('#edit-window-body').height()+200 }, 'slow');
+	$('#edit-window-body').animate({ scrollTop: $('#edit-window-body').height()+500 }, 'slow');
 	$("#wait-window").modal('hide');
 	$("#message-window").hide();
 };

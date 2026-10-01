@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="updateVersion"  basedir="."> 
-	<property name="noVersion" value="3.133.0"/>
-	<property name="textVersion" value="FEAT : new alert for batch"/>
+	<property name="noVersion" value="3.133.0a"/>
+	<property name="textVersion" value="TEST :  batch"/>
 	<property name="dirSrce" value="src/htm-srce"/>
 	<property name="dirTrgt" value="WebContent/karuta/htm"/>
 	<target name="testIfNewVersion">
