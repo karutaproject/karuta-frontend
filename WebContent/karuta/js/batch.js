@@ -23,6 +23,7 @@ var g_current_node_uuid = null;
 var g_users = {};
 var g_userids = {};
 var g_batch_error = [];
+var g_batch_proxies_data = {};
 //-----------------------
 
 var jqueryBatchSpecificFunctions = {};
@@ -471,8 +472,7 @@ function processAll(model_code,portfoliologcode)
 //=================================================
 {
 	$.ajaxSetup({async: false});
-	var actions_list = $("model",g_xmlDoc).children();
-//	alert("==========================================\r\n"+karutaStr[languages[LANGCODE]]['batch-wait']+"\r\n==========================================");
+	var actions_list = $("model",g_xmlDoc).children();//	alert("==========================================\r\n"+karutaStr[languages[LANGCODE]]['batch-wait']+"\r\n==========================================");
 	processActions(0,actions_list,portfoliologcode);
 }
 
@@ -518,11 +518,11 @@ function processLine(j,actionnode,i,list,portfoliologcode)
 		$("#progressbar").attr("value",j/(g_json.lines.length-1));
 		g_noline = j;
 		processLine(j,actionnode,i,list,portfoliologcode)
-//		setTimeout(processLine,0,j,actionnode,i,list,portfoliologcode);
+		setTimeout(processLine,0,j,actionnode,i,list,portfoliologcode);
 	} else {
 		i++;
 		processActions(i,list,portfoliologcode);
-//		setTimeout(processActions,0,i,list,portfoliologcode);		
+		setTimeout(processActions,0,i,list,portfoliologcode);		
 	}
 }
 //=================================================
@@ -542,32 +542,6 @@ function processListActions(list)
 			processLine(j,actionnode);
 //			setTimeout(processLine,0,j,actionnode);
 		}
-		/*
-		for (j=0; j<g_json.lines.length; j++){
-			$("#progressbar").attr("value",(j+1)/g_json.lines.length);
-			g_noline = j;
-			$("#batch-log").append("<br>================ LINE "+(g_noline+1)+" =============================");
-			processListActions($(actionnode).children());
-		} */
-
-/*		if (actiontype=='if-then-else') {
-			var if_action = $('if-part',actionnode).children()[0]; // only one action in test
-			var then_actions = $($('>then-part',actionnode)[0]).children();
-			var else_actions = $($('>else-part',actionnode)[0]).children();
-			var actiontype = $(if_action).prop("nodeName");
-			var actionnode = if_action;
-			$("#batch-log").append("<br>================ IF ===============================");			
-			if (g_actions[actiontype](actionnode)){
-				$("#batch-log").append("<br>================ THEN =============================");			
-				processListActions(then_actions);
-			}
-			else {
-				$("#batch-log").append("<br>================ ELSE =============================");			
-				processListActions(else_actions);
-			}
-			$("#batch-log").append("<br>================ END IF ============================");			
-		}
-		*/
 	}
 };
 
@@ -2960,7 +2934,11 @@ g_actions['share-usergroup'] = function shareUserGroup(node)
 //=================================================
 {
 	var ok = false;
-	const error = ($(node).attr("noterror")==undefined)?true:false;
+	let strerror = $(node).attr("not-error");
+	if (strerror==undefined || strerror=='@1')
+		error = true
+	else
+		error = false;
 	var role = "";
 	var treeref = $(node).attr("select");
 	var role = getTxtvals($("role",node));
@@ -4165,6 +4143,52 @@ g_actions['update-proxy'] = function update_proxy(node,data)
 	return (ok!=0 && ok == nodes.length);
 }
 
+//=================================================
+g_actions['update-proxy-byid'] = function (node,data)
+//=================================================
+{
+	var ok = 0;
+	//------------- Source -----------------------
+	let sourceid =  replaceVariable(replaceBatchVariable($("source",node).text()));
+	//------------ Target --------------------
+	const nodes = getTargetNodes(node,data,"dest-test");
+	//----------------------------------------
+	if (nodes.length>0){	
+		for (i=0; i<nodes.length; i++){
+			var targetid = $(nodes[i]).attr('id');
+			//----- get target ----------------
+			var resource = $("asmResource[xsi_type='Proxy']",nodes[i]);
+			$("code",resource).text(sourceid);
+			$("value",resource).text(sourceid);
+			var xml = "<asmResource xsi_type='Proxy'>" + $(resource).html() + "</asmResource>";
+			var strippeddata = xml.replace(/xmlns=\"http:\/\/www.w3.org\/1999\/xhtml\"/g,"");  // remove xmlns attribute
+			//----- update target ----------------
+			$.ajax({
+				async : false,
+				type : "PUT",
+				contentType: "application/xml",
+				dataType : "text",
+				data : strippeddata,
+				targetid : targetid,
+				sourceid : sourceid,
+				url : serverBCK_API+"/resources/resource/" + targetid,
+				success : function(data) {
+					ok++;
+					$("#batch-log").append("<br>- resource updated target : "+this.targetid+" - srce: "+this.sourceid);
+					//===========================================================
+				},
+				error : function(data) {
+					$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in update proxy");
+				}
+			});
+		}
+	} else {
+		$("#batch-log").append("<br>- ***NOT FOUND <span class='danger'>ERROR - update-proxy</span>");
+	}
+	if (!(ok!=0 && ok == nodes.length)) g_batch_error.push("update-proxy");
+	return (ok!=0 && ok == nodes.length);
+}
+
 //-----------------------------------------------------------------------
 //-----------------------------------------------------------------------
 //------------------------- UPDATE-URL2UNIT -----------------------------
@@ -4212,7 +4236,7 @@ g_actions['update-url2unit'] = function update_url2unit(node,data)
 				});
 			}
 	} else {
-		$("#batch-log").append("<br>- ***NOT FOUND <span class='danger'>ERROR - update-proxy</span>");
+		$("#batch-log").append("<br>- ***NOT FOUND <span class='danger'>ERROR - update-url2unit</span>");
 	}
 	if (!(ok!=0 && ok == nodes.length)) g_batch_error.push("update-url2unit");
 	return (ok!=0 && ok == nodes.length);
@@ -4330,7 +4354,7 @@ g_actions['jsfunction'] = function (node)
 //=============================================================================
 
 //==================================
-g_actions['variable-value'] = function (node)
+g_actions['variable-value'] = async function (node)
 //==================================
 {
 	var ok = false
@@ -4794,6 +4818,7 @@ function get_usergroupid(groupname)
 async function execBatchForm(nodeid)
 //==================================================
 {
+	$("#edit-window").modal('show');
 	$("#message-window-header").html("<div class='danger' style='font-weight:bold;font-size:120%'>ATTENTION</div>");
 	$("#message-window-body").html(karutaStr[languages[LANGCODE]]['batch-wait']);
 	$("#message-window").show();
@@ -4817,7 +4842,7 @@ async function execBatchForm(nodeid)
 	//------------------------------
 	await attendre(0);
 	getModelAndProcess(g_json.model_code);
-	$('#edit-window-body').animate({ scrollTop: $('#edit-window-body').height()+500 }, 'slow');
+	$('#edit-window-body').animate({ scrollTop: 9999 }, 'slow');
 	$("#wait-window").modal('hide');
 	$("#message-window").hide();
 };
