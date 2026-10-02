@@ -4289,6 +4289,10 @@ function waithide(){
 	setTimeout(wait,0,'hide');
 }
 
+function parseXml(xmlStr) {
+   return new window.DOMParser().parseFromString(xmlStr, "text/xml");
+}
+
 //================================================
 //================================================
 //============== Function JQuery =================

@@ -166,9 +166,9 @@ var UICom =
 							dataType : "xml",
 							url : serverBCK_API+"/nodes/node/" + targetid + "?resources=true",
 							success : function(data) {
+								proxies_data[id] = xml2string(data);
 								var newid = targetid+"_"+$(current).attr("id");
 								$(":root",data).attr("id",newid);
-								proxies_data[newid] = data;
 								proxies_parent[newid] = $(current).attr("id");
 								proxies_edit[newid] = edittargetroles;
 								proxies_delete[newid] = delnoderoles;
@@ -192,7 +192,7 @@ var UICom =
 								dataS += "</asmContext>";
 								var parser = new DOMParser();
 								var data = parser.parseFromString(dataS, "text/xml");
-								proxies_data[newid] = data;
+								proxies_data[$(current).attr("id")] = data;
 								proxies_parent[newid] = $(current).attr("id"); // proxy parentid
 								proxies_edit[newid] = edittargetroles;
 								proxies_delete[newid] = delnoderoles;

@@ -2,8 +2,8 @@
 var karuta_version = "@project.version@";
 var karuta_date = "@build.timestamp@";
 
-const karuta_version_eportfolium = 'eportfolium-3.133.0';
-const karuta_date_eportfolium = '2026-09-29';
+const karuta_version_eportfolium = 'eportfolium-3.134.0';
+const karuta_date_eportfolium = '2026-10-02';
 
 var karuta_backend_version = "?";
 var karuta_backend_date = "?";
@@ -184,3 +184,5 @@ var karuta_fileserver_date = "?";
 // 3.131.0 FEAT : new function deleteChildren - 2026-09-24 12:10:56
 // 3.132.0 FEAT : new function submitParentPage - 2026-09-28 02:26:32
 // 3.133.0 FEAT : new alert for batch - 2026-09-29 11:39:42
+// 3.133.0a TEST :  batch - 2026-10-01 04:49:13
+// 3.134.0 FEAT :  batch update-proxy-byid - 2026-10-02 02:15:12
