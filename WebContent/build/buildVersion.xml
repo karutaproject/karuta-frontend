@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="updateVersion"  basedir="."> 
-	<property name="noVersion" value="3.134.0"/>
-	<property name="textVersion" value="FEAT :  batch update-proxy-byid"/>
+	<property name="noVersion" value="3.134.1"/>
+	<property name="textVersion" value="FIX :  confirmSubmitParentPage with more parameters"/>
 	<property name="dirSrce" value="src/htm-srce"/>
 	<property name="dirTrgt" value="WebContent/karuta/htm"/>
 	<target name="testIfNewVersion">

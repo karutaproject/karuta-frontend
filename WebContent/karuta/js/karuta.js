@@ -642,17 +642,17 @@ function deleteandhidewindow(uuid,type,parentid,destid,callback,param1,param2,pa
 }
 
 //=======================================================================
-function submitCurrentPage(submitall)
+function submitCurrentPage(submitall,js1,text,js2)
 //=======================================================================
 {
 	if (submitall==null || submitall==undefined)
 		submitall = false;
 	const pageid = $("#page").attr('uuid');
-	confirmSubmit(pageid,submitall);
+	confirmSubmit(pageid,submital,js1,text,js2);
 }
 
 //=======================================================================
-function submitParentPage(uuid,submitall)
+function submitParentPage(uuid,submitall,js1,text,js2)
 //=======================================================================
 {
 	if (submitall==null || submitall==undefined)
@@ -662,7 +662,7 @@ function submitParentPage(uuid,submitall)
 		parent = $(parent).parent();
 	}
 	const pageid = $(parent).attr('id');
-	confirmSubmit(pageid,submitall);
+	confirmSubmit(pageid,submitall,js1,text,js2);
 }
 
 //=======================================================================
