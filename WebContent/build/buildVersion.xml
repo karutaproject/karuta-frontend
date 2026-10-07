@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="updateVersion"  basedir="."> 
-	<property name="noVersion" value="3.135.0"/>
-	<property name="textVersion" value="FEAT - Get_resource last-first-name option added"/>
+	<property name="noVersion" value="3.136.0"/>
+	<property name="textVersion" value="FEAT - report x-y-axis with variable"/>
 	<property name="dirSrce" value="src/htm-srce"/>
 	<property name="dirTrgt" value="WebContent/karuta/htm"/>
 	<target name="testIfNewVersion">
