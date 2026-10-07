@@ -4354,7 +4354,7 @@ g_actions['jsfunction'] = function (node)
 //=============================================================================
 
 //==================================
-g_actions['variable-value'] = async function (node)
+g_actions['variable-value'] = function (node)
 //==================================
 {
 	var ok = false

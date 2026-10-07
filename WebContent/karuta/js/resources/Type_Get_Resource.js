@@ -619,7 +619,7 @@ UIFactory["Get_Resource"].prototype.displayEditor = function(destid,type,langcod
 				});
 			}
 		//----------------- List of users ----------------------------
-		} else if (queryattr_value.indexOf("#persons.person.first-last-name")>-1) {
+		} else if (queryattr_value.indexOf("#persons.person.first-last-name")>-1 || queryattr_value.indexOf("#persons.person.last-first-name")>-1) {
 			if (cachable && g_Get_Resource_caches[queryattr_value]!=undefined && g_Get_Resource_caches[queryattr_value]!="")
 				self.parse(destid,type,langcode,g_Get_Resource_caches[queryattr_value],disabled,srce,resettable,target,semtag,multiple_tags,portfoliocode,semtag2,cachable);
 			else {
@@ -853,6 +853,18 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 //							UIFactory.User.load(userid);
 							code = Users_byid[userid].username;
 							libelle =Users_byid[userid].firstname+" " +Users_byid[userid].lastname;
+							sorton = 1; //on trie sur lastname
+						}
+					} else if (target=="last-first-name") {
+						if (portfoliocode=="#group" || portfoliocode=="#persons") {
+							code = $(nodes[i]).attr('id');
+							libelle = $("lastname",nodes[i]).text()+ " "+$("firstname",nodes[i]).text();
+						} else if (portfoliocode=="#persongroup") {
+							const userid = $(nodes[i]).attr("id");
+//							UIFactory.User.load(userid);
+							code = Users_byid[userid].username;
+							libelle = Users_byid[userid].lastname+ " " + Users_byid[userid].firstname;
+							sorton = 2; //on trie sur lastname
 						}
 					} else if (portfoliocode=="#portfoliogroup") {
 							const id = $(nodes[i]).attr("id");
@@ -1646,7 +1658,7 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 			$(select).append($(select_item));
 		}
 		//---------------------
-		if (target=="label" || target=="grouplabel" || target=="first-last-name" || target=="portfoliolabel")  {
+		if (target=="label" || target=="grouplabel" || target=="first-last-name" || target=="last-first-name" || target=="portfoliolabel")  {
 			for ( var i = 0; i < newTableau1.length; i++) {
 				//------------------------------
 				var uuid = $(newTableau1[i][2]).attr('id');
@@ -1656,7 +1668,7 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 				let code = "";
 				let label = "";
 				//------------------------------
-				if (target=='grouplabel' || target=="first-last-name" || target=="portfoliolabel") {
+				if (target=='grouplabel' || target=="first-last-name" || target=="last-first-name" || target=="portfoliolabel") {
 					code = "@" + newTableau1[i][0];
 					value = code;
 					label = newTableau1[i][1];
