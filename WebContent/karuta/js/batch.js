@@ -404,11 +404,6 @@ function getTargetNodes(node,data,teststr,error)
 				}
 			},
 			error : function(data) {
-				if (error)
-					$("#batch-log").append("<br>- ***NOT FOUND <span class='danger'>ERROR - update-node-resource - semtag: "+semtag+"</span>");
-				else
-					$("#batch-log").append("<br>- ***NOT FOUND - update-node-resource - semtag: "+semtag+"</span>");
-
 			}
 		});
 	} else {
@@ -471,7 +466,7 @@ function getSourceNodes(node,data,teststr)
 function processAll(model_code,portfoliologcode)
 //=================================================
 {
-	$.ajaxSetup({async: false});
+	$("#batchend").html("<div style='margin-left:200px'>"+karutaStr[languages[LANGCODE]]['batch-wait']+"</div>");
 	var actions_list = $("model",g_xmlDoc).children();//	alert("==========================================\r\n"+karutaStr[languages[LANGCODE]]['batch-wait']+"\r\n==========================================");
 	processActions(0,actions_list,portfoliologcode);
 }
@@ -486,16 +481,19 @@ function processActions(i,list,portfoliologcode)
 		if (actiontype=='for-each-line') {
 			processLine(0,actionnode,i,list,portfoliologcode);
 		} else {
-			$("#batch-log").append("<br>------------- "+actiontype+" -----------------");
-			g_actions[actiontype](actionnode);
+//			$("#batch-log").append("<br>------------- "+actiontype+" -----------------");
+			setTimeout(function(){$("#batch-log").append("<br>------------- "+actiontype+" -----------------");g_actions[actiontype](actionnode)},0);
 			previous_action = actiontype;
 			i++;
-			processActions(i,list,portfoliologcode);
-//			setTimeout(processActions,0,i,list,portfoliologcode);
+//			processActions(i,list,portfoliologcode);
+			setTimeout(processActions,0,i,list,portfoliologcode);
 		}
 	} else {
 		$("#batch-log").append("<br><br>============================ THIS IS THE END ===============================<br><br>");
-		$("#batchend").html(" THIS IS THE END ");
+		$("#batchend").html("<span style='margin-left:200px;background-color:green;color:white;font-size:200%;padding:10px'> THIS IS THE END </span>");
+		$("#wait-window").modal('hide');
+		$("#message-window").hide();
+		$('#edit-window-body').animate({ scrollTop: 9999 }, 'slow');
 		//--------------------
 		if (portfoliologcode!="")
 			saveLog(model_code,portfoliologcode,$("#batch-log").html());
@@ -515,13 +513,13 @@ function processLine(j,actionnode,i,list,portfoliologcode)
 		$("#batchlinenumber").html((g_noline+1)+"/"+g_json.lines.length);
 		processListActions($(actionnode).children());
 		j++;
-		$("#progressbar").attr("value",j/(g_json.lines.length-1));
+		$("#progressbar").attr("value",j/(g_json.lines.length));
 		g_noline = j;
-		processLine(j,actionnode,i,list,portfoliologcode)
+//		processLine(j,actionnode,i,list,portfoliologcode)
 		setTimeout(processLine,0,j,actionnode,i,list,portfoliologcode);
 	} else {
 		i++;
-		processActions(i,list,portfoliologcode);
+//		processActions(i,list,portfoliologcode);
 		setTimeout(processActions,0,i,list,portfoliologcode);		
 	}
 }
@@ -534,13 +532,13 @@ function processListActions(list)
 		var actionnode = list[i];
 		if (actiontype!='for-each-line') {
 			$("#batch-log").append("<br>------------- "+actiontype+" -----------------");
+//			setTimeout(g_actions[actiontype],0,actionnode);
 			g_actions[actiontype](actionnode);
 			previous_action = actiontype; j =0
 		}
 		if (actiontype=='for-each-line') {
 			let j = 0;
 			processLine(j,actionnode);
-//			setTimeout(processLine,0,j,actionnode);
 		}
 	}
 };
@@ -868,7 +866,7 @@ g_actions['update-user'] = function (node)
 //=================================================
 {
 	var ok = false;
-	const error = ($(node).attr("noterror")==undefined)?true:false;
+	const error = ($(node).attr("not-error")==undefined)?true:false;
 	var identifier = getTxtvals($("identifier",node));
 	var lastname = getTxtvals($("lastname",node));
 	var firstname = getTxtvals($("firstname",node));
@@ -940,7 +938,7 @@ g_actions['delete-user'] = function deleteUser(node)
 //=================================================
 {
 	var ok = false;
-	const error = ($(node).attr("noterror")==undefined)?true:false;
+	const error = ($(node).attr("not-error")==undefined)?true:false;
 	var identifier = getTxtvals($("identifier",node));
 	var userref = $(node).attr("select");
 	if (userref!=="")
@@ -987,7 +985,7 @@ g_actions['inactivate-user'] = function inactivateUser(node)
 //=================================================
 {
 	var ok = false;
-	const error = ($(node).attr("noterror")==undefined)?true:false;
+	const error = ($(node).attr("not-error")==undefined)?true:false;
 	var identifier = getTxtvals($("identifier",node));
 	var userref = $(node).attr("select");
 	if (userref!=="")
@@ -1050,7 +1048,7 @@ g_actions['activate-user'] = function activateUser(node)
 //=================================================
 {
 	var ok = false;
-	const error = ($(node).attr("noterror")==undefined)?true:false;
+	const error = ($(node).attr("not-error")==undefined)?true:false;
 	var identifier = getTxtvals($("identifier",node));
 	var userref = $(node).attr("select");
 	if (userref!=="")
@@ -1148,7 +1146,7 @@ g_actions['join-usergroup'] = function JoinUserGroup(node)
 //=================================================
 {
 	var ok = false;
-	const error = ($(node).attr("noterror")==undefined)?true:false;
+	const error = ($(node).attr("not-error")==undefined)?true:false;
 	var user = getTxtvals($("user",node));
 	var usergroup = getTxtvals($("usergroup",node));
 	usergroup = decodeURI(usergroup);
@@ -1232,7 +1230,7 @@ g_actions['leave-usergroup'] = function LeaveUserGroup(node)
 //=================================================
 {
 	var ok = false;
-	const error = ($(node).attr("noterror")==undefined)?true:false;
+	const error = ($(node).attr("not-error")==undefined)?true:false;
 	var user = getTxtvals($("user",node));
 	var usergroup = getTxtvals($("usergroup",node));
 	usergroup = decodeURI(usergroup);
@@ -1312,7 +1310,7 @@ g_actions['delete-usergroup'] = function (node)
 //=================================================
 {
 	var ok = false;
-	const error = ($(node).attr("noterror")==undefined)?true:false;
+	const error = ($(node).attr("not-error")==undefined)?true:false;
 	var usergroup = getTxtvals($("usergroup",node));
 	usergroup = decodeURI(usergroup);
 	if (usergroup.startsWith("@"))
@@ -1745,7 +1743,7 @@ g_actions['select-folder'] = function (node)
 //=================================================
 {
 	var ok = false;
-	const error = ($(node).attr("noterror")==undefined)?true:false;
+	const error = ($(node).attr("not-error")==undefined)?true:false;
 	var code = getvarvals($("code",node));
 	if (code=="")
 		code = getTxtvals($("code",node));
@@ -1876,7 +1874,7 @@ g_actions['select-tree'] = function selectTree(node)
 //=================================================
 {
 	var ok = false;
-	const error = ($(node).attr("noterror")==undefined)?true:false;
+	const error = ($(node).attr("not-error")==undefined)?true:false;
 	var code = getvarvals($("code",node));
 	if (code=="")
 		code = getTxtvals($("code",node));
@@ -1980,7 +1978,7 @@ g_actions['update-tree-root'] = function updateTreeRoot(node)
 //=================================================
 {
 	var ok = false;
-	const error = ($(node).attr("noterror")==undefined)?true:false;
+	const error = ($(node).attr("not-error")==undefined)?true:false;
 	var treeref = $(node).attr("select");
 	var newcode = getTxtvals($("newcode",node));
 	var label = getTxtvals($("label",node));
@@ -2711,7 +2709,7 @@ g_actions['share-portfoliogroup'] = function sharePortfolioGroup(node)
 //=================================================
 {
 	var ok = false;
-	const error = ($(node).attr("noterror")==undefined)?true:false;
+	const error = ($(node).attr("not-error")==undefined)?true:false;
 	var user = getTxtvals($("identifier",node));;
 	if (user.startsWith("@"))
 		user = user.substring(1);
@@ -2797,7 +2795,7 @@ g_actions['unshare-portfoliogroup'] = function unsharePortfolioGroup(node)
 //=================================================
 {
 	var ok = false;
-	const error = ($(node).attr("noterror")==undefined)?true:false;
+	const error = ($(node).attr("not-error")==undefined)?true:false;
 	var user = getTxtvals($("identifier",node));;
 	if (user.startsWith("@"))
 		user = user.substring(1);
@@ -3080,7 +3078,7 @@ g_actions['share-groups'] = function shareGroups(node)
 //=================================================
 {
 	var ok = false;
-	const error = ($(node).attr("noterror")==undefined)?true:false;
+	const error = ($(node).attr("not-error")==undefined)?true:false;
 	var role = getTxtvals($("role",node));
 	var usergroup = getTxtvals($("usergroup",node));
 	var usergroupid = get_usergroupid(usergroup);
@@ -3175,7 +3173,7 @@ g_actions['update-resource'] = function updateResource(node,data)
 //=================================================
 {
 	var ok = 0;
-	const error = ($(node).attr("noterror")==undefined)?true:false;
+	const error = ($(node).attr("not-error")==undefined)?true:false;
 	var type = $(node).attr("type");
 	var attributes = $("attribute",node)
 	//---------------------
@@ -3251,7 +3249,7 @@ g_actions['update-resource'] = function updateResource(node,data)
 		if (error)
 			$("#batch-log").append("<br>- ***NOT FOUND <span class='danger'>ERROR - update-resource "+type+" -"+getSemtag(node)+"</span>");
 		else
-			$("#batch-log").append("<br>- resource not found - update-resource "+type+" -"+getSemtag(node));
+			$("#batch-log").append("<br>- ***resource not found - update-resource "+type+" -"+getSemtag(node));
 	}
 	if (!(ok!=0 && ok == nodes.length) && error) g_batch_error.push("update-resource");
 	return (ok!=0 && ok == nodes.length);
@@ -3268,7 +3266,7 @@ g_actions['update-node-resource'] = function updateResource(node,data)
 //=================================================
 {
 	let ok = 0;
-	const error = ($(node).attr("noterror")==undefined)?true:false;
+	const error = ($(node).attr("not-error")==undefined)?true:false;
 	let type = $(node).attr("type");
 	//-------------------
 	let nodes = getTargetNodes(node,data,"test",error)
@@ -3348,7 +3346,7 @@ g_actions['update-node-context'] = function updateContext(node,data)
 //=================================================
 {
 	let ok = 0;
-	const error = ($(node).attr("noterror")==undefined)?true:false;
+	const error = ($(node).attr("not-error")==undefined)?true:false;
 	let type = $(node).attr("type");
 	//-------------------
 	let nodes = getTargetNodes(node,data,"test")
@@ -3746,7 +3744,7 @@ g_actions['move-node'] = function moveNode(node,data)
 //=================================================
 {
 	let ok = false
-	const error = ($(node).attr("noterror")==undefined)?true:false;
+	const error = ($(node).attr("not-error")==undefined)?true:false;
 	//------------- source -----------------------
 	const srce_nodes = getSourceNodes(node,data,"srce-test",error);
 	let nodeid = $(srce_nodes[0]).attr('id');;
@@ -3793,7 +3791,7 @@ g_actions['delete-node'] = function deleteNode(node,data)
 //=================================================
 {
 	var ok = 0;
-	const error = ($(node).attr("noterror")==undefined)?true:false;
+	const error = ($(node).attr("not-error")==undefined)?true:false;
 	let nodes = getTargetNodes(node,data,"test")
 	if (nodes.length>0){
 		for (i=0; i<nodes.length; i++){
@@ -3837,7 +3835,7 @@ g_actions['show-node'] = function showNode(node,data)
 //=================================================
 {
 	var ok = 0;
-	const error = ($(node).attr("noterror")==undefined)?true:false;
+	const error = ($(node).attr("not-error")==undefined)?true:false;
 	let nodes = getTargetNodes(node,data,"test",error)
 	if (nodes.length>0){
 		for (i=0; i<nodes.length; i++){
@@ -3875,7 +3873,7 @@ g_actions['hide-node'] = function hideNode(node,data)
 //=================================================
 {
 	var ok = 0;
-	const error = ($(node).attr("noterror")==undefined)?true:false;
+	const error = ($(node).attr("not-error")==undefined)?true:false;
 	let nodes = getTargetNodes(node,data,"test")
 	if (nodes.length>0){
 		for (i=0; i<nodes.length; i++){
@@ -4842,9 +4840,6 @@ async function execBatchForm(nodeid)
 	//------------------------------
 	await attendre(0);
 	getModelAndProcess(g_json.model_code);
-	$('#edit-window-body').animate({ scrollTop: 9999 }, 'slow');
-	$("#wait-window").modal('hide');
-	$("#message-window").hide();
 };
 
 //==================================================

@@ -2,8 +2,8 @@
 var karuta_version = "@project.version@";
 var karuta_date = "@build.timestamp@";
 
-const karuta_version_eportfolium = 'eportfolium-3.136.0';
-const karuta_date_eportfolium = '2026-10-07';
+const karuta_version_eportfolium = 'eportfolium-3.137.0';
+const karuta_date_eportfolium = '2026-10-11';
 
 var karuta_backend_version = "?";
 var karuta_backend_date = "?";
@@ -189,3 +189,4 @@ var karuta_fileserver_date = "?";
 // 3.134.1 FIX :  confirmSubmitParentPage with more parameters - 2026-10-03 11:46:40
 // 3.135.0 FEAT - Get_resource last-first-name option added - 2026-10-07 03:43:33
 // 3.136.0 FEAT - report x-y-axis with variable - 2026-10-07 06:41:39
+// 3.137.0 FEAT - Batch - not dis^lay if error - 2026-10-11 11:56:51
