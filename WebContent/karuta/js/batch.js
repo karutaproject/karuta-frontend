@@ -466,6 +466,7 @@ function getSourceNodes(node,data,teststr)
 function processAll(model_code,portfoliologcode)
 //=================================================
 {
+	$.ajaxSetup({async: false});
 	$("#batchend").html("<div style='margin-left:200px'>"+karutaStr[languages[LANGCODE]]['batch-wait']+"</div>");
 	var actions_list = $("model",g_xmlDoc).children();//	alert("==========================================\r\n"+karutaStr[languages[LANGCODE]]['batch-wait']+"\r\n==========================================");
 	processActions(0,actions_list,portfoliologcode);

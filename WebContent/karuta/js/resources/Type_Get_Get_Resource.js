@@ -279,7 +279,7 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 				semtag2 = semtag.substring(semtag.indexOf('+')+1);
 				semtag = semtag.substring(0,semtag.indexOf('+'));
 			}
-			var target = queryattr_value.substring(srce_indx+1);  // label or text or personlabel or grouplabel or first-last-name
+			var target = queryattr_value.substring(srce_indx+1);  // label or text or personlabel or grouplabel or first-last-name or last-first-name
 			var semtag_parent_indx = queryattr_value.substring(0,semtag_indx).lastIndexOf('.');
 			var semtag_parent = queryattr_value.substring(semtag_parent_indx+1,semtag_indx);
 			if (semtag_parent.indexOf('#')==0)
@@ -863,7 +863,7 @@ UIFactory["Get_Get_Resource"].prototype.parse = function(destid,type,langcode,da
 			let value = "";
 			let code = "";
 			let label = [];
-			if (target=='first-last-name' || target=='personlabel' || target=='portfoliolabel') {
+			if (target=='first-last-name' || target=='last-first-name' || target=='personlabel' || target=='portfoliolabel') {
 				code = "@"+tableau2[i].code;
 				value = code;
 				for (var j=0; j<languages.length;j++){
@@ -1002,7 +1002,7 @@ UIFactory["Get_Get_Resource"].prototype.parse = function(destid,type,langcode,da
 			var input = "";
 			var resource = null;
 			//------------------------------
-			if (target=='first-last-name' || target=='personlabel' || target=='portfoliolabel') {
+			if (target=='first-last-name' || target=='last-first-name' || target=='personlabel' || target=='portfoliolabel') {
 				code = "@"+tableau2[i].code;
 				value = code;
 				for (var j=0; j<languages.length;j++){
@@ -1094,7 +1094,7 @@ UIFactory["Get_Get_Resource"].prototype.parse = function(destid,type,langcode,da
 			let code = "";
 			let label = [];
 			//------------------------------
-			if (target=='first-last-name' || target=='personlabel' || target=='portfoliolabel') {
+			if (target=='first-last-name' || target=='last-first-name' || target=='personlabel' || target=='portfoliolabel') {
 				code = "@"+tableau2[i].code;
 				value = code;
 				for (var j=0; j<languages.length;j++){
@@ -1207,7 +1207,7 @@ UIFactory["Get_Get_Resource"].prototype.parse = function(destid,type,langcode,da
 			let code = "";
 			let label = [];
 			//------------------------------
-			if (target=='first-last-name' || target=='personlabel' || target=='portfoliolabel') {
+			if (target=='first-last-name' || target=='last-first-name' || target=='personlabel' || target=='portfoliolabel') {
 				code = "@"+tableau2[i].code;
 				value = code;
 				for (var j=0; j<languages.length;j++){
@@ -1332,7 +1332,7 @@ UIFactory["Get_Get_Resource"].prototype.parse = function(destid,type,langcode,da
 			$(select).append($(select_item));
 //		}
 		//---------------------
-		if (target.indexOf('label')>-1) {
+		if (target.indexOf('label')>-1 || target.indexOf('first-')>-1) {
 			for ( var i = 0; i < newTableau1.length; i++) {
 				//------------------------------
 				let uuid = $(newTableau1[i][1]).attr('id');
@@ -1342,7 +1342,7 @@ UIFactory["Get_Get_Resource"].prototype.parse = function(destid,type,langcode,da
 				let code = "";
 				let label = [];
 				//------------------------------
-				if (target=='first-last-name' || target=='personlabel' || target=='portfoliolabel') {
+				if (target=='first-last-name' || target=='last-first-name' || target=='personlabel' || target=='portfoliolabel') {
 					code = "@"+tableau2[i].code;
 					value = code;
 					for (var j=0; j<languages.length;j++){

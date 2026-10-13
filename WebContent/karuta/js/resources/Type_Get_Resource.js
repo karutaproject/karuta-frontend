@@ -968,7 +968,7 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 				let value = "";
 				let code = "";
 				let label = "";
-				if (target=='grouplabel' || target=="first-last-name" || target=="portfoliolabel") {
+				if (target=='grouplabel' || target=="first-last-name" || target=="last-first-name" || target=="portfoliolabel") {
 					code = "@" + tableau1[i][0];
 					value = code;
 					label = tableau1[i][1];

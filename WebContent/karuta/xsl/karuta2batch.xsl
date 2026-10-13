@@ -1424,7 +1424,7 @@
 			</xsl:call-template>
 		</xsl:variable>
 		<xsl:variable name="test">
-			<xsl:value-of select=".//asmContext[metadata/@semantictag='test']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+			<xsl:value-of select="asmUnitStructure[metadata/@semantictag='subsection-source']//asmContext[metadata/@semantictag='test']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
 		<for-each-node source="{$source}">
 			<xsl:if test="not($test='')">
