@@ -3228,13 +3228,18 @@ function outCopy(id)
 	$(element).attr('title', karutaStr[LANG]['copy'] +" : "+element.textContent);
 }
 
-
-
-
 //==================================
-function callmajcodenum (nodeid) {
+function copyForImport(nodeid) 
 //==================================
-	majcodenum(UICom.structure.ui[nodeid].node);
+{
+	const semantictag = $("metadata",UICom.structure.ui[nodeid].node).attr('semantictag');
+	const portfoliocode = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",g_portfolio_current)).text();
+	let textArea = document.createElement("textarea");
+	textArea.value = portfoliocode+","+semantictag+",importer@fr/Import@en,designer";
+	document.body.appendChild(textArea);
+	textArea.select();
+	document.execCommand("Copy");
+	textArea.remove();
 }
 
 //=====================================================================================================
@@ -3242,6 +3247,12 @@ function callmajcodenum (nodeid) {
 //============================== UTILITIES =======================================================
 //=====================================================================================================
 //=====================================================================================================
+
+//==================================
+function callmajcodenum (nodeid) {
+//==================================
+	majcodenum(UICom.structure.ui[nodeid].node);
+}
 
 //==================================
 function updatelabel (uuid) {
