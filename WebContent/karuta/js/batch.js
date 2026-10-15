@@ -867,7 +867,12 @@ g_actions['update-user'] = function (node)
 //=================================================
 {
 	var ok = false;
-	const error = ($(node).attr("not-error")==undefined)?true:false;
+	//-----------------
+	let error = false;
+	const strerror = $(node).attr("not-error");
+	if (strerror==undefined || strerror=='@1' || strerror=='')
+		error = true
+	//-----------------
 	var identifier = getTxtvals($("identifier",node));
 	var lastname = getTxtvals($("lastname",node));
 	var firstname = getTxtvals($("firstname",node));
@@ -939,7 +944,12 @@ g_actions['delete-user'] = function deleteUser(node)
 //=================================================
 {
 	var ok = false;
-	const error = ($(node).attr("not-error")==undefined)?true:false;
+	//-----------------
+	let error = false;
+	const strerror = $(node).attr("not-error");
+	if (strerror==undefined || strerror=='@1' || strerror=='')
+		error = true
+	//-----------------
 	var identifier = getTxtvals($("identifier",node));
 	var userref = $(node).attr("select");
 	if (userref!=="")
@@ -986,7 +996,12 @@ g_actions['inactivate-user'] = function inactivateUser(node)
 //=================================================
 {
 	var ok = false;
-	const error = ($(node).attr("not-error")==undefined)?true:false;
+	//-----------------
+	let error = false;
+	const strerror = $(node).attr("not-error");
+	if (strerror==undefined || strerror=='@1' || strerror=='')
+		error = true
+	//-----------------
 	var identifier = getTxtvals($("identifier",node));
 	var userref = $(node).attr("select");
 	if (userref!=="")
@@ -1049,7 +1064,12 @@ g_actions['activate-user'] = function activateUser(node)
 //=================================================
 {
 	var ok = false;
-	const error = ($(node).attr("not-error")==undefined)?true:false;
+	//-----------------
+	let error = false;
+	const strerror = $(node).attr("not-error");
+	if (strerror==undefined || strerror=='@1' || strerror=='')
+		error = true
+	//-----------------
 	var identifier = getTxtvals($("identifier",node));
 	var userref = $(node).attr("select");
 	if (userref!=="")
@@ -1147,7 +1167,12 @@ g_actions['join-usergroup'] = function JoinUserGroup(node)
 //=================================================
 {
 	var ok = false;
-	const error = ($(node).attr("not-error")==undefined)?true:false;
+	//-----------------
+	let error = false;
+	const strerror = $(node).attr("not-error");
+	if (strerror==undefined || strerror=='@1' || strerror=='')
+		error = true
+	//-----------------
 	var user = getTxtvals($("user",node));
 	var usergroup = getTxtvals($("usergroup",node));
 	usergroup = decodeURI(usergroup);
@@ -1231,7 +1256,12 @@ g_actions['leave-usergroup'] = function LeaveUserGroup(node)
 //=================================================
 {
 	var ok = false;
-	const error = ($(node).attr("not-error")==undefined)?true:false;
+	//-----------------
+	let error = false;
+	const strerror = $(node).attr("not-error");
+	if (strerror==undefined || strerror=='@1' || strerror=='')
+		error = true
+	//-----------------
 	var user = getTxtvals($("user",node));
 	var usergroup = getTxtvals($("usergroup",node));
 	usergroup = decodeURI(usergroup);
@@ -1311,7 +1341,12 @@ g_actions['delete-usergroup'] = function (node)
 //=================================================
 {
 	var ok = false;
-	const error = ($(node).attr("not-error")==undefined)?true:false;
+	//-----------------
+	let error = false;
+	const strerror = $(node).attr("not-error");
+	if (strerror==undefined || strerror=='@1' || strerror=='')
+		error = true
+	//-----------------
 	var usergroup = getTxtvals($("usergroup",node));
 	usergroup = decodeURI(usergroup);
 	if (usergroup.startsWith("@"))
@@ -1744,7 +1779,12 @@ g_actions['select-folder'] = function (node)
 //=================================================
 {
 	var ok = false;
-	const error = ($(node).attr("not-error")==undefined)?true:false;
+	//-----------------
+	let error = false;
+	const strerror = $(node).attr("not-error");
+	if (strerror==undefined || strerror=='@1' || strerror=='')
+		error = true
+	//-----------------
 	var code = getvarvals($("code",node));
 	if (code=="")
 		code = getTxtvals($("code",node));
@@ -1875,7 +1915,12 @@ g_actions['select-tree'] = function selectTree(node)
 //=================================================
 {
 	var ok = false;
-	const error = ($(node).attr("not-error")==undefined)?true:false;
+	//-----------------
+	let error = false;
+	const strerror = $(node).attr("not-error");
+	if (strerror==undefined || strerror=='@1' || strerror=='')
+		error = true
+	//-----------------
 	var code = getvarvals($("code",node));
 	if (code=="")
 		code = getTxtvals($("code",node));
@@ -1979,7 +2024,12 @@ g_actions['update-tree-root'] = function updateTreeRoot(node)
 //=================================================
 {
 	var ok = false;
-	const error = ($(node).attr("not-error")==undefined)?true:false;
+	//-----------------
+	let error = false;
+	const strerror = $(node).attr("not-error");
+	if (strerror==undefined || strerror=='@1' || strerror=='')
+		error = true
+	//-----------------
 	var treeref = $(node).attr("select");
 	var newcode = getTxtvals($("newcode",node));
 	var label = getTxtvals($("label",node));
@@ -2710,7 +2760,12 @@ g_actions['share-portfoliogroup'] = function sharePortfolioGroup(node)
 //=================================================
 {
 	var ok = false;
-	const error = ($(node).attr("not-error")==undefined)?true:false;
+	//-----------------
+	let error = false;
+	const strerror = $(node).attr("not-error");
+	if (strerror==undefined || strerror=='@1' || strerror=='')
+		error = true
+	//-----------------
 	var user = getTxtvals($("identifier",node));;
 	if (user.startsWith("@"))
 		user = user.substring(1);
@@ -2796,7 +2851,12 @@ g_actions['unshare-portfoliogroup'] = function unsharePortfolioGroup(node)
 //=================================================
 {
 	var ok = false;
-	const error = ($(node).attr("not-error")==undefined)?true:false;
+	//-----------------
+	let error = false;
+	const strerror = $(node).attr("not-error");
+	if (strerror==undefined || strerror=='@1' || strerror=='')
+		error = true
+	//-----------------
 	var user = getTxtvals($("identifier",node));;
 	if (user.startsWith("@"))
 		user = user.substring(1);
@@ -2933,11 +2993,12 @@ g_actions['share-usergroup'] = function shareUserGroup(node)
 //=================================================
 {
 	var ok = false;
-	let strerror = $(node).attr("not-error");
-	if (strerror==undefined || strerror=='@1')
+	//-----------------
+	let error = false;
+	const strerror = $(node).attr("not-error");
+	if (strerror==undefined || strerror=='@1' || strerror=='')
 		error = true
-	else
-		error = false;
+	//-----------------
 	var role = "";
 	var treeref = $(node).attr("select");
 	var role = getTxtvals($("role",node));
@@ -3079,7 +3140,12 @@ g_actions['share-groups'] = function shareGroups(node)
 //=================================================
 {
 	var ok = false;
-	const error = ($(node).attr("not-error")==undefined)?true:false;
+	//-----------------
+	let error = false;
+	const strerror = $(node).attr("not-error");
+	if (strerror==undefined || strerror=='@1' || strerror=='')
+		error = true
+	//-----------------
 	var role = getTxtvals($("role",node));
 	var usergroup = getTxtvals($("usergroup",node));
 	var usergroupid = get_usergroupid(usergroup);
@@ -3174,7 +3240,12 @@ g_actions['update-resource'] = function updateResource(node,data)
 //=================================================
 {
 	var ok = 0;
-	const error = ($(node).attr("not-error")==undefined)?true:false;
+	//-----------------
+	let error = false;
+	const strerror = $(node).attr("not-error");
+	if (strerror==undefined || strerror=='@1' || strerror=='')
+		error = true
+	//-----------------
 	var type = $(node).attr("type");
 	var attributes = $("attribute",node)
 	//---------------------
@@ -3267,7 +3338,12 @@ g_actions['update-node-resource'] = function updateResource(node,data)
 //=================================================
 {
 	let ok = 0;
-	const error = ($(node).attr("not-error")==undefined)?true:false;
+	//-----------------
+	let error = false;
+	const strerror = $(node).attr("not-error");
+	if (strerror==undefined || strerror=='@1' || strerror=='')
+		error = true
+	//-----------------
 	let type = $(node).attr("type");
 	//-------------------
 	let nodes = getTargetNodes(node,data,"test",error)
@@ -3347,7 +3423,12 @@ g_actions['update-node-context'] = function updateContext(node,data)
 //=================================================
 {
 	let ok = 0;
-	const error = ($(node).attr("not-error")==undefined)?true:false;
+	//-----------------
+	let error = false;
+	const strerror = $(node).attr("not-error");
+	if (strerror==undefined || strerror=='@1' || strerror=='')
+		error = true
+	//-----------------
 	let type = $(node).attr("type");
 	//-------------------
 	let nodes = getTargetNodes(node,data,"test")
@@ -3745,7 +3826,11 @@ g_actions['move-node'] = function moveNode(node,data)
 //=================================================
 {
 	let ok = false
-	const error = ($(node).attr("not-error")==undefined)?true:false;
+	//-----------------
+	let error = false;
+	const strerror = $(node).attr("not-error");
+	if (strerror==undefined || strerror=='@1' || strerror=='')
+		error = true
 	//------------- source -----------------------
 	const srce_nodes = getSourceNodes(node,data,"srce-test",error);
 	let nodeid = $(srce_nodes[0]).attr('id');;
@@ -3792,7 +3877,12 @@ g_actions['delete-node'] = function deleteNode(node,data)
 //=================================================
 {
 	var ok = 0;
-	const error = ($(node).attr("not-error")==undefined)?true:false;
+	//-----------------
+	let error = false;
+	const strerror = $(node).attr("not-error");
+	if (strerror==undefined || strerror=='@1' || strerror=='')
+		error = true
+	//-----------------
 	let nodes = getTargetNodes(node,data,"test")
 	if (nodes.length>0){
 		for (i=0; i<nodes.length; i++){
@@ -3836,7 +3926,12 @@ g_actions['show-node'] = function showNode(node,data)
 //=================================================
 {
 	var ok = 0;
-	const error = ($(node).attr("not-error")==undefined)?true:false;
+	//-----------------
+	let error = false;
+	const strerror = $(node).attr("not-error");
+	if (strerror==undefined || strerror=='@1' || strerror=='')
+		error = true
+	//-----------------
 	let nodes = getTargetNodes(node,data,"test",error)
 	if (nodes.length>0){
 		for (i=0; i<nodes.length; i++){
@@ -3874,7 +3969,12 @@ g_actions['hide-node'] = function hideNode(node,data)
 //=================================================
 {
 	var ok = 0;
-	const error = ($(node).attr("not-error")==undefined)?true:false;
+	//-----------------
+	let error = false;
+	const strerror = $(node).attr("not-error");
+	if (strerror==undefined || strerror=='@1' || strerror=='')
+		error = true
+	//-----------------
 	let nodes = getTargetNodes(node,data,"test")
 	if (nodes.length>0){
 		for (i=0; i<nodes.length; i++){
@@ -3955,11 +4055,14 @@ g_actions['reload-node'] = function (node,data)
 //=================================================
 {
 	var ok = 0;
-	let strerror = $(node).attr("not-error");
+	//-----------------
+	let error = false;
+	const strerror = $(node).attr("not-error");
+	if (strerror==undefined || strerror=='@1' || strerror=='')
+		error = true
+	//-----------------
 	if (strerror==undefined || strerror=='@1')
 		error = true
-	else
-		error = false;
 	let nodes = getTargetNodes(node,data,"test")
 	if (nodes.length>0){
 		for (i=0; i<nodes.length; i++){

@@ -2,8 +2,8 @@
 var karuta_version = "@project.version@";
 var karuta_date = "@build.timestamp@";
 
-const karuta_version_eportfolium = 'eportfolium-3.138.0';
-const karuta_date_eportfolium = '2026-10-14';
+const karuta_version_eportfolium = 'eportfolium-3.139.0';
+const karuta_date_eportfolium = '2026-10-15';
 
 var karuta_backend_version = "?";
 var karuta_backend_date = "?";
@@ -193,3 +193,4 @@ var karuta_fileserver_date = "?";
 // 3.137.1 FIX - Batch - async error - 2026-10-12 05:53:57
 // 3.137.2 FIX - Batch - for-each-node test - 2026-10-13 05:10:44
 // 3.138.0 FEAT - New Function copyToImport - 2026-10-14 12:20:39
+// 3.139.0 FEAT - BATCH - not-error for each batch action - 2026-10-15 01:32:57

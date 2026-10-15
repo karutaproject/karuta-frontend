@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="updateVersion"  basedir="."> 
-	<property name="noVersion" value="3.138.0"/>
-	<property name="textVersion" value="FEAT - New Function copyToImport"/>
+	<property name="noVersion" value="3.139.0"/>
+	<property name="textVersion" value="FEAT - BATCH - not-error for each batch action"/>
 	<property name="dirSrce" value="src/htm-srce"/>
 	<property name="dirTrgt" value="WebContent/karuta/htm"/>
 	<target name="testIfNewVersion">
