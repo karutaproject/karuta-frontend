@@ -959,7 +959,7 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 			$(select).append($(select_item));
 		}
 		//---------------------
-		if (target=="label" || target=="grouplabel" || target=="first-last-name" || target=="portfoliolabel") {
+		if (target=="label" || target=="grouplabel" || target=="first-last-name" || target=="last-first-name" ||target=="portfoliolabel") {
 			for ( let i = 0; i < newTableau1.length; i++) {
 				//------------------------------
 				let uuid = $(newTableau1[i][2]).attr('id');
@@ -1323,10 +1323,10 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 			let value = "";
 			let label = "";
 			//------------------------------
-			if (target=='grouplabel' || target=="first-last-name" || target=="portfoliolabel") {
-				code = "@" + tableau1[i].code;
-				value = code;
-				label = tableau1[i].libelle;
+				if (target=='grouplabel' || target=="first-last-name" || target=="last-first-name" || target=="portfoliolabel") {
+					code = "@" + tableau1[i][0];
+					value = code;
+					label = tableau1[i][1];
 			} else {
 				if ($("asmResource",newTableau1[i][2]).length==3) {
 					style = UIFactory.Node.getDataContentStyle(newTableau1[i][2].querySelector("metadata-epm"));
@@ -1342,10 +1342,14 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 			//------------------------------
 			var display_code = false;
 			var display_label = true;
+			var display_value = false;
 			if (code.indexOf("$")>-1) 
 				display_label = false;
 			if (code.indexOf("@")<0) {
 				display_code = true;
+			}
+			if (code.indexOf("?")>-1) {
+				display_value = true;
 			}
 			var original_code = code
 			code = cleanCode(code);
@@ -1426,10 +1430,10 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 			let value = "";
 			let label = "";
 			//------------------------------
-			if (target=='grouplabel' || target=="first-last-name" || target=="portfoliolabel") {
-				code = "@" + tableau1[i].code;
+			if (target=='grouplabel' || target=="first-last-name" || target=="last-first-name" || target=="portfoliolabel") {
+				code = "@" + tableau1[i][0];
 				value = code;
-				label = tableau1[i].libelle;
+				label = tableau1[i][1];
 			} else {
 				if ($("asmResource",newTableau1[i][2]).length==3) {
 					style = UIFactory.Node.getDataContentStyle(newTableau1[i][2].querySelector("metadata-epm"));
@@ -1443,16 +1447,21 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 				label = $(srce+"[lang='"+languages[langcode]+"']",resource).text();
 			}
 			//------------------------------
-			let display_code = false;
-			let display_label = true;
+			var display_code = false;
+			var display_label = true;
+			var display_value = false;
 			if (code.indexOf("$")>-1) 
 				display_label = false;
 			if (code.indexOf("@")<0) {
 				display_code = true;
 			}
+			if (code.indexOf("?")>-1) {
+				display_value = true;
+			}
+			var original_code = code
 			code = cleanCode(code);
 			//------------------------------
-			input += "<div name='click_"+self.id+"' value='"+value+"' code='"+code+"' class='click-item";
+			input += "<div name='click_"+self.id+"' code='"+code+"' value='"+value+"' class='sel"+code+" click-item";
 			if (self_code==code)
 				input += " clicked";
 			input += "' ";
@@ -1532,7 +1541,7 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 			let value = "";
 			let code = "";
 			let label = "";
-			if (target=='grouplabel' || target=="first-last-name" || target=="portfoliolabel") {
+			if (target=='grouplabel' || target=="first-last-name" || target=="last-first-name" || target=="portfoliolabel") {
 				code = "@" + newTableau2[i][0];
 				value = code;
 				label = newTableau2[i][1];
@@ -1623,18 +1632,16 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 	//------------------------------------------------------------
 	//------------------------------------------------------------
 		var newTableau3 = [];
-		var html ="";
-		html += "<form autocomplete='off'>";
-		html += "</form>";
-		var form = $(html);
-		html = "";
+		let form = $("<form id='form_"+self.id+"' autocomplete='off'></form>");
+		let html = "";
 		html += "<div class='auto-complete btn-group roles-choice select-"+semtag+"'>";
 		html += "<input id='button_"+langcode+self.id+"' type='text' class='btn btn-default select' code= '' value=''/>";
 		html += "<button type='button' class='btn btn-default dropdown-toggle select' data-toggle='dropdown' aria-expanded='false'><span class='caret'></span><span class='sr-only'>&nbsp;</span></button>";
 		html += "</div>";
-		var btn_group = $(html);
+		let btn_group = $(html);
 		$(form).append($(btn_group));
-		$("#"+destid).append(form);
+		if ($("#form_"+self.id).length==0)
+			$("#"+destid).append(form);
 		//---------------------------------------------------
 		
 		html = "<div class='dropdown-menu dropdown-menu-right'></div>";
@@ -1729,7 +1736,7 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 						}
 						code = cleanCode(code);
 						//--------------------------------
-						var html = "";
+						html = "";
 						if (display_code)
 							html += code+" ";
 						if (display_label)
@@ -1744,7 +1751,7 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 				}
 				//-------------- update button -----
 				if ( code!="" && cleanCode(self_code)==cleanCode(code) ) {
-					var html = "";
+					html = "";
 					if (display_code)
 						html += code+" ";
 					if (display_label)

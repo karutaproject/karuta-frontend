@@ -1265,8 +1265,10 @@ UIFactory["Portfolio"].instantiate_rename = function(templateid,targetcode,reloa
 							url : serverBCK_API+"/nodes/node/" + nodeid + "/noderesource",
 							success : function(data) {
 								$("#wait-window").modal('hide');
-								if (reload!=null && reload)
-									window.location.reload();
+								if (reload!=null && reload) {
+									folders_list = [];
+									fill_list_page();
+								}
 							},
 							error : function(jqxhr,textStatus) {
 								$("#wait-window").modal('hide');
@@ -1435,6 +1437,7 @@ UIFactory["Portfolio"].copy_rename = function(templateid,targetcode,reload,targe
 								$('#edit-window').modal('hide');
 								if (rootsemtag=="karuta-project") // folder creation - we open the new folder
 									localStorage.setItem('currentDisplayedportfolioCode',targetcode);
+								folders_list = [];
 								fill_list_page();
 							},
 							error : function(jqxhr,textStatus) {
@@ -1674,6 +1677,7 @@ UIFactory["Portfolio"].del = function(portfolioid)
 		url : url,
 		data : "",
 		success : function(data) {
+			folders_list = [];
 			fill_list_page();
 		},
 		error : function(jqxhr,textStatus) {
