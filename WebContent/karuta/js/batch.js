@@ -3729,7 +3729,7 @@ g_actions['import-node'] = function importNode(node,data)
 		srceid = $(srce_nodes[0]).attr('id');
 	//-------------------- TARGET --------------------------------------
 	let nodes = getTargetNodes(node,null,"dest-test")
-	const treeref= getTreef(node);
+	const treeref= replaceBatchVariable(getTreef(node));
 	if (nodes.length>0){
 		for (let i=0; i<nodes.length; i++){
 			destid = $(nodes[i]).attr('id');
@@ -3749,7 +3749,7 @@ g_actions['import-node'] = function importNode(node,data)
 				success : function(data) {
 					if (data.indexOf("llegal operation")<0) {
 						ok = true;
-						if (this.treeref!="") {
+						if (this.treeref!="" && g_trees[treeref]!=undefined) {
 							g_trees[treeref].lastimported.push(data);
 							g_trees[treeref].currentnode.push(data);
 						}
