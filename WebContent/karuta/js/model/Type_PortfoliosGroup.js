@@ -186,7 +186,7 @@ UIFactory["PortfoliosGroup"].prototype.loadNumberOfPortfolios = function ()
 //==============================
 {
 	$.ajax({
-		async:false,
+		async:true,
 		type : "GET",
 		dataType : "xml",
 		url : serverBCK_API+"/portfoliogroups?group="+this.id,
@@ -195,6 +195,7 @@ UIFactory["PortfoliosGroup"].prototype.loadNumberOfPortfolios = function ()
 		success : function(data) {
 			var items = $("portfolio",data);
 			this.group.nbchildren = items.length;
+			$("#nbchildren_"+this.group.id).text(items.length);
 		},
 		error : function(jqxhr,textStatus) {
 			alertHTML("Error : "+jqxhr.responseText);
@@ -240,7 +241,7 @@ UIFactory["PortfoliosGroup"].prototype.loadContent = function ()
 						}
 
 					});
-					UIFactory.Portfolio.load(uuid,"1");
+//					UIFactory.Portfolio.load(uuid,"1");
 				}
 				var code = portfolios_byid[uuid].code_node.text();
 				tableau1[tableau1.length] = [code,uuid];
