@@ -1393,7 +1393,7 @@ UIFactory["Get_Get_Resource"].prototype.parse = function(destid,type,langcode,da
 			$(select).append($(select_item));
 		}
 		//---------------------
-		if (target=="label" || target=="grouplabel" || target=="personlabel" || target=="first-last-name" || target=="last-first-name" ||target=="portfoliolabel") {
+		if (target.indexOf("label")>-1 || target.indexOf("-name")>-1) {
 			for ( let i = 0; i < newTableau1.length; i++) {
 				//------------------------------
 				const uuid = $(newTableau1[i][2]).attr('id');
@@ -1401,7 +1401,7 @@ UIFactory["Get_Get_Resource"].prototype.parse = function(destid,type,langcode,da
 				const value = code;
 				const label = newTableau1[i][1];
 				let style = "";
-				if (target!='grouplabel' && target!="first-last-name" && target!="last-first-name" && target!="portfoliolabel") {
+				if (target=='label') {
 					//------------------------------
 					if ($("asmResource",newTableau1[i][2]).length==3) {
 						style = UIFactory.Node.getDataContentStyle(newTableau1[i][2].querySelector("metadata-epm"));

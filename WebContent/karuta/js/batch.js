@@ -885,7 +885,7 @@ g_actions['update-user'] = function (node)
 		designer ='0';
 	//---- get userid ----------
 	var userid = "";
-	var url = serverBCK_API+"/users/user/username/"+identifier;
+	var url = serverBCK_API+"/users?username="+identifier;
 	$.ajax({
 		async : false,
 		type : "GET",
@@ -893,22 +893,46 @@ g_actions['update-user'] = function (node)
 		dataType : "text",
 		url : url,
 		success : function(data) {
-			userid = data;
+			userid = $('user',data).attr('id');
+			oldlastname = $('lastname',data).text();
+			oldfirstname = $('firstname',data).text();
+			oldemail = $('email',data).text();
+			olddesigner = $('designer',data).text();
+			oldsharer = $('sharer',data).text();
+			oldother = $('other',data).text();
 			var xml = "";
 			xml +="<?xml version='1.0' encoding='UTF-8'?>";
 			xml +="<user>";
 			xml +="	<username>"+identifier+"</username>";
-			xml +="	<lastname>"+lastname+"</lastname>";
-			xml +="	<firstname>"+firstname+"</firstname>";
-			xml +="	<email>"+email+"</email>";
+			if (lastname!='')
+				xml +="	<lastname>"+lastname+"</lastname>";
+			else
+				xml +="	<lastname>"+oldlastname+"</lastname>";
+			if (firstname!='')
+				xml +="	<firstname>"+firstname+"</firstname>";
+			else
+				xml +="	<firstname>"+oldfirstname+"</firstname>";
+			if (email!='')
+				xml +="	<email>"+email+"</email>";
+			else
+				xml +="	<email>"+oldemail+"</email>";
 			if (password!="")
 				xml +="	<password>"+password+"</password>"; 
 			xml +="	<prevpass>"+USER.password+"</prevpass>"; 
 			xml +="	<active>1</active>";
-			xml +="	<other>"+other+"</other>";
+			if (other!='')
+				xml +="<other>"+other+"</other>";
+			else
+				xml +="<other>"+oldother+"</other>";
 			xml +="	<admin>0</admin>";
-			xml +="	<designer>"+designer+"</designer>";
-			xml +="	<sharer>"+sharer+"</sharer>";
+			if (designer!='')
+				xml +="	<designer>"+designer+"</designer>";
+			else
+				xml +="	<designer>"+olddesigner+"</designer>";
+			if (sharer!='')
+				xml +="	<sharer>"+sharer+"</sharer>";
+			else
+				xml +="	<sharer>"+oldsharer+"</sharer>";
 			xml +="</user>";
 			var url = serverBCK_API+"/users/user/"+userid;
 			$.ajax({
