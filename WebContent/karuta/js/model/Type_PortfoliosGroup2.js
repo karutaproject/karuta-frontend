@@ -222,7 +222,7 @@ UIFactory["PortfoliosGroup"].prototype.loadContent = function ()
 			var items = $("portfolio",data);
 			for ( var i = 0; i < items.length; i++) {
 				uuid = $(items[i]).attr('id');
-				info = UIFactory.Portfolio.getCodeLabel_byid (uuid,1);
+				info = UIFactory.Portfolio.getCodeLabel_byid (uuid,"1");
 				/*
 				if (portfolios_byid[uuid]==undefined){
 					let param = "?level=1";

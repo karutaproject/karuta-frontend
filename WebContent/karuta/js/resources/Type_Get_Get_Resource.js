@@ -852,7 +852,7 @@ UIFactory["Get_Get_Resource"].prototype.parse = function(destid,type,langcode,da
 					code = $('code',resource).text();
 					libelle = $(srce+"[lang='"+languages[langcode]+"']",resource).text();
 				} else { // users, portfolios, usergroup or portfoliogroup
-					if (target=="first-last-name") {
+					if (target=="first-last-name" || target=="personlabel") {
 						if (portfoliocode=="#group" || portfoliocode=="#persons") {
 							code = $(nodes[i]).attr('id');
 							libelle = $("firstname",nodes[i]).text()+ " "+$("lastname",nodes[i]).text();
