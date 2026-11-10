@@ -2,8 +2,8 @@
 var karuta_version = "@project.version@";
 var karuta_date = "@build.timestamp@";
 
-const karuta_version_eportfolium = 'eportfolium-3.140.1';
-const karuta_date_eportfolium = '2026-11-04';
+const karuta_version_eportfolium = 'eportfolium-3.141.0';
+const karuta_date_eportfolium = '2026-11-10';
 
 var karuta_backend_version = "?";
 var karuta_backend_date = "?";
@@ -196,3 +196,4 @@ var karuta_fileserver_date = "?";
 // 3.139.0 FEAT - BATCH - not-error for each batch action - 2026-10-15 01:32:57
 // 3.140.0 FEAT - Get_Get_resource sort on lastname - PortfolioFolder no systematic reload - 2026-10-30 03:33:50
 // 3.140.1 FIX - Get_Get_resource - Batch - 2026-11-04 04:21:37
+// 3.141.0 FEAT - Usergroup portfoliogropup list optimized - 2026-11-10 02:53:20

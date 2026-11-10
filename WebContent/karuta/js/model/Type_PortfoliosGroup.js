@@ -222,6 +222,8 @@ UIFactory["PortfoliosGroup"].prototype.loadContent = function ()
 			var items = $("portfolio",data);
 			for ( var i = 0; i < items.length; i++) {
 				uuid = $(items[i]).attr('id');
+				info = UIFactory.Portfolio.getCodeLabel_byid (uuid,"1");
+				/*
 				if (portfolios_byid[uuid]==undefined){
 					let param = "?level=1";
 					$.ajax({
@@ -241,15 +243,16 @@ UIFactory["PortfoliosGroup"].prototype.loadContent = function ()
 						}
 
 					});
-//					UIFactory.Portfolio.load(uuid,"1");
-				}
-				var code = portfolios_byid[uuid].code_node.text();
-				tableau1[tableau1.length] = [code,uuid];
+					UIFactory.Portfolio.load(uuid,"1");
+				} */
+				var code = info.code;
+				var label = info.label;
+				tableau1[tableau1.length] = [code,uuid,label];
 			}
 			var newTableau1 = tableau1.sort(sortOn1);
 			this.group.children = {};
 			for (var i=0; i<newTableau1.length; i++){
-				this.group.children[newTableau1[i][1]] = {'id':newTableau1[i][1]};
+				this.group.children[newTableau1[i][1]] = {'id':newTableau1[i][1],'code':newTableau1[i][0],'label':newTableau1[i][2]};
 			}
 			this.group.nbchildren = items.length;
 		},
@@ -427,11 +430,20 @@ UIFactory["PortfoliosGroup"].prototype.displayContent = function(type)
 	//------------------ content ---------------------------
 	$("#"+type+"-rightside-content2").html($("<div class='portfolios-content' id='"+type+"-portfolios-content'</div>"));
 	for (uuid in this.children){
+		var portfolioid  = this.children[uuid].id;
+		var portfoliocode =this.children[uuid].code;
+		var portfoliolabel =this.children[uuid].label;
+		$("#"+type+"-portfolios-content").append($("<div class='row portfolio-row' id='portfoliogroup_"+portfolioid+"'</div>"));
+//		$("#portfoliogroup_"+portfolio.id).html(portfolio.getPortfolioView("portfoliogroup_"+portfolio.id,'portfoliogroup',null,null,null,this.id));
+		let html = "<div class='portfoliogroup-portfolio-label'>"+portfoliolabel+"<span class='fas fa-trash' onclick=\"UIFactory.PortfoliosGroup.confirmRemove('"+this.id+"','"+portfolioid+"\")></span></div>";
+		$("#portfoliogroup_"+portfolioid).html(html);
+	}
+/*	for (uuid in this.children){
 		var portfolio = portfolios_byid[uuid];
 		var portfoliocode = portfolio.code_node.text();
 		$("#"+type+"-portfolios-content").append($("<div class='row portfolio-row' id='portfoliogroup_"+portfolio.id+"'</div>"));
 		$("#portfoliogroup_"+portfolio.id).html(portfolio.getPortfolioView("portfoliogroup_"+portfolio.id,'portfoliogroup',null,null,null,this.id));
-	}
+	}*/
 	$("#nbchildren_"+this.id).html(this.nbchildren);
 	$(window).scrollTop(0);
 	$("#wait-window").modal('hide');

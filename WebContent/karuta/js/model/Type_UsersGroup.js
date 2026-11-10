@@ -193,7 +193,7 @@ UIFactory["UsersGroup"].prototype.loadNumberOfUsers = function (type)
 //==============================
 {
 	$.ajax({
-		async:false,
+		async:true,
 		type : "GET",
 		dataType : "xml",
 		url : serverBCK_API+"/usersgroups?group="+this.id,
@@ -202,6 +202,7 @@ UIFactory["UsersGroup"].prototype.loadNumberOfUsers = function (type)
 		success : function(data) {
 			var items = $("user",data);
 			this.group.nbchildren = items.length;
+			$("#nbchildren_"+this.group.id).text(items.length);
 		},
 		error : function(jqxhr,textStatus) {
 			alertHTML("Error : "+jqxhr.responseText);
