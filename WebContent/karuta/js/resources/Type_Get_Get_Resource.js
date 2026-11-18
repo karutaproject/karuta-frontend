@@ -854,30 +854,30 @@ UIFactory["Get_Get_Resource"].prototype.parse = function(destid,type,langcode,da
 				} else { // users, portfolios, usergroup or portfoliogroup
 					if (target=="first-last-name" || target=="personlabel") {
 						if (portfoliocode=="#group" || portfoliocode=="#persons") {
-							code = $(nodes[i]).attr('id');
+							code = '@'+$(nodes[i]).attr('id');
 							libelle = $("firstname",nodes[i]).text()+ " "+$("lastname",nodes[i]).text();
 						} else if (portfoliocode.indexOf("#persongroup")>-1) {
 							const userid = $(nodes[i]).attr("id");
 //							UIFactory.User.load(userid);
-							code = Users_byid[userid].username;
+							code = '@'+Users_byid[userid].username;
 							libelle =Users_byid[userid].firstname+" " +Users_byid[userid].lastname;
 							sorton = 1; //on trie sur lastname
 						}
 					} else if (target=="last-first-name") {
 						if (portfoliocode=="#group" || portfoliocode=="#persons") {
-							code = $(nodes[i]).attr('id');
+							code = '@'+$(nodes[i]).attr('id');
 							libelle = $("lastname",nodes[i]).text()+ " "+$("firstname",nodes[i]).text();
 						} else if (portfoliocode.indexOf("#persongroup")>-1) {
 							const userid = $(nodes[i]).attr("id");
 //							UIFactory.User.load(userid);
-							code = Users_byid[userid].username;
+							code = '@'+Users_byid[userid].username;
 							libelle = Users_byid[userid].lastname+ " " + Users_byid[userid].firstname;
 							sorton = 2; //on trie sur lastname
 						}
 					} else if (portfoliocode.indexOf("#portfoliogroup")>-1) {
 							const id = $(nodes[i]).attr("id");
 							UIFactory.Portfolio.load(id);
-							code = portfolios_byid[id].getCode();
+							code = '@'+portfolios_byid[id].getCode();
 							libelle = portfolios_byid[id].getLabel();
 					} else {
 						code = $(nodes[i]).attr("id");
