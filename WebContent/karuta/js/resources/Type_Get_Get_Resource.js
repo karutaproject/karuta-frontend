@@ -383,152 +383,197 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 				portfoliocode_parent = selfcode.substring(0,selfcode.indexOf('.')) + "." + portfoliocode_parent;
 //			alertHTML('portfoliocode:'+portfoliocode+'--semtag:'+semtag+'--semtag_parent:'+semtag_parent+'--code_parent:'+code_parent+'--portfoliocode_parent:'+portfoliocode_parent);
 			//----------------------
-			var url ="";
-			if (portfoliocode.indexOf('value?')>-1) {
-				code_parent = replaceVariable(code_parent);
-				value_parent = replaceVariable(value_parent);
-				portfoliocode = portfoliocode_parent = value_parent;
-				$(this.portfoliocode_node).text(portfoliocode_parent);
-				$(this.value_node).text(portfoliocode_parent);
-				url = serverBCK_API+"/nodes?portfoliocode="+portfoliocode_parent+"&semtag="+semtag.replace("!","")+"&semtag_parent="+semtag_parent+ "&code_parent="+code_parent;			
-			} else if (portfoliocode.indexOf('parent?')>-1){
-				if (portfoliocode_parent.indexOf("@")>-1) {
-					display_portfoliocode_parent = false;
-					portfoliocode_parent =portfoliocode_parent.substring(0,portfoliocode_parent.indexOf("@"))+portfoliocode_parent.substring(portfoliocode_parent.indexOf("@")+1);
+			if (portfoliocode.indexOf("ROME")>-1){ // ==== ROME =====
+				var self = this;
+				if (cachable && g_Get_Resource_caches[queryattr_value]!=undefined && g_Get_Resource_caches[queryattr_value]!="")
+					UIFactory["Get_Get_Resource"].parseROME(destid,type,langcode,g_Get_Resource_caches[queryattr_value],self,disabled,srce,portfoliocode);
+				else {
+					var url = serverBCK+"/rome/rome-metiers/v1/metiers/"+semtag_parent;
+					if (code_parent!='') {
+						url+= "/"+code_parent+"?champs=competencesmobilisees%28libelle%29";
+					}
+					else
+						url+= semtag;
+					$.ajax({
+						type : "GET",
+						dataType : "json",
+						url : url,
+						success : function(data) {
+							if (cachable)
+								g_Get_Resource_caches[queryattr_value] = data;
+							UIFactory["Get_Get_Resource"].parseROME(destid,type,langcode,data,self,disabled,srce,portfoliocode);
+						}
+					});
 				}
-				if (portfoliocode_parent.indexOf("#")>-1) {
-					portfoliocode_parent = portfoliocode_parent.substring(0,portfoliocode_parent.indexOf("#"))+portfoliocode_parent.substring(portfoliocode_parent.indexOf("#")+1);
+			} else if (portfoliocode.indexOf("CNAM")>-1){ // ==== CNAM =====
+				var self = this;
+				if (cachable && g_Get_Resource_caches[queryattr_value]!=undefined && g_Get_Resource_caches[queryattr_value]!="")
+					UIFactory["Get_Get_Resource"].parseCNAM(destid,type,langcode,g_Get_Resource_caches[queryattr_value],self,disabled,srce,portfoliocode,semtag);
+				else {
+					var url = serverBCK+"/cnam/";
+					if (code_parent!='')
+							url+= semtag_parent+"/"+code_parent;
+					else
+						url+= semtag;
+					$.ajax({
+						type : "GET",
+						dataType : "json",
+						url : url,
+						success : function(data) {
+							if (cachable)
+								g_Get_Resource_caches[queryattr_value] = data;
+							UIFactory["Get_Get_Resource"].parseCNAM(destid,type,langcode,data,self,disabled,srce,portfoliocode,semtag);
+						}
+					});
 				}
-				$(this.portfoliocode_node).text(portfoliocode_parent);
-				portfoliocode = portfoliocode_parent;
-				url = serverBCK_API+"/nodes?portfoliocode="+portfoliocode_parent+"&semtag="+semtag.replace("!","")+"&semtag_parent="+semtag_parent+ "&code_parent="+code_parent;			
-			} else if (portfoliocode.indexOf('?')>-1 || portfoliocode.indexOf('code?')>-1){
-				code_parent = replaceVariable(code_parent);
-				code_parent = cleanCode(code_parent);
-				$(this.portfoliocode_node).text(code_parent);
-				portfoliocode = code_parent;
-				url = serverBCK_API+"/nodes?portfoliocode="+portfoliocode+"&semtag="+semtag.replace("!","");
-			} else {
-				$(this.portfoliocode_node).text(portfoliocode);
-				url = serverBCK_API+"/nodes?portfoliocode="+portfoliocode+"&semtag="+semtag.replace("!","")+"&semtag_parent="+semtag_parent+ "&code_parent="+code_parent;
-			}
-			//----------------------
-			if (code_parent!="") {
-				let self = this;
-				let url1 = "";
-				if  (portfoliocode.indexOf("#portfoliogroup")>-1) {
+			} else { // ==== KARUTA ====
+				var url ="";
+				if (portfoliocode.indexOf('value?')>-1) {
+					code_parent = replaceVariable(code_parent);
+					value_parent = replaceVariable(value_parent);
+					portfoliocode = portfoliocode_parent = value_parent;
+					$(this.portfoliocode_node).text(portfoliocode_parent);
+					$(this.value_node).text(portfoliocode_parent);
+					url = serverBCK_API+"/nodes?portfoliocode="+portfoliocode_parent+"&semtag="+semtag.replace("!","")+"&semtag_parent="+semtag_parent+ "&code_parent="+code_parent;			
+				} else if (portfoliocode.indexOf('parent?')>-1){
+					if (portfoliocode_parent.indexOf("@")>-1) {
+						display_portfoliocode_parent = false;
+						portfoliocode_parent =portfoliocode_parent.substring(0,portfoliocode_parent.indexOf("@"))+portfoliocode_parent.substring(portfoliocode_parent.indexOf("@")+1);
+					}
+					if (portfoliocode_parent.indexOf("#")>-1) {
+						portfoliocode_parent = portfoliocode_parent.substring(0,portfoliocode_parent.indexOf("#"))+portfoliocode_parent.substring(portfoliocode_parent.indexOf("#")+1);
+					}
+					$(this.portfoliocode_node).text(portfoliocode_parent);
+					portfoliocode = portfoliocode_parent;
+					url = serverBCK_API+"/nodes?portfoliocode="+portfoliocode_parent+"&semtag="+semtag.replace("!","")+"&semtag_parent="+semtag_parent+ "&code_parent="+code_parent;			
+				} else if (portfoliocode.indexOf('?')>-1 || portfoliocode.indexOf('code?')>-1){
+					code_parent = replaceVariable(code_parent);
 					code_parent = cleanCode(code_parent);
-					if (isNaN(code_parent)) {
-						const groupid = UIFactory.PortfoliosGroup.getIdByLabel(code_parent);
-						url1 = serverBCK_API+"/portfoliogroups?group="+groupid;
-					} else {
-						url1 = serverBCK_API+"/portfoliogroups?group="+code_parent;
-					}
-					$.ajax({
-						async: false,
-						type : "GET",
-						dataType : "xml",
-						portfoliocode:portfoliocode,
-						url : url1,
-						success : function(data) {
-							self.parse(destid,type,langcode,data,disabled,srce,srce2,this.portfoliocode,target,semtag,semtag2,cachable,resettable);
-						},
-						error : function(jqxhr,textStatus) {
-							$("#"+destid).html("<span id='noresult-"+ destid +"'>No result</span>");
-						}
-					});
-				} else if  (portfoliocode.indexOf("#persongroup")>-1) {
-					if (isNaN(cleanCode(code_parent))) {
-						const groupid = UIFactory.UsersGroup.getIdByLabel(cleanCode(code_parent));
-						url1 = serverBCK_API+"/usersgroups?group="+groupid;
-					} else {
-						url1 = serverBCK_API+"/usersgroups?group="+cleanCode(code_parent);
-					}
-					$.ajax({
-						async: false,
-						type : "GET",
-						dataType : "xml",
-						portfoliocode:portfoliocode,
-						url : url1,
-						success : function(data) {
-							self.parse(destid,type,langcode,data,disabled,srce,srce2,this.portfoliocode,target,semtag,semtag2,cachable,resettable);
-						},
-						error : function(jqxhr,textStatus) {
-							$("#"+destid).html("<span id='noresult-"+ destid +"'>No result</span>");
-						}
-					});
+					$(this.portfoliocode_node).text(code_parent);
+					portfoliocode = code_parent;
+					url = serverBCK_API+"/nodes?portfoliocode="+portfoliocode+"&semtag="+semtag.replace("!","");
 				} else {
-					$.ajax({
-						async:false,
-						type : "GET",
-						dataType : "xml",
-						url : url,
-						portfoliocode:portfoliocode,
-						semtag2:semtag2,
-						success : function(data) {
-							self.parse(destid,type,langcode,data,disabled,srce,srce2,this.portfoliocode,target,semtag,semtag2,cachable,resettable);
-						},
-						error : function(jqxhr,textStatus) {
-							$("#"+destid).html("<span id='noresult-"+ destid +"'>No result</span>");
-							self.parse(destid,type,langcode,null,disabled,srce,srce2,this.portfoliocod,target,semtag,semtag2,cachable,resettable);
-						}
-					});
+					$(this.portfoliocode_node).text(portfoliocode);
+					url = serverBCK_API+"/nodes?portfoliocode="+portfoliocode+"&semtag="+semtag.replace("!","")+"&semtag_parent="+semtag_parent+ "&code_parent="+code_parent;
 				}
-			} else {
-				//----------- ERROR Parent not selected ---------------------------------------------
-				var data = this.node;
-				if ($("metadata-wad",data)[0]!=undefined && $($("metadata-wad",data)[0]).attr('error')!=undefined && $($("metadata-wad",data)[0]).attr('error')!=""){
-					var error_text = "";
-					var errorlang = 0;
-					var display_error = false;
-					var attr_error = $($("metadata-wad",data)[0]).attr('error');
-					var errors = attr_error.split("/"); // lang1/lang2/...
-					for (var j=0; j<errors.length; j++){
-						if (errors[j].indexOf("@"+languages[langcode])>-1)
-							errorlang =j;
-					}
-					error_text = errors[errorlang].substring(0,errors[errorlang].indexOf("@"));
-					if (errors[errorlang].indexOf(",")>-1) {
-						var roles = errors[errorlang].substring(errors[errorlang].indexOf(","));
-						if (roles.indexOf(this.userrole)>-1 || (roles.containsArrayElt(g_userroles) && g_userroles[0]!='designer') || USER.admin || g_userroles[0]=='designer')
-						display_error = true;
+				//----------------------
+				if (code_parent!="") {
+					let self = this;
+					let url1 = "";
+					if  (portfoliocode.indexOf("#portfoliogroup")>-1) {
+						code_parent = cleanCode(code_parent);
+						if (isNaN(code_parent)) {
+							const groupid = UIFactory.PortfoliosGroup.getIdByLabel(code_parent);
+							url1 = serverBCK_API+"/portfoliogroups?group="+groupid;
+						} else {
+							url1 = serverBCK_API+"/portfoliogroups?group="+code_parent;
+						}
+						$.ajax({
+							async: false,
+							type : "GET",
+							dataType : "xml",
+							portfoliocode:portfoliocode,
+							url : url1,
+							success : function(data) {
+								self.parse(destid,type,langcode,data,disabled,srce,srce2,this.portfoliocode,target,semtag,semtag2,cachable,resettable);
+							},
+							error : function(jqxhr,textStatus) {
+								$("#"+destid).html("<span id='noresult-"+ destid +"'>No result</span>");
+							}
+						});
+					} else if  (portfoliocode.indexOf("#persongroup")>-1) {
+						if (isNaN(cleanCode(code_parent))) {
+							const groupid = UIFactory.UsersGroup.getIdByLabel(cleanCode(code_parent));
+							url1 = serverBCK_API+"/usersgroups?group="+groupid;
+						} else {
+							url1 = serverBCK_API+"/usersgroups?group="+cleanCode(code_parent);
+						}
+						$.ajax({
+							async: false,
+							type : "GET",
+							dataType : "xml",
+							portfoliocode:portfoliocode,
+							url : url1,
+							success : function(data) {
+								self.parse(destid,type,langcode,data,disabled,srce,srce2,this.portfoliocode,target,semtag,semtag2,cachable,resettable);
+							},
+							error : function(jqxhr,textStatus) {
+								$("#"+destid).html("<span id='noresult-"+ destid +"'>No result</span>");
+							}
+						});
 					} else {
-						display_error = true;
+						$.ajax({
+							async:false,
+							type : "GET",
+							dataType : "xml",
+							url : url,
+							portfoliocode:portfoliocode,
+							semtag2:semtag2,
+							success : function(data) {
+								self.parse(destid,type,langcode,data,disabled,srce,srce2,this.portfoliocode,target,semtag,semtag2,cachable,resettable);
+							},
+							error : function(jqxhr,textStatus) {
+								$("#"+destid).html("<span id='noresult-"+ destid +"'>No result</span>");
+								self.parse(destid,type,langcode,null,disabled,srce,srce2,this.portfoliocod,target,semtag,semtag2,cachable,resettable);
+							}
+						});
 					}
-					if (display_error){
-						alertHTML(error_text);
-					}
-					//---------------------
-					$(UICom.structure.ui[this.id].resource.value_node[0]).text("");
-					$(UICom.structure.ui[this.id].resource.code_node[0]).text("");
-					$(UICom.structure.ui[this.id].resource.uuid_node[0]).text("");
-					$(UICom.structure.ui[this.id].resource.style_node[0]).text("");
-					for (var i=0; i<languages.length;i++){
-						$(UICom.structure.ui[this.id].resource.label_node[i][0]).text("");
-					}
-					$(UICom.structure.ui[this.id].resource.lastmodified_node).text(new Date().getTime());
-					this.save();
-					//-----------------------
-				} else { // we execute anyway
-					var self = this;
-					$.ajax({
-						async:false,
-						type : "GET",
-						dataType : "xml",
-						url : url,
-						portfoliocode:portfoliocode,
-						semtag2:semtag2,
-						success : function(data) {
-							self.parse(destid,type,langcode,data,disabled,srce,this.portfoliocode,target,semtag,semtag2,cachable,resettable);
-						},
-						error : function(jqxhr,textStatus) {
-							$("#"+destid).html("<span id='noresult-"+ destid +"'>No result</span>");
-							self.parse(destid,type,langcode,null,disabled,srce,srce2,this.portfoliocode,target,semtag,semtag2,cachable,resettable);
+				} else {
+					//----------- ERROR Parent not selected ---------------------------------------------
+					var data = this.node;
+					if ($("metadata-wad",data)[0]!=undefined && $($("metadata-wad",data)[0]).attr('error')!=undefined && $($("metadata-wad",data)[0]).attr('error')!=""){
+						var error_text = "";
+						var errorlang = 0;
+						var display_error = false;
+						var attr_error = $($("metadata-wad",data)[0]).attr('error');
+						var errors = attr_error.split("/"); // lang1/lang2/...
+						for (var j=0; j<errors.length; j++){
+							if (errors[j].indexOf("@"+languages[langcode])>-1)
+								errorlang =j;
 						}
-					});
+						error_text = errors[errorlang].substring(0,errors[errorlang].indexOf("@"));
+						if (errors[errorlang].indexOf(",")>-1) {
+							var roles = errors[errorlang].substring(errors[errorlang].indexOf(","));
+							if (roles.indexOf(this.userrole)>-1 || (roles.containsArrayElt(g_userroles) && g_userroles[0]!='designer') || USER.admin || g_userroles[0]=='designer')
+							display_error = true;
+						} else {
+							display_error = true;
+						}
+						if (display_error){
+							alertHTML(error_text);
+						}
+						//---------------------
+						$(UICom.structure.ui[this.id].resource.value_node[0]).text("");
+						$(UICom.structure.ui[this.id].resource.code_node[0]).text("");
+						$(UICom.structure.ui[this.id].resource.uuid_node[0]).text("");
+						$(UICom.structure.ui[this.id].resource.style_node[0]).text("");
+						for (var i=0; i<languages.length;i++){
+							$(UICom.structure.ui[this.id].resource.label_node[i][0]).text("");
+						}
+						$(UICom.structure.ui[this.id].resource.lastmodified_node).text(new Date().getTime());
+						this.save();
+						//-----------------------
+					} else { // we execute anyway
+						var self = this;
+						$.ajax({
+							async:false,
+							type : "GET",
+							dataType : "xml",
+							url : url,
+							portfoliocode:portfoliocode,
+							semtag2:semtag2,
+							success : function(data) {
+								self.parse(destid,type,langcode,data,disabled,srce,this.portfoliocode,target,semtag,semtag2,cachable,resettable);
+							},
+							error : function(jqxhr,textStatus) {
+								$("#"+destid).html("<span id='noresult-"+ destid +"'>No result</span>");
+								self.parse(destid,type,langcode,null,disabled,srce,srce2,this.portfoliocode,target,semtag,semtag2,cachable,resettable);
+							}
+						});
+					}
 				}
+				//----------------------
 			}
-			//----------------------
 		} catch(e) {
 			alertHTML("1-"+e);
 			// do nothing - error in the search attribute
@@ -2050,5 +2095,430 @@ UIFactory["Get_Get_Resource"].prototype.erase = function()
 	$(this.lastmodified_node).text(new Date().getTime());
 	UICom.structure.ui[this.id].save();
 	UICom.structure.ui[this.id].refresh();
+}
+
+//===============================================================================================
+
+
+//==================================
+UIFactory["Get_Get_Resource"].parseROME = function(destid,type,langcode,data,self,disabled,srce,portfoliocode) {
+//==================================
+	//---------------------
+	if (langcode==null)
+		langcode = LANGCODE;
+	if (!self.multilingual)
+		langcode = NONMULTILANGCODE;
+	if (disabled==null)
+		disabled = false;
+	//---------------------
+	if (type==undefined || type==null)
+		type = 'select';
+	//---------------------
+	var cachable = true;
+	var langcode = LANGCODE;
+	var semtag = 'rome';
+	var display_code = false;
+	var display_label = true;
+	var self_code = $(self.code_node).text();
+	//-----Node ordering-------------------------------------------------------
+	var newTableau1 = data.competencesMobilisees;
+	//------------------------------------------------------------
+	if (type=='select') {
+		var html ="";
+		html += "<form autocomplete='off'>";
+		html += "</form>";
+		var form = $(html);
+		html = "";
+		html += "<div class='auto-complete btn-group roles-choice'>";
+		html += "<input id='input_"+self.id+"' type='text' class='btn btn-default select select-rome' code= '' value=''>";
+		html += "<button type='button' class='btn btn-default dropdown-toggle select' data-toggle='dropdown' aria-expanded='false'><span class='caret'></span><span class='sr-only'>&nbsp;</span></button>";
+		html += "</div>";
+		var btn_group = $(html);
+		$(form).append($(btn_group));
+		$("#"+destid).append(form);
+		var onupdate = "UIFactory.Get_Get_Resource.update(input,self)";
+		autocomplete(document.getElementById("input_"+self.id), newTableau1,onupdate,self,langcode);
+		//-------------------------------------------------
+		html = "<ul class='dropdown-menu' role='menu'></ul>";
+		var select  = $(html);
+		//---------------------
+		var code = "";
+		var label = "";
+		html = "<li></li>";
+		var select_item = $(html);
+		html = "<a  value='' code='"+code+"' class='sel"+code+"' label_fr=\""+label+"\" >";
+		if (display_code)
+			html += "<span class='li-code'>"+code+"</span>";
+		if (display_label)
+			html += "<span class='li-label'>"+label+"</span>";
+		html += "</a>";			
+		var select_item_a = $(html);
+		$(select_item_a).click(function (ev){
+			//--------------------------------
+			var code = $(this).attr('code');
+			var display_code = false;
+			var display_label = true;
+			//--------------------------------
+			var html = "";
+			if (display_code)
+				html += code+" ";
+			if (display_label)
+				html += $(this).attr("label_fr");
+			$("#input_"+self.id).html(html);
+			UIFactory["Get_Get_Resource"].update(this,self,langcode);
+			//--------------------------------
+		});
+		$(select_item).append($(select_item_a))
+		$(select).append($(select_item));
+		//---------------------
+		for ( var i = 0; i < newTableau1.length; i++) {
+			//------------------------------
+			var code = newTableau1[i].code;
+			var label = newTableau1[i].libelle;
+			html = "<li></li>";
+			var select_item = $(html);
+			html = "<a  value='' code='"+code+"' class='sel"+code+"' label_fr=\""+label+"\" >";
+			if (display_code)
+				html += "<span class='li-code'>"+code+"</span>";
+			if (display_label)
+				html += "<span class='li-label'>"+label+"</span>";
+			html += "</a>";			
+			var select_item_a = $(html);
+			$(select_item_a).click(function (ev){
+				//--------------------------------
+				var code = $(this).attr('code');
+				var display_code = false;
+				var display_label = true;
+				//--------------------------------
+				var html = "";
+				if (display_code)
+					html += code+" ";
+				if (display_label)
+					html += $(this).attr("label_fr");
+				$("#input_"+self.id).attr('value',html);
+				UIFactory["Get_Get_Resource"].update(this,self,langcode);
+				//--------------------------------
+			});
+			$(select_item).append($(select_item_a))
+			$(select).append($(select_item));
+			//-------------- update button -----
+			if (code!="" && self_code==code) {
+				var html = "";
+				if (display_code)
+					html += code+" ";
+				if (display_label)
+					html += label;
+				$("#input_"+self.id).attr('value',html);
+			}
+		}
+		//---------------------
+		$(btn_group).append($(select));
+	}
+	//------------------------------------------------------------
+	if (type.indexOf('multiple')>-1) {
+		//------------------------
+		var inputs = "<div class='ROME' id='get_get_multiple' class='multiple'></div>";
+		var inputs_obj = $(inputs);
+		//-----------------------
+		var nodes = $("node",data);
+		for ( var i = 0; i < newTableau1.length; ++i) {
+			var code = newTableau1[i].code;
+			var label = newTableau1[i].libelle;
+			var input = "";
+			//------------------------------
+			input += "<div> <input type='checkbox' portfoliocode='"+portfoliocode+"' name='multiple_"+self.id+"' value='' code='"+code+"' class='multiple-item";
+			input += "' ";
+			for (var j=0; j<languages.length;j++){
+				input += "label_"+languages[j]+"=\""+label+"\" ";
+			}
+			input += "> ";
+			if (display_code)
+				input += code + " ";
+			input +="<span  class='"+code+"'>"+label+"</span></div>";
+			var input_obj = $(input);
+			$(inputs_obj).append(input_obj);
+		}
+		$("#"+destid).append(inputs_obj);
+	}
+	//------------------------------------------------------------
+	if (type=='completion') {
+		var html ="";
+		html += "<form autocomplete='off'>";
+		html += "</form>";
+		var form = $(html);
+		html = "";
+		html += "<div class='auto-complete btn-group roles-choice'>";
+		html += "<input id='input_"+self.id+"' type='text' class='btn btn-default select select-rome' code= '' value=''>";
+		html += "<button type='button' class='btn btn-default dropdown-toggle select' data-toggle='dropdown' aria-expanded='false'><span class='caret'></span><span class='sr-only'>&nbsp;</span></button>";
+		html += "</div>";
+		var btn_group = $(html);
+		$(form).append($(btn_group));
+		$("#"+destid).append(form);
+		var onupdate = "UIFactory.Get_Get_Resource.update(inp,self)";
+		autocomplete(document.getElementById("input_"+self.id), newTableau1,onupdate,self,langcode);
+		//===============
+		html = "<ul class='dropdown-menu' role='menu'></ul>";
+		var select  = $(html);
+		//---------------------
+		html = "<li></li>";
+		var select_item = $(html);
+		html = "<a  value='' code='' label_fr='&nbsp;' >&nbsp;</a>";
+		var select_item_a = $(html);
+		$(select_item_a).click(function (ev){
+			$("#input_"+self.id).attr("value"," ");
+			UIFactory["Get_Get_Resource"].update(this,self,langcode);
+		});
+		$(select_item).append($(select_item_a))
+		$(select).append($(select_item));
+		//---------------------
+		for ( var i = 0; i < newTableau1.length; i++) {
+			//------------------------------
+			var code = newTableau1[i].code;
+			var label = newTableau1[i].libelle;
+			html = "<li></li>";
+			var select_item = $(html);
+			html = "<a  value='' code='"+code+"' class='sel"+code+"' label_fr=\""+label+"\" >";
+			if (display_code)
+				html += "<span class='li-code'>"+code+"</span>";
+			if (display_label)
+				html += "<span class='li-label'>"+label+"</span>";
+			html += "</a>";			
+			var select_item_a = $(html);
+			$(select_item_a).click(function (ev){
+				//--------------------------------
+				var code = $(this).attr('code');
+				var display_code = false;
+				var display_label = true;
+				//--------------------------------
+				var html = "";
+				if (display_code)
+					html += code+" ";
+				if (display_label)
+					html += $(this).attr("label_fr");
+				$("#input_"+self.id).attr("value",html);
+				UIFactory["Get_Get_Resource"].update(this,self,langcode);
+				//--------------------------------
+			});
+			$(select_item).append($(select_item_a))
+			$(select).append($(select_item));
+			//-------------- update button -----
+			if (code!="" && self_code==code) {
+				var html = "";
+				if (display_code)
+					html += code+" ";
+				if (display_label)
+					html += label;
+				$("#input_"+self.id).attr("value",html);
+			}
+		}
+		//---------------------
+		$(btn_group).append($(select));
+	}
+}
+
+
+//==================================
+UIFactory["Get_Get_Resource"].parseCNAM = function(destid,type,langcode,data,self,disabled,srce,portfoliocode,semtag) {
+//==================================
+	//---------------------
+	if (langcode==null)
+		langcode = LANGCODE;
+	if (!self.multilingual)
+		langcode = NONMULTILANGCODE;
+	if (disabled==null)
+		disabled = false;
+	//---------------------
+	if (type==undefined || type==null)
+		type = 'select';
+	//---------------------
+	var cachable = true;
+	var langcode = LANGCODE;
+	var display_code = false;
+	var display_label = true;
+	var self_code = $(self.code_node).text();
+	//-----Node ordering-------------------------------------------------------
+	var newTableau1 = [];
+	if (data.length==undefined)
+		newTableau1 [0] = data;
+	else
+		newTableau1 = data;
+	//------------------------------------------------------------
+	if (type=='select') {
+		var html ="";
+		html += "<form autocomplete='off'>";
+		html += "</form>";
+		var form = $(html);
+		html = "";
+		html += "<div class='auto-complete btn-group roles-choice'>";
+		html += "<input type='text' id='input_"+self.id+"' type='text' class='btn btn-default select select-rome' code= '' value=''>";
+		html += "<button type='button' class='btn btn-default dropdown-toggle select' data-toggle='dropdown' aria-expanded='false'><span class='caret'></span><span class='sr-only'>&nbsp;</span></button>";
+		html += "</div>";
+		var btn_group = $(html);
+		$(form).append($(btn_group));
+		$("#"+destid).append(form);
+		var onupdate = "UIFactory.Get_Get_Resource.update(input,self)";
+		autocomplete(document.getElementById("input_"+self.id), newTableau1,onupdate,self,langcode);
+		//-------------------------------------------------
+		html = "<ul class='dropdown-menu' role='menu'></ul>";
+		var select  = $(html);
+		//---------------------
+		html = "<li></li>";
+		var select_item = $(html);
+		html = "<a  value='' code='' label_fr='&nbsp;' >&nbsp;</a>";
+		var select_item_a = $(html);
+		$(select_item_a).click(function (ev){
+			$("#input_"+self.id).attr("value"," ");
+			UIFactory["Get_Get_Resource"].update(this,self,langcode);
+		});
+		$(select_item).append($(select_item_a))
+		$(select).append($(select_item));
+		//---------------------
+		//---------------------
+		for ( var i = 0; i < newTableau1.length; i++) {
+			//------------------------------
+			var code = newTableau1[i].code;
+			semtag = semtag.replace(/:/g, '.');
+			var label = eval("newTableau1[i]."+semtag).replace(/"/g, "'"); 
+			html = "<li></li>";
+			var select_item = $(html);
+			html = "<div  value='' code='"+code+"' class='sel"+code+"' label_fr=\""+label+"\" >";
+			if (display_code)
+				html += "<span class='li-code'>"+code+"</span>";
+			if (display_label)
+				html += "<span class='li-label'>"+label+"</span>";
+			html += "</div>";			
+			var select_item_a = $(html);
+			$(select_item_a).click(function (ev){
+				//--------------------------------
+				var code = $(this).attr('code');
+				var display_code = false;
+				var display_label = true;
+				//--------------------------------
+				var html = "";
+				if (display_code)
+					html += code+" ";
+				if (display_label)
+					html += $(this).attr("label_fr");
+				$("#input_"+self.id).attr('value',html);
+				UIFactory["Get_Get_Resource"].update(this,self,langcode);
+				//--------------------------------
+			});
+			$(select_item).append($(select_item_a))
+			$(select).append($(select_item));
+			//-------------- update button -----
+			if (code!="" && self_code==code) {
+				var html = "";
+				if (display_code)
+					html += code+" ";
+				if (display_label)
+					html += label;
+				$("#input_"+self.id).attr('value',html);
+			}
+		}
+		//---------------------
+		$(btn_group).append($(select));
+	}
+	//------------------------------------------------------------
+	if (type.indexOf('multiple')>-1) {
+		//------------------------
+		var inputs = "<div class='ROME' id='get_get_multiple' class='multiple'></div>";
+		var inputs_obj = $(inputs);
+		//-----------------------
+		var nodes = $("node",data);
+		for ( var i = 0; i < newTableau1.length; ++i) {
+			var code = newTableau1[i].code;
+			semtag = semtag.replace(/:/g, '.');
+			var label = eval("newTableau1[i]."+semtag).replace(/"/g, "'"); 
+			var input = "";
+			//------------------------------
+			input += "<div> <input type='checkbox' portfoliocode='"+portfoliocode+"' name='multiple_"+self.id+"' value='' code='"+code+"' class='multiple-item";
+			input += "' ";
+			for (var j=0; j<languages.length;j++){
+				input += "label_"+languages[j]+"=\""+label+"\" ";
+			}
+			input += "> ";
+			if (display_code)
+				input += code + " ";
+			input +="<span  class='"+code+"'>"+label+"</span></div>";
+			var input_obj = $(input);
+			$(inputs_obj).append(input_obj);
+		}
+		$("#"+destid).append(inputs_obj);
+	}
+	//------------------------------------------------------------
+	if (type=='completion') {
+		var html ="";
+		html += "<form autocomplete='off'>";
+		html += "</form>";
+		var form = $(html);
+		html = "";
+		html += "<div class='auto-complete btn-group roles-choice'>";
+		html += "<input id='input_"+self.id+"' type='text' class='btn btn-default select select-rome' code= '' value=''>";
+		html += "<button type='button' class='btn btn-default dropdown-toggle select' data-toggle='dropdown' aria-expanded='false'><span class='caret'></span><span class='sr-only'>&nbsp;</span></button>";
+		html += "</div>";
+		var btn_group = $(html);
+		$(form).append($(btn_group));
+		$("#"+destid).append(form);
+		var onupdate = "UIFactory.Get_Get_Resource.update(inp,self)";
+		autocomplete(document.getElementById("input_"+self.id), newTableau1,onupdate,self,langcode);
+		//===============
+		html = "<ul class='dropdown-menu' role='menu'></ul>";
+		var select  = $(html);
+		//---------------------
+		html = "<li></li>";
+		var select_item = $(html);
+		html = "<a  value='' code='' label_fr='&nbsp;' >&nbsp;</a>";
+		var select_item_a = $(html);
+		$(select_item_a).click(function (ev){
+			$("#input_"+self.id).attr("value"," ");
+			UIFactory["Get_Get_Resource"].update(this,self,langcode);
+		});
+		$(select_item).append($(select_item_a))
+		$(select).append($(select_item));
+		//---------------------
+		for ( var i = 0; i < newTableau1.length; i++) {
+			//------------------------------
+			var code = newTableau1[i].code;
+			semtag = semtag.replace(/:/g, '.');
+			var label = eval("newTableau1[i]."+semtag).replace(/"/g, "'"); 
+			html = "<li></li>";
+			var select_item = $(html);
+			html = "<a  value='' code='"+code+"' class='sel"+code+"' label_fr=\""+label+"\" >";
+			if (display_code)
+				html += "<span class='li-code'>"+code+"</span>";
+			if (display_label)
+				html += "<span class='li-label'>"+label+"</span>";
+			html += "</a>";			
+			var select_item_a = $(html);
+			$(select_item_a).click(function (ev){
+				//--------------------------------
+				var code = $(this).attr('code');
+				var display_code = false;
+				var display_label = true;
+				//--------------------------------
+				var html = "";
+				if (display_code)
+					html += code+" ";
+				if (display_label)
+					html += $(this).attr("label_fr");
+				$("#input_"+self.id).attr("value",html);
+				UIFactory["Get_Get_Resource"].update(this,self,langcode);
+				//--------------------------------
+			});
+			$(select_item).append($(select_item_a))
+			$(select).append($(select_item));
+			//-------------- update button -----
+			if (code!="" && self_code==code) {
+				var html = "";
+				if (display_code)
+					html += code+" ";
+				if (display_label)
+					html += label;
+				$("#input_"+self.id).attr("value",html);
+			}
+		}
+		//---------------------
+		$(btn_group).append($(select));
+	}
 }
 

@@ -2,8 +2,8 @@
 var karuta_version = "@project.version@";
 var karuta_date = "@build.timestamp@";
 
-const karuta_version_eportfolium = 'eportfolium-3.141.1';
-const karuta_date_eportfolium = '2026-11-18';
+const karuta_version_eportfolium = 'eportfolium-3.142.0';
+const karuta_date_eportfolium = '2026-11-20';
 
 var karuta_backend_version = "?";
 var karuta_backend_date = "?";
@@ -198,3 +198,4 @@ var karuta_fileserver_date = "?";
 // 3.140.1 FIX - Get_Get_resource - Batch - 2026-11-04 04:21:37
 // 3.141.0 FEAT - Usergroup portfoliogropup list optimized - 2026-11-10 02:53:20
 // 3.141.1 FIX - GetGetResource and groups - 2026-11-18 09:53:58
+// 3.142.0 FEAT- ROME French competencies repository access - 2026-11-20 05:46:11
