@@ -16,7 +16,7 @@
 var folders_byid = {};
 var folders_list = [];
 var nb_folders = 0;
-var nb_portfolios = 0;
+var g_nb_portfolios = null;
 var portfoliosnotinfolders = [];
 var folder_last_drop = "";
 /// Check namespace existence
@@ -188,26 +188,25 @@ UIFactory["PortfolioFolder"].loadAndDisplayAll = function (type)
 				$("#wait-window").modal('hide');
 			}
 		});
-		UIFactory["PortfolioFolder"].displayAll(type);
-		//--------------------------------------
-		if (nb_folders==0 && !USER.admin && !USER.creator) {
-//			$("#folders-label").hide();
-			$("#portfolio-leftside").hide();
-		} else {
-			$("#nb_folders_active").html( (nb_folders==0)?0:nb_folders);
-		}
-		//--------------------------------------
-		$('[data-toggle=tooltip]').tooltip({html: true, trigger: 'hover'});
-		if (localStorage.getItem('currentDisplayedportfolioCode')=='portfolios') {
-			UIFactory.PortfolioFolder.loadAndDisplayPortfolios('portfolio-content2-rightside','list');
-		}
-		if (nb_folders==0 && nb_portfolios==0 && g_execbatch!=undefined && g_execbatch){
-			$("#search-portfolio-div").hide();
-			$("#refresh").hide();
-			displayExecBatchButton();
-		}
-		$("#wait-window").modal('hide');
-		$("#spinner-4").hide();
+	UIFactory["PortfolioFolder"].displayAll(type);
+	//--------------------------------------
+	if (nb_folders==0 && !USER.admin && !USER.creator) {
+		$("#portfolio-leftside").hide();
+	} else {
+		$("#nb_folders_active").html( (nb_folders==0)?0:nb_folders);
+	}
+	//--------------------------------------
+	$('[data-toggle=tooltip]').tooltip({html: true, trigger: 'hover'});
+	if (localStorage.getItem('currentDisplayedportfolioCode')=='portfolios') {
+		UIFactory.PortfolioFolder.loadAndDisplayPortfolios('portfolio-content2-rightside','list');
+	}
+	if (nb_folders==0 && g_nb_portfolios==0 && g_execbatch!=undefined && g_execbatch){
+		$("#search-portfolio-div").hide();
+		$("#refresh").hide();
+		displayExecBatchButton();
+	}
+	$("#wait-window").modal('hide');
+	$("#spinner-4").hide();
 
 }
 
@@ -1052,23 +1051,25 @@ UIFactory["PortfolioFolder"].prototype.rename = function(oldfolder_code,newfolde
 UIFactory["PortfolioFolder"].checkPortfolios = function() 
 //==================================
 {
-	$.ajax({
-		async: false,
-		type : "GET",
-		dataType : "xml",
-		url : serverBCK_API+"/portfolios?active=1&project=false&count=true",
-		success : function(data) {
-			nb_portfolios = parseInt($('portfolios',data).attr('count'));
-			if (nb_portfolios==0)
-				$("#portfolios-label").hide();
-			else
-				UIFactory.PortfolioFolder.loadAndDisplayPortfolios('portfolio-content2-rightside');
-		},
-		error : function(jqxhr,textStatus) {
-			alertHTML("Server Error GET active=1&project=false: "+textStatus);
-			$("#wait-window").modal('hide');
-		}
-	});
+	if (g_nb_portfolios==null) {
+		$.ajax({
+			async: false,
+			type : "GET",
+			dataType : "xml",
+			url : serverBCK_API+"/portfolios?active=1&project=false&count=true",
+			success : function(data) {
+				g_nb_portfolios = parseInt($('portfolios',data).attr('count'));
+				if (g_nb_portfolios==0)
+					$("#portfolios-label").hide();
+				else
+					UIFactory.PortfolioFolder.loadAndDisplayPortfolios('portfolio-content2-rightside');
+			},
+			error : function(jqxhr,textStatus) {
+				alertHTML("Server Error GET active=1&project=false: "+textStatus);
+				$("#wait-window").modal('hide');
+			}
+		});
+	}
 }
 
 //==================================
