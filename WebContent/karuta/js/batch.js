@@ -4496,6 +4496,22 @@ g_actions['variable-value'] = function (node)
 }
 
 //==================================
+g_actions['variable-table'] = function (node)
+//==================================
+{
+	var ok = false
+	//-----------------------------------
+	var text = "";
+	var text = getvarvals($("text",node));
+	if (text=="")
+		text = getTxtvals($("text",node));
+	var varlabel = $(node).attr("varlabel");
+	g_variables[varlabel][g_variables[varlabel].length] = text;
+	$("#batch-log").append("<br>- Variable "+varlabel+" = "+text);
+	//-----------------------------------
+}
+
+//==================================
 g_actions['batch-variable'] = function (node,data)
 //==================================
 {

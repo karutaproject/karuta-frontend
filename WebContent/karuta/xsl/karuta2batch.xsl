@@ -1473,10 +1473,10 @@
 	<!-- ====================================================================================== -->
 
 	<!-- ================ variable ============================ -->
+	<xsl:template match="*[metadata/@semantictag='batch-variable']">
 		<xsl:variable name="not-error">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='not-error']/asmResource[@xsi_type='Get_Resource']/code"></xsl:value-of>
 		</xsl:variable>
-	<xsl:template match="*[metadata/@semantictag='batch-variable']">
 		<xsl:variable name="varlabel">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='varlabel']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
@@ -1520,7 +1520,7 @@
 		</batch-variable>
 	</xsl:template>
 
-<!-- ================ variable ============================ -->
+<!-- ================ variable-value ============================ -->
 	<xsl:template match="*[metadata/@semantictag='batch-value-variable']">
 		<xsl:variable name="not-error">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='not-error']/asmResource[@xsi_type='Get_Resource']/code"></xsl:value-of>
@@ -1539,6 +1539,27 @@
 			</text>
 		</variable-value>
 	</xsl:template>
+
+<!-- ================ variable-table ============================ -->
+	<xsl:template match="*[metadata/@semantictag='batch-table-variable']">
+		<xsl:variable name="not-error">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='not-error']/asmResource[@xsi_type='Get_Resource']/code"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="varlabel">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='varlabel']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<variable-table not-error="{$not-error}">
+			<xsl:if test="not($varlabel='')">
+				<xsl:attribute name="varlabel"><xsl:value-of select="$varlabel"/></xsl:attribute>
+			</xsl:if>
+			<text>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">value</xsl:with-param>
+				</xsl:call-template>
+			</text>
+		</variable-table>
+	</xsl:template>
+
 
 
 	<!-- ====================================================================================== -->
